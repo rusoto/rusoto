@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -24,7 +23,6 @@ use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
-
 use std::str::FromStr;
 use std::io::Write;
 use xml::reader::ParserConfig;
@@ -36,29 +34,30 @@ use xml::EventWriter;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{peek_at_name, characters, end_element, start_element, skip_tree};
+use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
 enum DeserializerNext {
     Close,
     Skip,
     Element(String),
 }
-#[doc="<p>A complex type that lists the AWS accounts, if any, that you included in the <code>TrustedSigners</code> complex type for this distribution. These are the accounts that you want to allow to create signed URLs for private content.</p> <p>The <code>Signer</code> complex type lists the AWS account number of the trusted signer or <code>self</code> if the signer is the AWS account that created the distribution. The <code>Signer</code> element also includes the IDs of any active CloudFront key pairs that are associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create signed URLs. </p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that lists the AWS accounts, if any, that you included in the <code>TrustedSigners</code> complex type for this distribution. These are the accounts that you want to allow to create signed URLs for private content.</p> <p>The <code>Signer</code> complex type lists the AWS account number of the trusted signer or <code>self</code> if the signer is the AWS account that created the distribution. The <code>Signer</code> element also includes the IDs of any active CloudFront key pairs that are associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create signed URLs. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+#[derive(Default, Debug)]
 pub struct ActiveTrustedSigners {
-    #[doc="<p>Enabled is <code>true</code> if any of the AWS accounts listed in the <code>TrustedSigners</code> complex type for this RTMP distribution have active CloudFront key pairs. If not, <code>Enabled</code> is <code>false</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>"]
+    /// <p>Enabled is <code>true</code> if any of the AWS accounts listed in the <code>TrustedSigners</code> complex type for this RTMP distribution have active CloudFront key pairs. If not, <code>Enabled</code> is <code>false</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>
     pub enabled: bool,
-    #[doc="<p>A complex type that contains one <code>Signer</code> complex type for each trusted signer that is specified in the <code>TrustedSigners</code> complex type.</p> <p>For more information, see <a>ActiveTrustedSigners</a>. </p>"]
+    /// <p>A complex type that contains one <code>Signer</code> complex type for each trusted signer that is specified in the <code>TrustedSigners</code> complex type.</p> <p>For more information, see <a>ActiveTrustedSigners</a>. </p>
     pub items: Option<Vec<Signer>>,
-    #[doc="<p>A complex type that contains one <code>Signer</code> complex type for each trusted signer specified in the <code>TrustedSigners</code> complex type.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>"]
+    /// <p>A complex type that contains one <code>Signer</code> complex type for each trusted signer specified in the <code>TrustedSigners</code> complex type.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>
     pub quantity: i64,
 }
 
 struct ActiveTrustedSignersDeserializer;
 impl ActiveTrustedSignersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ActiveTrustedSigners, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ActiveTrustedSigners, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ActiveTrustedSigners::default();
@@ -73,22 +72,18 @@ impl ActiveTrustedSignersDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Enabled" => {
-                            obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
-                        }
-                        "Items" => {
-                            obj.items = Some(try!(SignerListDeserializer::deserialize("Items",
-                                                                                      stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Enabled" => {
+                        obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
                     }
-                }
+                    "Items" => {
+                        obj.items = Some(try!(SignerListDeserializer::deserialize("Items", stack)));
+                    }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -99,16 +94,15 @@ impl ActiveTrustedSignersDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AliasListDeserializer;
 impl AliasListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -140,18 +134,19 @@ impl AliasListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct AliasListSerializer;
 impl AliasListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<String>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<String>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -162,21 +157,22 @@ impl AliasListSerializer {
     }
 }
 
-#[doc="<p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this distribution. </p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this distribution. </p>
+#[derive(Default, Debug)]
 pub struct Aliases {
-    #[doc="<p>A complex type that contains the CNAME aliases, if any, that you want to associate with this distribution.</p>"]
+    /// <p>A complex type that contains the CNAME aliases, if any, that you want to associate with this distribution.</p>
     pub items: Option<Vec<String>>,
-    #[doc="<p>The number of CNAME aliases, if any, that you want to associate with this distribution.</p>"]
+    /// <p>The number of CNAME aliases, if any, that you want to associate with this distribution.</p>
     pub quantity: i64,
 }
 
 struct AliasesDeserializer;
 impl AliasesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Aliases, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Aliases, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Aliases::default();
@@ -191,19 +187,15 @@ impl AliasesDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items = Some(try!(AliasListDeserializer::deserialize("Items",
-                                                                                     stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items = Some(try!(AliasListDeserializer::deserialize("Items", stack)));
                     }
-                }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -214,48 +206,51 @@ impl AliasesDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct AliasesSerializer;
 impl AliasesSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Aliases)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Aliases,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.items {
             &AliasListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>A complex type that controls which HTTP methods CloudFront processes and forwards to your Amazon S3 bucket or your custom origin. There are three choices:</p> <ul> <li> <p>CloudFront forwards only <code>GET</code> and <code>HEAD</code> requests.</p> </li> <li> <p>CloudFront forwards only <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests.</p> </li> <li> <p>CloudFront forwards <code>GET, HEAD, OPTIONS, PUT, PATCH, POST</code>, and <code>DELETE</code> requests.</p> </li> </ul> <p>If you pick the third choice, you may need to restrict access to your Amazon S3 bucket or to your custom origin so users can't perform operations that you don't want them to. For example, you might not want users to have permissions to delete objects from your origin.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that controls which HTTP methods CloudFront processes and forwards to your Amazon S3 bucket or your custom origin. There are three choices:</p> <ul> <li> <p>CloudFront forwards only <code>GET</code> and <code>HEAD</code> requests.</p> </li> <li> <p>CloudFront forwards only <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests.</p> </li> <li> <p>CloudFront forwards <code>GET, HEAD, OPTIONS, PUT, PATCH, POST</code>, and <code>DELETE</code> requests.</p> </li> </ul> <p>If you pick the third choice, you may need to restrict access to your Amazon S3 bucket or to your custom origin so users can't perform operations that you don't want them to. For example, you might not want users to have permissions to delete objects from your origin.</p>
+#[derive(Default, Debug)]
 pub struct AllowedMethods {
     pub cached_methods: Option<CachedMethods>,
-    #[doc="<p>A complex type that contains the HTTP methods that you want CloudFront to process and forward to your origin.</p>"]
+    /// <p>A complex type that contains the HTTP methods that you want CloudFront to process and forward to your origin.</p>
     pub items: Vec<String>,
-    #[doc="<p>The number of HTTP methods that you want CloudFront to forward to your origin. Valid values are 2 (for <code>GET</code> and <code>HEAD</code> requests), 3 (for <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests) and 7 (for <code>GET, HEAD, OPTIONS, PUT, PATCH, POST</code>, and <code>DELETE</code> requests).</p>"]
+    /// <p>The number of HTTP methods that you want CloudFront to forward to your origin. Valid values are 2 (for <code>GET</code> and <code>HEAD</code> requests), 3 (for <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests) and 7 (for <code>GET, HEAD, OPTIONS, PUT, PATCH, POST</code>, and <code>DELETE</code> requests).</p>
     pub quantity: i64,
 }
 
 struct AllowedMethodsDeserializer;
 impl AllowedMethodsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AllowedMethods, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AllowedMethods, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AllowedMethods::default();
@@ -270,23 +265,21 @@ impl AllowedMethodsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CachedMethods" => {
-                            obj.cached_methods =
-                                Some(try!(CachedMethodsDeserializer::deserialize("CachedMethods",
-                                                                                 stack)));
-                        }
-                        "Items" => {
-                            obj.items = try!(MethodsListDeserializer::deserialize("Items", stack));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CachedMethods" => {
+                        obj.cached_methods = Some(try!(CachedMethodsDeserializer::deserialize(
+                            "CachedMethods",
+                            stack
+                        )));
                     }
-                }
+                    "Items" => {
+                        obj.items = try!(MethodsListDeserializer::deserialize("Items", stack));
+                    }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -297,28 +290,30 @@ impl AllowedMethodsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct AllowedMethodsSerializer;
 impl AllowedMethodsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &AllowedMethods)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &AllowedMethods,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.cached_methods {
             &CachedMethodsSerializer::serialize(&mut writer, "CachedMethods", value)?;
         }
         MethodsListSerializer::serialize(&mut writer, "Items", &obj.items)?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -327,10 +322,10 @@ impl AllowedMethodsSerializer {
 struct AwsAccountNumberListDeserializer;
 impl AwsAccountNumberListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -346,7 +341,10 @@ impl AwsAccountNumberListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "AwsAccountNumber" {
-                        obj.push(try!(StringDeserializer::deserialize("AwsAccountNumber", stack)));
+                        obj.push(try!(StringDeserializer::deserialize(
+                            "AwsAccountNumber",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -362,18 +360,19 @@ impl AwsAccountNumberListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct AwsAccountNumberListSerializer;
 impl AwsAccountNumberListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<String>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<String>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -387,69 +386,73 @@ impl AwsAccountNumberListSerializer {
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<bool, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct BooleanSerializer;
 impl BooleanSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &bool)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &bool,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
-#[doc="<p>A complex type that describes how CloudFront processes requests.</p> <p>You must create at least as many cache behaviors (including the default cache behavior) as you have origins if you want CloudFront to distribute objects from all of the origins. Each cache behavior specifies the one origin from which you want CloudFront to get objects. If you have two origins and only the default cache behavior, the default cache behavior will cause CloudFront to get objects from one of the origins, but the other origin is never used.</p> <p>For the current limit on the number of cache behaviors that you can add to a distribution, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront\">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p> <p>If you don't want to specify any cache behaviors, include only an empty <code>CacheBehaviors</code> element. Don't include an empty <code>CacheBehavior</code> element, or CloudFront returns a <code>MalformedXML</code> error.</p> <p>To delete all cache behaviors in an existing distribution, update the distribution configuration and include only an empty <code>CacheBehaviors</code> element.</p> <p>To add, change, or remove one or more cache behaviors, update the distribution configuration and specify all of the cache behaviors that you want to include in the updated distribution.</p> <p>For more information about cache behaviors, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior\">Cache Behaviors</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that describes how CloudFront processes requests.</p> <p>You must create at least as many cache behaviors (including the default cache behavior) as you have origins if you want CloudFront to distribute objects from all of the origins. Each cache behavior specifies the one origin from which you want CloudFront to get objects. If you have two origins and only the default cache behavior, the default cache behavior will cause CloudFront to get objects from one of the origins, but the other origin is never used.</p> <p>For the current limit on the number of cache behaviors that you can add to a distribution, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p> <p>If you don't want to specify any cache behaviors, include only an empty <code>CacheBehaviors</code> element. Don't include an empty <code>CacheBehavior</code> element, or CloudFront returns a <code>MalformedXML</code> error.</p> <p>To delete all cache behaviors in an existing distribution, update the distribution configuration and include only an empty <code>CacheBehaviors</code> element.</p> <p>To add, change, or remove one or more cache behaviors, update the distribution configuration and specify all of the cache behaviors that you want to include in the updated distribution.</p> <p>For more information about cache behaviors, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior">Cache Behaviors</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+#[derive(Default, Debug)]
 pub struct CacheBehavior {
     pub allowed_methods: Option<AllowedMethods>,
-    #[doc="<p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify true; if not, specify false. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html\">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify true; if not, specify false. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub compress: Option<bool>,
-    #[doc="<p>The default amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin does not add HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html\">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>The default amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin does not add HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub default_ttl: Option<i64>,
-    #[doc="<p>A complex type that specifies how CloudFront handles query strings and cookies.</p>"]
+    /// <p>A complex type that specifies how CloudFront handles query strings and cookies.</p>
     pub forwarded_values: ForwardedValues,
-    #[doc="<p>A complex type that contains zero or more Lambda function associations for a cache behavior.</p>"]
+    /// <p>A complex type that contains zero or more Lambda function associations for a cache behavior.</p>
     pub lambda_function_associations: Option<LambdaFunctionAssociations>,
-    #[doc="<p>The maximum amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin adds HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html\">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>The maximum amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin adds HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub max_ttl: Option<i64>,
-    #[doc="<p>The minimum amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html\">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>You must specify <code>0</code> for <code>MinTTL</code> if you configure CloudFront to forward all headers to your origin (under <code>Headers</code>, if you specify <code>1</code> for <code>Quantity</code> and <code>*</code> for <code>Name</code>).</p>"]
+    /// <p>The minimum amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>You must specify <code>0</code> for <code>MinTTL</code> if you configure CloudFront to forward all headers to your origin (under <code>Headers</code>, if you specify <code>1</code> for <code>Quantity</code> and <code>*</code> for <code>Name</code>).</p>
     pub min_ttl: i64,
-    #[doc="<p>The pattern (for example, <code>images/*.jpg</code>) that specifies which requests to apply the behavior to. When CloudFront receives a viewer request, the requested path is compared with path patterns in the order in which cache behaviors are listed in the distribution.</p> <note> <p>You can optionally include a slash (<code>/</code>) at the beginning of the path pattern. For example, <code>/images/*.jpg</code>. CloudFront behavior is the same with or without the leading <code>/</code>.</p> </note> <p>The path pattern for the default cache behavior is <code>*</code> and cannot be changed. If the request for an object does not match the path pattern for any cache behaviors, CloudFront applies the behavior in the default cache behavior.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern\">Path Pattern</a> in the <i> Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>The pattern (for example, <code>images/*.jpg</code>) that specifies which requests to apply the behavior to. When CloudFront receives a viewer request, the requested path is compared with path patterns in the order in which cache behaviors are listed in the distribution.</p> <note> <p>You can optionally include a slash (<code>/</code>) at the beginning of the path pattern. For example, <code>/images/*.jpg</code>. CloudFront behavior is the same with or without the leading <code>/</code>.</p> </note> <p>The path pattern for the default cache behavior is <code>*</code> and cannot be changed. If the request for an object does not match the path pattern for any cache behaviors, CloudFront applies the behavior in the default cache behavior.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern">Path Pattern</a> in the <i> Amazon CloudFront Developer Guide</i>.</p>
     pub path_pattern: String,
-    #[doc="<p>Indicates whether you want to distribute media files in the Microsoft Smooth Streaming format using the origin that is associated with this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. If you specify <code>true</code> for <code>SmoothStreaming</code>, you can still distribute other content using this cache behavior if the content matches the value of <code>PathPattern</code>. </p>"]
+    /// <p>Indicates whether you want to distribute media files in the Microsoft Smooth Streaming format using the origin that is associated with this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. If you specify <code>true</code> for <code>SmoothStreaming</code>, you can still distribute other content using this cache behavior if the content matches the value of <code>PathPattern</code>. </p>
     pub smooth_streaming: Option<bool>,
-    #[doc="<p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when a request matches the path pattern either for a cache behavior or for the default cache behavior.</p>"]
+    /// <p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when a request matches the path pattern either for a cache behavior or for the default cache behavior.</p>
     pub target_origin_id: String,
-    #[doc="<p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>"]
+    /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
     pub trusted_signers: TrustedSigners,
-    #[doc="<p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL. </p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden). </p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html\">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects' cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html\">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note>"]
+    /// <p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL. </p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden). </p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects' cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note>
     pub viewer_protocol_policy: String,
 }
 
 struct CacheBehaviorDeserializer;
 impl CacheBehaviorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CacheBehavior, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CacheBehavior, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CacheBehavior::default();
@@ -464,62 +467,69 @@ impl CacheBehaviorDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AllowedMethods" => {
-                            obj.allowed_methods =
-                                Some(try!(AllowedMethodsDeserializer::deserialize("AllowedMethods",
-                                                                                  stack)));
-                        }
-                        "Compress" => {
-                            obj.compress = Some(try!(BooleanDeserializer::deserialize("Compress",
-                                                                                      stack)));
-                        }
-                        "DefaultTTL" => {
-                            obj.default_ttl = Some(try!(LongDeserializer::deserialize("DefaultTTL",
-                                                                                      stack)));
-                        }
-                        "ForwardedValues" => {
-                            obj.forwarded_values =
-                                try!(ForwardedValuesDeserializer::deserialize("ForwardedValues",
-                                                                              stack));
-                        }
-                        "LambdaFunctionAssociations" => {
-                            obj.lambda_function_associations = Some(try!(LambdaFunctionAssociationsDeserializer::deserialize("LambdaFunctionAssociations", stack)));
-                        }
-                        "MaxTTL" => {
-                            obj.max_ttl = Some(try!(LongDeserializer::deserialize("MaxTTL",
-                                                                                  stack)));
-                        }
-                        "MinTTL" => {
-                            obj.min_ttl = try!(LongDeserializer::deserialize("MinTTL", stack));
-                        }
-                        "PathPattern" => {
-                            obj.path_pattern = try!(StringDeserializer::deserialize("PathPattern",
-                                                                                    stack));
-                        }
-                        "SmoothStreaming" => {
-                            obj.smooth_streaming =
-                                Some(try!(BooleanDeserializer::deserialize("SmoothStreaming",
-                                                                           stack)));
-                        }
-                        "TargetOriginId" => {
-                            obj.target_origin_id = try!(StringDeserializer::deserialize("TargetOriginId",
-                                                                                        stack));
-                        }
-                        "TrustedSigners" => {
-                            obj.trusted_signers =
-                                try!(TrustedSignersDeserializer::deserialize("TrustedSigners",
-                                                                             stack));
-                        }
-                        "ViewerProtocolPolicy" => {
-                            obj.viewer_protocol_policy =
-                                try!(ViewerProtocolPolicyDeserializer::deserialize("ViewerProtocolPolicy",
-                                                                                   stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AllowedMethods" => {
+                        obj.allowed_methods = Some(try!(AllowedMethodsDeserializer::deserialize(
+                            "AllowedMethods",
+                            stack
+                        )));
                     }
-                }
+                    "Compress" => {
+                        obj.compress =
+                            Some(try!(BooleanDeserializer::deserialize("Compress", stack)));
+                    }
+                    "DefaultTTL" => {
+                        obj.default_ttl =
+                            Some(try!(LongDeserializer::deserialize("DefaultTTL", stack)));
+                    }
+                    "ForwardedValues" => {
+                        obj.forwarded_values = try!(ForwardedValuesDeserializer::deserialize(
+                            "ForwardedValues",
+                            stack
+                        ));
+                    }
+                    "LambdaFunctionAssociations" => {
+                        obj.lambda_function_associations =
+                            Some(try!(LambdaFunctionAssociationsDeserializer::deserialize(
+                                "LambdaFunctionAssociations",
+                                stack
+                            )));
+                    }
+                    "MaxTTL" => {
+                        obj.max_ttl = Some(try!(LongDeserializer::deserialize("MaxTTL", stack)));
+                    }
+                    "MinTTL" => {
+                        obj.min_ttl = try!(LongDeserializer::deserialize("MinTTL", stack));
+                    }
+                    "PathPattern" => {
+                        obj.path_pattern =
+                            try!(StringDeserializer::deserialize("PathPattern", stack));
+                    }
+                    "SmoothStreaming" => {
+                        obj.smooth_streaming = Some(try!(BooleanDeserializer::deserialize(
+                            "SmoothStreaming",
+                            stack
+                        )));
+                    }
+                    "TargetOriginId" => {
+                        obj.target_origin_id =
+                            try!(StringDeserializer::deserialize("TargetOriginId", stack));
+                    }
+                    "TrustedSigners" => {
+                        obj.trusted_signers = try!(TrustedSignersDeserializer::deserialize(
+                            "TrustedSigners",
+                            stack
+                        ));
+                    }
+                    "ViewerProtocolPolicy" => {
+                        obj.viewer_protocol_policy =
+                            try!(ViewerProtocolPolicyDeserializer::deserialize(
+                                "ViewerProtocolPolicy",
+                                stack
+                            ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -530,78 +540,92 @@ impl CacheBehaviorDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct CacheBehaviorSerializer;
 impl CacheBehaviorSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &CacheBehavior)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CacheBehavior,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.allowed_methods {
             &AllowedMethodsSerializer::serialize(&mut writer, "AllowedMethods", value)?;
         }
         if let Some(ref value) = obj.compress {
-            writer
-                .write(xml::writer::XmlEvent::start_element("Compress"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("Compress"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.default_ttl {
-            writer
-                .write(xml::writer::XmlEvent::start_element("DefaultTTL"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("DefaultTTL"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        ForwardedValuesSerializer::serialize(&mut writer,
-                                             "ForwardedValues",
-                                             &obj.forwarded_values)?;
+        ForwardedValuesSerializer::serialize(
+            &mut writer,
+            "ForwardedValues",
+            &obj.forwarded_values,
+        )?;
         if let Some(ref value) = obj.lambda_function_associations {
-            &LambdaFunctionAssociationsSerializer::serialize(&mut writer,
-                                                             "LambdaFunctionAssociations",
-                                                             value)?;
+            &LambdaFunctionAssociationsSerializer::serialize(
+                &mut writer,
+                "LambdaFunctionAssociations",
+                value,
+            )?;
         }
         if let Some(ref value) = obj.max_ttl {
-            writer
-                .write(xml::writer::XmlEvent::start_element("MaxTTL"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("MaxTTL"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("MinTTL"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.min_ttl)))?;
+        writer.write(xml::writer::XmlEvent::start_element("MinTTL"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.min_ttl
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("PathPattern"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.path_pattern)))?;
+        writer.write(xml::writer::XmlEvent::start_element("PathPattern"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.path_pattern
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.smooth_streaming {
-            writer
-                .write(xml::writer::XmlEvent::start_element("SmoothStreaming"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("SmoothStreaming"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("TargetOriginId"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.target_origin_id)))?;
+        writer.write(xml::writer::XmlEvent::start_element("TargetOriginId"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.target_origin_id
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", &obj.trusted_signers)?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("ViewerProtocolPolicy"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.viewer_protocol_policy)))?;
+        writer.write(xml::writer::XmlEvent::start_element("ViewerProtocolPolicy"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.viewer_protocol_policy
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -610,10 +634,10 @@ impl CacheBehaviorSerializer {
 struct CacheBehaviorListDeserializer;
 impl CacheBehaviorListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<CacheBehavior>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<CacheBehavior>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -629,8 +653,10 @@ impl CacheBehaviorListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "CacheBehavior" {
-                        obj.push(try!(CacheBehaviorDeserializer::deserialize("CacheBehavior",
-                                                                             stack)));
+                        obj.push(try!(CacheBehaviorDeserializer::deserialize(
+                            "CacheBehavior",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -646,18 +672,19 @@ impl CacheBehaviorListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct CacheBehaviorListSerializer;
 impl CacheBehaviorListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<CacheBehavior>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<CacheBehavior>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -668,21 +695,22 @@ impl CacheBehaviorListSerializer {
     }
 }
 
-#[doc="<p>A complex type that contains zero or more <code>CacheBehavior</code> elements. </p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that contains zero or more <code>CacheBehavior</code> elements. </p>
+#[derive(Default, Debug)]
 pub struct CacheBehaviors {
-    #[doc="<p>Optional: A complex type that contains cache behaviors for this distribution. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>"]
+    /// <p>Optional: A complex type that contains cache behaviors for this distribution. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>
     pub items: Option<Vec<CacheBehavior>>,
-    #[doc="<p>The number of cache behaviors for this distribution. </p>"]
+    /// <p>The number of cache behaviors for this distribution. </p>
     pub quantity: i64,
 }
 
 struct CacheBehaviorsDeserializer;
 impl CacheBehaviorsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CacheBehaviors, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CacheBehaviors, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CacheBehaviors::default();
@@ -697,20 +725,18 @@ impl CacheBehaviorsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items =
-                                Some(try!(CacheBehaviorListDeserializer::deserialize("Items",
-                                                                                     stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items = Some(try!(CacheBehaviorListDeserializer::deserialize(
+                            "Items",
+                            stack
+                        )));
                     }
-                }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -721,47 +747,50 @@ impl CacheBehaviorsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct CacheBehaviorsSerializer;
 impl CacheBehaviorsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &CacheBehaviors)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CacheBehaviors,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.items {
             &CacheBehaviorListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>A complex type that controls whether CloudFront caches the response to requests using the specified HTTP methods. There are two choices:</p> <ul> <li> <p>CloudFront caches responses to <code>GET</code> and <code>HEAD</code> requests.</p> </li> <li> <p>CloudFront caches responses to <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests.</p> </li> </ul> <p>If you pick the second choice for your Amazon S3 Origin, you may need to forward Access-Control-Request-Method, Access-Control-Request-Headers, and Origin headers for the responses to be cached correctly. </p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that controls whether CloudFront caches the response to requests using the specified HTTP methods. There are two choices:</p> <ul> <li> <p>CloudFront caches responses to <code>GET</code> and <code>HEAD</code> requests.</p> </li> <li> <p>CloudFront caches responses to <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests.</p> </li> </ul> <p>If you pick the second choice for your Amazon S3 Origin, you may need to forward Access-Control-Request-Method, Access-Control-Request-Headers, and Origin headers for the responses to be cached correctly. </p>
+#[derive(Default, Debug)]
 pub struct CachedMethods {
-    #[doc="<p>A complex type that contains the HTTP methods that you want CloudFront to cache responses to.</p>"]
+    /// <p>A complex type that contains the HTTP methods that you want CloudFront to cache responses to.</p>
     pub items: Vec<String>,
-    #[doc="<p>The number of HTTP methods for which you want CloudFront to cache responses. Valid values are <code>2</code> (for caching responses to <code>GET</code> and <code>HEAD</code> requests) and <code>3</code> (for caching responses to <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests).</p>"]
+    /// <p>The number of HTTP methods for which you want CloudFront to cache responses. Valid values are <code>2</code> (for caching responses to <code>GET</code> and <code>HEAD</code> requests) and <code>3</code> (for caching responses to <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests).</p>
     pub quantity: i64,
 }
 
 struct CachedMethodsDeserializer;
 impl CachedMethodsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CachedMethods, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CachedMethods, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CachedMethods::default();
@@ -776,18 +805,15 @@ impl CachedMethodsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items = try!(MethodsListDeserializer::deserialize("Items", stack));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items = try!(MethodsListDeserializer::deserialize("Items", stack));
                     }
-                }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -798,47 +824,50 @@ impl CachedMethodsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct CachedMethodsSerializer;
 impl CachedMethodsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &CachedMethods)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CachedMethods,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         MethodsListSerializer::serialize(&mut writer, "Items", &obj.items)?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>CloudFront origin access identity.</p>"]
-#[derive(Default,Debug)]
+/// <p>CloudFront origin access identity.</p>
+#[derive(Default, Debug)]
 pub struct CloudFrontOriginAccessIdentity {
-    #[doc="<p>The current configuration information for the identity. </p>"]
+    /// <p>The current configuration information for the identity. </p>
     pub cloud_front_origin_access_identity_config: Option<CloudFrontOriginAccessIdentityConfig>,
-    #[doc="<p>The ID for the origin access identity. For example: <code>E74FTE3AJFJ256A</code>. </p>"]
+    /// <p>The ID for the origin access identity. For example: <code>E74FTE3AJFJ256A</code>. </p>
     pub id: String,
-    #[doc="<p>The Amazon S3 canonical user ID for the origin access identity, used when giving the origin access identity read permission to an object in Amazon S3. </p>"]
+    /// <p>The Amazon S3 canonical user ID for the origin access identity, used when giving the origin access identity read permission to an object in Amazon S3. </p>
     pub s3_canonical_user_id: String,
 }
 
 struct CloudFrontOriginAccessIdentityDeserializer;
 impl CloudFrontOriginAccessIdentityDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CloudFrontOriginAccessIdentity, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CloudFrontOriginAccessIdentity, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CloudFrontOriginAccessIdentity::default();
@@ -853,21 +882,24 @@ impl CloudFrontOriginAccessIdentityDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CloudFrontOriginAccessIdentityConfig" => {
-                            obj.cloud_front_origin_access_identity_config = Some(try!(CloudFrontOriginAccessIdentityConfigDeserializer::deserialize("CloudFrontOriginAccessIdentityConfig", stack)));
-                        }
-                        "Id" => {
-                            obj.id = try!(StringDeserializer::deserialize("Id", stack));
-                        }
-                        "S3CanonicalUserId" => {
-                            obj.s3_canonical_user_id = try!(StringDeserializer::deserialize("S3CanonicalUserId",
-                                                                                            stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CloudFrontOriginAccessIdentityConfig" => {
+                        obj.cloud_front_origin_access_identity_config = Some(try!(
+                            CloudFrontOriginAccessIdentityConfigDeserializer::deserialize(
+                                "CloudFrontOriginAccessIdentityConfig",
+                                stack
+                            )
+                        ));
                     }
-                }
+                    "Id" => {
+                        obj.id = try!(StringDeserializer::deserialize("Id", stack));
+                    }
+                    "S3CanonicalUserId" => {
+                        obj.s3_canonical_user_id =
+                            try!(StringDeserializer::deserialize("S3CanonicalUserId", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -878,25 +910,24 @@ impl CloudFrontOriginAccessIdentityDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Origin access identity configuration. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/CloudFront/identity ID/config</code> resource. </p>"]
-#[derive(Default,Debug)]
+/// <p>Origin access identity configuration. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/CloudFront/identity ID/config</code> resource. </p>
+#[derive(Default, Debug)]
 pub struct CloudFrontOriginAccessIdentityConfig {
-    #[doc="<p>A unique number that ensures the request can't be replayed.</p> <p>If the <code>CallerReference</code> is new (no matter the content of the <code>CloudFrontOriginAccessIdentityConfig</code> object), a new origin access identity is created.</p> <p>If the <code>CallerReference</code> is a value already sent in a previous identity request, and the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is identical to the original request (ignoring white space), the response includes the same information returned to the original request. </p> <p>If the <code>CallerReference</code> is a value you already sent in a previous request to create an identity, but the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is different from the original request, CloudFront returns a <code>CloudFrontOriginAccessIdentityAlreadyExists</code> error. </p>"]
+    /// <p>A unique number that ensures the request can't be replayed.</p> <p>If the <code>CallerReference</code> is new (no matter the content of the <code>CloudFrontOriginAccessIdentityConfig</code> object), a new origin access identity is created.</p> <p>If the <code>CallerReference</code> is a value already sent in a previous identity request, and the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is identical to the original request (ignoring white space), the response includes the same information returned to the original request. </p> <p>If the <code>CallerReference</code> is a value you already sent in a previous request to create an identity, but the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is different from the original request, CloudFront returns a <code>CloudFrontOriginAccessIdentityAlreadyExists</code> error. </p>
     pub caller_reference: String,
-    #[doc="<p>Any comments you want to include about the origin access identity. </p>"]
+    /// <p>Any comments you want to include about the origin access identity. </p>
     pub comment: String,
 }
 
 struct CloudFrontOriginAccessIdentityConfigDeserializer;
 impl CloudFrontOriginAccessIdentityConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<CloudFrontOriginAccessIdentityConfig, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CloudFrontOriginAccessIdentityConfig, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CloudFrontOriginAccessIdentityConfig::default();
@@ -911,18 +942,16 @@ impl CloudFrontOriginAccessIdentityConfigDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CallerReference" => {
-                            obj.caller_reference = try!(StringDeserializer::deserialize("CallerReference",
-                                                                                        stack));
-                        }
-                        "Comment" => {
-                            obj.comment = try!(StringDeserializer::deserialize("Comment", stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CallerReference" => {
+                        obj.caller_reference =
+                            try!(StringDeserializer::deserialize("CallerReference", stack));
                     }
-                }
+                    "Comment" => {
+                        obj.comment = try!(StringDeserializer::deserialize("Comment", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -933,59 +962,61 @@ impl CloudFrontOriginAccessIdentityConfigDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct CloudFrontOriginAccessIdentityConfigSerializer;
 impl CloudFrontOriginAccessIdentityConfigSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &CloudFrontOriginAccessIdentityConfig)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CloudFrontOriginAccessIdentityConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("CallerReference"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.caller_reference)))?;
+        writer.write(xml::writer::XmlEvent::start_element("CallerReference"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.caller_reference
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Comment"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.comment)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Comment"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.comment
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>Lists the origin access identities for CloudFront.Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/origin-access-identity/cloudfront</code> resource. The response includes a <code>CloudFrontOriginAccessIdentityList</code> element with zero or more <code>CloudFrontOriginAccessIdentitySummary</code> child elements. By default, your entire list of origin access identities is returned in one single page. If the list is long, you can paginate it using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>"]
-#[derive(Default,Debug)]
+/// <p>Lists the origin access identities for CloudFront.Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/origin-access-identity/cloudfront</code> resource. The response includes a <code>CloudFrontOriginAccessIdentityList</code> element with zero or more <code>CloudFrontOriginAccessIdentitySummary</code> child elements. By default, your entire list of origin access identities is returned in one single page. If the list is long, you can paginate it using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+#[derive(Default, Debug)]
 pub struct CloudFrontOriginAccessIdentityList {
-    #[doc="<p>A flag that indicates whether more origin access identities remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more items in the list.</p>"]
+    /// <p>A flag that indicates whether more origin access identities remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more items in the list.</p>
     pub is_truncated: bool,
-    #[doc="<p>A complex type that contains one <code>CloudFrontOriginAccessIdentitySummary</code> element for each origin access identity that was created by the current AWS account.</p>"]
+    /// <p>A complex type that contains one <code>CloudFrontOriginAccessIdentitySummary</code> element for each origin access identity that was created by the current AWS account.</p>
     pub items: Option<Vec<CloudFrontOriginAccessIdentitySummary>>,
-    #[doc="<p>Use this when paginating results to indicate where to begin in your list of origin access identities. The results include identities in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last identity on that page). </p>"]
+    /// <p>Use this when paginating results to indicate where to begin in your list of origin access identities. The results include identities in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last identity on that page). </p>
     pub marker: String,
-    #[doc="<p>The maximum number of origin access identities you want in the response body. </p>"]
+    /// <p>The maximum number of origin access identities you want in the response body. </p>
     pub max_items: i64,
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value you can use for the <code>Marker</code> request parameter to continue listing your origin access identities where they left off. </p>"]
+    /// <p>If <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value you can use for the <code>Marker</code> request parameter to continue listing your origin access identities where they left off. </p>
     pub next_marker: Option<String>,
-    #[doc="<p>The number of CloudFront origin access identities that were created by the current AWS account. </p>"]
+    /// <p>The number of CloudFront origin access identities that were created by the current AWS account. </p>
     pub quantity: i64,
 }
 
 struct CloudFrontOriginAccessIdentityListDeserializer;
 impl CloudFrontOriginAccessIdentityListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<CloudFrontOriginAccessIdentityList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CloudFrontOriginAccessIdentityList, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CloudFrontOriginAccessIdentityList::default();
@@ -1003,8 +1034,8 @@ impl CloudFrontOriginAccessIdentityListDeserializer {
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "IsTruncated" => {
-                            obj.is_truncated = try!(BooleanDeserializer::deserialize("IsTruncated",
-                                                                                     stack));
+                            obj.is_truncated =
+                                try!(BooleanDeserializer::deserialize("IsTruncated", stack));
                         }
                         "Items" => {
                             obj.items = Some(try!(CloudFrontOriginAccessIdentitySummaryListDeserializer::deserialize("Items", stack)));
@@ -1013,16 +1044,16 @@ impl CloudFrontOriginAccessIdentityListDeserializer {
                             obj.marker = try!(StringDeserializer::deserialize("Marker", stack));
                         }
                         "MaxItems" => {
-                            obj.max_items = try!(IntegerDeserializer::deserialize("MaxItems",
-                                                                                  stack));
+                            obj.max_items =
+                                try!(IntegerDeserializer::deserialize("MaxItems", stack));
                         }
                         "NextMarker" => {
-                            obj.next_marker = Some(try!(StringDeserializer::deserialize("NextMarker",
-                                                                                        stack)));
+                            obj.next_marker =
+                                Some(try!(StringDeserializer::deserialize("NextMarker", stack)));
                         }
                         "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
+                            obj.quantity =
+                                try!(IntegerDeserializer::deserialize("Quantity", stack));
                         }
                         _ => skip_tree(stack),
                     }
@@ -1037,27 +1068,26 @@ impl CloudFrontOriginAccessIdentityListDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Summary of the information about a CloudFront origin access identity.</p>"]
-#[derive(Default,Debug)]
+/// <p>Summary of the information about a CloudFront origin access identity.</p>
+#[derive(Default, Debug)]
 pub struct CloudFrontOriginAccessIdentitySummary {
-    #[doc="<p>The comment for this origin access identity, as originally specified when created.</p>"]
+    /// <p>The comment for this origin access identity, as originally specified when created.</p>
     pub comment: String,
-    #[doc="<p>The ID for the origin access identity. For example: <code>E74FTE3AJFJ256A</code>.</p>"]
+    /// <p>The ID for the origin access identity. For example: <code>E74FTE3AJFJ256A</code>.</p>
     pub id: String,
-    #[doc="<p>The Amazon S3 canonical user ID for the origin access identity, which you use when giving the origin access identity read permission to an object in Amazon S3.</p>"]
+    /// <p>The Amazon S3 canonical user ID for the origin access identity, which you use when giving the origin access identity read permission to an object in Amazon S3.</p>
     pub s3_canonical_user_id: String,
 }
 
 struct CloudFrontOriginAccessIdentitySummaryDeserializer;
 impl CloudFrontOriginAccessIdentitySummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<CloudFrontOriginAccessIdentitySummary, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CloudFrontOriginAccessIdentitySummary, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CloudFrontOriginAccessIdentitySummary::default();
@@ -1072,21 +1102,19 @@ impl CloudFrontOriginAccessIdentitySummaryDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Comment" => {
-                            obj.comment = try!(StringDeserializer::deserialize("Comment", stack));
-                        }
-                        "Id" => {
-                            obj.id = try!(StringDeserializer::deserialize("Id", stack));
-                        }
-                        "S3CanonicalUserId" => {
-                            obj.s3_canonical_user_id = try!(StringDeserializer::deserialize("S3CanonicalUserId",
-                                                                                            stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Comment" => {
+                        obj.comment = try!(StringDeserializer::deserialize("Comment", stack));
                     }
-                }
+                    "Id" => {
+                        obj.id = try!(StringDeserializer::deserialize("Id", stack));
+                    }
+                    "S3CanonicalUserId" => {
+                        obj.s3_canonical_user_id =
+                            try!(StringDeserializer::deserialize("S3CanonicalUserId", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1097,17 +1125,15 @@ impl CloudFrontOriginAccessIdentitySummaryDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct CloudFrontOriginAccessIdentitySummaryListDeserializer;
 impl CloudFrontOriginAccessIdentitySummaryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<Vec<CloudFrontOriginAccessIdentitySummary>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<CloudFrontOriginAccessIdentitySummary>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -1123,7 +1149,12 @@ impl CloudFrontOriginAccessIdentitySummaryListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "CloudFrontOriginAccessIdentitySummary" {
-                        obj.push(try!(CloudFrontOriginAccessIdentitySummaryDeserializer::deserialize("CloudFrontOriginAccessIdentitySummary", stack)));
+                        obj.push(try!(
+                            CloudFrontOriginAccessIdentitySummaryDeserializer::deserialize(
+                                "CloudFrontOriginAccessIdentitySummary",
+                                stack
+                            )
+                        ));
                     } else {
                         skip_tree(stack);
                     }
@@ -1139,16 +1170,15 @@ impl CloudFrontOriginAccessIdentitySummaryListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 struct CookieNameListDeserializer;
 impl CookieNameListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -1180,18 +1210,19 @@ impl CookieNameListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct CookieNameListSerializer;
 impl CookieNameListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<String>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<String>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -1202,21 +1233,22 @@ impl CookieNameListSerializer {
     }
 }
 
-#[doc="<p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html\">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+#[derive(Default, Debug)]
 pub struct CookieNames {
-    #[doc="<p>A complex type that contains one <code>Name</code> element for each cookie that you want CloudFront to forward to the origin for this cache behavior.</p>"]
+    /// <p>A complex type that contains one <code>Name</code> element for each cookie that you want CloudFront to forward to the origin for this cache behavior.</p>
     pub items: Option<Vec<String>>,
-    #[doc="<p>The number of different cookies that you want CloudFront to forward to the origin for this cache behavior.</p>"]
+    /// <p>The number of different cookies that you want CloudFront to forward to the origin for this cache behavior.</p>
     pub quantity: i64,
 }
 
 struct CookieNamesDeserializer;
 impl CookieNamesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CookieNames, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CookieNames, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CookieNames::default();
@@ -1231,19 +1263,18 @@ impl CookieNamesDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items = Some(try!(CookieNameListDeserializer::deserialize("Items",
-                                                                                          stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items = Some(try!(CookieNameListDeserializer::deserialize(
+                            "Items",
+                            stack
+                        )));
                     }
-                }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1254,47 +1285,50 @@ impl CookieNamesDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct CookieNamesSerializer;
 impl CookieNamesSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &CookieNames)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CookieNames,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.items {
             &CookieNameListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html\">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+#[derive(Default, Debug)]
 pub struct CookiePreference {
-    #[doc="<p>Specifies which cookies to forward to the origin for this cache behavior: all, none, or the list of cookies specified in the <code>WhitelistedNames</code> complex type.</p> <p>Amazon S3 doesn't process cookies. When the cache behavior is forwarding requests to an Amazon S3 origin, specify none for the <code>Forward</code> element. </p>"]
+    /// <p>Specifies which cookies to forward to the origin for this cache behavior: all, none, or the list of cookies specified in the <code>WhitelistedNames</code> complex type.</p> <p>Amazon S3 doesn't process cookies. When the cache behavior is forwarding requests to an Amazon S3 origin, specify none for the <code>Forward</code> element. </p>
     pub forward: String,
-    #[doc="<p>Required if you specify <code>whitelist</code> for the value of <code>Forward:</code>. A complex type that specifies how many different cookies you want CloudFront to forward to the origin for this cache behavior and, if you want to forward selected cookies, the names of those cookies.</p> <p>If you specify <code>all</code> or none for the value of <code>Forward</code>, omit <code>WhitelistedNames</code>. If you change the value of <code>Forward</code> from <code>whitelist</code> to all or none and you don't delete the <code>WhitelistedNames</code> element and its child elements, CloudFront deletes them automatically.</p> <p>For the current limit on the number of cookie names that you can whitelist for each cache behavior, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront\">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>"]
+    /// <p>Required if you specify <code>whitelist</code> for the value of <code>Forward:</code>. A complex type that specifies how many different cookies you want CloudFront to forward to the origin for this cache behavior and, if you want to forward selected cookies, the names of those cookies.</p> <p>If you specify <code>all</code> or none for the value of <code>Forward</code>, omit <code>WhitelistedNames</code>. If you change the value of <code>Forward</code> from <code>whitelist</code> to all or none and you don't delete the <code>WhitelistedNames</code> element and its child elements, CloudFront deletes them automatically.</p> <p>For the current limit on the number of cookie names that you can whitelist for each cache behavior, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>
     pub whitelisted_names: Option<CookieNames>,
 }
 
 struct CookiePreferenceDeserializer;
 impl CookiePreferenceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CookiePreference, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CookiePreference, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CookiePreference::default();
@@ -1309,20 +1343,19 @@ impl CookiePreferenceDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Forward" => {
-                            obj.forward = try!(ItemSelectionDeserializer::deserialize("Forward",
-                                                                                      stack));
-                        }
-                        "WhitelistedNames" => {
-                            obj.whitelisted_names =
-                                Some(try!(CookieNamesDeserializer::deserialize("WhitelistedNames",
-                                                                               stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Forward" => {
+                        obj.forward =
+                            try!(ItemSelectionDeserializer::deserialize("Forward", stack));
                     }
-                }
+                    "WhitelistedNames" => {
+                        obj.whitelisted_names = Some(try!(CookieNamesDeserializer::deserialize(
+                            "WhitelistedNames",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1333,24 +1366,26 @@ impl CookiePreferenceDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct CookiePreferenceSerializer;
 impl CookiePreferenceSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &CookiePreference)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CookiePreference,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Forward"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.forward)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Forward"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.forward
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.whitelisted_names {
             &CookieNamesSerializer::serialize(&mut writer, "WhitelistedNames", value)?;
@@ -1359,31 +1394,31 @@ impl CookiePreferenceSerializer {
     }
 }
 
-#[doc="<p>The request to create a new origin access identity.</p>"]
-#[derive(Default,Debug)]
+/// <p>The request to create a new origin access identity.</p>
+#[derive(Default, Debug)]
 pub struct CreateCloudFrontOriginAccessIdentityRequest {
-    #[doc="<p>The current configuration information for the identity.</p>"]
+    /// <p>The current configuration information for the identity.</p>
     pub cloud_front_origin_access_identity_config: CloudFrontOriginAccessIdentityConfig,
 }
 
-#[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct CreateCloudFrontOriginAccessIdentityResult {
-    #[doc="<p>The origin access identity's information.</p>"]
+    /// <p>The origin access identity's information.</p>
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
-    #[doc="<p>The current version of the origin access identity created.</p>"]
+    /// <p>The current version of the origin access identity created.</p>
     pub e_tag: Option<String>,
-    #[doc="<p>The fully qualified URI of the new origin access identity just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/origin-access-identity/cloudfront/E74FTE3AJFJ256A</code>.</p>"]
+    /// <p>The fully qualified URI of the new origin access identity just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/origin-access-identity/cloudfront/E74FTE3AJFJ256A</code>.</p>
     pub location: Option<String>,
 }
 
 struct CreateCloudFrontOriginAccessIdentityResultDeserializer;
 impl CreateCloudFrontOriginAccessIdentityResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<CreateCloudFrontOriginAccessIdentityResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateCloudFrontOriginAccessIdentityResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CreateCloudFrontOriginAccessIdentityResult::default();
@@ -1398,14 +1433,17 @@ impl CreateCloudFrontOriginAccessIdentityResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CloudFrontOriginAccessIdentity" => {
-                            obj.cloud_front_origin_access_identity = Some(try!(CloudFrontOriginAccessIdentityDeserializer::deserialize("CloudFrontOriginAccessIdentity", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CloudFrontOriginAccessIdentity" => {
+                        obj.cloud_front_origin_access_identity = Some(try!(
+                            CloudFrontOriginAccessIdentityDeserializer::deserialize(
+                                "CloudFrontOriginAccessIdentity",
+                                stack
+                            )
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1416,33 +1454,33 @@ impl CreateCloudFrontOriginAccessIdentityResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to create a new distribution.</p>"]
-#[derive(Default,Debug)]
+/// <p>The request to create a new distribution.</p>
+#[derive(Default, Debug)]
 pub struct CreateDistributionRequest {
-    #[doc="<p>The distribution's configuration information.</p>"]
+    /// <p>The distribution's configuration information.</p>
     pub distribution_config: DistributionConfig,
 }
 
-#[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct CreateDistributionResult {
-    #[doc="<p>The distribution's information.</p>"]
+    /// <p>The distribution's information.</p>
     pub distribution: Option<Distribution>,
-    #[doc="<p>The current version of the distribution created.</p>"]
+    /// <p>The current version of the distribution created.</p>
     pub e_tag: Option<String>,
-    #[doc="<p>The fully qualified URI of the new distribution resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/distribution/EDFDVBD632BHDS5</code>.</p>"]
+    /// <p>The fully qualified URI of the new distribution resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/distribution/EDFDVBD632BHDS5</code>.</p>
     pub location: Option<String>,
 }
 
 struct CreateDistributionResultDeserializer;
 impl CreateDistributionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CreateDistributionResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateDistributionResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CreateDistributionResult::default();
@@ -1457,16 +1495,15 @@ impl CreateDistributionResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Distribution" => {
-                            obj.distribution =
-                                Some(try!(DistributionDeserializer::deserialize("Distribution",
-                                                                                stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Distribution" => {
+                        obj.distribution = Some(try!(DistributionDeserializer::deserialize(
+                            "Distribution",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1477,34 +1514,33 @@ impl CreateDistributionResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to create a new distribution with tags. </p>"]
-#[derive(Default,Debug)]
+/// <p>The request to create a new distribution with tags. </p>
+#[derive(Default, Debug)]
 pub struct CreateDistributionWithTagsRequest {
-    #[doc="<p>The distribution's configuration information. </p>"]
+    /// <p>The distribution's configuration information. </p>
     pub distribution_config_with_tags: DistributionConfigWithTags,
 }
 
-#[doc="<p>The returned result of the corresponding request. </p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request. </p>
+#[derive(Default, Debug)]
 pub struct CreateDistributionWithTagsResult {
-    #[doc="<p>The distribution's information. </p>"]
+    /// <p>The distribution's information. </p>
     pub distribution: Option<Distribution>,
-    #[doc="<p>The current version of the distribution created.</p>"]
+    /// <p>The current version of the distribution created.</p>
     pub e_tag: Option<String>,
-    #[doc="<p>The fully qualified URI of the new distribution resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/distribution/EDFDVBD632BHDS5</code>. </p>"]
+    /// <p>The fully qualified URI of the new distribution resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/distribution/EDFDVBD632BHDS5</code>. </p>
     pub location: Option<String>,
 }
 
 struct CreateDistributionWithTagsResultDeserializer;
 impl CreateDistributionWithTagsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<CreateDistributionWithTagsResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateDistributionWithTagsResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CreateDistributionWithTagsResult::default();
@@ -1519,16 +1555,15 @@ impl CreateDistributionWithTagsResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Distribution" => {
-                            obj.distribution =
-                                Some(try!(DistributionDeserializer::deserialize("Distribution",
-                                                                                stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Distribution" => {
+                        obj.distribution = Some(try!(DistributionDeserializer::deserialize(
+                            "Distribution",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1539,33 +1574,33 @@ impl CreateDistributionWithTagsResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to create an invalidation.</p>"]
-#[derive(Default,Debug)]
+/// <p>The request to create an invalidation.</p>
+#[derive(Default, Debug)]
 pub struct CreateInvalidationRequest {
-    #[doc="<p>The distribution's id.</p>"]
+    /// <p>The distribution's id.</p>
     pub distribution_id: String,
-    #[doc="<p>The batch information for the invalidation.</p>"]
+    /// <p>The batch information for the invalidation.</p>
     pub invalidation_batch: InvalidationBatch,
 }
 
-#[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct CreateInvalidationResult {
-    #[doc="<p>The invalidation's information.</p>"]
+    /// <p>The invalidation's information.</p>
     pub invalidation: Option<Invalidation>,
-    #[doc="<p>The fully qualified URI of the distribution and invalidation batch request, including the <code>Invalidation ID</code>.</p>"]
+    /// <p>The fully qualified URI of the distribution and invalidation batch request, including the <code>Invalidation ID</code>.</p>
     pub location: Option<String>,
 }
 
 struct CreateInvalidationResultDeserializer;
 impl CreateInvalidationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CreateInvalidationResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateInvalidationResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CreateInvalidationResult::default();
@@ -1580,16 +1615,15 @@ impl CreateInvalidationResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Invalidation" => {
-                            obj.invalidation =
-                                Some(try!(InvalidationDeserializer::deserialize("Invalidation",
-                                                                                stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Invalidation" => {
+                        obj.invalidation = Some(try!(InvalidationDeserializer::deserialize(
+                            "Invalidation",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1600,34 +1634,33 @@ impl CreateInvalidationResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to create a new streaming distribution.</p>"]
-#[derive(Default,Debug)]
+/// <p>The request to create a new streaming distribution.</p>
+#[derive(Default, Debug)]
 pub struct CreateStreamingDistributionRequest {
-    #[doc="<p>The streaming distribution's configuration information.</p>"]
+    /// <p>The streaming distribution's configuration information.</p>
     pub streaming_distribution_config: StreamingDistributionConfig,
 }
 
-#[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct CreateStreamingDistributionResult {
-    #[doc="<p>The current version of the streaming distribution created.</p>"]
+    /// <p>The current version of the streaming distribution created.</p>
     pub e_tag: Option<String>,
-    #[doc="<p>The fully qualified URI of the new streaming distribution resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/streaming-distribution/EGTXBD79H29TRA8</code>.</p>"]
+    /// <p>The fully qualified URI of the new streaming distribution resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/streaming-distribution/EGTXBD79H29TRA8</code>.</p>
     pub location: Option<String>,
-    #[doc="<p>The streaming distribution's information.</p>"]
+    /// <p>The streaming distribution's information.</p>
     pub streaming_distribution: Option<StreamingDistribution>,
 }
 
 struct CreateStreamingDistributionResultDeserializer;
 impl CreateStreamingDistributionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<CreateStreamingDistributionResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateStreamingDistributionResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CreateStreamingDistributionResult::default();
@@ -1642,16 +1675,16 @@ impl CreateStreamingDistributionResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "StreamingDistribution" => {
-                            obj.streaming_distribution =
-                                Some(try!(StreamingDistributionDeserializer::deserialize("StreamingDistribution",
-                                                                                         stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "StreamingDistribution" => {
+                        obj.streaming_distribution =
+                            Some(try!(StreamingDistributionDeserializer::deserialize(
+                                "StreamingDistribution",
+                                stack
+                            )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1662,33 +1695,32 @@ impl CreateStreamingDistributionResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to create a new streaming distribution with tags.</p>"]
-#[derive(Default,Debug)]
+/// <p>The request to create a new streaming distribution with tags.</p>
+#[derive(Default, Debug)]
 pub struct CreateStreamingDistributionWithTagsRequest {
-    #[doc="<p> The streaming distribution's configuration information. </p>"]
+    /// <p> The streaming distribution's configuration information. </p>
     pub streaming_distribution_config_with_tags: StreamingDistributionConfigWithTags,
 }
 
-#[doc="<p>The returned result of the corresponding request. </p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request. </p>
+#[derive(Default, Debug)]
 pub struct CreateStreamingDistributionWithTagsResult {
     pub e_tag: Option<String>,
-    #[doc="<p>The fully qualified URI of the new streaming distribution resource just created. For example:<code> https://cloudfront.amazonaws.com/2010-11-01/streaming-distribution/EGTXBD79H29TRA8</code>.</p>"]
+    /// <p>The fully qualified URI of the new streaming distribution resource just created. For example:<code> https://cloudfront.amazonaws.com/2010-11-01/streaming-distribution/EGTXBD79H29TRA8</code>.</p>
     pub location: Option<String>,
-    #[doc="<p>The streaming distribution's information. </p>"]
+    /// <p>The streaming distribution's information. </p>
     pub streaming_distribution: Option<StreamingDistribution>,
 }
 
 struct CreateStreamingDistributionWithTagsResultDeserializer;
 impl CreateStreamingDistributionWithTagsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<CreateStreamingDistributionWithTagsResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateStreamingDistributionWithTagsResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CreateStreamingDistributionWithTagsResult::default();
@@ -1703,16 +1735,16 @@ impl CreateStreamingDistributionWithTagsResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "StreamingDistribution" => {
-                            obj.streaming_distribution =
-                                Some(try!(StreamingDistributionDeserializer::deserialize("StreamingDistribution",
-                                                                                         stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "StreamingDistribution" => {
+                        obj.streaming_distribution =
+                            Some(try!(StreamingDistributionDeserializer::deserialize(
+                                "StreamingDistribution",
+                                stack
+                            )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1723,28 +1755,28 @@ impl CreateStreamingDistributionWithTagsResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer. </p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html\">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer. </p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+#[derive(Default, Debug)]
 pub struct CustomErrorResponse {
-    #[doc="<p>The minimum amount of time, in seconds, that you want CloudFront to cache the HTTP status code specified in <code>ErrorCode</code>. When this time period has elapsed, CloudFront queries your origin to see whether the problem that caused the error has been resolved and the requested object is now available.</p> <p>If you don't want to specify a value, include an empty element, <code>&lt;ErrorCachingMinTTL&gt;</code>, in the XML document.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html\">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>The minimum amount of time, in seconds, that you want CloudFront to cache the HTTP status code specified in <code>ErrorCode</code>. When this time period has elapsed, CloudFront queries your origin to see whether the problem that caused the error has been resolved and the requested object is now available.</p> <p>If you don't want to specify a value, include an empty element, <code>&lt;ErrorCachingMinTTL&gt;</code>, in the XML document.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub error_caching_min_ttl: Option<i64>,
-    #[doc="<p>The HTTP status code for which you want to specify a custom error page and/or a caching duration.</p>"]
+    /// <p>The HTTP status code for which you want to specify a custom error page and/or a caching duration.</p>
     pub error_code: i64,
-    #[doc="<p>The HTTP status code that you want CloudFront to return to the viewer along with the custom error page. There are a variety of reasons that you might want CloudFront to return a status code different from the status code that your origin returned to CloudFront, for example:</p> <ul> <li> <p>Some Internet devices (some firewalls and corporate proxies, for example) intercept HTTP 4xx and 5xx and prevent the response from being returned to the viewer. If you substitute <code>200</code>, the response typically won't be intercepted.</p> </li> <li> <p>If you don't care about distinguishing among different client errors or server errors, you can specify <code>400</code> or <code>500</code> as the <code>ResponseCode</code> for all 4xx or 5xx errors.</p> </li> <li> <p>You might want to return a <code>200</code> status code (OK) and static website so your customers don't know that your website is down.</p> </li> </ul> <p>If you specify a value for <code>ResponseCode</code>, you must also specify a value for <code>ResponsePagePath</code>. If you don't want to specify a value, include an empty element, <code>&lt;ResponseCode&gt;</code>, in the XML document.</p>"]
+    /// <p>The HTTP status code that you want CloudFront to return to the viewer along with the custom error page. There are a variety of reasons that you might want CloudFront to return a status code different from the status code that your origin returned to CloudFront, for example:</p> <ul> <li> <p>Some Internet devices (some firewalls and corporate proxies, for example) intercept HTTP 4xx and 5xx and prevent the response from being returned to the viewer. If you substitute <code>200</code>, the response typically won't be intercepted.</p> </li> <li> <p>If you don't care about distinguishing among different client errors or server errors, you can specify <code>400</code> or <code>500</code> as the <code>ResponseCode</code> for all 4xx or 5xx errors.</p> </li> <li> <p>You might want to return a <code>200</code> status code (OK) and static website so your customers don't know that your website is down.</p> </li> </ul> <p>If you specify a value for <code>ResponseCode</code>, you must also specify a value for <code>ResponsePagePath</code>. If you don't want to specify a value, include an empty element, <code>&lt;ResponseCode&gt;</code>, in the XML document.</p>
     pub response_code: Option<String>,
-    #[doc="<p>The path to the custom error page that you want CloudFront to return to a viewer when your origin returns the HTTP status code specified by <code>ErrorCode</code>, for example, <code>/4xx-errors/403-forbidden.html</code>. If you want to store your objects and your custom error pages in different locations, your distribution must include a cache behavior for which the following is true:</p> <ul> <li> <p>The value of <code>PathPattern</code> matches the path to your custom error messages. For example, suppose you saved custom error pages for 4xx errors in an Amazon S3 bucket in a directory named <code>/4xx-errors</code>. Your distribution must include a cache behavior for which the path pattern routes requests for your custom error pages to that location, for example, <code>/4xx-errors/*</code>. </p> </li> <li> <p>The value of <code>TargetOriginId</code> specifies the value of the <code>ID</code> element for the origin that contains your custom error pages.</p> </li> </ul> <p>If you specify a value for <code>ResponsePagePath</code>, you must also specify a value for <code>ResponseCode</code>. If you don't want to specify a value, include an empty element, <code>&lt;ResponsePagePath&gt;</code>, in the XML document.</p> <p>We recommend that you store custom error pages in an Amazon S3 bucket. If you store custom error pages on an HTTP server and the server starts to return 5xx errors, CloudFront can't get the files that you want to return to viewers because the origin server is unavailable.</p>"]
+    /// <p>The path to the custom error page that you want CloudFront to return to a viewer when your origin returns the HTTP status code specified by <code>ErrorCode</code>, for example, <code>/4xx-errors/403-forbidden.html</code>. If you want to store your objects and your custom error pages in different locations, your distribution must include a cache behavior for which the following is true:</p> <ul> <li> <p>The value of <code>PathPattern</code> matches the path to your custom error messages. For example, suppose you saved custom error pages for 4xx errors in an Amazon S3 bucket in a directory named <code>/4xx-errors</code>. Your distribution must include a cache behavior for which the path pattern routes requests for your custom error pages to that location, for example, <code>/4xx-errors/*</code>. </p> </li> <li> <p>The value of <code>TargetOriginId</code> specifies the value of the <code>ID</code> element for the origin that contains your custom error pages.</p> </li> </ul> <p>If you specify a value for <code>ResponsePagePath</code>, you must also specify a value for <code>ResponseCode</code>. If you don't want to specify a value, include an empty element, <code>&lt;ResponsePagePath&gt;</code>, in the XML document.</p> <p>We recommend that you store custom error pages in an Amazon S3 bucket. If you store custom error pages on an HTTP server and the server starts to return 5xx errors, CloudFront can't get the files that you want to return to viewers because the origin server is unavailable.</p>
     pub response_page_path: Option<String>,
 }
 
 struct CustomErrorResponseDeserializer;
 impl CustomErrorResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CustomErrorResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CustomErrorResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CustomErrorResponse::default();
@@ -1759,29 +1791,28 @@ impl CustomErrorResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ErrorCachingMinTTL" => {
-                            obj.error_caching_min_ttl =
-                                Some(try!(LongDeserializer::deserialize("ErrorCachingMinTTL",
-                                                                        stack)));
-                        }
-                        "ErrorCode" => {
-                            obj.error_code = try!(IntegerDeserializer::deserialize("ErrorCode",
-                                                                                   stack));
-                        }
-                        "ResponseCode" => {
-                            obj.response_code = Some(try!(StringDeserializer::deserialize("ResponseCode",
-                                                                                          stack)));
-                        }
-                        "ResponsePagePath" => {
-                            obj.response_page_path =
-                                Some(try!(StringDeserializer::deserialize("ResponsePagePath",
-                                                                          stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ErrorCachingMinTTL" => {
+                        obj.error_caching_min_ttl = Some(try!(LongDeserializer::deserialize(
+                            "ErrorCachingMinTTL",
+                            stack
+                        )));
                     }
-                }
+                    "ErrorCode" => {
+                        obj.error_code = try!(IntegerDeserializer::deserialize("ErrorCode", stack));
+                    }
+                    "ResponseCode" => {
+                        obj.response_code =
+                            Some(try!(StringDeserializer::deserialize("ResponseCode", stack)));
+                    }
+                    "ResponsePagePath" => {
+                        obj.response_page_path = Some(try!(StringDeserializer::deserialize(
+                            "ResponsePagePath",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1792,41 +1823,49 @@ impl CustomErrorResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct CustomErrorResponseSerializer;
 impl CustomErrorResponseSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &CustomErrorResponse)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CustomErrorResponse,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.error_caching_min_ttl {
-            writer
-                .write(xml::writer::XmlEvent::start_element("ErrorCachingMinTTL"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("ErrorCachingMinTTL"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("ErrorCode"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.error_code)))?;
+        writer.write(xml::writer::XmlEvent::start_element("ErrorCode"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.error_code
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.response_code {
-            writer
-                .write(xml::writer::XmlEvent::start_element("ResponseCode"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("ResponseCode"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.response_page_path {
-            writer
-                .write(xml::writer::XmlEvent::start_element("ResponsePagePath"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("ResponsePagePath"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
@@ -1836,10 +1875,10 @@ impl CustomErrorResponseSerializer {
 struct CustomErrorResponseListDeserializer;
 impl CustomErrorResponseListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<CustomErrorResponse>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<CustomErrorResponse>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -1855,7 +1894,10 @@ impl CustomErrorResponseListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "CustomErrorResponse" {
-                        obj.push(try!(CustomErrorResponseDeserializer::deserialize("CustomErrorResponse", stack)));
+                        obj.push(try!(CustomErrorResponseDeserializer::deserialize(
+                            "CustomErrorResponse",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -1871,18 +1913,19 @@ impl CustomErrorResponseListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct CustomErrorResponseListSerializer;
 impl CustomErrorResponseListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<CustomErrorResponse>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<CustomErrorResponse>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -1893,21 +1936,22 @@ impl CustomErrorResponseListSerializer {
     }
 }
 
-#[doc="<p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer.</p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html\">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer.</p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+#[derive(Default, Debug)]
 pub struct CustomErrorResponses {
-    #[doc="<p>A complex type that contains a <code>CustomErrorResponse</code> element for each HTTP status code for which you want to specify a custom error page and/or a caching duration. </p>"]
+    /// <p>A complex type that contains a <code>CustomErrorResponse</code> element for each HTTP status code for which you want to specify a custom error page and/or a caching duration. </p>
     pub items: Option<Vec<CustomErrorResponse>>,
-    #[doc="<p>The number of HTTP status codes for which you want to specify a custom error page and/or a caching duration. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>"]
+    /// <p>The number of HTTP status codes for which you want to specify a custom error page and/or a caching duration. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>
     pub quantity: i64,
 }
 
 struct CustomErrorResponsesDeserializer;
 impl CustomErrorResponsesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CustomErrorResponses, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CustomErrorResponses, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CustomErrorResponses::default();
@@ -1922,20 +1966,18 @@ impl CustomErrorResponsesDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items =
-                                Some(try!(CustomErrorResponseListDeserializer::deserialize("Items",
-                                                                                           stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items = Some(try!(CustomErrorResponseListDeserializer::deserialize(
+                            "Items",
+                            stack
+                        )));
                     }
-                }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1946,47 +1988,50 @@ impl CustomErrorResponsesDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct CustomErrorResponsesSerializer;
 impl CustomErrorResponsesSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &CustomErrorResponses)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CustomErrorResponses,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.items {
             &CustomErrorResponseListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>A complex type that contains the list of Custom Headers for each origin. </p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that contains the list of Custom Headers for each origin. </p>
+#[derive(Default, Debug)]
 pub struct CustomHeaders {
-    #[doc="<p> <b>Optional</b>: A list that contains one <code>OriginCustomHeader</code> element for each custom header that you want CloudFront to forward to the origin. If Quantity is <code>0</code>, omit <code>Items</code>.</p>"]
+    /// <p> <b>Optional</b>: A list that contains one <code>OriginCustomHeader</code> element for each custom header that you want CloudFront to forward to the origin. If Quantity is <code>0</code>, omit <code>Items</code>.</p>
     pub items: Option<Vec<OriginCustomHeader>>,
-    #[doc="<p>The number of custom headers, if any, for this distribution.</p>"]
+    /// <p>The number of custom headers, if any, for this distribution.</p>
     pub quantity: i64,
 }
 
 struct CustomHeadersDeserializer;
 impl CustomHeadersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CustomHeaders, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CustomHeaders, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CustomHeaders::default();
@@ -2001,20 +2046,18 @@ impl CustomHeadersDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items =
-                                Some(try!(OriginCustomHeadersListDeserializer::deserialize("Items",
-                                                                                           stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items = Some(try!(OriginCustomHeadersListDeserializer::deserialize(
+                            "Items",
+                            stack
+                        )));
                     }
-                }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2025,55 +2068,58 @@ impl CustomHeadersDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct CustomHeadersSerializer;
 impl CustomHeadersSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &CustomHeaders)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CustomHeaders,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.items {
             &OriginCustomHeadersListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>A customer origin.</p>"]
-#[derive(Default,Debug)]
+/// <p>A customer origin.</p>
+#[derive(Default, Debug)]
 pub struct CustomOriginConfig {
-    #[doc="<p>The HTTP port the custom origin listens on.</p>"]
+    /// <p>The HTTP port the custom origin listens on.</p>
     pub http_port: i64,
-    #[doc="<p>The HTTPS port the custom origin listens on.</p>"]
+    /// <p>The HTTPS port the custom origin listens on.</p>
     pub https_port: i64,
-    #[doc="<p>You can create a custom keep-alive timeout. All timeout units are in seconds. The default keep-alive timeout is 5 seconds, but you can configure custom timeout lengths using the CloudFront API. The minimum timeout length is 1 second; the maximum is 60 seconds.</p> <p>If you need to increase the maximum time limit, contact the <a href=\"https://console.aws.amazon.com/support/home#/\">AWS Support Center</a>.</p>"]
+    /// <p>You can create a custom keep-alive timeout. All timeout units are in seconds. The default keep-alive timeout is 5 seconds, but you can configure custom timeout lengths using the CloudFront API. The minimum timeout length is 1 second; the maximum is 60 seconds.</p> <p>If you need to increase the maximum time limit, contact the <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>.</p>
     pub origin_keepalive_timeout: Option<i64>,
-    #[doc="<p>The origin protocol policy to apply to your origin.</p>"]
+    /// <p>The origin protocol policy to apply to your origin.</p>
     pub origin_protocol_policy: String,
-    #[doc="<p>You can create a custom origin read timeout. All timeout units are in seconds. The default origin read timeout is 30 seconds, but you can configure custom timeout lengths using the CloudFront API. The minimum timeout length is 4 seconds; the maximum is 60 seconds.</p> <p>If you need to increase the maximum time limit, contact the <a href=\"https://console.aws.amazon.com/support/home#/\">AWS Support Center</a>.</p>"]
+    /// <p>You can create a custom origin read timeout. All timeout units are in seconds. The default origin read timeout is 30 seconds, but you can configure custom timeout lengths using the CloudFront API. The minimum timeout length is 4 seconds; the maximum is 60 seconds.</p> <p>If you need to increase the maximum time limit, contact the <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>.</p>
     pub origin_read_timeout: Option<i64>,
-    #[doc="<p>The SSL/TLS protocols that you want CloudFront to use when communicating with your origin over HTTPS.</p>"]
+    /// <p>The SSL/TLS protocols that you want CloudFront to use when communicating with your origin over HTTPS.</p>
     pub origin_ssl_protocols: Option<OriginSslProtocols>,
 }
 
 struct CustomOriginConfigDeserializer;
 impl CustomOriginConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CustomOriginConfig, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CustomOriginConfig, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CustomOriginConfig::default();
@@ -2088,39 +2134,40 @@ impl CustomOriginConfigDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "HTTPPort" => {
-                            obj.http_port = try!(IntegerDeserializer::deserialize("HTTPPort",
-                                                                                  stack));
-                        }
-                        "HTTPSPort" => {
-                            obj.https_port = try!(IntegerDeserializer::deserialize("HTTPSPort",
-                                                                                   stack));
-                        }
-                        "OriginKeepaliveTimeout" => {
-                            obj.origin_keepalive_timeout =
-                                Some(try!(IntegerDeserializer::deserialize("OriginKeepaliveTimeout",
-                                                                           stack)));
-                        }
-                        "OriginProtocolPolicy" => {
-                            obj.origin_protocol_policy =
-                                try!(OriginProtocolPolicyDeserializer::deserialize("OriginProtocolPolicy",
-                                                                                   stack));
-                        }
-                        "OriginReadTimeout" => {
-                            obj.origin_read_timeout =
-                                Some(try!(IntegerDeserializer::deserialize("OriginReadTimeout",
-                                                                           stack)));
-                        }
-                        "OriginSslProtocols" => {
-                            obj.origin_ssl_protocols =
-                                Some(try!(OriginSslProtocolsDeserializer::deserialize("OriginSslProtocols",
-                                                                                      stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "HTTPPort" => {
+                        obj.http_port = try!(IntegerDeserializer::deserialize("HTTPPort", stack));
                     }
-                }
+                    "HTTPSPort" => {
+                        obj.https_port = try!(IntegerDeserializer::deserialize("HTTPSPort", stack));
+                    }
+                    "OriginKeepaliveTimeout" => {
+                        obj.origin_keepalive_timeout = Some(try!(
+                            IntegerDeserializer::deserialize("OriginKeepaliveTimeout", stack)
+                        ));
+                    }
+                    "OriginProtocolPolicy" => {
+                        obj.origin_protocol_policy =
+                            try!(OriginProtocolPolicyDeserializer::deserialize(
+                                "OriginProtocolPolicy",
+                                stack
+                            ));
+                    }
+                    "OriginReadTimeout" => {
+                        obj.origin_read_timeout = Some(try!(IntegerDeserializer::deserialize(
+                            "OriginReadTimeout",
+                            stack
+                        )));
+                    }
+                    "OriginSslProtocols" => {
+                        obj.origin_ssl_protocols =
+                            Some(try!(OriginSslProtocolsDeserializer::deserialize(
+                                "OriginSslProtocols",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2131,46 +2178,55 @@ impl CustomOriginConfigDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct CustomOriginConfigSerializer;
 impl CustomOriginConfigSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &CustomOriginConfig)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CustomOriginConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("HTTPPort"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.http_port)))?;
+        writer.write(xml::writer::XmlEvent::start_element("HTTPPort"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.http_port
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("HTTPSPort"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.https_port)))?;
+        writer.write(xml::writer::XmlEvent::start_element("HTTPSPort"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.https_port
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.origin_keepalive_timeout {
-            writer
-                .write(xml::writer::XmlEvent::start_element("OriginKeepaliveTimeout"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element(
+                "OriginKeepaliveTimeout",
+            ))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("OriginProtocolPolicy"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.origin_protocol_policy)))?;
+        writer.write(xml::writer::XmlEvent::start_element("OriginProtocolPolicy"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.origin_protocol_policy
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.origin_read_timeout {
-            writer
-                .write(xml::writer::XmlEvent::start_element("OriginReadTimeout"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("OriginReadTimeout"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.origin_ssl_protocols {
@@ -2180,37 +2236,38 @@ impl CustomOriginConfigSerializer {
     }
 }
 
-#[doc="<p>A complex type that describes the default cache behavior if you do not specify a <code>CacheBehavior</code> element or if files don't match any of the values of <code>PathPattern</code> in <code>CacheBehavior</code> elements. You must create exactly one default cache behavior.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that describes the default cache behavior if you do not specify a <code>CacheBehavior</code> element or if files don't match any of the values of <code>PathPattern</code> in <code>CacheBehavior</code> elements. You must create exactly one default cache behavior.</p>
+#[derive(Default, Debug)]
 pub struct DefaultCacheBehavior {
     pub allowed_methods: Option<AllowedMethods>,
-    #[doc="<p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html\">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub compress: Option<bool>,
-    #[doc="<p>The default amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin does not add HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html\">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>The default amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin does not add HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub default_ttl: Option<i64>,
-    #[doc="<p>A complex type that specifies how CloudFront handles query strings and cookies.</p>"]
+    /// <p>A complex type that specifies how CloudFront handles query strings and cookies.</p>
     pub forwarded_values: ForwardedValues,
-    #[doc="<p>A complex type that contains zero or more Lambda function associations for a cache behavior.</p>"]
+    /// <p>A complex type that contains zero or more Lambda function associations for a cache behavior.</p>
     pub lambda_function_associations: Option<LambdaFunctionAssociations>,
     pub max_ttl: Option<i64>,
-    #[doc="<p>The minimum amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html\">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>You must specify <code>0</code> for <code>MinTTL</code> if you configure CloudFront to forward all headers to your origin (under <code>Headers</code>, if you specify <code>1</code> for <code>Quantity</code> and <code>*</code> for <code>Name</code>).</p>"]
+    /// <p>The minimum amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>You must specify <code>0</code> for <code>MinTTL</code> if you configure CloudFront to forward all headers to your origin (under <code>Headers</code>, if you specify <code>1</code> for <code>Quantity</code> and <code>*</code> for <code>Name</code>).</p>
     pub min_ttl: i64,
-    #[doc="<p>Indicates whether you want to distribute media files in the Microsoft Smooth Streaming format using the origin that is associated with this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. If you specify <code>true</code> for <code>SmoothStreaming</code>, you can still distribute other content using this cache behavior if the content matches the value of <code>PathPattern</code>. </p>"]
+    /// <p>Indicates whether you want to distribute media files in the Microsoft Smooth Streaming format using the origin that is associated with this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. If you specify <code>true</code> for <code>SmoothStreaming</code>, you can still distribute other content using this cache behavior if the content matches the value of <code>PathPattern</code>. </p>
     pub smooth_streaming: Option<bool>,
-    #[doc="<p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when a request matches the path pattern either for a cache behavior or for the default cache behavior.</p>"]
+    /// <p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when a request matches the path pattern either for a cache behavior or for the default cache behavior.</p>
     pub target_origin_id: String,
-    #[doc="<p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>"]
+    /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
     pub trusted_signers: TrustedSigners,
-    #[doc="<p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL.</p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden).</p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html\">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects' cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html\">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note>"]
+    /// <p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL.</p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden).</p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects' cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note>
     pub viewer_protocol_policy: String,
 }
 
 struct DefaultCacheBehaviorDeserializer;
 impl DefaultCacheBehaviorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DefaultCacheBehavior, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DefaultCacheBehavior, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DefaultCacheBehavior::default();
@@ -2225,58 +2282,65 @@ impl DefaultCacheBehaviorDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AllowedMethods" => {
-                            obj.allowed_methods =
-                                Some(try!(AllowedMethodsDeserializer::deserialize("AllowedMethods",
-                                                                                  stack)));
-                        }
-                        "Compress" => {
-                            obj.compress = Some(try!(BooleanDeserializer::deserialize("Compress",
-                                                                                      stack)));
-                        }
-                        "DefaultTTL" => {
-                            obj.default_ttl = Some(try!(LongDeserializer::deserialize("DefaultTTL",
-                                                                                      stack)));
-                        }
-                        "ForwardedValues" => {
-                            obj.forwarded_values =
-                                try!(ForwardedValuesDeserializer::deserialize("ForwardedValues",
-                                                                              stack));
-                        }
-                        "LambdaFunctionAssociations" => {
-                            obj.lambda_function_associations = Some(try!(LambdaFunctionAssociationsDeserializer::deserialize("LambdaFunctionAssociations", stack)));
-                        }
-                        "MaxTTL" => {
-                            obj.max_ttl = Some(try!(LongDeserializer::deserialize("MaxTTL",
-                                                                                  stack)));
-                        }
-                        "MinTTL" => {
-                            obj.min_ttl = try!(LongDeserializer::deserialize("MinTTL", stack));
-                        }
-                        "SmoothStreaming" => {
-                            obj.smooth_streaming =
-                                Some(try!(BooleanDeserializer::deserialize("SmoothStreaming",
-                                                                           stack)));
-                        }
-                        "TargetOriginId" => {
-                            obj.target_origin_id = try!(StringDeserializer::deserialize("TargetOriginId",
-                                                                                        stack));
-                        }
-                        "TrustedSigners" => {
-                            obj.trusted_signers =
-                                try!(TrustedSignersDeserializer::deserialize("TrustedSigners",
-                                                                             stack));
-                        }
-                        "ViewerProtocolPolicy" => {
-                            obj.viewer_protocol_policy =
-                                try!(ViewerProtocolPolicyDeserializer::deserialize("ViewerProtocolPolicy",
-                                                                                   stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AllowedMethods" => {
+                        obj.allowed_methods = Some(try!(AllowedMethodsDeserializer::deserialize(
+                            "AllowedMethods",
+                            stack
+                        )));
                     }
-                }
+                    "Compress" => {
+                        obj.compress =
+                            Some(try!(BooleanDeserializer::deserialize("Compress", stack)));
+                    }
+                    "DefaultTTL" => {
+                        obj.default_ttl =
+                            Some(try!(LongDeserializer::deserialize("DefaultTTL", stack)));
+                    }
+                    "ForwardedValues" => {
+                        obj.forwarded_values = try!(ForwardedValuesDeserializer::deserialize(
+                            "ForwardedValues",
+                            stack
+                        ));
+                    }
+                    "LambdaFunctionAssociations" => {
+                        obj.lambda_function_associations =
+                            Some(try!(LambdaFunctionAssociationsDeserializer::deserialize(
+                                "LambdaFunctionAssociations",
+                                stack
+                            )));
+                    }
+                    "MaxTTL" => {
+                        obj.max_ttl = Some(try!(LongDeserializer::deserialize("MaxTTL", stack)));
+                    }
+                    "MinTTL" => {
+                        obj.min_ttl = try!(LongDeserializer::deserialize("MinTTL", stack));
+                    }
+                    "SmoothStreaming" => {
+                        obj.smooth_streaming = Some(try!(BooleanDeserializer::deserialize(
+                            "SmoothStreaming",
+                            stack
+                        )));
+                    }
+                    "TargetOriginId" => {
+                        obj.target_origin_id =
+                            try!(StringDeserializer::deserialize("TargetOriginId", stack));
+                    }
+                    "TrustedSigners" => {
+                        obj.trusted_signers = try!(TrustedSignersDeserializer::deserialize(
+                            "TrustedSigners",
+                            stack
+                        ));
+                    }
+                    "ViewerProtocolPolicy" => {
+                        obj.viewer_protocol_policy =
+                            try!(ViewerProtocolPolicyDeserializer::deserialize(
+                                "ViewerProtocolPolicy",
+                                stack
+                            ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2287,131 +2351,146 @@ impl DefaultCacheBehaviorDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct DefaultCacheBehaviorSerializer;
 impl DefaultCacheBehaviorSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &DefaultCacheBehavior)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &DefaultCacheBehavior,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.allowed_methods {
             &AllowedMethodsSerializer::serialize(&mut writer, "AllowedMethods", value)?;
         }
         if let Some(ref value) = obj.compress {
-            writer
-                .write(xml::writer::XmlEvent::start_element("Compress"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("Compress"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.default_ttl {
-            writer
-                .write(xml::writer::XmlEvent::start_element("DefaultTTL"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("DefaultTTL"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        ForwardedValuesSerializer::serialize(&mut writer,
-                                             "ForwardedValues",
-                                             &obj.forwarded_values)?;
+        ForwardedValuesSerializer::serialize(
+            &mut writer,
+            "ForwardedValues",
+            &obj.forwarded_values,
+        )?;
         if let Some(ref value) = obj.lambda_function_associations {
-            &LambdaFunctionAssociationsSerializer::serialize(&mut writer,
-                                                             "LambdaFunctionAssociations",
-                                                             value)?;
+            &LambdaFunctionAssociationsSerializer::serialize(
+                &mut writer,
+                "LambdaFunctionAssociations",
+                value,
+            )?;
         }
         if let Some(ref value) = obj.max_ttl {
-            writer
-                .write(xml::writer::XmlEvent::start_element("MaxTTL"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("MaxTTL"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("MinTTL"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.min_ttl)))?;
+        writer.write(xml::writer::XmlEvent::start_element("MinTTL"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.min_ttl
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.smooth_streaming {
-            writer
-                .write(xml::writer::XmlEvent::start_element("SmoothStreaming"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("SmoothStreaming"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("TargetOriginId"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.target_origin_id)))?;
+        writer.write(xml::writer::XmlEvent::start_element("TargetOriginId"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.target_origin_id
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", &obj.trusted_signers)?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("ViewerProtocolPolicy"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.viewer_protocol_policy)))?;
+        writer.write(xml::writer::XmlEvent::start_element("ViewerProtocolPolicy"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.viewer_protocol_policy
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>Deletes a origin access identity.</p>"]
-#[derive(Default,Debug)]
+/// <p>Deletes a origin access identity.</p>
+#[derive(Default, Debug)]
 pub struct DeleteCloudFrontOriginAccessIdentityRequest {
-    #[doc="<p>The origin access identity's ID.</p>"]
+    /// <p>The origin access identity's ID.</p>
     pub id: String,
-    #[doc="<p>The value of the <code>ETag</code> header you received from a previous <code>GET</code> or <code>PUT</code> request. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
+    /// <p>The value of the <code>ETag</code> header you received from a previous <code>GET</code> or <code>PUT</code> request. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub if_match: Option<String>,
 }
 
-#[doc="<p>This action deletes a web distribution. To delete a web distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete a web distribution using the CloudFront API:</b> </p> <ol> <li> <p>Disable the web distribution </p> </li> <li> <p>Submit a <code>GET Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution.</p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Distribution</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 6.</p> </li> <li> <p>Review the response to your <code>DELETE Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html\">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Debug)]
+/// <p>This action deletes a web distribution. To delete a web distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete a web distribution using the CloudFront API:</b> </p> <ol> <li> <p>Disable the web distribution </p> </li> <li> <p>Submit a <code>GET Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution.</p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Distribution</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 6.</p> </li> <li> <p>Review the response to your <code>DELETE Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+#[derive(Default, Debug)]
 pub struct DeleteDistributionRequest {
-    #[doc="<p>The distribution ID. </p>"]
+    /// <p>The distribution ID. </p>
     pub id: String,
-    #[doc="<p>The value of the <code>ETag</code> header that you received when you disabled the distribution. For example: <code>E2QWRUHAPOMQZL</code>. </p>"]
+    /// <p>The value of the <code>ETag</code> header that you received when you disabled the distribution. For example: <code>E2QWRUHAPOMQZL</code>. </p>
     pub if_match: Option<String>,
 }
 
-#[doc="<p>The request to delete a streaming distribution.</p>"]
-#[derive(Default,Debug)]
+/// <p>The request to delete a streaming distribution.</p>
+#[derive(Default, Debug)]
 pub struct DeleteStreamingDistributionRequest {
-    #[doc="<p>The distribution ID. </p>"]
+    /// <p>The distribution ID. </p>
     pub id: String,
-    #[doc="<p>The value of the <code>ETag</code> header that you received when you disabled the streaming distribution. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
+    /// <p>The value of the <code>ETag</code> header that you received when you disabled the streaming distribution. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub if_match: Option<String>,
 }
 
-#[doc="<p>The distribution's information.</p>"]
-#[derive(Default,Debug)]
+/// <p>The distribution's information.</p>
+#[derive(Default, Debug)]
 pub struct Distribution {
-    #[doc="<p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>"]
+    /// <p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
     pub arn: String,
-    #[doc="<p>CloudFront automatically adds this element to the response only if you've set up the distribution to serve private content with signed URLs. The element lists the key pair IDs that CloudFront is aware of for each trusted signer. The <code>Signer</code> child element lists the AWS account number of the trusted signer (or an empty <code>Self</code> element if the signer is you). The <code>Signer</code> element also includes the IDs of any active key pairs associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create working signed URLs.</p>"]
+    /// <p>CloudFront automatically adds this element to the response only if you've set up the distribution to serve private content with signed URLs. The element lists the key pair IDs that CloudFront is aware of for each trusted signer. The <code>Signer</code> child element lists the AWS account number of the trusted signer (or an empty <code>Self</code> element if the signer is you). The <code>Signer</code> element also includes the IDs of any active key pairs associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create working signed URLs.</p>
     pub active_trusted_signers: ActiveTrustedSigners,
-    #[doc="<p>The current configuration information for the distribution. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/distribution ID/config</code> resource.</p>"]
+    /// <p>The current configuration information for the distribution. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/distribution ID/config</code> resource.</p>
     pub distribution_config: DistributionConfig,
-    #[doc="<p>The domain name corresponding to the distribution. For example: <code>d604721fxaaqy9.cloudfront.net</code>. </p>"]
+    /// <p>The domain name corresponding to the distribution. For example: <code>d604721fxaaqy9.cloudfront.net</code>. </p>
     pub domain_name: String,
-    #[doc="<p>The identifier for the distribution. For example: <code>EDFDVBD632BHDS5</code>. </p>"]
+    /// <p>The identifier for the distribution. For example: <code>EDFDVBD632BHDS5</code>. </p>
     pub id: String,
-    #[doc="<p>The number of invalidation batches currently in progress. </p>"]
+    /// <p>The number of invalidation batches currently in progress. </p>
     pub in_progress_invalidation_batches: i64,
-    #[doc="<p>The date and time the distribution was last modified. </p>"]
+    /// <p>The date and time the distribution was last modified. </p>
     pub last_modified_time: String,
-    #[doc="<p>This response element indicates the current status of the distribution. When the status is <code>Deployed</code>, the distribution's information is fully propagated to all CloudFront edge locations. </p>"]
+    /// <p>This response element indicates the current status of the distribution. When the status is <code>Deployed</code>, the distribution's information is fully propagated to all CloudFront edge locations. </p>
     pub status: String,
 }
 
 struct DistributionDeserializer;
 impl DistributionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Distribution, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Distribution, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Distribution::default();
@@ -2426,43 +2505,49 @@ impl DistributionDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ARN" => {
-                            obj.arn = try!(StringDeserializer::deserialize("ARN", stack));
-                        }
-                        "ActiveTrustedSigners" => {
-                            obj.active_trusted_signers =
-                                try!(ActiveTrustedSignersDeserializer::deserialize("ActiveTrustedSigners",
-                                                                                   stack));
-                        }
-                        "DistributionConfig" => {
-                            obj.distribution_config =
-                                try!(DistributionConfigDeserializer::deserialize("DistributionConfig",
-                                                                                 stack));
-                        }
-                        "DomainName" => {
-                            obj.domain_name = try!(StringDeserializer::deserialize("DomainName",
-                                                                                   stack));
-                        }
-                        "Id" => {
-                            obj.id = try!(StringDeserializer::deserialize("Id", stack));
-                        }
-                        "InProgressInvalidationBatches" => {
-                            obj.in_progress_invalidation_batches =
-                                try!(IntegerDeserializer::deserialize("InProgressInvalidationBatches",
-                                                                      stack));
-                        }
-                        "LastModifiedTime" => {
-                            obj.last_modified_time =
-                                try!(TimestampDeserializer::deserialize("LastModifiedTime", stack));
-                        }
-                        "Status" => {
-                            obj.status = try!(StringDeserializer::deserialize("Status", stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ARN" => {
+                        obj.arn = try!(StringDeserializer::deserialize("ARN", stack));
                     }
-                }
+                    "ActiveTrustedSigners" => {
+                        obj.active_trusted_signers =
+                            try!(ActiveTrustedSignersDeserializer::deserialize(
+                                "ActiveTrustedSigners",
+                                stack
+                            ));
+                    }
+                    "DistributionConfig" => {
+                        obj.distribution_config =
+                            try!(DistributionConfigDeserializer::deserialize(
+                                "DistributionConfig",
+                                stack
+                            ));
+                    }
+                    "DomainName" => {
+                        obj.domain_name =
+                            try!(StringDeserializer::deserialize("DomainName", stack));
+                    }
+                    "Id" => {
+                        obj.id = try!(StringDeserializer::deserialize("Id", stack));
+                    }
+                    "InProgressInvalidationBatches" => {
+                        obj.in_progress_invalidation_batches =
+                            try!(IntegerDeserializer::deserialize(
+                                "InProgressInvalidationBatches",
+                                stack
+                            ));
+                    }
+                    "LastModifiedTime" => {
+                        obj.last_modified_time = try!(TimestampDeserializer::deserialize(
+                            "LastModifiedTime",
+                            stack
+                        ));
+                    }
+                    "Status" => {
+                        obj.status = try!(StringDeserializer::deserialize("Status", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2473,50 +2558,50 @@ impl DistributionDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>A distribution configuration.</p>"]
-#[derive(Default,Debug)]
+/// <p>A distribution configuration.</p>
+#[derive(Default, Debug)]
 pub struct DistributionConfig {
-    #[doc="<p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this distribution.</p>"]
+    /// <p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this distribution.</p>
     pub aliases: Option<Aliases>,
-    #[doc="<p>A complex type that contains zero or more <code>CacheBehavior</code> elements. </p>"]
+    /// <p>A complex type that contains zero or more <code>CacheBehavior</code> elements. </p>
     pub cache_behaviors: Option<CacheBehaviors>,
-    #[doc="<p>A unique value (for example, a date-time stamp) that ensures that the request can't be replayed.</p> <p>If the value of <code>CallerReference</code> is new (regardless of the content of the <code>DistributionConfig</code> object), CloudFront creates a new distribution.</p> <p>If <code>CallerReference</code> is a value you already sent in a previous request to create a distribution, and if the content of the <code>DistributionConfig</code> is identical to the original request (ignoring white space), CloudFront returns the same the response that it returned to the original request.</p> <p>If <code>CallerReference</code> is a value you already sent in a previous request to create a distribution but the content of the <code>DistributionConfig</code> is different from the original request, CloudFront returns a <code>DistributionAlreadyExists</code> error.</p>"]
+    /// <p>A unique value (for example, a date-time stamp) that ensures that the request can't be replayed.</p> <p>If the value of <code>CallerReference</code> is new (regardless of the content of the <code>DistributionConfig</code> object), CloudFront creates a new distribution.</p> <p>If <code>CallerReference</code> is a value you already sent in a previous request to create a distribution, and if the content of the <code>DistributionConfig</code> is identical to the original request (ignoring white space), CloudFront returns the same the response that it returned to the original request.</p> <p>If <code>CallerReference</code> is a value you already sent in a previous request to create a distribution but the content of the <code>DistributionConfig</code> is different from the original request, CloudFront returns a <code>DistributionAlreadyExists</code> error.</p>
     pub caller_reference: String,
-    #[doc="<p>Any comments you want to include about the distribution.</p> <p>If you don't want to specify a comment, include an empty <code>Comment</code> element.</p> <p>To delete an existing comment, update the distribution configuration and include an empty <code>Comment</code> element.</p> <p>To add or change a comment, update the distribution configuration and specify the new comment.</p>"]
+    /// <p>Any comments you want to include about the distribution.</p> <p>If you don't want to specify a comment, include an empty <code>Comment</code> element.</p> <p>To delete an existing comment, update the distribution configuration and include an empty <code>Comment</code> element.</p> <p>To add or change a comment, update the distribution configuration and specify the new comment.</p>
     pub comment: String,
-    #[doc="<p>A complex type that controls the following:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer.</p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html\">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>A complex type that controls the following:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer.</p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub custom_error_responses: Option<CustomErrorResponses>,
-    #[doc="<p>A complex type that describes the default cache behavior if you do not specify a <code>CacheBehavior</code> element or if files don't match any of the values of <code>PathPattern</code> in <code>CacheBehavior</code> elements. You must create exactly one default cache behavior.</p>"]
+    /// <p>A complex type that describes the default cache behavior if you do not specify a <code>CacheBehavior</code> element or if files don't match any of the values of <code>PathPattern</code> in <code>CacheBehavior</code> elements. You must create exactly one default cache behavior.</p>
     pub default_cache_behavior: DefaultCacheBehavior,
-    #[doc="<p>The object that you want CloudFront to request from your origin (for example, <code>index.html</code>) when a viewer requests the root URL for your distribution (<code>http://www.example.com</code>) instead of an object in your distribution (<code>http://www.example.com/product-description.html</code>). Specifying a default root object avoids exposing the contents of your distribution.</p> <p>Specify only the object name, for example, <code>index.html</code>. Do not add a <code>/</code> before the object name.</p> <p>If you don't want to specify a default root object when you create a distribution, include an empty <code>DefaultRootObject</code> element.</p> <p>To delete the default root object from an existing distribution, update the distribution configuration and include an empty <code>DefaultRootObject</code> element.</p> <p>To replace the default root object, update the distribution configuration and specify the new object.</p> <p>For more information about the default root object, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DefaultRootObject.html\">Creating a Default Root Object</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>The object that you want CloudFront to request from your origin (for example, <code>index.html</code>) when a viewer requests the root URL for your distribution (<code>http://www.example.com</code>) instead of an object in your distribution (<code>http://www.example.com/product-description.html</code>). Specifying a default root object avoids exposing the contents of your distribution.</p> <p>Specify only the object name, for example, <code>index.html</code>. Do not add a <code>/</code> before the object name.</p> <p>If you don't want to specify a default root object when you create a distribution, include an empty <code>DefaultRootObject</code> element.</p> <p>To delete the default root object from an existing distribution, update the distribution configuration and include an empty <code>DefaultRootObject</code> element.</p> <p>To replace the default root object, update the distribution configuration and specify the new object.</p> <p>For more information about the default root object, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DefaultRootObject.html">Creating a Default Root Object</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub default_root_object: Option<String>,
-    #[doc="<p>From this field, you can enable or disable the selected distribution.</p> <p>If you specify <code>false</code> for <code>Enabled</code> but you specify values for <code>Bucket</code> and <code>Prefix</code>, the values are automatically deleted.</p>"]
+    /// <p>From this field, you can enable or disable the selected distribution.</p> <p>If you specify <code>false</code> for <code>Enabled</code> but you specify values for <code>Bucket</code> and <code>Prefix</code>, the values are automatically deleted.</p>
     pub enabled: bool,
-    #[doc="<p>(Optional) Specify the maximum HTTP version that you want viewers to use to communicate with CloudFront. The default value for new web distributions is http2. Viewers that don't support HTTP/2 automatically use an earlier HTTP version.</p> <p>For viewers and CloudFront to use HTTP/2, viewers must support TLS 1.2 or later, and must support Server Name Identification (SNI).</p> <p>In general, configuring CloudFront to communicate with viewers using HTTP/2 reduces latency. You can improve performance by optimizing for HTTP/2. For more information, do an Internet search for \"http/2 optimization.\" </p>"]
+    /// <p>(Optional) Specify the maximum HTTP version that you want viewers to use to communicate with CloudFront. The default value for new web distributions is http2. Viewers that don't support HTTP/2 automatically use an earlier HTTP version.</p> <p>For viewers and CloudFront to use HTTP/2, viewers must support TLS 1.2 or later, and must support Server Name Identification (SNI).</p> <p>In general, configuring CloudFront to communicate with viewers using HTTP/2 reduces latency. You can improve performance by optimizing for HTTP/2. For more information, do an Internet search for "http/2 optimization." </p>
     pub http_version: Option<String>,
-    #[doc="<p>If you want CloudFront to respond to IPv6 DNS requests with an IPv6 address for your distribution, specify <code>true</code>. If you specify <code>false</code>, CloudFront responds to IPv6 DNS requests with the DNS response code <code>NOERROR</code> and with no IP addresses. This allows viewers to submit a second request, for an IPv4 address for your distribution. </p> <p>In general, you should enable IPv6 if you have users on IPv6 networks who want to access your content. However, if you're using signed URLs or signed cookies to restrict access to your content, and if you're using a custom policy that includes the <code>IpAddress</code> parameter to restrict the IP addresses that can access your content, do not enable IPv6. If you want to restrict access to some content by IP address and not restrict access to other content (or restrict access but not by IP address), you can create two distributions. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-creating-signed-url-custom-policy.html\">Creating a Signed URL Using a Custom Policy</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you're using an Amazon Route 53 alias resource record set to route traffic to your CloudFront distribution, you need to create a second alias resource record set when both of the following are true:</p> <ul> <li> <p>You enable IPv6 for the distribution</p> </li> <li> <p>You're using alternate domain names in the URLs for your objects</p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-cloudfront-distribution.html\">Routing Traffic to an Amazon CloudFront Web Distribution by Using Your Domain Name</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If you created a CNAME resource record set, either with Amazon Route 53 or with another DNS service, you don't need to make any changes. A CNAME record will route traffic to your distribution regardless of the IP address format of the viewer request.</p>"]
+    /// <p>If you want CloudFront to respond to IPv6 DNS requests with an IPv6 address for your distribution, specify <code>true</code>. If you specify <code>false</code>, CloudFront responds to IPv6 DNS requests with the DNS response code <code>NOERROR</code> and with no IP addresses. This allows viewers to submit a second request, for an IPv4 address for your distribution. </p> <p>In general, you should enable IPv6 if you have users on IPv6 networks who want to access your content. However, if you're using signed URLs or signed cookies to restrict access to your content, and if you're using a custom policy that includes the <code>IpAddress</code> parameter to restrict the IP addresses that can access your content, do not enable IPv6. If you want to restrict access to some content by IP address and not restrict access to other content (or restrict access but not by IP address), you can create two distributions. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-creating-signed-url-custom-policy.html">Creating a Signed URL Using a Custom Policy</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you're using an Amazon Route 53 alias resource record set to route traffic to your CloudFront distribution, you need to create a second alias resource record set when both of the following are true:</p> <ul> <li> <p>You enable IPv6 for the distribution</p> </li> <li> <p>You're using alternate domain names in the URLs for your objects</p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-cloudfront-distribution.html">Routing Traffic to an Amazon CloudFront Web Distribution by Using Your Domain Name</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If you created a CNAME resource record set, either with Amazon Route 53 or with another DNS service, you don't need to make any changes. A CNAME record will route traffic to your distribution regardless of the IP address format of the viewer request.</p>
     pub is_ipv6_enabled: Option<bool>,
-    #[doc="<p>A complex type that controls whether access logs are written for the distribution.</p> <p>For more information about logging, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html\">Access Logs</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>A complex type that controls whether access logs are written for the distribution.</p> <p>For more information about logging, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html">Access Logs</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub logging: Option<LoggingConfig>,
-    #[doc="<p>A complex type that contains information about origins for this distribution. </p>"]
+    /// <p>A complex type that contains information about origins for this distribution. </p>
     pub origins: Origins,
-    #[doc="<p>The price class that corresponds with the maximum price that you want to pay for CloudFront service. If you specify <code>PriceClass_All</code>, CloudFront responds to requests for your objects from all CloudFront edge locations.</p> <p>If you specify a price class other than <code>PriceClass_All</code>, CloudFront serves your objects from the CloudFront edge location that has the lowest latency among the edge locations in your price class. Viewers who are in or near regions that are excluded from your specified price class may encounter slower performance.</p> <p>For more information about price classes, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PriceClass.html\">Choosing the Price Class for a CloudFront Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>. For information about CloudFront pricing, including how price classes map to CloudFront regions, see <a href=\"https://aws.amazon.com/cloudfront/pricing/\">Amazon CloudFront Pricing</a>.</p>"]
+    /// <p>The price class that corresponds with the maximum price that you want to pay for CloudFront service. If you specify <code>PriceClass_All</code>, CloudFront responds to requests for your objects from all CloudFront edge locations.</p> <p>If you specify a price class other than <code>PriceClass_All</code>, CloudFront serves your objects from the CloudFront edge location that has the lowest latency among the edge locations in your price class. Viewers who are in or near regions that are excluded from your specified price class may encounter slower performance.</p> <p>For more information about price classes, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PriceClass.html">Choosing the Price Class for a CloudFront Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>. For information about CloudFront pricing, including how price classes map to CloudFront regions, see <a href="https://aws.amazon.com/cloudfront/pricing/">Amazon CloudFront Pricing</a>.</p>
     pub price_class: Option<String>,
     pub restrictions: Option<Restrictions>,
     pub viewer_certificate: Option<ViewerCertificate>,
-    #[doc="<p>A unique identifier that specifies the AWS WAF web ACL, if any, to associate with this distribution.</p> <p>AWS WAF is a web application firewall that lets you monitor the HTTP and HTTPS requests that are forwarded to CloudFront, and lets you control access to your content. Based on conditions that you specify, such as the IP addresses that requests originate from or the values of query strings, CloudFront responds to requests either with the requested content or with an HTTP 403 status code (Forbidden). You can also configure CloudFront to return a custom error page when a request is blocked. For more information about AWS WAF, see the <a href=\"http://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html\">AWS WAF Developer Guide</a>. </p>"]
+    /// <p>A unique identifier that specifies the AWS WAF web ACL, if any, to associate with this distribution.</p> <p>AWS WAF is a web application firewall that lets you monitor the HTTP and HTTPS requests that are forwarded to CloudFront, and lets you control access to your content. Based on conditions that you specify, such as the IP addresses that requests originate from or the values of query strings, CloudFront responds to requests either with the requested content or with an HTTP 403 status code (Forbidden). You can also configure CloudFront to return a custom error page when a request is blocked. For more information about AWS WAF, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html">AWS WAF Developer Guide</a>. </p>
     pub web_acl_id: Option<String>,
 }
 
 struct DistributionConfigDeserializer;
 impl DistributionConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DistributionConfig, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DistributionConfig, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DistributionConfig::default();
@@ -2531,81 +2616,91 @@ impl DistributionConfigDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Aliases" => {
-                            obj.aliases = Some(try!(AliasesDeserializer::deserialize("Aliases",
-                                                                                     stack)));
-                        }
-                        "CacheBehaviors" => {
-                            obj.cache_behaviors =
-                                Some(try!(CacheBehaviorsDeserializer::deserialize("CacheBehaviors",
-                                                                                  stack)));
-                        }
-                        "CallerReference" => {
-                            obj.caller_reference = try!(StringDeserializer::deserialize("CallerReference",
-                                                                                        stack));
-                        }
-                        "Comment" => {
-                            obj.comment = try!(StringDeserializer::deserialize("Comment", stack));
-                        }
-                        "CustomErrorResponses" => {
-                            obj.custom_error_responses =
-                                Some(try!(CustomErrorResponsesDeserializer::deserialize("CustomErrorResponses",
-                                                                                        stack)));
-                        }
-                        "DefaultCacheBehavior" => {
-                            obj.default_cache_behavior =
-                                try!(DefaultCacheBehaviorDeserializer::deserialize("DefaultCacheBehavior",
-                                                                                   stack));
-                        }
-                        "DefaultRootObject" => {
-                            obj.default_root_object =
-                                Some(try!(StringDeserializer::deserialize("DefaultRootObject",
-                                                                          stack)));
-                        }
-                        "Enabled" => {
-                            obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
-                        }
-                        "HttpVersion" => {
-                            obj.http_version =
-                                Some(try!(HttpVersionDeserializer::deserialize("HttpVersion",
-                                                                               stack)));
-                        }
-                        "IsIPV6Enabled" => {
-                            obj.is_ipv6_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("IsIPV6Enabled",
-                                                                           stack)));
-                        }
-                        "Logging" => {
-                            obj.logging = Some(try!(LoggingConfigDeserializer::deserialize("Logging",
-                                                                                           stack)));
-                        }
-                        "Origins" => {
-                            obj.origins = try!(OriginsDeserializer::deserialize("Origins", stack));
-                        }
-                        "PriceClass" => {
-                            obj.price_class =
-                                Some(try!(PriceClassDeserializer::deserialize("PriceClass",
-                                                                              stack)));
-                        }
-                        "Restrictions" => {
-                            obj.restrictions =
-                                Some(try!(RestrictionsDeserializer::deserialize("Restrictions",
-                                                                                stack)));
-                        }
-                        "ViewerCertificate" => {
-                            obj.viewer_certificate =
-                                Some(try!(ViewerCertificateDeserializer::deserialize("ViewerCertificate",
-                                                                                     stack)));
-                        }
-                        "WebACLId" => {
-                            obj.web_acl_id = Some(try!(StringDeserializer::deserialize("WebACLId",
-                                                                                       stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Aliases" => {
+                        obj.aliases =
+                            Some(try!(AliasesDeserializer::deserialize("Aliases", stack)));
                     }
-                }
+                    "CacheBehaviors" => {
+                        obj.cache_behaviors = Some(try!(CacheBehaviorsDeserializer::deserialize(
+                            "CacheBehaviors",
+                            stack
+                        )));
+                    }
+                    "CallerReference" => {
+                        obj.caller_reference =
+                            try!(StringDeserializer::deserialize("CallerReference", stack));
+                    }
+                    "Comment" => {
+                        obj.comment = try!(StringDeserializer::deserialize("Comment", stack));
+                    }
+                    "CustomErrorResponses" => {
+                        obj.custom_error_responses =
+                            Some(try!(CustomErrorResponsesDeserializer::deserialize(
+                                "CustomErrorResponses",
+                                stack
+                            )));
+                    }
+                    "DefaultCacheBehavior" => {
+                        obj.default_cache_behavior =
+                            try!(DefaultCacheBehaviorDeserializer::deserialize(
+                                "DefaultCacheBehavior",
+                                stack
+                            ));
+                    }
+                    "DefaultRootObject" => {
+                        obj.default_root_object = Some(try!(StringDeserializer::deserialize(
+                            "DefaultRootObject",
+                            stack
+                        )));
+                    }
+                    "Enabled" => {
+                        obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
+                    }
+                    "HttpVersion" => {
+                        obj.http_version = Some(try!(HttpVersionDeserializer::deserialize(
+                            "HttpVersion",
+                            stack
+                        )));
+                    }
+                    "IsIPV6Enabled" => {
+                        obj.is_ipv6_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "IsIPV6Enabled",
+                            stack
+                        )));
+                    }
+                    "Logging" => {
+                        obj.logging = Some(try!(LoggingConfigDeserializer::deserialize(
+                            "Logging",
+                            stack
+                        )));
+                    }
+                    "Origins" => {
+                        obj.origins = try!(OriginsDeserializer::deserialize("Origins", stack));
+                    }
+                    "PriceClass" => {
+                        obj.price_class = Some(try!(PriceClassDeserializer::deserialize(
+                            "PriceClass",
+                            stack
+                        )));
+                    }
+                    "Restrictions" => {
+                        obj.restrictions = Some(try!(RestrictionsDeserializer::deserialize(
+                            "Restrictions",
+                            stack
+                        )));
+                    }
+                    "ViewerCertificate" => {
+                        obj.viewer_certificate = Some(try!(
+                            ViewerCertificateDeserializer::deserialize("ViewerCertificate", stack)
+                        ));
+                    }
+                    "WebACLId" => {
+                        obj.web_acl_id =
+                            Some(try!(StringDeserializer::deserialize("WebACLId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2616,18 +2711,19 @@ impl DistributionConfigDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct DistributionConfigSerializer;
 impl DistributionConfigSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &DistributionConfig)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &DistributionConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.aliases {
@@ -2636,44 +2732,54 @@ impl DistributionConfigSerializer {
         if let Some(ref value) = obj.cache_behaviors {
             &CacheBehaviorsSerializer::serialize(&mut writer, "CacheBehaviors", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("CallerReference"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.caller_reference)))?;
+        writer.write(xml::writer::XmlEvent::start_element("CallerReference"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.caller_reference
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Comment"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.comment)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Comment"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.comment
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.custom_error_responses {
             &CustomErrorResponsesSerializer::serialize(&mut writer, "CustomErrorResponses", value)?;
         }
-        DefaultCacheBehaviorSerializer::serialize(&mut writer,
-                                                  "DefaultCacheBehavior",
-                                                  &obj.default_cache_behavior)?;
+        DefaultCacheBehaviorSerializer::serialize(
+            &mut writer,
+            "DefaultCacheBehavior",
+            &obj.default_cache_behavior,
+        )?;
         if let Some(ref value) = obj.default_root_object {
-            writer
-                .write(xml::writer::XmlEvent::start_element("DefaultRootObject"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("DefaultRootObject"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("Enabled"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.enabled)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Enabled"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.enabled
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.http_version {
-            writer
-                .write(xml::writer::XmlEvent::start_element("HttpVersion"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("HttpVersion"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.is_ipv6_enabled {
-            writer
-                .write(xml::writer::XmlEvent::start_element("IsIPV6Enabled"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("IsIPV6Enabled"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.logging {
@@ -2681,9 +2787,11 @@ impl DistributionConfigSerializer {
         }
         OriginsSerializer::serialize(&mut writer, "Origins", &obj.origins)?;
         if let Some(ref value) = obj.price_class {
-            writer
-                .write(xml::writer::XmlEvent::start_element("PriceClass"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("PriceClass"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.restrictions {
@@ -2693,66 +2801,72 @@ impl DistributionConfigSerializer {
             &ViewerCertificateSerializer::serialize(&mut writer, "ViewerCertificate", value)?;
         }
         if let Some(ref value) = obj.web_acl_id {
-            writer
-                .write(xml::writer::XmlEvent::start_element("WebACLId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("WebACLId"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>A distribution Configuration and a list of tags to be associated with the distribution.</p>"]
-#[derive(Default,Debug)]
+/// <p>A distribution Configuration and a list of tags to be associated with the distribution.</p>
+#[derive(Default, Debug)]
 pub struct DistributionConfigWithTags {
-    #[doc="<p>A distribution configuration.</p>"]
+    /// <p>A distribution configuration.</p>
     pub distribution_config: DistributionConfig,
-    #[doc="<p>A complex type that contains zero or more <code>Tag</code> elements.</p>"]
+    /// <p>A complex type that contains zero or more <code>Tag</code> elements.</p>
     pub tags: Tags,
 }
-
 
 pub struct DistributionConfigWithTagsSerializer;
 impl DistributionConfigWithTagsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &DistributionConfigWithTags)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &DistributionConfigWithTags,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        DistributionConfigSerializer::serialize(&mut writer,
-                                                "DistributionConfig",
-                                                &obj.distribution_config)?;
+        DistributionConfigSerializer::serialize(
+            &mut writer,
+            "DistributionConfig",
+            &obj.distribution_config,
+        )?;
         TagsSerializer::serialize(&mut writer, "Tags", &obj.tags)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>A distribution list.</p>"]
-#[derive(Default,Debug)]
+/// <p>A distribution list.</p>
+#[derive(Default, Debug)]
 pub struct DistributionList {
-    #[doc="<p>A flag that indicates whether more distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list.</p>"]
+    /// <p>A flag that indicates whether more distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list.</p>
     pub is_truncated: bool,
-    #[doc="<p>A complex type that contains one <code>DistributionSummary</code> element for each distribution that was created by the current AWS account.</p>"]
+    /// <p>A complex type that contains one <code>DistributionSummary</code> element for each distribution that was created by the current AWS account.</p>
     pub items: Option<Vec<DistributionSummary>>,
-    #[doc="<p>The value you provided for the <code>Marker</code> request parameter.</p>"]
+    /// <p>The value you provided for the <code>Marker</code> request parameter.</p>
     pub marker: String,
-    #[doc="<p>The value you provided for the <code>MaxItems</code> request parameter.</p>"]
+    /// <p>The value you provided for the <code>MaxItems</code> request parameter.</p>
     pub max_items: i64,
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value you can use for the <code>Marker</code> request parameter to continue listing your distributions where they left off. </p>"]
+    /// <p>If <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value you can use for the <code>Marker</code> request parameter to continue listing your distributions where they left off. </p>
     pub next_marker: Option<String>,
-    #[doc="<p>The number of distributions that were created by the current AWS account. </p>"]
+    /// <p>The number of distributions that were created by the current AWS account. </p>
     pub quantity: i64,
 }
 
 struct DistributionListDeserializer;
 impl DistributionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DistributionList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DistributionList, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DistributionList::default();
@@ -2767,35 +2881,32 @@ impl DistributionListDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "IsTruncated" => {
-                            obj.is_truncated = try!(BooleanDeserializer::deserialize("IsTruncated",
-                                                                                     stack));
-                        }
-                        "Items" => {
-                            obj.items =
-                                Some(try!(DistributionSummaryListDeserializer::deserialize("Items",
-                                                                                           stack)));
-                        }
-                        "Marker" => {
-                            obj.marker = try!(StringDeserializer::deserialize("Marker", stack));
-                        }
-                        "MaxItems" => {
-                            obj.max_items = try!(IntegerDeserializer::deserialize("MaxItems",
-                                                                                  stack));
-                        }
-                        "NextMarker" => {
-                            obj.next_marker = Some(try!(StringDeserializer::deserialize("NextMarker",
-                                                                                        stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "IsTruncated" => {
+                        obj.is_truncated =
+                            try!(BooleanDeserializer::deserialize("IsTruncated", stack));
                     }
-                }
+                    "Items" => {
+                        obj.items = Some(try!(DistributionSummaryListDeserializer::deserialize(
+                            "Items",
+                            stack
+                        )));
+                    }
+                    "Marker" => {
+                        obj.marker = try!(StringDeserializer::deserialize("Marker", stack));
+                    }
+                    "MaxItems" => {
+                        obj.max_items = try!(IntegerDeserializer::deserialize("MaxItems", stack));
+                    }
+                    "NextMarker" => {
+                        obj.next_marker =
+                            Some(try!(StringDeserializer::deserialize("NextMarker", stack)));
+                    }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2806,53 +2917,53 @@ impl DistributionListDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>A summary of the information about a CloudFront distribution.</p>"]
-#[derive(Default,Debug)]
+/// <p>A summary of the information about a CloudFront distribution.</p>
+#[derive(Default, Debug)]
 pub struct DistributionSummary {
-    #[doc="<p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>"]
+    /// <p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
     pub arn: String,
-    #[doc="<p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this distribution.</p>"]
+    /// <p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this distribution.</p>
     pub aliases: Aliases,
-    #[doc="<p>A complex type that contains zero or more <code>CacheBehavior</code> elements.</p>"]
+    /// <p>A complex type that contains zero or more <code>CacheBehavior</code> elements.</p>
     pub cache_behaviors: CacheBehaviors,
-    #[doc="<p>The comment originally specified when this distribution was created.</p>"]
+    /// <p>The comment originally specified when this distribution was created.</p>
     pub comment: String,
-    #[doc="<p>A complex type that contains zero or more <code>CustomErrorResponses</code> elements.</p>"]
+    /// <p>A complex type that contains zero or more <code>CustomErrorResponses</code> elements.</p>
     pub custom_error_responses: CustomErrorResponses,
-    #[doc="<p>A complex type that describes the default cache behavior if you do not specify a <code>CacheBehavior</code> element or if files don't match any of the values of <code>PathPattern</code> in <code>CacheBehavior</code> elements. You must create exactly one default cache behavior.</p>"]
+    /// <p>A complex type that describes the default cache behavior if you do not specify a <code>CacheBehavior</code> element or if files don't match any of the values of <code>PathPattern</code> in <code>CacheBehavior</code> elements. You must create exactly one default cache behavior.</p>
     pub default_cache_behavior: DefaultCacheBehavior,
-    #[doc="<p>The domain name that corresponds to the distribution. For example: <code>d604721fxaaqy9.cloudfront.net</code>.</p>"]
+    /// <p>The domain name that corresponds to the distribution. For example: <code>d604721fxaaqy9.cloudfront.net</code>.</p>
     pub domain_name: String,
-    #[doc="<p>Whether the distribution is enabled to accept user requests for content.</p>"]
+    /// <p>Whether the distribution is enabled to accept user requests for content.</p>
     pub enabled: bool,
-    #[doc="<p> Specify the maximum HTTP version that you want viewers to use to communicate with CloudFront. The default value for new web distributions is <code>http2</code>. Viewers that don't support <code>HTTP/2</code> will automatically use an earlier version.</p>"]
+    /// <p> Specify the maximum HTTP version that you want viewers to use to communicate with CloudFront. The default value for new web distributions is <code>http2</code>. Viewers that don't support <code>HTTP/2</code> will automatically use an earlier version.</p>
     pub http_version: String,
-    #[doc="<p>The identifier for the distribution. For example: <code>EDFDVBD632BHDS5</code>.</p>"]
+    /// <p>The identifier for the distribution. For example: <code>EDFDVBD632BHDS5</code>.</p>
     pub id: String,
-    #[doc="<p>Whether CloudFront responds to IPv6 DNS requests with an IPv6 address for your distribution.</p>"]
+    /// <p>Whether CloudFront responds to IPv6 DNS requests with an IPv6 address for your distribution.</p>
     pub is_ipv6_enabled: bool,
-    #[doc="<p>The date and time the distribution was last modified.</p>"]
+    /// <p>The date and time the distribution was last modified.</p>
     pub last_modified_time: String,
-    #[doc="<p>A complex type that contains information about origins for this distribution.</p>"]
+    /// <p>A complex type that contains information about origins for this distribution.</p>
     pub origins: Origins,
     pub price_class: String,
     pub restrictions: Restrictions,
-    #[doc="<p>The current status of the distribution. When the status is <code>Deployed</code>, the distribution's information is propagated to all CloudFront edge locations.</p>"]
+    /// <p>The current status of the distribution. When the status is <code>Deployed</code>, the distribution's information is propagated to all CloudFront edge locations.</p>
     pub status: String,
     pub viewer_certificate: ViewerCertificate,
-    #[doc="<p>The Web ACL Id (if any) associated with the distribution.</p>"]
+    /// <p>The Web ACL Id (if any) associated with the distribution.</p>
     pub web_acl_id: String,
 }
 
 struct DistributionSummaryDeserializer;
 impl DistributionSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DistributionSummary, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DistributionSummary, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DistributionSummary::default();
@@ -2867,80 +2978,85 @@ impl DistributionSummaryDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ARN" => {
-                            obj.arn = try!(StringDeserializer::deserialize("ARN", stack));
-                        }
-                        "Aliases" => {
-                            obj.aliases = try!(AliasesDeserializer::deserialize("Aliases", stack));
-                        }
-                        "CacheBehaviors" => {
-                            obj.cache_behaviors =
-                                try!(CacheBehaviorsDeserializer::deserialize("CacheBehaviors",
-                                                                             stack));
-                        }
-                        "Comment" => {
-                            obj.comment = try!(StringDeserializer::deserialize("Comment", stack));
-                        }
-                        "CustomErrorResponses" => {
-                            obj.custom_error_responses =
-                                try!(CustomErrorResponsesDeserializer::deserialize("CustomErrorResponses",
-                                                                                   stack));
-                        }
-                        "DefaultCacheBehavior" => {
-                            obj.default_cache_behavior =
-                                try!(DefaultCacheBehaviorDeserializer::deserialize("DefaultCacheBehavior",
-                                                                                   stack));
-                        }
-                        "DomainName" => {
-                            obj.domain_name = try!(StringDeserializer::deserialize("DomainName",
-                                                                                   stack));
-                        }
-                        "Enabled" => {
-                            obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
-                        }
-                        "HttpVersion" => {
-                            obj.http_version = try!(HttpVersionDeserializer::deserialize("HttpVersion",
-                                                                                         stack));
-                        }
-                        "Id" => {
-                            obj.id = try!(StringDeserializer::deserialize("Id", stack));
-                        }
-                        "IsIPV6Enabled" => {
-                            obj.is_ipv6_enabled = try!(BooleanDeserializer::deserialize("IsIPV6Enabled",
-                                                                                        stack));
-                        }
-                        "LastModifiedTime" => {
-                            obj.last_modified_time =
-                                try!(TimestampDeserializer::deserialize("LastModifiedTime", stack));
-                        }
-                        "Origins" => {
-                            obj.origins = try!(OriginsDeserializer::deserialize("Origins", stack));
-                        }
-                        "PriceClass" => {
-                            obj.price_class = try!(PriceClassDeserializer::deserialize("PriceClass",
-                                                                                       stack));
-                        }
-                        "Restrictions" => {
-                            obj.restrictions = try!(RestrictionsDeserializer::deserialize("Restrictions",
-                                                                                          stack));
-                        }
-                        "Status" => {
-                            obj.status = try!(StringDeserializer::deserialize("Status", stack));
-                        }
-                        "ViewerCertificate" => {
-                            obj.viewer_certificate =
-                                try!(ViewerCertificateDeserializer::deserialize("ViewerCertificate",
-                                                                                stack));
-                        }
-                        "WebACLId" => {
-                            obj.web_acl_id = try!(StringDeserializer::deserialize("WebACLId",
-                                                                                  stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ARN" => {
+                        obj.arn = try!(StringDeserializer::deserialize("ARN", stack));
                     }
-                }
+                    "Aliases" => {
+                        obj.aliases = try!(AliasesDeserializer::deserialize("Aliases", stack));
+                    }
+                    "CacheBehaviors" => {
+                        obj.cache_behaviors = try!(CacheBehaviorsDeserializer::deserialize(
+                            "CacheBehaviors",
+                            stack
+                        ));
+                    }
+                    "Comment" => {
+                        obj.comment = try!(StringDeserializer::deserialize("Comment", stack));
+                    }
+                    "CustomErrorResponses" => {
+                        obj.custom_error_responses =
+                            try!(CustomErrorResponsesDeserializer::deserialize(
+                                "CustomErrorResponses",
+                                stack
+                            ));
+                    }
+                    "DefaultCacheBehavior" => {
+                        obj.default_cache_behavior =
+                            try!(DefaultCacheBehaviorDeserializer::deserialize(
+                                "DefaultCacheBehavior",
+                                stack
+                            ));
+                    }
+                    "DomainName" => {
+                        obj.domain_name =
+                            try!(StringDeserializer::deserialize("DomainName", stack));
+                    }
+                    "Enabled" => {
+                        obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
+                    }
+                    "HttpVersion" => {
+                        obj.http_version =
+                            try!(HttpVersionDeserializer::deserialize("HttpVersion", stack));
+                    }
+                    "Id" => {
+                        obj.id = try!(StringDeserializer::deserialize("Id", stack));
+                    }
+                    "IsIPV6Enabled" => {
+                        obj.is_ipv6_enabled =
+                            try!(BooleanDeserializer::deserialize("IsIPV6Enabled", stack));
+                    }
+                    "LastModifiedTime" => {
+                        obj.last_modified_time = try!(TimestampDeserializer::deserialize(
+                            "LastModifiedTime",
+                            stack
+                        ));
+                    }
+                    "Origins" => {
+                        obj.origins = try!(OriginsDeserializer::deserialize("Origins", stack));
+                    }
+                    "PriceClass" => {
+                        obj.price_class =
+                            try!(PriceClassDeserializer::deserialize("PriceClass", stack));
+                    }
+                    "Restrictions" => {
+                        obj.restrictions =
+                            try!(RestrictionsDeserializer::deserialize("Restrictions", stack));
+                    }
+                    "Status" => {
+                        obj.status = try!(StringDeserializer::deserialize("Status", stack));
+                    }
+                    "ViewerCertificate" => {
+                        obj.viewer_certificate = try!(ViewerCertificateDeserializer::deserialize(
+                            "ViewerCertificate",
+                            stack
+                        ));
+                    }
+                    "WebACLId" => {
+                        obj.web_acl_id = try!(StringDeserializer::deserialize("WebACLId", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2951,16 +3067,15 @@ impl DistributionSummaryDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct DistributionSummaryListDeserializer;
 impl DistributionSummaryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<DistributionSummary>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<DistributionSummary>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -2976,7 +3091,10 @@ impl DistributionSummaryListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DistributionSummary" {
-                        obj.push(try!(DistributionSummaryDeserializer::deserialize("DistributionSummary", stack)));
+                        obj.push(try!(DistributionSummaryDeserializer::deserialize(
+                            "DistributionSummary",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -2992,60 +3110,63 @@ impl DistributionSummaryListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct EventTypeSerializer;
 impl EventTypeSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
-#[doc="<p>A complex type that specifies how CloudFront handles query strings and cookies.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that specifies how CloudFront handles query strings and cookies.</p>
+#[derive(Default, Debug)]
 pub struct ForwardedValues {
-    #[doc="<p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html\">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub cookies: CookiePreference,
-    #[doc="<p>A complex type that specifies the <code>Headers</code>, if any, that you want CloudFront to vary upon for this cache behavior. </p>"]
+    /// <p>A complex type that specifies the <code>Headers</code>, if any, that you want CloudFront to vary upon for this cache behavior. </p>
     pub headers: Option<Headers>,
-    #[doc="<p>Indicates whether you want CloudFront to forward query strings to the origin that is associated with this cache behavior and cache based on the query string parameters. CloudFront behavior depends on the value of <code>QueryString</code> and on the values that you specify for <code>QueryStringCacheKeys</code>, if any:</p> <p>If you specify true for <code>QueryString</code> and you don't specify any values for <code>QueryStringCacheKeys</code>, CloudFront forwards all query string parameters to the origin and caches based on all query string parameters. Depending on how many query string parameters and values you have, this can adversely affect performance because CloudFront must forward more requests to the origin.</p> <p>If you specify true for <code>QueryString</code> and you specify one or more values for <code>QueryStringCacheKeys</code>, CloudFront forwards all query string parameters to the origin, but it only caches based on the query string parameters that you specify.</p> <p>If you specify false for <code>QueryString</code>, CloudFront doesn't forward any query string parameters to the origin, and doesn't cache based on query string parameters.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/QueryStringParameters.html\">Configuring CloudFront to Cache Based on Query String Parameters</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>Indicates whether you want CloudFront to forward query strings to the origin that is associated with this cache behavior and cache based on the query string parameters. CloudFront behavior depends on the value of <code>QueryString</code> and on the values that you specify for <code>QueryStringCacheKeys</code>, if any:</p> <p>If you specify true for <code>QueryString</code> and you don't specify any values for <code>QueryStringCacheKeys</code>, CloudFront forwards all query string parameters to the origin and caches based on all query string parameters. Depending on how many query string parameters and values you have, this can adversely affect performance because CloudFront must forward more requests to the origin.</p> <p>If you specify true for <code>QueryString</code> and you specify one or more values for <code>QueryStringCacheKeys</code>, CloudFront forwards all query string parameters to the origin, but it only caches based on the query string parameters that you specify.</p> <p>If you specify false for <code>QueryString</code>, CloudFront doesn't forward any query string parameters to the origin, and doesn't cache based on query string parameters.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/QueryStringParameters.html">Configuring CloudFront to Cache Based on Query String Parameters</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub query_string: bool,
-    #[doc="<p>A complex type that contains information about the query string parameters that you want CloudFront to use for caching for this cache behavior.</p>"]
+    /// <p>A complex type that contains information about the query string parameters that you want CloudFront to use for caching for this cache behavior.</p>
     pub query_string_cache_keys: Option<QueryStringCacheKeys>,
 }
 
 struct ForwardedValuesDeserializer;
 impl ForwardedValuesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ForwardedValues, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ForwardedValues, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ForwardedValues::default();
@@ -3060,28 +3181,28 @@ impl ForwardedValuesDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Cookies" => {
-                            obj.cookies = try!(CookiePreferenceDeserializer::deserialize("Cookies",
-                                                                                         stack));
-                        }
-                        "Headers" => {
-                            obj.headers = Some(try!(HeadersDeserializer::deserialize("Headers",
-                                                                                     stack)));
-                        }
-                        "QueryString" => {
-                            obj.query_string = try!(BooleanDeserializer::deserialize("QueryString",
-                                                                                     stack));
-                        }
-                        "QueryStringCacheKeys" => {
-                            obj.query_string_cache_keys =
-                                Some(try!(QueryStringCacheKeysDeserializer::deserialize("QueryStringCacheKeys",
-                                                                                        stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Cookies" => {
+                        obj.cookies =
+                            try!(CookiePreferenceDeserializer::deserialize("Cookies", stack));
                     }
-                }
+                    "Headers" => {
+                        obj.headers =
+                            Some(try!(HeadersDeserializer::deserialize("Headers", stack)));
+                    }
+                    "QueryString" => {
+                        obj.query_string =
+                            try!(BooleanDeserializer::deserialize("QueryString", stack));
+                    }
+                    "QueryStringCacheKeys" => {
+                        obj.query_string_cache_keys =
+                            Some(try!(QueryStringCacheKeysDeserializer::deserialize(
+                                "QueryStringCacheKeys",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3092,29 +3213,30 @@ impl ForwardedValuesDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct ForwardedValuesSerializer;
 impl ForwardedValuesSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &ForwardedValues)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &ForwardedValues,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         CookiePreferenceSerializer::serialize(&mut writer, "Cookies", &obj.cookies)?;
         if let Some(ref value) = obj.headers {
             &HeadersSerializer::serialize(&mut writer, "Headers", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("QueryString"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.query_string)))?;
+        writer.write(xml::writer::XmlEvent::start_element("QueryString"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.query_string
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.query_string_cache_keys {
             &QueryStringCacheKeysSerializer::serialize(&mut writer, "QueryStringCacheKeys", value)?;
@@ -3123,23 +3245,24 @@ impl ForwardedValuesSerializer {
     }
 }
 
-#[doc="<p>A complex type that controls the countries in which your content is distributed. CloudFront determines the location of your users using <code>MaxMind</code> GeoIP databases. </p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that controls the countries in which your content is distributed. CloudFront determines the location of your users using <code>MaxMind</code> GeoIP databases. </p>
+#[derive(Default, Debug)]
 pub struct GeoRestriction {
-    #[doc="<p> A complex type that contains a <code>Location</code> element for each country in which you want CloudFront either to distribute your content (<code>whitelist</code>) or not distribute your content (<code>blacklist</code>).</p> <p>The <code>Location</code> element is a two-letter, uppercase country code for a country that you want to include in your <code>blacklist</code> or <code>whitelist</code>. Include one <code>Location</code> element for each country.</p> <p>CloudFront and <code>MaxMind</code> both use <code>ISO 3166</code> country codes. For the current list of countries and the corresponding codes, see <code>ISO 3166-1-alpha-2</code> code on the <i>International Organization for Standardization</i> website. You can also refer to the country list in the CloudFront console, which includes both country names and codes.</p>"]
+    /// <p> A complex type that contains a <code>Location</code> element for each country in which you want CloudFront either to distribute your content (<code>whitelist</code>) or not distribute your content (<code>blacklist</code>).</p> <p>The <code>Location</code> element is a two-letter, uppercase country code for a country that you want to include in your <code>blacklist</code> or <code>whitelist</code>. Include one <code>Location</code> element for each country.</p> <p>CloudFront and <code>MaxMind</code> both use <code>ISO 3166</code> country codes. For the current list of countries and the corresponding codes, see <code>ISO 3166-1-alpha-2</code> code on the <i>International Organization for Standardization</i> website. You can also refer to the country list in the CloudFront console, which includes both country names and codes.</p>
     pub items: Option<Vec<String>>,
-    #[doc="<p>When geo restriction is <code>enabled</code>, this is the number of countries in your <code>whitelist</code> or <code>blacklist</code>. Otherwise, when it is not enabled, <code>Quantity</code> is <code>0</code>, and you can omit <code>Items</code>.</p>"]
+    /// <p>When geo restriction is <code>enabled</code>, this is the number of countries in your <code>whitelist</code> or <code>blacklist</code>. Otherwise, when it is not enabled, <code>Quantity</code> is <code>0</code>, and you can omit <code>Items</code>.</p>
     pub quantity: i64,
-    #[doc="<p>The method that you want to use to restrict distribution of your content by country:</p> <ul> <li> <p> <code>none</code>: No geo restriction is enabled, meaning access to content is not restricted by client geo location.</p> </li> <li> <p> <code>blacklist</code>: The <code>Location</code> elements specify the countries in which you do not want CloudFront to distribute your content.</p> </li> <li> <p> <code>whitelist</code>: The <code>Location</code> elements specify the countries in which you want CloudFront to distribute your content.</p> </li> </ul>"]
+    /// <p>The method that you want to use to restrict distribution of your content by country:</p> <ul> <li> <p> <code>none</code>: No geo restriction is enabled, meaning access to content is not restricted by client geo location.</p> </li> <li> <p> <code>blacklist</code>: The <code>Location</code> elements specify the countries in which you do not want CloudFront to distribute your content.</p> </li> <li> <p> <code>whitelist</code>: The <code>Location</code> elements specify the countries in which you want CloudFront to distribute your content.</p> </li> </ul>
     pub restriction_type: String,
 }
 
 struct GeoRestrictionDeserializer;
 impl GeoRestrictionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<GeoRestriction, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GeoRestriction, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = GeoRestriction::default();
@@ -3154,24 +3277,22 @@ impl GeoRestrictionDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items = Some(try!(LocationListDeserializer::deserialize("Items",
-                                                                                        stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        "RestrictionType" => {
-                            obj.restriction_type =
-                                try!(GeoRestrictionTypeDeserializer::deserialize("RestrictionType",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items =
+                            Some(try!(LocationListDeserializer::deserialize("Items", stack)));
                     }
-                }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    "RestrictionType" => {
+                        obj.restriction_type = try!(GeoRestrictionTypeDeserializer::deserialize(
+                            "RestrictionType",
+                            stack
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3182,33 +3303,35 @@ impl GeoRestrictionDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct GeoRestrictionSerializer;
 impl GeoRestrictionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &GeoRestriction)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &GeoRestriction,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.items {
             &LocationListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("RestrictionType"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.restriction_type)))?;
+        writer.write(xml::writer::XmlEvent::start_element("RestrictionType"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.restriction_type
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3217,58 +3340,61 @@ impl GeoRestrictionSerializer {
 struct GeoRestrictionTypeDeserializer;
 impl GeoRestrictionTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct GeoRestrictionTypeSerializer;
 impl GeoRestrictionTypeSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
-#[doc="<p>The origin access identity's configuration information. For more information, see <a>CloudFrontOriginAccessIdentityConfigComplexType</a>.</p>"]
-#[derive(Default,Debug)]
+/// <p>The origin access identity's configuration information. For more information, see <a>CloudFrontOriginAccessIdentityConfigComplexType</a>.</p>
+#[derive(Default, Debug)]
 pub struct GetCloudFrontOriginAccessIdentityConfigRequest {
-    #[doc="<p>The identity's ID. </p>"]
+    /// <p>The identity's ID. </p>
     pub id: String,
 }
 
-#[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct GetCloudFrontOriginAccessIdentityConfigResult {
-    #[doc="<p>The origin access identity's configuration information. </p>"]
+    /// <p>The origin access identity's configuration information. </p>
     pub cloud_front_origin_access_identity_config: Option<CloudFrontOriginAccessIdentityConfig>,
-    #[doc="<p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
+    /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
 }
 
 struct GetCloudFrontOriginAccessIdentityConfigResultDeserializer;
 impl GetCloudFrontOriginAccessIdentityConfigResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<GetCloudFrontOriginAccessIdentityConfigResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetCloudFrontOriginAccessIdentityConfigResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = GetCloudFrontOriginAccessIdentityConfigResult::default();
@@ -3283,14 +3409,17 @@ impl GetCloudFrontOriginAccessIdentityConfigResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CloudFrontOriginAccessIdentityConfig" => {
-                            obj.cloud_front_origin_access_identity_config = Some(try!(CloudFrontOriginAccessIdentityConfigDeserializer::deserialize("CloudFrontOriginAccessIdentityConfig", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CloudFrontOriginAccessIdentityConfig" => {
+                        obj.cloud_front_origin_access_identity_config = Some(try!(
+                            CloudFrontOriginAccessIdentityConfigDeserializer::deserialize(
+                                "CloudFrontOriginAccessIdentityConfig",
+                                stack
+                            )
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3301,32 +3430,31 @@ impl GetCloudFrontOriginAccessIdentityConfigResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to get an origin access identity's information.</p>"]
-#[derive(Default,Debug)]
+/// <p>The request to get an origin access identity's information.</p>
+#[derive(Default, Debug)]
 pub struct GetCloudFrontOriginAccessIdentityRequest {
-    #[doc="<p>The identity's ID.</p>"]
+    /// <p>The identity's ID.</p>
     pub id: String,
 }
 
-#[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct GetCloudFrontOriginAccessIdentityResult {
-    #[doc="<p>The origin access identity's information.</p>"]
+    /// <p>The origin access identity's information.</p>
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
-    #[doc="<p>The current version of the origin access identity's information. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
+    /// <p>The current version of the origin access identity's information. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
 }
 
 struct GetCloudFrontOriginAccessIdentityResultDeserializer;
 impl GetCloudFrontOriginAccessIdentityResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<GetCloudFrontOriginAccessIdentityResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetCloudFrontOriginAccessIdentityResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = GetCloudFrontOriginAccessIdentityResult::default();
@@ -3341,14 +3469,17 @@ impl GetCloudFrontOriginAccessIdentityResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CloudFrontOriginAccessIdentity" => {
-                            obj.cloud_front_origin_access_identity = Some(try!(CloudFrontOriginAccessIdentityDeserializer::deserialize("CloudFrontOriginAccessIdentity", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CloudFrontOriginAccessIdentity" => {
+                        obj.cloud_front_origin_access_identity = Some(try!(
+                            CloudFrontOriginAccessIdentityDeserializer::deserialize(
+                                "CloudFrontOriginAccessIdentity",
+                                stack
+                            )
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3359,31 +3490,31 @@ impl GetCloudFrontOriginAccessIdentityResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to get a distribution configuration.</p>"]
-#[derive(Default,Debug)]
+/// <p>The request to get a distribution configuration.</p>
+#[derive(Default, Debug)]
 pub struct GetDistributionConfigRequest {
-    #[doc="<p>The distribution's ID.</p>"]
+    /// <p>The distribution's ID.</p>
     pub id: String,
 }
 
-#[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct GetDistributionConfigResult {
-    #[doc="<p>The distribution's configuration information.</p>"]
+    /// <p>The distribution's configuration information.</p>
     pub distribution_config: Option<DistributionConfig>,
-    #[doc="<p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
+    /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
 }
 
 struct GetDistributionConfigResultDeserializer;
 impl GetDistributionConfigResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<GetDistributionConfigResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetDistributionConfigResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = GetDistributionConfigResult::default();
@@ -3398,16 +3529,16 @@ impl GetDistributionConfigResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DistributionConfig" => {
-                            obj.distribution_config =
-                                Some(try!(DistributionConfigDeserializer::deserialize("DistributionConfig",
-                                                                                      stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DistributionConfig" => {
+                        obj.distribution_config =
+                            Some(try!(DistributionConfigDeserializer::deserialize(
+                                "DistributionConfig",
+                                stack
+                            )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3418,31 +3549,31 @@ impl GetDistributionConfigResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to get a distribution's information.</p>"]
-#[derive(Default,Debug)]
+/// <p>The request to get a distribution's information.</p>
+#[derive(Default, Debug)]
 pub struct GetDistributionRequest {
-    #[doc="<p>The distribution's ID.</p>"]
+    /// <p>The distribution's ID.</p>
     pub id: String,
 }
 
-#[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct GetDistributionResult {
-    #[doc="<p>The distribution's information.</p>"]
+    /// <p>The distribution's information.</p>
     pub distribution: Option<Distribution>,
-    #[doc="<p>The current version of the distribution's information. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
+    /// <p>The current version of the distribution's information. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
 }
 
 struct GetDistributionResultDeserializer;
 impl GetDistributionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<GetDistributionResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetDistributionResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = GetDistributionResult::default();
@@ -3457,16 +3588,15 @@ impl GetDistributionResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Distribution" => {
-                            obj.distribution =
-                                Some(try!(DistributionDeserializer::deserialize("Distribution",
-                                                                                stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Distribution" => {
+                        obj.distribution = Some(try!(DistributionDeserializer::deserialize(
+                            "Distribution",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3477,31 +3607,31 @@ impl GetDistributionResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to get an invalidation's information. </p>"]
-#[derive(Default,Debug)]
+/// <p>The request to get an invalidation's information. </p>
+#[derive(Default, Debug)]
 pub struct GetInvalidationRequest {
-    #[doc="<p>The distribution's ID.</p>"]
+    /// <p>The distribution's ID.</p>
     pub distribution_id: String,
-    #[doc="<p>The identifier for the invalidation request, for example, <code>IDFDVBD632BHDS5</code>.</p>"]
+    /// <p>The identifier for the invalidation request, for example, <code>IDFDVBD632BHDS5</code>.</p>
     pub id: String,
 }
 
-#[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct GetInvalidationResult {
-    #[doc="<p>The invalidation's information. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/InvalidationDatatype.html\">Invalidation Complex Type</a>. </p>"]
+    /// <p>The invalidation's information. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/InvalidationDatatype.html">Invalidation Complex Type</a>. </p>
     pub invalidation: Option<Invalidation>,
 }
 
 struct GetInvalidationResultDeserializer;
 impl GetInvalidationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<GetInvalidationResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetInvalidationResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = GetInvalidationResult::default();
@@ -3516,16 +3646,15 @@ impl GetInvalidationResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Invalidation" => {
-                            obj.invalidation =
-                                Some(try!(InvalidationDeserializer::deserialize("Invalidation",
-                                                                                stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Invalidation" => {
+                        obj.invalidation = Some(try!(InvalidationDeserializer::deserialize(
+                            "Invalidation",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3536,32 +3665,31 @@ impl GetInvalidationResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>To request to get a streaming distribution configuration.</p>"]
-#[derive(Default,Debug)]
+/// <p>To request to get a streaming distribution configuration.</p>
+#[derive(Default, Debug)]
 pub struct GetStreamingDistributionConfigRequest {
-    #[doc="<p>The streaming distribution's ID.</p>"]
+    /// <p>The streaming distribution's ID.</p>
     pub id: String,
 }
 
-#[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct GetStreamingDistributionConfigResult {
-    #[doc="<p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>. </p>"]
+    /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>. </p>
     pub e_tag: Option<String>,
-    #[doc="<p>The streaming distribution's configuration information.</p>"]
+    /// <p>The streaming distribution's configuration information.</p>
     pub streaming_distribution_config: Option<StreamingDistributionConfig>,
 }
 
 struct GetStreamingDistributionConfigResultDeserializer;
 impl GetStreamingDistributionConfigResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<GetStreamingDistributionConfigResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetStreamingDistributionConfigResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = GetStreamingDistributionConfigResult::default();
@@ -3576,14 +3704,16 @@ impl GetStreamingDistributionConfigResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "StreamingDistributionConfig" => {
-                            obj.streaming_distribution_config = Some(try!(StreamingDistributionConfigDeserializer::deserialize("StreamingDistributionConfig", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "StreamingDistributionConfig" => {
+                        obj.streaming_distribution_config =
+                            Some(try!(StreamingDistributionConfigDeserializer::deserialize(
+                                "StreamingDistributionConfig",
+                                stack
+                            )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3594,31 +3724,31 @@ impl GetStreamingDistributionConfigResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to get a streaming distribution's information.</p>"]
-#[derive(Default,Debug)]
+/// <p>The request to get a streaming distribution's information.</p>
+#[derive(Default, Debug)]
 pub struct GetStreamingDistributionRequest {
-    #[doc="<p>The streaming distribution's ID.</p>"]
+    /// <p>The streaming distribution's ID.</p>
     pub id: String,
 }
 
-#[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct GetStreamingDistributionResult {
-    #[doc="<p>The current version of the streaming distribution's information. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
+    /// <p>The current version of the streaming distribution's information. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
-    #[doc="<p>The streaming distribution's information.</p>"]
+    /// <p>The streaming distribution's information.</p>
     pub streaming_distribution: Option<StreamingDistribution>,
 }
 
 struct GetStreamingDistributionResultDeserializer;
 impl GetStreamingDistributionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<GetStreamingDistributionResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetStreamingDistributionResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = GetStreamingDistributionResult::default();
@@ -3633,16 +3763,16 @@ impl GetStreamingDistributionResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "StreamingDistribution" => {
-                            obj.streaming_distribution =
-                                Some(try!(StreamingDistributionDeserializer::deserialize("StreamingDistribution",
-                                                                                         stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "StreamingDistribution" => {
+                        obj.streaming_distribution =
+                            Some(try!(StreamingDistributionDeserializer::deserialize(
+                                "StreamingDistribution",
+                                stack
+                            )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3653,16 +3783,15 @@ impl GetStreamingDistributionResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct HeaderListDeserializer;
 impl HeaderListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -3694,18 +3823,19 @@ impl HeaderListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct HeaderListSerializer;
 impl HeaderListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<String>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<String>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -3716,21 +3846,22 @@ impl HeaderListSerializer {
     }
 }
 
-#[doc="<p>A complex type that specifies the headers that you want CloudFront to forward to the origin for this cache behavior.</p> <p>For the headers that you specify, CloudFront also caches separate versions of a specified object based on the header values in viewer requests. For example, suppose viewer requests for <code>logo.jpg</code> contain a custom <code>Product</code> header that has a value of either <code>Acme</code> or <code>Apex</code>, and you configure CloudFront to cache your content based on values in the <code>Product</code> header. CloudFront forwards the <code>Product</code> header to the origin and caches the response from the origin once for each header value. For more information about caching based on header values, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html\">How CloudFront Forwards and Caches Headers</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that specifies the headers that you want CloudFront to forward to the origin for this cache behavior.</p> <p>For the headers that you specify, CloudFront also caches separate versions of a specified object based on the header values in viewer requests. For example, suppose viewer requests for <code>logo.jpg</code> contain a custom <code>Product</code> header that has a value of either <code>Acme</code> or <code>Apex</code>, and you configure CloudFront to cache your content based on values in the <code>Product</code> header. CloudFront forwards the <code>Product</code> header to the origin and caches the response from the origin once for each header value. For more information about caching based on header values, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html">How CloudFront Forwards and Caches Headers</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+#[derive(Default, Debug)]
 pub struct Headers {
-    #[doc="<p>A complex type that contains one <code>Name</code> element for each header that you want CloudFront to forward to the origin and to vary on for this cache behavior. If <code>Quantity</code> is <code>0</code>, omit <code>Items</code>.</p>"]
+    /// <p>A complex type that contains one <code>Name</code> element for each header that you want CloudFront to forward to the origin and to vary on for this cache behavior. If <code>Quantity</code> is <code>0</code>, omit <code>Items</code>.</p>
     pub items: Option<Vec<String>>,
-    #[doc="<p>The number of different headers that you want CloudFront to forward to the origin for this cache behavior. You can configure each cache behavior in a web distribution to do one of the following:</p> <ul> <li> <p> <b>Forward all headers to your origin</b>: Specify <code>1</code> for <code>Quantity</code> and <code>*</code> for <code>Name</code>.</p> <important> <p>If you configure CloudFront to forward all headers to your origin, CloudFront doesn't cache the objects associated with this cache behavior. Instead, it sends every request to the origin.</p> </important> </li> <li> <p> <i>Forward a whitelist of headers you specify</i>: Specify the number of headers that you want to forward, and specify the header names in <code>Name</code> elements. CloudFront caches your objects based on the values in all of the specified headers. CloudFront also forwards the headers that it forwards by default, but it caches your objects based only on the headers that you specify. </p> </li> <li> <p> <b>Forward only the default headers</b>: Specify <code>0</code> for <code>Quantity</code> and omit <code>Items</code>. In this configuration, CloudFront doesn't cache based on the values in the request headers.</p> </li> </ul>"]
+    /// <p>The number of different headers that you want CloudFront to forward to the origin for this cache behavior. You can configure each cache behavior in a web distribution to do one of the following:</p> <ul> <li> <p> <b>Forward all headers to your origin</b>: Specify <code>1</code> for <code>Quantity</code> and <code>*</code> for <code>Name</code>.</p> <important> <p>If you configure CloudFront to forward all headers to your origin, CloudFront doesn't cache the objects associated with this cache behavior. Instead, it sends every request to the origin.</p> </important> </li> <li> <p> <i>Forward a whitelist of headers you specify</i>: Specify the number of headers that you want to forward, and specify the header names in <code>Name</code> elements. CloudFront caches your objects based on the values in all of the specified headers. CloudFront also forwards the headers that it forwards by default, but it caches your objects based only on the headers that you specify. </p> </li> <li> <p> <b>Forward only the default headers</b>: Specify <code>0</code> for <code>Quantity</code> and omit <code>Items</code>. In this configuration, CloudFront doesn't cache based on the values in the request headers.</p> </li> </ul>
     pub quantity: i64,
 }
 
 struct HeadersDeserializer;
 impl HeadersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Headers, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Headers, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Headers::default();
@@ -3745,19 +3876,15 @@ impl HeadersDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items = Some(try!(HeaderListDeserializer::deserialize("Items",
-                                                                                      stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items = Some(try!(HeaderListDeserializer::deserialize("Items", stack)));
                     }
-                }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3768,27 +3895,29 @@ impl HeadersDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct HeadersSerializer;
 impl HeadersSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Headers)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Headers,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.items {
             &HeaderListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3797,86 +3926,93 @@ impl HeadersSerializer {
 struct HttpVersionDeserializer;
 impl HttpVersionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct HttpVersionSerializer;
 impl HttpVersionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct IntegerSerializer;
 impl IntegerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &i64)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &i64,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
-#[doc="<p>An invalidation. </p>"]
-#[derive(Default,Debug)]
+/// <p>An invalidation. </p>
+#[derive(Default, Debug)]
 pub struct Invalidation {
-    #[doc="<p>The date and time the invalidation request was first made. </p>"]
+    /// <p>The date and time the invalidation request was first made. </p>
     pub create_time: String,
-    #[doc="<p>The identifier for the invalidation request. For example: <code>IDFDVBD632BHDS5</code>.</p>"]
+    /// <p>The identifier for the invalidation request. For example: <code>IDFDVBD632BHDS5</code>.</p>
     pub id: String,
-    #[doc="<p>The current invalidation information for the batch request. </p>"]
+    /// <p>The current invalidation information for the batch request. </p>
     pub invalidation_batch: InvalidationBatch,
-    #[doc="<p>The status of the invalidation request. When the invalidation batch is finished, the status is <code>Completed</code>.</p>"]
+    /// <p>The status of the invalidation request. When the invalidation batch is finished, the status is <code>Completed</code>.</p>
     pub status: String,
 }
 
 struct InvalidationDeserializer;
 impl InvalidationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Invalidation, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Invalidation, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Invalidation::default();
@@ -3891,26 +4027,25 @@ impl InvalidationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CreateTime" => {
-                            obj.create_time = try!(TimestampDeserializer::deserialize("CreateTime",
-                                                                                      stack));
-                        }
-                        "Id" => {
-                            obj.id = try!(StringDeserializer::deserialize("Id", stack));
-                        }
-                        "InvalidationBatch" => {
-                            obj.invalidation_batch =
-                                try!(InvalidationBatchDeserializer::deserialize("InvalidationBatch",
-                                                                                stack));
-                        }
-                        "Status" => {
-                            obj.status = try!(StringDeserializer::deserialize("Status", stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CreateTime" => {
+                        obj.create_time =
+                            try!(TimestampDeserializer::deserialize("CreateTime", stack));
                     }
-                }
+                    "Id" => {
+                        obj.id = try!(StringDeserializer::deserialize("Id", stack));
+                    }
+                    "InvalidationBatch" => {
+                        obj.invalidation_batch = try!(InvalidationBatchDeserializer::deserialize(
+                            "InvalidationBatch",
+                            stack
+                        ));
+                    }
+                    "Status" => {
+                        obj.status = try!(StringDeserializer::deserialize("Status", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3921,24 +4056,24 @@ impl InvalidationDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>An invalidation batch.</p>"]
-#[derive(Default,Debug)]
+/// <p>An invalidation batch.</p>
+#[derive(Default, Debug)]
 pub struct InvalidationBatch {
-    #[doc="<p>A value that you specify to uniquely identify an invalidation request. CloudFront uses the value to prevent you from accidentally resubmitting an identical request. Whenever you create a new invalidation request, you must specify a new value for <code>CallerReference</code> and change other values in the request as applicable. One way to ensure that the value of <code>CallerReference</code> is unique is to use a <code>timestamp</code>, for example, <code>20120301090000</code>.</p> <p>If you make a second invalidation request with the same value for <code>CallerReference</code>, and if the rest of the request is the same, CloudFront doesn't create a new invalidation request. Instead, CloudFront returns information about the invalidation request that you previously created with the same <code>CallerReference</code>.</p> <p>If <code>CallerReference</code> is a value you already sent in a previous invalidation batch request but the content of any <code>Path</code> is different from the original request, CloudFront returns an <code>InvalidationBatchAlreadyExists</code> error.</p>"]
+    /// <p>A value that you specify to uniquely identify an invalidation request. CloudFront uses the value to prevent you from accidentally resubmitting an identical request. Whenever you create a new invalidation request, you must specify a new value for <code>CallerReference</code> and change other values in the request as applicable. One way to ensure that the value of <code>CallerReference</code> is unique is to use a <code>timestamp</code>, for example, <code>20120301090000</code>.</p> <p>If you make a second invalidation request with the same value for <code>CallerReference</code>, and if the rest of the request is the same, CloudFront doesn't create a new invalidation request. Instead, CloudFront returns information about the invalidation request that you previously created with the same <code>CallerReference</code>.</p> <p>If <code>CallerReference</code> is a value you already sent in a previous invalidation batch request but the content of any <code>Path</code> is different from the original request, CloudFront returns an <code>InvalidationBatchAlreadyExists</code> error.</p>
     pub caller_reference: String,
-    #[doc="<p>A complex type that contains information about the objects that you want to invalidate. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects\">Specifying the Objects to Invalidate</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>"]
+    /// <p>A complex type that contains information about the objects that you want to invalidate. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects">Specifying the Objects to Invalidate</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>
     pub paths: Paths,
 }
 
 struct InvalidationBatchDeserializer;
 impl InvalidationBatchDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<InvalidationBatch, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InvalidationBatch, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = InvalidationBatch::default();
@@ -3953,18 +4088,16 @@ impl InvalidationBatchDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CallerReference" => {
-                            obj.caller_reference = try!(StringDeserializer::deserialize("CallerReference",
-                                                                                        stack));
-                        }
-                        "Paths" => {
-                            obj.paths = try!(PathsDeserializer::deserialize("Paths", stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CallerReference" => {
+                        obj.caller_reference =
+                            try!(StringDeserializer::deserialize("CallerReference", stack));
                     }
-                }
+                    "Paths" => {
+                        obj.paths = try!(PathsDeserializer::deserialize("Paths", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3975,54 +4108,56 @@ impl InvalidationBatchDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct InvalidationBatchSerializer;
 impl InvalidationBatchSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &InvalidationBatch)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &InvalidationBatch,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("CallerReference"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.caller_reference)))?;
+        writer.write(xml::writer::XmlEvent::start_element("CallerReference"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.caller_reference
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         PathsSerializer::serialize(&mut writer, "Paths", &obj.paths)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>The <code>InvalidationList</code> complex type describes the list of invalidation objects. For more information about invalidation, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html\">Invalidating Objects (Web Distributions Only)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Debug)]
+/// <p>The <code>InvalidationList</code> complex type describes the list of invalidation objects. For more information about invalidation, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html">Invalidating Objects (Web Distributions Only)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+#[derive(Default, Debug)]
 pub struct InvalidationList {
-    #[doc="<p>A flag that indicates whether more invalidation batch requests remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more invalidation batches in the list.</p>"]
+    /// <p>A flag that indicates whether more invalidation batch requests remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more invalidation batches in the list.</p>
     pub is_truncated: bool,
-    #[doc="<p>A complex type that contains one <code>InvalidationSummary</code> element for each invalidation batch created by the current AWS account.</p>"]
+    /// <p>A complex type that contains one <code>InvalidationSummary</code> element for each invalidation batch created by the current AWS account.</p>
     pub items: Option<Vec<InvalidationSummary>>,
-    #[doc="<p>The value that you provided for the <code>Marker</code> request parameter.</p>"]
+    /// <p>The value that you provided for the <code>Marker</code> request parameter.</p>
     pub marker: String,
-    #[doc="<p>The value that you provided for the <code>MaxItems</code> request parameter.</p>"]
+    /// <p>The value that you provided for the <code>MaxItems</code> request parameter.</p>
     pub max_items: i64,
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value that you can use for the <code>Marker</code> request parameter to continue listing your invalidation batches where they left off.</p>"]
+    /// <p>If <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value that you can use for the <code>Marker</code> request parameter to continue listing your invalidation batches where they left off.</p>
     pub next_marker: Option<String>,
-    #[doc="<p>The number of invalidation batches that were created by the current AWS account. </p>"]
+    /// <p>The number of invalidation batches that were created by the current AWS account. </p>
     pub quantity: i64,
 }
 
 struct InvalidationListDeserializer;
 impl InvalidationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<InvalidationList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InvalidationList, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = InvalidationList::default();
@@ -4037,35 +4172,32 @@ impl InvalidationListDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "IsTruncated" => {
-                            obj.is_truncated = try!(BooleanDeserializer::deserialize("IsTruncated",
-                                                                                     stack));
-                        }
-                        "Items" => {
-                            obj.items =
-                                Some(try!(InvalidationSummaryListDeserializer::deserialize("Items",
-                                                                                           stack)));
-                        }
-                        "Marker" => {
-                            obj.marker = try!(StringDeserializer::deserialize("Marker", stack));
-                        }
-                        "MaxItems" => {
-                            obj.max_items = try!(IntegerDeserializer::deserialize("MaxItems",
-                                                                                  stack));
-                        }
-                        "NextMarker" => {
-                            obj.next_marker = Some(try!(StringDeserializer::deserialize("NextMarker",
-                                                                                        stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "IsTruncated" => {
+                        obj.is_truncated =
+                            try!(BooleanDeserializer::deserialize("IsTruncated", stack));
                     }
-                }
+                    "Items" => {
+                        obj.items = Some(try!(InvalidationSummaryListDeserializer::deserialize(
+                            "Items",
+                            stack
+                        )));
+                    }
+                    "Marker" => {
+                        obj.marker = try!(StringDeserializer::deserialize("Marker", stack));
+                    }
+                    "MaxItems" => {
+                        obj.max_items = try!(IntegerDeserializer::deserialize("MaxItems", stack));
+                    }
+                    "NextMarker" => {
+                        obj.next_marker =
+                            Some(try!(StringDeserializer::deserialize("NextMarker", stack)));
+                    }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4076,25 +4208,25 @@ impl InvalidationListDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>A summary of an invalidation request.</p>"]
-#[derive(Default,Debug)]
+/// <p>A summary of an invalidation request.</p>
+#[derive(Default, Debug)]
 pub struct InvalidationSummary {
     pub create_time: String,
-    #[doc="<p>The unique ID for an invalidation request.</p>"]
+    /// <p>The unique ID for an invalidation request.</p>
     pub id: String,
-    #[doc="<p>The status of an invalidation request.</p>"]
+    /// <p>The status of an invalidation request.</p>
     pub status: String,
 }
 
 struct InvalidationSummaryDeserializer;
 impl InvalidationSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<InvalidationSummary, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InvalidationSummary, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = InvalidationSummary::default();
@@ -4109,21 +4241,19 @@ impl InvalidationSummaryDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CreateTime" => {
-                            obj.create_time = try!(TimestampDeserializer::deserialize("CreateTime",
-                                                                                      stack));
-                        }
-                        "Id" => {
-                            obj.id = try!(StringDeserializer::deserialize("Id", stack));
-                        }
-                        "Status" => {
-                            obj.status = try!(StringDeserializer::deserialize("Status", stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CreateTime" => {
+                        obj.create_time =
+                            try!(TimestampDeserializer::deserialize("CreateTime", stack));
                     }
-                }
+                    "Id" => {
+                        obj.id = try!(StringDeserializer::deserialize("Id", stack));
+                    }
+                    "Status" => {
+                        obj.status = try!(StringDeserializer::deserialize("Status", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4134,16 +4264,15 @@ impl InvalidationSummaryDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct InvalidationSummaryListDeserializer;
 impl InvalidationSummaryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<InvalidationSummary>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<InvalidationSummary>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -4159,7 +4288,10 @@ impl InvalidationSummaryListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "InvalidationSummary" {
-                        obj.push(try!(InvalidationSummaryDeserializer::deserialize("InvalidationSummary", stack)));
+                        obj.push(try!(InvalidationSummaryDeserializer::deserialize(
+                            "InvalidationSummary",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -4175,48 +4307,50 @@ impl InvalidationSummaryListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 struct ItemSelectionDeserializer;
 impl ItemSelectionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct ItemSelectionSerializer;
 impl ItemSelectionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
 struct KeyPairIdListDeserializer;
 impl KeyPairIdListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -4248,24 +4382,24 @@ impl KeyPairIdListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
-#[doc="<p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>. </p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>. </p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>
+#[derive(Default, Debug)]
 pub struct KeyPairIds {
-    #[doc="<p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>"]
+    /// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>
     pub items: Option<Vec<String>>,
-    #[doc="<p>The number of active CloudFront key pairs for <code>AwsAccountNumber</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>"]
+    /// <p>The number of active CloudFront key pairs for <code>AwsAccountNumber</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>
     pub quantity: i64,
 }
 
 struct KeyPairIdsDeserializer;
 impl KeyPairIdsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<KeyPairIds, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<KeyPairIds, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = KeyPairIds::default();
@@ -4280,19 +4414,16 @@ impl KeyPairIdsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items = Some(try!(KeyPairIdListDeserializer::deserialize("Items",
-                                                                                         stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items =
+                            Some(try!(KeyPairIdListDeserializer::deserialize("Items", stack)));
                     }
-                }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4303,24 +4434,24 @@ impl KeyPairIdsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>A complex type that contains a Lambda function association.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that contains a Lambda function association.</p>
+#[derive(Default, Debug)]
 pub struct LambdaFunctionAssociation {
-    #[doc="<p>Specifies the event type that triggers a Lambda function invocation. Valid values are:</p> <ul> <li> <p> <code>viewer-request</code> </p> </li> <li> <p> <code>origin-request</code> </p> </li> <li> <p> <code>viewer-response</code> </p> </li> <li> <p> <code>origin-response</code> </p> </li> </ul>"]
+    /// <p>Specifies the event type that triggers a Lambda function invocation. Valid values are:</p> <ul> <li> <p> <code>viewer-request</code> </p> </li> <li> <p> <code>origin-request</code> </p> </li> <li> <p> <code>viewer-response</code> </p> </li> <li> <p> <code>origin-response</code> </p> </li> </ul>
     pub event_type: Option<String>,
-    #[doc="<p>The ARN of the Lambda function.</p>"]
+    /// <p>The ARN of the Lambda function.</p>
     pub lambda_function_arn: Option<String>,
 }
 
 struct LambdaFunctionAssociationDeserializer;
 impl LambdaFunctionAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<LambdaFunctionAssociation, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LambdaFunctionAssociation, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = LambdaFunctionAssociation::default();
@@ -4335,20 +4466,19 @@ impl LambdaFunctionAssociationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "EventType" => {
-                            obj.event_type = Some(try!(EventTypeDeserializer::deserialize("EventType",
-                                                                                          stack)));
-                        }
-                        "LambdaFunctionARN" => {
-                            obj.lambda_function_arn =
-                                Some(try!(StringDeserializer::deserialize("LambdaFunctionARN",
-                                                                          stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "EventType" => {
+                        obj.event_type =
+                            Some(try!(EventTypeDeserializer::deserialize("EventType", stack)));
                     }
-                }
+                    "LambdaFunctionARN" => {
+                        obj.lambda_function_arn = Some(try!(StringDeserializer::deserialize(
+                            "LambdaFunctionARN",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4359,30 +4489,35 @@ impl LambdaFunctionAssociationDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct LambdaFunctionAssociationSerializer;
 impl LambdaFunctionAssociationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &LambdaFunctionAssociation)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &LambdaFunctionAssociation,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.event_type {
-            writer
-                .write(xml::writer::XmlEvent::start_element("EventType"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("EventType"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.lambda_function_arn {
-            writer
-                .write(xml::writer::XmlEvent::start_element("LambdaFunctionARN"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("LambdaFunctionARN"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
@@ -4392,10 +4527,10 @@ impl LambdaFunctionAssociationSerializer {
 struct LambdaFunctionAssociationListDeserializer;
 impl LambdaFunctionAssociationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<LambdaFunctionAssociation>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<LambdaFunctionAssociation>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -4411,7 +4546,10 @@ impl LambdaFunctionAssociationListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "LambdaFunctionAssociation" {
-                        obj.push(try!(LambdaFunctionAssociationDeserializer::deserialize("LambdaFunctionAssociation", stack)));
+                        obj.push(try!(LambdaFunctionAssociationDeserializer::deserialize(
+                            "LambdaFunctionAssociation",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -4427,45 +4565,49 @@ impl LambdaFunctionAssociationListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct LambdaFunctionAssociationListSerializer;
 impl LambdaFunctionAssociationListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<LambdaFunctionAssociation>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<LambdaFunctionAssociation>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
-            LambdaFunctionAssociationSerializer::serialize(writer,
-                                                           "LambdaFunctionAssociation",
-                                                           element)?;
+            LambdaFunctionAssociationSerializer::serialize(
+                writer,
+                "LambdaFunctionAssociation",
+                element,
+            )?;
         }
         writer.write(xml::writer::XmlEvent::end_element())?;
         Ok(())
     }
 }
 
-#[doc="<p>A complex type that specifies a list of Lambda functions associations for a cache behavior.</p> <p>If you want to invoke one or more Lambda functions triggered by requests that match the <code>PathPattern</code> of the cache behavior, specify the applicable values for <code>Quantity</code> and <code>Items</code>. Note that there can be up to 4 <code>LambdaFunctionAssociation</code> items in this list (one for each possible value of <code>EventType</code>) and each <code>EventType</code> can be associated with the Lambda function only once.</p> <p>If you don't want to invoke any Lambda functions for the requests that match <code>PathPattern</code>, specify <code>0</code> for <code>Quantity</code> and omit <code>Items</code>. </p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that specifies a list of Lambda functions associations for a cache behavior.</p> <p>If you want to invoke one or more Lambda functions triggered by requests that match the <code>PathPattern</code> of the cache behavior, specify the applicable values for <code>Quantity</code> and <code>Items</code>. Note that there can be up to 4 <code>LambdaFunctionAssociation</code> items in this list (one for each possible value of <code>EventType</code>) and each <code>EventType</code> can be associated with the Lambda function only once.</p> <p>If you don't want to invoke any Lambda functions for the requests that match <code>PathPattern</code>, specify <code>0</code> for <code>Quantity</code> and omit <code>Items</code>. </p>
+#[derive(Default, Debug)]
 pub struct LambdaFunctionAssociations {
-    #[doc="<p> <b>Optional</b>: A complex type that contains <code>LambdaFunctionAssociation</code> items for this cache behavior. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>"]
+    /// <p> <b>Optional</b>: A complex type that contains <code>LambdaFunctionAssociation</code> items for this cache behavior. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>
     pub items: Option<Vec<LambdaFunctionAssociation>>,
-    #[doc="<p>The number of Lambda function associations for this cache behavior.</p>"]
+    /// <p>The number of Lambda function associations for this cache behavior.</p>
     pub quantity: i64,
 }
 
 struct LambdaFunctionAssociationsDeserializer;
 impl LambdaFunctionAssociationsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<LambdaFunctionAssociations, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LambdaFunctionAssociations, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = LambdaFunctionAssociations::default();
@@ -4480,18 +4622,17 @@ impl LambdaFunctionAssociationsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items = Some(try!(LambdaFunctionAssociationListDeserializer::deserialize("Items", stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items = Some(try!(
+                            LambdaFunctionAssociationListDeserializer::deserialize("Items", stack)
+                        ));
                     }
-                }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4502,55 +4643,57 @@ impl LambdaFunctionAssociationsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct LambdaFunctionAssociationsSerializer;
 impl LambdaFunctionAssociationsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &LambdaFunctionAssociations)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &LambdaFunctionAssociations,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.items {
             &LambdaFunctionAssociationListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>The request to list origin access identities. </p>"]
-#[derive(Default,Debug)]
+/// <p>The request to list origin access identities. </p>
+#[derive(Default, Debug)]
 pub struct ListCloudFrontOriginAccessIdentitiesRequest {
-    #[doc="<p>Use this when paginating results to indicate where to begin in your list of origin access identities. The results include identities in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last identity on that page).</p>"]
+    /// <p>Use this when paginating results to indicate where to begin in your list of origin access identities. The results include identities in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last identity on that page).</p>
     pub marker: Option<String>,
-    #[doc="<p>The maximum number of origin access identities you want in the response body. </p>"]
+    /// <p>The maximum number of origin access identities you want in the response body. </p>
     pub max_items: Option<String>,
 }
 
-#[doc="<p>The returned result of the corresponding request. </p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request. </p>
+#[derive(Default, Debug)]
 pub struct ListCloudFrontOriginAccessIdentitiesResult {
-    #[doc="<p>The <code>CloudFrontOriginAccessIdentityList</code> type. </p>"]
+    /// <p>The <code>CloudFrontOriginAccessIdentityList</code> type. </p>
     pub cloud_front_origin_access_identity_list: Option<CloudFrontOriginAccessIdentityList>,
 }
 
 struct ListCloudFrontOriginAccessIdentitiesResultDeserializer;
 impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<ListCloudFrontOriginAccessIdentitiesResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListCloudFrontOriginAccessIdentitiesResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ListCloudFrontOriginAccessIdentitiesResult::default();
@@ -4565,14 +4708,17 @@ impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CloudFrontOriginAccessIdentityList" => {
-                            obj.cloud_front_origin_access_identity_list = Some(try!(CloudFrontOriginAccessIdentityListDeserializer::deserialize("CloudFrontOriginAccessIdentityList", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CloudFrontOriginAccessIdentityList" => {
+                        obj.cloud_front_origin_access_identity_list = Some(try!(
+                            CloudFrontOriginAccessIdentityListDeserializer::deserialize(
+                                "CloudFrontOriginAccessIdentityList",
+                                stack
+                            )
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4583,34 +4729,33 @@ impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to list distributions that are associated with a specified AWS WAF web ACL. </p>"]
-#[derive(Default,Debug)]
+/// <p>The request to list distributions that are associated with a specified AWS WAF web ACL. </p>
+#[derive(Default, Debug)]
 pub struct ListDistributionsByWebACLIdRequest {
-    #[doc="<p>Use <code>Marker</code> and <code>MaxItems</code> to control pagination of results. If you have more than <code>MaxItems</code> distributions that satisfy the request, the response includes a <code>NextMarker</code> element. To get the next page of results, submit another request. For the value of <code>Marker</code>, specify the value of <code>NextMarker</code> from the last response. (For the first request, omit <code>Marker</code>.) </p>"]
+    /// <p>Use <code>Marker</code> and <code>MaxItems</code> to control pagination of results. If you have more than <code>MaxItems</code> distributions that satisfy the request, the response includes a <code>NextMarker</code> element. To get the next page of results, submit another request. For the value of <code>Marker</code>, specify the value of <code>NextMarker</code> from the last response. (For the first request, omit <code>Marker</code>.) </p>
     pub marker: Option<String>,
-    #[doc="<p>The maximum number of distributions that you want CloudFront to return in the response body. The maximum and default values are both 100.</p>"]
+    /// <p>The maximum number of distributions that you want CloudFront to return in the response body. The maximum and default values are both 100.</p>
     pub max_items: Option<String>,
-    #[doc="<p>The ID of the AWS WAF web ACL that you want to list the associated distributions. If you specify \"null\" for the ID, the request returns a list of the distributions that aren't associated with a web ACL. </p>"]
+    /// <p>The ID of the AWS WAF web ACL that you want to list the associated distributions. If you specify "null" for the ID, the request returns a list of the distributions that aren't associated with a web ACL. </p>
     pub web_acl_id: String,
 }
 
-#[doc="<p>The response to a request to list the distributions that are associated with a specified AWS WAF web ACL. </p>"]
-#[derive(Default,Debug)]
+/// <p>The response to a request to list the distributions that are associated with a specified AWS WAF web ACL. </p>
+#[derive(Default, Debug)]
 pub struct ListDistributionsByWebACLIdResult {
-    #[doc="<p>The <code>DistributionList</code> type. </p>"]
+    /// <p>The <code>DistributionList</code> type. </p>
     pub distribution_list: Option<DistributionList>,
 }
 
 struct ListDistributionsByWebACLIdResultDeserializer;
 impl ListDistributionsByWebACLIdResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<ListDistributionsByWebACLIdResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListDistributionsByWebACLIdResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ListDistributionsByWebACLIdResult::default();
@@ -4625,16 +4770,14 @@ impl ListDistributionsByWebACLIdResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DistributionList" => {
-                            obj.distribution_list =
-                                Some(try!(DistributionListDeserializer::deserialize("DistributionList",
-                                                                                    stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DistributionList" => {
+                        obj.distribution_list = Some(try!(
+                            DistributionListDeserializer::deserialize("DistributionList", stack)
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4645,31 +4788,31 @@ impl ListDistributionsByWebACLIdResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to list your distributions. </p>"]
-#[derive(Default,Debug)]
+/// <p>The request to list your distributions. </p>
+#[derive(Default, Debug)]
 pub struct ListDistributionsRequest {
-    #[doc="<p>Use this when paginating results to indicate where to begin in your list of distributions. The results include distributions in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last distribution on that page).</p>"]
+    /// <p>Use this when paginating results to indicate where to begin in your list of distributions. The results include distributions in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last distribution on that page).</p>
     pub marker: Option<String>,
-    #[doc="<p>The maximum number of distributions you want in the response body.</p>"]
+    /// <p>The maximum number of distributions you want in the response body.</p>
     pub max_items: Option<String>,
 }
 
-#[doc="<p>The returned result of the corresponding request. </p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request. </p>
+#[derive(Default, Debug)]
 pub struct ListDistributionsResult {
-    #[doc="<p>The <code>DistributionList</code> type. </p>"]
+    /// <p>The <code>DistributionList</code> type. </p>
     pub distribution_list: Option<DistributionList>,
 }
 
 struct ListDistributionsResultDeserializer;
 impl ListDistributionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ListDistributionsResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListDistributionsResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ListDistributionsResult::default();
@@ -4684,16 +4827,14 @@ impl ListDistributionsResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DistributionList" => {
-                            obj.distribution_list =
-                                Some(try!(DistributionListDeserializer::deserialize("DistributionList",
-                                                                                    stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DistributionList" => {
+                        obj.distribution_list = Some(try!(
+                            DistributionListDeserializer::deserialize("DistributionList", stack)
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4704,33 +4845,33 @@ impl ListDistributionsResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to list invalidations. </p>"]
-#[derive(Default,Debug)]
+/// <p>The request to list invalidations. </p>
+#[derive(Default, Debug)]
 pub struct ListInvalidationsRequest {
-    #[doc="<p>The distribution's ID.</p>"]
+    /// <p>The distribution's ID.</p>
     pub distribution_id: String,
-    #[doc="<p>Use this parameter when paginating results to indicate where to begin in your list of invalidation batches. Because the results are returned in decreasing order from most recent to oldest, the most recent results are on the first page, the second page will contain earlier results, and so on. To get the next page of results, set <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response. This value is the same as the ID of the last invalidation batch on that page. </p>"]
+    /// <p>Use this parameter when paginating results to indicate where to begin in your list of invalidation batches. Because the results are returned in decreasing order from most recent to oldest, the most recent results are on the first page, the second page will contain earlier results, and so on. To get the next page of results, set <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response. This value is the same as the ID of the last invalidation batch on that page. </p>
     pub marker: Option<String>,
-    #[doc="<p>The maximum number of invalidation batches that you want in the response body.</p>"]
+    /// <p>The maximum number of invalidation batches that you want in the response body.</p>
     pub max_items: Option<String>,
 }
 
-#[doc="<p>The returned result of the corresponding request. </p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request. </p>
+#[derive(Default, Debug)]
 pub struct ListInvalidationsResult {
-    #[doc="<p>Information about invalidation batches. </p>"]
+    /// <p>Information about invalidation batches. </p>
     pub invalidation_list: Option<InvalidationList>,
 }
 
 struct ListInvalidationsResultDeserializer;
 impl ListInvalidationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ListInvalidationsResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListInvalidationsResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ListInvalidationsResult::default();
@@ -4745,16 +4886,14 @@ impl ListInvalidationsResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "InvalidationList" => {
-                            obj.invalidation_list =
-                                Some(try!(InvalidationListDeserializer::deserialize("InvalidationList",
-                                                                                    stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "InvalidationList" => {
+                        obj.invalidation_list = Some(try!(
+                            InvalidationListDeserializer::deserialize("InvalidationList", stack)
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4765,32 +4904,31 @@ impl ListInvalidationsResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to list your streaming distributions. </p>"]
-#[derive(Default,Debug)]
+/// <p>The request to list your streaming distributions. </p>
+#[derive(Default, Debug)]
 pub struct ListStreamingDistributionsRequest {
-    #[doc="<p>The value that you provided for the <code>Marker</code> request parameter.</p>"]
+    /// <p>The value that you provided for the <code>Marker</code> request parameter.</p>
     pub marker: Option<String>,
-    #[doc="<p>The value that you provided for the <code>MaxItems</code> request parameter.</p>"]
+    /// <p>The value that you provided for the <code>MaxItems</code> request parameter.</p>
     pub max_items: Option<String>,
 }
 
-#[doc="<p>The returned result of the corresponding request. </p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request. </p>
+#[derive(Default, Debug)]
 pub struct ListStreamingDistributionsResult {
-    #[doc="<p>The <code>StreamingDistributionList</code> type. </p>"]
+    /// <p>The <code>StreamingDistributionList</code> type. </p>
     pub streaming_distribution_list: Option<StreamingDistributionList>,
 }
 
 struct ListStreamingDistributionsResultDeserializer;
 impl ListStreamingDistributionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<ListStreamingDistributionsResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListStreamingDistributionsResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ListStreamingDistributionsResult::default();
@@ -4805,14 +4943,16 @@ impl ListStreamingDistributionsResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "StreamingDistributionList" => {
-                            obj.streaming_distribution_list = Some(try!(StreamingDistributionListDeserializer::deserialize("StreamingDistributionList", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "StreamingDistributionList" => {
+                        obj.streaming_distribution_list =
+                            Some(try!(StreamingDistributionListDeserializer::deserialize(
+                                "StreamingDistributionList",
+                                stack
+                            )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4823,29 +4963,29 @@ impl ListStreamingDistributionsResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p> The request to list tags for a CloudFront resource.</p>"]
-#[derive(Default,Debug)]
+/// <p> The request to list tags for a CloudFront resource.</p>
+#[derive(Default, Debug)]
 pub struct ListTagsForResourceRequest {
-    #[doc="<p> An ARN of a CloudFront resource.</p>"]
+    /// <p> An ARN of a CloudFront resource.</p>
     pub resource: String,
 }
 
-#[doc="<p> The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p> The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct ListTagsForResourceResult {
-    #[doc="<p> A complex type that contains zero or more <code>Tag</code> elements.</p>"]
+    /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
     pub tags: Tags,
 }
 
 struct ListTagsForResourceResultDeserializer;
 impl ListTagsForResourceResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ListTagsForResourceResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListTagsForResourceResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ListTagsForResourceResult::default();
@@ -4860,14 +5000,12 @@ impl ListTagsForResourceResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Tags" => {
-                            obj.tags = try!(TagsDeserializer::deserialize("Tags", stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Tags" => {
+                        obj.tags = try!(TagsDeserializer::deserialize("Tags", stack));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4878,16 +5016,15 @@ impl ListTagsForResourceResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct LocationListDeserializer;
 impl LocationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -4919,18 +5056,19 @@ impl LocationListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct LocationListSerializer;
 impl LocationListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<String>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<String>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -4941,25 +5079,26 @@ impl LocationListSerializer {
     }
 }
 
-#[doc="<p>A complex type that controls whether access logs are written for the distribution.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that controls whether access logs are written for the distribution.</p>
+#[derive(Default, Debug)]
 pub struct LoggingConfig {
-    #[doc="<p>The Amazon S3 bucket to store the access logs in, for example, <code>myawslogbucket.s3.amazonaws.com</code>.</p>"]
+    /// <p>The Amazon S3 bucket to store the access logs in, for example, <code>myawslogbucket.s3.amazonaws.com</code>.</p>
     pub bucket: String,
-    #[doc="<p>Specifies whether you want CloudFront to save access logs to an Amazon S3 bucket. If you do not want to enable logging when you create a distribution or if you want to disable logging for an existing distribution, specify <code>false</code> for <code>Enabled</code>, and specify empty <code>Bucket</code> and <code>Prefix</code> elements. If you specify <code>false</code> for <code>Enabled</code> but you specify values for <code>Bucket</code>, <code>prefix</code>, and <code>IncludeCookies</code>, the values are automatically deleted.</p>"]
+    /// <p>Specifies whether you want CloudFront to save access logs to an Amazon S3 bucket. If you do not want to enable logging when you create a distribution or if you want to disable logging for an existing distribution, specify <code>false</code> for <code>Enabled</code>, and specify empty <code>Bucket</code> and <code>Prefix</code> elements. If you specify <code>false</code> for <code>Enabled</code> but you specify values for <code>Bucket</code>, <code>prefix</code>, and <code>IncludeCookies</code>, the values are automatically deleted.</p>
     pub enabled: bool,
-    #[doc="<p>Specifies whether you want CloudFront to include cookies in access logs, specify <code>true</code> for <code>IncludeCookies</code>. If you choose to include cookies in logs, CloudFront logs all cookies regardless of how you configure the cache behaviors for this distribution. If you do not want to include cookies when you create a distribution or if you want to disable include cookies for an existing distribution, specify <code>false</code> for <code>IncludeCookies</code>.</p>"]
+    /// <p>Specifies whether you want CloudFront to include cookies in access logs, specify <code>true</code> for <code>IncludeCookies</code>. If you choose to include cookies in logs, CloudFront logs all cookies regardless of how you configure the cache behaviors for this distribution. If you do not want to include cookies when you create a distribution or if you want to disable include cookies for an existing distribution, specify <code>false</code> for <code>IncludeCookies</code>.</p>
     pub include_cookies: bool,
-    #[doc="<p>An optional string that you want CloudFront to prefix to the access log <code>filenames</code> for this distribution, for example, <code>myprefix/</code>. If you want to enable logging, but you do not want to specify a prefix, you still must include an empty <code>Prefix</code> element in the <code>Logging</code> element.</p>"]
+    /// <p>An optional string that you want CloudFront to prefix to the access log <code>filenames</code> for this distribution, for example, <code>myprefix/</code>. If you want to enable logging, but you do not want to specify a prefix, you still must include an empty <code>Prefix</code> element in the <code>Logging</code> element.</p>
     pub prefix: String,
 }
 
 struct LoggingConfigDeserializer;
 impl LoggingConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<LoggingConfig, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LoggingConfig, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = LoggingConfig::default();
@@ -4974,24 +5113,22 @@ impl LoggingConfigDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Bucket" => {
-                            obj.bucket = try!(StringDeserializer::deserialize("Bucket", stack));
-                        }
-                        "Enabled" => {
-                            obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
-                        }
-                        "IncludeCookies" => {
-                            obj.include_cookies = try!(BooleanDeserializer::deserialize("IncludeCookies",
-                                                                                        stack));
-                        }
-                        "Prefix" => {
-                            obj.prefix = try!(StringDeserializer::deserialize("Prefix", stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Bucket" => {
+                        obj.bucket = try!(StringDeserializer::deserialize("Bucket", stack));
                     }
-                }
+                    "Enabled" => {
+                        obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
+                    }
+                    "IncludeCookies" => {
+                        obj.include_cookies =
+                            try!(BooleanDeserializer::deserialize("IncludeCookies", stack));
+                    }
+                    "Prefix" => {
+                        obj.prefix = try!(StringDeserializer::deserialize("Prefix", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5002,40 +5139,44 @@ impl LoggingConfigDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct LoggingConfigSerializer;
 impl LoggingConfigSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &LoggingConfig)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &LoggingConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Bucket"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.bucket)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Bucket"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.bucket
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Enabled"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.enabled)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Enabled"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.enabled
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("IncludeCookies"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.include_cookies)))?;
+        writer.write(xml::writer::XmlEvent::start_element("IncludeCookies"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.include_cookies
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Prefix"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.prefix)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.prefix
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5044,74 +5185,80 @@ impl LoggingConfigSerializer {
 struct LongDeserializer;
 impl LongDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct LongSerializer;
 impl LongSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &i64)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &i64,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
 struct MethodDeserializer;
 impl MethodDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct MethodSerializer;
 impl MethodSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
 struct MethodsListDeserializer;
 impl MethodsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -5143,18 +5290,19 @@ impl MethodsListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct MethodsListSerializer;
 impl MethodsListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<String>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<String>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -5168,58 +5316,62 @@ impl MethodsListSerializer {
 struct MinimumProtocolVersionDeserializer;
 impl MinimumProtocolVersionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct MinimumProtocolVersionSerializer;
 impl MinimumProtocolVersionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
-#[doc="<p>A complex type that describes the Amazon S3 bucket or the HTTP server (for example, a web server) from which CloudFront gets your files. You must create at least one origin.</p> <p>For the current limit on the number of origins that you can create for a distribution, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront\">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that describes the Amazon S3 bucket or the HTTP server (for example, a web server) from which CloudFront gets your files. You must create at least one origin.</p> <p>For the current limit on the number of origins that you can create for a distribution, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>
+#[derive(Default, Debug)]
 pub struct Origin {
-    #[doc="<p>A complex type that contains names and values for the custom headers that you want.</p>"]
+    /// <p>A complex type that contains names and values for the custom headers that you want.</p>
     pub custom_headers: Option<CustomHeaders>,
-    #[doc="<p>A complex type that contains information about a custom origin. If the origin is an Amazon S3 bucket, use the <code>S3OriginConfig</code> element instead.</p>"]
+    /// <p>A complex type that contains information about a custom origin. If the origin is an Amazon S3 bucket, use the <code>S3OriginConfig</code> element instead.</p>
     pub custom_origin_config: Option<CustomOriginConfig>,
-    #[doc="<p> <b>Amazon S3 origins</b>: The DNS name of the Amazon S3 bucket from which you want CloudFront to get objects for this origin, for example, <code>myawsbucket.s3.amazonaws.com</code>.</p> <p>Constraints for Amazon S3 origins: </p> <ul> <li> <p>If you configured Amazon S3 Transfer Acceleration for your bucket, do not specify the <code>s3-accelerate</code> endpoint for <code>DomainName</code>.</p> </li> <li> <p>The bucket name must be between 3 and 63 characters long (inclusive).</p> </li> <li> <p>The bucket name must contain only lowercase characters, numbers, periods, underscores, and dashes.</p> </li> <li> <p>The bucket name must not contain adjacent periods.</p> </li> </ul> <p> <b>Custom Origins</b>: The DNS domain name for the HTTP server from which you want CloudFront to get objects for this origin, for example, <code>www.example.com</code>. </p> <p>Constraints for custom origins:</p> <ul> <li> <p> <code>DomainName</code> must be a valid DNS name that contains only a-z, A-Z, 0-9, dot (.), hyphen (-), or underscore (_) characters.</p> </li> <li> <p>The name cannot exceed 128 characters.</p> </li> </ul>"]
+    /// <p> <b>Amazon S3 origins</b>: The DNS name of the Amazon S3 bucket from which you want CloudFront to get objects for this origin, for example, <code>myawsbucket.s3.amazonaws.com</code>.</p> <p>Constraints for Amazon S3 origins: </p> <ul> <li> <p>If you configured Amazon S3 Transfer Acceleration for your bucket, do not specify the <code>s3-accelerate</code> endpoint for <code>DomainName</code>.</p> </li> <li> <p>The bucket name must be between 3 and 63 characters long (inclusive).</p> </li> <li> <p>The bucket name must contain only lowercase characters, numbers, periods, underscores, and dashes.</p> </li> <li> <p>The bucket name must not contain adjacent periods.</p> </li> </ul> <p> <b>Custom Origins</b>: The DNS domain name for the HTTP server from which you want CloudFront to get objects for this origin, for example, <code>www.example.com</code>. </p> <p>Constraints for custom origins:</p> <ul> <li> <p> <code>DomainName</code> must be a valid DNS name that contains only a-z, A-Z, 0-9, dot (.), hyphen (-), or underscore (_) characters.</p> </li> <li> <p>The name cannot exceed 128 characters.</p> </li> </ul>
     pub domain_name: String,
-    #[doc="<p>A unique identifier for the origin. The value of <code>Id</code> must be unique within the distribution.</p> <p>When you specify the value of <code>TargetOriginId</code> for the default cache behavior or for another cache behavior, you indicate the origin to which you want the cache behavior to route requests by specifying the value of the <code>Id</code> element for that origin. When a request matches the path pattern for that cache behavior, CloudFront routes the request to the specified origin. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior\">Cache Behavior Settings</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>A unique identifier for the origin. The value of <code>Id</code> must be unique within the distribution.</p> <p>When you specify the value of <code>TargetOriginId</code> for the default cache behavior or for another cache behavior, you indicate the origin to which you want the cache behavior to route requests by specifying the value of the <code>Id</code> element for that origin. When a request matches the path pattern for that cache behavior, CloudFront routes the request to the specified origin. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior">Cache Behavior Settings</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub id: String,
-    #[doc="<p>An optional element that causes CloudFront to request your content from a directory in your Amazon S3 bucket or your custom origin. When you include the <code>OriginPath</code> element, specify the directory name, beginning with a <code>/</code>. CloudFront appends the directory name to the value of <code>DomainName</code>, for example, <code>example.com/production</code>. Do not include a <code>/</code> at the end of the directory name.</p> <p>For example, suppose you've specified the following values for your distribution:</p> <ul> <li> <p> <code>DomainName</code>: An Amazon S3 bucket named <code>myawsbucket</code>.</p> </li> <li> <p> <code>OriginPath</code>: <code>/production</code> </p> </li> <li> <p> <code>CNAME</code>: <code>example.com</code> </p> </li> </ul> <p>When a user enters <code>example.com/index.html</code> in a browser, CloudFront sends a request to Amazon S3 for <code>myawsbucket/production/index.html</code>.</p> <p>When a user enters <code>example.com/acme/index.html</code> in a browser, CloudFront sends a request to Amazon S3 for <code>myawsbucket/production/acme/index.html</code>.</p>"]
+    /// <p>An optional element that causes CloudFront to request your content from a directory in your Amazon S3 bucket or your custom origin. When you include the <code>OriginPath</code> element, specify the directory name, beginning with a <code>/</code>. CloudFront appends the directory name to the value of <code>DomainName</code>, for example, <code>example.com/production</code>. Do not include a <code>/</code> at the end of the directory name.</p> <p>For example, suppose you've specified the following values for your distribution:</p> <ul> <li> <p> <code>DomainName</code>: An Amazon S3 bucket named <code>myawsbucket</code>.</p> </li> <li> <p> <code>OriginPath</code>: <code>/production</code> </p> </li> <li> <p> <code>CNAME</code>: <code>example.com</code> </p> </li> </ul> <p>When a user enters <code>example.com/index.html</code> in a browser, CloudFront sends a request to Amazon S3 for <code>myawsbucket/production/index.html</code>.</p> <p>When a user enters <code>example.com/acme/index.html</code> in a browser, CloudFront sends a request to Amazon S3 for <code>myawsbucket/production/acme/index.html</code>.</p>
     pub origin_path: Option<String>,
-    #[doc="<p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin, use the <code>CustomOriginConfig</code> element instead.</p>"]
+    /// <p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin, use the <code>CustomOriginConfig</code> element instead.</p>
     pub s3_origin_config: Option<S3OriginConfig>,
 }
 
 struct OriginDeserializer;
 impl OriginDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Origin, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Origin, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Origin::default();
@@ -5234,37 +5386,38 @@ impl OriginDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CustomHeaders" => {
-                            obj.custom_headers =
-                                Some(try!(CustomHeadersDeserializer::deserialize("CustomHeaders",
-                                                                                 stack)));
-                        }
-                        "CustomOriginConfig" => {
-                            obj.custom_origin_config =
-                                Some(try!(CustomOriginConfigDeserializer::deserialize("CustomOriginConfig",
-                                                                                      stack)));
-                        }
-                        "DomainName" => {
-                            obj.domain_name = try!(StringDeserializer::deserialize("DomainName",
-                                                                                   stack));
-                        }
-                        "Id" => {
-                            obj.id = try!(StringDeserializer::deserialize("Id", stack));
-                        }
-                        "OriginPath" => {
-                            obj.origin_path = Some(try!(StringDeserializer::deserialize("OriginPath",
-                                                                                        stack)));
-                        }
-                        "S3OriginConfig" => {
-                            obj.s3_origin_config =
-                                Some(try!(S3OriginConfigDeserializer::deserialize("S3OriginConfig",
-                                                                                  stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CustomHeaders" => {
+                        obj.custom_headers = Some(try!(CustomHeadersDeserializer::deserialize(
+                            "CustomHeaders",
+                            stack
+                        )));
                     }
-                }
+                    "CustomOriginConfig" => {
+                        obj.custom_origin_config =
+                            Some(try!(CustomOriginConfigDeserializer::deserialize(
+                                "CustomOriginConfig",
+                                stack
+                            )));
+                    }
+                    "DomainName" => {
+                        obj.domain_name =
+                            try!(StringDeserializer::deserialize("DomainName", stack));
+                    }
+                    "Id" => {
+                        obj.id = try!(StringDeserializer::deserialize("Id", stack));
+                    }
+                    "OriginPath" => {
+                        obj.origin_path =
+                            Some(try!(StringDeserializer::deserialize("OriginPath", stack)));
+                    }
+                    "S3OriginConfig" => {
+                        obj.s3_origin_config = Some(try!(
+                            S3OriginConfigDeserializer::deserialize("S3OriginConfig", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5275,18 +5428,19 @@ impl OriginDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct OriginSerializer;
 impl OriginSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Origin)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Origin,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.custom_headers {
@@ -5295,18 +5449,24 @@ impl OriginSerializer {
         if let Some(ref value) = obj.custom_origin_config {
             &CustomOriginConfigSerializer::serialize(&mut writer, "CustomOriginConfig", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("DomainName"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value=obj.domain_name)))?;
+        writer.write(xml::writer::XmlEvent::start_element("DomainName"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.domain_name
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.id)))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.id
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.origin_path {
-            writer
-                .write(xml::writer::XmlEvent::start_element("OriginPath"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("OriginPath"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.s3_origin_config {
@@ -5316,21 +5476,22 @@ impl OriginSerializer {
     }
 }
 
-#[doc="<p>A complex type that contains <code>HeaderName</code> and <code>HeaderValue</code> elements, if any, for this distribution. </p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that contains <code>HeaderName</code> and <code>HeaderValue</code> elements, if any, for this distribution. </p>
+#[derive(Default, Debug)]
 pub struct OriginCustomHeader {
-    #[doc="<p>The name of a header that you want CloudFront to forward to your origin. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/forward-custom-headers.html\">Forwarding Custom Headers to Your Origin (Web Distributions Only)</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>The name of a header that you want CloudFront to forward to your origin. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/forward-custom-headers.html">Forwarding Custom Headers to Your Origin (Web Distributions Only)</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p>
     pub header_name: String,
-    #[doc="<p>The value for the header that you specified in the <code>HeaderName</code> field.</p>"]
+    /// <p>The value for the header that you specified in the <code>HeaderName</code> field.</p>
     pub header_value: String,
 }
 
 struct OriginCustomHeaderDeserializer;
 impl OriginCustomHeaderDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<OriginCustomHeader, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginCustomHeader, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = OriginCustomHeader::default();
@@ -5345,19 +5506,17 @@ impl OriginCustomHeaderDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "HeaderName" => {
-                            obj.header_name = try!(StringDeserializer::deserialize("HeaderName",
-                                                                                   stack));
-                        }
-                        "HeaderValue" => {
-                            obj.header_value = try!(StringDeserializer::deserialize("HeaderValue",
-                                                                                    stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "HeaderName" => {
+                        obj.header_name =
+                            try!(StringDeserializer::deserialize("HeaderName", stack));
                     }
-                }
+                    "HeaderValue" => {
+                        obj.header_value =
+                            try!(StringDeserializer::deserialize("HeaderValue", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5368,29 +5527,32 @@ impl OriginCustomHeaderDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct OriginCustomHeaderSerializer;
 impl OriginCustomHeaderSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &OriginCustomHeader)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &OriginCustomHeader,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("HeaderName"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value=obj.header_name)))?;
+        writer.write(xml::writer::XmlEvent::start_element("HeaderName"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.header_name
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("HeaderValue"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.header_value)))?;
+        writer.write(xml::writer::XmlEvent::start_element("HeaderValue"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.header_value
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5399,10 +5561,10 @@ impl OriginCustomHeaderSerializer {
 struct OriginCustomHeadersListDeserializer;
 impl OriginCustomHeadersListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<OriginCustomHeader>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<OriginCustomHeader>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -5418,7 +5580,10 @@ impl OriginCustomHeadersListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "OriginCustomHeader" {
-                        obj.push(try!(OriginCustomHeaderDeserializer::deserialize("OriginCustomHeader", stack)));
+                        obj.push(try!(OriginCustomHeaderDeserializer::deserialize(
+                            "OriginCustomHeader",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -5434,18 +5599,19 @@ impl OriginCustomHeadersListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct OriginCustomHeadersListSerializer;
 impl OriginCustomHeadersListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<OriginCustomHeader>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<OriginCustomHeader>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -5459,10 +5625,10 @@ impl OriginCustomHeadersListSerializer {
 struct OriginListDeserializer;
 impl OriginListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<Origin>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Origin>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -5494,18 +5660,19 @@ impl OriginListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct OriginListSerializer;
 impl OriginListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<Origin>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<Origin>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -5519,50 +5686,54 @@ impl OriginListSerializer {
 struct OriginProtocolPolicyDeserializer;
 impl OriginProtocolPolicyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct OriginProtocolPolicySerializer;
 impl OriginProtocolPolicySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
-#[doc="<p>A complex type that contains information about the SSL/TLS protocols that CloudFront can use when establishing an HTTPS connection with your origin. </p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that contains information about the SSL/TLS protocols that CloudFront can use when establishing an HTTPS connection with your origin. </p>
+#[derive(Default, Debug)]
 pub struct OriginSslProtocols {
-    #[doc="<p>A list that contains allowed SSL/TLS protocols for this distribution.</p>"]
+    /// <p>A list that contains allowed SSL/TLS protocols for this distribution.</p>
     pub items: Vec<String>,
-    #[doc="<p>The number of SSL/TLS protocols that you want to allow CloudFront to use when establishing an HTTPS connection with this origin. </p>"]
+    /// <p>The number of SSL/TLS protocols that you want to allow CloudFront to use when establishing an HTTPS connection with this origin. </p>
     pub quantity: i64,
 }
 
 struct OriginSslProtocolsDeserializer;
 impl OriginSslProtocolsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<OriginSslProtocols, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginSslProtocols, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = OriginSslProtocols::default();
@@ -5577,19 +5748,15 @@ impl OriginSslProtocolsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items = try!(SslProtocolsListDeserializer::deserialize("Items",
-                                                                                       stack));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items = try!(SslProtocolsListDeserializer::deserialize("Items", stack));
                     }
-                }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5600,45 +5767,48 @@ impl OriginSslProtocolsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct OriginSslProtocolsSerializer;
 impl OriginSslProtocolsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &OriginSslProtocols)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &OriginSslProtocols,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         SslProtocolsListSerializer::serialize(&mut writer, "Items", &obj.items)?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>A complex type that contains information about origins for this distribution. </p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that contains information about origins for this distribution. </p>
+#[derive(Default, Debug)]
 pub struct Origins {
-    #[doc="<p>A complex type that contains origins for this distribution.</p>"]
+    /// <p>A complex type that contains origins for this distribution.</p>
     pub items: Option<Vec<Origin>>,
-    #[doc="<p>The number of origins for this distribution.</p>"]
+    /// <p>The number of origins for this distribution.</p>
     pub quantity: i64,
 }
 
 struct OriginsDeserializer;
 impl OriginsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Origins, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Origins, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Origins::default();
@@ -5653,19 +5823,15 @@ impl OriginsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items = Some(try!(OriginListDeserializer::deserialize("Items",
-                                                                                      stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items = Some(try!(OriginListDeserializer::deserialize("Items", stack)));
                     }
-                }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5676,27 +5842,29 @@ impl OriginsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct OriginsSerializer;
 impl OriginsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Origins)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Origins,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.items {
             &OriginListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5705,10 +5873,10 @@ impl OriginsSerializer {
 struct PathListDeserializer;
 impl PathListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -5740,18 +5908,19 @@ impl PathListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct PathListSerializer;
 impl PathListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<String>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<String>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -5762,21 +5931,22 @@ impl PathListSerializer {
     }
 }
 
-#[doc="<p>A complex type that contains information about the objects that you want to invalidate. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects\">Specifying the Objects to Invalidate</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that contains information about the objects that you want to invalidate. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects">Specifying the Objects to Invalidate</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>
+#[derive(Default, Debug)]
 pub struct Paths {
-    #[doc="<p>A complex type that contains a list of the paths that you want to invalidate.</p>"]
+    /// <p>A complex type that contains a list of the paths that you want to invalidate.</p>
     pub items: Option<Vec<String>>,
-    #[doc="<p>The number of objects that you want to invalidate.</p>"]
+    /// <p>The number of objects that you want to invalidate.</p>
     pub quantity: i64,
 }
 
 struct PathsDeserializer;
 impl PathsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Paths, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Paths, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Paths::default();
@@ -5791,19 +5961,15 @@ impl PathsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items = Some(try!(PathListDeserializer::deserialize("Items",
-                                                                                    stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items = Some(try!(PathListDeserializer::deserialize("Items", stack)));
                     }
-                }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5814,27 +5980,29 @@ impl PathsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct PathsSerializer;
 impl PathsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Paths)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Paths,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.items {
             &PathListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5843,49 +6011,53 @@ impl PathsSerializer {
 struct PriceClassDeserializer;
 impl PriceClassDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct PriceClassSerializer;
 impl PriceClassSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
-#[derive(Default,Debug)]
+#[derive(Default, Debug)]
 pub struct QueryStringCacheKeys {
-    #[doc="<p>(Optional) A list that contains the query string parameters that you want CloudFront to use as a basis for caching for this cache behavior. If <code>Quantity</code> is 0, you can omit <code>Items</code>. </p>"]
+    /// <p>(Optional) A list that contains the query string parameters that you want CloudFront to use as a basis for caching for this cache behavior. If <code>Quantity</code> is 0, you can omit <code>Items</code>. </p>
     pub items: Option<Vec<String>>,
-    #[doc="<p>The number of <code>whitelisted</code> query string parameters for this cache behavior.</p>"]
+    /// <p>The number of <code>whitelisted</code> query string parameters for this cache behavior.</p>
     pub quantity: i64,
 }
 
 struct QueryStringCacheKeysDeserializer;
 impl QueryStringCacheKeysDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<QueryStringCacheKeys, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<QueryStringCacheKeys, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = QueryStringCacheKeys::default();
@@ -5900,18 +6072,18 @@ impl QueryStringCacheKeysDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items = Some(try!(QueryStringCacheKeysListDeserializer::deserialize("Items", stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items = Some(try!(QueryStringCacheKeysListDeserializer::deserialize(
+                            "Items",
+                            stack
+                        )));
                     }
-                }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5922,27 +6094,29 @@ impl QueryStringCacheKeysDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct QueryStringCacheKeysSerializer;
 impl QueryStringCacheKeysSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &QueryStringCacheKeys)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &QueryStringCacheKeys,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.items {
             &QueryStringCacheKeysListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5951,10 +6125,10 @@ impl QueryStringCacheKeysSerializer {
 struct QueryStringCacheKeysListDeserializer;
 impl QueryStringCacheKeysListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -5986,18 +6160,19 @@ impl QueryStringCacheKeysListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct QueryStringCacheKeysListSerializer;
 impl QueryStringCacheKeysListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<String>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<String>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -6008,26 +6183,28 @@ impl QueryStringCacheKeysListSerializer {
     }
 }
 
-
 pub struct ResourceARNSerializer;
 impl ResourceARNSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
-#[doc="<p>A complex type that identifies ways in which you want to restrict distribution of your content.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that identifies ways in which you want to restrict distribution of your content.</p>
+#[derive(Default, Debug)]
 pub struct Restrictions {
     pub geo_restriction: GeoRestriction,
 }
@@ -6035,9 +6212,10 @@ pub struct Restrictions {
 struct RestrictionsDeserializer;
 impl RestrictionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Restrictions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Restrictions, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Restrictions::default();
@@ -6052,16 +6230,15 @@ impl RestrictionsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "GeoRestriction" => {
-                            obj.geo_restriction =
-                                try!(GeoRestrictionDeserializer::deserialize("GeoRestriction",
-                                                                             stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "GeoRestriction" => {
+                        obj.geo_restriction = try!(GeoRestrictionDeserializer::deserialize(
+                            "GeoRestriction",
+                            stack
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6072,18 +6249,19 @@ impl RestrictionsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct RestrictionsSerializer;
 impl RestrictionsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Restrictions)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Restrictions,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         GeoRestrictionSerializer::serialize(&mut writer, "GeoRestriction", &obj.geo_restriction)?;
@@ -6091,21 +6269,22 @@ impl RestrictionsSerializer {
     }
 }
 
-#[doc="<p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution.</p>
+#[derive(Default, Debug)]
 pub struct S3Origin {
-    #[doc="<p>The DNS name of the Amazon S3 origin. </p>"]
+    /// <p>The DNS name of the Amazon S3 origin. </p>
     pub domain_name: String,
-    #[doc="<p>The CloudFront origin access identity to associate with the RTMP distribution. Use an origin access identity to configure the distribution so that end users can only access objects in an Amazon S3 bucket through CloudFront.</p> <p>If you want end users to be able to access objects using either the CloudFront URL or the Amazon S3 URL, specify an empty <code>OriginAccessIdentity</code> element.</p> <p>To delete the origin access identity from an existing distribution, update the distribution configuration and include an empty <code>OriginAccessIdentity</code> element.</p> <p>To replace the origin access identity, update the distribution configuration and specify the new origin access identity.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html\">Using an Origin Access Identity to Restrict Access to Your Amazon S3 Content</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>The CloudFront origin access identity to associate with the RTMP distribution. Use an origin access identity to configure the distribution so that end users can only access objects in an Amazon S3 bucket through CloudFront.</p> <p>If you want end users to be able to access objects using either the CloudFront URL or the Amazon S3 URL, specify an empty <code>OriginAccessIdentity</code> element.</p> <p>To delete the origin access identity from an existing distribution, update the distribution configuration and include an empty <code>OriginAccessIdentity</code> element.</p> <p>To replace the origin access identity, update the distribution configuration and specify the new origin access identity.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html">Using an Origin Access Identity to Restrict Access to Your Amazon S3 Content</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p>
     pub origin_access_identity: String,
 }
 
 struct S3OriginDeserializer;
 impl S3OriginDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<S3Origin, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<S3Origin, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = S3Origin::default();
@@ -6120,20 +6299,19 @@ impl S3OriginDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DomainName" => {
-                            obj.domain_name = try!(StringDeserializer::deserialize("DomainName",
-                                                                                   stack));
-                        }
-                        "OriginAccessIdentity" => {
-                            obj.origin_access_identity =
-                                try!(StringDeserializer::deserialize("OriginAccessIdentity",
-                                                                     stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DomainName" => {
+                        obj.domain_name =
+                            try!(StringDeserializer::deserialize("DomainName", stack));
                     }
-                }
+                    "OriginAccessIdentity" => {
+                        obj.origin_access_identity = try!(StringDeserializer::deserialize(
+                            "OriginAccessIdentity",
+                            stack
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6144,47 +6322,51 @@ impl S3OriginDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct S3OriginSerializer;
 impl S3OriginSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &S3Origin)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &S3Origin,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("DomainName"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value=obj.domain_name)))?;
+        writer.write(xml::writer::XmlEvent::start_element("DomainName"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.domain_name
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("OriginAccessIdentity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.origin_access_identity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("OriginAccessIdentity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.origin_access_identity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin, use the <code>CustomOriginConfig</code> element instead.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin, use the <code>CustomOriginConfig</code> element instead.</p>
+#[derive(Default, Debug)]
 pub struct S3OriginConfig {
-    #[doc="<p>The CloudFront origin access identity to associate with the origin. Use an origin access identity to configure the origin so that viewers can <i>only</i> access objects in an Amazon S3 bucket through CloudFront. The format of the value is:</p> <p>origin-access-identity/cloudfront/<i>ID-of-origin-access-identity</i> </p> <p>where <code> <i>ID-of-origin-access-identity</i> </code> is the value that CloudFront returned in the <code>ID</code> element when you created the origin access identity.</p> <p>If you want viewers to be able to access objects using either the CloudFront URL or the Amazon S3 URL, specify an empty <code>OriginAccessIdentity</code> element.</p> <p>To delete the origin access identity from an existing distribution, update the distribution configuration and include an empty <code>OriginAccessIdentity</code> element.</p> <p>To replace the origin access identity, update the distribution configuration and specify the new origin access identity.</p> <p>For more information about the origin access identity, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>The CloudFront origin access identity to associate with the origin. Use an origin access identity to configure the origin so that viewers can <i>only</i> access objects in an Amazon S3 bucket through CloudFront. The format of the value is:</p> <p>origin-access-identity/cloudfront/<i>ID-of-origin-access-identity</i> </p> <p>where <code> <i>ID-of-origin-access-identity</i> </code> is the value that CloudFront returned in the <code>ID</code> element when you created the origin access identity.</p> <p>If you want viewers to be able to access objects using either the CloudFront URL or the Amazon S3 URL, specify an empty <code>OriginAccessIdentity</code> element.</p> <p>To delete the origin access identity from an existing distribution, update the distribution configuration and include an empty <code>OriginAccessIdentity</code> element.</p> <p>To replace the origin access identity, update the distribution configuration and specify the new origin access identity.</p> <p>For more information about the origin access identity, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub origin_access_identity: String,
 }
 
 struct S3OriginConfigDeserializer;
 impl S3OriginConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<S3OriginConfig, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<S3OriginConfig, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = S3OriginConfig::default();
@@ -6199,16 +6381,15 @@ impl S3OriginConfigDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "OriginAccessIdentity" => {
-                            obj.origin_access_identity =
-                                try!(StringDeserializer::deserialize("OriginAccessIdentity",
-                                                                     stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "OriginAccessIdentity" => {
+                        obj.origin_access_identity = try!(StringDeserializer::deserialize(
+                            "OriginAccessIdentity",
+                            stack
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6219,25 +6400,26 @@ impl S3OriginConfigDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct S3OriginConfigSerializer;
 impl S3OriginConfigSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &S3OriginConfig)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &S3OriginConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("OriginAccessIdentity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.origin_access_identity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("OriginAccessIdentity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.origin_access_identity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -6246,50 +6428,54 @@ impl S3OriginConfigSerializer {
 struct SSLSupportMethodDeserializer;
 impl SSLSupportMethodDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct SSLSupportMethodSerializer;
 impl SSLSupportMethodSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
-#[doc="<p>A complex type that lists the AWS accounts that were included in the <code>TrustedSigners</code> complex type, as well as their active CloudFront key pair IDs, if any. </p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that lists the AWS accounts that were included in the <code>TrustedSigners</code> complex type, as well as their active CloudFront key pair IDs, if any. </p>
+#[derive(Default, Debug)]
 pub struct Signer {
-    #[doc="<p>An AWS account that is included in the <code>TrustedSigners</code> complex type for this RTMP distribution. Valid values include:</p> <ul> <li> <p> <code>self</code>, which is the AWS account used to create the distribution.</p> </li> <li> <p>An AWS account number.</p> </li> </ul>"]
+    /// <p>An AWS account that is included in the <code>TrustedSigners</code> complex type for this RTMP distribution. Valid values include:</p> <ul> <li> <p> <code>self</code>, which is the AWS account used to create the distribution.</p> </li> <li> <p>An AWS account number.</p> </li> </ul>
     pub aws_account_number: Option<String>,
-    #[doc="<p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>.</p>"]
+    /// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>.</p>
     pub key_pair_ids: Option<KeyPairIds>,
 }
 
 struct SignerDeserializer;
 impl SignerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Signer, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Signer, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Signer::default();
@@ -6304,21 +6490,21 @@ impl SignerDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AwsAccountNumber" => {
-                            obj.aws_account_number =
-                                Some(try!(StringDeserializer::deserialize("AwsAccountNumber",
-                                                                          stack)));
-                        }
-                        "KeyPairIds" => {
-                            obj.key_pair_ids =
-                                Some(try!(KeyPairIdsDeserializer::deserialize("KeyPairIds",
-                                                                              stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AwsAccountNumber" => {
+                        obj.aws_account_number = Some(try!(StringDeserializer::deserialize(
+                            "AwsAccountNumber",
+                            stack
+                        )));
                     }
-                }
+                    "KeyPairIds" => {
+                        obj.key_pair_ids = Some(try!(KeyPairIdsDeserializer::deserialize(
+                            "KeyPairIds",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6329,16 +6515,15 @@ impl SignerDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SignerListDeserializer;
 impl SignerListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<Signer>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Signer>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -6370,48 +6555,50 @@ impl SignerListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 struct SslProtocolDeserializer;
 impl SslProtocolDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct SslProtocolSerializer;
 impl SslProtocolSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
 struct SslProtocolsListDeserializer;
 impl SslProtocolsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -6427,7 +6614,10 @@ impl SslProtocolsListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "SslProtocol" {
-                        obj.push(try!(SslProtocolDeserializer::deserialize("SslProtocol", stack)));
+                        obj.push(try!(SslProtocolDeserializer::deserialize(
+                            "SslProtocol",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -6443,18 +6633,19 @@ impl SslProtocolsListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct SslProtocolsListSerializer;
 impl SslProtocolsListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<String>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<String>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -6465,30 +6656,31 @@ impl SslProtocolsListSerializer {
     }
 }
 
-#[doc="<p>A streaming distribution. </p>"]
-#[derive(Default,Debug)]
+/// <p>A streaming distribution. </p>
+#[derive(Default, Debug)]
 pub struct StreamingDistribution {
     pub arn: String,
-    #[doc="<p>A complex type that lists the AWS accounts, if any, that you included in the <code>TrustedSigners</code> complex type for this distribution. These are the accounts that you want to allow to create signed URLs for private content.</p> <p>The <code>Signer</code> complex type lists the AWS account number of the trusted signer or <code>self</code> if the signer is the AWS account that created the distribution. The <code>Signer</code> element also includes the IDs of any active CloudFront key pairs that are associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create signed URLs.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>"]
+    /// <p>A complex type that lists the AWS accounts, if any, that you included in the <code>TrustedSigners</code> complex type for this distribution. These are the accounts that you want to allow to create signed URLs for private content.</p> <p>The <code>Signer</code> complex type lists the AWS account number of the trusted signer or <code>self</code> if the signer is the AWS account that created the distribution. The <code>Signer</code> element also includes the IDs of any active CloudFront key pairs that are associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create signed URLs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>
     pub active_trusted_signers: ActiveTrustedSigners,
-    #[doc="<p>The domain name that corresponds to the streaming distribution. For example: <code>s5c39gqb8ow64r.cloudfront.net</code>. </p>"]
+    /// <p>The domain name that corresponds to the streaming distribution. For example: <code>s5c39gqb8ow64r.cloudfront.net</code>. </p>
     pub domain_name: String,
-    #[doc="<p>The identifier for the RTMP distribution. For example: <code>EGTXBD79EXAMPLE</code>.</p>"]
+    /// <p>The identifier for the RTMP distribution. For example: <code>EGTXBD79EXAMPLE</code>.</p>
     pub id: String,
-    #[doc="<p>The date and time that the distribution was last modified. </p>"]
+    /// <p>The date and time that the distribution was last modified. </p>
     pub last_modified_time: Option<String>,
-    #[doc="<p>The current status of the RTMP distribution. When the status is <code>Deployed</code>, the distribution's information is propagated to all CloudFront edge locations.</p>"]
+    /// <p>The current status of the RTMP distribution. When the status is <code>Deployed</code>, the distribution's information is propagated to all CloudFront edge locations.</p>
     pub status: String,
-    #[doc="<p>The current configuration information for the RTMP distribution.</p>"]
+    /// <p>The current configuration information for the RTMP distribution.</p>
     pub streaming_distribution_config: StreamingDistributionConfig,
 }
 
 struct StreamingDistributionDeserializer;
 impl StreamingDistributionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<StreamingDistribution, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StreamingDistribution, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = StreamingDistribution::default();
@@ -6503,39 +6695,42 @@ impl StreamingDistributionDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ARN" => {
-                            obj.arn = try!(StringDeserializer::deserialize("ARN", stack));
-                        }
-                        "ActiveTrustedSigners" => {
-                            obj.active_trusted_signers =
-                                try!(ActiveTrustedSignersDeserializer::deserialize("ActiveTrustedSigners",
-                                                                                   stack));
-                        }
-                        "DomainName" => {
-                            obj.domain_name = try!(StringDeserializer::deserialize("DomainName",
-                                                                                   stack));
-                        }
-                        "Id" => {
-                            obj.id = try!(StringDeserializer::deserialize("Id", stack));
-                        }
-                        "LastModifiedTime" => {
-                            obj.last_modified_time =
-                                Some(try!(TimestampDeserializer::deserialize("LastModifiedTime",
-                                                                             stack)));
-                        }
-                        "Status" => {
-                            obj.status = try!(StringDeserializer::deserialize("Status", stack));
-                        }
-                        "StreamingDistributionConfig" => {
-                            obj.streaming_distribution_config =
-                                try!(StreamingDistributionConfigDeserializer::deserialize("StreamingDistributionConfig",
-                                                                                          stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ARN" => {
+                        obj.arn = try!(StringDeserializer::deserialize("ARN", stack));
                     }
-                }
+                    "ActiveTrustedSigners" => {
+                        obj.active_trusted_signers =
+                            try!(ActiveTrustedSignersDeserializer::deserialize(
+                                "ActiveTrustedSigners",
+                                stack
+                            ));
+                    }
+                    "DomainName" => {
+                        obj.domain_name =
+                            try!(StringDeserializer::deserialize("DomainName", stack));
+                    }
+                    "Id" => {
+                        obj.id = try!(StringDeserializer::deserialize("Id", stack));
+                    }
+                    "LastModifiedTime" => {
+                        obj.last_modified_time = Some(try!(TimestampDeserializer::deserialize(
+                            "LastModifiedTime",
+                            stack
+                        )));
+                    }
+                    "Status" => {
+                        obj.status = try!(StringDeserializer::deserialize("Status", stack));
+                    }
+                    "StreamingDistributionConfig" => {
+                        obj.streaming_distribution_config =
+                            try!(StreamingDistributionConfigDeserializer::deserialize(
+                                "StreamingDistributionConfig",
+                                stack
+                            ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6546,36 +6741,36 @@ impl StreamingDistributionDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The RTMP distribution's configuration information.</p>"]
-#[derive(Default,Debug)]
+/// <p>The RTMP distribution's configuration information.</p>
+#[derive(Default, Debug)]
 pub struct StreamingDistributionConfig {
-    #[doc="<p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this streaming distribution. </p>"]
+    /// <p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this streaming distribution. </p>
     pub aliases: Option<Aliases>,
-    #[doc="<p>A unique number that ensures that the request can't be replayed. If the <code>CallerReference</code> is new (no matter the content of the <code>StreamingDistributionConfig</code> object), a new streaming distribution is created. If the <code>CallerReference</code> is a value that you already sent in a previous request to create a streaming distribution, and the content of the <code>StreamingDistributionConfig</code> is identical to the original request (ignoring white space), the response includes the same information returned to the original request. If the <code>CallerReference</code> is a value that you already sent in a previous request to create a streaming distribution but the content of the <code>StreamingDistributionConfig</code> is different from the original request, CloudFront returns a <code>DistributionAlreadyExists</code> error. </p>"]
+    /// <p>A unique number that ensures that the request can't be replayed. If the <code>CallerReference</code> is new (no matter the content of the <code>StreamingDistributionConfig</code> object), a new streaming distribution is created. If the <code>CallerReference</code> is a value that you already sent in a previous request to create a streaming distribution, and the content of the <code>StreamingDistributionConfig</code> is identical to the original request (ignoring white space), the response includes the same information returned to the original request. If the <code>CallerReference</code> is a value that you already sent in a previous request to create a streaming distribution but the content of the <code>StreamingDistributionConfig</code> is different from the original request, CloudFront returns a <code>DistributionAlreadyExists</code> error. </p>
     pub caller_reference: String,
-    #[doc="<p>Any comments you want to include about the streaming distribution. </p>"]
+    /// <p>Any comments you want to include about the streaming distribution. </p>
     pub comment: String,
-    #[doc="<p>Whether the streaming distribution is enabled to accept user requests for content.</p>"]
+    /// <p>Whether the streaming distribution is enabled to accept user requests for content.</p>
     pub enabled: bool,
-    #[doc="<p>A complex type that controls whether access logs are written for the streaming distribution. </p>"]
+    /// <p>A complex type that controls whether access logs are written for the streaming distribution. </p>
     pub logging: Option<StreamingLoggingConfig>,
-    #[doc="<p>A complex type that contains information about price class for this streaming distribution. </p>"]
+    /// <p>A complex type that contains information about price class for this streaming distribution. </p>
     pub price_class: Option<String>,
-    #[doc="<p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution. </p>"]
+    /// <p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution. </p>
     pub s3_origin: S3Origin,
-    #[doc="<p>A complex type that specifies any AWS accounts that you want to permit to create signed URLs for private content. If you want the distribution to use signed URLs, include this element; if you want the distribution to use public URLs, remove this element. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>"]
+    /// <p>A complex type that specifies any AWS accounts that you want to permit to create signed URLs for private content. If you want the distribution to use signed URLs, include this element; if you want the distribution to use public URLs, remove this element. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>
     pub trusted_signers: TrustedSigners,
 }
 
 struct StreamingDistributionConfigDeserializer;
 impl StreamingDistributionConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<StreamingDistributionConfig, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StreamingDistributionConfig, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = StreamingDistributionConfig::default();
@@ -6590,44 +6785,44 @@ impl StreamingDistributionConfigDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Aliases" => {
-                            obj.aliases = Some(try!(AliasesDeserializer::deserialize("Aliases",
-                                                                                     stack)));
-                        }
-                        "CallerReference" => {
-                            obj.caller_reference = try!(StringDeserializer::deserialize("CallerReference",
-                                                                                        stack));
-                        }
-                        "Comment" => {
-                            obj.comment = try!(StringDeserializer::deserialize("Comment", stack));
-                        }
-                        "Enabled" => {
-                            obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
-                        }
-                        "Logging" => {
-                            obj.logging =
-                                Some(try!(StreamingLoggingConfigDeserializer::deserialize("Logging",
-                                                                                          stack)));
-                        }
-                        "PriceClass" => {
-                            obj.price_class =
-                                Some(try!(PriceClassDeserializer::deserialize("PriceClass",
-                                                                              stack)));
-                        }
-                        "S3Origin" => {
-                            obj.s3_origin = try!(S3OriginDeserializer::deserialize("S3Origin",
-                                                                                   stack));
-                        }
-                        "TrustedSigners" => {
-                            obj.trusted_signers =
-                                try!(TrustedSignersDeserializer::deserialize("TrustedSigners",
-                                                                             stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Aliases" => {
+                        obj.aliases =
+                            Some(try!(AliasesDeserializer::deserialize("Aliases", stack)));
                     }
-                }
+                    "CallerReference" => {
+                        obj.caller_reference =
+                            try!(StringDeserializer::deserialize("CallerReference", stack));
+                    }
+                    "Comment" => {
+                        obj.comment = try!(StringDeserializer::deserialize("Comment", stack));
+                    }
+                    "Enabled" => {
+                        obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
+                    }
+                    "Logging" => {
+                        obj.logging = Some(try!(StreamingLoggingConfigDeserializer::deserialize(
+                            "Logging",
+                            stack
+                        )));
+                    }
+                    "PriceClass" => {
+                        obj.price_class = Some(try!(PriceClassDeserializer::deserialize(
+                            "PriceClass",
+                            stack
+                        )));
+                    }
+                    "S3Origin" => {
+                        obj.s3_origin = try!(S3OriginDeserializer::deserialize("S3Origin", stack));
+                    }
+                    "TrustedSigners" => {
+                        obj.trusted_signers = try!(TrustedSignersDeserializer::deserialize(
+                            "TrustedSigners",
+                            stack
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6638,46 +6833,51 @@ impl StreamingDistributionConfigDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct StreamingDistributionConfigSerializer;
 impl StreamingDistributionConfigSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &StreamingDistributionConfig)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &StreamingDistributionConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.aliases {
             &AliasesSerializer::serialize(&mut writer, "Aliases", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("CallerReference"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}",
-                                                             value = obj.caller_reference)))?;
+        writer.write(xml::writer::XmlEvent::start_element("CallerReference"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.caller_reference
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Comment"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.comment)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Comment"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.comment
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Enabled"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.enabled)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Enabled"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.enabled
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.logging {
             &StreamingLoggingConfigSerializer::serialize(&mut writer, "Logging", value)?;
         }
         if let Some(ref value) = obj.price_class {
-            writer
-                .write(xml::writer::XmlEvent::start_element("PriceClass"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("PriceClass"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         S3OriginSerializer::serialize(&mut writer, "S3Origin", &obj.s3_origin)?;
@@ -6686,57 +6886,61 @@ impl StreamingDistributionConfigSerializer {
     }
 }
 
-#[doc="<p>A streaming distribution Configuration and a list of tags to be associated with the streaming distribution.</p>"]
-#[derive(Default,Debug)]
+/// <p>A streaming distribution Configuration and a list of tags to be associated with the streaming distribution.</p>
+#[derive(Default, Debug)]
 pub struct StreamingDistributionConfigWithTags {
-    #[doc="<p>A streaming distribution Configuration.</p>"]
+    /// <p>A streaming distribution Configuration.</p>
     pub streaming_distribution_config: StreamingDistributionConfig,
-    #[doc="<p>A complex type that contains zero or more <code>Tag</code> elements.</p>"]
+    /// <p>A complex type that contains zero or more <code>Tag</code> elements.</p>
     pub tags: Tags,
 }
-
 
 pub struct StreamingDistributionConfigWithTagsSerializer;
 impl StreamingDistributionConfigWithTagsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &StreamingDistributionConfigWithTags)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &StreamingDistributionConfigWithTags,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        StreamingDistributionConfigSerializer::serialize(&mut writer,
-                                                         "StreamingDistributionConfig",
-                                                         &obj.streaming_distribution_config)?;
+        StreamingDistributionConfigSerializer::serialize(
+            &mut writer,
+            "StreamingDistributionConfig",
+            &obj.streaming_distribution_config,
+        )?;
         TagsSerializer::serialize(&mut writer, "Tags", &obj.tags)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p>A streaming distribution list. </p>"]
-#[derive(Default,Debug)]
+/// <p>A streaming distribution list. </p>
+#[derive(Default, Debug)]
 pub struct StreamingDistributionList {
-    #[doc="<p>A flag that indicates whether more streaming distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list. </p>"]
+    /// <p>A flag that indicates whether more streaming distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list. </p>
     pub is_truncated: bool,
-    #[doc="<p>A complex type that contains one <code>StreamingDistributionSummary</code> element for each distribution that was created by the current AWS account.</p>"]
+    /// <p>A complex type that contains one <code>StreamingDistributionSummary</code> element for each distribution that was created by the current AWS account.</p>
     pub items: Option<Vec<StreamingDistributionSummary>>,
-    #[doc="<p>The value you provided for the <code>Marker</code> request parameter. </p>"]
+    /// <p>The value you provided for the <code>Marker</code> request parameter. </p>
     pub marker: String,
-    #[doc="<p>The value you provided for the <code>MaxItems</code> request parameter. </p>"]
+    /// <p>The value you provided for the <code>MaxItems</code> request parameter. </p>
     pub max_items: i64,
-    #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value you can use for the <code>Marker</code> request parameter to continue listing your RTMP distributions where they left off. </p>"]
+    /// <p>If <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value you can use for the <code>Marker</code> request parameter to continue listing your RTMP distributions where they left off. </p>
     pub next_marker: Option<String>,
-    #[doc="<p>The number of streaming distributions that were created by the current AWS account. </p>"]
+    /// <p>The number of streaming distributions that were created by the current AWS account. </p>
     pub quantity: i64,
 }
 
 struct StreamingDistributionListDeserializer;
 impl StreamingDistributionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<StreamingDistributionList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StreamingDistributionList, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = StreamingDistributionList::default();
@@ -6751,33 +6955,34 @@ impl StreamingDistributionListDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "IsTruncated" => {
-                            obj.is_truncated = try!(BooleanDeserializer::deserialize("IsTruncated",
-                                                                                     stack));
-                        }
-                        "Items" => {
-                            obj.items = Some(try!(StreamingDistributionSummaryListDeserializer::deserialize("Items", stack)));
-                        }
-                        "Marker" => {
-                            obj.marker = try!(StringDeserializer::deserialize("Marker", stack));
-                        }
-                        "MaxItems" => {
-                            obj.max_items = try!(IntegerDeserializer::deserialize("MaxItems",
-                                                                                  stack));
-                        }
-                        "NextMarker" => {
-                            obj.next_marker = Some(try!(StringDeserializer::deserialize("NextMarker",
-                                                                                        stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "IsTruncated" => {
+                        obj.is_truncated =
+                            try!(BooleanDeserializer::deserialize("IsTruncated", stack));
                     }
-                }
+                    "Items" => {
+                        obj.items = Some(try!(
+                            StreamingDistributionSummaryListDeserializer::deserialize(
+                                "Items",
+                                stack
+                            )
+                        ));
+                    }
+                    "Marker" => {
+                        obj.marker = try!(StringDeserializer::deserialize("Marker", stack));
+                    }
+                    "MaxItems" => {
+                        obj.max_items = try!(IntegerDeserializer::deserialize("MaxItems", stack));
+                    }
+                    "NextMarker" => {
+                        obj.next_marker =
+                            Some(try!(StringDeserializer::deserialize("NextMarker", stack)));
+                    }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6788,41 +6993,41 @@ impl StreamingDistributionListDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p> A summary of the information for an Amazon CloudFront streaming distribution.</p>"]
-#[derive(Default,Debug)]
+/// <p> A summary of the information for an Amazon CloudFront streaming distribution.</p>
+#[derive(Default, Debug)]
 pub struct StreamingDistributionSummary {
-    #[doc="<p> The ARN (Amazon Resource Name) for the streaming distribution. For example: <code>arn:aws:cloudfront::123456789012:streaming-distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>"]
+    /// <p> The ARN (Amazon Resource Name) for the streaming distribution. For example: <code>arn:aws:cloudfront::123456789012:streaming-distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
     pub arn: String,
-    #[doc="<p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this streaming distribution.</p>"]
+    /// <p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this streaming distribution.</p>
     pub aliases: Aliases,
-    #[doc="<p>The comment originally specified when this distribution was created.</p>"]
+    /// <p>The comment originally specified when this distribution was created.</p>
     pub comment: String,
-    #[doc="<p>The domain name corresponding to the distribution. For example: <code>d604721fxaaqy9.cloudfront.net</code>.</p>"]
+    /// <p>The domain name corresponding to the distribution. For example: <code>d604721fxaaqy9.cloudfront.net</code>.</p>
     pub domain_name: String,
-    #[doc="<p>Whether the distribution is enabled to accept end user requests for content.</p>"]
+    /// <p>Whether the distribution is enabled to accept end user requests for content.</p>
     pub enabled: bool,
-    #[doc="<p>The identifier for the distribution. For example: <code>EDFDVBD632BHDS5</code>.</p>"]
+    /// <p>The identifier for the distribution. For example: <code>EDFDVBD632BHDS5</code>.</p>
     pub id: String,
-    #[doc="<p>The date and time the distribution was last modified.</p>"]
+    /// <p>The date and time the distribution was last modified.</p>
     pub last_modified_time: String,
     pub price_class: String,
-    #[doc="<p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution.</p>"]
+    /// <p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution.</p>
     pub s3_origin: S3Origin,
-    #[doc="<p> Indicates the current status of the distribution. When the status is <code>Deployed</code>, the distribution's information is fully propagated throughout the Amazon CloudFront system.</p>"]
+    /// <p> Indicates the current status of the distribution. When the status is <code>Deployed</code>, the distribution's information is fully propagated throughout the Amazon CloudFront system.</p>
     pub status: String,
-    #[doc="<p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content. If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>.If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>. To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>"]
+    /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content. If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>.If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>. To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
     pub trusted_signers: TrustedSigners,
 }
 
 struct StreamingDistributionSummaryDeserializer;
 impl StreamingDistributionSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<StreamingDistributionSummary, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StreamingDistributionSummary, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = StreamingDistributionSummary::default();
@@ -6837,50 +7042,50 @@ impl StreamingDistributionSummaryDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ARN" => {
-                            obj.arn = try!(StringDeserializer::deserialize("ARN", stack));
-                        }
-                        "Aliases" => {
-                            obj.aliases = try!(AliasesDeserializer::deserialize("Aliases", stack));
-                        }
-                        "Comment" => {
-                            obj.comment = try!(StringDeserializer::deserialize("Comment", stack));
-                        }
-                        "DomainName" => {
-                            obj.domain_name = try!(StringDeserializer::deserialize("DomainName",
-                                                                                   stack));
-                        }
-                        "Enabled" => {
-                            obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
-                        }
-                        "Id" => {
-                            obj.id = try!(StringDeserializer::deserialize("Id", stack));
-                        }
-                        "LastModifiedTime" => {
-                            obj.last_modified_time =
-                                try!(TimestampDeserializer::deserialize("LastModifiedTime", stack));
-                        }
-                        "PriceClass" => {
-                            obj.price_class = try!(PriceClassDeserializer::deserialize("PriceClass",
-                                                                                       stack));
-                        }
-                        "S3Origin" => {
-                            obj.s3_origin = try!(S3OriginDeserializer::deserialize("S3Origin",
-                                                                                   stack));
-                        }
-                        "Status" => {
-                            obj.status = try!(StringDeserializer::deserialize("Status", stack));
-                        }
-                        "TrustedSigners" => {
-                            obj.trusted_signers =
-                                try!(TrustedSignersDeserializer::deserialize("TrustedSigners",
-                                                                             stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ARN" => {
+                        obj.arn = try!(StringDeserializer::deserialize("ARN", stack));
                     }
-                }
+                    "Aliases" => {
+                        obj.aliases = try!(AliasesDeserializer::deserialize("Aliases", stack));
+                    }
+                    "Comment" => {
+                        obj.comment = try!(StringDeserializer::deserialize("Comment", stack));
+                    }
+                    "DomainName" => {
+                        obj.domain_name =
+                            try!(StringDeserializer::deserialize("DomainName", stack));
+                    }
+                    "Enabled" => {
+                        obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
+                    }
+                    "Id" => {
+                        obj.id = try!(StringDeserializer::deserialize("Id", stack));
+                    }
+                    "LastModifiedTime" => {
+                        obj.last_modified_time = try!(TimestampDeserializer::deserialize(
+                            "LastModifiedTime",
+                            stack
+                        ));
+                    }
+                    "PriceClass" => {
+                        obj.price_class =
+                            try!(PriceClassDeserializer::deserialize("PriceClass", stack));
+                    }
+                    "S3Origin" => {
+                        obj.s3_origin = try!(S3OriginDeserializer::deserialize("S3Origin", stack));
+                    }
+                    "Status" => {
+                        obj.status = try!(StringDeserializer::deserialize("Status", stack));
+                    }
+                    "TrustedSigners" => {
+                        obj.trusted_signers = try!(TrustedSignersDeserializer::deserialize(
+                            "TrustedSigners",
+                            stack
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6891,17 +7096,15 @@ impl StreamingDistributionSummaryDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct StreamingDistributionSummaryListDeserializer;
 impl StreamingDistributionSummaryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<Vec<StreamingDistributionSummary>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<StreamingDistributionSummary>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -6917,7 +7120,12 @@ impl StreamingDistributionSummaryListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "StreamingDistributionSummary" {
-                        obj.push(try!(StreamingDistributionSummaryDeserializer::deserialize("StreamingDistributionSummary", stack)));
+                        obj.push(try!(
+                            StreamingDistributionSummaryDeserializer::deserialize(
+                                "StreamingDistributionSummary",
+                                stack
+                            )
+                        ));
                     } else {
                         skip_tree(stack);
                     }
@@ -6933,26 +7141,26 @@ impl StreamingDistributionSummaryListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
-#[doc="<p>A complex type that controls whether access logs are written for this streaming distribution.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that controls whether access logs are written for this streaming distribution.</p>
+#[derive(Default, Debug)]
 pub struct StreamingLoggingConfig {
-    #[doc="<p>The Amazon S3 bucket to store the access logs in, for example, <code>myawslogbucket.s3.amazonaws.com</code>.</p>"]
+    /// <p>The Amazon S3 bucket to store the access logs in, for example, <code>myawslogbucket.s3.amazonaws.com</code>.</p>
     pub bucket: String,
-    #[doc="<p>Specifies whether you want CloudFront to save access logs to an Amazon S3 bucket. If you do not want to enable logging when you create a streaming distribution or if you want to disable logging for an existing streaming distribution, specify <code>false</code> for <code>Enabled</code>, and specify <code>empty Bucket</code> and <code>Prefix</code> elements. If you specify <code>false</code> for <code>Enabled</code> but you specify values for <code>Bucket</code> and <code>Prefix</code>, the values are automatically deleted. </p>"]
+    /// <p>Specifies whether you want CloudFront to save access logs to an Amazon S3 bucket. If you do not want to enable logging when you create a streaming distribution or if you want to disable logging for an existing streaming distribution, specify <code>false</code> for <code>Enabled</code>, and specify <code>empty Bucket</code> and <code>Prefix</code> elements. If you specify <code>false</code> for <code>Enabled</code> but you specify values for <code>Bucket</code> and <code>Prefix</code>, the values are automatically deleted. </p>
     pub enabled: bool,
-    #[doc="<p>An optional string that you want CloudFront to prefix to the access log <code>filenames</code> for this streaming distribution, for example, <code>myprefix/</code>. If you want to enable logging, but you do not want to specify a prefix, you still must include an empty <code>Prefix</code> element in the <code>Logging</code> element.</p>"]
+    /// <p>An optional string that you want CloudFront to prefix to the access log <code>filenames</code> for this streaming distribution, for example, <code>myprefix/</code>. If you want to enable logging, but you do not want to specify a prefix, you still must include an empty <code>Prefix</code> element in the <code>Logging</code> element.</p>
     pub prefix: String,
 }
 
 struct StreamingLoggingConfigDeserializer;
 impl StreamingLoggingConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<StreamingLoggingConfig, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StreamingLoggingConfig, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = StreamingLoggingConfig::default();
@@ -6967,20 +7175,18 @@ impl StreamingLoggingConfigDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Bucket" => {
-                            obj.bucket = try!(StringDeserializer::deserialize("Bucket", stack));
-                        }
-                        "Enabled" => {
-                            obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
-                        }
-                        "Prefix" => {
-                            obj.prefix = try!(StringDeserializer::deserialize("Prefix", stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Bucket" => {
+                        obj.bucket = try!(StringDeserializer::deserialize("Bucket", stack));
                     }
-                }
+                    "Enabled" => {
+                        obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
+                    }
+                    "Prefix" => {
+                        obj.prefix = try!(StringDeserializer::deserialize("Prefix", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6991,34 +7197,38 @@ impl StreamingLoggingConfigDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct StreamingLoggingConfigSerializer;
 impl StreamingLoggingConfigSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &StreamingLoggingConfig)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &StreamingLoggingConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Bucket"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.bucket)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Bucket"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.bucket
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Enabled"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.enabled)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Enabled"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.enabled
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Prefix"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.prefix)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.prefix
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -7027,50 +7237,54 @@ impl StreamingLoggingConfigSerializer {
 struct StringDeserializer;
 impl StringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct StringSerializer;
 impl StringSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
-#[doc="<p> A complex type that contains <code>Tag</code> key and <code>Tag</code> value.</p>"]
-#[derive(Default,Debug)]
+/// <p> A complex type that contains <code>Tag</code> key and <code>Tag</code> value.</p>
+#[derive(Default, Debug)]
 pub struct Tag {
-    #[doc="<p> A string that contains <code>Tag</code> key.</p> <p>The string length should be between 1 and 128 characters. Valid characters include <code>a-z</code>, <code>A-Z</code>, <code>0-9</code>, space, and the special characters <code>_ - . : / = + @</code>.</p>"]
+    /// <p> A string that contains <code>Tag</code> key.</p> <p>The string length should be between 1 and 128 characters. Valid characters include <code>a-z</code>, <code>A-Z</code>, <code>0-9</code>, space, and the special characters <code>_ - . : / = + @</code>.</p>
     pub key: String,
-    #[doc="<p> A string that contains an optional <code>Tag</code> value.</p> <p>The string length should be between 0 and 256 characters. Valid characters include <code>a-z</code>, <code>A-Z</code>, <code>0-9</code>, space, and the special characters <code>_ - . : / = + @</code>.</p>"]
+    /// <p> A string that contains an optional <code>Tag</code> value.</p> <p>The string length should be between 0 and 256 characters. Valid characters include <code>a-z</code>, <code>A-Z</code>, <code>0-9</code>, space, and the special characters <code>_ - . : / = + @</code>.</p>
     pub value: Option<String>,
 }
 
 struct TagDeserializer;
 impl TagDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Tag, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Tag, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Tag::default();
@@ -7085,18 +7299,15 @@ impl TagDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Key" => {
-                            obj.key = try!(TagKeyDeserializer::deserialize("Key", stack));
-                        }
-                        "Value" => {
-                            obj.value = Some(try!(TagValueDeserializer::deserialize("Value",
-                                                                                    stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Key" => {
+                        obj.key = try!(TagKeyDeserializer::deserialize("Key", stack));
                     }
-                }
+                    "Value" => {
+                        obj.value = Some(try!(TagValueDeserializer::deserialize("Value", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -7107,27 +7318,33 @@ impl TagDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct TagSerializer;
 impl TagSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Tag)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Tag,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         writer.write(xml::writer::XmlEvent::start_element("Key"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.key)))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.key
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.value {
             writer.write(xml::writer::XmlEvent::start_element("Value"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
@@ -7137,44 +7354,48 @@ impl TagSerializer {
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct TagKeySerializer;
 impl TagKeySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
-
 
 pub struct TagKeyListSerializer;
 impl TagKeyListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<String>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<String>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -7185,22 +7406,23 @@ impl TagKeyListSerializer {
     }
 }
 
-#[doc="<p> A complex type that contains zero or more <code>Tag</code> elements.</p>"]
-#[derive(Default,Debug)]
+/// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
+#[derive(Default, Debug)]
 pub struct TagKeys {
-    #[doc="<p> A complex type that contains <code>Tag</code> key elements.</p>"]
+    /// <p> A complex type that contains <code>Tag</code> key elements.</p>
     pub items: Option<Vec<String>>,
 }
-
 
 pub struct TagKeysSerializer;
 impl TagKeysSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &TagKeys)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &TagKeys,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.items {
@@ -7213,10 +7435,10 @@ impl TagKeysSerializer {
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<Tag>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Tag>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -7248,18 +7470,19 @@ impl TagListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 
 pub struct TagListSerializer;
 impl TagListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Vec<Tag>)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<Tag>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
@@ -7270,60 +7493,64 @@ impl TagListSerializer {
     }
 }
 
-#[doc="<p> The request to add tags to a CloudFront resource.</p>"]
-#[derive(Default,Debug)]
+/// <p> The request to add tags to a CloudFront resource.</p>
+#[derive(Default, Debug)]
 pub struct TagResourceRequest {
-    #[doc="<p> An ARN of a CloudFront resource.</p>"]
+    /// <p> An ARN of a CloudFront resource.</p>
     pub resource: String,
-    #[doc="<p> A complex type that contains zero or more <code>Tag</code> elements.</p>"]
+    /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
     pub tags: Tags,
 }
 
 struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct TagValueSerializer;
 impl TagValueSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
-#[doc="<p> A complex type that contains zero or more <code>Tag</code> elements.</p>"]
-#[derive(Default,Debug)]
+/// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
+#[derive(Default, Debug)]
 pub struct Tags {
-    #[doc="<p> A complex type that contains <code>Tag</code> elements.</p>"]
+    /// <p> A complex type that contains <code>Tag</code> elements.</p>
     pub items: Option<Vec<Tag>>,
 }
 
 struct TagsDeserializer;
 impl TagsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Tags, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Tags, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Tags::default();
@@ -7338,15 +7565,12 @@ impl TagsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Items" => {
-                            obj.items = Some(try!(TagListDeserializer::deserialize("Items",
-                                                                                   stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Items" => {
+                        obj.items = Some(try!(TagListDeserializer::deserialize("Items", stack)));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -7357,18 +7581,19 @@ impl TagsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct TagsSerializer;
 impl TagsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &Tags)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Tags,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.items {
@@ -7381,34 +7606,35 @@ impl TagsSerializer {
 struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p> <p>For more information about updating the distribution configuration, see <a>DistributionConfig</a> .</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p> <p>For more information about updating the distribution configuration, see <a>DistributionConfig</a> .</p>
+#[derive(Default, Debug)]
 pub struct TrustedSigners {
-    #[doc="<p>Specifies whether you want to require viewers to use signed URLs to access the files specified by <code>PathPattern</code> and <code>TargetOriginId</code>.</p>"]
+    /// <p>Specifies whether you want to require viewers to use signed URLs to access the files specified by <code>PathPattern</code> and <code>TargetOriginId</code>.</p>
     pub enabled: bool,
-    #[doc="<p> <b>Optional</b>: A complex type that contains trusted signers for this cache behavior. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>"]
+    /// <p> <b>Optional</b>: A complex type that contains trusted signers for this cache behavior. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>
     pub items: Option<Vec<String>>,
-    #[doc="<p>The number of trusted signers for this cache behavior.</p>"]
+    /// <p>The number of trusted signers for this cache behavior.</p>
     pub quantity: i64,
 }
 
 struct TrustedSignersDeserializer;
 impl TrustedSignersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<TrustedSigners, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TrustedSigners, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = TrustedSigners::default();
@@ -7423,23 +7649,21 @@ impl TrustedSignersDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Enabled" => {
-                            obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
-                        }
-                        "Items" => {
-                            obj.items =
-                                Some(try!(AwsAccountNumberListDeserializer::deserialize("Items",
-                                                                                        stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity = try!(IntegerDeserializer::deserialize("Quantity",
-                                                                                 stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Enabled" => {
+                        obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
                     }
-                }
+                    "Items" => {
+                        obj.items = Some(try!(AwsAccountNumberListDeserializer::deserialize(
+                            "Items",
+                            stack
+                        )));
+                    }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -7450,73 +7674,76 @@ impl TrustedSignersDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct TrustedSignersSerializer;
 impl TrustedSignersSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &TrustedSigners)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &TrustedSigners,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer
-            .write(xml::writer::XmlEvent::start_element("Enabled"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.enabled)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Enabled"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.enabled
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.items {
             &AwsAccountNumberListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer
-            .write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer
-            .write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.quantity)))?;
+        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.quantity
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[doc="<p> The request to remove tags from a CloudFront resource.</p>"]
-#[derive(Default,Debug)]
+/// <p> The request to remove tags from a CloudFront resource.</p>
+#[derive(Default, Debug)]
 pub struct UntagResourceRequest {
-    #[doc="<p> An ARN of a CloudFront resource.</p>"]
+    /// <p> An ARN of a CloudFront resource.</p>
     pub resource: String,
-    #[doc="<p> A complex type that contains zero or more <code>Tag</code> key elements.</p>"]
+    /// <p> A complex type that contains zero or more <code>Tag</code> key elements.</p>
     pub tag_keys: TagKeys,
 }
 
-#[doc="<p>The request to update an origin access identity.</p>"]
-#[derive(Default,Debug)]
+/// <p>The request to update an origin access identity.</p>
+#[derive(Default, Debug)]
 pub struct UpdateCloudFrontOriginAccessIdentityRequest {
-    #[doc="<p>The identity's configuration information.</p>"]
+    /// <p>The identity's configuration information.</p>
     pub cloud_front_origin_access_identity_config: CloudFrontOriginAccessIdentityConfig,
-    #[doc="<p>The identity's id.</p>"]
+    /// <p>The identity's id.</p>
     pub id: String,
-    #[doc="<p>The value of the <code>ETag</code> header that you received when retrieving the identity's configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
+    /// <p>The value of the <code>ETag</code> header that you received when retrieving the identity's configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub if_match: Option<String>,
 }
 
-#[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct UpdateCloudFrontOriginAccessIdentityResult {
-    #[doc="<p>The origin access identity's information.</p>"]
+    /// <p>The origin access identity's information.</p>
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
-    #[doc="<p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
+    /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
 }
 
 struct UpdateCloudFrontOriginAccessIdentityResultDeserializer;
 impl UpdateCloudFrontOriginAccessIdentityResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<UpdateCloudFrontOriginAccessIdentityResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateCloudFrontOriginAccessIdentityResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = UpdateCloudFrontOriginAccessIdentityResult::default();
@@ -7531,14 +7758,17 @@ impl UpdateCloudFrontOriginAccessIdentityResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CloudFrontOriginAccessIdentity" => {
-                            obj.cloud_front_origin_access_identity = Some(try!(CloudFrontOriginAccessIdentityDeserializer::deserialize("CloudFrontOriginAccessIdentity", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CloudFrontOriginAccessIdentity" => {
+                        obj.cloud_front_origin_access_identity = Some(try!(
+                            CloudFrontOriginAccessIdentityDeserializer::deserialize(
+                                "CloudFrontOriginAccessIdentity",
+                                stack
+                            )
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -7549,35 +7779,35 @@ impl UpdateCloudFrontOriginAccessIdentityResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to update a distribution.</p>"]
-#[derive(Default,Debug)]
+/// <p>The request to update a distribution.</p>
+#[derive(Default, Debug)]
 pub struct UpdateDistributionRequest {
-    #[doc="<p>The distribution's configuration information.</p>"]
+    /// <p>The distribution's configuration information.</p>
     pub distribution_config: DistributionConfig,
-    #[doc="<p>The distribution's id.</p>"]
+    /// <p>The distribution's id.</p>
     pub id: String,
-    #[doc="<p>The value of the <code>ETag</code> header that you received when retrieving the distribution's configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
+    /// <p>The value of the <code>ETag</code> header that you received when retrieving the distribution's configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub if_match: Option<String>,
 }
 
-#[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct UpdateDistributionResult {
-    #[doc="<p>The distribution's information.</p>"]
+    /// <p>The distribution's information.</p>
     pub distribution: Option<Distribution>,
-    #[doc="<p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
+    /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
 }
 
 struct UpdateDistributionResultDeserializer;
 impl UpdateDistributionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<UpdateDistributionResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateDistributionResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = UpdateDistributionResult::default();
@@ -7592,16 +7822,15 @@ impl UpdateDistributionResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Distribution" => {
-                            obj.distribution =
-                                Some(try!(DistributionDeserializer::deserialize("Distribution",
-                                                                                stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Distribution" => {
+                        obj.distribution = Some(try!(DistributionDeserializer::deserialize(
+                            "Distribution",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -7612,36 +7841,35 @@ impl UpdateDistributionResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The request to update a streaming distribution.</p>"]
-#[derive(Default,Debug)]
+/// <p>The request to update a streaming distribution.</p>
+#[derive(Default, Debug)]
 pub struct UpdateStreamingDistributionRequest {
-    #[doc="<p>The streaming distribution's id.</p>"]
+    /// <p>The streaming distribution's id.</p>
     pub id: String,
-    #[doc="<p>The value of the <code>ETag</code> header that you received when retrieving the streaming distribution's configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
+    /// <p>The value of the <code>ETag</code> header that you received when retrieving the streaming distribution's configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub if_match: Option<String>,
-    #[doc="<p>The streaming distribution's configuration information.</p>"]
+    /// <p>The streaming distribution's configuration information.</p>
     pub streaming_distribution_config: StreamingDistributionConfig,
 }
 
-#[doc="<p>The returned result of the corresponding request.</p>"]
-#[derive(Default,Debug)]
+/// <p>The returned result of the corresponding request.</p>
+#[derive(Default, Debug)]
 pub struct UpdateStreamingDistributionResult {
-    #[doc="<p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>"]
+    /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
-    #[doc="<p>The streaming distribution's information.</p>"]
+    /// <p>The streaming distribution's information.</p>
     pub streaming_distribution: Option<StreamingDistribution>,
 }
 
 struct UpdateStreamingDistributionResultDeserializer;
 impl UpdateStreamingDistributionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<UpdateStreamingDistributionResult, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateStreamingDistributionResult, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = UpdateStreamingDistributionResult::default();
@@ -7656,16 +7884,16 @@ impl UpdateStreamingDistributionResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "StreamingDistribution" => {
-                            obj.streaming_distribution =
-                                Some(try!(StreamingDistributionDeserializer::deserialize("StreamingDistribution",
-                                                                                         stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "StreamingDistribution" => {
+                        obj.streaming_distribution =
+                            Some(try!(StreamingDistributionDeserializer::deserialize(
+                                "StreamingDistribution",
+                                stack
+                            )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -7676,27 +7904,27 @@ impl UpdateStreamingDistributionResultDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>A complex type that specifies the following:</p> <ul> <li> <p>Which SSL/TLS certificate to use when viewers request objects using HTTPS</p> </li> <li> <p>Whether you want CloudFront to use dedicated IP addresses or SNI when you're using alternate domain names in your object names</p> </li> <li> <p>The minimum protocol version that you want CloudFront to use when communicating with viewers</p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html\">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p>"]
-#[derive(Default,Debug)]
+/// <p>A complex type that specifies the following:</p> <ul> <li> <p>Which SSL/TLS certificate to use when viewers request objects using HTTPS</p> </li> <li> <p>Whether you want CloudFront to use dedicated IP addresses or SNI when you're using alternate domain names in your object names</p> </li> <li> <p>The minimum protocol version that you want CloudFront to use when communicating with viewers</p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p>
+#[derive(Default, Debug)]
 pub struct ViewerCertificate {
     pub acm_certificate_arn: Option<String>,
     pub cloud_front_default_certificate: Option<bool>,
     pub iam_certificate_id: Option<String>,
-    #[doc="<p>Specify the minimum version of the SSL/TLS protocol that you want CloudFront to use for HTTPS connections between viewers and CloudFront: <code>SSLv3</code> or <code>TLSv1</code>. CloudFront serves your objects only to viewers that support SSL/TLS version that you specify and later versions. The <code>TLSv1</code> protocol is more secure, so we recommend that you specify <code>SSLv3</code> only if your users are using browsers or devices that don't support <code>TLSv1</code>. Note the following:</p> <ul> <li> <p>If you specify &lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;, the minimum SSL protocol version is <code>TLSv1</code> and can't be changed.</p> </li> <li> <p>If you're using a custom certificate (if you specify a value for <code>ACMCertificateArn</code> or for <code>IAMCertificateId</code>) and if you're using SNI (if you specify <code>sni-only</code> for <code>SSLSupportMethod</code>), you must specify <code>TLSv1</code> for <code>MinimumProtocolVersion</code>.</p> </li> </ul>"]
+    /// <p>Specify the minimum version of the SSL/TLS protocol that you want CloudFront to use for HTTPS connections between viewers and CloudFront: <code>SSLv3</code> or <code>TLSv1</code>. CloudFront serves your objects only to viewers that support SSL/TLS version that you specify and later versions. The <code>TLSv1</code> protocol is more secure, so we recommend that you specify <code>SSLv3</code> only if your users are using browsers or devices that don't support <code>TLSv1</code>. Note the following:</p> <ul> <li> <p>If you specify &lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;, the minimum SSL protocol version is <code>TLSv1</code> and can't be changed.</p> </li> <li> <p>If you're using a custom certificate (if you specify a value for <code>ACMCertificateArn</code> or for <code>IAMCertificateId</code>) and if you're using SNI (if you specify <code>sni-only</code> for <code>SSLSupportMethod</code>), you must specify <code>TLSv1</code> for <code>MinimumProtocolVersion</code>.</p> </li> </ul>
     pub minimum_protocol_version: Option<String>,
-    #[doc="<p>If you specify a value for <code>ACMCertificateArn</code> or for <code>IAMCertificateId</code>, you must also specify how you want CloudFront to serve HTTPS requests: using a method that works for all clients or one that works for most clients:</p> <ul> <li> <p> <code>vip</code>: CloudFront uses dedicated IP addresses for your content and can respond to HTTPS requests from any viewer. However, you will incur additional monthly charges.</p> </li> <li> <p> <code>sni-only</code>: CloudFront can respond to HTTPS requests from viewers that support Server Name Indication (SNI). All modern browsers support SNI, but some browsers still in use don't support SNI. If some of your users' browsers don't support SNI, we recommend that you do one of the following:</p> <ul> <li> <p>Use the <code>vip</code> option (dedicated IP addresses) instead of <code>sni-only</code>.</p> </li> <li> <p>Use the CloudFront SSL/TLS certificate instead of a custom certificate. This requires that you use the CloudFront domain name of your distribution in the URLs for your objects, for example, <code>https://d111111abcdef8.cloudfront.net/logo.png</code>.</p> </li> <li> <p>If you can control which browser your users use, upgrade the browser to one that supports SNI.</p> </li> <li> <p>Use HTTP instead of HTTPS.</p> </li> </ul> </li> </ul> <p>Do not specify a value for <code>SSLSupportMethod</code> if you specified <code>&lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;</code>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS.html\">Using Alternate Domain Names and HTTPS</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>If you specify a value for <code>ACMCertificateArn</code> or for <code>IAMCertificateId</code>, you must also specify how you want CloudFront to serve HTTPS requests: using a method that works for all clients or one that works for most clients:</p> <ul> <li> <p> <code>vip</code>: CloudFront uses dedicated IP addresses for your content and can respond to HTTPS requests from any viewer. However, you will incur additional monthly charges.</p> </li> <li> <p> <code>sni-only</code>: CloudFront can respond to HTTPS requests from viewers that support Server Name Indication (SNI). All modern browsers support SNI, but some browsers still in use don't support SNI. If some of your users' browsers don't support SNI, we recommend that you do one of the following:</p> <ul> <li> <p>Use the <code>vip</code> option (dedicated IP addresses) instead of <code>sni-only</code>.</p> </li> <li> <p>Use the CloudFront SSL/TLS certificate instead of a custom certificate. This requires that you use the CloudFront domain name of your distribution in the URLs for your objects, for example, <code>https://d111111abcdef8.cloudfront.net/logo.png</code>.</p> </li> <li> <p>If you can control which browser your users use, upgrade the browser to one that supports SNI.</p> </li> <li> <p>Use HTTP instead of HTTPS.</p> </li> </ul> </li> </ul> <p>Do not specify a value for <code>SSLSupportMethod</code> if you specified <code>&lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;</code>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS.html">Using Alternate Domain Names and HTTPS</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub ssl_support_method: Option<String>,
 }
 
 struct ViewerCertificateDeserializer;
 impl ViewerCertificateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ViewerCertificate, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ViewerCertificate, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ViewerCertificate::default();
@@ -7711,36 +7939,38 @@ impl ViewerCertificateDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ACMCertificateArn" => {
-                            obj.acm_certificate_arn =
-                                Some(try!(StringDeserializer::deserialize("ACMCertificateArn",
-                                                                          stack)));
-                        }
-                        "CloudFrontDefaultCertificate" => {
-                            obj.cloud_front_default_certificate =
-                                Some(try!(BooleanDeserializer::deserialize("CloudFrontDefaultCertificate",
-                                                                           stack)));
-                        }
-                        "IAMCertificateId" => {
-                            obj.iam_certificate_id =
-                                Some(try!(StringDeserializer::deserialize("IAMCertificateId",
-                                                                          stack)));
-                        }
-                        "MinimumProtocolVersion" => {
-                            obj.minimum_protocol_version =
-                                Some(try!(MinimumProtocolVersionDeserializer::deserialize("MinimumProtocolVersion",
-                                                                                          stack)));
-                        }
-                        "SSLSupportMethod" => {
-                            obj.ssl_support_method =
-                                Some(try!(SSLSupportMethodDeserializer::deserialize("SSLSupportMethod",
-                                                                                    stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ACMCertificateArn" => {
+                        obj.acm_certificate_arn = Some(try!(StringDeserializer::deserialize(
+                            "ACMCertificateArn",
+                            stack
+                        )));
                     }
-                }
+                    "CloudFrontDefaultCertificate" => {
+                        obj.cloud_front_default_certificate = Some(try!(
+                            BooleanDeserializer::deserialize("CloudFrontDefaultCertificate", stack)
+                        ));
+                    }
+                    "IAMCertificateId" => {
+                        obj.iam_certificate_id = Some(try!(StringDeserializer::deserialize(
+                            "IAMCertificateId",
+                            stack
+                        )));
+                    }
+                    "MinimumProtocolVersion" => {
+                        obj.minimum_protocol_version =
+                            Some(try!(MinimumProtocolVersionDeserializer::deserialize(
+                                "MinimumProtocolVersion",
+                                stack
+                            )));
+                    }
+                    "SSLSupportMethod" => {
+                        obj.ssl_support_method = Some(try!(
+                            SSLSupportMethodDeserializer::deserialize("SSLSupportMethod", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -7751,48 +7981,63 @@ impl ViewerCertificateDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct ViewerCertificateSerializer;
 impl ViewerCertificateSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &ViewerCertificate)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &ViewerCertificate,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.acm_certificate_arn {
-            writer
-                .write(xml::writer::XmlEvent::start_element("ACMCertificateArn"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("ACMCertificateArn"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.cloud_front_default_certificate {
-            writer
-                .write(xml::writer::XmlEvent::start_element("CloudFrontDefaultCertificate"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element(
+                "CloudFrontDefaultCertificate",
+            ))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.iam_certificate_id {
-            writer
-                .write(xml::writer::XmlEvent::start_element("IAMCertificateId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("IAMCertificateId"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.minimum_protocol_version {
-            writer
-                .write(xml::writer::XmlEvent::start_element("MinimumProtocolVersion"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element(
+                "MinimumProtocolVersion",
+            ))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         if let Some(ref value) = obj.ssl_support_method {
-            writer
-                .write(xml::writer::XmlEvent::start_element("SSLSupportMethod"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = value)));
+            writer.write(xml::writer::XmlEvent::start_element("SSLSupportMethod"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
@@ -7802,32 +8047,35 @@ impl ViewerCertificateSerializer {
 struct ViewerProtocolPolicyDeserializer;
 impl ViewerProtocolPolicyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
 pub struct ViewerProtocolPolicySerializer;
 impl ViewerProtocolPolicySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(mut writer: &mut EventWriter<W>,
-                        name: &str,
-                        obj: &String)
-                        -> Result<(), xml::writer::Error>
-        where W: Write
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
     {
-
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!("{value}", value = obj.to_string())))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
-
     }
 }
 
@@ -7854,7 +8102,6 @@ pub enum CreateCloudFrontOriginAccessIdentityError {
     Unknown(String),
 }
 
-
 impl CreateCloudFrontOriginAccessIdentityError {
     pub fn from_body(body: &str) -> CreateCloudFrontOriginAccessIdentityError {
         let reader = EventReader::new(body.as_bytes());
@@ -7862,18 +8109,13 @@ impl CreateCloudFrontOriginAccessIdentityError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "CloudFrontOriginAccessIdentityAlreadyExists" => CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(String::from(parsed_error.message)),
-                    "InconsistentQuantities" => CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),
-                    "InvalidArgument" => CreateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),
-                    "MissingBody" => CreateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),
-                    "TooManyCloudFrontOriginAccessIdentities" => CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(String::from(parsed_error.message)),
-                    _ => CreateCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
-                }
-            }
-            Err(_) => CreateCloudFrontOriginAccessIdentityError::Unknown(body.to_string()),
-        }
+                            Ok(parsed_error) => {
+                                match &parsed_error.code[..] {
+                                    "CloudFrontOriginAccessIdentityAlreadyExists" => CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(String::from(parsed_error.message)),"InconsistentQuantities" => CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => CreateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),"MissingBody" => CreateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),"TooManyCloudFrontOriginAccessIdentities" => CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(String::from(parsed_error.message)),_ => CreateCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
+                                }
+                           },
+                           Err(_) => CreateCloudFrontOriginAccessIdentityError::Unknown(body.to_string())
+                       }
     }
 }
 
@@ -7906,18 +8148,16 @@ impl fmt::Display for CreateCloudFrontOriginAccessIdentityError {
 impl Error for CreateCloudFrontOriginAccessIdentityError {
     fn description(&self) -> &str {
         match *self {
-            CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(ref cause) => cause,
-            CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(ref cause) => cause,
-            CreateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => cause,
-            CreateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => cause,
-            CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(ref cause) => cause,
-            CreateCloudFrontOriginAccessIdentityError::Validation(ref cause) => cause,
-            CreateCloudFrontOriginAccessIdentityError::Credentials(ref err) => err.description(),
-            CreateCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause,
-        }
+                            CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(ref cause) => cause,
+CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(ref cause) => cause,
+CreateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => cause,
+CreateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => cause,
+CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(ref cause) => cause,
+CreateCloudFrontOriginAccessIdentityError::Validation(ref cause) => cause,
+CreateCloudFrontOriginAccessIdentityError::Credentials(ref err) => err.description(),
+CreateCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause
+                        }
     }
 }
 /// Errors returned by CreateDistribution
@@ -8013,7 +8253,6 @@ pub enum CreateDistributionError {
     Unknown(String),
 }
 
-
 impl CreateDistributionError {
     pub fn from_body(body: &str) -> CreateDistributionError {
         let reader = EventReader::new(body.as_bytes());
@@ -8021,67 +8260,153 @@ impl CreateDistributionError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        CreateDistributionError::AccessDenied(String::from(parsed_error.message))
-                    }
-                    "CNAMEAlreadyExists" => CreateDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message)),
-                    "DistributionAlreadyExists" => CreateDistributionError::DistributionAlreadyExists(String::from(parsed_error.message)),
-                    "InconsistentQuantities" => CreateDistributionError::InconsistentQuantities(String::from(parsed_error.message)),
-                    "InvalidArgument" => {
-                        CreateDistributionError::InvalidArgument(String::from(parsed_error.message))
-                    }
-                    "InvalidDefaultRootObject" => CreateDistributionError::InvalidDefaultRootObject(String::from(parsed_error.message)),
-                    "InvalidErrorCode" => CreateDistributionError::InvalidErrorCode(String::from(parsed_error.message)),
-                    "InvalidForwardCookies" => CreateDistributionError::InvalidForwardCookies(String::from(parsed_error.message)),
-                    "InvalidGeoRestrictionParameter" => CreateDistributionError::InvalidGeoRestrictionParameter(String::from(parsed_error.message)),
-                    "InvalidHeadersForS3Origin" => CreateDistributionError::InvalidHeadersForS3Origin(String::from(parsed_error.message)),
-                    "InvalidLambdaFunctionAssociation" => CreateDistributionError::InvalidLambdaFunctionAssociation(String::from(parsed_error.message)),
-                    "InvalidLocationCode" => CreateDistributionError::InvalidLocationCode(String::from(parsed_error.message)),
-                    "InvalidMinimumProtocolVersion" => CreateDistributionError::InvalidMinimumProtocolVersion(String::from(parsed_error.message)),
-                    "InvalidOrigin" => {
-                        CreateDistributionError::InvalidOrigin(String::from(parsed_error.message))
-                    }
-                    "InvalidOriginAccessIdentity" => CreateDistributionError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),
-                    "InvalidOriginKeepaliveTimeout" => CreateDistributionError::InvalidOriginKeepaliveTimeout(String::from(parsed_error.message)),
-                    "InvalidOriginReadTimeout" => CreateDistributionError::InvalidOriginReadTimeout(String::from(parsed_error.message)),
-                    "InvalidProtocolSettings" => CreateDistributionError::InvalidProtocolSettings(String::from(parsed_error.message)),
-                    "InvalidQueryStringParameters" => CreateDistributionError::InvalidQueryStringParameters(String::from(parsed_error.message)),
-                    "InvalidRelativePath" => CreateDistributionError::InvalidRelativePath(String::from(parsed_error.message)),
-                    "InvalidRequiredProtocol" => CreateDistributionError::InvalidRequiredProtocol(String::from(parsed_error.message)),
-                    "InvalidResponseCode" => CreateDistributionError::InvalidResponseCode(String::from(parsed_error.message)),
-                    "InvalidTTLOrder" => {
-                        CreateDistributionError::InvalidTTLOrder(String::from(parsed_error.message))
-                    }
-                    "InvalidViewerCertificate" => CreateDistributionError::InvalidViewerCertificate(String::from(parsed_error.message)),
-                    "InvalidWebACLId" => {
-                        CreateDistributionError::InvalidWebACLId(String::from(parsed_error.message))
-                    }
-                    "MissingBody" => {
-                        CreateDistributionError::MissingBody(String::from(parsed_error.message))
-                    }
-                    "NoSuchOrigin" => {
-                        CreateDistributionError::NoSuchOrigin(String::from(parsed_error.message))
-                    }
-                    "TooManyCacheBehaviors" => CreateDistributionError::TooManyCacheBehaviors(String::from(parsed_error.message)),
-                    "TooManyCertificates" => CreateDistributionError::TooManyCertificates(String::from(parsed_error.message)),
-                    "TooManyCookieNamesInWhiteList" => CreateDistributionError::TooManyCookieNamesInWhiteList(String::from(parsed_error.message)),
-                    "TooManyDistributionCNAMEs" => CreateDistributionError::TooManyDistributionCNAMEs(String::from(parsed_error.message)),
-                    "TooManyDistributions" => CreateDistributionError::TooManyDistributions(String::from(parsed_error.message)),
-                    "TooManyDistributionsWithLambdaAssociations" => CreateDistributionError::TooManyDistributionsWithLambdaAssociations(String::from(parsed_error.message)),
-                    "TooManyHeadersInForwardedValues" => CreateDistributionError::TooManyHeadersInForwardedValues(String::from(parsed_error.message)),
-                    "TooManyLambdaFunctionAssociations" => CreateDistributionError::TooManyLambdaFunctionAssociations(String::from(parsed_error.message)),
-                    "TooManyOriginCustomHeaders" => CreateDistributionError::TooManyOriginCustomHeaders(String::from(parsed_error.message)),
-                    "TooManyOrigins" => {
-                        CreateDistributionError::TooManyOrigins(String::from(parsed_error.message))
-                    }
-                    "TooManyQueryStringParameters" => CreateDistributionError::TooManyQueryStringParameters(String::from(parsed_error.message)),
-                    "TooManyTrustedSigners" => CreateDistributionError::TooManyTrustedSigners(String::from(parsed_error.message)),
-                    "TrustedSignerDoesNotExist" => CreateDistributionError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),
-                    _ => CreateDistributionError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => {
+                    CreateDistributionError::AccessDenied(String::from(parsed_error.message))
                 }
-            }
+                "CNAMEAlreadyExists" => {
+                    CreateDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message))
+                }
+                "DistributionAlreadyExists" => CreateDistributionError::DistributionAlreadyExists(
+                    String::from(parsed_error.message),
+                ),
+                "InconsistentQuantities" => CreateDistributionError::InconsistentQuantities(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidArgument" => {
+                    CreateDistributionError::InvalidArgument(String::from(parsed_error.message))
+                }
+                "InvalidDefaultRootObject" => CreateDistributionError::InvalidDefaultRootObject(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidErrorCode" => {
+                    CreateDistributionError::InvalidErrorCode(String::from(parsed_error.message))
+                }
+                "InvalidForwardCookies" => CreateDistributionError::InvalidForwardCookies(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidGeoRestrictionParameter" => {
+                    CreateDistributionError::InvalidGeoRestrictionParameter(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidHeadersForS3Origin" => CreateDistributionError::InvalidHeadersForS3Origin(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidLambdaFunctionAssociation" => {
+                    CreateDistributionError::InvalidLambdaFunctionAssociation(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidLocationCode" => {
+                    CreateDistributionError::InvalidLocationCode(String::from(parsed_error.message))
+                }
+                "InvalidMinimumProtocolVersion" => {
+                    CreateDistributionError::InvalidMinimumProtocolVersion(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidOrigin" => {
+                    CreateDistributionError::InvalidOrigin(String::from(parsed_error.message))
+                }
+                "InvalidOriginAccessIdentity" => {
+                    CreateDistributionError::InvalidOriginAccessIdentity(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidOriginKeepaliveTimeout" => {
+                    CreateDistributionError::InvalidOriginKeepaliveTimeout(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidOriginReadTimeout" => CreateDistributionError::InvalidOriginReadTimeout(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidProtocolSettings" => CreateDistributionError::InvalidProtocolSettings(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidQueryStringParameters" => {
+                    CreateDistributionError::InvalidQueryStringParameters(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidRelativePath" => {
+                    CreateDistributionError::InvalidRelativePath(String::from(parsed_error.message))
+                }
+                "InvalidRequiredProtocol" => CreateDistributionError::InvalidRequiredProtocol(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidResponseCode" => {
+                    CreateDistributionError::InvalidResponseCode(String::from(parsed_error.message))
+                }
+                "InvalidTTLOrder" => {
+                    CreateDistributionError::InvalidTTLOrder(String::from(parsed_error.message))
+                }
+                "InvalidViewerCertificate" => CreateDistributionError::InvalidViewerCertificate(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidWebACLId" => {
+                    CreateDistributionError::InvalidWebACLId(String::from(parsed_error.message))
+                }
+                "MissingBody" => {
+                    CreateDistributionError::MissingBody(String::from(parsed_error.message))
+                }
+                "NoSuchOrigin" => {
+                    CreateDistributionError::NoSuchOrigin(String::from(parsed_error.message))
+                }
+                "TooManyCacheBehaviors" => CreateDistributionError::TooManyCacheBehaviors(
+                    String::from(parsed_error.message),
+                ),
+                "TooManyCertificates" => {
+                    CreateDistributionError::TooManyCertificates(String::from(parsed_error.message))
+                }
+                "TooManyCookieNamesInWhiteList" => {
+                    CreateDistributionError::TooManyCookieNamesInWhiteList(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyDistributionCNAMEs" => CreateDistributionError::TooManyDistributionCNAMEs(
+                    String::from(parsed_error.message),
+                ),
+                "TooManyDistributions" => CreateDistributionError::TooManyDistributions(
+                    String::from(parsed_error.message),
+                ),
+                "TooManyDistributionsWithLambdaAssociations" => {
+                    CreateDistributionError::TooManyDistributionsWithLambdaAssociations(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "TooManyHeadersInForwardedValues" => {
+                    CreateDistributionError::TooManyHeadersInForwardedValues(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyLambdaFunctionAssociations" => {
+                    CreateDistributionError::TooManyLambdaFunctionAssociations(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyOriginCustomHeaders" => {
+                    CreateDistributionError::TooManyOriginCustomHeaders(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyOrigins" => {
+                    CreateDistributionError::TooManyOrigins(String::from(parsed_error.message))
+                }
+                "TooManyQueryStringParameters" => {
+                    CreateDistributionError::TooManyQueryStringParameters(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyTrustedSigners" => CreateDistributionError::TooManyTrustedSigners(
+                    String::from(parsed_error.message),
+                ),
+                "TrustedSignerDoesNotExist" => CreateDistributionError::TrustedSignerDoesNotExist(
+                    String::from(parsed_error.message),
+                ),
+                _ => CreateDistributionError::Unknown(String::from(body)),
+            },
             Err(_) => CreateDistributionError::Unknown(body.to_string()),
         }
     }
@@ -8260,7 +8585,6 @@ pub enum CreateDistributionWithTagsError {
     Unknown(String),
 }
 
-
 impl CreateDistributionWithTagsError {
     pub fn from_body(body: &str) -> CreateDistributionWithTagsError {
         let reader = EventReader::new(body.as_bytes());
@@ -8268,52 +8592,176 @@ impl CreateDistributionWithTagsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => CreateDistributionWithTagsError::AccessDenied(String::from(parsed_error.message)),
-                    "CNAMEAlreadyExists" => CreateDistributionWithTagsError::CNAMEAlreadyExists(String::from(parsed_error.message)),
-                    "DistributionAlreadyExists" => CreateDistributionWithTagsError::DistributionAlreadyExists(String::from(parsed_error.message)),
-                    "InconsistentQuantities" => CreateDistributionWithTagsError::InconsistentQuantities(String::from(parsed_error.message)),
-                    "InvalidArgument" => CreateDistributionWithTagsError::InvalidArgument(String::from(parsed_error.message)),
-                    "InvalidDefaultRootObject" => CreateDistributionWithTagsError::InvalidDefaultRootObject(String::from(parsed_error.message)),
-                    "InvalidErrorCode" => CreateDistributionWithTagsError::InvalidErrorCode(String::from(parsed_error.message)),
-                    "InvalidForwardCookies" => CreateDistributionWithTagsError::InvalidForwardCookies(String::from(parsed_error.message)),
-                    "InvalidGeoRestrictionParameter" => CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(String::from(parsed_error.message)),
-                    "InvalidHeadersForS3Origin" => CreateDistributionWithTagsError::InvalidHeadersForS3Origin(String::from(parsed_error.message)),
-                    "InvalidLambdaFunctionAssociation" => CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(String::from(parsed_error.message)),
-                    "InvalidLocationCode" => CreateDistributionWithTagsError::InvalidLocationCode(String::from(parsed_error.message)),
-                    "InvalidMinimumProtocolVersion" => CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(String::from(parsed_error.message)),
-                    "InvalidOrigin" => CreateDistributionWithTagsError::InvalidOrigin(String::from(parsed_error.message)),
-                    "InvalidOriginAccessIdentity" => CreateDistributionWithTagsError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),
-                    "InvalidOriginKeepaliveTimeout" => CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(String::from(parsed_error.message)),
-                    "InvalidOriginReadTimeout" => CreateDistributionWithTagsError::InvalidOriginReadTimeout(String::from(parsed_error.message)),
-                    "InvalidProtocolSettings" => CreateDistributionWithTagsError::InvalidProtocolSettings(String::from(parsed_error.message)),
-                    "InvalidQueryStringParameters" => CreateDistributionWithTagsError::InvalidQueryStringParameters(String::from(parsed_error.message)),
-                    "InvalidRelativePath" => CreateDistributionWithTagsError::InvalidRelativePath(String::from(parsed_error.message)),
-                    "InvalidRequiredProtocol" => CreateDistributionWithTagsError::InvalidRequiredProtocol(String::from(parsed_error.message)),
-                    "InvalidResponseCode" => CreateDistributionWithTagsError::InvalidResponseCode(String::from(parsed_error.message)),
-                    "InvalidTTLOrder" => CreateDistributionWithTagsError::InvalidTTLOrder(String::from(parsed_error.message)),
-                    "InvalidTagging" => CreateDistributionWithTagsError::InvalidTagging(String::from(parsed_error.message)),
-                    "InvalidViewerCertificate" => CreateDistributionWithTagsError::InvalidViewerCertificate(String::from(parsed_error.message)),
-                    "InvalidWebACLId" => CreateDistributionWithTagsError::InvalidWebACLId(String::from(parsed_error.message)),
-                    "MissingBody" => CreateDistributionWithTagsError::MissingBody(String::from(parsed_error.message)),
-                    "NoSuchOrigin" => CreateDistributionWithTagsError::NoSuchOrigin(String::from(parsed_error.message)),
-                    "TooManyCacheBehaviors" => CreateDistributionWithTagsError::TooManyCacheBehaviors(String::from(parsed_error.message)),
-                    "TooManyCertificates" => CreateDistributionWithTagsError::TooManyCertificates(String::from(parsed_error.message)),
-                    "TooManyCookieNamesInWhiteList" => CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(String::from(parsed_error.message)),
-                    "TooManyDistributionCNAMEs" => CreateDistributionWithTagsError::TooManyDistributionCNAMEs(String::from(parsed_error.message)),
-                    "TooManyDistributions" => CreateDistributionWithTagsError::TooManyDistributions(String::from(parsed_error.message)),
-                    "TooManyDistributionsWithLambdaAssociations" => CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(String::from(parsed_error.message)),
-                    "TooManyHeadersInForwardedValues" => CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(String::from(parsed_error.message)),
-                    "TooManyLambdaFunctionAssociations" => CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(String::from(parsed_error.message)),
-                    "TooManyOriginCustomHeaders" => CreateDistributionWithTagsError::TooManyOriginCustomHeaders(String::from(parsed_error.message)),
-                    "TooManyOrigins" => CreateDistributionWithTagsError::TooManyOrigins(String::from(parsed_error.message)),
-                    "TooManyQueryStringParameters" => CreateDistributionWithTagsError::TooManyQueryStringParameters(String::from(parsed_error.message)),
-                    "TooManyTrustedSigners" => CreateDistributionWithTagsError::TooManyTrustedSigners(String::from(parsed_error.message)),
-                    "TrustedSignerDoesNotExist" => CreateDistributionWithTagsError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),
-                    _ => CreateDistributionWithTagsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => CreateDistributionWithTagsError::AccessDenied(String::from(
+                    parsed_error.message,
+                )),
+                "CNAMEAlreadyExists" => CreateDistributionWithTagsError::CNAMEAlreadyExists(
+                    String::from(parsed_error.message),
+                ),
+                "DistributionAlreadyExists" => {
+                    CreateDistributionWithTagsError::DistributionAlreadyExists(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "InconsistentQuantities" => {
+                    CreateDistributionWithTagsError::InconsistentQuantities(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidArgument" => CreateDistributionWithTagsError::InvalidArgument(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidDefaultRootObject" => {
+                    CreateDistributionWithTagsError::InvalidDefaultRootObject(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidErrorCode" => CreateDistributionWithTagsError::InvalidErrorCode(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidForwardCookies" => CreateDistributionWithTagsError::InvalidForwardCookies(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidGeoRestrictionParameter" => {
+                    CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidHeadersForS3Origin" => {
+                    CreateDistributionWithTagsError::InvalidHeadersForS3Origin(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidLambdaFunctionAssociation" => {
+                    CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "InvalidLocationCode" => CreateDistributionWithTagsError::InvalidLocationCode(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidMinimumProtocolVersion" => {
+                    CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidOrigin" => CreateDistributionWithTagsError::InvalidOrigin(String::from(
+                    parsed_error.message,
+                )),
+                "InvalidOriginAccessIdentity" => {
+                    CreateDistributionWithTagsError::InvalidOriginAccessIdentity(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidOriginKeepaliveTimeout" => {
+                    CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidOriginReadTimeout" => {
+                    CreateDistributionWithTagsError::InvalidOriginReadTimeout(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidProtocolSettings" => {
+                    CreateDistributionWithTagsError::InvalidProtocolSettings(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidQueryStringParameters" => {
+                    CreateDistributionWithTagsError::InvalidQueryStringParameters(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidRelativePath" => CreateDistributionWithTagsError::InvalidRelativePath(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidRequiredProtocol" => {
+                    CreateDistributionWithTagsError::InvalidRequiredProtocol(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidResponseCode" => CreateDistributionWithTagsError::InvalidResponseCode(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidTTLOrder" => CreateDistributionWithTagsError::InvalidTTLOrder(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidTagging" => CreateDistributionWithTagsError::InvalidTagging(String::from(
+                    parsed_error.message,
+                )),
+                "InvalidViewerCertificate" => {
+                    CreateDistributionWithTagsError::InvalidViewerCertificate(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidWebACLId" => CreateDistributionWithTagsError::InvalidWebACLId(
+                    String::from(parsed_error.message),
+                ),
+                "MissingBody" => {
+                    CreateDistributionWithTagsError::MissingBody(String::from(parsed_error.message))
+                }
+                "NoSuchOrigin" => CreateDistributionWithTagsError::NoSuchOrigin(String::from(
+                    parsed_error.message,
+                )),
+                "TooManyCacheBehaviors" => CreateDistributionWithTagsError::TooManyCacheBehaviors(
+                    String::from(parsed_error.message),
+                ),
+                "TooManyCertificates" => CreateDistributionWithTagsError::TooManyCertificates(
+                    String::from(parsed_error.message),
+                ),
+                "TooManyCookieNamesInWhiteList" => {
+                    CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyDistributionCNAMEs" => {
+                    CreateDistributionWithTagsError::TooManyDistributionCNAMEs(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyDistributions" => CreateDistributionWithTagsError::TooManyDistributions(
+                    String::from(parsed_error.message),
+                ),
+                "TooManyDistributionsWithLambdaAssociations" => {
+                    CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "TooManyHeadersInForwardedValues" => {
+                    CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyLambdaFunctionAssociations" => {
+                    CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "TooManyOriginCustomHeaders" => {
+                    CreateDistributionWithTagsError::TooManyOriginCustomHeaders(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyOrigins" => CreateDistributionWithTagsError::TooManyOrigins(String::from(
+                    parsed_error.message,
+                )),
+                "TooManyQueryStringParameters" => {
+                    CreateDistributionWithTagsError::TooManyQueryStringParameters(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyTrustedSigners" => CreateDistributionWithTagsError::TooManyTrustedSigners(
+                    String::from(parsed_error.message),
+                ),
+                "TrustedSignerDoesNotExist" => {
+                    CreateDistributionWithTagsError::TrustedSignerDoesNotExist(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => CreateDistributionWithTagsError::Unknown(String::from(body)),
+            },
             Err(_) => CreateDistributionWithTagsError::Unknown(body.to_string()),
         }
     }
@@ -8381,7 +8829,9 @@ impl Error for CreateDistributionWithTagsError {
             CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(ref cause) => cause,
             CreateDistributionWithTagsError::TooManyDistributionCNAMEs(ref cause) => cause,
             CreateDistributionWithTagsError::TooManyDistributions(ref cause) => cause,
-            CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(ref cause) => cause,
+            CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(
+                ref cause,
+            ) => cause,
             CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(ref cause) => cause,
             CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(ref cause) => cause,
             CreateDistributionWithTagsError::TooManyOriginCustomHeaders(ref cause) => cause,
@@ -8425,7 +8875,6 @@ pub enum CreateInvalidationError {
     Unknown(String),
 }
 
-
 impl CreateInvalidationError {
     pub fn from_body(body: &str) -> CreateInvalidationError {
         let reader = EventReader::new(body.as_bytes());
@@ -8433,26 +8882,32 @@ impl CreateInvalidationError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        CreateInvalidationError::AccessDenied(String::from(parsed_error.message))
-                    }
-                    "BatchTooLarge" => {
-                        CreateInvalidationError::BatchTooLarge(String::from(parsed_error.message))
-                    }
-                    "InconsistentQuantities" => CreateInvalidationError::InconsistentQuantities(String::from(parsed_error.message)),
-                    "InvalidArgument" => {
-                        CreateInvalidationError::InvalidArgument(String::from(parsed_error.message))
-                    }
-                    "MissingBody" => {
-                        CreateInvalidationError::MissingBody(String::from(parsed_error.message))
-                    }
-                    "NoSuchDistribution" => CreateInvalidationError::NoSuchDistribution(String::from(parsed_error.message)),
-                    "TooManyInvalidationsInProgress" => CreateInvalidationError::TooManyInvalidationsInProgress(String::from(parsed_error.message)),
-                    _ => CreateInvalidationError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => {
+                    CreateInvalidationError::AccessDenied(String::from(parsed_error.message))
                 }
-            }
+                "BatchTooLarge" => {
+                    CreateInvalidationError::BatchTooLarge(String::from(parsed_error.message))
+                }
+                "InconsistentQuantities" => CreateInvalidationError::InconsistentQuantities(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidArgument" => {
+                    CreateInvalidationError::InvalidArgument(String::from(parsed_error.message))
+                }
+                "MissingBody" => {
+                    CreateInvalidationError::MissingBody(String::from(parsed_error.message))
+                }
+                "NoSuchDistribution" => {
+                    CreateInvalidationError::NoSuchDistribution(String::from(parsed_error.message))
+                }
+                "TooManyInvalidationsInProgress" => {
+                    CreateInvalidationError::TooManyInvalidationsInProgress(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => CreateInvalidationError::Unknown(String::from(body)),
+            },
             Err(_) => CreateInvalidationError::Unknown(body.to_string()),
         }
     }
@@ -8540,7 +8995,6 @@ pub enum CreateStreamingDistributionError {
     Unknown(String),
 }
 
-
 impl CreateStreamingDistributionError {
     pub fn from_body(body: &str) -> CreateStreamingDistributionError {
         let reader = EventReader::new(body.as_bytes());
@@ -8548,23 +9002,59 @@ impl CreateStreamingDistributionError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => CreateStreamingDistributionError::AccessDenied(String::from(parsed_error.message)),
-                    "CNAMEAlreadyExists" => CreateStreamingDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message)),
-                    "InconsistentQuantities" => CreateStreamingDistributionError::InconsistentQuantities(String::from(parsed_error.message)),
-                    "InvalidArgument" => CreateStreamingDistributionError::InvalidArgument(String::from(parsed_error.message)),
-                    "InvalidOrigin" => CreateStreamingDistributionError::InvalidOrigin(String::from(parsed_error.message)),
-                    "InvalidOriginAccessIdentity" => CreateStreamingDistributionError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),
-                    "MissingBody" => CreateStreamingDistributionError::MissingBody(String::from(parsed_error.message)),
-                    "StreamingDistributionAlreadyExists" => CreateStreamingDistributionError::StreamingDistributionAlreadyExists(String::from(parsed_error.message)),
-                    "TooManyStreamingDistributionCNAMEs" => CreateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(String::from(parsed_error.message)),
-                    "TooManyStreamingDistributions" => CreateStreamingDistributionError::TooManyStreamingDistributions(String::from(parsed_error.message)),
-                    "TooManyTrustedSigners" => CreateStreamingDistributionError::TooManyTrustedSigners(String::from(parsed_error.message)),
-                    "TrustedSignerDoesNotExist" => CreateStreamingDistributionError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),
-                    _ => CreateStreamingDistributionError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => CreateStreamingDistributionError::AccessDenied(String::from(
+                    parsed_error.message,
+                )),
+                "CNAMEAlreadyExists" => CreateStreamingDistributionError::CNAMEAlreadyExists(
+                    String::from(parsed_error.message),
+                ),
+                "InconsistentQuantities" => {
+                    CreateStreamingDistributionError::InconsistentQuantities(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "InvalidArgument" => CreateStreamingDistributionError::InvalidArgument(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidOrigin" => CreateStreamingDistributionError::InvalidOrigin(String::from(
+                    parsed_error.message,
+                )),
+                "InvalidOriginAccessIdentity" => {
+                    CreateStreamingDistributionError::InvalidOriginAccessIdentity(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "MissingBody" => CreateStreamingDistributionError::MissingBody(String::from(
+                    parsed_error.message,
+                )),
+                "StreamingDistributionAlreadyExists" => {
+                    CreateStreamingDistributionError::StreamingDistributionAlreadyExists(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "TooManyStreamingDistributionCNAMEs" => {
+                    CreateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "TooManyStreamingDistributions" => {
+                    CreateStreamingDistributionError::TooManyStreamingDistributions(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyTrustedSigners" => {
+                    CreateStreamingDistributionError::TooManyTrustedSigners(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TrustedSignerDoesNotExist" => {
+                    CreateStreamingDistributionError::TrustedSignerDoesNotExist(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => CreateStreamingDistributionError::Unknown(String::from(body)),
+            },
             Err(_) => CreateStreamingDistributionError::Unknown(body.to_string()),
         }
     }
@@ -8663,7 +9153,6 @@ pub enum CreateStreamingDistributionWithTagsError {
     Unknown(String),
 }
 
-
 impl CreateStreamingDistributionWithTagsError {
     pub fn from_body(body: &str) -> CreateStreamingDistributionWithTagsError {
         let reader = EventReader::new(body.as_bytes());
@@ -8671,24 +9160,64 @@ impl CreateStreamingDistributionWithTagsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => CreateStreamingDistributionWithTagsError::AccessDenied(String::from(parsed_error.message)),
-                    "CNAMEAlreadyExists" => CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(String::from(parsed_error.message)),
-                    "InconsistentQuantities" => CreateStreamingDistributionWithTagsError::InconsistentQuantities(String::from(parsed_error.message)),
-                    "InvalidArgument" => CreateStreamingDistributionWithTagsError::InvalidArgument(String::from(parsed_error.message)),
-                    "InvalidOrigin" => CreateStreamingDistributionWithTagsError::InvalidOrigin(String::from(parsed_error.message)),
-                    "InvalidOriginAccessIdentity" => CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),
-                    "InvalidTagging" => CreateStreamingDistributionWithTagsError::InvalidTagging(String::from(parsed_error.message)),
-                    "MissingBody" => CreateStreamingDistributionWithTagsError::MissingBody(String::from(parsed_error.message)),
-                    "StreamingDistributionAlreadyExists" => CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(String::from(parsed_error.message)),
-                    "TooManyStreamingDistributionCNAMEs" => CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(String::from(parsed_error.message)),
-                    "TooManyStreamingDistributions" => CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(String::from(parsed_error.message)),
-                    "TooManyTrustedSigners" => CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(String::from(parsed_error.message)),
-                    "TrustedSignerDoesNotExist" => CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),
-                    _ => CreateStreamingDistributionWithTagsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => CreateStreamingDistributionWithTagsError::AccessDenied(
+                    String::from(parsed_error.message),
+                ),
+                "CNAMEAlreadyExists" => {
+                    CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "InconsistentQuantities" => {
+                    CreateStreamingDistributionWithTagsError::InconsistentQuantities(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidArgument" => CreateStreamingDistributionWithTagsError::InvalidArgument(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidOrigin" => CreateStreamingDistributionWithTagsError::InvalidOrigin(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidOriginAccessIdentity" => {
+                    CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "InvalidTagging" => CreateStreamingDistributionWithTagsError::InvalidTagging(
+                    String::from(parsed_error.message),
+                ),
+                "MissingBody" => CreateStreamingDistributionWithTagsError::MissingBody(
+                    String::from(parsed_error.message),
+                ),
+                "StreamingDistributionAlreadyExists" => {
+                    CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "TooManyStreamingDistributionCNAMEs" => {
+                    CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "TooManyStreamingDistributions" => {
+                    CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "TooManyTrustedSigners" => {
+                    CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TrustedSignerDoesNotExist" => {
+                    CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(
+                        String::from(parsed_error.message),
+                    )
+                }
+                _ => CreateStreamingDistributionWithTagsError::Unknown(String::from(body)),
+            },
             Err(_) => CreateStreamingDistributionWithTagsError::Unknown(body.to_string()),
         }
     }
@@ -8733,8 +9262,12 @@ impl Error for CreateStreamingDistributionWithTagsError {
             }
             CreateStreamingDistributionWithTagsError::InvalidTagging(ref cause) => cause,
             CreateStreamingDistributionWithTagsError::MissingBody(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(ref cause) => cause,
-            CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(ref cause) => cause,
+            CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(
+                ref cause,
+            ) => cause,
+            CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(
+                ref cause,
+            ) => cause,
             CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(ref cause) => {
                 cause
             }
@@ -8772,7 +9305,6 @@ pub enum DeleteCloudFrontOriginAccessIdentityError {
     Unknown(String),
 }
 
-
 impl DeleteCloudFrontOriginAccessIdentityError {
     pub fn from_body(body: &str) -> DeleteCloudFrontOriginAccessIdentityError {
         let reader = EventReader::new(body.as_bytes());
@@ -8780,18 +9312,13 @@ impl DeleteCloudFrontOriginAccessIdentityError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => DeleteCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),
-                    "CloudFrontOriginAccessIdentityInUse" => DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(String::from(parsed_error.message)),
-                    "InvalidIfMatchVersion" => DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message)),
-                    "NoSuchCloudFrontOriginAccessIdentity" => DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),
-                    "PreconditionFailed" => DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message)),
-                    _ => DeleteCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
-                }
-            }
-            Err(_) => DeleteCloudFrontOriginAccessIdentityError::Unknown(body.to_string()),
-        }
+                            Ok(parsed_error) => {
+                                match &parsed_error.code[..] {
+                                    "AccessDenied" => DeleteCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),"CloudFrontOriginAccessIdentityInUse" => DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(String::from(parsed_error.message)),"InvalidIfMatchVersion" => DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),"PreconditionFailed" => DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message)),_ => DeleteCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
+                                }
+                           },
+                           Err(_) => DeleteCloudFrontOriginAccessIdentityError::Unknown(body.to_string())
+                       }
     }
 }
 
@@ -8825,9 +9352,13 @@ impl Error for DeleteCloudFrontOriginAccessIdentityError {
     fn description(&self) -> &str {
         match *self {
             DeleteCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => cause,
-            DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(ref cause) => cause,
+            DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(
+                ref cause,
+            ) => cause,
             DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(ref cause) => cause,
-            DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(ref cause) => cause,
+            DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
+                ref cause,
+            ) => cause,
             DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(ref cause) => cause,
             DeleteCloudFrontOriginAccessIdentityError::Validation(ref cause) => cause,
             DeleteCloudFrontOriginAccessIdentityError::Credentials(ref err) => err.description(),
@@ -8861,7 +9392,6 @@ pub enum DeleteDistributionError {
     Unknown(String),
 }
 
-
 impl DeleteDistributionError {
     pub fn from_body(body: &str) -> DeleteDistributionError {
         let reader = EventReader::new(body.as_bytes());
@@ -8869,18 +9399,24 @@ impl DeleteDistributionError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        DeleteDistributionError::AccessDenied(String::from(parsed_error.message))
-                    }
-                    "DistributionNotDisabled" => DeleteDistributionError::DistributionNotDisabled(String::from(parsed_error.message)),
-                    "InvalidIfMatchVersion" => DeleteDistributionError::InvalidIfMatchVersion(String::from(parsed_error.message)),
-                    "NoSuchDistribution" => DeleteDistributionError::NoSuchDistribution(String::from(parsed_error.message)),
-                    "PreconditionFailed" => DeleteDistributionError::PreconditionFailed(String::from(parsed_error.message)),
-                    _ => DeleteDistributionError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => {
+                    DeleteDistributionError::AccessDenied(String::from(parsed_error.message))
                 }
-            }
+                "DistributionNotDisabled" => DeleteDistributionError::DistributionNotDisabled(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidIfMatchVersion" => DeleteDistributionError::InvalidIfMatchVersion(
+                    String::from(parsed_error.message),
+                ),
+                "NoSuchDistribution" => {
+                    DeleteDistributionError::NoSuchDistribution(String::from(parsed_error.message))
+                }
+                "PreconditionFailed" => {
+                    DeleteDistributionError::PreconditionFailed(String::from(parsed_error.message))
+                }
+                _ => DeleteDistributionError::Unknown(String::from(body)),
+            },
             Err(_) => DeleteDistributionError::Unknown(body.to_string()),
         }
     }
@@ -8952,7 +9488,6 @@ pub enum DeleteStreamingDistributionError {
     Unknown(String),
 }
 
-
 impl DeleteStreamingDistributionError {
     pub fn from_body(body: &str) -> DeleteStreamingDistributionError {
         let reader = EventReader::new(body.as_bytes());
@@ -8960,16 +9495,30 @@ impl DeleteStreamingDistributionError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => DeleteStreamingDistributionError::AccessDenied(String::from(parsed_error.message)),
-                    "InvalidIfMatchVersion" => DeleteStreamingDistributionError::InvalidIfMatchVersion(String::from(parsed_error.message)),
-                    "NoSuchStreamingDistribution" => DeleteStreamingDistributionError::NoSuchStreamingDistribution(String::from(parsed_error.message)),
-                    "PreconditionFailed" => DeleteStreamingDistributionError::PreconditionFailed(String::from(parsed_error.message)),
-                    "StreamingDistributionNotDisabled" => DeleteStreamingDistributionError::StreamingDistributionNotDisabled(String::from(parsed_error.message)),
-                    _ => DeleteStreamingDistributionError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => DeleteStreamingDistributionError::AccessDenied(String::from(
+                    parsed_error.message,
+                )),
+                "InvalidIfMatchVersion" => {
+                    DeleteStreamingDistributionError::InvalidIfMatchVersion(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "NoSuchStreamingDistribution" => {
+                    DeleteStreamingDistributionError::NoSuchStreamingDistribution(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "PreconditionFailed" => DeleteStreamingDistributionError::PreconditionFailed(
+                    String::from(parsed_error.message),
+                ),
+                "StreamingDistributionNotDisabled" => {
+                    DeleteStreamingDistributionError::StreamingDistributionNotDisabled(
+                        String::from(parsed_error.message),
+                    )
+                }
+                _ => DeleteStreamingDistributionError::Unknown(String::from(body)),
+            },
             Err(_) => DeleteStreamingDistributionError::Unknown(body.to_string()),
         }
     }
@@ -9035,7 +9584,6 @@ pub enum GetCloudFrontOriginAccessIdentityError {
     Unknown(String),
 }
 
-
 impl GetCloudFrontOriginAccessIdentityError {
     pub fn from_body(body: &str) -> GetCloudFrontOriginAccessIdentityError {
         let reader = EventReader::new(body.as_bytes());
@@ -9043,13 +9591,17 @@ impl GetCloudFrontOriginAccessIdentityError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => GetCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),
-                    "NoSuchCloudFrontOriginAccessIdentity" => GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),
-                    _ => GetCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => GetCloudFrontOriginAccessIdentityError::AccessDenied(
+                    String::from(parsed_error.message),
+                ),
+                "NoSuchCloudFrontOriginAccessIdentity" => {
+                    GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
+                        String::from(parsed_error.message),
+                    )
                 }
-            }
+                _ => GetCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
+            },
             Err(_) => GetCloudFrontOriginAccessIdentityError::Unknown(body.to_string()),
         }
     }
@@ -9085,7 +9637,9 @@ impl Error for GetCloudFrontOriginAccessIdentityError {
     fn description(&self) -> &str {
         match *self {
             GetCloudFrontOriginAccessIdentityError::AccessDenied(ref cause) => cause,
-            GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(ref cause) => cause,
+            GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
+                ref cause,
+            ) => cause,
             GetCloudFrontOriginAccessIdentityError::Validation(ref cause) => cause,
             GetCloudFrontOriginAccessIdentityError::Credentials(ref err) => err.description(),
             GetCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => {
@@ -9112,7 +9666,6 @@ pub enum GetCloudFrontOriginAccessIdentityConfigError {
     Unknown(String),
 }
 
-
 impl GetCloudFrontOriginAccessIdentityConfigError {
     pub fn from_body(body: &str) -> GetCloudFrontOriginAccessIdentityConfigError {
         let reader = EventReader::new(body.as_bytes());
@@ -9120,15 +9673,13 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(String::from(parsed_error.message)),
-                    "NoSuchCloudFrontOriginAccessIdentity" => GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),
-                    _ => GetCloudFrontOriginAccessIdentityConfigError::Unknown(String::from(body)),
-                }
-            }
-            Err(_) => GetCloudFrontOriginAccessIdentityConfigError::Unknown(body.to_string()),
-        }
+                            Ok(parsed_error) => {
+                                match &parsed_error.code[..] {
+                                    "AccessDenied" => GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),_ => GetCloudFrontOriginAccessIdentityConfigError::Unknown(String::from(body))
+                                }
+                           },
+                           Err(_) => GetCloudFrontOriginAccessIdentityConfigError::Unknown(body.to_string())
+                       }
     }
 }
 
@@ -9161,15 +9712,13 @@ impl fmt::Display for GetCloudFrontOriginAccessIdentityConfigError {
 impl Error for GetCloudFrontOriginAccessIdentityConfigError {
     fn description(&self) -> &str {
         match *self {
-            GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(ref cause) => cause,
-            GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(ref cause) => cause,
-            GetCloudFrontOriginAccessIdentityConfigError::Validation(ref cause) => cause,
-            GetCloudFrontOriginAccessIdentityConfigError::Credentials(ref err) => err.description(),
-            GetCloudFrontOriginAccessIdentityConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetCloudFrontOriginAccessIdentityConfigError::Unknown(ref cause) => cause,
-        }
+                            GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(ref cause) => cause,
+GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(ref cause) => cause,
+GetCloudFrontOriginAccessIdentityConfigError::Validation(ref cause) => cause,
+GetCloudFrontOriginAccessIdentityConfigError::Credentials(ref err) => err.description(),
+GetCloudFrontOriginAccessIdentityConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetCloudFrontOriginAccessIdentityConfigError::Unknown(ref cause) => cause
+                        }
     }
 }
 /// Errors returned by GetDistribution
@@ -9189,7 +9738,6 @@ pub enum GetDistributionError {
     Unknown(String),
 }
 
-
 impl GetDistributionError {
     pub fn from_body(body: &str) -> GetDistributionError {
         let reader = EventReader::new(body.as_bytes());
@@ -9197,17 +9745,15 @@ impl GetDistributionError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        GetDistributionError::AccessDenied(String::from(parsed_error.message))
-                    }
-                    "NoSuchDistribution" => {
-                        GetDistributionError::NoSuchDistribution(String::from(parsed_error.message))
-                    }
-                    _ => GetDistributionError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => {
+                    GetDistributionError::AccessDenied(String::from(parsed_error.message))
                 }
-            }
+                "NoSuchDistribution" => {
+                    GetDistributionError::NoSuchDistribution(String::from(parsed_error.message))
+                }
+                _ => GetDistributionError::Unknown(String::from(body)),
+            },
             Err(_) => GetDistributionError::Unknown(body.to_string()),
         }
     }
@@ -9268,7 +9814,6 @@ pub enum GetDistributionConfigError {
     Unknown(String),
 }
 
-
 impl GetDistributionConfigError {
     pub fn from_body(body: &str) -> GetDistributionConfigError {
         let reader = EventReader::new(body.as_bytes());
@@ -9276,15 +9821,15 @@ impl GetDistributionConfigError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        GetDistributionConfigError::AccessDenied(String::from(parsed_error.message))
-                    }
-                    "NoSuchDistribution" => GetDistributionConfigError::NoSuchDistribution(String::from(parsed_error.message)),
-                    _ => GetDistributionConfigError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => {
+                    GetDistributionConfigError::AccessDenied(String::from(parsed_error.message))
                 }
-            }
+                "NoSuchDistribution" => GetDistributionConfigError::NoSuchDistribution(
+                    String::from(parsed_error.message),
+                ),
+                _ => GetDistributionConfigError::Unknown(String::from(body)),
+            },
             Err(_) => GetDistributionConfigError::Unknown(body.to_string()),
         }
     }
@@ -9349,7 +9894,6 @@ pub enum GetInvalidationError {
     Unknown(String),
 }
 
-
 impl GetInvalidationError {
     pub fn from_body(body: &str) -> GetInvalidationError {
         let reader = EventReader::new(body.as_bytes());
@@ -9357,20 +9901,18 @@ impl GetInvalidationError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        GetInvalidationError::AccessDenied(String::from(parsed_error.message))
-                    }
-                    "NoSuchDistribution" => {
-                        GetInvalidationError::NoSuchDistribution(String::from(parsed_error.message))
-                    }
-                    "NoSuchInvalidation" => {
-                        GetInvalidationError::NoSuchInvalidation(String::from(parsed_error.message))
-                    }
-                    _ => GetInvalidationError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => {
+                    GetInvalidationError::AccessDenied(String::from(parsed_error.message))
                 }
-            }
+                "NoSuchDistribution" => {
+                    GetInvalidationError::NoSuchDistribution(String::from(parsed_error.message))
+                }
+                "NoSuchInvalidation" => {
+                    GetInvalidationError::NoSuchInvalidation(String::from(parsed_error.message))
+                }
+                _ => GetInvalidationError::Unknown(String::from(body)),
+            },
             Err(_) => GetInvalidationError::Unknown(body.to_string()),
         }
     }
@@ -9432,7 +9974,6 @@ pub enum GetStreamingDistributionError {
     Unknown(String),
 }
 
-
 impl GetStreamingDistributionError {
     pub fn from_body(body: &str) -> GetStreamingDistributionError {
         let reader = EventReader::new(body.as_bytes());
@@ -9440,13 +9981,17 @@ impl GetStreamingDistributionError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => GetStreamingDistributionError::AccessDenied(String::from(parsed_error.message)),
-                    "NoSuchStreamingDistribution" => GetStreamingDistributionError::NoSuchStreamingDistribution(String::from(parsed_error.message)),
-                    _ => GetStreamingDistributionError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => {
+                    GetStreamingDistributionError::AccessDenied(String::from(parsed_error.message))
                 }
-            }
+                "NoSuchStreamingDistribution" => {
+                    GetStreamingDistributionError::NoSuchStreamingDistribution(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => GetStreamingDistributionError::Unknown(String::from(body)),
+            },
             Err(_) => GetStreamingDistributionError::Unknown(body.to_string()),
         }
     }
@@ -9509,7 +10054,6 @@ pub enum GetStreamingDistributionConfigError {
     Unknown(String),
 }
 
-
 impl GetStreamingDistributionConfigError {
     pub fn from_body(body: &str) -> GetStreamingDistributionConfigError {
         let reader = EventReader::new(body.as_bytes());
@@ -9517,13 +10061,17 @@ impl GetStreamingDistributionConfigError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => GetStreamingDistributionConfigError::AccessDenied(String::from(parsed_error.message)),
-                    "NoSuchStreamingDistribution" => GetStreamingDistributionConfigError::NoSuchStreamingDistribution(String::from(parsed_error.message)),
-                    _ => GetStreamingDistributionConfigError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => GetStreamingDistributionConfigError::AccessDenied(String::from(
+                    parsed_error.message,
+                )),
+                "NoSuchStreamingDistribution" => {
+                    GetStreamingDistributionConfigError::NoSuchStreamingDistribution(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                _ => GetStreamingDistributionConfigError::Unknown(String::from(body)),
+            },
             Err(_) => GetStreamingDistributionConfigError::Unknown(body.to_string()),
         }
     }
@@ -9584,7 +10132,6 @@ pub enum ListCloudFrontOriginAccessIdentitiesError {
     Unknown(String),
 }
 
-
 impl ListCloudFrontOriginAccessIdentitiesError {
     pub fn from_body(body: &str) -> ListCloudFrontOriginAccessIdentitiesError {
         let reader = EventReader::new(body.as_bytes());
@@ -9592,12 +10139,12 @@ impl ListCloudFrontOriginAccessIdentitiesError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(String::from(parsed_error.message)),
-                    _ => ListCloudFrontOriginAccessIdentitiesError::Unknown(String::from(body)),
-                }
-            }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidArgument" => ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(
+                    String::from(parsed_error.message),
+                ),
+                _ => ListCloudFrontOriginAccessIdentitiesError::Unknown(String::from(body)),
+            },
             Err(_) => ListCloudFrontOriginAccessIdentitiesError::Unknown(body.to_string()),
         }
     }
@@ -9657,7 +10204,6 @@ pub enum ListDistributionsError {
     Unknown(String),
 }
 
-
 impl ListDistributionsError {
     pub fn from_body(body: &str) -> ListDistributionsError {
         let reader = EventReader::new(body.as_bytes());
@@ -9665,14 +10211,12 @@ impl ListDistributionsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => {
-                        ListDistributionsError::InvalidArgument(String::from(parsed_error.message))
-                    }
-                    _ => ListDistributionsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidArgument" => {
+                    ListDistributionsError::InvalidArgument(String::from(parsed_error.message))
                 }
-            }
+                _ => ListDistributionsError::Unknown(String::from(body)),
+            },
             Err(_) => ListDistributionsError::Unknown(body.to_string()),
         }
     }
@@ -9734,7 +10278,6 @@ pub enum ListDistributionsByWebACLIdError {
     Unknown(String),
 }
 
-
 impl ListDistributionsByWebACLIdError {
     pub fn from_body(body: &str) -> ListDistributionsByWebACLIdError {
         let reader = EventReader::new(body.as_bytes());
@@ -9742,13 +10285,15 @@ impl ListDistributionsByWebACLIdError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => ListDistributionsByWebACLIdError::InvalidArgument(String::from(parsed_error.message)),
-                    "InvalidWebACLId" => ListDistributionsByWebACLIdError::InvalidWebACLId(String::from(parsed_error.message)),
-                    _ => ListDistributionsByWebACLIdError::Unknown(String::from(body)),
-                }
-            }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidArgument" => ListDistributionsByWebACLIdError::InvalidArgument(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidWebACLId" => ListDistributionsByWebACLIdError::InvalidWebACLId(
+                    String::from(parsed_error.message),
+                ),
+                _ => ListDistributionsByWebACLIdError::Unknown(String::from(body)),
+            },
             Err(_) => ListDistributionsByWebACLIdError::Unknown(body.to_string()),
         }
     }
@@ -9813,7 +10358,6 @@ pub enum ListInvalidationsError {
     Unknown(String),
 }
 
-
 impl ListInvalidationsError {
     pub fn from_body(body: &str) -> ListInvalidationsError {
         let reader = EventReader::new(body.as_bytes());
@@ -9821,18 +10365,18 @@ impl ListInvalidationsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        ListInvalidationsError::AccessDenied(String::from(parsed_error.message))
-                    }
-                    "InvalidArgument" => {
-                        ListInvalidationsError::InvalidArgument(String::from(parsed_error.message))
-                    }
-                    "NoSuchDistribution" => ListInvalidationsError::NoSuchDistribution(String::from(parsed_error.message)),
-                    _ => ListInvalidationsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => {
+                    ListInvalidationsError::AccessDenied(String::from(parsed_error.message))
                 }
-            }
+                "InvalidArgument" => {
+                    ListInvalidationsError::InvalidArgument(String::from(parsed_error.message))
+                }
+                "NoSuchDistribution" => {
+                    ListInvalidationsError::NoSuchDistribution(String::from(parsed_error.message))
+                }
+                _ => ListInvalidationsError::Unknown(String::from(body)),
+            },
             Err(_) => ListInvalidationsError::Unknown(body.to_string()),
         }
     }
@@ -9894,7 +10438,6 @@ pub enum ListStreamingDistributionsError {
     Unknown(String),
 }
 
-
 impl ListStreamingDistributionsError {
     pub fn from_body(body: &str) -> ListStreamingDistributionsError {
         let reader = EventReader::new(body.as_bytes());
@@ -9902,12 +10445,12 @@ impl ListStreamingDistributionsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "InvalidArgument" => ListStreamingDistributionsError::InvalidArgument(String::from(parsed_error.message)),
-                    _ => ListStreamingDistributionsError::Unknown(String::from(body)),
-                }
-            }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidArgument" => ListStreamingDistributionsError::InvalidArgument(
+                    String::from(parsed_error.message),
+                ),
+                _ => ListStreamingDistributionsError::Unknown(String::from(body)),
+            },
             Err(_) => ListStreamingDistributionsError::Unknown(body.to_string()),
         }
     }
@@ -9973,7 +10516,6 @@ pub enum ListTagsForResourceError {
     Unknown(String),
 }
 
-
 impl ListTagsForResourceError {
     pub fn from_body(body: &str) -> ListTagsForResourceError {
         let reader = EventReader::new(body.as_bytes());
@@ -9981,21 +10523,21 @@ impl ListTagsForResourceError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        ListTagsForResourceError::AccessDenied(String::from(parsed_error.message))
-                    }
-                    "InvalidArgument" => ListTagsForResourceError::InvalidArgument(String::from(parsed_error.message)),
-                    "InvalidTagging" => {
-                        ListTagsForResourceError::InvalidTagging(String::from(parsed_error.message))
-                    }
-                    "NoSuchResource" => {
-                        ListTagsForResourceError::NoSuchResource(String::from(parsed_error.message))
-                    }
-                    _ => ListTagsForResourceError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => {
+                    ListTagsForResourceError::AccessDenied(String::from(parsed_error.message))
                 }
-            }
+                "InvalidArgument" => {
+                    ListTagsForResourceError::InvalidArgument(String::from(parsed_error.message))
+                }
+                "InvalidTagging" => {
+                    ListTagsForResourceError::InvalidTagging(String::from(parsed_error.message))
+                }
+                "NoSuchResource" => {
+                    ListTagsForResourceError::NoSuchResource(String::from(parsed_error.message))
+                }
+                _ => ListTagsForResourceError::Unknown(String::from(body)),
+            },
             Err(_) => ListTagsForResourceError::Unknown(body.to_string()),
         }
     }
@@ -10064,7 +10606,6 @@ pub enum TagResourceError {
     Unknown(String),
 }
 
-
 impl TagResourceError {
     pub fn from_body(body: &str) -> TagResourceError {
         let reader = EventReader::new(body.as_bytes());
@@ -10072,23 +10613,21 @@ impl TagResourceError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        TagResourceError::AccessDenied(String::from(parsed_error.message))
-                    }
-                    "InvalidArgument" => {
-                        TagResourceError::InvalidArgument(String::from(parsed_error.message))
-                    }
-                    "InvalidTagging" => {
-                        TagResourceError::InvalidTagging(String::from(parsed_error.message))
-                    }
-                    "NoSuchResource" => {
-                        TagResourceError::NoSuchResource(String::from(parsed_error.message))
-                    }
-                    _ => TagResourceError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => {
+                    TagResourceError::AccessDenied(String::from(parsed_error.message))
                 }
-            }
+                "InvalidArgument" => {
+                    TagResourceError::InvalidArgument(String::from(parsed_error.message))
+                }
+                "InvalidTagging" => {
+                    TagResourceError::InvalidTagging(String::from(parsed_error.message))
+                }
+                "NoSuchResource" => {
+                    TagResourceError::NoSuchResource(String::from(parsed_error.message))
+                }
+                _ => TagResourceError::Unknown(String::from(body)),
+            },
             Err(_) => TagResourceError::Unknown(body.to_string()),
         }
     }
@@ -10155,7 +10694,6 @@ pub enum UntagResourceError {
     Unknown(String),
 }
 
-
 impl UntagResourceError {
     pub fn from_body(body: &str) -> UntagResourceError {
         let reader = EventReader::new(body.as_bytes());
@@ -10163,23 +10701,21 @@ impl UntagResourceError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        UntagResourceError::AccessDenied(String::from(parsed_error.message))
-                    }
-                    "InvalidArgument" => {
-                        UntagResourceError::InvalidArgument(String::from(parsed_error.message))
-                    }
-                    "InvalidTagging" => {
-                        UntagResourceError::InvalidTagging(String::from(parsed_error.message))
-                    }
-                    "NoSuchResource" => {
-                        UntagResourceError::NoSuchResource(String::from(parsed_error.message))
-                    }
-                    _ => UntagResourceError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => {
+                    UntagResourceError::AccessDenied(String::from(parsed_error.message))
                 }
-            }
+                "InvalidArgument" => {
+                    UntagResourceError::InvalidArgument(String::from(parsed_error.message))
+                }
+                "InvalidTagging" => {
+                    UntagResourceError::InvalidTagging(String::from(parsed_error.message))
+                }
+                "NoSuchResource" => {
+                    UntagResourceError::NoSuchResource(String::from(parsed_error.message))
+                }
+                _ => UntagResourceError::Unknown(String::from(body)),
+            },
             Err(_) => UntagResourceError::Unknown(body.to_string()),
         }
     }
@@ -10254,7 +10790,6 @@ pub enum UpdateCloudFrontOriginAccessIdentityError {
     Unknown(String),
 }
 
-
 impl UpdateCloudFrontOriginAccessIdentityError {
     pub fn from_body(body: &str) -> UpdateCloudFrontOriginAccessIdentityError {
         let reader = EventReader::new(body.as_bytes());
@@ -10262,21 +10797,13 @@ impl UpdateCloudFrontOriginAccessIdentityError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => UpdateCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),
-                    "IllegalUpdate" => UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(String::from(parsed_error.message)),
-                    "InconsistentQuantities" => UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),
-                    "InvalidArgument" => UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),
-                    "InvalidIfMatchVersion" => UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message)),
-                    "MissingBody" => UpdateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),
-                    "NoSuchCloudFrontOriginAccessIdentity" => UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),
-                    "PreconditionFailed" => UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message)),
-                    _ => UpdateCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
-                }
-            }
-            Err(_) => UpdateCloudFrontOriginAccessIdentityError::Unknown(body.to_string()),
-        }
+                            Ok(parsed_error) => {
+                                match &parsed_error.code[..] {
+                                    "AccessDenied" => UpdateCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),"IllegalUpdate" => UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(String::from(parsed_error.message)),"InconsistentQuantities" => UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),"InvalidIfMatchVersion" => UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message)),"MissingBody" => UpdateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),"PreconditionFailed" => UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message)),_ => UpdateCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
+                                }
+                           },
+                           Err(_) => UpdateCloudFrontOriginAccessIdentityError::Unknown(body.to_string())
+                       }
     }
 }
 
@@ -10315,7 +10842,9 @@ impl Error for UpdateCloudFrontOriginAccessIdentityError {
             UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(ref cause) => cause,
             UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(ref cause) => cause,
             UpdateCloudFrontOriginAccessIdentityError::MissingBody(ref cause) => cause,
-            UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(ref cause) => cause,
+            UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
+                ref cause,
+            ) => cause,
             UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(ref cause) => cause,
             UpdateCloudFrontOriginAccessIdentityError::Validation(ref cause) => cause,
             UpdateCloudFrontOriginAccessIdentityError::Credentials(ref err) => err.description(),
@@ -10419,7 +10948,6 @@ pub enum UpdateDistributionError {
     Unknown(String),
 }
 
-
 impl UpdateDistributionError {
     pub fn from_body(body: &str) -> UpdateDistributionError {
         let reader = EventReader::new(body.as_bytes());
@@ -10427,67 +10955,153 @@ impl UpdateDistributionError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => {
-                        UpdateDistributionError::AccessDenied(String::from(parsed_error.message))
-                    }
-                    "CNAMEAlreadyExists" => UpdateDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message)),
-                    "IllegalUpdate" => {
-                        UpdateDistributionError::IllegalUpdate(String::from(parsed_error.message))
-                    }
-                    "InconsistentQuantities" => UpdateDistributionError::InconsistentQuantities(String::from(parsed_error.message)),
-                    "InvalidArgument" => {
-                        UpdateDistributionError::InvalidArgument(String::from(parsed_error.message))
-                    }
-                    "InvalidDefaultRootObject" => UpdateDistributionError::InvalidDefaultRootObject(String::from(parsed_error.message)),
-                    "InvalidErrorCode" => UpdateDistributionError::InvalidErrorCode(String::from(parsed_error.message)),
-                    "InvalidForwardCookies" => UpdateDistributionError::InvalidForwardCookies(String::from(parsed_error.message)),
-                    "InvalidGeoRestrictionParameter" => UpdateDistributionError::InvalidGeoRestrictionParameter(String::from(parsed_error.message)),
-                    "InvalidHeadersForS3Origin" => UpdateDistributionError::InvalidHeadersForS3Origin(String::from(parsed_error.message)),
-                    "InvalidIfMatchVersion" => UpdateDistributionError::InvalidIfMatchVersion(String::from(parsed_error.message)),
-                    "InvalidLambdaFunctionAssociation" => UpdateDistributionError::InvalidLambdaFunctionAssociation(String::from(parsed_error.message)),
-                    "InvalidLocationCode" => UpdateDistributionError::InvalidLocationCode(String::from(parsed_error.message)),
-                    "InvalidMinimumProtocolVersion" => UpdateDistributionError::InvalidMinimumProtocolVersion(String::from(parsed_error.message)),
-                    "InvalidOriginAccessIdentity" => UpdateDistributionError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),
-                    "InvalidOriginKeepaliveTimeout" => UpdateDistributionError::InvalidOriginKeepaliveTimeout(String::from(parsed_error.message)),
-                    "InvalidOriginReadTimeout" => UpdateDistributionError::InvalidOriginReadTimeout(String::from(parsed_error.message)),
-                    "InvalidQueryStringParameters" => UpdateDistributionError::InvalidQueryStringParameters(String::from(parsed_error.message)),
-                    "InvalidRelativePath" => UpdateDistributionError::InvalidRelativePath(String::from(parsed_error.message)),
-                    "InvalidRequiredProtocol" => UpdateDistributionError::InvalidRequiredProtocol(String::from(parsed_error.message)),
-                    "InvalidResponseCode" => UpdateDistributionError::InvalidResponseCode(String::from(parsed_error.message)),
-                    "InvalidTTLOrder" => {
-                        UpdateDistributionError::InvalidTTLOrder(String::from(parsed_error.message))
-                    }
-                    "InvalidViewerCertificate" => UpdateDistributionError::InvalidViewerCertificate(String::from(parsed_error.message)),
-                    "InvalidWebACLId" => {
-                        UpdateDistributionError::InvalidWebACLId(String::from(parsed_error.message))
-                    }
-                    "MissingBody" => {
-                        UpdateDistributionError::MissingBody(String::from(parsed_error.message))
-                    }
-                    "NoSuchDistribution" => UpdateDistributionError::NoSuchDistribution(String::from(parsed_error.message)),
-                    "NoSuchOrigin" => {
-                        UpdateDistributionError::NoSuchOrigin(String::from(parsed_error.message))
-                    }
-                    "PreconditionFailed" => UpdateDistributionError::PreconditionFailed(String::from(parsed_error.message)),
-                    "TooManyCacheBehaviors" => UpdateDistributionError::TooManyCacheBehaviors(String::from(parsed_error.message)),
-                    "TooManyCertificates" => UpdateDistributionError::TooManyCertificates(String::from(parsed_error.message)),
-                    "TooManyCookieNamesInWhiteList" => UpdateDistributionError::TooManyCookieNamesInWhiteList(String::from(parsed_error.message)),
-                    "TooManyDistributionCNAMEs" => UpdateDistributionError::TooManyDistributionCNAMEs(String::from(parsed_error.message)),
-                    "TooManyDistributionsWithLambdaAssociations" => UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(String::from(parsed_error.message)),
-                    "TooManyHeadersInForwardedValues" => UpdateDistributionError::TooManyHeadersInForwardedValues(String::from(parsed_error.message)),
-                    "TooManyLambdaFunctionAssociations" => UpdateDistributionError::TooManyLambdaFunctionAssociations(String::from(parsed_error.message)),
-                    "TooManyOriginCustomHeaders" => UpdateDistributionError::TooManyOriginCustomHeaders(String::from(parsed_error.message)),
-                    "TooManyOrigins" => {
-                        UpdateDistributionError::TooManyOrigins(String::from(parsed_error.message))
-                    }
-                    "TooManyQueryStringParameters" => UpdateDistributionError::TooManyQueryStringParameters(String::from(parsed_error.message)),
-                    "TooManyTrustedSigners" => UpdateDistributionError::TooManyTrustedSigners(String::from(parsed_error.message)),
-                    "TrustedSignerDoesNotExist" => UpdateDistributionError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),
-                    _ => UpdateDistributionError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => {
+                    UpdateDistributionError::AccessDenied(String::from(parsed_error.message))
                 }
-            }
+                "CNAMEAlreadyExists" => {
+                    UpdateDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message))
+                }
+                "IllegalUpdate" => {
+                    UpdateDistributionError::IllegalUpdate(String::from(parsed_error.message))
+                }
+                "InconsistentQuantities" => UpdateDistributionError::InconsistentQuantities(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidArgument" => {
+                    UpdateDistributionError::InvalidArgument(String::from(parsed_error.message))
+                }
+                "InvalidDefaultRootObject" => UpdateDistributionError::InvalidDefaultRootObject(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidErrorCode" => {
+                    UpdateDistributionError::InvalidErrorCode(String::from(parsed_error.message))
+                }
+                "InvalidForwardCookies" => UpdateDistributionError::InvalidForwardCookies(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidGeoRestrictionParameter" => {
+                    UpdateDistributionError::InvalidGeoRestrictionParameter(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidHeadersForS3Origin" => UpdateDistributionError::InvalidHeadersForS3Origin(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidIfMatchVersion" => UpdateDistributionError::InvalidIfMatchVersion(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidLambdaFunctionAssociation" => {
+                    UpdateDistributionError::InvalidLambdaFunctionAssociation(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidLocationCode" => {
+                    UpdateDistributionError::InvalidLocationCode(String::from(parsed_error.message))
+                }
+                "InvalidMinimumProtocolVersion" => {
+                    UpdateDistributionError::InvalidMinimumProtocolVersion(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidOriginAccessIdentity" => {
+                    UpdateDistributionError::InvalidOriginAccessIdentity(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidOriginKeepaliveTimeout" => {
+                    UpdateDistributionError::InvalidOriginKeepaliveTimeout(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidOriginReadTimeout" => UpdateDistributionError::InvalidOriginReadTimeout(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidQueryStringParameters" => {
+                    UpdateDistributionError::InvalidQueryStringParameters(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidRelativePath" => {
+                    UpdateDistributionError::InvalidRelativePath(String::from(parsed_error.message))
+                }
+                "InvalidRequiredProtocol" => UpdateDistributionError::InvalidRequiredProtocol(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidResponseCode" => {
+                    UpdateDistributionError::InvalidResponseCode(String::from(parsed_error.message))
+                }
+                "InvalidTTLOrder" => {
+                    UpdateDistributionError::InvalidTTLOrder(String::from(parsed_error.message))
+                }
+                "InvalidViewerCertificate" => UpdateDistributionError::InvalidViewerCertificate(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidWebACLId" => {
+                    UpdateDistributionError::InvalidWebACLId(String::from(parsed_error.message))
+                }
+                "MissingBody" => {
+                    UpdateDistributionError::MissingBody(String::from(parsed_error.message))
+                }
+                "NoSuchDistribution" => {
+                    UpdateDistributionError::NoSuchDistribution(String::from(parsed_error.message))
+                }
+                "NoSuchOrigin" => {
+                    UpdateDistributionError::NoSuchOrigin(String::from(parsed_error.message))
+                }
+                "PreconditionFailed" => {
+                    UpdateDistributionError::PreconditionFailed(String::from(parsed_error.message))
+                }
+                "TooManyCacheBehaviors" => UpdateDistributionError::TooManyCacheBehaviors(
+                    String::from(parsed_error.message),
+                ),
+                "TooManyCertificates" => {
+                    UpdateDistributionError::TooManyCertificates(String::from(parsed_error.message))
+                }
+                "TooManyCookieNamesInWhiteList" => {
+                    UpdateDistributionError::TooManyCookieNamesInWhiteList(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyDistributionCNAMEs" => UpdateDistributionError::TooManyDistributionCNAMEs(
+                    String::from(parsed_error.message),
+                ),
+                "TooManyDistributionsWithLambdaAssociations" => {
+                    UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "TooManyHeadersInForwardedValues" => {
+                    UpdateDistributionError::TooManyHeadersInForwardedValues(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyLambdaFunctionAssociations" => {
+                    UpdateDistributionError::TooManyLambdaFunctionAssociations(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyOriginCustomHeaders" => {
+                    UpdateDistributionError::TooManyOriginCustomHeaders(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyOrigins" => {
+                    UpdateDistributionError::TooManyOrigins(String::from(parsed_error.message))
+                }
+                "TooManyQueryStringParameters" => {
+                    UpdateDistributionError::TooManyQueryStringParameters(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyTrustedSigners" => UpdateDistributionError::TooManyTrustedSigners(
+                    String::from(parsed_error.message),
+                ),
+                "TrustedSignerDoesNotExist" => UpdateDistributionError::TrustedSignerDoesNotExist(
+                    String::from(parsed_error.message),
+                ),
+                _ => UpdateDistributionError::Unknown(String::from(body)),
+            },
             Err(_) => UpdateDistributionError::Unknown(body.to_string()),
         }
     }
@@ -10610,7 +11224,6 @@ pub enum UpdateStreamingDistributionError {
     Unknown(String),
 }
 
-
 impl UpdateStreamingDistributionError {
     pub fn from_body(body: &str) -> UpdateStreamingDistributionError {
         let reader = EventReader::new(body.as_bytes());
@@ -10618,24 +11231,62 @@ impl UpdateStreamingDistributionError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "AccessDenied" => UpdateStreamingDistributionError::AccessDenied(String::from(parsed_error.message)),
-                    "CNAMEAlreadyExists" => UpdateStreamingDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message)),
-                    "IllegalUpdate" => UpdateStreamingDistributionError::IllegalUpdate(String::from(parsed_error.message)),
-                    "InconsistentQuantities" => UpdateStreamingDistributionError::InconsistentQuantities(String::from(parsed_error.message)),
-                    "InvalidArgument" => UpdateStreamingDistributionError::InvalidArgument(String::from(parsed_error.message)),
-                    "InvalidIfMatchVersion" => UpdateStreamingDistributionError::InvalidIfMatchVersion(String::from(parsed_error.message)),
-                    "InvalidOriginAccessIdentity" => UpdateStreamingDistributionError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),
-                    "MissingBody" => UpdateStreamingDistributionError::MissingBody(String::from(parsed_error.message)),
-                    "NoSuchStreamingDistribution" => UpdateStreamingDistributionError::NoSuchStreamingDistribution(String::from(parsed_error.message)),
-                    "PreconditionFailed" => UpdateStreamingDistributionError::PreconditionFailed(String::from(parsed_error.message)),
-                    "TooManyStreamingDistributionCNAMEs" => UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(String::from(parsed_error.message)),
-                    "TooManyTrustedSigners" => UpdateStreamingDistributionError::TooManyTrustedSigners(String::from(parsed_error.message)),
-                    "TrustedSignerDoesNotExist" => UpdateStreamingDistributionError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),
-                    _ => UpdateStreamingDistributionError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => UpdateStreamingDistributionError::AccessDenied(String::from(
+                    parsed_error.message,
+                )),
+                "CNAMEAlreadyExists" => UpdateStreamingDistributionError::CNAMEAlreadyExists(
+                    String::from(parsed_error.message),
+                ),
+                "IllegalUpdate" => UpdateStreamingDistributionError::IllegalUpdate(String::from(
+                    parsed_error.message,
+                )),
+                "InconsistentQuantities" => {
+                    UpdateStreamingDistributionError::InconsistentQuantities(String::from(
+                        parsed_error.message,
+                    ))
                 }
-            }
+                "InvalidArgument" => UpdateStreamingDistributionError::InvalidArgument(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidIfMatchVersion" => {
+                    UpdateStreamingDistributionError::InvalidIfMatchVersion(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidOriginAccessIdentity" => {
+                    UpdateStreamingDistributionError::InvalidOriginAccessIdentity(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "MissingBody" => UpdateStreamingDistributionError::MissingBody(String::from(
+                    parsed_error.message,
+                )),
+                "NoSuchStreamingDistribution" => {
+                    UpdateStreamingDistributionError::NoSuchStreamingDistribution(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "PreconditionFailed" => UpdateStreamingDistributionError::PreconditionFailed(
+                    String::from(parsed_error.message),
+                ),
+                "TooManyStreamingDistributionCNAMEs" => {
+                    UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "TooManyTrustedSigners" => {
+                    UpdateStreamingDistributionError::TooManyTrustedSigners(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TrustedSignerDoesNotExist" => {
+                    UpdateStreamingDistributionError::TrustedSignerDoesNotExist(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => UpdateStreamingDistributionError::Unknown(String::from(body)),
+            },
             Err(_) => UpdateStreamingDistributionError::Unknown(body.to_string()),
         }
     }
@@ -10697,182 +11348,169 @@ impl Error for UpdateStreamingDistributionError {
 /// Trait representing the capabilities of the CloudFront API. CloudFront clients implement this trait.
 pub trait CloudFront {
     #[doc="<p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-    fn create_cloud_front_origin_access_identity
-        (&self,
-         input: &CreateCloudFrontOriginAccessIdentityRequest)
-         -> Result<CreateCloudFrontOriginAccessIdentityResult,
-                   CreateCloudFrontOriginAccessIdentityError>;
-
+    fn create_cloud_front_origin_access_identity(
+        &self,
+        input: &CreateCloudFrontOriginAccessIdentityRequest,
+    ) -> Result<CreateCloudFrontOriginAccessIdentityResult, CreateCloudFrontOriginAccessIdentityError>;
 
     #[doc="<p>Creates a new web distribution. Send a <code>POST</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>"]
-    fn create_distribution(&self,
-                           input: &CreateDistributionRequest)
-                           -> Result<CreateDistributionResult, CreateDistributionError>;
+    fn create_distribution(
+        &self,
+        input: &CreateDistributionRequest,
+    ) -> Result<CreateDistributionResult, CreateDistributionError>;
 
+    #[doc = "<p>Create a new distribution with tags.</p>"]
+    fn create_distribution_with_tags(
+        &self,
+        input: &CreateDistributionWithTagsRequest,
+    ) -> Result<CreateDistributionWithTagsResult, CreateDistributionWithTagsError>;
 
-    #[doc="<p>Create a new distribution with tags.</p>"]
-    fn create_distribution_with_tags
-        (&self,
-         input: &CreateDistributionWithTagsRequest)
-         -> Result<CreateDistributionWithTagsResult, CreateDistributionWithTagsError>;
-
-
-    #[doc="<p>Create a new invalidation. </p>"]
-    fn create_invalidation(&self,
-                           input: &CreateInvalidationRequest)
-                           -> Result<CreateInvalidationResult, CreateInvalidationError>;
-
+    #[doc = "<p>Create a new invalidation. </p>"]
+    fn create_invalidation(
+        &self,
+        input: &CreateInvalidationRequest,
+    ) -> Result<CreateInvalidationResult, CreateInvalidationError>;
 
     #[doc="<p>Creates a new RMTP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new web distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html\">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there's a mismatch between the number of values you say you're specifying in the <code>Quantity</code> element and the number of values specified.</p> </important>"]
-    fn create_streaming_distribution
-        (&self,
-         input: &CreateStreamingDistributionRequest)
-         -> Result<CreateStreamingDistributionResult, CreateStreamingDistributionError>;
+    fn create_streaming_distribution(
+        &self,
+        input: &CreateStreamingDistributionRequest,
+    ) -> Result<CreateStreamingDistributionResult, CreateStreamingDistributionError>;
 
+    #[doc = "<p>Create a new streaming distribution with tags.</p>"]
+    fn create_streaming_distribution_with_tags(
+        &self,
+        input: &CreateStreamingDistributionWithTagsRequest,
+    ) -> Result<CreateStreamingDistributionWithTagsResult, CreateStreamingDistributionWithTagsError>;
 
-    #[doc="<p>Create a new streaming distribution with tags.</p>"]
-    fn create_streaming_distribution_with_tags
-        (&self,
-         input: &CreateStreamingDistributionWithTagsRequest)
-         -> Result<CreateStreamingDistributionWithTagsResult,
-                   CreateStreamingDistributionWithTagsError>;
+    #[doc = "<p>Delete an origin access identity. </p>"]
+    fn delete_cloud_front_origin_access_identity(
+        &self,
+        input: &DeleteCloudFrontOriginAccessIdentityRequest,
+    ) -> Result<(), DeleteCloudFrontOriginAccessIdentityError>;
 
-
-    #[doc="<p>Delete an origin access identity. </p>"]
-    fn delete_cloud_front_origin_access_identity
-        (&self,
-         input: &DeleteCloudFrontOriginAccessIdentityRequest)
-         -> Result<(), DeleteCloudFrontOriginAccessIdentityError>;
-
-
-    #[doc="<p>Delete a distribution. </p>"]
-    fn delete_distribution(&self,
-                           input: &DeleteDistributionRequest)
-                           -> Result<(), DeleteDistributionError>;
-
+    #[doc = "<p>Delete a distribution. </p>"]
+    fn delete_distribution(
+        &self,
+        input: &DeleteDistributionRequest,
+    ) -> Result<(), DeleteDistributionError>;
 
     #[doc="<p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html\">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-    fn delete_streaming_distribution(&self,
-                                     input: &DeleteStreamingDistributionRequest)
-                                     -> Result<(), DeleteStreamingDistributionError>;
+    fn delete_streaming_distribution(
+        &self,
+        input: &DeleteStreamingDistributionRequest,
+    ) -> Result<(), DeleteStreamingDistributionError>;
 
+    #[doc = "<p>Get the information about an origin access identity. </p>"]
+    fn get_cloud_front_origin_access_identity(
+        &self,
+        input: &GetCloudFrontOriginAccessIdentityRequest,
+    ) -> Result<GetCloudFrontOriginAccessIdentityResult, GetCloudFrontOriginAccessIdentityError>;
 
-    #[doc="<p>Get the information about an origin access identity. </p>"]
-    fn get_cloud_front_origin_access_identity
-        (&self,
-         input: &GetCloudFrontOriginAccessIdentityRequest)
-         -> Result<GetCloudFrontOriginAccessIdentityResult, GetCloudFrontOriginAccessIdentityError>;
+    #[doc = "<p>Get the configuration information about an origin access identity. </p>"]
+    fn get_cloud_front_origin_access_identity_config(
+        &self,
+        input: &GetCloudFrontOriginAccessIdentityConfigRequest,
+    ) -> Result<
+        GetCloudFrontOriginAccessIdentityConfigResult,
+        GetCloudFrontOriginAccessIdentityConfigError,
+    >;
 
+    #[doc = "<p>Get the information about a distribution. </p>"]
+    fn get_distribution(
+        &self,
+        input: &GetDistributionRequest,
+    ) -> Result<GetDistributionResult, GetDistributionError>;
 
-    #[doc="<p>Get the configuration information about an origin access identity. </p>"]
-    fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOriginAccessIdentityConfigRequest) -> Result<GetCloudFrontOriginAccessIdentityConfigResult, GetCloudFrontOriginAccessIdentityConfigError>;
+    #[doc = "<p>Get the configuration information about a distribution. </p>"]
+    fn get_distribution_config(
+        &self,
+        input: &GetDistributionConfigRequest,
+    ) -> Result<GetDistributionConfigResult, GetDistributionConfigError>;
 
-
-    #[doc="<p>Get the information about a distribution. </p>"]
-    fn get_distribution(&self,
-                        input: &GetDistributionRequest)
-                        -> Result<GetDistributionResult, GetDistributionError>;
-
-
-    #[doc="<p>Get the configuration information about a distribution. </p>"]
-    fn get_distribution_config
-        (&self,
-         input: &GetDistributionConfigRequest)
-         -> Result<GetDistributionConfigResult, GetDistributionConfigError>;
-
-
-    #[doc="<p>Get the information about an invalidation. </p>"]
-    fn get_invalidation(&self,
-                        input: &GetInvalidationRequest)
-                        -> Result<GetInvalidationResult, GetInvalidationError>;
-
+    #[doc = "<p>Get the information about an invalidation. </p>"]
+    fn get_invalidation(
+        &self,
+        input: &GetInvalidationRequest,
+    ) -> Result<GetInvalidationResult, GetInvalidationError>;
 
     #[doc="<p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>"]
-    fn get_streaming_distribution
-        (&self,
-         input: &GetStreamingDistributionRequest)
-         -> Result<GetStreamingDistributionResult, GetStreamingDistributionError>;
+    fn get_streaming_distribution(
+        &self,
+        input: &GetStreamingDistributionRequest,
+    ) -> Result<GetStreamingDistributionResult, GetStreamingDistributionError>;
 
+    #[doc = "<p>Get the configuration information about a streaming distribution. </p>"]
+    fn get_streaming_distribution_config(
+        &self,
+        input: &GetStreamingDistributionConfigRequest,
+    ) -> Result<GetStreamingDistributionConfigResult, GetStreamingDistributionConfigError>;
 
-    #[doc="<p>Get the configuration information about a streaming distribution. </p>"]
-    fn get_streaming_distribution_config
-        (&self,
-         input: &GetStreamingDistributionConfigRequest)
-         -> Result<GetStreamingDistributionConfigResult, GetStreamingDistributionConfigError>;
+    #[doc = "<p>Lists origin access identities.</p>"]
+    fn list_cloud_front_origin_access_identities(
+        &self,
+        input: &ListCloudFrontOriginAccessIdentitiesRequest,
+    ) -> Result<ListCloudFrontOriginAccessIdentitiesResult, ListCloudFrontOriginAccessIdentitiesError>;
 
+    #[doc = "<p>List distributions. </p>"]
+    fn list_distributions(
+        &self,
+        input: &ListDistributionsRequest,
+    ) -> Result<ListDistributionsResult, ListDistributionsError>;
 
-    #[doc="<p>Lists origin access identities.</p>"]
-    fn list_cloud_front_origin_access_identities
-        (&self,
-         input: &ListCloudFrontOriginAccessIdentitiesRequest)
-         -> Result<ListCloudFrontOriginAccessIdentitiesResult,
-                   ListCloudFrontOriginAccessIdentitiesError>;
+    #[doc = "<p>List the distributions that are associated with a specified AWS WAF web ACL. </p>"]
+    fn list_distributions_by_web_acl_id(
+        &self,
+        input: &ListDistributionsByWebACLIdRequest,
+    ) -> Result<ListDistributionsByWebACLIdResult, ListDistributionsByWebACLIdError>;
 
+    #[doc = "<p>Lists invalidation batches. </p>"]
+    fn list_invalidations(
+        &self,
+        input: &ListInvalidationsRequest,
+    ) -> Result<ListInvalidationsResult, ListInvalidationsError>;
 
-    #[doc="<p>List distributions. </p>"]
-    fn list_distributions(&self,
-                          input: &ListDistributionsRequest)
-                          -> Result<ListDistributionsResult, ListDistributionsError>;
+    #[doc = "<p>List streaming distributions. </p>"]
+    fn list_streaming_distributions(
+        &self,
+        input: &ListStreamingDistributionsRequest,
+    ) -> Result<ListStreamingDistributionsResult, ListStreamingDistributionsError>;
 
+    #[doc = "<p>List tags for a CloudFront resource.</p>"]
+    fn list_tags_for_resource(
+        &self,
+        input: &ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResult, ListTagsForResourceError>;
 
-    #[doc="<p>List the distributions that are associated with a specified AWS WAF web ACL. </p>"]
-    fn list_distributions_by_web_acl_id
-        (&self,
-         input: &ListDistributionsByWebACLIdRequest)
-         -> Result<ListDistributionsByWebACLIdResult, ListDistributionsByWebACLIdError>;
-
-
-    #[doc="<p>Lists invalidation batches. </p>"]
-    fn list_invalidations(&self,
-                          input: &ListInvalidationsRequest)
-                          -> Result<ListInvalidationsResult, ListInvalidationsError>;
-
-
-    #[doc="<p>List streaming distributions. </p>"]
-    fn list_streaming_distributions
-        (&self,
-         input: &ListStreamingDistributionsRequest)
-         -> Result<ListStreamingDistributionsResult, ListStreamingDistributionsError>;
-
-
-    #[doc="<p>List tags for a CloudFront resource.</p>"]
-    fn list_tags_for_resource(&self,
-                              input: &ListTagsForResourceRequest)
-                              -> Result<ListTagsForResourceResult, ListTagsForResourceError>;
-
-
-    #[doc="<p>Add tags to a CloudFront resource.</p>"]
+    #[doc = "<p>Add tags to a CloudFront resource.</p>"]
     fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError>;
 
-
-    #[doc="<p>Remove tags from a CloudFront resource.</p>"]
+    #[doc = "<p>Remove tags from a CloudFront resource.</p>"]
     fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError>;
 
-
-    #[doc="<p>Update an origin access identity. </p>"]
-    fn update_cloud_front_origin_access_identity
-        (&self,
-         input: &UpdateCloudFrontOriginAccessIdentityRequest)
-         -> Result<UpdateCloudFrontOriginAccessIdentityResult,
-                   UpdateCloudFrontOriginAccessIdentityError>;
-
+    #[doc = "<p>Update an origin access identity. </p>"]
+    fn update_cloud_front_origin_access_identity(
+        &self,
+        input: &UpdateCloudFrontOriginAccessIdentityRequest,
+    ) -> Result<UpdateCloudFrontOriginAccessIdentityResult, UpdateCloudFrontOriginAccessIdentityError>;
 
     #[doc="<p>Updates the configuration for a web distribution. Perform the following steps.</p> <p>For information about updating a distribution using the CloudFront console, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html\">Creating or Updating a Web Distribution Using the CloudFront Console </a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p> <b>To update a web distribution using the CloudFront API</b> </p> <ol> <li> <p>Submit a <a>GetDistributionConfig</a> request to get the current configuration and an <code>Etag</code> header for the distribution.</p> <note> <p>If you update the distribution again, you need to get a new <code>Etag</code> header.</p> </note> </li> <li> <p>Update the XML document that was returned in the response to your <code>GetDistributionConfig</code> request to include the desired changes. You can't change the value of <code>CallerReference</code>. If you try to change this value, CloudFront returns an <code>IllegalUpdate</code> error.</p> <important> <p>The new configuration replaces the existing configuration; the values that you specify in an <code>UpdateDistribution</code> request are not merged into the existing configuration. When you add, delete, or replace values in an element that allows multiple values (for example, <code>CNAME</code>), you must specify all of the values that you want to appear in the updated distribution. In addition, you must update the corresponding <code>Quantity</code> element.</p> </important> </li> <li> <p>Submit an <code>UpdateDistribution</code> request to update the configuration for your distribution:</p> <ul> <li> <p>In the request body, include the XML document that you updated in Step 2. The request body must include an XML document with a <code>DistributionConfig</code> element.</p> </li> <li> <p>Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GetDistributionConfig</code> request in Step 1.</p> </li> </ul> </li> <li> <p>Review the response to the <code>UpdateDistribution</code> request to confirm that the configuration was successfully updated.</p> </li> <li> <p>Optional: Submit a <a>GetDistribution</a> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a distribution. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there's a mismatch between the number of values you say you're specifying in the <code>Quantity</code> element and the number of values you're actually specifying.</p> </important> </li> </ol>"]
-    fn update_distribution(&self,
-                           input: &UpdateDistributionRequest)
-                           -> Result<UpdateDistributionResult, UpdateDistributionError>;
+    fn update_distribution(
+        &self,
+        input: &UpdateDistributionRequest,
+    ) -> Result<UpdateDistributionResult, UpdateDistributionError>;
 
-
-    #[doc="<p>Update a streaming distribution. </p>"]
-    fn update_streaming_distribution
-        (&self,
-         input: &UpdateStreamingDistributionRequest)
-         -> Result<UpdateStreamingDistributionResult, UpdateStreamingDistributionError>;
+    #[doc = "<p>Update a streaming distribution. </p>"]
+    fn update_streaming_distribution(
+        &self,
+        input: &UpdateStreamingDistributionRequest,
+    ) -> Result<UpdateStreamingDistributionResult, UpdateStreamingDistributionError>;
 }
 /// A client for the CloudFront API.
 pub struct CloudFrontClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -10880,8 +11518,9 @@ pub struct CloudFrontClient<P, D>
 }
 
 impl<P, D> CloudFrontClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         CloudFrontClient {
@@ -10893,25 +11532,28 @@ impl<P, D> CloudFrontClient<P, D>
 }
 
 impl<P, D> CloudFront for CloudFrontClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-    #[allow(unused_variables, warnings)]
-    fn create_cloud_front_origin_access_identity
-        (&self,
-         input: &CreateCloudFrontOriginAccessIdentityRequest)
-         -> Result<CreateCloudFrontOriginAccessIdentityResult,
-                   CreateCloudFrontOriginAccessIdentityError> {
+                    #[allow(unused_variables, warnings)]
+    fn create_cloud_front_origin_access_identity(
+        &self,
+        input: &CreateCloudFrontOriginAccessIdentityRequest,
+    ) -> Result<CreateCloudFrontOriginAccessIdentityResult, CreateCloudFrontOriginAccessIdentityError>
+    {
         let request_uri = "/2017-03-25/origin-access-identity/cloudfront";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
-
-
         let mut payload: Vec<u8>;
         let mut writer = EventWriter::new(Vec::new());
-        CloudFrontOriginAccessIdentityConfigSerializer::serialize(&mut writer, "CloudFrontOriginAccessIdentityConfig", &input.cloud_front_origin_access_identity_config);
+        CloudFrontOriginAccessIdentityConfigSerializer::serialize(
+            &mut writer,
+            "CloudFrontOriginAccessIdentityConfig",
+            &input.cloud_front_origin_access_identity_config,
+        );
         payload = writer.into_inner();
 
         request.set_payload(Some(payload));
@@ -10921,10 +11563,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10932,13 +11571,19 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 if body.is_empty() {
                     result = CreateCloudFrontOriginAccessIdentityResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                    result = try!(
+                        CreateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -10953,27 +11598,30 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateCloudFrontOriginAccessIdentityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
     #[doc="<p>Creates a new web distribution. Send a <code>POST</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>"]
-    #[allow(unused_variables, warnings)]
-    fn create_distribution(&self,
-                           input: &CreateDistributionRequest)
-                           -> Result<CreateDistributionResult, CreateDistributionError> {
+                    #[allow(unused_variables, warnings)]
+    fn create_distribution(
+        &self,
+        input: &CreateDistributionRequest,
+    ) -> Result<CreateDistributionResult, CreateDistributionError> {
         let request_uri = "/2017-03-25/distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
-
-
         let mut payload: Vec<u8>;
         let mut writer = EventWriter::new(Vec::new());
-        DistributionConfigSerializer::serialize(&mut writer,
-                                                "DistributionConfig",
-                                                &input.distribution_config);
+        DistributionConfigSerializer::serialize(
+            &mut writer,
+            "DistributionConfig",
+            &input.distribution_config,
+        );
         payload = writer.into_inner();
 
         request.set_payload(Some(payload));
@@ -10983,10 +11631,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -10994,15 +11639,17 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 if body.is_empty() {
                     result = CreateDistributionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(CreateDistributionResultDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
+                    result = try!(CreateDistributionResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -11017,30 +11664,33 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateDistributionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateDistributionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Create a new distribution with tags.</p>"]
+    #[doc = "<p>Create a new distribution with tags.</p>"]
     #[allow(unused_variables, warnings)]
-    fn create_distribution_with_tags
-        (&self,
-         input: &CreateDistributionWithTagsRequest)
-         -> Result<CreateDistributionWithTagsResult, CreateDistributionWithTagsError> {
+    fn create_distribution_with_tags(
+        &self,
+        input: &CreateDistributionWithTagsRequest,
+    ) -> Result<CreateDistributionWithTagsResult, CreateDistributionWithTagsError> {
         let request_uri = "/2017-03-25/distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
-
 
         let mut params = Params::new();
         params.put_key("WithTags");
         request.set_params(params);
         let mut payload: Vec<u8>;
         let mut writer = EventWriter::new(Vec::new());
-        DistributionConfigWithTagsSerializer::serialize(&mut writer,
-                                                        "DistributionConfigWithTags",
-                                                        &input.distribution_config_with_tags);
+        DistributionConfigWithTagsSerializer::serialize(
+            &mut writer,
+            "DistributionConfigWithTags",
+            &input.distribution_config_with_tags,
+        );
         payload = writer.into_inner();
 
         request.set_payload(Some(payload));
@@ -11050,10 +11700,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11061,13 +11708,17 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 if body.is_empty() {
                     result = CreateDistributionWithTagsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateDistributionWithTagsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                    result = try!(CreateDistributionWithTagsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -11082,29 +11733,33 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateDistributionWithTagsError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(CreateDistributionWithTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Create a new invalidation. </p>"]
+    #[doc = "<p>Create a new invalidation. </p>"]
     #[allow(unused_variables, warnings)]
-    fn create_invalidation(&self,
-                           input: &CreateInvalidationRequest)
-                           -> Result<CreateInvalidationResult, CreateInvalidationError> {
-        let request_uri = format!("/2017-03-25/distribution/{distribution_id}/invalidation",
-                                  distribution_id = input.distribution_id);
+    fn create_invalidation(
+        &self,
+        input: &CreateInvalidationRequest,
+    ) -> Result<CreateInvalidationResult, CreateInvalidationError> {
+        let request_uri = format!(
+            "/2017-03-25/distribution/{distribution_id}/invalidation",
+            distribution_id = input.distribution_id
+        );
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
-
-
         let mut payload: Vec<u8>;
         let mut writer = EventWriter::new(Vec::new());
-        InvalidationBatchSerializer::serialize(&mut writer,
-                                               "InvalidationBatch",
-                                               &input.invalidation_batch);
+        InvalidationBatchSerializer::serialize(
+            &mut writer,
+            "InvalidationBatch",
+            &input.invalidation_batch,
+        );
         payload = writer.into_inner();
 
         request.set_payload(Some(payload));
@@ -11114,10 +11769,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11125,15 +11777,17 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 if body.is_empty() {
                     result = CreateInvalidationResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(CreateInvalidationResultDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
+                    result = try!(CreateInvalidationResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
                 if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
@@ -11144,28 +11798,30 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateInvalidationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateInvalidationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
     #[doc="<p>Creates a new RMTP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new web distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html\">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there's a mismatch between the number of values you say you're specifying in the <code>Quantity</code> element and the number of values specified.</p> </important>"]
-    #[allow(unused_variables, warnings)]
-    fn create_streaming_distribution
-        (&self,
-         input: &CreateStreamingDistributionRequest)
-         -> Result<CreateStreamingDistributionResult, CreateStreamingDistributionError> {
+                    #[allow(unused_variables, warnings)]
+    fn create_streaming_distribution(
+        &self,
+        input: &CreateStreamingDistributionRequest,
+    ) -> Result<CreateStreamingDistributionResult, CreateStreamingDistributionError> {
         let request_uri = "/2017-03-25/streaming-distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
-
-
         let mut payload: Vec<u8>;
         let mut writer = EventWriter::new(Vec::new());
-        StreamingDistributionConfigSerializer::serialize(&mut writer,
-                                                         "StreamingDistributionConfig",
-                                                         &input.streaming_distribution_config);
+        StreamingDistributionConfigSerializer::serialize(
+            &mut writer,
+            "StreamingDistributionConfig",
+            &input.streaming_distribution_config,
+        );
         payload = writer.into_inner();
 
         request.set_payload(Some(payload));
@@ -11175,10 +11831,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11186,13 +11839,17 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 if body.is_empty() {
                     result = CreateStreamingDistributionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateStreamingDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                    result = try!(CreateStreamingDistributionResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -11207,30 +11864,34 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateStreamingDistributionError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(CreateStreamingDistributionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Create a new streaming distribution with tags.</p>"]
+    #[doc = "<p>Create a new streaming distribution with tags.</p>"]
     #[allow(unused_variables, warnings)]
-    fn create_streaming_distribution_with_tags
-        (&self,
-         input: &CreateStreamingDistributionWithTagsRequest)
-         -> Result<CreateStreamingDistributionWithTagsResult,
-                   CreateStreamingDistributionWithTagsError> {
+    fn create_streaming_distribution_with_tags(
+        &self,
+        input: &CreateStreamingDistributionWithTagsRequest,
+    ) -> Result<CreateStreamingDistributionWithTagsResult, CreateStreamingDistributionWithTagsError>
+    {
         let request_uri = "/2017-03-25/streaming-distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
-
 
         let mut params = Params::new();
         params.put_key("WithTags");
         request.set_params(params);
         let mut payload: Vec<u8>;
         let mut writer = EventWriter::new(Vec::new());
-        StreamingDistributionConfigWithTagsSerializer::serialize(&mut writer, "StreamingDistributionConfigWithTags", &input.streaming_distribution_config_with_tags);
+        StreamingDistributionConfigWithTagsSerializer::serialize(
+            &mut writer,
+            "StreamingDistributionConfigWithTags",
+            &input.streaming_distribution_config_with_tags,
+        );
         payload = writer.into_inner();
 
         request.set_payload(Some(payload));
@@ -11240,10 +11901,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11251,13 +11909,19 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 if body.is_empty() {
                     result = CreateStreamingDistributionWithTagsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateStreamingDistributionWithTagsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                    result = try!(
+                        CreateStreamingDistributionWithTagsResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -11272,37 +11936,36 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateStreamingDistributionWithTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateStreamingDistributionWithTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Delete an origin access identity. </p>"]
+    #[doc = "<p>Delete an origin access identity. </p>"]
     #[allow(unused_variables, warnings)]
-    fn delete_cloud_front_origin_access_identity
-        (&self,
-         input: &DeleteCloudFrontOriginAccessIdentityRequest)
-         -> Result<(), DeleteCloudFrontOriginAccessIdentityError> {
-        let request_uri = format!("/2017-03-25/origin-access-identity/cloudfront/{id}",
-                                  id = input.id);
+    fn delete_cloud_front_origin_access_identity(
+        &self,
+        input: &DeleteCloudFrontOriginAccessIdentityRequest,
+    ) -> Result<(), DeleteCloudFrontOriginAccessIdentityError> {
+        let request_uri = format!(
+            "/2017-03-25/origin-access-identity/cloudfront/{id}",
+            id = input.id
+        );
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
-
 
         if let Some(ref if_match) = input.if_match {
             request.add_header("If-Match", &if_match.to_string());
         }
-
-
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -11310,35 +11973,33 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteCloudFrontOriginAccessIdentityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Delete a distribution. </p>"]
+    #[doc = "<p>Delete a distribution. </p>"]
     #[allow(unused_variables, warnings)]
-    fn delete_distribution(&self,
-                           input: &DeleteDistributionRequest)
-                           -> Result<(), DeleteDistributionError> {
+    fn delete_distribution(
+        &self,
+        input: &DeleteDistributionRequest,
+    ) -> Result<(), DeleteDistributionError> {
         let request_uri = format!("/2017-03-25/distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-
         if let Some(ref if_match) = input.if_match {
             request.add_header("If-Match", &if_match.to_string());
         }
-
-
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -11346,35 +12007,33 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteDistributionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteDistributionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
     #[doc="<p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html\">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-    #[allow(unused_variables, warnings)]
-    fn delete_streaming_distribution(&self,
-                                     input: &DeleteStreamingDistributionRequest)
-                                     -> Result<(), DeleteStreamingDistributionError> {
+                    #[allow(unused_variables, warnings)]
+    fn delete_streaming_distribution(
+        &self,
+        input: &DeleteStreamingDistributionRequest,
+    ) -> Result<(), DeleteStreamingDistributionError> {
         let request_uri = format!("/2017-03-25/streaming-distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-
         if let Some(ref if_match) = input.if_match {
             request.add_header("If-Match", &if_match.to_string());
         }
-
-
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -11382,36 +12041,33 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteStreamingDistributionError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(DeleteStreamingDistributionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Get the information about an origin access identity. </p>"]
+    #[doc = "<p>Get the information about an origin access identity. </p>"]
     #[allow(unused_variables, warnings)]
-    fn get_cloud_front_origin_access_identity
-        (&self,
-         input: &GetCloudFrontOriginAccessIdentityRequest)
-         -> Result<GetCloudFrontOriginAccessIdentityResult, GetCloudFrontOriginAccessIdentityError> {
-        let request_uri = format!("/2017-03-25/origin-access-identity/cloudfront/{id}",
-                                  id = input.id);
+    fn get_cloud_front_origin_access_identity(
+        &self,
+        input: &GetCloudFrontOriginAccessIdentityRequest,
+    ) -> Result<GetCloudFrontOriginAccessIdentityResult, GetCloudFrontOriginAccessIdentityError>
+    {
+        let request_uri = format!(
+            "/2017-03-25/origin-access-identity/cloudfront/{id}",
+            id = input.id
+        );
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
-
-
-
-
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11419,13 +12075,19 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                 if body.is_empty() {
                     result = GetCloudFrontOriginAccessIdentityResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                    result = try!(
+                        GetCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -11436,32 +12098,35 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetCloudFrontOriginAccessIdentityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Get the configuration information about an origin access identity. </p>"]
+    #[doc = "<p>Get the configuration information about an origin access identity. </p>"]
     #[allow(unused_variables, warnings)]
-fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOriginAccessIdentityConfigRequest) -> Result<GetCloudFrontOriginAccessIdentityConfigResult, GetCloudFrontOriginAccessIdentityConfigError>{
-        let request_uri = format!("/2017-03-25/origin-access-identity/cloudfront/{id}/config",
-                                  id = input.id);
+    fn get_cloud_front_origin_access_identity_config(
+        &self,
+        input: &GetCloudFrontOriginAccessIdentityConfigRequest,
+    ) -> Result<
+        GetCloudFrontOriginAccessIdentityConfigResult,
+        GetCloudFrontOriginAccessIdentityConfigError,
+    > {
+        let request_uri = format!(
+            "/2017-03-25/origin-access-identity/cloudfront/{id}/config",
+            id = input.id
+        );
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
-
-
-
-
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11469,13 +12134,19 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = GetCloudFrontOriginAccessIdentityConfigResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetCloudFrontOriginAccessIdentityConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                    result = try!(
+                        GetCloudFrontOriginAccessIdentityConfigResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -11486,33 +12157,29 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetCloudFrontOriginAccessIdentityConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetCloudFrontOriginAccessIdentityConfigError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Get the information about a distribution. </p>"]
+    #[doc = "<p>Get the information about a distribution. </p>"]
     #[allow(unused_variables, warnings)]
-    fn get_distribution(&self,
-                        input: &GetDistributionRequest)
-                        -> Result<GetDistributionResult, GetDistributionError> {
+    fn get_distribution(
+        &self,
+        input: &GetDistributionRequest,
+    ) -> Result<GetDistributionResult, GetDistributionError> {
         let request_uri = format!("/2017-03-25/distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
-
-
-
-
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11520,14 +12187,17 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = GetDistributionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetDistributionResultDeserializer::deserialize(&actual_tag_name,
-                                                                                 &mut stack));
+                    result = try!(GetDistributionResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -11538,34 +12208,29 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDistributionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDistributionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Get the configuration information about a distribution. </p>"]
+    #[doc = "<p>Get the configuration information about a distribution. </p>"]
     #[allow(unused_variables, warnings)]
-    fn get_distribution_config
-        (&self,
-         input: &GetDistributionConfigRequest)
-         -> Result<GetDistributionConfigResult, GetDistributionConfigError> {
+    fn get_distribution_config(
+        &self,
+        input: &GetDistributionConfigRequest,
+    ) -> Result<GetDistributionConfigResult, GetDistributionConfigError> {
         let request_uri = format!("/2017-03-25/distribution/{id}/config", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
-
-
-
-
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11573,13 +12238,17 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = GetDistributionConfigResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetDistributionConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                    result = try!(GetDistributionConfigResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -11590,35 +12259,33 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDistributionConfigError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDistributionConfigError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Get the information about an invalidation. </p>"]
+    #[doc = "<p>Get the information about an invalidation. </p>"]
     #[allow(unused_variables, warnings)]
-    fn get_invalidation(&self,
-                        input: &GetInvalidationRequest)
-                        -> Result<GetInvalidationResult, GetInvalidationError> {
-        let request_uri = format!("/2017-03-25/distribution/{distribution_id}/invalidation/{id}",
-                                  distribution_id = input.distribution_id,
-                                  id = input.id);
+    fn get_invalidation(
+        &self,
+        input: &GetInvalidationRequest,
+    ) -> Result<GetInvalidationResult, GetInvalidationError> {
+        let request_uri = format!(
+            "/2017-03-25/distribution/{distribution_id}/invalidation/{id}",
+            distribution_id = input.distribution_id,
+            id = input.id
+        );
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
-
-
-
-
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11626,14 +12293,17 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = GetInvalidationResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetInvalidationResultDeserializer::deserialize(&actual_tag_name,
-                                                                                 &mut stack));
+                    result = try!(GetInvalidationResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -11641,34 +12311,29 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetInvalidationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetInvalidationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
     #[doc="<p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>"]
-    #[allow(unused_variables, warnings)]
-    fn get_streaming_distribution
-        (&self,
-         input: &GetStreamingDistributionRequest)
-         -> Result<GetStreamingDistributionResult, GetStreamingDistributionError> {
+                    #[allow(unused_variables, warnings)]
+    fn get_streaming_distribution(
+        &self,
+        input: &GetStreamingDistributionRequest,
+    ) -> Result<GetStreamingDistributionResult, GetStreamingDistributionError> {
         let request_uri = format!("/2017-03-25/streaming-distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
-
-
-
-
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11676,13 +12341,17 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = GetStreamingDistributionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetStreamingDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                    result = try!(GetStreamingDistributionResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -11693,36 +12362,32 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetStreamingDistributionError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(GetStreamingDistributionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Get the configuration information about a streaming distribution. </p>"]
+    #[doc = "<p>Get the configuration information about a streaming distribution. </p>"]
     #[allow(unused_variables, warnings)]
-    fn get_streaming_distribution_config
-        (&self,
-         input: &GetStreamingDistributionConfigRequest)
-         -> Result<GetStreamingDistributionConfigResult, GetStreamingDistributionConfigError> {
-        let request_uri = format!("/2017-03-25/streaming-distribution/{id}/config",
-                                  id = input.id);
+    fn get_streaming_distribution_config(
+        &self,
+        input: &GetStreamingDistributionConfigRequest,
+    ) -> Result<GetStreamingDistributionConfigResult, GetStreamingDistributionConfigError> {
+        let request_uri = format!(
+            "/2017-03-25/streaming-distribution/{id}/config",
+            id = input.id
+        );
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
-
-
-
-
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11730,13 +12395,19 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = GetStreamingDistributionConfigResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetStreamingDistributionConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                    result = try!(
+                        GetStreamingDistributionConfigResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -11747,23 +12418,23 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetStreamingDistributionConfigError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(GetStreamingDistributionConfigError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Lists origin access identities.</p>"]
+    #[doc = "<p>Lists origin access identities.</p>"]
     #[allow(unused_variables, warnings)]
-    fn list_cloud_front_origin_access_identities
-        (&self,
-         input: &ListCloudFrontOriginAccessIdentitiesRequest)
-         -> Result<ListCloudFrontOriginAccessIdentitiesResult,
-                   ListCloudFrontOriginAccessIdentitiesError> {
+    fn list_cloud_front_origin_access_identities(
+        &self,
+        input: &ListCloudFrontOriginAccessIdentitiesRequest,
+    ) -> Result<ListCloudFrontOriginAccessIdentitiesResult, ListCloudFrontOriginAccessIdentitiesError>
+    {
         let request_uri = "/2017-03-25/origin-access-identity/cloudfront";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.marker {
@@ -11774,16 +12445,12 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         }
         request.set_params(params);
 
-
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11791,13 +12458,19 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = ListCloudFrontOriginAccessIdentitiesResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListCloudFrontOriginAccessIdentitiesResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                    result = try!(
+                        ListCloudFrontOriginAccessIdentitiesResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
                 }
 
                 Ok(result)
@@ -11805,20 +12478,22 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListCloudFrontOriginAccessIdentitiesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListCloudFrontOriginAccessIdentitiesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>List distributions. </p>"]
+    #[doc = "<p>List distributions. </p>"]
     #[allow(unused_variables, warnings)]
-    fn list_distributions(&self,
-                          input: &ListDistributionsRequest)
-                          -> Result<ListDistributionsResult, ListDistributionsError> {
+    fn list_distributions(
+        &self,
+        input: &ListDistributionsRequest,
+    ) -> Result<ListDistributionsResult, ListDistributionsError> {
         let request_uri = "/2017-03-25/distribution";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.marker {
@@ -11829,16 +12504,12 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         }
         request.set_params(params);
 
-
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11846,15 +12517,17 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = ListDistributionsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(ListDistributionsResultDeserializer::deserialize(&actual_tag_name,
-                                                                              &mut stack));
+                    result = try!(ListDistributionsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -11862,22 +12535,25 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDistributionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListDistributionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>List the distributions that are associated with a specified AWS WAF web ACL. </p>"]
+    #[doc = "<p>List the distributions that are associated with a specified AWS WAF web ACL. </p>"]
     #[allow(unused_variables, warnings)]
-    fn list_distributions_by_web_acl_id
-        (&self,
-         input: &ListDistributionsByWebACLIdRequest)
-         -> Result<ListDistributionsByWebACLIdResult, ListDistributionsByWebACLIdError> {
-        let request_uri = format!("/2017-03-25/distributionsByWebACLId/{web_acl_id}",
-                                  web_acl_id = input.web_acl_id);
+    fn list_distributions_by_web_acl_id(
+        &self,
+        input: &ListDistributionsByWebACLIdRequest,
+    ) -> Result<ListDistributionsByWebACLIdResult, ListDistributionsByWebACLIdError> {
+        let request_uri = format!(
+            "/2017-03-25/distributionsByWebACLId/{web_acl_id}",
+            web_acl_id = input.web_acl_id
+        );
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.marker {
@@ -11888,16 +12564,12 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         }
         request.set_params(params);
 
-
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11905,13 +12577,17 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = ListDistributionsByWebACLIdResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListDistributionsByWebACLIdResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                    result = try!(ListDistributionsByWebACLIdResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -11919,22 +12595,25 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDistributionsByWebACLIdError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(ListDistributionsByWebACLIdError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Lists invalidation batches. </p>"]
+    #[doc = "<p>Lists invalidation batches. </p>"]
     #[allow(unused_variables, warnings)]
-    fn list_invalidations(&self,
-                          input: &ListInvalidationsRequest)
-                          -> Result<ListInvalidationsResult, ListInvalidationsError> {
-        let request_uri = format!("/2017-03-25/distribution/{distribution_id}/invalidation",
-                                  distribution_id = input.distribution_id);
+    fn list_invalidations(
+        &self,
+        input: &ListInvalidationsRequest,
+    ) -> Result<ListInvalidationsResult, ListInvalidationsError> {
+        let request_uri = format!(
+            "/2017-03-25/distribution/{distribution_id}/invalidation",
+            distribution_id = input.distribution_id
+        );
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.marker {
@@ -11945,16 +12624,12 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         }
         request.set_params(params);
 
-
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -11962,15 +12637,17 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = ListInvalidationsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(ListInvalidationsResultDeserializer::deserialize(&actual_tag_name,
-                                                                              &mut stack));
+                    result = try!(ListInvalidationsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -11978,21 +12655,22 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListInvalidationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListInvalidationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>List streaming distributions. </p>"]
+    #[doc = "<p>List streaming distributions. </p>"]
     #[allow(unused_variables, warnings)]
-    fn list_streaming_distributions
-        (&self,
-         input: &ListStreamingDistributionsRequest)
-         -> Result<ListStreamingDistributionsResult, ListStreamingDistributionsError> {
+    fn list_streaming_distributions(
+        &self,
+        input: &ListStreamingDistributionsRequest,
+    ) -> Result<ListStreamingDistributionsResult, ListStreamingDistributionsError> {
         let request_uri = "/2017-03-25/streaming-distribution";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.marker {
@@ -12003,16 +12681,12 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         }
         request.set_params(params);
 
-
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12020,13 +12694,17 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = ListStreamingDistributionsResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListStreamingDistributionsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                    result = try!(ListStreamingDistributionsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -12034,36 +12712,33 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListStreamingDistributionsError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(ListStreamingDistributionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>List tags for a CloudFront resource.</p>"]
+    #[doc = "<p>List tags for a CloudFront resource.</p>"]
     #[allow(unused_variables, warnings)]
-    fn list_tags_for_resource(&self,
-                              input: &ListTagsForResourceRequest)
-                              -> Result<ListTagsForResourceResult, ListTagsForResourceError> {
+    fn list_tags_for_resource(
+        &self,
+        input: &ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResult, ListTagsForResourceError> {
         let request_uri = "/2017-03-25/tagging";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-
         let mut params = Params::new();
         params.put("Resource", &input.resource);
         request.set_params(params);
-
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
 
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12071,15 +12746,17 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = ListTagsForResourceResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(ListTagsForResourceResultDeserializer::deserialize(&actual_tag_name,
-                                                                                &mut stack));
+                    result = try!(ListTagsForResourceResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -12087,18 +12764,19 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTagsForResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Add tags to a CloudFront resource.</p>"]
+    #[doc = "<p>Add tags to a CloudFront resource.</p>"]
     #[allow(unused_variables, warnings)]
     fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
         let request_uri = "/2017-03-25/tagging";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
-
 
         let mut params = Params::new();
         params.put("Resource", &input.resource);
@@ -12116,9 +12794,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -12126,18 +12802,19 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(TagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(TagResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Remove tags from a CloudFront resource.</p>"]
+    #[doc = "<p>Remove tags from a CloudFront resource.</p>"]
     #[allow(unused_variables, warnings)]
     fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
         let request_uri = "/2017-03-25/tagging";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
-
 
         let mut params = Params::new();
         params.put("Resource", &input.resource);
@@ -12155,9 +12832,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -12165,23 +12840,26 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UntagResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UntagResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Update an origin access identity. </p>"]
+    #[doc = "<p>Update an origin access identity. </p>"]
     #[allow(unused_variables, warnings)]
-    fn update_cloud_front_origin_access_identity
-        (&self,
-         input: &UpdateCloudFrontOriginAccessIdentityRequest)
-         -> Result<UpdateCloudFrontOriginAccessIdentityResult,
-                   UpdateCloudFrontOriginAccessIdentityError> {
-        let request_uri = format!("/2017-03-25/origin-access-identity/cloudfront/{id}/config",
-                                  id = input.id);
+    fn update_cloud_front_origin_access_identity(
+        &self,
+        input: &UpdateCloudFrontOriginAccessIdentityRequest,
+    ) -> Result<UpdateCloudFrontOriginAccessIdentityResult, UpdateCloudFrontOriginAccessIdentityError>
+    {
+        let request_uri = format!(
+            "/2017-03-25/origin-access-identity/cloudfront/{id}/config",
+            id = input.id
+        );
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
-
 
         if let Some(ref if_match) = input.if_match {
             request.add_header("If-Match", &if_match.to_string());
@@ -12189,7 +12867,11 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let mut payload: Vec<u8>;
         let mut writer = EventWriter::new(Vec::new());
-        CloudFrontOriginAccessIdentityConfigSerializer::serialize(&mut writer, "CloudFrontOriginAccessIdentityConfig", &input.cloud_front_origin_access_identity_config);
+        CloudFrontOriginAccessIdentityConfigSerializer::serialize(
+            &mut writer,
+            "CloudFrontOriginAccessIdentityConfig",
+            &input.cloud_front_origin_access_identity_config,
+        );
         payload = writer.into_inner();
 
         request.set_payload(Some(payload));
@@ -12199,10 +12881,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12210,13 +12889,19 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = UpdateCloudFrontOriginAccessIdentityResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(UpdateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                    result = try!(
+                        UpdateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -12227,20 +12912,22 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateCloudFrontOriginAccessIdentityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateCloudFrontOriginAccessIdentityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
     #[doc="<p>Updates the configuration for a web distribution. Perform the following steps.</p> <p>For information about updating a distribution using the CloudFront console, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html\">Creating or Updating a Web Distribution Using the CloudFront Console </a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p> <b>To update a web distribution using the CloudFront API</b> </p> <ol> <li> <p>Submit a <a>GetDistributionConfig</a> request to get the current configuration and an <code>Etag</code> header for the distribution.</p> <note> <p>If you update the distribution again, you need to get a new <code>Etag</code> header.</p> </note> </li> <li> <p>Update the XML document that was returned in the response to your <code>GetDistributionConfig</code> request to include the desired changes. You can't change the value of <code>CallerReference</code>. If you try to change this value, CloudFront returns an <code>IllegalUpdate</code> error.</p> <important> <p>The new configuration replaces the existing configuration; the values that you specify in an <code>UpdateDistribution</code> request are not merged into the existing configuration. When you add, delete, or replace values in an element that allows multiple values (for example, <code>CNAME</code>), you must specify all of the values that you want to appear in the updated distribution. In addition, you must update the corresponding <code>Quantity</code> element.</p> </important> </li> <li> <p>Submit an <code>UpdateDistribution</code> request to update the configuration for your distribution:</p> <ul> <li> <p>In the request body, include the XML document that you updated in Step 2. The request body must include an XML document with a <code>DistributionConfig</code> element.</p> </li> <li> <p>Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GetDistributionConfig</code> request in Step 1.</p> </li> </ul> </li> <li> <p>Review the response to the <code>UpdateDistribution</code> request to confirm that the configuration was successfully updated.</p> </li> <li> <p>Optional: Submit a <a>GetDistribution</a> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a distribution. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there's a mismatch between the number of values you say you're specifying in the <code>Quantity</code> element and the number of values you're actually specifying.</p> </important> </li> </ol>"]
-    #[allow(unused_variables, warnings)]
-    fn update_distribution(&self,
-                           input: &UpdateDistributionRequest)
-                           -> Result<UpdateDistributionResult, UpdateDistributionError> {
+                    #[allow(unused_variables, warnings)]
+    fn update_distribution(
+        &self,
+        input: &UpdateDistributionRequest,
+    ) -> Result<UpdateDistributionResult, UpdateDistributionError> {
         let request_uri = format!("/2017-03-25/distribution/{id}/config", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
-
 
         if let Some(ref if_match) = input.if_match {
             request.add_header("If-Match", &if_match.to_string());
@@ -12248,9 +12935,11 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let mut payload: Vec<u8>;
         let mut writer = EventWriter::new(Vec::new());
-        DistributionConfigSerializer::serialize(&mut writer,
-                                                "DistributionConfig",
-                                                &input.distribution_config);
+        DistributionConfigSerializer::serialize(
+            &mut writer,
+            "DistributionConfig",
+            &input.distribution_config,
+        );
         payload = writer.into_inner();
 
         request.set_payload(Some(payload));
@@ -12260,10 +12949,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12271,15 +12957,17 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = UpdateDistributionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(UpdateDistributionResultDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
+                    result = try!(UpdateDistributionResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -12290,22 +12978,25 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateDistributionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateDistributionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-    #[doc="<p>Update a streaming distribution. </p>"]
+    #[doc = "<p>Update a streaming distribution. </p>"]
     #[allow(unused_variables, warnings)]
-    fn update_streaming_distribution
-        (&self,
-         input: &UpdateStreamingDistributionRequest)
-         -> Result<UpdateStreamingDistributionResult, UpdateStreamingDistributionError> {
-        let request_uri = format!("/2017-03-25/streaming-distribution/{id}/config",
-                                  id = input.id);
+    fn update_streaming_distribution(
+        &self,
+        input: &UpdateStreamingDistributionRequest,
+    ) -> Result<UpdateStreamingDistributionResult, UpdateStreamingDistributionError> {
+        let request_uri = format!(
+            "/2017-03-25/streaming-distribution/{id}/config",
+            id = input.id
+        );
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
-
 
         if let Some(ref if_match) = input.if_match {
             request.add_header("If-Match", &if_match.to_string());
@@ -12313,9 +13004,11 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let mut payload: Vec<u8>;
         let mut writer = EventWriter::new(Vec::new());
-        StreamingDistributionConfigSerializer::serialize(&mut writer,
-                                                         "StreamingDistributionConfig",
-                                                         &input.streaming_distribution_config);
+        StreamingDistributionConfigSerializer::serialize(
+            &mut writer,
+            "StreamingDistributionConfig",
+            &input.streaming_distribution_config,
+        );
         payload = writer.into_inner();
 
         request.set_payload(Some(payload));
@@ -12325,10 +13018,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
                 let mut result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -12336,13 +13026,17 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                 if body.is_empty() {
                     result = UpdateStreamingDistributionResult::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(UpdateStreamingDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                    result = try!(UpdateStreamingDistributionResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -12353,8 +13047,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateStreamingDistributionError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(UpdateStreamingDistributionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
@@ -12369,12 +13064,12 @@ mod protocol_tests {
     use self::rusoto_mock::*;
     use rusoto_core::Region as rusoto_region;
 
-
-
     #[test]
     fn test_parse_valid_cloudfront_get_cloud_front_origin_access_identity() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "cloudfront-get-cloud-front-origin-access-identity.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/valid",
+            "cloudfront-get-cloud-front-origin-access-identity.xml",
+        );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetCloudFrontOriginAccessIdentityRequest::default();
@@ -12382,11 +13077,12 @@ mod protocol_tests {
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-
     #[test]
     fn test_parse_valid_cloudfront_get_distribution() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "cloudfront-get-distribution.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/valid",
+            "cloudfront-get-distribution.xml",
+        );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetDistributionRequest::default();
@@ -12394,11 +13090,12 @@ mod protocol_tests {
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-
     #[test]
     fn test_parse_valid_cloudfront_get_invalidation() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "cloudfront-get-invalidation.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/valid",
+            "cloudfront-get-invalidation.xml",
+        );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetInvalidationRequest::default();
@@ -12406,11 +13103,12 @@ mod protocol_tests {
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-
     #[test]
     fn test_parse_valid_cloudfront_get_streaming_distribution() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "cloudfront-get-streaming-distribution.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/valid",
+            "cloudfront-get-streaming-distribution.xml",
+        );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetStreamingDistributionRequest::default();
@@ -12418,11 +13116,12 @@ mod protocol_tests {
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-
     #[test]
     fn test_parse_valid_cloudfront_list_cloud_front_origin_access_identities() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "cloudfront-list-cloud-front-origin-access-identities.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/valid",
+            "cloudfront-list-cloud-front-origin-access-identities.xml",
+        );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListCloudFrontOriginAccessIdentitiesRequest::default();
@@ -12430,11 +13129,12 @@ mod protocol_tests {
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-
     #[test]
     fn test_parse_valid_cloudfront_list_distributions() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "cloudfront-list-distributions.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/valid",
+            "cloudfront-list-distributions.xml",
+        );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListDistributionsRequest::default();
@@ -12442,11 +13142,12 @@ mod protocol_tests {
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-
     #[test]
     fn test_parse_valid_cloudfront_list_invalidations() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "cloudfront-list-invalidations.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/valid",
+            "cloudfront-list-invalidations.xml",
+        );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListInvalidationsRequest::default();
@@ -12454,11 +13155,12 @@ mod protocol_tests {
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
-
     #[test]
     fn test_parse_valid_cloudfront_list_streaming_distributions() {
-        let mock_response = MockResponseReader::read_response("test_resources/generated/valid",
-                                                              "cloudfront-list-streaming-distributions.xml");
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/valid",
+            "cloudfront-list-streaming-distributions.xml",
+        );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListStreamingDistributionsRequest::default();

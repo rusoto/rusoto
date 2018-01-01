@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,77 +27,68 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="Request of DeleteReportDefinition"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// Request of DeleteReportDefinition
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteReportDefinitionRequest {
-    #[serde(rename="ReportName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "ReportName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub report_name: Option<String>,
 }
 
-#[doc="Response of DeleteReportDefinition"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// Response of DeleteReportDefinition
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteReportDefinitionResponse {
-    #[serde(rename="ResponseMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "ResponseMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub response_message: Option<String>,
 }
 
-#[doc="Request of DescribeReportDefinitions"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// Request of DescribeReportDefinitions
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeReportDefinitionsRequest {
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="Response of DescribeReportDefinitions"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// Response of DescribeReportDefinitions
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeReportDefinitionsResponse {
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[serde(rename="ReportDefinitions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "ReportDefinitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub report_definitions: Option<Vec<ReportDefinition>>,
 }
 
-#[doc="Request of PutReportDefinition"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// Request of PutReportDefinition
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutReportDefinitionRequest {
-    #[serde(rename="ReportDefinition")]
-    pub report_definition: ReportDefinition,
+    #[serde(rename = "ReportDefinition")] pub report_definition: ReportDefinition,
 }
 
-#[doc="Response of PutReportDefinition"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// Response of PutReportDefinition
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutReportDefinitionResponse;
 
-#[doc="The definition of AWS Cost and Usage Report. Customer can specify the report name, time unit, report format, compression format, S3 bucket and additional artifacts and schema elements in the definition."]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// The definition of AWS Cost and Usage Report. Customer can specify the report name, time unit, report format, compression format, S3 bucket and additional artifacts and schema elements in the definition.
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ReportDefinition {
-    #[serde(rename="AdditionalArtifacts")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "AdditionalArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_artifacts: Option<Vec<String>>,
-    #[serde(rename="AdditionalSchemaElements")]
-    pub additional_schema_elements: Vec<String>,
-    #[serde(rename="Compression")]
-    pub compression: String,
-    #[serde(rename="Format")]
-    pub format: String,
-    #[serde(rename="ReportName")]
-    pub report_name: String,
-    #[serde(rename="S3Bucket")]
-    pub s3_bucket: String,
-    #[serde(rename="S3Prefix")]
-    pub s3_prefix: String,
-    #[serde(rename="S3Region")]
-    pub s3_region: String,
-    #[serde(rename="TimeUnit")]
-    pub time_unit: String,
+    #[serde(rename = "AdditionalSchemaElements")] pub additional_schema_elements: Vec<String>,
+    #[serde(rename = "Compression")] pub compression: String,
+    #[serde(rename = "Format")] pub format: String,
+    #[serde(rename = "ReportName")] pub report_name: String,
+    #[serde(rename = "S3Bucket")] pub s3_bucket: String,
+    #[serde(rename = "S3Prefix")] pub s3_prefix: String,
+    #[serde(rename = "S3Region")] pub s3_region: String,
+    #[serde(rename = "TimeUnit")] pub time_unit: String,
 }
 
 /// Errors returned by DeleteReportDefinition
@@ -115,7 +105,6 @@ pub enum DeleteReportDefinitionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteReportDefinitionError {
     pub fn from_body(body: &str) -> DeleteReportDefinitionError {
@@ -196,7 +185,6 @@ pub enum DescribeReportDefinitionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeReportDefinitionsError {
     pub fn from_body(body: &str) -> DescribeReportDefinitionsError {
@@ -282,7 +270,6 @@ pub enum PutReportDefinitionError {
     Unknown(String),
 }
 
-
 impl PutReportDefinitionError {
     pub fn from_body(body: &str) -> PutReportDefinitionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -358,29 +345,29 @@ impl Error for PutReportDefinitionError {
 }
 /// Trait representing the capabilities of the AWS Cost and Usage Report Service API. AWS Cost and Usage Report Service clients implement this trait.
 pub trait CostAndUsageReport {
-    #[doc="Delete a specified report definition"]
-    fn delete_report_definition
-        (&self,
-         input: &DeleteReportDefinitionRequest)
-         -> Result<DeleteReportDefinitionResponse, DeleteReportDefinitionError>;
+    #[doc = "Delete a specified report definition"]
+    fn delete_report_definition(
+        &self,
+        input: &DeleteReportDefinitionRequest,
+    ) -> Result<DeleteReportDefinitionResponse, DeleteReportDefinitionError>;
 
+    #[doc = "Describe a list of report definitions owned by the account"]
+    fn describe_report_definitions(
+        &self,
+        input: &DescribeReportDefinitionsRequest,
+    ) -> Result<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError>;
 
-    #[doc="Describe a list of report definitions owned by the account"]
-    fn describe_report_definitions
-        (&self,
-         input: &DescribeReportDefinitionsRequest)
-         -> Result<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError>;
-
-
-    #[doc="Create a new report definition"]
-    fn put_report_definition(&self,
-                             input: &PutReportDefinitionRequest)
-                             -> Result<PutReportDefinitionResponse, PutReportDefinitionError>;
+    #[doc = "Create a new report definition"]
+    fn put_report_definition(
+        &self,
+        input: &PutReportDefinitionRequest,
+    ) -> Result<PutReportDefinitionResponse, PutReportDefinitionError>;
 }
 /// A client for the AWS Cost and Usage Report Service API.
 pub struct CostAndUsageReportClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -388,8 +375,9 @@ pub struct CostAndUsageReportClient<P, D>
 }
 
 impl<P, D> CostAndUsageReportClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         CostAndUsageReportClient {
@@ -401,19 +389,22 @@ impl<P, D> CostAndUsageReportClient<P, D>
 }
 
 impl<P, D> CostAndUsageReport for CostAndUsageReportClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
-    #[doc="Delete a specified report definition"]
-    fn delete_report_definition
-        (&self,
-         input: &DeleteReportDefinitionRequest)
-         -> Result<DeleteReportDefinitionResponse, DeleteReportDefinitionError> {
+    #[doc = "Delete a specified report definition"]
+    fn delete_report_definition(
+        &self,
+        input: &DeleteReportDefinitionRequest,
+    ) -> Result<DeleteReportDefinitionResponse, DeleteReportDefinitionError> {
         let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrigamiServiceGatewayService.DeleteReportDefinition");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrigamiServiceGatewayService.DeleteReportDefinition",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -425,27 +416,32 @@ impl<P, D> CostAndUsageReport for CostAndUsageReportClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteReportDefinitionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteReportDefinitionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteReportDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteReportDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Describe a list of report definitions owned by the account"]
-    fn describe_report_definitions
-        (&self,
-         input: &DescribeReportDefinitionsRequest)
-         -> Result<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError> {
+    #[doc = "Describe a list of report definitions owned by the account"]
+    fn describe_report_definitions(
+        &self,
+        input: &DescribeReportDefinitionsRequest,
+    ) -> Result<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError> {
         let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrigamiServiceGatewayService.DescribeReportDefinitions");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrigamiServiceGatewayService.DescribeReportDefinitions",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -457,27 +453,32 @@ impl<P, D> CostAndUsageReport for CostAndUsageReportClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeReportDefinitionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeReportDefinitionsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeReportDefinitionsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DescribeReportDefinitionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="Create a new report definition"]
-    fn put_report_definition(&self,
-                             input: &PutReportDefinitionRequest)
-                             -> Result<PutReportDefinitionResponse, PutReportDefinitionError> {
+    #[doc = "Create a new report definition"]
+    fn put_report_definition(
+        &self,
+        input: &PutReportDefinitionRequest,
+    ) -> Result<PutReportDefinitionResponse, PutReportDefinitionError> {
         let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrigamiServiceGatewayService.PutReportDefinition");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrigamiServiceGatewayService.PutReportDefinition",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -489,12 +490,16 @@ impl<P, D> CostAndUsageReport for CostAndUsageReportClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutReportDefinitionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<PutReportDefinitionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutReportDefinitionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutReportDefinitionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

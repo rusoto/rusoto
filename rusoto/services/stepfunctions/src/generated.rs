@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,712 +27,710 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ActivityFailedEventDetails {
-    #[doc="<p>A more detailed explanation of the cause of the failure.</p>"]
-    #[serde(rename="cause")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A more detailed explanation of the cause of the failure.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cause: Option<String>,
-    #[doc="<p>The error code of the failure.</p>"]
-    #[serde(rename="error")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ActivityListItem {
-    #[doc="<p>The Amazon Resource Name (ARN) that identifies the activity.</p>"]
-    #[serde(rename="activityArn")]
+    /// <p>The Amazon Resource Name (ARN) that identifies the activity.</p>
+    #[serde(rename = "activityArn")]
     pub activity_arn: String,
-    #[doc="<p>The date the activity was created.</p>"]
-    #[serde(rename="creationDate")]
+    /// <p>The date the activity was created.</p>
+    #[serde(rename = "creationDate")]
     pub creation_date: f64,
-    #[doc="<p>The name of the activity.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the activity.</p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ActivityScheduleFailedEventDetails {
-    #[doc="<p>A more detailed explanation of the cause of the failure.</p>"]
-    #[serde(rename="cause")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A more detailed explanation of the cause of the failure.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cause: Option<String>,
-    #[doc="<p>The error code of the failure.</p>"]
-    #[serde(rename="error")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ActivityScheduledEventDetails {
-    #[doc="<p>The maximum allowed duration between two heartbeats for the activity task.</p>"]
-    #[serde(rename="heartbeatInSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum allowed duration between two heartbeats for the activity task.</p>
+    #[serde(rename = "heartbeatInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub heartbeat_in_seconds: Option<i64>,
-    #[doc="<p>The JSON data input to the activity task.</p>"]
-    #[serde(rename="input")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON data input to the activity task.</p>
+    #[serde(rename = "input")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the scheduled activity.</p>"]
-    #[serde(rename="resource")]
+    /// <p>The Amazon Resource Name (ARN) of the scheduled activity.</p>
+    #[serde(rename = "resource")]
     pub resource: String,
-    #[doc="<p>The maximum allowed duration of the activity task.</p>"]
-    #[serde(rename="timeoutInSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum allowed duration of the activity task.</p>
+    #[serde(rename = "timeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_seconds: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ActivityStartedEventDetails {
-    #[doc="<p>The name of the worker that the task was assigned to. These names are provided by the workers when calling <a>GetActivityTask</a>.</p>"]
-    #[serde(rename="workerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the worker that the task was assigned to. These names are provided by the workers when calling <a>GetActivityTask</a>.</p>
+    #[serde(rename = "workerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub worker_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ActivitySucceededEventDetails {
-    #[doc="<p>The JSON data output by the activity task.</p>"]
-    #[serde(rename="output")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON data output by the activity task.</p>
+    #[serde(rename = "output")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ActivityTimedOutEventDetails {
-    #[doc="<p>A more detailed explanation of the cause of the timeout.</p>"]
-    #[serde(rename="cause")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A more detailed explanation of the cause of the timeout.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cause: Option<String>,
-    #[doc="<p>The error code of the failure.</p>"]
-    #[serde(rename="error")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateActivityInput {
-    #[doc="<p>The name of the activity to create. This name must be unique for your AWS account and region.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the activity to create. This name must be unique for your AWS account and region.</p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateActivityOutput {
-    #[doc="<p>The Amazon Resource Name (ARN) that identifies the created activity.</p>"]
-    #[serde(rename="activityArn")]
+    /// <p>The Amazon Resource Name (ARN) that identifies the created activity.</p>
+    #[serde(rename = "activityArn")]
     pub activity_arn: String,
-    #[doc="<p>The date the activity was created.</p>"]
-    #[serde(rename="creationDate")]
+    /// <p>The date the activity was created.</p>
+    #[serde(rename = "creationDate")]
     pub creation_date: f64,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateStateMachineInput {
-    #[doc="<p>The Amazon States Language definition of the state machine.</p>"]
-    #[serde(rename="definition")]
+    /// <p>The Amazon States Language definition of the state machine.</p>
+    #[serde(rename = "definition")]
     pub definition: String,
-    #[doc="<p>The name of the state machine. This name must be unique for your AWS account and region.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the state machine. This name must be unique for your AWS account and region.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The Amazon Resource Name (ARN) of the IAM role to use for this state machine.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to use for this state machine.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateStateMachineOutput {
-    #[doc="<p>The date the state machine was created.</p>"]
-    #[serde(rename="creationDate")]
+    /// <p>The date the state machine was created.</p>
+    #[serde(rename = "creationDate")]
     pub creation_date: f64,
-    #[doc="<p>The Amazon Resource Name (ARN) that identifies the created state machine.</p>"]
-    #[serde(rename="stateMachineArn")]
+    /// <p>The Amazon Resource Name (ARN) that identifies the created state machine.</p>
+    #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteActivityInput {
-    #[doc="<p>The Amazon Resource Name (ARN) of the activity to delete.</p>"]
-    #[serde(rename="activityArn")]
+    /// <p>The Amazon Resource Name (ARN) of the activity to delete.</p>
+    #[serde(rename = "activityArn")]
     pub activity_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteActivityOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteStateMachineInput {
-    #[doc="<p>The Amazon Resource Name (ARN) of the state machine to delete.</p>"]
-    #[serde(rename="stateMachineArn")]
+    /// <p>The Amazon Resource Name (ARN) of the state machine to delete.</p>
+    #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteStateMachineOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeActivityInput {
-    #[doc="<p>The Amazon Resource Name (ARN) of the activity to describe.</p>"]
-    #[serde(rename="activityArn")]
+    /// <p>The Amazon Resource Name (ARN) of the activity to describe.</p>
+    #[serde(rename = "activityArn")]
     pub activity_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeActivityOutput {
-    #[doc="<p>The Amazon Resource Name (ARN) that identifies the activity.</p>"]
-    #[serde(rename="activityArn")]
+    /// <p>The Amazon Resource Name (ARN) that identifies the activity.</p>
+    #[serde(rename = "activityArn")]
     pub activity_arn: String,
-    #[doc="<p>The date the activity was created.</p>"]
-    #[serde(rename="creationDate")]
+    /// <p>The date the activity was created.</p>
+    #[serde(rename = "creationDate")]
     pub creation_date: f64,
-    #[doc="<p>The name of the activity.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the activity.</p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeExecutionInput {
-    #[doc="<p>The Amazon Resource Name (ARN) of the execution to describe.</p>"]
-    #[serde(rename="executionArn")]
+    /// <p>The Amazon Resource Name (ARN) of the execution to describe.</p>
+    #[serde(rename = "executionArn")]
     pub execution_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeExecutionOutput {
-    #[doc="<p>The Amazon Resource Name (ARN) that identifies the execution.</p>"]
-    #[serde(rename="executionArn")]
+    /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
+    #[serde(rename = "executionArn")]
     pub execution_arn: String,
-    #[doc="<p>The JSON input data of the execution.</p>"]
-    #[serde(rename="input")]
+    /// <p>The JSON input data of the execution.</p>
+    #[serde(rename = "input")]
     pub input: String,
-    #[doc="<p>The name of the execution.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the execution.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The JSON output data of the execution.</p>"]
-    #[serde(rename="output")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON output data of the execution.</p>
+    #[serde(rename = "output")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<String>,
-    #[doc="<p>The date the execution was started.</p>"]
-    #[serde(rename="startDate")]
+    /// <p>The date the execution was started.</p>
+    #[serde(rename = "startDate")]
     pub start_date: f64,
-    #[doc="<p>The Amazon Resource Name (ARN) of the executed stated machine.</p>"]
-    #[serde(rename="stateMachineArn")]
+    /// <p>The Amazon Resource Name (ARN) of the executed stated machine.</p>
+    #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
-    #[doc="<p>The current status of the execution.</p>"]
-    #[serde(rename="status")]
+    /// <p>The current status of the execution.</p>
+    #[serde(rename = "status")]
     pub status: String,
-    #[doc="<p>If the execution has already ended, the date the execution stopped.</p>"]
-    #[serde(rename="stopDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the execution has already ended, the date the execution stopped.</p>
+    #[serde(rename = "stopDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stop_date: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeStateMachineInput {
-    #[doc="<p>The Amazon Resource Name (ARN) of the state machine to describe.</p>"]
-    #[serde(rename="stateMachineArn")]
+    /// <p>The Amazon Resource Name (ARN) of the state machine to describe.</p>
+    #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeStateMachineOutput {
-    #[doc="<p>The date the state machine was created.</p>"]
-    #[serde(rename="creationDate")]
+    /// <p>The date the state machine was created.</p>
+    #[serde(rename = "creationDate")]
     pub creation_date: f64,
-    #[doc="<p>The Amazon States Language definition of the state machine.</p>"]
-    #[serde(rename="definition")]
+    /// <p>The Amazon States Language definition of the state machine.</p>
+    #[serde(rename = "definition")]
     pub definition: String,
-    #[doc="<p>The name of the state machine.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the state machine.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The Amazon Resource Name (ARN) of the IAM role used for executing this state machine.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The Amazon Resource Name (ARN) of the IAM role used for executing this state machine.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
-    #[doc="<p>The Amazon Resource Name (ARN) that identifies the state machine.</p>"]
-    #[serde(rename="stateMachineArn")]
+    /// <p>The Amazon Resource Name (ARN) that identifies the state machine.</p>
+    #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
-    #[doc="<p>The current status of the state machine.</p>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current status of the state machine.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ExecutionAbortedEventDetails {
-    #[doc="<p>A more detailed explanation of the cause of the failure.</p>"]
-    #[serde(rename="cause")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A more detailed explanation of the cause of the failure.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cause: Option<String>,
-    #[doc="<p>The error code of the failure.</p>"]
-    #[serde(rename="error")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ExecutionFailedEventDetails {
-    #[doc="<p>A more detailed explanation of the cause of the failure.</p>"]
-    #[serde(rename="cause")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A more detailed explanation of the cause of the failure.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cause: Option<String>,
-    #[doc="<p>The error code of the failure.</p>"]
-    #[serde(rename="error")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ExecutionListItem {
-    #[doc="<p>The Amazon Resource Name (ARN) that identifies the execution.</p>"]
-    #[serde(rename="executionArn")]
+    /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
+    #[serde(rename = "executionArn")]
     pub execution_arn: String,
-    #[doc="<p>The name of the execution.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the execution.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The date the execution started.</p>"]
-    #[serde(rename="startDate")]
+    /// <p>The date the execution started.</p>
+    #[serde(rename = "startDate")]
     pub start_date: f64,
-    #[doc="<p>The Amazon Resource Name (ARN) of the executed state machine.</p>"]
-    #[serde(rename="stateMachineArn")]
+    /// <p>The Amazon Resource Name (ARN) of the executed state machine.</p>
+    #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
-    #[doc="<p>The current status of the execution.</p>"]
-    #[serde(rename="status")]
+    /// <p>The current status of the execution.</p>
+    #[serde(rename = "status")]
     pub status: String,
-    #[doc="<p>If the execution already ended, the date the execution stopped.</p>"]
-    #[serde(rename="stopDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the execution already ended, the date the execution stopped.</p>
+    #[serde(rename = "stopDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stop_date: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ExecutionStartedEventDetails {
-    #[doc="<p>The JSON data input to the execution.</p>"]
-    #[serde(rename="input")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON data input to the execution.</p>
+    #[serde(rename = "input")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the IAM role used for executing AWS Lambda tasks.</p>"]
-    #[serde(rename="roleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the IAM role used for executing AWS Lambda tasks.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ExecutionSucceededEventDetails {
-    #[doc="<p>The JSON data output by the execution.</p>"]
-    #[serde(rename="output")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON data output by the execution.</p>
+    #[serde(rename = "output")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ExecutionTimedOutEventDetails {
-    #[doc="<p>A more detailed explanation of the cause of the timeout.</p>"]
-    #[serde(rename="cause")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A more detailed explanation of the cause of the timeout.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cause: Option<String>,
-    #[doc="<p>The error code of the failure.</p>"]
-    #[serde(rename="error")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetActivityTaskInput {
-    #[doc="<p>The Amazon Resource Name (ARN) of the activity to retrieve tasks from.</p>"]
-    #[serde(rename="activityArn")]
+    /// <p>The Amazon Resource Name (ARN) of the activity to retrieve tasks from.</p>
+    #[serde(rename = "activityArn")]
     pub activity_arn: String,
-    #[doc="<p>An arbitrary name may be provided in order to identify the worker that the task is assigned to. This name will be used when it is logged in the execution history.</p>"]
-    #[serde(rename="workerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An arbitrary name may be provided in order to identify the worker that the task is assigned to. This name will be used when it is logged in the execution history.</p>
+    #[serde(rename = "workerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub worker_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetActivityTaskOutput {
-    #[doc="<p>The JSON input data for the task.</p>"]
-    #[serde(rename="input")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON input data for the task.</p>
+    #[serde(rename = "input")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
-    #[doc="<p>A token that identifies the scheduled task. This token must be copied and included in subsequent calls to <a>SendTaskHeartbeat</a>, <a>SendTaskSuccess</a> or <a>SendTaskFailure</a> in order to report the progress or completion of the task.</p>"]
-    #[serde(rename="taskToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token that identifies the scheduled task. This token must be copied and included in subsequent calls to <a>SendTaskHeartbeat</a>, <a>SendTaskSuccess</a> or <a>SendTaskFailure</a> in order to report the progress or completion of the task.</p>
+    #[serde(rename = "taskToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetExecutionHistoryInput {
-    #[doc="<p>The Amazon Resource Name (ARN) of the execution.</p>"]
-    #[serde(rename="executionArn")]
+    /// <p>The Amazon Resource Name (ARN) of the execution.</p>
+    #[serde(rename = "executionArn")]
     pub execution_arn: String,
-    #[doc="<p>The maximum number of results that will be returned per call. <code>nextToken</code> can be used to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results that will be returned per call. <code>nextToken</code> can be used to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>If a <code>nextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a <code>nextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Lists events in descending order of their <code>timeStamp</code>.</p>"]
-    #[serde(rename="reverseOrder")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Lists events in descending order of their <code>timeStamp</code>.</p>
+    #[serde(rename = "reverseOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reverse_order: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetExecutionHistoryOutput {
-    #[doc="<p>The list of events that occurred in the execution.</p>"]
-    #[serde(rename="events")]
+    /// <p>The list of events that occurred in the execution.</p>
+    #[serde(rename = "events")]
     pub events: Vec<HistoryEvent>,
-    #[doc="<p>If a <code>nextToken</code> is returned, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a <code>nextToken</code> is returned, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct HistoryEvent {
-    #[serde(rename="activityFailedEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "activityFailedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub activity_failed_event_details: Option<ActivityFailedEventDetails>,
-    #[serde(rename="activityScheduleFailedEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "activityScheduleFailedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub activity_schedule_failed_event_details: Option<ActivityScheduleFailedEventDetails>,
-    #[serde(rename="activityScheduledEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "activityScheduledEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub activity_scheduled_event_details: Option<ActivityScheduledEventDetails>,
-    #[serde(rename="activityStartedEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "activityStartedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub activity_started_event_details: Option<ActivityStartedEventDetails>,
-    #[serde(rename="activitySucceededEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "activitySucceededEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub activity_succeeded_event_details: Option<ActivitySucceededEventDetails>,
-    #[serde(rename="activityTimedOutEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "activityTimedOutEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub activity_timed_out_event_details: Option<ActivityTimedOutEventDetails>,
-    #[serde(rename="executionAbortedEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "executionAbortedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_aborted_event_details: Option<ExecutionAbortedEventDetails>,
-    #[serde(rename="executionFailedEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "executionFailedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_failed_event_details: Option<ExecutionFailedEventDetails>,
-    #[serde(rename="executionStartedEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "executionStartedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_started_event_details: Option<ExecutionStartedEventDetails>,
-    #[serde(rename="executionSucceededEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "executionSucceededEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_succeeded_event_details: Option<ExecutionSucceededEventDetails>,
-    #[serde(rename="executionTimedOutEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "executionTimedOutEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_timed_out_event_details: Option<ExecutionTimedOutEventDetails>,
-    #[doc="<p>The id of the event. Events are numbered sequentially, starting at one.</p>"]
-    #[serde(rename="id")]
+    /// <p>The id of the event. Events are numbered sequentially, starting at one.</p>
+    #[serde(rename = "id")]
     pub id: i64,
-    #[serde(rename="lambdaFunctionFailedEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "lambdaFunctionFailedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_function_failed_event_details: Option<LambdaFunctionFailedEventDetails>,
-    #[serde(rename="lambdaFunctionScheduleFailedEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "lambdaFunctionScheduleFailedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_function_schedule_failed_event_details:
         Option<LambdaFunctionScheduleFailedEventDetails>,
-    #[serde(rename="lambdaFunctionScheduledEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "lambdaFunctionScheduledEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_function_scheduled_event_details: Option<LambdaFunctionScheduledEventDetails>,
-    #[serde(rename="lambdaFunctionStartFailedEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub lambda_function_start_failed_event_details:
-        Option<LambdaFunctionStartFailedEventDetails>,
-    #[serde(rename="lambdaFunctionSucceededEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "lambdaFunctionStartFailedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lambda_function_start_failed_event_details: Option<LambdaFunctionStartFailedEventDetails>,
+    #[serde(rename = "lambdaFunctionSucceededEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_function_succeeded_event_details: Option<LambdaFunctionSucceededEventDetails>,
-    #[serde(rename="lambdaFunctionTimedOutEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "lambdaFunctionTimedOutEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_function_timed_out_event_details: Option<LambdaFunctionTimedOutEventDetails>,
-    #[doc="<p>The id of the previous event.</p>"]
-    #[serde(rename="previousEventId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The id of the previous event.</p>
+    #[serde(rename = "previousEventId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub previous_event_id: Option<i64>,
-    #[serde(rename="stateEnteredEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "stateEnteredEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state_entered_event_details: Option<StateEnteredEventDetails>,
-    #[serde(rename="stateExitedEventDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "stateExitedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state_exited_event_details: Option<StateExitedEventDetails>,
-    #[doc="<p>The date the event occured.</p>"]
-    #[serde(rename="timestamp")]
+    /// <p>The date the event occured.</p>
+    #[serde(rename = "timestamp")]
     pub timestamp: f64,
-    #[doc="<p>The type of the event.</p>"]
-    #[serde(rename="type")]
+    /// <p>The type of the event.</p>
+    #[serde(rename = "type")]
     pub type_: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LambdaFunctionFailedEventDetails {
-    #[doc="<p>A more detailed explanation of the cause of the failure.</p>"]
-    #[serde(rename="cause")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A more detailed explanation of the cause of the failure.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cause: Option<String>,
-    #[doc="<p>The error code of the failure.</p>"]
-    #[serde(rename="error")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LambdaFunctionScheduleFailedEventDetails {
-    #[doc="<p>A more detailed explanation of the cause of the failure.</p>"]
-    #[serde(rename="cause")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A more detailed explanation of the cause of the failure.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cause: Option<String>,
-    #[doc="<p>The error code of the failure.</p>"]
-    #[serde(rename="error")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LambdaFunctionScheduledEventDetails {
-    #[doc="<p>The JSON data input to the lambda function.</p>"]
-    #[serde(rename="input")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON data input to the lambda function.</p>
+    #[serde(rename = "input")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the scheduled lambda function.</p>"]
-    #[serde(rename="resource")]
+    /// <p>The Amazon Resource Name (ARN) of the scheduled lambda function.</p>
+    #[serde(rename = "resource")]
     pub resource: String,
-    #[doc="<p>The maximum allowed duration of the lambda function.</p>"]
-    #[serde(rename="timeoutInSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum allowed duration of the lambda function.</p>
+    #[serde(rename = "timeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_seconds: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LambdaFunctionStartFailedEventDetails {
-    #[doc="<p>A more detailed explanation of the cause of the failure.</p>"]
-    #[serde(rename="cause")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A more detailed explanation of the cause of the failure.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cause: Option<String>,
-    #[doc="<p>The error code of the failure.</p>"]
-    #[serde(rename="error")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LambdaFunctionSucceededEventDetails {
-    #[doc="<p>The JSON data output by the lambda function.</p>"]
-    #[serde(rename="output")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON data output by the lambda function.</p>
+    #[serde(rename = "output")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LambdaFunctionTimedOutEventDetails {
-    #[doc="<p>A more detailed explanation of the cause of the timeout.</p>"]
-    #[serde(rename="cause")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A more detailed explanation of the cause of the timeout.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cause: Option<String>,
-    #[doc="<p>The error code of the failure.</p>"]
-    #[serde(rename="error")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListActivitiesInput {
-    #[doc="<p>The maximum number of results that will be returned per call. <code>nextToken</code> can be used to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results that will be returned per call. <code>nextToken</code> can be used to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>If a <code>nextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a <code>nextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListActivitiesOutput {
-    #[doc="<p>The list of activities.</p>"]
-    #[serde(rename="activities")]
+    /// <p>The list of activities.</p>
+    #[serde(rename = "activities")]
     pub activities: Vec<ActivityListItem>,
-    #[doc="<p>If a <code>nextToken</code> is returned, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a <code>nextToken</code> is returned, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListExecutionsInput {
-    #[doc="<p>The maximum number of results that will be returned per call. <code>nextToken</code> can be used to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results that will be returned per call. <code>nextToken</code> can be used to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>If a <code>nextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a <code>nextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the state machine whose executions will be listed.</p>"]
-    #[serde(rename="stateMachineArn")]
+    /// <p>The Amazon Resource Name (ARN) of the state machine whose executions will be listed.</p>
+    #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
-    #[doc="<p>If specified, only list the executions whose current execution status matches the given filter.</p>"]
-    #[serde(rename="statusFilter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If specified, only list the executions whose current execution status matches the given filter.</p>
+    #[serde(rename = "statusFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_filter: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListExecutionsOutput {
-    #[doc="<p>The list of matching executions.</p>"]
-    #[serde(rename="executions")]
+    /// <p>The list of matching executions.</p>
+    #[serde(rename = "executions")]
     pub executions: Vec<ExecutionListItem>,
-    #[doc="<p>If a <code>nextToken</code> is returned, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a <code>nextToken</code> is returned, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListStateMachinesInput {
-    #[doc="<p>The maximum number of results that will be returned per call. <code>nextToken</code> can be used to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results that will be returned per call. <code>nextToken</code> can be used to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>If a <code>nextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a <code>nextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListStateMachinesOutput {
-    #[doc="<p>If a <code>nextToken</code> is returned, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a <code>nextToken</code> is returned, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[serde(rename="stateMachines")]
-    pub state_machines: Vec<StateMachineListItem>,
+    #[serde(rename = "stateMachines")] pub state_machines: Vec<StateMachineListItem>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SendTaskFailureInput {
-    #[doc="<p>A more detailed explanation of the cause of the failure.</p>"]
-    #[serde(rename="cause")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A more detailed explanation of the cause of the failure.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cause: Option<String>,
-    #[doc="<p>An arbitrary error code that identifies the cause of the failure.</p>"]
-    #[serde(rename="error")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An arbitrary error code that identifies the cause of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
-    #[doc="<p>The token that represents this task. Task tokens are generated by the service when the tasks are assigned to a worker (see GetActivityTask::taskToken).</p>"]
-    #[serde(rename="taskToken")]
+    /// <p>The token that represents this task. Task tokens are generated by the service when the tasks are assigned to a worker (see GetActivityTask::taskToken).</p>
+    #[serde(rename = "taskToken")]
     pub task_token: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SendTaskFailureOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SendTaskHeartbeatInput {
-    #[doc="<p>The token that represents this task. Task tokens are generated by the service when the tasks are assigned to a worker (see GetActivityTask::taskToken).</p>"]
-    #[serde(rename="taskToken")]
+    /// <p>The token that represents this task. Task tokens are generated by the service when the tasks are assigned to a worker (see GetActivityTask::taskToken).</p>
+    #[serde(rename = "taskToken")]
     pub task_token: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SendTaskHeartbeatOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SendTaskSuccessInput {
-    #[doc="<p>The JSON output of the task.</p>"]
-    #[serde(rename="output")]
+    /// <p>The JSON output of the task.</p>
+    #[serde(rename = "output")]
     pub output: String,
-    #[doc="<p>The token that represents this task. Task tokens are generated by the service when the tasks are assigned to a worker (see GetActivityTask::taskToken).</p>"]
-    #[serde(rename="taskToken")]
+    /// <p>The token that represents this task. Task tokens are generated by the service when the tasks are assigned to a worker (see GetActivityTask::taskToken).</p>
+    #[serde(rename = "taskToken")]
     pub task_token: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SendTaskSuccessOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartExecutionInput {
-    #[doc="<p>The JSON input data for the execution.</p>"]
-    #[serde(rename="input")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON input data for the execution.</p>
+    #[serde(rename = "input")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
-    #[doc="<p>The name of the execution. This name must be unique for your AWS account and region.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the execution. This name must be unique for your AWS account and region.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the state machine to execute.</p>"]
-    #[serde(rename="stateMachineArn")]
+    /// <p>The Amazon Resource Name (ARN) of the state machine to execute.</p>
+    #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartExecutionOutput {
-    #[doc="<p>The Amazon Resource Name (ARN) that identifies the execution.</p>"]
-    #[serde(rename="executionArn")]
+    /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
+    #[serde(rename = "executionArn")]
     pub execution_arn: String,
-    #[doc="<p>The date the execution was started.</p>"]
-    #[serde(rename="startDate")]
+    /// <p>The date the execution was started.</p>
+    #[serde(rename = "startDate")]
     pub start_date: f64,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StateEnteredEventDetails {
-    #[doc="<p>The JSON input data to the state.</p>"]
-    #[serde(rename="input")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON input data to the state.</p>
+    #[serde(rename = "input")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
-    #[doc="<p>The name of the state.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the state.</p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StateExitedEventDetails {
-    #[doc="<p>The name of the state.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the state.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The JSON output data of the state.</p>"]
-    #[serde(rename="output")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON output data of the state.</p>
+    #[serde(rename = "output")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StateMachineListItem {
-    #[doc="<p>The date the state machine was created.</p>"]
-    #[serde(rename="creationDate")]
+    /// <p>The date the state machine was created.</p>
+    #[serde(rename = "creationDate")]
     pub creation_date: f64,
-    #[doc="<p>The name of the state machine.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the state machine.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The Amazon Resource Name (ARN) that identifies the state machine.</p>"]
-    #[serde(rename="stateMachineArn")]
+    /// <p>The Amazon Resource Name (ARN) that identifies the state machine.</p>
+    #[serde(rename = "stateMachineArn")]
     pub state_machine_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopExecutionInput {
-    #[doc="<p>A more detailed explanation of the cause of the termination.</p>"]
-    #[serde(rename="cause")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A more detailed explanation of the cause of the termination.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cause: Option<String>,
-    #[doc="<p>An arbitrary error code that identifies the cause of the termination.</p>"]
-    #[serde(rename="error")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An arbitrary error code that identifies the cause of the termination.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the execution to stop.</p>"]
-    #[serde(rename="executionArn")]
+    /// <p>The Amazon Resource Name (ARN) of the execution to stop.</p>
+    #[serde(rename = "executionArn")]
     pub execution_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopExecutionOutput {
-    #[doc="<p>The date the execution was stopped.</p>"]
-    #[serde(rename="stopDate")]
+    /// <p>The date the execution was stopped.</p>
+    #[serde(rename = "stopDate")]
     pub stop_date: f64,
 }
 
@@ -753,7 +750,6 @@ pub enum CreateActivityError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateActivityError {
     pub fn from_body(body: &str) -> CreateActivityError {
@@ -845,7 +841,6 @@ pub enum CreateStateMachineError {
     Unknown(String),
 }
 
-
 impl CreateStateMachineError {
     pub fn from_body(body: &str) -> CreateStateMachineError {
         match from_str::<SerdeJsonValue>(body) {
@@ -868,11 +863,19 @@ impl CreateStateMachineError {
                     "InvalidName" => {
                         CreateStateMachineError::InvalidName(String::from(error_message))
                     }
-                    "StateMachineAlreadyExists" => CreateStateMachineError::StateMachineAlreadyExists(String::from(error_message)),
+                    "StateMachineAlreadyExists" => {
+                        CreateStateMachineError::StateMachineAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
                     "StateMachineDeleting" => {
                         CreateStateMachineError::StateMachineDeleting(String::from(error_message))
                     }
-                    "StateMachineLimitExceeded" => CreateStateMachineError::StateMachineLimitExceeded(String::from(error_message)),
+                    "StateMachineLimitExceeded" => {
+                        CreateStateMachineError::StateMachineLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateStateMachineError::Validation(error_message.to_string())
                     }
@@ -941,7 +944,6 @@ pub enum DeleteActivityError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteActivityError {
     pub fn from_body(body: &str) -> DeleteActivityError {
@@ -1018,7 +1020,6 @@ pub enum DeleteStateMachineError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteStateMachineError {
     pub fn from_body(body: &str) -> DeleteStateMachineError {
@@ -1102,7 +1103,6 @@ pub enum DescribeActivityError {
     Unknown(String),
 }
 
-
 impl DescribeActivityError {
     pub fn from_body(body: &str) -> DescribeActivityError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1184,7 +1184,6 @@ pub enum DescribeExecutionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeExecutionError {
     pub fn from_body(body: &str) -> DescribeExecutionError {
@@ -1270,7 +1269,6 @@ pub enum DescribeStateMachineError {
     Unknown(String),
 }
 
-
 impl DescribeStateMachineError {
     pub fn from_body(body: &str) -> DescribeStateMachineError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1287,7 +1285,11 @@ impl DescribeStateMachineError {
                     "InvalidArn" => {
                         DescribeStateMachineError::InvalidArn(String::from(error_message))
                     }
-                    "StateMachineDoesNotExist" => DescribeStateMachineError::StateMachineDoesNotExist(String::from(error_message)),
+                    "StateMachineDoesNotExist" => {
+                        DescribeStateMachineError::StateMachineDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeStateMachineError::Validation(error_message.to_string())
                     }
@@ -1357,7 +1359,6 @@ pub enum GetActivityTaskError {
     Unknown(String),
 }
 
-
 impl GetActivityTaskError {
     pub fn from_body(body: &str) -> GetActivityTaskError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1374,7 +1375,11 @@ impl GetActivityTaskError {
                     "ActivityDoesNotExist" => {
                         GetActivityTaskError::ActivityDoesNotExist(String::from(error_message))
                     }
-                    "ActivityWorkerLimitExceeded" => GetActivityTaskError::ActivityWorkerLimitExceeded(String::from(error_message)),
+                    "ActivityWorkerLimitExceeded" => {
+                        GetActivityTaskError::ActivityWorkerLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidArn" => GetActivityTaskError::InvalidArn(String::from(error_message)),
                     "ValidationException" => {
                         GetActivityTaskError::Validation(error_message.to_string())
@@ -1443,7 +1448,6 @@ pub enum GetExecutionHistoryError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetExecutionHistoryError {
     pub fn from_body(body: &str) -> GetExecutionHistoryError {
@@ -1533,7 +1537,6 @@ pub enum ListActivitiesError {
     Unknown(String),
 }
 
-
 impl ListActivitiesError {
     pub fn from_body(body: &str) -> ListActivitiesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1615,7 +1618,6 @@ pub enum ListExecutionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListExecutionsError {
     pub fn from_body(body: &str) -> ListExecutionsError {
@@ -1701,7 +1703,6 @@ pub enum ListStateMachinesError {
     Unknown(String),
 }
 
-
 impl ListStateMachinesError {
     pub fn from_body(body: &str) -> ListStateMachinesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1785,7 +1786,6 @@ pub enum SendTaskFailureError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl SendTaskFailureError {
     pub fn from_body(body: &str) -> SendTaskFailureError {
@@ -1876,7 +1876,6 @@ pub enum SendTaskHeartbeatError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl SendTaskHeartbeatError {
     pub fn from_body(body: &str) -> SendTaskHeartbeatError {
@@ -1971,7 +1970,6 @@ pub enum SendTaskSuccessError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl SendTaskSuccessError {
     pub fn from_body(body: &str) -> SendTaskSuccessError {
@@ -2075,7 +2073,6 @@ pub enum StartExecutionError {
     Unknown(String),
 }
 
-
 impl StartExecutionError {
     pub fn from_body(body: &str) -> StartExecutionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2176,7 +2173,6 @@ pub enum StopExecutionError {
     Unknown(String),
 }
 
-
 impl StopExecutionError {
     pub fn from_body(body: &str) -> StopExecutionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2244,111 +2240,113 @@ impl Error for StopExecutionError {
 }
 /// Trait representing the capabilities of the AWS SFN API. AWS SFN clients implement this trait.
 pub trait StepFunctions {
-    #[doc="<p>Creates an activity.</p>"]
-    fn create_activity(&self,
-                       input: &CreateActivityInput)
-                       -> Result<CreateActivityOutput, CreateActivityError>;
+    #[doc = "<p>Creates an activity.</p>"]
+    fn create_activity(
+        &self,
+        input: &CreateActivityInput,
+    ) -> Result<CreateActivityOutput, CreateActivityError>;
 
+    #[doc = "<p>Creates a state machine.</p>"]
+    fn create_state_machine(
+        &self,
+        input: &CreateStateMachineInput,
+    ) -> Result<CreateStateMachineOutput, CreateStateMachineError>;
 
-    #[doc="<p>Creates a state machine.</p>"]
-    fn create_state_machine(&self,
-                            input: &CreateStateMachineInput)
-                            -> Result<CreateStateMachineOutput, CreateStateMachineError>;
-
-
-    #[doc="<p>Deletes an activity.</p>"]
-    fn delete_activity(&self,
-                       input: &DeleteActivityInput)
-                       -> Result<DeleteActivityOutput, DeleteActivityError>;
-
+    #[doc = "<p>Deletes an activity.</p>"]
+    fn delete_activity(
+        &self,
+        input: &DeleteActivityInput,
+    ) -> Result<DeleteActivityOutput, DeleteActivityError>;
 
     #[doc="<p>Deletes a state machine. This is an asynchronous operation-- it sets the state machine's status to \"DELETING\" and begins the delete process.</p>"]
-    fn delete_state_machine(&self,
-                            input: &DeleteStateMachineInput)
-                            -> Result<DeleteStateMachineOutput, DeleteStateMachineError>;
+    fn delete_state_machine(
+        &self,
+        input: &DeleteStateMachineInput,
+    ) -> Result<DeleteStateMachineOutput, DeleteStateMachineError>;
 
+    #[doc = "<p>Describes an activity.</p>"]
+    fn describe_activity(
+        &self,
+        input: &DescribeActivityInput,
+    ) -> Result<DescribeActivityOutput, DescribeActivityError>;
 
-    #[doc="<p>Describes an activity.</p>"]
-    fn describe_activity(&self,
-                         input: &DescribeActivityInput)
-                         -> Result<DescribeActivityOutput, DescribeActivityError>;
+    #[doc = "<p>Describes an execution.</p>"]
+    fn describe_execution(
+        &self,
+        input: &DescribeExecutionInput,
+    ) -> Result<DescribeExecutionOutput, DescribeExecutionError>;
 
-
-    #[doc="<p>Describes an execution.</p>"]
-    fn describe_execution(&self,
-                          input: &DescribeExecutionInput)
-                          -> Result<DescribeExecutionOutput, DescribeExecutionError>;
-
-
-    #[doc="<p>Describes a state machine.</p>"]
-    fn describe_state_machine(&self,
-                              input: &DescribeStateMachineInput)
-                              -> Result<DescribeStateMachineOutput, DescribeStateMachineError>;
-
+    #[doc = "<p>Describes a state machine.</p>"]
+    fn describe_state_machine(
+        &self,
+        input: &DescribeStateMachineInput,
+    ) -> Result<DescribeStateMachineOutput, DescribeStateMachineError>;
 
     #[doc="<p>Used by workers to retrieve a task (with the specified activity ARN) scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll will return an empty result, that is, the <code>taskToken</code> returned is an empty string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> </important>"]
-    fn get_activity_task(&self,
-                         input: &GetActivityTaskInput)
-                         -> Result<GetActivityTaskOutput, GetActivityTaskError>;
-
+    fn get_activity_task(
+        &self,
+        input: &GetActivityTaskInput,
+    ) -> Result<GetActivityTaskOutput, GetActivityTaskError>;
 
     #[doc="<p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
-    fn get_execution_history(&self,
-                             input: &GetExecutionHistoryInput)
-                             -> Result<GetExecutionHistoryOutput, GetExecutionHistoryError>;
-
+    fn get_execution_history(
+        &self,
+        input: &GetExecutionHistoryInput,
+    ) -> Result<GetExecutionHistoryOutput, GetExecutionHistoryError>;
 
     #[doc="<p>Lists the existing activities. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
-    fn list_activities(&self,
-                       input: &ListActivitiesInput)
-                       -> Result<ListActivitiesOutput, ListActivitiesError>;
-
+    fn list_activities(
+        &self,
+        input: &ListActivitiesInput,
+    ) -> Result<ListActivitiesOutput, ListActivitiesError>;
 
     #[doc="<p>Lists the executions of a state machine that meet the filtering criteria. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
-    fn list_executions(&self,
-                       input: &ListExecutionsInput)
-                       -> Result<ListExecutionsOutput, ListExecutionsError>;
-
+    fn list_executions(
+        &self,
+        input: &ListExecutionsInput,
+    ) -> Result<ListExecutionsOutput, ListExecutionsError>;
 
     #[doc="<p>Lists the existing state machines. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
-    fn list_state_machines(&self,
-                           input: &ListStateMachinesInput)
-                           -> Result<ListStateMachinesOutput, ListStateMachinesError>;
-
+    fn list_state_machines(
+        &self,
+        input: &ListStateMachinesInput,
+    ) -> Result<ListStateMachinesOutput, ListStateMachinesError>;
 
     #[doc="<p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>"]
-    fn send_task_failure(&self,
-                         input: &SendTaskFailureInput)
-                         -> Result<SendTaskFailureOutput, SendTaskFailureError>;
-
+    fn send_task_failure(
+        &self,
+        input: &SendTaskFailureInput,
+    ) -> Result<SendTaskFailureOutput, SendTaskFailureError>;
 
     #[doc="<p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine's Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history will contain an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine's Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note>"]
-    fn send_task_heartbeat(&self,
-                           input: &SendTaskHeartbeatInput)
-                           -> Result<SendTaskHeartbeatOutput, SendTaskHeartbeatError>;
-
+    fn send_task_heartbeat(
+        &self,
+        input: &SendTaskHeartbeatInput,
+    ) -> Result<SendTaskHeartbeatOutput, SendTaskHeartbeatError>;
 
     #[doc="<p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>"]
-    fn send_task_success(&self,
-                         input: &SendTaskSuccessInput)
-                         -> Result<SendTaskSuccessOutput, SendTaskSuccessError>;
+    fn send_task_success(
+        &self,
+        input: &SendTaskSuccessInput,
+    ) -> Result<SendTaskSuccessOutput, SendTaskSuccessError>;
 
+    #[doc = "<p>Starts a state machine execution.</p>"]
+    fn start_execution(
+        &self,
+        input: &StartExecutionInput,
+    ) -> Result<StartExecutionOutput, StartExecutionError>;
 
-    #[doc="<p>Starts a state machine execution.</p>"]
-    fn start_execution(&self,
-                       input: &StartExecutionInput)
-                       -> Result<StartExecutionOutput, StartExecutionError>;
-
-
-    #[doc="<p>Stops an execution.</p>"]
-    fn stop_execution(&self,
-                      input: &StopExecutionInput)
-                      -> Result<StopExecutionOutput, StopExecutionError>;
+    #[doc = "<p>Stops an execution.</p>"]
+    fn stop_execution(
+        &self,
+        input: &StopExecutionInput,
+    ) -> Result<StopExecutionOutput, StopExecutionError>;
 }
 /// A client for the AWS SFN API.
 pub struct StepFunctionsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -2356,8 +2354,9 @@ pub struct StepFunctionsClient<P, D>
 }
 
 impl<P, D> StepFunctionsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         StepFunctionsClient {
@@ -2369,13 +2368,15 @@ impl<P, D> StepFunctionsClient<P, D>
 }
 
 impl<P, D> StepFunctions for StepFunctionsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
-    #[doc="<p>Creates an activity.</p>"]
-    fn create_activity(&self,
-                       input: &CreateActivityInput)
-                       -> Result<CreateActivityOutput, CreateActivityError> {
+    #[doc = "<p>Creates an activity.</p>"]
+    fn create_activity(
+        &self,
+        input: &CreateActivityInput,
+    ) -> Result<CreateActivityOutput, CreateActivityError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2391,23 +2392,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateActivityOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateActivityOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateActivityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateActivityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a state machine.</p>"]
-    fn create_state_machine(&self,
-                            input: &CreateStateMachineInput)
-                            -> Result<CreateStateMachineOutput, CreateStateMachineError> {
+    #[doc = "<p>Creates a state machine.</p>"]
+    fn create_state_machine(
+        &self,
+        input: &CreateStateMachineInput,
+    ) -> Result<CreateStateMachineOutput, CreateStateMachineError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2423,23 +2426,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateStateMachineOutput>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateStateMachineOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateStateMachineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateStateMachineError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes an activity.</p>"]
-    fn delete_activity(&self,
-                       input: &DeleteActivityInput)
-                       -> Result<DeleteActivityOutput, DeleteActivityError> {
+    #[doc = "<p>Deletes an activity.</p>"]
+    fn delete_activity(
+        &self,
+        input: &DeleteActivityInput,
+    ) -> Result<DeleteActivityOutput, DeleteActivityError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2455,23 +2460,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteActivityOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteActivityOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteActivityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteActivityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a state machine. This is an asynchronous operation-- it sets the state machine's status to \"DELETING\" and begins the delete process.</p>"]
-    fn delete_state_machine(&self,
-                            input: &DeleteStateMachineInput)
-                            -> Result<DeleteStateMachineOutput, DeleteStateMachineError> {
+    fn delete_state_machine(
+        &self,
+        input: &DeleteStateMachineInput,
+    ) -> Result<DeleteStateMachineOutput, DeleteStateMachineError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2487,23 +2494,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteStateMachineOutput>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteStateMachineOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteStateMachineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteStateMachineError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes an activity.</p>"]
-    fn describe_activity(&self,
-                         input: &DescribeActivityInput)
-                         -> Result<DescribeActivityOutput, DescribeActivityError> {
+    #[doc = "<p>Describes an activity.</p>"]
+    fn describe_activity(
+        &self,
+        input: &DescribeActivityInput,
+    ) -> Result<DescribeActivityOutput, DescribeActivityError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2519,23 +2528,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeActivityOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeActivityOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeActivityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeActivityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes an execution.</p>"]
-    fn describe_execution(&self,
-                          input: &DescribeExecutionInput)
-                          -> Result<DescribeExecutionOutput, DescribeExecutionError> {
+    #[doc = "<p>Describes an execution.</p>"]
+    fn describe_execution(
+        &self,
+        input: &DescribeExecutionInput,
+    ) -> Result<DescribeExecutionOutput, DescribeExecutionError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2551,23 +2562,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeExecutionOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeExecutionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeExecutionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes a state machine.</p>"]
-    fn describe_state_machine(&self,
-                              input: &DescribeStateMachineInput)
-                              -> Result<DescribeStateMachineOutput, DescribeStateMachineError> {
+    #[doc = "<p>Describes a state machine.</p>"]
+    fn describe_state_machine(
+        &self,
+        input: &DescribeStateMachineInput,
+    ) -> Result<DescribeStateMachineOutput, DescribeStateMachineError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2583,21 +2596,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeStateMachineOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeStateMachineOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeStateMachineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeStateMachineError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Used by workers to retrieve a task (with the specified activity ARN) scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll will return an empty result, that is, the <code>taskToken</code> returned is an empty string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> </important>"]
-    fn get_activity_task(&self,
-                         input: &GetActivityTaskInput)
-                         -> Result<GetActivityTaskOutput, GetActivityTaskError> {
+    fn get_activity_task(
+        &self,
+        input: &GetActivityTaskInput,
+    ) -> Result<GetActivityTaskOutput, GetActivityTaskError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2613,23 +2630,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetActivityTaskOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetActivityTaskOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetActivityTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetActivityTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
-    fn get_execution_history(&self,
-                             input: &GetExecutionHistoryInput)
-                             -> Result<GetExecutionHistoryOutput, GetExecutionHistoryError> {
+    fn get_execution_history(
+        &self,
+        input: &GetExecutionHistoryInput,
+    ) -> Result<GetExecutionHistoryOutput, GetExecutionHistoryError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2645,21 +2664,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetExecutionHistoryOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetExecutionHistoryOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetExecutionHistoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetExecutionHistoryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the existing activities. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
-    fn list_activities(&self,
-                       input: &ListActivitiesInput)
-                       -> Result<ListActivitiesOutput, ListActivitiesError> {
+    fn list_activities(
+        &self,
+        input: &ListActivitiesInput,
+    ) -> Result<ListActivitiesOutput, ListActivitiesError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2675,23 +2698,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListActivitiesOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListActivitiesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListActivitiesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListActivitiesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the executions of a state machine that meet the filtering criteria. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
-    fn list_executions(&self,
-                       input: &ListExecutionsInput)
-                       -> Result<ListExecutionsOutput, ListExecutionsError> {
+    fn list_executions(
+        &self,
+        input: &ListExecutionsInput,
+    ) -> Result<ListExecutionsOutput, ListExecutionsError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2707,23 +2732,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListExecutionsOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListExecutionsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListExecutionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListExecutionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the existing state machines. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
-    fn list_state_machines(&self,
-                           input: &ListStateMachinesInput)
-                           -> Result<ListStateMachinesOutput, ListStateMachinesError> {
+    fn list_state_machines(
+        &self,
+        input: &ListStateMachinesInput,
+    ) -> Result<ListStateMachinesOutput, ListStateMachinesError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2739,23 +2766,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListStateMachinesOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListStateMachinesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListStateMachinesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListStateMachinesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>"]
-    fn send_task_failure(&self,
-                         input: &SendTaskFailureInput)
-                         -> Result<SendTaskFailureOutput, SendTaskFailureError> {
+    fn send_task_failure(
+        &self,
+        input: &SendTaskFailureInput,
+    ) -> Result<SendTaskFailureOutput, SendTaskFailureError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2771,23 +2800,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SendTaskFailureOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<SendTaskFailureOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SendTaskFailureError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SendTaskFailureError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine's Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history will contain an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine's Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note>"]
-    fn send_task_heartbeat(&self,
-                           input: &SendTaskHeartbeatInput)
-                           -> Result<SendTaskHeartbeatOutput, SendTaskHeartbeatError> {
+    fn send_task_heartbeat(
+        &self,
+        input: &SendTaskHeartbeatInput,
+    ) -> Result<SendTaskHeartbeatOutput, SendTaskHeartbeatError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2803,23 +2834,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SendTaskHeartbeatOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<SendTaskHeartbeatOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SendTaskHeartbeatError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SendTaskHeartbeatError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>"]
-    fn send_task_success(&self,
-                         input: &SendTaskSuccessInput)
-                         -> Result<SendTaskSuccessOutput, SendTaskSuccessError> {
+    fn send_task_success(
+        &self,
+        input: &SendTaskSuccessInput,
+    ) -> Result<SendTaskSuccessOutput, SendTaskSuccessError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2835,23 +2868,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SendTaskSuccessOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<SendTaskSuccessOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SendTaskSuccessError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SendTaskSuccessError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Starts a state machine execution.</p>"]
-    fn start_execution(&self,
-                       input: &StartExecutionInput)
-                       -> Result<StartExecutionOutput, StartExecutionError> {
+    #[doc = "<p>Starts a state machine execution.</p>"]
+    fn start_execution(
+        &self,
+        input: &StartExecutionInput,
+    ) -> Result<StartExecutionOutput, StartExecutionError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2867,23 +2902,25 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartExecutionOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<StartExecutionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StartExecutionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Stops an execution.</p>"]
-    fn stop_execution(&self,
-                      input: &StopExecutionInput)
-                      -> Result<StopExecutionOutput, StopExecutionError> {
+    #[doc = "<p>Stops an execution.</p>"]
+    fn stop_execution(
+        &self,
+        input: &StopExecutionInput,
+    ) -> Result<StopExecutionOutput, StopExecutionError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
@@ -2899,14 +2936,16 @@ impl<P, D> StepFunctions for StepFunctionsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopExecutionOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<StopExecutionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StopExecutionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

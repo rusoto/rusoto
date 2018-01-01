@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,2533 +27,2533 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AcceptMatchInput {
-    #[doc="<p>Player response to the proposed match.</p>"]
-    #[serde(rename="AcceptanceType")]
+    /// <p>Player response to the proposed match.</p>
+    #[serde(rename = "AcceptanceType")]
     pub acceptance_type: String,
-    #[doc="<p>Unique identifier for a player delivering the response. This parameter can include one or multiple player IDs.</p>"]
-    #[serde(rename="PlayerIds")]
+    /// <p>Unique identifier for a player delivering the response. This parameter can include one or multiple player IDs.</p>
+    #[serde(rename = "PlayerIds")]
     pub player_ids: Vec<String>,
-    #[doc="<p>Unique identifier for a matchmaking ticket. The ticket must be in status <code>REQUIRES_ACCEPTANCE</code>; otherwise this request will fail.</p>"]
-    #[serde(rename="TicketId")]
+    /// <p>Unique identifier for a matchmaking ticket. The ticket must be in status <code>REQUIRES_ACCEPTANCE</code>; otherwise this request will fail.</p>
+    #[serde(rename = "TicketId")]
     pub ticket_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AcceptMatchOutput;
 
-#[doc="<p>Properties describing a fleet alias.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Properties describing a fleet alias.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Alias {
-    #[doc="<p>Unique identifier for an alias; alias ARNs are unique across all regions.</p>"]
-    #[serde(rename="AliasArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for an alias; alias ARNs are unique across all regions.</p>
+    #[serde(rename = "AliasArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alias_arn: Option<String>,
-    #[doc="<p>Unique identifier for an alias; alias IDs are unique within a region.</p>"]
-    #[serde(rename="AliasId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for an alias; alias IDs are unique within a region.</p>
+    #[serde(rename = "AliasId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alias_id: Option<String>,
-    #[doc="<p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="CreationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    #[doc="<p>Human-readable description of an alias.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Human-readable description of an alias.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Time stamp indicating when this data object was last modified. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="LastUpdatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this data object was last modified. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "LastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_time: Option<f64>,
-    #[doc="<p>Descriptive label that is associated with an alias. Alias names do not need to be unique.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with an alias. Alias names do not need to be unique.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Alias configuration for the alias, including routing type and settings.</p>"]
-    #[serde(rename="RoutingStrategy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Alias configuration for the alias, including routing type and settings.</p>
+    #[serde(rename = "RoutingStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub routing_strategy: Option<RoutingStrategy>,
 }
 
-#[doc="<p>Values for use in <a>Player</a> attribute type:value pairs. This object lets you specify an attribute value using any of the valid data types: string, number, string array or data map. Each <code>AttributeValue</code> object can use only one of the available properties.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Values for use in <a>Player</a> attribute type:value pairs. This object lets you specify an attribute value using any of the valid data types: string, number, string array or data map. Each <code>AttributeValue</code> object can use only one of the available properties.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct AttributeValue {
-    #[doc="<p>For number values, expressed as double.</p>"]
-    #[serde(rename="N")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For number values, expressed as double.</p>
+    #[serde(rename = "N")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub n: Option<f64>,
-    #[doc="<p>For single string values. Maximum string length is 100 characters.</p>"]
-    #[serde(rename="S")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For single string values. Maximum string length is 100 characters.</p>
+    #[serde(rename = "S")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s: Option<String>,
-    #[doc="<p>For a map of up to 10 type:value pairs. Maximum length for each string value is 100 characters. </p>"]
-    #[serde(rename="SDM")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a map of up to 10 type:value pairs. Maximum length for each string value is 100 characters. </p>
+    #[serde(rename = "SDM")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sdm: Option<::std::collections::HashMap<String, f64>>,
-    #[doc="<p>For a list of up to 10 strings. Maximum length for each string is 100 characters. Duplicate values are not recognized; all occurances of the the repeated value after the first of a repeated value are ignored.</p>"]
-    #[serde(rename="SL")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For a list of up to 10 strings. Maximum length for each string is 100 characters. Duplicate values are not recognized; all occurances of the the repeated value after the first of a repeated value are ignored.</p>
+    #[serde(rename = "SL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sl: Option<Vec<String>>,
 }
 
-#[doc="<p>Temporary access credentials used for uploading game build files to Amazon GameLift. They are valid for a limited time. If they expire before you upload your game build, get a new set by calling <a>RequestUploadCredentials</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Temporary access credentials used for uploading game build files to Amazon GameLift. They are valid for a limited time. If they expire before you upload your game build, get a new set by calling <a>RequestUploadCredentials</a>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AwsCredentials {
-    #[doc="<p>Temporary key allowing access to the Amazon GameLift S3 account.</p>"]
-    #[serde(rename="AccessKeyId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Temporary key allowing access to the Amazon GameLift S3 account.</p>
+    #[serde(rename = "AccessKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub access_key_id: Option<String>,
-    #[doc="<p>Temporary secret key allowing access to the Amazon GameLift S3 account.</p>"]
-    #[serde(rename="SecretAccessKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Temporary secret key allowing access to the Amazon GameLift S3 account.</p>
+    #[serde(rename = "SecretAccessKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_access_key: Option<String>,
-    #[doc="<p>Token used to associate a specific build ID with the files uploaded using these credentials.</p>"]
-    #[serde(rename="SessionToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token used to associate a specific build ID with the files uploaded using these credentials.</p>
+    #[serde(rename = "SessionToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub session_token: Option<String>,
 }
 
-#[doc="<p>Properties describing a game build.</p> <p>Build-related operations include:</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Properties describing a game build.</p> <p>Build-related operations include:</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Build {
-    #[doc="<p>Unique identifier for a build.</p>"]
-    #[serde(rename="BuildId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a build.</p>
+    #[serde(rename = "BuildId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub build_id: Option<String>,
-    #[doc="<p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="CreationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    #[doc="<p>Descriptive label that is associated with a build. Build names do not need to be unique. It can be set using <a>CreateBuild</a> or <a>UpdateBuild</a>.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with a build. Build names do not need to be unique. It can be set using <a>CreateBuild</a> or <a>UpdateBuild</a>.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Operating system that the game server binaries are built to run on. This value determines the type of fleet resources that you can use for this build.</p>"]
-    #[serde(rename="OperatingSystem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Operating system that the game server binaries are built to run on. This value determines the type of fleet resources that you can use for this build.</p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
-    #[doc="<p>File size of the uploaded game build, expressed in bytes. When the build status is <code>INITIALIZED</code>, this value is 0.</p>"]
-    #[serde(rename="SizeOnDisk")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>File size of the uploaded game build, expressed in bytes. When the build status is <code>INITIALIZED</code>, this value is 0.</p>
+    #[serde(rename = "SizeOnDisk")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub size_on_disk: Option<i64>,
-    #[doc="<p>Current status of the build.</p> <p>Possible build statuses include the following:</p> <ul> <li> <p> <b>INITIALIZED</b> – A new build has been defined, but no files have been uploaded. You cannot create fleets for builds that are in this status. When a build is successfully created, the build status is set to this value. </p> </li> <li> <p> <b>READY</b> – The game build has been successfully uploaded. You can now create new fleets for this build.</p> </li> <li> <p> <b>FAILED</b> – The game build upload failed. You cannot create new fleets for this build. </p> </li> </ul>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Current status of the build.</p> <p>Possible build statuses include the following:</p> <ul> <li> <p> <b>INITIALIZED</b> – A new build has been defined, but no files have been uploaded. You cannot create fleets for builds that are in this status. When a build is successfully created, the build status is set to this value. </p> </li> <li> <p> <b>READY</b> – The game build has been successfully uploaded. You can now create new fleets for this build.</p> </li> <li> <p> <b>FAILED</b> – The game build upload failed. You cannot create new fleets for this build. </p> </li> </ul>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>Version that is associated with this build. Version strings do not need to be unique. This value can be set using <a>CreateBuild</a> or <a>UpdateBuild</a>.</p>"]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Version that is associated with this build. Version strings do not need to be unique. This value can be set using <a>CreateBuild</a> or <a>UpdateBuild</a>.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateAliasInput {
-    #[doc="<p>Human-readable description of an alias.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Human-readable description of an alias.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Descriptive label that is associated with an alias. Alias names do not need to be unique.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Descriptive label that is associated with an alias. Alias names do not need to be unique.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>Object that specifies the fleet and routing type to use for the alias.</p>"]
-    #[serde(rename="RoutingStrategy")]
+    /// <p>Object that specifies the fleet and routing type to use for the alias.</p>
+    #[serde(rename = "RoutingStrategy")]
     pub routing_strategy: RoutingStrategy,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateAliasOutput {
-    #[doc="<p>Object that describes the newly created alias record.</p>"]
-    #[serde(rename="Alias")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that describes the newly created alias record.</p>
+    #[serde(rename = "Alias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alias: Option<Alias>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateBuildInput {
-    #[doc="<p>Descriptive label that is associated with a build. Build names do not need to be unique. You can use <a>UpdateBuild</a> to change this value later. </p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with a build. Build names do not need to be unique. You can use <a>UpdateBuild</a> to change this value later. </p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Operating system that the game server binaries are built to run on. This value determines the type of fleet resources that you can use for this build. If your game build contains multiple executables, they all must run on the same operating system.</p>"]
-    #[serde(rename="OperatingSystem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Operating system that the game server binaries are built to run on. This value determines the type of fleet resources that you can use for this build. If your game build contains multiple executables, they all must run on the same operating system.</p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
-    #[doc="<p>Amazon S3 location of the game build files to be uploaded. The S3 bucket must be owned by the same AWS account that you're using to manage Amazon GameLift. It also must in the same region that you want to create a new build in. Before calling <code>CreateBuild</code> with this location, you must allow Amazon GameLift to access your Amazon S3 bucket (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-cli-uploading.html#gamelift-build-cli-uploading-create-build\">Create a Build with Files in Amazon S3</a>).</p>"]
-    #[serde(rename="StorageLocation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon S3 location of the game build files to be uploaded. The S3 bucket must be owned by the same AWS account that you're using to manage Amazon GameLift. It also must in the same region that you want to create a new build in. Before calling <code>CreateBuild</code> with this location, you must allow Amazon GameLift to access your Amazon S3 bucket (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-cli-uploading.html#gamelift-build-cli-uploading-create-build">Create a Build with Files in Amazon S3</a>).</p>
+    #[serde(rename = "StorageLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_location: Option<S3Location>,
-    #[doc="<p>Version that is associated with this build. Version strings do not need to be unique. You can use <a>UpdateBuild</a> to change this value later. </p>"]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Version that is associated with this build. Version strings do not need to be unique. You can use <a>UpdateBuild</a> to change this value later. </p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateBuildOutput {
-    #[doc="<p>The newly created build record, including a unique build ID and status. </p>"]
-    #[serde(rename="Build")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The newly created build record, including a unique build ID and status. </p>
+    #[serde(rename = "Build")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub build: Option<Build>,
-    #[doc="<p>Amazon S3 location specified in the request.</p>"]
-    #[serde(rename="StorageLocation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon S3 location specified in the request.</p>
+    #[serde(rename = "StorageLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_location: Option<S3Location>,
-    #[doc="<p>This element is not currently in use.</p>"]
-    #[serde(rename="UploadCredentials")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>This element is not currently in use.</p>
+    #[serde(rename = "UploadCredentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub upload_credentials: Option<AwsCredentials>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateFleetInput {
-    #[doc="<p>Unique identifier for a build to be deployed on the new fleet. The build must have been successfully uploaded to Amazon GameLift and be in a <code>READY</code> status. This fleet setting cannot be changed once the fleet is created.</p>"]
-    #[serde(rename="BuildId")]
+    /// <p>Unique identifier for a build to be deployed on the new fleet. The build must have been successfully uploaded to Amazon GameLift and be in a <code>READY</code> status. This fleet setting cannot be changed once the fleet is created.</p>
+    #[serde(rename = "BuildId")]
     pub build_id: String,
-    #[doc="<p>Human-readable description of a fleet.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Human-readable description of a fleet.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Range of IP addresses and port settings that permit inbound traffic to access server processes running on the fleet. If no inbound permissions are set, including both IP address range and port range, the server processes in the fleet cannot accept connections. You can specify one or more sets of permissions for a fleet.</p>"]
-    #[serde(rename="EC2InboundPermissions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Range of IP addresses and port settings that permit inbound traffic to access server processes running on the fleet. If no inbound permissions are set, including both IP address range and port range, the server processes in the fleet cannot accept connections. You can specify one or more sets of permissions for a fleet.</p>
+    #[serde(rename = "EC2InboundPermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ec2_inbound_permissions: Option<Vec<IpPermission>>,
-    #[doc="<p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for detailed descriptions.</p>"]
-    #[serde(rename="EC2InstanceType")]
+    /// <p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for detailed descriptions.</p>
+    #[serde(rename = "EC2InstanceType")]
     pub ec2_instance_type: String,
-    #[doc="<p>This parameter is no longer used. Instead, to specify where Amazon GameLift should store log files once a server process shuts down, use the Amazon GameLift server API <code>ProcessReady()</code> and specify one or more directory paths in <code>logParameters</code>. See more information in the <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api-ref.html#gamelift-sdk-server-api-ref-dataypes-process\">Server API Reference</a>. </p>"]
-    #[serde(rename="LogPaths")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>This parameter is no longer used. Instead, to specify where Amazon GameLift should store log files once a server process shuts down, use the Amazon GameLift server API <code>ProcessReady()</code> and specify one or more directory paths in <code>logParameters</code>. See more information in the <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api-ref.html#gamelift-sdk-server-api-ref-dataypes-process">Server API Reference</a>. </p>
+    #[serde(rename = "LogPaths")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_paths: Option<Vec<String>>,
-    #[doc="<p>Names of metric groups to add this fleet to. Use an existing metric group name to add this fleet to the group. Or use a new name to create a new metric group. A fleet can only be included in one metric group at a time.</p>"]
-    #[serde(rename="MetricGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Names of metric groups to add this fleet to. Use an existing metric group name to add this fleet to the group. Or use a new name to create a new metric group. A fleet can only be included in one metric group at a time.</p>
+    #[serde(rename = "MetricGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_groups: Option<Vec<String>>,
-    #[doc="<p>Descriptive label that is associated with a fleet. Fleet names do not need to be unique.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Descriptive label that is associated with a fleet. Fleet names do not need to be unique.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>Game session protection policy to apply to all instances in this fleet. If this parameter is not set, instances in this fleet default to no protection. You can change a fleet's protection policy using UpdateFleetAttributes, but this change will only affect sessions created after the policy change. You can also set protection for individual instances using <a>UpdateGameSession</a>.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>"]
-    #[serde(rename="NewGameSessionProtectionPolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Game session protection policy to apply to all instances in this fleet. If this parameter is not set, instances in this fleet default to no protection. You can change a fleet's protection policy using UpdateFleetAttributes, but this change will only affect sessions created after the policy change. You can also set protection for individual instances using <a>UpdateGameSession</a>.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>
+    #[serde(rename = "NewGameSessionProtectionPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub new_game_session_protection_policy: Option<String>,
-    #[doc="<p>Policy that limits the number of game sessions an individual player can create over a span of time for this fleet.</p>"]
-    #[serde(rename="ResourceCreationLimitPolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Policy that limits the number of game sessions an individual player can create over a span of time for this fleet.</p>
+    #[serde(rename = "ResourceCreationLimitPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_creation_limit_policy: Option<ResourceCreationLimitPolicy>,
-    #[doc="<p>Instructions for launching server processes on each instance in the fleet. The run-time configuration for a fleet has a collection of server process configurations, one for each type of server process to run on an instance. A server process configuration specifies the location of the server executable, launch parameters, and the number of concurrent processes with that configuration to maintain on each instance. A CreateFleet request must include a run-time configuration with at least one server process configuration; otherwise the request fails with an invalid request exception. (This parameter replaces the parameters <code>ServerLaunchPath</code> and <code>ServerLaunchParameters</code>; requests that contain values for these parameters instead of a run-time configuration will continue to work.) </p>"]
-    #[serde(rename="RuntimeConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Instructions for launching server processes on each instance in the fleet. The run-time configuration for a fleet has a collection of server process configurations, one for each type of server process to run on an instance. A server process configuration specifies the location of the server executable, launch parameters, and the number of concurrent processes with that configuration to maintain on each instance. A CreateFleet request must include a run-time configuration with at least one server process configuration; otherwise the request fails with an invalid request exception. (This parameter replaces the parameters <code>ServerLaunchPath</code> and <code>ServerLaunchParameters</code>; requests that contain values for these parameters instead of a run-time configuration will continue to work.) </p>
+    #[serde(rename = "RuntimeConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub runtime_configuration: Option<RuntimeConfiguration>,
-    #[doc="<p>This parameter is no longer used. Instead, specify server launch parameters in the <code>RuntimeConfiguration</code> parameter. (Requests that specify a server launch path and launch parameters instead of a run-time configuration will continue to work.)</p>"]
-    #[serde(rename="ServerLaunchParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>This parameter is no longer used. Instead, specify server launch parameters in the <code>RuntimeConfiguration</code> parameter. (Requests that specify a server launch path and launch parameters instead of a run-time configuration will continue to work.)</p>
+    #[serde(rename = "ServerLaunchParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_launch_parameters: Option<String>,
-    #[doc="<p>This parameter is no longer used. Instead, specify a server launch path using the <code>RuntimeConfiguration</code> parameter. (Requests that specify a server launch path and launch parameters instead of a run-time configuration will continue to work.)</p>"]
-    #[serde(rename="ServerLaunchPath")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>This parameter is no longer used. Instead, specify a server launch path using the <code>RuntimeConfiguration</code> parameter. (Requests that specify a server launch path and launch parameters instead of a run-time configuration will continue to work.)</p>
+    #[serde(rename = "ServerLaunchPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_launch_path: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateFleetOutput {
-    #[doc="<p>Properties for the newly created fleet.</p>"]
-    #[serde(rename="FleetAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Properties for the newly created fleet.</p>
+    #[serde(rename = "FleetAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_attributes: Option<FleetAttributes>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateGameSessionInput {
-    #[doc="<p>Unique identifier for an alias associated with the fleet to create a game session in. Each request must reference either a fleet ID or alias ID, but not both.</p>"]
-    #[serde(rename="AliasId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for an alias associated with the fleet to create a game session in. Each request must reference either a fleet ID or alias ID, but not both.</p>
+    #[serde(rename = "AliasId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alias_id: Option<String>,
-    #[doc="<p>Unique identifier for a player or entity creating the game session. This ID is used to enforce a resource protection policy (if one exists) that limits the number of concurrent active game sessions one player can have.</p>"]
-    #[serde(rename="CreatorId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a player or entity creating the game session. This ID is used to enforce a resource protection policy (if one exists) that limits the number of concurrent active game sessions one player can have.</p>
+    #[serde(rename = "CreatorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_id: Option<String>,
-    #[doc="<p>Unique identifier for a fleet to create a game session in. Each request must reference either a fleet ID or alias ID, but not both.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet to create a game session in. Each request must reference either a fleet ID or alias ID, but not both.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
-    #[doc="<p>Set of developer-defined properties for a game session, formatted as a set of type:value pairs. These properties are included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession\">Start a Game Session</a>).</p>"]
-    #[serde(rename="GameProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of developer-defined properties for a game session, formatted as a set of type:value pairs. These properties are included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>).</p>
+    #[serde(rename = "GameProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_properties: Option<Vec<GameProperty>>,
-    #[doc="<p>Set of developer-defined game session properties, formatted as a single string value. This data is included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession\">Start a Game Session</a>).</p>"]
-    #[serde(rename="GameSessionData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of developer-defined game session properties, formatted as a single string value. This data is included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>).</p>
+    #[serde(rename = "GameSessionData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_data: Option<String>,
-    #[doc="<p> <i>This parameter is no longer preferred. Please use <code>IdempotencyToken</code> instead.</i> Custom string that uniquely identifies a request for a new game session. Maximum token length is 48 characters. If provided, this string is included in the new game session's ID. (A game session ID has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.) </p>"]
-    #[serde(rename="GameSessionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> <i>This parameter is no longer preferred. Please use <code>IdempotencyToken</code> instead.</i> Custom string that uniquely identifies a request for a new game session. Maximum token length is 48 characters. If provided, this string is included in the new game session's ID. (A game session ID has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.) </p>
+    #[serde(rename = "GameSessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_id: Option<String>,
-    #[doc="<p>Custom string that uniquely identifies a request for a new game session. Maximum token length is 48 characters. If provided, this string is included in the new game session's ID. (A game session ID has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.) Idempotency tokens remain in use for 30 days after a game session has ended; game session objects are retained for this time period and then deleted.</p>"]
-    #[serde(rename="IdempotencyToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Custom string that uniquely identifies a request for a new game session. Maximum token length is 48 characters. If provided, this string is included in the new game session's ID. (A game session ID has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.) Idempotency tokens remain in use for 30 days after a game session has ended; game session objects are retained for this time period and then deleted.</p>
+    #[serde(rename = "IdempotencyToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub idempotency_token: Option<String>,
-    #[doc="<p>Maximum number of players that can be connected simultaneously to the game session.</p>"]
-    #[serde(rename="MaximumPlayerSessionCount")]
+    /// <p>Maximum number of players that can be connected simultaneously to the game session.</p>
+    #[serde(rename = "MaximumPlayerSessionCount")]
     pub maximum_player_session_count: i64,
-    #[doc="<p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateGameSessionOutput {
-    #[doc="<p>Object that describes the newly created game session record.</p>"]
-    #[serde(rename="GameSession")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that describes the newly created game session record.</p>
+    #[serde(rename = "GameSession")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session: Option<GameSession>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateGameSessionQueueInput {
-    #[doc="<p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order.</p>"]
-    #[serde(rename="Destinations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order.</p>
+    #[serde(rename = "Destinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destinations: Option<Vec<GameSessionQueueDestination>>,
-    #[doc="<p>Descriptive label that is associated with game session queue. Queue names must be unique within each region.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Descriptive label that is associated with game session queue. Queue names must be unique within each region.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>Collection of latency policies to apply when processing game sessions placement requests with player latency information. Multiple policies are evaluated in order of the maximum latency value, starting with the lowest latency values. With just one policy, it is enforced at the start of the game session placement for the duration period. With multiple policies, each policy is enforced consecutively for its duration period. For example, a queue might enforce a 60-second policy followed by a 120-second policy, and then no policy for the remainder of the placement. A player latency policy must set a value for MaximumIndividualPlayerLatencyMilliseconds; if none is set, this API requests will fail.</p>"]
-    #[serde(rename="PlayerLatencyPolicies")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of latency policies to apply when processing game sessions placement requests with player latency information. Multiple policies are evaluated in order of the maximum latency value, starting with the lowest latency values. With just one policy, it is enforced at the start of the game session placement for the duration period. With multiple policies, each policy is enforced consecutively for its duration period. For example, a queue might enforce a 60-second policy followed by a 120-second policy, and then no policy for the remainder of the placement. A player latency policy must set a value for MaximumIndividualPlayerLatencyMilliseconds; if none is set, this API requests will fail.</p>
+    #[serde(rename = "PlayerLatencyPolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_latency_policies: Option<Vec<PlayerLatencyPolicy>>,
-    #[doc="<p>Maximum time, in seconds, that a new game session placement request remains in the queue. When a request exceeds this time, the game session placement changes to a <code>TIMED_OUT</code> status.</p>"]
-    #[serde(rename="TimeoutInSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum time, in seconds, that a new game session placement request remains in the queue. When a request exceeds this time, the game session placement changes to a <code>TIMED_OUT</code> status.</p>
+    #[serde(rename = "TimeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_seconds: Option<i64>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateGameSessionQueueOutput {
-    #[doc="<p>Object that describes the newly created game session queue.</p>"]
-    #[serde(rename="GameSessionQueue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that describes the newly created game session queue.</p>
+    #[serde(rename = "GameSessionQueue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_queue: Option<GameSessionQueue>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateMatchmakingConfigurationInput {
-    #[doc="<p>Flag that determines whether or not a match that was created with this configuration must be accepted by the matched players. To require acceptance, set to TRUE.</p>"]
-    #[serde(rename="AcceptanceRequired")]
+    /// <p>Flag that determines whether or not a match that was created with this configuration must be accepted by the matched players. To require acceptance, set to TRUE.</p>
+    #[serde(rename = "AcceptanceRequired")]
     pub acceptance_required: bool,
-    #[doc="<p>Length of time (in seconds) to wait for players to accept a proposed match. If any player rejects the match or fails to accept before the timeout, the ticket continues to look for an acceptable match.</p>"]
-    #[serde(rename="AcceptanceTimeoutSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Length of time (in seconds) to wait for players to accept a proposed match. If any player rejects the match or fails to accept before the timeout, the ticket continues to look for an acceptable match.</p>
+    #[serde(rename = "AcceptanceTimeoutSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub acceptance_timeout_seconds: Option<i64>,
-    #[doc="<p>Number of player slots in a match to keep open for future players. For example, if the configuration's rule set specifies a match for a single 12-person team, and the additional player count is set to 2, only 10 players are selected for the match.</p>"]
-    #[serde(rename="AdditionalPlayerCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of player slots in a match to keep open for future players. For example, if the configuration's rule set specifies a match for a single 12-person team, and the additional player count is set to 2, only 10 players are selected for the match.</p>
+    #[serde(rename = "AdditionalPlayerCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_player_count: Option<i64>,
-    #[doc="<p>Information to attached to all events related to the matchmaking configuration. </p>"]
-    #[serde(rename="CustomEventData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information to attached to all events related to the matchmaking configuration. </p>
+    #[serde(rename = "CustomEventData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_event_data: Option<String>,
-    #[doc="<p>Meaningful description of the matchmaking configuration. </p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Meaningful description of the matchmaking configuration. </p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Set of developer-defined properties for a game session, formatted as a set of type:value pairs. These properties are included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession\">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match. </p>"]
-    #[serde(rename="GameProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of developer-defined properties for a game session, formatted as a set of type:value pairs. These properties are included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match. </p>
+    #[serde(rename = "GameProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_properties: Option<Vec<GameProperty>>,
-    #[doc="<p>Set of developer-defined game session properties, formatted as a single string value. This data is included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession\">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match.</p>"]
-    #[serde(rename="GameSessionData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of developer-defined game session properties, formatted as a single string value. This data is included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match.</p>
+    #[serde(rename = "GameSessionData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_data: Option<String>,
-    #[doc="<p>Amazon Resource Name (<a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html\">ARN</a>) that is assigned to a game session queue and uniquely identifies it. Format is <code>arn:aws:gamelift:&lt;region&gt;::fleet/fleet-a1234567-b8c9-0d1e-2fa3-b45c6d7e8912</code>. These queues are used when placing game sessions for matches that are created with this matchmaking configuration. Queues can be located in any region.</p>"]
-    #[serde(rename="GameSessionQueueArns")]
+    /// <p>Amazon Resource Name (<a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html">ARN</a>) that is assigned to a game session queue and uniquely identifies it. Format is <code>arn:aws:gamelift:&lt;region&gt;::fleet/fleet-a1234567-b8c9-0d1e-2fa3-b45c6d7e8912</code>. These queues are used when placing game sessions for matches that are created with this matchmaking configuration. Queues can be located in any region.</p>
+    #[serde(rename = "GameSessionQueueArns")]
     pub game_session_queue_arns: Vec<String>,
-    #[doc="<p>Unique identifier for a matchmaking configuration. This name is used to identify the configuration associated with a matchmaking request or ticket.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Unique identifier for a matchmaking configuration. This name is used to identify the configuration associated with a matchmaking request or ticket.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>SNS topic ARN that is set up to receive matchmaking notifications.</p>"]
-    #[serde(rename="NotificationTarget")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>SNS topic ARN that is set up to receive matchmaking notifications.</p>
+    #[serde(rename = "NotificationTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_target: Option<String>,
-    #[doc="<p>Maximum duration, in seconds, that a matchmaking ticket can remain in process before timing out. Requests that time out can be resubmitted as needed.</p>"]
-    #[serde(rename="RequestTimeoutSeconds")]
+    /// <p>Maximum duration, in seconds, that a matchmaking ticket can remain in process before timing out. Requests that time out can be resubmitted as needed.</p>
+    #[serde(rename = "RequestTimeoutSeconds")]
     pub request_timeout_seconds: i64,
-    #[doc="<p>Unique identifier for a matchmaking rule set to use with this configuration. A matchmaking configuration can only use rule sets that are defined in the same region.</p>"]
-    #[serde(rename="RuleSetName")]
+    /// <p>Unique identifier for a matchmaking rule set to use with this configuration. A matchmaking configuration can only use rule sets that are defined in the same region.</p>
+    #[serde(rename = "RuleSetName")]
     pub rule_set_name: String,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateMatchmakingConfigurationOutput {
-    #[doc="<p>Object that describes the newly created matchmaking configuration.</p>"]
-    #[serde(rename="Configuration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that describes the newly created matchmaking configuration.</p>
+    #[serde(rename = "Configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<MatchmakingConfiguration>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateMatchmakingRuleSetInput {
-    #[doc="<p>Unique identifier for a matchmaking rule set. This name is used to identify the rule set associated with a matchmaking configuration.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Unique identifier for a matchmaking rule set. This name is used to identify the rule set associated with a matchmaking configuration.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>Collection of matchmaking rules, formatted as a JSON string. (Note that comments are not allowed in JSON, but most elements support a description field.)</p>"]
-    #[serde(rename="RuleSetBody")]
+    /// <p>Collection of matchmaking rules, formatted as a JSON string. (Note that comments are not allowed in JSON, but most elements support a description field.)</p>
+    #[serde(rename = "RuleSetBody")]
     pub rule_set_body: String,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateMatchmakingRuleSetOutput {
-    #[doc="<p>Object that describes the newly created matchmaking rule set.</p>"]
-    #[serde(rename="RuleSet")]
+    /// <p>Object that describes the newly created matchmaking rule set.</p>
+    #[serde(rename = "RuleSet")]
     pub rule_set: MatchmakingRuleSet,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePlayerSessionInput {
-    #[doc="<p>Unique identifier for the game session to add a player to.</p>"]
-    #[serde(rename="GameSessionId")]
+    /// <p>Unique identifier for the game session to add a player to.</p>
+    #[serde(rename = "GameSessionId")]
     pub game_session_id: String,
-    #[doc="<p>Developer-defined information related to a player. Amazon GameLift does not use this data, so it can be formatted as needed for use in the game.</p>"]
-    #[serde(rename="PlayerData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Developer-defined information related to a player. Amazon GameLift does not use this data, so it can be formatted as needed for use in the game.</p>
+    #[serde(rename = "PlayerData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_data: Option<String>,
-    #[doc="<p>Unique identifier for a player. Player IDs are developer-defined.</p>"]
-    #[serde(rename="PlayerId")]
+    /// <p>Unique identifier for a player. Player IDs are developer-defined.</p>
+    #[serde(rename = "PlayerId")]
     pub player_id: String,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreatePlayerSessionOutput {
-    #[doc="<p>Object that describes the newly created player session record.</p>"]
-    #[serde(rename="PlayerSession")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that describes the newly created player session record.</p>
+    #[serde(rename = "PlayerSession")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_session: Option<PlayerSession>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePlayerSessionsInput {
-    #[doc="<p>Unique identifier for the game session to add players to.</p>"]
-    #[serde(rename="GameSessionId")]
+    /// <p>Unique identifier for the game session to add players to.</p>
+    #[serde(rename = "GameSessionId")]
     pub game_session_id: String,
-    #[doc="<p>Map of string pairs, each specifying a player ID and a set of developer-defined information related to the player. Amazon GameLift does not use this data, so it can be formatted as needed for use in the game. Player data strings for player IDs not included in the <code>PlayerIds</code> parameter are ignored. </p>"]
-    #[serde(rename="PlayerDataMap")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Map of string pairs, each specifying a player ID and a set of developer-defined information related to the player. Amazon GameLift does not use this data, so it can be formatted as needed for use in the game. Player data strings for player IDs not included in the <code>PlayerIds</code> parameter are ignored. </p>
+    #[serde(rename = "PlayerDataMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_data_map: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>List of unique identifiers for the players to be added.</p>"]
-    #[serde(rename="PlayerIds")]
+    /// <p>List of unique identifiers for the players to be added.</p>
+    #[serde(rename = "PlayerIds")]
     pub player_ids: Vec<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreatePlayerSessionsOutput {
-    #[doc="<p>Collection of player session objects created for the added players.</p>"]
-    #[serde(rename="PlayerSessions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of player session objects created for the added players.</p>
+    #[serde(rename = "PlayerSessions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_sessions: Option<Vec<PlayerSession>>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteAliasInput {
-    #[doc="<p>Unique identifier for a fleet alias. Specify the alias you want to delete.</p>"]
-    #[serde(rename="AliasId")]
+    /// <p>Unique identifier for a fleet alias. Specify the alias you want to delete.</p>
+    #[serde(rename = "AliasId")]
     pub alias_id: String,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteBuildInput {
-    #[doc="<p>Unique identifier for a build to delete.</p>"]
-    #[serde(rename="BuildId")]
+    /// <p>Unique identifier for a build to delete.</p>
+    #[serde(rename = "BuildId")]
     pub build_id: String,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteFleetInput {
-    #[doc="<p>Unique identifier for a fleet to be deleted.</p>"]
-    #[serde(rename="FleetId")]
+    /// <p>Unique identifier for a fleet to be deleted.</p>
+    #[serde(rename = "FleetId")]
     pub fleet_id: String,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteGameSessionQueueInput {
-    #[doc="<p>Descriptive label that is associated with game session queue. Queue names must be unique within each region.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Descriptive label that is associated with game session queue. Queue names must be unique within each region.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteGameSessionQueueOutput;
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteMatchmakingConfigurationInput {
-    #[doc="<p>Unique identifier for a matchmaking configuration</p>"]
-    #[serde(rename="Name")]
+    /// <p>Unique identifier for a matchmaking configuration</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteMatchmakingConfigurationOutput;
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteScalingPolicyInput {
-    #[doc="<p>Unique identifier for a fleet to be deleted.</p>"]
-    #[serde(rename="FleetId")]
+    /// <p>Unique identifier for a fleet to be deleted.</p>
+    #[serde(rename = "FleetId")]
     pub fleet_id: String,
-    #[doc="<p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAliasInput {
-    #[doc="<p>Unique identifier for a fleet alias. Specify the alias you want to retrieve.</p>"]
-    #[serde(rename="AliasId")]
+    /// <p>Unique identifier for a fleet alias. Specify the alias you want to retrieve.</p>
+    #[serde(rename = "AliasId")]
     pub alias_id: String,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeAliasOutput {
-    #[doc="<p>Object that contains the requested alias.</p>"]
-    #[serde(rename="Alias")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that contains the requested alias.</p>
+    #[serde(rename = "Alias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alias: Option<Alias>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeBuildInput {
-    #[doc="<p>Unique identifier for a build to retrieve properties for.</p>"]
-    #[serde(rename="BuildId")]
+    /// <p>Unique identifier for a build to retrieve properties for.</p>
+    #[serde(rename = "BuildId")]
     pub build_id: String,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeBuildOutput {
-    #[doc="<p>Set of properties describing the requested build.</p>"]
-    #[serde(rename="Build")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of properties describing the requested build.</p>
+    #[serde(rename = "Build")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub build: Option<Build>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEC2InstanceLimitsInput {
-    #[doc="<p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for detailed descriptions. Leave this parameter blank to retrieve limits for all types.</p>"]
-    #[serde(rename="EC2InstanceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for detailed descriptions. Leave this parameter blank to retrieve limits for all types.</p>
+    #[serde(rename = "EC2InstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ec2_instance_type: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEC2InstanceLimitsOutput {
-    #[doc="<p>Object that contains the maximum number of instances for the specified instance type.</p>"]
-    #[serde(rename="EC2InstanceLimits")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that contains the maximum number of instances for the specified instance type.</p>
+    #[serde(rename = "EC2InstanceLimits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ec2_instance_limits: Option<Vec<EC2InstanceLimit>>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeFleetAttributesInput {
-    #[doc="<p>Unique identifier for a fleet(s) to retrieve attributes for. To request attributes for all fleets, leave this parameter empty.</p>"]
-    #[serde(rename="FleetIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet(s) to retrieve attributes for. To request attributes for all fleets, leave this parameter empty.</p>
+    #[serde(rename = "FleetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_ids: Option<Vec<String>>,
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeFleetAttributesOutput {
-    #[doc="<p>Collection of objects containing attribute metadata for each requested fleet ID.</p>"]
-    #[serde(rename="FleetAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of objects containing attribute metadata for each requested fleet ID.</p>
+    #[serde(rename = "FleetAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_attributes: Option<Vec<FleetAttributes>>,
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeFleetCapacityInput {
-    #[doc="<p>Unique identifier for a fleet(s) to retrieve capacity information for. To request capacity information for all fleets, leave this parameter empty.</p>"]
-    #[serde(rename="FleetIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet(s) to retrieve capacity information for. To request capacity information for all fleets, leave this parameter empty.</p>
+    #[serde(rename = "FleetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_ids: Option<Vec<String>>,
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeFleetCapacityOutput {
-    #[doc="<p>Collection of objects containing capacity information for each requested fleet ID. Leave this parameter empty to retrieve capacity information for all fleets.</p>"]
-    #[serde(rename="FleetCapacity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of objects containing capacity information for each requested fleet ID. Leave this parameter empty to retrieve capacity information for all fleets.</p>
+    #[serde(rename = "FleetCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_capacity: Option<Vec<FleetCapacity>>,
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeFleetEventsInput {
-    #[doc="<p>Most recent date to retrieve event logs for. If no end time is specified, this call returns entries from the specified start time up to the present. Format is a number expressed in Unix time as milliseconds (ex: \"1469498468.057\").</p>"]
-    #[serde(rename="EndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Most recent date to retrieve event logs for. If no end time is specified, this call returns entries from the specified start time up to the present. Format is a number expressed in Unix time as milliseconds (ex: "1469498468.057").</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>Unique identifier for a fleet to get event logs for.</p>"]
-    #[serde(rename="FleetId")]
+    /// <p>Unique identifier for a fleet to get event logs for.</p>
+    #[serde(rename = "FleetId")]
     pub fleet_id: String,
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Earliest date to retrieve event logs for. If no start time is specified, this call returns entries starting from when the fleet was created to the specified end time. Format is a number expressed in Unix time as milliseconds (ex: \"1469498468.057\").</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Earliest date to retrieve event logs for. If no start time is specified, this call returns entries starting from when the fleet was created to the specified end time. Format is a number expressed in Unix time as milliseconds (ex: "1469498468.057").</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeFleetEventsOutput {
-    #[doc="<p>Collection of objects containing event log entries for the specified fleet.</p>"]
-    #[serde(rename="Events")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of objects containing event log entries for the specified fleet.</p>
+    #[serde(rename = "Events")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub events: Option<Vec<Event>>,
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeFleetPortSettingsInput {
-    #[doc="<p>Unique identifier for a fleet to retrieve port settings for.</p>"]
-    #[serde(rename="FleetId")]
+    /// <p>Unique identifier for a fleet to retrieve port settings for.</p>
+    #[serde(rename = "FleetId")]
     pub fleet_id: String,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeFleetPortSettingsOutput {
-    #[doc="<p>Object that contains port settings for the requested fleet ID.</p>"]
-    #[serde(rename="InboundPermissions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that contains port settings for the requested fleet ID.</p>
+    #[serde(rename = "InboundPermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub inbound_permissions: Option<Vec<IpPermission>>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeFleetUtilizationInput {
-    #[doc="<p>Unique identifier for a fleet(s) to retrieve utilization data for. To request utilization data for all fleets, leave this parameter empty.</p>"]
-    #[serde(rename="FleetIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet(s) to retrieve utilization data for. To request utilization data for all fleets, leave this parameter empty.</p>
+    #[serde(rename = "FleetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_ids: Option<Vec<String>>,
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeFleetUtilizationOutput {
-    #[doc="<p>Collection of objects containing utilization information for each requested fleet ID.</p>"]
-    #[serde(rename="FleetUtilization")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of objects containing utilization information for each requested fleet ID.</p>
+    #[serde(rename = "FleetUtilization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_utilization: Option<Vec<FleetUtilization>>,
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeGameSessionDetailsInput {
-    #[doc="<p>Unique identifier for an alias associated with the fleet to retrieve all game sessions for.</p>"]
-    #[serde(rename="AliasId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for an alias associated with the fleet to retrieve all game sessions for.</p>
+    #[serde(rename = "AliasId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alias_id: Option<String>,
-    #[doc="<p>Unique identifier for a fleet to retrieve all game sessions active on the fleet.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet to retrieve all game sessions active on the fleet.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
-    #[doc="<p>Unique identifier for the game session to retrieve.</p>"]
-    #[serde(rename="GameSessionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for the game session to retrieve.</p>
+    #[serde(rename = "GameSessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_id: Option<String>,
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Game session status to filter results on. Possible game session statuses include <code>ACTIVE</code>, <code>TERMINATED</code>, <code>ACTIVATING</code> and <code>TERMINATING</code> (the last two are transitory). </p>"]
-    #[serde(rename="StatusFilter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Game session status to filter results on. Possible game session statuses include <code>ACTIVE</code>, <code>TERMINATED</code>, <code>ACTIVATING</code> and <code>TERMINATING</code> (the last two are transitory). </p>
+    #[serde(rename = "StatusFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_filter: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeGameSessionDetailsOutput {
-    #[doc="<p>Collection of objects containing game session properties and the protection policy currently in force for each session matching the request.</p>"]
-    #[serde(rename="GameSessionDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of objects containing game session properties and the protection policy currently in force for each session matching the request.</p>
+    #[serde(rename = "GameSessionDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_details: Option<Vec<GameSessionDetail>>,
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeGameSessionPlacementInput {
-    #[doc="<p>Unique identifier for a game session placement to retrieve.</p>"]
-    #[serde(rename="PlacementId")]
+    /// <p>Unique identifier for a game session placement to retrieve.</p>
+    #[serde(rename = "PlacementId")]
     pub placement_id: String,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeGameSessionPlacementOutput {
-    #[doc="<p>Object that describes the requested game session placement.</p>"]
-    #[serde(rename="GameSessionPlacement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that describes the requested game session placement.</p>
+    #[serde(rename = "GameSessionPlacement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_placement: Option<GameSessionPlacement>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeGameSessionQueuesInput {
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>List of queue names to retrieve information for. To request settings for all queues, leave this parameter empty.</p>"]
-    #[serde(rename="Names")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of queue names to retrieve information for. To request settings for all queues, leave this parameter empty.</p>
+    #[serde(rename = "Names")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub names: Option<Vec<String>>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeGameSessionQueuesOutput {
-    #[doc="<p>Collection of objects that describes the requested game session queues.</p>"]
-    #[serde(rename="GameSessionQueues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of objects that describes the requested game session queues.</p>
+    #[serde(rename = "GameSessionQueues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_queues: Option<Vec<GameSessionQueue>>,
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeGameSessionsInput {
-    #[doc="<p>Unique identifier for an alias associated with the fleet to retrieve all game sessions for. </p>"]
-    #[serde(rename="AliasId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for an alias associated with the fleet to retrieve all game sessions for. </p>
+    #[serde(rename = "AliasId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alias_id: Option<String>,
-    #[doc="<p>Unique identifier for a fleet to retrieve all game sessions for.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet to retrieve all game sessions for.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
-    #[doc="<p>Unique identifier for the game session to retrieve. You can use either a <code>GameSessionId</code> or <code>GameSessionArn</code> value. </p>"]
-    #[serde(rename="GameSessionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for the game session to retrieve. You can use either a <code>GameSessionId</code> or <code>GameSessionArn</code> value. </p>
+    #[serde(rename = "GameSessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_id: Option<String>,
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Game session status to filter results on. Possible game session statuses include <code>ACTIVE</code>, <code>TERMINATED</code>, <code>ACTIVATING</code>, and <code>TERMINATING</code> (the last two are transitory). </p>"]
-    #[serde(rename="StatusFilter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Game session status to filter results on. Possible game session statuses include <code>ACTIVE</code>, <code>TERMINATED</code>, <code>ACTIVATING</code>, and <code>TERMINATING</code> (the last two are transitory). </p>
+    #[serde(rename = "StatusFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_filter: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeGameSessionsOutput {
-    #[doc="<p>Collection of objects containing game session properties for each session matching the request.</p>"]
-    #[serde(rename="GameSessions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of objects containing game session properties for each session matching the request.</p>
+    #[serde(rename = "GameSessions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_sessions: Option<Vec<GameSession>>,
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeInstancesInput {
-    #[doc="<p>Unique identifier for a fleet to retrieve instance information for.</p>"]
-    #[serde(rename="FleetId")]
+    /// <p>Unique identifier for a fleet to retrieve instance information for.</p>
+    #[serde(rename = "FleetId")]
     pub fleet_id: String,
-    #[doc="<p>Unique identifier for an instance to retrieve. Specify an instance ID or leave blank to retrieve all instances in the fleet.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for an instance to retrieve. Specify an instance ID or leave blank to retrieve all instances in the fleet.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeInstancesOutput {
-    #[doc="<p>Collection of objects containing properties for each instance returned.</p>"]
-    #[serde(rename="Instances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of objects containing properties for each instance returned.</p>
+    #[serde(rename = "Instances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instances: Option<Vec<Instance>>,
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeMatchmakingConfigurationsInput {
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. This parameter is limited to 10.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. This parameter is limited to 10.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Unique identifier for a matchmaking configuration(s) to retrieve. To request all existing configurations, leave this parameter empty.</p>"]
-    #[serde(rename="Names")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a matchmaking configuration(s) to retrieve. To request all existing configurations, leave this parameter empty.</p>
+    #[serde(rename = "Names")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub names: Option<Vec<String>>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Unique identifier for a matchmaking rule set. Use this parameter to retrieve all matchmaking configurations that use this rule set.</p>"]
-    #[serde(rename="RuleSetName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a matchmaking rule set. Use this parameter to retrieve all matchmaking configurations that use this rule set.</p>
+    #[serde(rename = "RuleSetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_set_name: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeMatchmakingConfigurationsOutput {
-    #[doc="<p>Collection of requested matchmaking configuration objects.</p>"]
-    #[serde(rename="Configurations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of requested matchmaking configuration objects.</p>
+    #[serde(rename = "Configurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configurations: Option<Vec<MatchmakingConfiguration>>,
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeMatchmakingInput {
-    #[doc="<p>Unique identifier for a matchmaking ticket. To request all existing tickets, leave this parameter empty.</p>"]
-    #[serde(rename="TicketIds")]
+    /// <p>Unique identifier for a matchmaking ticket. To request all existing tickets, leave this parameter empty.</p>
+    #[serde(rename = "TicketIds")]
     pub ticket_ids: Vec<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeMatchmakingOutput {
-    #[doc="<p>Collection of existing matchmaking ticket objects matching the request.</p>"]
-    #[serde(rename="TicketList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of existing matchmaking ticket objects matching the request.</p>
+    #[serde(rename = "TicketList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ticket_list: Option<Vec<MatchmakingTicket>>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeMatchmakingRuleSetsInput {
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Unique identifier for a matchmaking rule set. This name is used to identify the rule set associated with a matchmaking configuration.</p>"]
-    #[serde(rename="Names")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a matchmaking rule set. This name is used to identify the rule set associated with a matchmaking configuration.</p>
+    #[serde(rename = "Names")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub names: Option<Vec<String>>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeMatchmakingRuleSetsOutput {
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Collection of requested matchmaking rule set objects. </p>"]
-    #[serde(rename="RuleSets")]
+    /// <p>Collection of requested matchmaking rule set objects. </p>
+    #[serde(rename = "RuleSets")]
     pub rule_sets: Vec<MatchmakingRuleSet>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribePlayerSessionsInput {
-    #[doc="<p>Unique identifier for the game session to retrieve player sessions for.</p>"]
-    #[serde(rename="GameSessionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for the game session to retrieve player sessions for.</p>
+    #[serde(rename = "GameSessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_id: Option<String>,
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. If a player session ID is specified, this parameter is ignored.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. If a player session ID is specified, this parameter is ignored.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value. If a player session ID is specified, this parameter is ignored.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value. If a player session ID is specified, this parameter is ignored.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Unique identifier for a player to retrieve player sessions for.</p>"]
-    #[serde(rename="PlayerId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a player to retrieve player sessions for.</p>
+    #[serde(rename = "PlayerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_id: Option<String>,
-    #[doc="<p>Unique identifier for a player session to retrieve.</p>"]
-    #[serde(rename="PlayerSessionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a player session to retrieve.</p>
+    #[serde(rename = "PlayerSessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_session_id: Option<String>,
-    #[doc="<p>Player session status to filter results on.</p> <p>Possible player session statuses include the following:</p> <ul> <li> <p> <b>RESERVED</b> – The player session request has been received, but the player has not yet connected to the server process and/or been validated. </p> </li> <li> <p> <b>ACTIVE</b> – The player has been validated by the server process and is currently connected.</p> </li> <li> <p> <b>COMPLETED</b> – The player connection has been dropped.</p> </li> <li> <p> <b>TIMEDOUT</b> – A player session request was received, but the player did not connect and/or was not validated within the time-out limit (60 seconds).</p> </li> </ul>"]
-    #[serde(rename="PlayerSessionStatusFilter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Player session status to filter results on.</p> <p>Possible player session statuses include the following:</p> <ul> <li> <p> <b>RESERVED</b> – The player session request has been received, but the player has not yet connected to the server process and/or been validated. </p> </li> <li> <p> <b>ACTIVE</b> – The player has been validated by the server process and is currently connected.</p> </li> <li> <p> <b>COMPLETED</b> – The player connection has been dropped.</p> </li> <li> <p> <b>TIMEDOUT</b> – A player session request was received, but the player did not connect and/or was not validated within the time-out limit (60 seconds).</p> </li> </ul>
+    #[serde(rename = "PlayerSessionStatusFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_session_status_filter: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribePlayerSessionsOutput {
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Collection of objects containing properties for each player session that matches the request.</p>"]
-    #[serde(rename="PlayerSessions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of objects containing properties for each player session that matches the request.</p>
+    #[serde(rename = "PlayerSessions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_sessions: Option<Vec<PlayerSession>>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeRuntimeConfigurationInput {
-    #[doc="<p>Unique identifier for a fleet to get the run-time configuration for.</p>"]
-    #[serde(rename="FleetId")]
+    /// <p>Unique identifier for a fleet to get the run-time configuration for.</p>
+    #[serde(rename = "FleetId")]
     pub fleet_id: String,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeRuntimeConfigurationOutput {
-    #[doc="<p>Instructions describing how server processes should be launched and maintained on each instance in the fleet.</p>"]
-    #[serde(rename="RuntimeConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Instructions describing how server processes should be launched and maintained on each instance in the fleet.</p>
+    #[serde(rename = "RuntimeConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub runtime_configuration: Option<RuntimeConfiguration>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeScalingPoliciesInput {
-    #[doc="<p>Unique identifier for a fleet to retrieve scaling policies for.</p>"]
-    #[serde(rename="FleetId")]
+    /// <p>Unique identifier for a fleet to retrieve scaling policies for.</p>
+    #[serde(rename = "FleetId")]
     pub fleet_id: String,
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Scaling policy status to filter results on. A scaling policy is only in force when in an <code>ACTIVE</code> status.</p> <ul> <li> <p> <b>ACTIVE</b> – The scaling policy is currently in force.</p> </li> <li> <p> <b>UPDATEREQUESTED</b> – A request to update the scaling policy has been received.</p> </li> <li> <p> <b>UPDATING</b> – A change is being made to the scaling policy.</p> </li> <li> <p> <b>DELETEREQUESTED</b> – A request to delete the scaling policy has been received.</p> </li> <li> <p> <b>DELETING</b> – The scaling policy is being deleted.</p> </li> <li> <p> <b>DELETED</b> – The scaling policy has been deleted.</p> </li> <li> <p> <b>ERROR</b> – An error occurred in creating the policy. It should be removed and recreated.</p> </li> </ul>"]
-    #[serde(rename="StatusFilter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Scaling policy status to filter results on. A scaling policy is only in force when in an <code>ACTIVE</code> status.</p> <ul> <li> <p> <b>ACTIVE</b> – The scaling policy is currently in force.</p> </li> <li> <p> <b>UPDATEREQUESTED</b> – A request to update the scaling policy has been received.</p> </li> <li> <p> <b>UPDATING</b> – A change is being made to the scaling policy.</p> </li> <li> <p> <b>DELETEREQUESTED</b> – A request to delete the scaling policy has been received.</p> </li> <li> <p> <b>DELETING</b> – The scaling policy is being deleted.</p> </li> <li> <p> <b>DELETED</b> – The scaling policy has been deleted.</p> </li> <li> <p> <b>ERROR</b> – An error occurred in creating the policy. It should be removed and recreated.</p> </li> </ul>
+    #[serde(rename = "StatusFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_filter: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeScalingPoliciesOutput {
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Collection of objects containing the scaling policies matching the request.</p>"]
-    #[serde(rename="ScalingPolicies")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of objects containing the scaling policies matching the request.</p>
+    #[serde(rename = "ScalingPolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_policies: Option<Vec<ScalingPolicy>>,
 }
 
-#[doc="<p>Player information for use when creating player sessions using a game session placement request with <a>StartGameSessionPlacement</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Player information for use when creating player sessions using a game session placement request with <a>StartGameSessionPlacement</a>.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DesiredPlayerSession {
-    #[doc="<p>Developer-defined information related to a player. Amazon GameLift does not use this data, so it can be formatted as needed for use in the game.</p>"]
-    #[serde(rename="PlayerData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Developer-defined information related to a player. Amazon GameLift does not use this data, so it can be formatted as needed for use in the game.</p>
+    #[serde(rename = "PlayerData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_data: Option<String>,
-    #[doc="<p>Unique identifier for a player to associate with the player session.</p>"]
-    #[serde(rename="PlayerId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a player to associate with the player session.</p>
+    #[serde(rename = "PlayerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_id: Option<String>,
 }
 
-#[doc="<p>Current status of fleet capacity. The number of active instances should match or be in the process of matching the number of desired instances. Pending and terminating counts are non-zero only if fleet capacity is adjusting to an <a>UpdateFleetCapacity</a> request, or if access to resources is temporarily affected.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Current status of fleet capacity. The number of active instances should match or be in the process of matching the number of desired instances. Pending and terminating counts are non-zero only if fleet capacity is adjusting to an <a>UpdateFleetCapacity</a> request, or if access to resources is temporarily affected.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EC2InstanceCounts {
-    #[doc="<p>Actual number of active instances in the fleet.</p>"]
-    #[serde(rename="ACTIVE")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Actual number of active instances in the fleet.</p>
+    #[serde(rename = "ACTIVE")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub active: Option<i64>,
-    #[doc="<p>Ideal number of active instances in the fleet.</p>"]
-    #[serde(rename="DESIRED")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Ideal number of active instances in the fleet.</p>
+    #[serde(rename = "DESIRED")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub desired: Option<i64>,
-    #[doc="<p>Number of active instances in the fleet that are not currently hosting a game session.</p>"]
-    #[serde(rename="IDLE")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of active instances in the fleet that are not currently hosting a game session.</p>
+    #[serde(rename = "IDLE")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub idle: Option<i64>,
-    #[doc="<p>Maximum value allowed for the fleet's instance count.</p>"]
-    #[serde(rename="MAXIMUM")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum value allowed for the fleet's instance count.</p>
+    #[serde(rename = "MAXIMUM")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum: Option<i64>,
-    #[doc="<p>Minimum value allowed for the fleet's instance count.</p>"]
-    #[serde(rename="MINIMUM")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Minimum value allowed for the fleet's instance count.</p>
+    #[serde(rename = "MINIMUM")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum: Option<i64>,
-    #[doc="<p>Number of instances in the fleet that are starting but not yet active.</p>"]
-    #[serde(rename="PENDING")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of instances in the fleet that are starting but not yet active.</p>
+    #[serde(rename = "PENDING")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pending: Option<i64>,
-    #[doc="<p>Number of instances in the fleet that are no longer active but haven't yet been terminated.</p>"]
-    #[serde(rename="TERMINATING")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of instances in the fleet that are no longer active but haven't yet been terminated.</p>
+    #[serde(rename = "TERMINATING")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub terminating: Option<i64>,
 }
 
-#[doc="<p>Maximum number of instances allowed based on the Amazon Elastic Compute Cloud (Amazon EC2) instance type. Instance limits can be retrieved by calling <a>DescribeEC2InstanceLimits</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Maximum number of instances allowed based on the Amazon Elastic Compute Cloud (Amazon EC2) instance type. Instance limits can be retrieved by calling <a>DescribeEC2InstanceLimits</a>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EC2InstanceLimit {
-    #[doc="<p>Number of instances of the specified type that are currently in use by this AWS account.</p>"]
-    #[serde(rename="CurrentInstances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of instances of the specified type that are currently in use by this AWS account.</p>
+    #[serde(rename = "CurrentInstances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub current_instances: Option<i64>,
-    #[doc="<p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for detailed descriptions.</p>"]
-    #[serde(rename="EC2InstanceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for detailed descriptions.</p>
+    #[serde(rename = "EC2InstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ec2_instance_type: Option<String>,
-    #[doc="<p>Number of instances allowed.</p>"]
-    #[serde(rename="InstanceLimit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of instances allowed.</p>
+    #[serde(rename = "InstanceLimit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_limit: Option<i64>,
 }
 
-#[doc="<p>Log entry describing an event that involves Amazon GameLift resources (such as a fleet). In addition to tracking activity, event codes and messages can provide additional information for troubleshooting and debugging problems.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Log entry describing an event that involves Amazon GameLift resources (such as a fleet). In addition to tracking activity, event codes and messages can provide additional information for troubleshooting and debugging problems.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Event {
-    #[doc="<p>Type of event being logged. The following events are currently in use:</p> <ul> <li> <p>General events:</p> <ul> <li> <p> <b>GENERIC_EVENT</b> – An unspecified event has occurred.</p> </li> </ul> </li> <li> <p>Fleet creation events:</p> <ul> <li> <p> <b>FLEET_CREATED</b> – A fleet record was successfully created with a status of <code>NEW</code>. Event messaging includes the fleet ID.</p> </li> <li> <p> <b>FLEET_STATE_DOWNLOADING</b> – Fleet status changed from <code>NEW</code> to <code>DOWNLOADING</code>. The compressed build has started downloading to a fleet instance for installation.</p> </li> <li> <p> <b>FLEET_BINARY_DOWNLOAD_FAILED</b> – The build failed to download to the fleet instance.</p> </li> <li> <p> <b>FLEET_CREATION_EXTRACTING_BUILD</b> – The game server build was successfully downloaded to an instance, and the build files are now being extracted from the uploaded build and saved to an instance. Failure at this stage prevents a fleet from moving to <code>ACTIVE</code> status. Logs for this stage display a list of the files that are extracted and saved on the instance. Access the logs by using the URL in <i>PreSignedLogUrl</i>.</p> </li> <li> <p> <b>FLEET_CREATION_RUNNING_INSTALLER</b> – The game server build files were successfully extracted, and the Amazon GameLift is now running the build's install script (if one is included). Failure in this stage prevents a fleet from moving to <code>ACTIVE</code> status. Logs for this stage list the installation steps and whether or not the install completed successfully. Access the logs by using the URL in <i>PreSignedLogUrl</i>. </p> </li> <li> <p> <b>FLEET_CREATION_VALIDATING_RUNTIME_CONFIG</b> – The build process was successful, and the Amazon GameLift is now verifying that the game server launch paths, which are specified in the fleet's run-time configuration, exist. If any listed launch path exists, Amazon GameLift tries to launch a game server process and waits for the process to report ready. Failures in this stage prevent a fleet from moving to <code>ACTIVE</code> status. Logs for this stage list the launch paths in the run-time configuration and indicate whether each is found. Access the logs by using the URL in <i>PreSignedLogUrl</i>. </p> </li> <li> <p> <b>FLEET_STATE_VALIDATING</b> – Fleet status changed from <code>DOWNLOADING</code> to <code>VALIDATING</code>.</p> </li> <li> <p> <b>FLEET_VALIDATION_LAUNCH_PATH_NOT_FOUND</b> – Validation of the run-time configuration failed because the executable specified in a launch path does not exist on the instance.</p> </li> <li> <p> <b>FLEET_STATE_BUILDING</b> – Fleet status changed from <code>VALIDATING</code> to <code>BUILDING</code>.</p> </li> <li> <p> <b>FLEET_VALIDATION_EXECUTABLE_RUNTIME_FAILURE</b> – Validation of the run-time configuration failed because the executable specified in a launch path failed to run on the fleet instance.</p> </li> <li> <p> <b>FLEET_STATE_ACTIVATING</b> – Fleet status changed from <code>BUILDING</code> to <code>ACTIVATING</code>. </p> </li> <li> <p> <b>FLEET_ACTIVATION_FAILED</b> - The fleet failed to successfully complete one of the steps in the fleet activation process. This event code indicates that the game build was successfully downloaded to a fleet instance, built, and validated, but was not able to start a server process. A possible reason for failure is that the game server is not reporting \"process ready\" to the Amazon GameLift service.</p> </li> <li> <p> <b>FLEET_STATE_ACTIVE</b> – The fleet's status changed from <code>ACTIVATING</code> to <code>ACTIVE</code>. The fleet is now ready to host game sessions.</p> </li> </ul> </li> <li> <p>Other fleet events:</p> <ul> <li> <p> <b>FLEET_SCALING_EVENT</b> – A change was made to the fleet's capacity settings (desired instances, minimum/maximum scaling limits). Event messaging includes the new capacity settings.</p> </li> <li> <p> <b>FLEET_NEW_GAME_SESSION_PROTECTION_POLICY_UPDATED</b> – A change was made to the fleet's game session protection policy setting. Event messaging includes both the old and new policy setting. </p> </li> <li> <p> <b>FLEET_DELETED</b> – A request to delete a fleet was initiated.</p> </li> </ul> </li> </ul>"]
-    #[serde(rename="EventCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Type of event being logged. The following events are currently in use:</p> <ul> <li> <p>General events:</p> <ul> <li> <p> <b>GENERIC_EVENT</b> – An unspecified event has occurred.</p> </li> </ul> </li> <li> <p>Fleet creation events:</p> <ul> <li> <p> <b>FLEET_CREATED</b> – A fleet record was successfully created with a status of <code>NEW</code>. Event messaging includes the fleet ID.</p> </li> <li> <p> <b>FLEET_STATE_DOWNLOADING</b> – Fleet status changed from <code>NEW</code> to <code>DOWNLOADING</code>. The compressed build has started downloading to a fleet instance for installation.</p> </li> <li> <p> <b>FLEET_BINARY_DOWNLOAD_FAILED</b> – The build failed to download to the fleet instance.</p> </li> <li> <p> <b>FLEET_CREATION_EXTRACTING_BUILD</b> – The game server build was successfully downloaded to an instance, and the build files are now being extracted from the uploaded build and saved to an instance. Failure at this stage prevents a fleet from moving to <code>ACTIVE</code> status. Logs for this stage display a list of the files that are extracted and saved on the instance. Access the logs by using the URL in <i>PreSignedLogUrl</i>.</p> </li> <li> <p> <b>FLEET_CREATION_RUNNING_INSTALLER</b> – The game server build files were successfully extracted, and the Amazon GameLift is now running the build's install script (if one is included). Failure in this stage prevents a fleet from moving to <code>ACTIVE</code> status. Logs for this stage list the installation steps and whether or not the install completed successfully. Access the logs by using the URL in <i>PreSignedLogUrl</i>. </p> </li> <li> <p> <b>FLEET_CREATION_VALIDATING_RUNTIME_CONFIG</b> – The build process was successful, and the Amazon GameLift is now verifying that the game server launch paths, which are specified in the fleet's run-time configuration, exist. If any listed launch path exists, Amazon GameLift tries to launch a game server process and waits for the process to report ready. Failures in this stage prevent a fleet from moving to <code>ACTIVE</code> status. Logs for this stage list the launch paths in the run-time configuration and indicate whether each is found. Access the logs by using the URL in <i>PreSignedLogUrl</i>. </p> </li> <li> <p> <b>FLEET_STATE_VALIDATING</b> – Fleet status changed from <code>DOWNLOADING</code> to <code>VALIDATING</code>.</p> </li> <li> <p> <b>FLEET_VALIDATION_LAUNCH_PATH_NOT_FOUND</b> – Validation of the run-time configuration failed because the executable specified in a launch path does not exist on the instance.</p> </li> <li> <p> <b>FLEET_STATE_BUILDING</b> – Fleet status changed from <code>VALIDATING</code> to <code>BUILDING</code>.</p> </li> <li> <p> <b>FLEET_VALIDATION_EXECUTABLE_RUNTIME_FAILURE</b> – Validation of the run-time configuration failed because the executable specified in a launch path failed to run on the fleet instance.</p> </li> <li> <p> <b>FLEET_STATE_ACTIVATING</b> – Fleet status changed from <code>BUILDING</code> to <code>ACTIVATING</code>. </p> </li> <li> <p> <b>FLEET_ACTIVATION_FAILED</b> - The fleet failed to successfully complete one of the steps in the fleet activation process. This event code indicates that the game build was successfully downloaded to a fleet instance, built, and validated, but was not able to start a server process. A possible reason for failure is that the game server is not reporting "process ready" to the Amazon GameLift service.</p> </li> <li> <p> <b>FLEET_STATE_ACTIVE</b> – The fleet's status changed from <code>ACTIVATING</code> to <code>ACTIVE</code>. The fleet is now ready to host game sessions.</p> </li> </ul> </li> <li> <p>Other fleet events:</p> <ul> <li> <p> <b>FLEET_SCALING_EVENT</b> – A change was made to the fleet's capacity settings (desired instances, minimum/maximum scaling limits). Event messaging includes the new capacity settings.</p> </li> <li> <p> <b>FLEET_NEW_GAME_SESSION_PROTECTION_POLICY_UPDATED</b> – A change was made to the fleet's game session protection policy setting. Event messaging includes both the old and new policy setting. </p> </li> <li> <p> <b>FLEET_DELETED</b> – A request to delete a fleet was initiated.</p> </li> </ul> </li> </ul>
+    #[serde(rename = "EventCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_code: Option<String>,
-    #[doc="<p>Unique identifier for a fleet event.</p>"]
-    #[serde(rename="EventId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet event.</p>
+    #[serde(rename = "EventId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_id: Option<String>,
-    #[doc="<p>Time stamp indicating when this event occurred. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="EventTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this event occurred. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "EventTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_time: Option<f64>,
-    #[doc="<p>Additional information related to the event.</p>"]
-    #[serde(rename="Message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Additional information related to the event.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>Location of stored logs with additional detail that is related to the event. This is useful for debugging issues. The URL is valid for 15 minutes. You can also access fleet creation logs through the Amazon GameLift console.</p>"]
-    #[serde(rename="PreSignedLogUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Location of stored logs with additional detail that is related to the event. This is useful for debugging issues. The URL is valid for 15 minutes. You can also access fleet creation logs through the Amazon GameLift console.</p>
+    #[serde(rename = "PreSignedLogUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pre_signed_log_url: Option<String>,
-    #[doc="<p>Unique identifier for an event resource, such as a fleet ID.</p>"]
-    #[serde(rename="ResourceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for an event resource, such as a fleet ID.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
 }
 
-#[doc="<p>General properties describing a fleet.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>General properties describing a fleet.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct FleetAttributes {
-    #[doc="<p>Unique identifier for a build.</p>"]
-    #[serde(rename="BuildId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a build.</p>
+    #[serde(rename = "BuildId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub build_id: Option<String>,
-    #[doc="<p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="CreationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    #[doc="<p>Human-readable description of the fleet.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Human-readable description of the fleet.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Identifier for a fleet that is unique across all regions.</p>"]
-    #[serde(rename="FleetArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Identifier for a fleet that is unique across all regions.</p>
+    #[serde(rename = "FleetArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_arn: Option<String>,
-    #[doc="<p>Unique identifier for a fleet.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
-    #[doc="<p>Location of default log files. When a server process is shut down, Amazon GameLift captures and stores any log files in this location. These logs are in addition to game session logs; see more on game session logs in the <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-api-server-code\">Amazon GameLift Developer Guide</a>. If no default log path for a fleet is specified, Amazon GameLift automatically uploads logs that are stored on each instance at <code>C:\\game\\logs</code> (for Windows) or <code>/local/game/logs</code> (for Linux). Use the Amazon GameLift console to access stored logs. </p>"]
-    #[serde(rename="LogPaths")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Location of default log files. When a server process is shut down, Amazon GameLift captures and stores any log files in this location. These logs are in addition to game session logs; see more on game session logs in the <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-api-server-code">Amazon GameLift Developer Guide</a>. If no default log path for a fleet is specified, Amazon GameLift automatically uploads logs that are stored on each instance at <code>C:\game\logs</code> (for Windows) or <code>/local/game/logs</code> (for Linux). Use the Amazon GameLift console to access stored logs. </p>
+    #[serde(rename = "LogPaths")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_paths: Option<Vec<String>>,
-    #[doc="<p>Names of metric groups that this fleet is included in. In Amazon CloudWatch, you can view metrics for an individual fleet or aggregated metrics for fleets that are in a fleet metric group. A fleet can be included in only one metric group at a time.</p>"]
-    #[serde(rename="MetricGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Names of metric groups that this fleet is included in. In Amazon CloudWatch, you can view metrics for an individual fleet or aggregated metrics for fleets that are in a fleet metric group. A fleet can be included in only one metric group at a time.</p>
+    #[serde(rename = "MetricGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_groups: Option<Vec<String>>,
-    #[doc="<p>Descriptive label that is associated with a fleet. Fleet names do not need to be unique.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with a fleet. Fleet names do not need to be unique.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Type of game session protection to set for all new instances started in the fleet.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>"]
-    #[serde(rename="NewGameSessionProtectionPolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Type of game session protection to set for all new instances started in the fleet.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>
+    #[serde(rename = "NewGameSessionProtectionPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub new_game_session_protection_policy: Option<String>,
-    #[doc="<p>Operating system of the fleet's computing resources. A fleet's operating system depends on the OS specified for the build that is deployed on this fleet.</p>"]
-    #[serde(rename="OperatingSystem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Operating system of the fleet's computing resources. A fleet's operating system depends on the OS specified for the build that is deployed on this fleet.</p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
-    #[doc="<p>Fleet policy to limit the number of game sessions an individual player can create over a span of time.</p>"]
-    #[serde(rename="ResourceCreationLimitPolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Fleet policy to limit the number of game sessions an individual player can create over a span of time.</p>
+    #[serde(rename = "ResourceCreationLimitPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_creation_limit_policy: Option<ResourceCreationLimitPolicy>,
-    #[doc="<p>Game server launch parameters specified for fleets created before 2016-08-04 (or AWS SDK v. 0.12.16). Server launch parameters for fleets created after this date are specified in the fleet's <a>RuntimeConfiguration</a>.</p>"]
-    #[serde(rename="ServerLaunchParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Game server launch parameters specified for fleets created before 2016-08-04 (or AWS SDK v. 0.12.16). Server launch parameters for fleets created after this date are specified in the fleet's <a>RuntimeConfiguration</a>.</p>
+    #[serde(rename = "ServerLaunchParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_launch_parameters: Option<String>,
-    #[doc="<p>Path to a game server executable in the fleet's build, specified for fleets created before 2016-08-04 (or AWS SDK v. 0.12.16). Server launch paths for fleets created after this date are specified in the fleet's <a>RuntimeConfiguration</a>.</p>"]
-    #[serde(rename="ServerLaunchPath")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Path to a game server executable in the fleet's build, specified for fleets created before 2016-08-04 (or AWS SDK v. 0.12.16). Server launch paths for fleets created after this date are specified in the fleet's <a>RuntimeConfiguration</a>.</p>
+    #[serde(rename = "ServerLaunchPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_launch_path: Option<String>,
-    #[doc="<p>Current status of the fleet.</p> <p>Possible fleet statuses include the following:</p> <ul> <li> <p> <b>NEW</b> – A new fleet has been defined and desired instances is set to 1. </p> </li> <li> <p> <b>DOWNLOADING/VALIDATING/BUILDING/ACTIVATING</b> – Amazon GameLift is setting up the new fleet, creating new instances with the game build and starting server processes.</p> </li> <li> <p> <b>ACTIVE</b> – Hosts can now accept game sessions.</p> </li> <li> <p> <b>ERROR</b> – An error occurred when downloading, validating, building, or activating the fleet.</p> </li> <li> <p> <b>DELETING</b> – Hosts are responding to a delete fleet request.</p> </li> <li> <p> <b>TERMINATED</b> – The fleet no longer exists.</p> </li> </ul>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Current status of the fleet.</p> <p>Possible fleet statuses include the following:</p> <ul> <li> <p> <b>NEW</b> – A new fleet has been defined and desired instances is set to 1. </p> </li> <li> <p> <b>DOWNLOADING/VALIDATING/BUILDING/ACTIVATING</b> – Amazon GameLift is setting up the new fleet, creating new instances with the game build and starting server processes.</p> </li> <li> <p> <b>ACTIVE</b> – Hosts can now accept game sessions.</p> </li> <li> <p> <b>ERROR</b> – An error occurred when downloading, validating, building, or activating the fleet.</p> </li> <li> <p> <b>DELETING</b> – Hosts are responding to a delete fleet request.</p> </li> <li> <p> <b>TERMINATED</b> – The fleet no longer exists.</p> </li> </ul>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>Time stamp indicating when this data object was terminated. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="TerminationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this data object was terminated. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "TerminationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub termination_time: Option<f64>,
 }
 
-#[doc="<p>Information about the fleet's capacity. Fleet capacity is measured in EC2 instances. By default, new fleets have a capacity of one instance, but can be updated as needed. The maximum number of instances for a fleet is determined by the fleet's instance type.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about the fleet's capacity. Fleet capacity is measured in EC2 instances. By default, new fleets have a capacity of one instance, but can be updated as needed. The maximum number of instances for a fleet is determined by the fleet's instance type.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct FleetCapacity {
-    #[doc="<p>Unique identifier for a fleet.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
-    #[doc="<p>Current status of fleet capacity.</p>"]
-    #[serde(rename="InstanceCounts")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Current status of fleet capacity.</p>
+    #[serde(rename = "InstanceCounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_counts: Option<EC2InstanceCounts>,
-    #[doc="<p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for detailed descriptions.</p>"]
-    #[serde(rename="InstanceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for detailed descriptions.</p>
+    #[serde(rename = "InstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
 }
 
-#[doc="<p>Current status of fleet utilization, including the number of game and player sessions being hosted.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Current status of fleet utilization, including the number of game and player sessions being hosted.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct FleetUtilization {
-    #[doc="<p>Number of active game sessions currently being hosted on all instances in the fleet.</p>"]
-    #[serde(rename="ActiveGameSessionCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of active game sessions currently being hosted on all instances in the fleet.</p>
+    #[serde(rename = "ActiveGameSessionCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub active_game_session_count: Option<i64>,
-    #[doc="<p>Number of server processes in an <code>ACTIVE</code> status currently running across all instances in the fleet</p>"]
-    #[serde(rename="ActiveServerProcessCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of server processes in an <code>ACTIVE</code> status currently running across all instances in the fleet</p>
+    #[serde(rename = "ActiveServerProcessCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub active_server_process_count: Option<i64>,
-    #[doc="<p>Number of active player sessions currently being hosted on all instances in the fleet.</p>"]
-    #[serde(rename="CurrentPlayerSessionCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of active player sessions currently being hosted on all instances in the fleet.</p>
+    #[serde(rename = "CurrentPlayerSessionCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub current_player_session_count: Option<i64>,
-    #[doc="<p>Unique identifier for a fleet.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
-    #[doc="<p>Maximum players allowed across all game sessions currently being hosted on all instances in the fleet.</p>"]
-    #[serde(rename="MaximumPlayerSessionCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum players allowed across all game sessions currently being hosted on all instances in the fleet.</p>
+    #[serde(rename = "MaximumPlayerSessionCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_player_session_count: Option<i64>,
 }
 
-#[doc="<p>Set of key-value pairs that contain information about a game session. When included in a game session request, these properties communicate details to be used when setting up the new game session, such as to specify a game mode, level, or map. Game properties are passed to the game server process when initiating a new game session; the server process uses the properties as appropriate. For more information, see the <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-client-api.html#gamelift-sdk-client-api-create\"> Amazon GameLift Developer Guide</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Set of key-value pairs that contain information about a game session. When included in a game session request, these properties communicate details to be used when setting up the new game session, such as to specify a game mode, level, or map. Game properties are passed to the game server process when initiating a new game session; the server process uses the properties as appropriate. For more information, see the <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-client-api.html#gamelift-sdk-client-api-create"> Amazon GameLift Developer Guide</a>.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct GameProperty {
-    #[doc="<p>Game property identifier.</p>"]
-    #[serde(rename="Key")]
+    /// <p>Game property identifier.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>Game property value.</p>"]
-    #[serde(rename="Value")]
+    /// <p>Game property value.</p>
+    #[serde(rename = "Value")]
     pub value: String,
 }
 
-#[doc="<p>Properties describing a game session.</p> <p>A game session in ACTIVE status can host players. When a game session ends, its status is set to <code>TERMINATED</code>. </p> <p>Once the session ends, the game session object is retained for 30 days. This means you can reuse idempotency token values after this time. Game session logs are retained for 14 days.</p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Properties describing a game session.</p> <p>A game session in ACTIVE status can host players. When a game session ends, its status is set to <code>TERMINATED</code>. </p> <p>Once the session ends, the game session object is retained for 30 days. This means you can reuse idempotency token values after this time. Game session logs are retained for 14 days.</p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GameSession {
-    #[doc="<p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="CreationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    #[doc="<p>Unique identifier for a player. This ID is used to enforce a resource protection policy (if one exists), that limits the number of game sessions a player can create.</p>"]
-    #[serde(rename="CreatorId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a player. This ID is used to enforce a resource protection policy (if one exists), that limits the number of game sessions a player can create.</p>
+    #[serde(rename = "CreatorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_id: Option<String>,
-    #[doc="<p>Number of players currently in the game session.</p>"]
-    #[serde(rename="CurrentPlayerSessionCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of players currently in the game session.</p>
+    #[serde(rename = "CurrentPlayerSessionCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub current_player_session_count: Option<i64>,
-    #[doc="<p>Unique identifier for a fleet the game session is running on.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet the game session is running on.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
-    #[doc="<p>Set of developer-defined properties for a game session, formatted as a set of type:value pairs. These properties are included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession\">Start a Game Session</a>).</p>"]
-    #[serde(rename="GameProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of developer-defined properties for a game session, formatted as a set of type:value pairs. These properties are included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>).</p>
+    #[serde(rename = "GameProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_properties: Option<Vec<GameProperty>>,
-    #[doc="<p>Set of developer-defined game session properties, formatted as a single string value. This data is included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession\">Start a Game Session</a>).</p>"]
-    #[serde(rename="GameSessionData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of developer-defined game session properties, formatted as a single string value. This data is included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>).</p>
+    #[serde(rename = "GameSessionData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_data: Option<String>,
-    #[doc="<p>Unique identifier for the game session. A game session ID has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.</p>"]
-    #[serde(rename="GameSessionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for the game session. A game session ID has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.</p>
+    #[serde(rename = "GameSessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_id: Option<String>,
-    #[doc="<p>IP address of the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number.</p>"]
-    #[serde(rename="IpAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>IP address of the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number.</p>
+    #[serde(rename = "IpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    #[doc="<p>Maximum number of players that can be connected simultaneously to the game session.</p>"]
-    #[serde(rename="MaximumPlayerSessionCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of players that can be connected simultaneously to the game session.</p>
+    #[serde(rename = "MaximumPlayerSessionCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_player_session_count: Option<i64>,
-    #[doc="<p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Indicates whether or not the game session is accepting new players.</p>"]
-    #[serde(rename="PlayerSessionCreationPolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether or not the game session is accepting new players.</p>
+    #[serde(rename = "PlayerSessionCreationPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_session_creation_policy: Option<String>,
-    #[doc="<p>Port number for the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number.</p>"]
-    #[serde(rename="Port")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Port number for the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number.</p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    #[doc="<p>Current status of the game session. A game session must have an <code>ACTIVE</code> status to have player sessions.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Current status of the game session. A game session must have an <code>ACTIVE</code> status to have player sessions.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>Time stamp indicating when this data object was terminated. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="TerminationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this data object was terminated. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "TerminationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub termination_time: Option<f64>,
 }
 
-#[doc="<p>Connection information for the new game session that is created with matchmaking. (with <a>StartMatchmaking</a>). Once a match is set, the FlexMatch engine places the match and creates a new game session for it. This information, including the game session endpoint and player sessions for each player in the original matchmaking request, is added to the <a>MatchmakingTicket</a>, which can be retrieved by calling <a>DescribeMatchmaking</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Connection information for the new game session that is created with matchmaking. (with <a>StartMatchmaking</a>). Once a match is set, the FlexMatch engine places the match and creates a new game session for it. This information, including the game session endpoint and player sessions for each player in the original matchmaking request, is added to the <a>MatchmakingTicket</a>, which can be retrieved by calling <a>DescribeMatchmaking</a>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GameSessionConnectionInfo {
-    #[doc="<p>Amazon Resource Name (<a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html\">ARN</a>) that is assigned to a game session and uniquely identifies it.</p>"]
-    #[serde(rename="GameSessionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon Resource Name (<a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html">ARN</a>) that is assigned to a game session and uniquely identifies it.</p>
+    #[serde(rename = "GameSessionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_arn: Option<String>,
-    #[doc="<p>IP address of the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number.</p>"]
-    #[serde(rename="IpAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>IP address of the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number.</p>
+    #[serde(rename = "IpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    #[doc="<p>Collection of player session IDs, one for each player ID that was included in the original matchmaking request. </p>"]
-    #[serde(rename="MatchedPlayerSessions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of player session IDs, one for each player ID that was included in the original matchmaking request. </p>
+    #[serde(rename = "MatchedPlayerSessions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub matched_player_sessions: Option<Vec<MatchedPlayerSession>>,
-    #[doc="<p>Port number for the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number.</p>"]
-    #[serde(rename="Port")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Port number for the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number.</p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
 }
 
-#[doc="<p>A game session's properties plus the protection policy currently in force.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A game session's properties plus the protection policy currently in force.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GameSessionDetail {
-    #[doc="<p>Object that describes a game session.</p>"]
-    #[serde(rename="GameSession")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that describes a game session.</p>
+    #[serde(rename = "GameSession")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session: Option<GameSession>,
-    #[doc="<p>Current status of protection for the game session.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>"]
-    #[serde(rename="ProtectionPolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Current status of protection for the game session.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>
+    #[serde(rename = "ProtectionPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub protection_policy: Option<String>,
 }
 
-#[doc="<p>Object that describes a <a>StartGameSessionPlacement</a> request. This object includes the full details of the original request plus the current status and start/end time stamps.</p> <p>Game session placement-related operations include:</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Object that describes a <a>StartGameSessionPlacement</a> request. This object includes the full details of the original request plus the current status and start/end time stamps.</p> <p>Game session placement-related operations include:</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GameSessionPlacement {
-    #[doc="<p>Time stamp indicating when this request was completed, canceled, or timed out.</p>"]
-    #[serde(rename="EndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this request was completed, canceled, or timed out.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>Set of developer-defined properties for a game session, formatted as a set of type:value pairs. These properties are included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession\">Start a Game Session</a>).</p>"]
-    #[serde(rename="GameProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of developer-defined properties for a game session, formatted as a set of type:value pairs. These properties are included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>).</p>
+    #[serde(rename = "GameProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_properties: Option<Vec<GameProperty>>,
-    #[doc="<p>Identifier for the game session created by this placement request. This value is set once the new game session is placed (placement status is <code>FULFILLED</code>). This identifier is unique across all regions. You can use this value as a <code>GameSessionId</code> value as needed.</p>"]
-    #[serde(rename="GameSessionArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Identifier for the game session created by this placement request. This value is set once the new game session is placed (placement status is <code>FULFILLED</code>). This identifier is unique across all regions. You can use this value as a <code>GameSessionId</code> value as needed.</p>
+    #[serde(rename = "GameSessionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_arn: Option<String>,
-    #[doc="<p>Set of developer-defined game session properties, formatted as a single string value. This data is included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession\">Start a Game Session</a>).</p>"]
-    #[serde(rename="GameSessionData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of developer-defined game session properties, formatted as a single string value. This data is included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>).</p>
+    #[serde(rename = "GameSessionData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_data: Option<String>,
-    #[doc="<p>Unique identifier for the game session. This value is set once the new game session is placed (placement status is <code>FULFILLED</code>).</p>"]
-    #[serde(rename="GameSessionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for the game session. This value is set once the new game session is placed (placement status is <code>FULFILLED</code>).</p>
+    #[serde(rename = "GameSessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_id: Option<String>,
-    #[doc="<p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>"]
-    #[serde(rename="GameSessionName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>
+    #[serde(rename = "GameSessionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_name: Option<String>,
-    #[doc="<p>Descriptive label that is associated with game session queue. Queue names must be unique within each region.</p>"]
-    #[serde(rename="GameSessionQueueName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with game session queue. Queue names must be unique within each region.</p>
+    #[serde(rename = "GameSessionQueueName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_queue_name: Option<String>,
-    #[doc="<p>Name of the region where the game session created by this placement request is running. This value is set once the new game session is placed (placement status is <code>FULFILLED</code>).</p>"]
-    #[serde(rename="GameSessionRegion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the region where the game session created by this placement request is running. This value is set once the new game session is placed (placement status is <code>FULFILLED</code>).</p>
+    #[serde(rename = "GameSessionRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_region: Option<String>,
-    #[doc="<p>IP address of the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number. This value is set once the new game session is placed (placement status is <code>FULFILLED</code>). </p>"]
-    #[serde(rename="IpAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>IP address of the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number. This value is set once the new game session is placed (placement status is <code>FULFILLED</code>). </p>
+    #[serde(rename = "IpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    #[doc="<p>Maximum number of players that can be connected simultaneously to the game session.</p>"]
-    #[serde(rename="MaximumPlayerSessionCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of players that can be connected simultaneously to the game session.</p>
+    #[serde(rename = "MaximumPlayerSessionCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_player_session_count: Option<i64>,
-    #[doc="<p>Collection of information on player sessions created in response to the game session placement request. These player sessions are created only once a new game session is successfully placed (placement status is <code>FULFILLED</code>). This information includes the player ID (as provided in the placement request) and the corresponding player session ID. Retrieve full player sessions by calling <a>DescribePlayerSessions</a> with the player session ID.</p>"]
-    #[serde(rename="PlacedPlayerSessions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of information on player sessions created in response to the game session placement request. These player sessions are created only once a new game session is successfully placed (placement status is <code>FULFILLED</code>). This information includes the player ID (as provided in the placement request) and the corresponding player session ID. Retrieve full player sessions by calling <a>DescribePlayerSessions</a> with the player session ID.</p>
+    #[serde(rename = "PlacedPlayerSessions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub placed_player_sessions: Option<Vec<PlacedPlayerSession>>,
-    #[doc="<p>Unique identifier for a game session placement.</p>"]
-    #[serde(rename="PlacementId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a game session placement.</p>
+    #[serde(rename = "PlacementId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub placement_id: Option<String>,
-    #[doc="<p>Set of values, expressed in milliseconds, indicating the amount of latency that a player experiences when connected to AWS regions.</p>"]
-    #[serde(rename="PlayerLatencies")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of values, expressed in milliseconds, indicating the amount of latency that a player experiences when connected to AWS regions.</p>
+    #[serde(rename = "PlayerLatencies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_latencies: Option<Vec<PlayerLatency>>,
-    #[doc="<p>Port number for the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number. This value is set once the new game session is placed (placement status is <code>FULFILLED</code>).</p>"]
-    #[serde(rename="Port")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Port number for the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number. This value is set once the new game session is placed (placement status is <code>FULFILLED</code>).</p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    #[doc="<p>Time stamp indicating when this request was placed in the queue. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this request was placed in the queue. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>Current status of the game session placement request.</p> <ul> <li> <p> <b>PENDING</b> – The placement request is currently in the queue waiting to be processed.</p> </li> <li> <p> <b>FULFILLED</b> – A new game session and player sessions (if requested) have been successfully created. Values for <i>GameSessionArn</i> and <i>GameSessionRegion</i> are available. </p> </li> <li> <p> <b>CANCELLED</b> – The placement request was canceled with a call to <a>StopGameSessionPlacement</a>.</p> </li> <li> <p> <b>TIMED_OUT</b> – A new game session was not successfully created before the time limit expired. You can resubmit the placement request as needed.</p> </li> </ul>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Current status of the game session placement request.</p> <ul> <li> <p> <b>PENDING</b> – The placement request is currently in the queue waiting to be processed.</p> </li> <li> <p> <b>FULFILLED</b> – A new game session and player sessions (if requested) have been successfully created. Values for <i>GameSessionArn</i> and <i>GameSessionRegion</i> are available. </p> </li> <li> <p> <b>CANCELLED</b> – The placement request was canceled with a call to <a>StopGameSessionPlacement</a>.</p> </li> <li> <p> <b>TIMED_OUT</b> – A new game session was not successfully created before the time limit expired. You can resubmit the placement request as needed.</p> </li> </ul>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>Configuration of a queue that is used to process game session placement requests. The queue configuration identifies several game features:</p> <ul> <li> <p>The destinations where a new game session can potentially be hosted. Amazon GameLift tries these destinations in an order based on either the queue's default order or player latency information, if provided in a placement request. With latency information, Amazon GameLift can place game sessions where the majority of players are reporting the lowest possible latency. </p> </li> <li> <p>The length of time that placement requests can wait in the queue before timing out. </p> </li> <li> <p>A set of optional latency policies that protect individual players from high latencies, preventing game sessions from being placed where any individual player is reporting latency higher than a policy's maximum.</p> </li> </ul> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Configuration of a queue that is used to process game session placement requests. The queue configuration identifies several game features:</p> <ul> <li> <p>The destinations where a new game session can potentially be hosted. Amazon GameLift tries these destinations in an order based on either the queue's default order or player latency information, if provided in a placement request. With latency information, Amazon GameLift can place game sessions where the majority of players are reporting the lowest possible latency. </p> </li> <li> <p>The length of time that placement requests can wait in the queue before timing out. </p> </li> <li> <p>A set of optional latency policies that protect individual players from high latencies, preventing game sessions from being placed where any individual player is reporting latency higher than a policy's maximum.</p> </li> </ul> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GameSessionQueue {
-    #[doc="<p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order.</p>"]
-    #[serde(rename="Destinations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order.</p>
+    #[serde(rename = "Destinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destinations: Option<Vec<GameSessionQueueDestination>>,
-    #[doc="<p>Amazon Resource Name (<a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html\">ARN</a>) that is assigned to a game session queue and uniquely identifies it. Format is <code>arn:aws:gamelift:&lt;region&gt;::fleet/fleet-a1234567-b8c9-0d1e-2fa3-b45c6d7e8912</code>.</p>"]
-    #[serde(rename="GameSessionQueueArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon Resource Name (<a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html">ARN</a>) that is assigned to a game session queue and uniquely identifies it. Format is <code>arn:aws:gamelift:&lt;region&gt;::fleet/fleet-a1234567-b8c9-0d1e-2fa3-b45c6d7e8912</code>.</p>
+    #[serde(rename = "GameSessionQueueArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_queue_arn: Option<String>,
-    #[doc="<p>Descriptive label that is associated with game session queue. Queue names must be unique within each region.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with game session queue. Queue names must be unique within each region.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Collection of latency policies to apply when processing game sessions placement requests with player latency information. Multiple policies are evaluated in order of the maximum latency value, starting with the lowest latency values. With just one policy, it is enforced at the start of the game session placement for the duration period. With multiple policies, each policy is enforced consecutively for its duration period. For example, a queue might enforce a 60-second policy followed by a 120-second policy, and then no policy for the remainder of the placement. </p>"]
-    #[serde(rename="PlayerLatencyPolicies")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of latency policies to apply when processing game sessions placement requests with player latency information. Multiple policies are evaluated in order of the maximum latency value, starting with the lowest latency values. With just one policy, it is enforced at the start of the game session placement for the duration period. With multiple policies, each policy is enforced consecutively for its duration period. For example, a queue might enforce a 60-second policy followed by a 120-second policy, and then no policy for the remainder of the placement. </p>
+    #[serde(rename = "PlayerLatencyPolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_latency_policies: Option<Vec<PlayerLatencyPolicy>>,
-    #[doc="<p>Maximum time, in seconds, that a new game session placement request remains in the queue. When a request exceeds this time, the game session placement changes to a <code>TIMED_OUT</code> status.</p>"]
-    #[serde(rename="TimeoutInSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum time, in seconds, that a new game session placement request remains in the queue. When a request exceeds this time, the game session placement changes to a <code>TIMED_OUT</code> status.</p>
+    #[serde(rename = "TimeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_seconds: Option<i64>,
 }
 
-#[doc="<p>Fleet designated in a game session queue. Requests for new game sessions in the queue are fulfilled by starting a new game session on any destination configured for a queue. </p> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Fleet designated in a game session queue. Requests for new game sessions in the queue are fulfilled by starting a new game session on any destination configured for a queue. </p> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct GameSessionQueueDestination {
-    #[doc="<p>Amazon Resource Name (ARN) assigned to fleet or fleet alias. ARNs, which include a fleet ID or alias ID and a region name, provide a unique identifier across all regions. </p>"]
-    #[serde(rename="DestinationArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon Resource Name (ARN) assigned to fleet or fleet alias. ARNs, which include a fleet ID or alias ID and a region name, provide a unique identifier across all regions. </p>
+    #[serde(rename = "DestinationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_arn: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetGameSessionLogUrlInput {
-    #[doc="<p>Unique identifier for the game session to get logs for.</p>"]
-    #[serde(rename="GameSessionId")]
+    /// <p>Unique identifier for the game session to get logs for.</p>
+    #[serde(rename = "GameSessionId")]
     pub game_session_id: String,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetGameSessionLogUrlOutput {
-    #[doc="<p>Location of the requested game session logs, available for download.</p>"]
-    #[serde(rename="PreSignedUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Location of the requested game session logs, available for download.</p>
+    #[serde(rename = "PreSignedUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pre_signed_url: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetInstanceAccessInput {
-    #[doc="<p>Unique identifier for a fleet that contains the instance you want access to. The fleet can be in any of the following statuses: <code>ACTIVATING</code>, <code>ACTIVE</code>, or <code>ERROR</code>. Fleets with an <code>ERROR</code> status may be accessible for a short time before they are deleted.</p>"]
-    #[serde(rename="FleetId")]
+    /// <p>Unique identifier for a fleet that contains the instance you want access to. The fleet can be in any of the following statuses: <code>ACTIVATING</code>, <code>ACTIVE</code>, or <code>ERROR</code>. Fleets with an <code>ERROR</code> status may be accessible for a short time before they are deleted.</p>
+    #[serde(rename = "FleetId")]
     pub fleet_id: String,
-    #[doc="<p>Unique identifier for an instance you want to get access to. You can access an instance in any status.</p>"]
-    #[serde(rename="InstanceId")]
+    /// <p>Unique identifier for an instance you want to get access to. You can access an instance in any status.</p>
+    #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetInstanceAccessOutput {
-    #[doc="<p>Object that contains connection information for a fleet instance, including IP address and access credentials.</p>"]
-    #[serde(rename="InstanceAccess")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that contains connection information for a fleet instance, including IP address and access credentials.</p>
+    #[serde(rename = "InstanceAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_access: Option<InstanceAccess>,
 }
 
-#[doc="<p>Properties that describe an instance of a virtual computing resource that hosts one or more game servers. A fleet may contain zero or more instances.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Properties that describe an instance of a virtual computing resource that hosts one or more game servers. A fleet may contain zero or more instances.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Instance {
-    #[doc="<p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="CreationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    #[doc="<p>Unique identifier for a fleet that the instance is in.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet that the instance is in.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
-    #[doc="<p>Unique identifier for an instance.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for an instance.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>IP address assigned to the instance.</p>"]
-    #[serde(rename="IpAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>IP address assigned to the instance.</p>
+    #[serde(rename = "IpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    #[doc="<p>Operating system that is running on this instance. </p>"]
-    #[serde(rename="OperatingSystem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Operating system that is running on this instance. </p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
-    #[doc="<p>Current status of the instance. Possible statuses include the following:</p> <ul> <li> <p> <b>PENDING</b> – The instance is in the process of being created and launching server processes as defined in the fleet's run-time configuration. </p> </li> <li> <p> <b>ACTIVE</b> – The instance has been successfully created and at least one server process has successfully launched and reported back to Amazon GameLift that it is ready to host a game session. The instance is now considered ready to host game sessions. </p> </li> <li> <p> <b>TERMINATING</b> – The instance is in the process of shutting down. This may happen to reduce capacity during a scaling down event or to recycle resources in the event of a problem.</p> </li> </ul>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Current status of the instance. Possible statuses include the following:</p> <ul> <li> <p> <b>PENDING</b> – The instance is in the process of being created and launching server processes as defined in the fleet's run-time configuration. </p> </li> <li> <p> <b>ACTIVE</b> – The instance has been successfully created and at least one server process has successfully launched and reported back to Amazon GameLift that it is ready to host a game session. The instance is now considered ready to host game sessions. </p> </li> <li> <p> <b>TERMINATING</b> – The instance is in the process of shutting down. This may happen to reduce capacity during a scaling down event or to recycle resources in the event of a problem.</p> </li> </ul>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>EC2 instance type that defines the computing resources of this instance. </p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>EC2 instance type that defines the computing resources of this instance. </p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Information required to remotely connect to a fleet instance. Access is requested by calling <a>GetInstanceAccess</a>. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information required to remotely connect to a fleet instance. Access is requested by calling <a>GetInstanceAccess</a>. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceAccess {
-    #[doc="<p>Credentials required to access the instance.</p>"]
-    #[serde(rename="Credentials")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Credentials required to access the instance.</p>
+    #[serde(rename = "Credentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials: Option<InstanceCredentials>,
-    #[doc="<p>Unique identifier for a fleet containing the instance being accessed.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet containing the instance being accessed.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
-    #[doc="<p>Unique identifier for an instance being accessed.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for an instance being accessed.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>IP address assigned to the instance.</p>"]
-    #[serde(rename="IpAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>IP address assigned to the instance.</p>
+    #[serde(rename = "IpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    #[doc="<p>Operating system that is running on the instance.</p>"]
-    #[serde(rename="OperatingSystem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Operating system that is running on the instance.</p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
 }
 
-#[doc="<p>Set of credentials required to remotely access a fleet instance. Access credentials are requested by calling <a>GetInstanceAccess</a> and returned in an <a>InstanceAccess</a> object.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Set of credentials required to remotely access a fleet instance. Access credentials are requested by calling <a>GetInstanceAccess</a> and returned in an <a>InstanceAccess</a> object.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceCredentials {
-    #[doc="<p>Secret string. For Windows instances, the secret is a password for use with Windows Remote Desktop. For Linux instances, it is a private key (which must be saved as a <code>.pem</code> file) for use with SSH.</p>"]
-    #[serde(rename="Secret")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Secret string. For Windows instances, the secret is a password for use with Windows Remote Desktop. For Linux instances, it is a private key (which must be saved as a <code>.pem</code> file) for use with SSH.</p>
+    #[serde(rename = "Secret")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub secret: Option<String>,
-    #[doc="<p>User login string.</p>"]
-    #[serde(rename="UserName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User login string.</p>
+    #[serde(rename = "UserName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_name: Option<String>,
 }
 
-#[doc="<p>A range of IP addresses and port settings that allow inbound traffic to connect to server processes on Amazon GameLift. Each game session hosted on a fleet is assigned a unique combination of IP address and port number, which must fall into the fleet's allowed ranges. This combination is included in the <a>GameSession</a> object. </p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A range of IP addresses and port settings that allow inbound traffic to connect to server processes on Amazon GameLift. Each game session hosted on a fleet is assigned a unique combination of IP address and port number, which must fall into the fleet's allowed ranges. This combination is included in the <a>GameSession</a> object. </p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct IpPermission {
-    #[doc="<p>Starting value for a range of allowed port numbers.</p>"]
-    #[serde(rename="FromPort")]
+    /// <p>Starting value for a range of allowed port numbers.</p>
+    #[serde(rename = "FromPort")]
     pub from_port: i64,
-    #[doc="<p>Range of allowed IP addresses. This value must be expressed in CIDR notation. Example: \"<code>000.000.000.000/[subnet mask]</code>\" or optionally the shortened version \"<code>0.0.0.0/[subnet mask]</code>\".</p>"]
-    #[serde(rename="IpRange")]
+    /// <p>Range of allowed IP addresses. This value must be expressed in CIDR notation. Example: "<code>000.000.000.000/[subnet mask]</code>" or optionally the shortened version "<code>0.0.0.0/[subnet mask]</code>".</p>
+    #[serde(rename = "IpRange")]
     pub ip_range: String,
-    #[doc="<p>Network communication protocol used by the fleet.</p>"]
-    #[serde(rename="Protocol")]
+    /// <p>Network communication protocol used by the fleet.</p>
+    #[serde(rename = "Protocol")]
     pub protocol: String,
-    #[doc="<p>Ending value for a range of allowed port numbers. Port numbers are end-inclusive. This value must be higher than <code>FromPort</code>.</p>"]
-    #[serde(rename="ToPort")]
+    /// <p>Ending value for a range of allowed port numbers. Port numbers are end-inclusive. This value must be higher than <code>FromPort</code>.</p>
+    #[serde(rename = "ToPort")]
     pub to_port: i64,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAliasesInput {
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Descriptive label that is associated with an alias. Alias names do not need to be unique.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with an alias. Alias names do not need to be unique.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Type of routing to filter results on. Use this parameter to retrieve only aliases of a certain type. To retrieve all aliases, leave this parameter empty.</p> <p>Possible routing types include the following:</p> <ul> <li> <p> <b>SIMPLE</b> – The alias resolves to one specific fleet. Use this type when routing to active fleets.</p> </li> <li> <p> <b>TERMINAL</b> – The alias does not resolve to a fleet but instead can be used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException with the <a>RoutingStrategy</a> message embedded.</p> </li> </ul>"]
-    #[serde(rename="RoutingStrategyType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Type of routing to filter results on. Use this parameter to retrieve only aliases of a certain type. To retrieve all aliases, leave this parameter empty.</p> <p>Possible routing types include the following:</p> <ul> <li> <p> <b>SIMPLE</b> – The alias resolves to one specific fleet. Use this type when routing to active fleets.</p> </li> <li> <p> <b>TERMINAL</b> – The alias does not resolve to a fleet but instead can be used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException with the <a>RoutingStrategy</a> message embedded.</p> </li> </ul>
+    #[serde(rename = "RoutingStrategyType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub routing_strategy_type: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAliasesOutput {
-    #[doc="<p>Collection of alias records that match the list request.</p>"]
-    #[serde(rename="Aliases")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of alias records that match the list request.</p>
+    #[serde(rename = "Aliases")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub aliases: Option<Vec<Alias>>,
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListBuildsInput {
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Build status to filter results by. To retrieve all builds, leave this parameter empty.</p> <p>Possible build statuses include the following:</p> <ul> <li> <p> <b>INITIALIZED</b> – A new build has been defined, but no files have been uploaded. You cannot create fleets for builds that are in this status. When a build is successfully created, the build status is set to this value. </p> </li> <li> <p> <b>READY</b> – The game build has been successfully uploaded. You can now create new fleets for this build.</p> </li> <li> <p> <b>FAILED</b> – The game build upload failed. You cannot create new fleets for this build. </p> </li> </ul>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Build status to filter results by. To retrieve all builds, leave this parameter empty.</p> <p>Possible build statuses include the following:</p> <ul> <li> <p> <b>INITIALIZED</b> – A new build has been defined, but no files have been uploaded. You cannot create fleets for builds that are in this status. When a build is successfully created, the build status is set to this value. </p> </li> <li> <p> <b>READY</b> – The game build has been successfully uploaded. You can now create new fleets for this build.</p> </li> <li> <p> <b>FAILED</b> – The game build upload failed. You cannot create new fleets for this build. </p> </li> </ul>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListBuildsOutput {
-    #[doc="<p>Collection of build records that match the request.</p>"]
-    #[serde(rename="Builds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of build records that match the request.</p>
+    #[serde(rename = "Builds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub builds: Option<Vec<Build>>,
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListFleetsInput {
-    #[doc="<p>Unique identifier for a build to return fleets for. Use this parameter to return only fleets using the specified build. To retrieve all fleets, leave this parameter empty.</p>"]
-    #[serde(rename="BuildId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a build to return fleets for. Use this parameter to return only fleets using the specified build. To retrieve all fleets, leave this parameter empty.</p>
+    #[serde(rename = "BuildId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub build_id: Option<String>,
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListFleetsOutput {
-    #[doc="<p>Set of fleet IDs matching the list request. You can retrieve additional information about all returned fleets by passing this result set to a call to <a>DescribeFleetAttributes</a>, <a>DescribeFleetCapacity</a>, or <a>DescribeFleetUtilization</a>.</p>"]
-    #[serde(rename="FleetIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of fleet IDs matching the list request. You can retrieve additional information about all returned fleets by passing this result set to a call to <a>DescribeFleetAttributes</a>, <a>DescribeFleetCapacity</a>, or <a>DescribeFleetUtilization</a>.</p>
+    #[serde(rename = "FleetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_ids: Option<Vec<String>>,
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>New player session created as a result of a successful FlexMatch match. A successful match automatically creates new player sessions for every player ID in the original matchmaking request. </p> <p>When players connect to the match's game session, they must include both player ID and player session ID in order to claim their assigned player slot.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>New player session created as a result of a successful FlexMatch match. A successful match automatically creates new player sessions for every player ID in the original matchmaking request. </p> <p>When players connect to the match's game session, they must include both player ID and player session ID in order to claim their assigned player slot.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MatchedPlayerSession {
-    #[doc="<p>Unique identifier for a player </p>"]
-    #[serde(rename="PlayerId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a player </p>
+    #[serde(rename = "PlayerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_id: Option<String>,
-    #[doc="<p>Unique identifier for a player session</p>"]
-    #[serde(rename="PlayerSessionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a player session</p>
+    #[serde(rename = "PlayerSessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_session_id: Option<String>,
 }
 
-#[doc="<p>Guidelines for use with FlexMatch to match players into games. All matchmaking requests must specify a matchmaking configuration.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Guidelines for use with FlexMatch to match players into games. All matchmaking requests must specify a matchmaking configuration.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MatchmakingConfiguration {
-    #[doc="<p>Flag that determines whether or not a match that was created with this configuration must be accepted by the matched players. To require acceptance, set to TRUE.</p>"]
-    #[serde(rename="AcceptanceRequired")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Flag that determines whether or not a match that was created with this configuration must be accepted by the matched players. To require acceptance, set to TRUE.</p>
+    #[serde(rename = "AcceptanceRequired")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub acceptance_required: Option<bool>,
-    #[doc="<p>Length of time (in seconds) to wait for players to accept a proposed match. If any player rejects the match or fails to accept before the timeout, the ticket continues to look for an acceptable match.</p>"]
-    #[serde(rename="AcceptanceTimeoutSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Length of time (in seconds) to wait for players to accept a proposed match. If any player rejects the match or fails to accept before the timeout, the ticket continues to look for an acceptable match.</p>
+    #[serde(rename = "AcceptanceTimeoutSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub acceptance_timeout_seconds: Option<i64>,
-    #[doc="<p>Number of player slots in a match to keep open for future players. For example, if the configuration's rule set specifies a match for a single 12-person team, and the additional player count is set to 2, only 10 players are selected for the match.</p>"]
-    #[serde(rename="AdditionalPlayerCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of player slots in a match to keep open for future players. For example, if the configuration's rule set specifies a match for a single 12-person team, and the additional player count is set to 2, only 10 players are selected for the match.</p>
+    #[serde(rename = "AdditionalPlayerCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_player_count: Option<i64>,
-    #[doc="<p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="CreationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    #[doc="<p>Information to attached to all events related to the matchmaking configuration. </p>"]
-    #[serde(rename="CustomEventData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information to attached to all events related to the matchmaking configuration. </p>
+    #[serde(rename = "CustomEventData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_event_data: Option<String>,
-    #[doc="<p>Descriptive label that is associated with matchmaking configuration.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with matchmaking configuration.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Set of developer-defined properties for a game session, formatted as a set of type:value pairs. These properties are included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession\">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match. </p>"]
-    #[serde(rename="GameProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of developer-defined properties for a game session, formatted as a set of type:value pairs. These properties are included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match. </p>
+    #[serde(rename = "GameProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_properties: Option<Vec<GameProperty>>,
-    #[doc="<p>Set of developer-defined game session properties, formatted as a single string value. This data is included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession\">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match. </p>"]
-    #[serde(rename="GameSessionData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of developer-defined game session properties, formatted as a single string value. This data is included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match. </p>
+    #[serde(rename = "GameSessionData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_data: Option<String>,
-    #[doc="<p>Amazon Resource Name (<a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html\">ARN</a>) that is assigned to a game session queue and uniquely identifies it. Format is <code>arn:aws:gamelift:&lt;region&gt;::fleet/fleet-a1234567-b8c9-0d1e-2fa3-b45c6d7e8912</code>. These queues are used when placing game sessions for matches that are created with this matchmaking configuration. Queues can be located in any region.</p>"]
-    #[serde(rename="GameSessionQueueArns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon Resource Name (<a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html">ARN</a>) that is assigned to a game session queue and uniquely identifies it. Format is <code>arn:aws:gamelift:&lt;region&gt;::fleet/fleet-a1234567-b8c9-0d1e-2fa3-b45c6d7e8912</code>. These queues are used when placing game sessions for matches that are created with this matchmaking configuration. Queues can be located in any region.</p>
+    #[serde(rename = "GameSessionQueueArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_queue_arns: Option<Vec<String>>,
-    #[doc="<p>Unique identifier for a matchmaking configuration. This name is used to identify the configuration associated with a matchmaking request or ticket.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a matchmaking configuration. This name is used to identify the configuration associated with a matchmaking request or ticket.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>SNS topic ARN that is set up to receive matchmaking notifications.</p>"]
-    #[serde(rename="NotificationTarget")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>SNS topic ARN that is set up to receive matchmaking notifications.</p>
+    #[serde(rename = "NotificationTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_target: Option<String>,
-    #[doc="<p>Maximum duration, in seconds, that a matchmaking ticket can remain in process before timing out. Requests that time out can be resubmitted as needed.</p>"]
-    #[serde(rename="RequestTimeoutSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum duration, in seconds, that a matchmaking ticket can remain in process before timing out. Requests that time out can be resubmitted as needed.</p>
+    #[serde(rename = "RequestTimeoutSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub request_timeout_seconds: Option<i64>,
-    #[doc="<p>Unique identifier for a matchmaking rule set to use with this configuration. A matchmaking configuration can only use rule sets that are defined in the same region.</p>"]
-    #[serde(rename="RuleSetName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a matchmaking rule set to use with this configuration. A matchmaking configuration can only use rule sets that are defined in the same region.</p>
+    #[serde(rename = "RuleSetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_set_name: Option<String>,
 }
 
-#[doc="<p>Set of rule statements, used with FlexMatch, that determine how to build a certain kind of player match. Each rule set describes a type of group to be created and defines the parameters for acceptable player matches. Rule sets are used in <a>MatchmakingConfiguration</a> objects.</p> <p>A rule set may define the following elements for a match. For detailed information and examples showing how to construct a rule set, see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/match-rules.html\">Create Matchmaking Rules for Your Game</a>. </p> <ul> <li> <p>Teams -- Required. A rule set must define one or multiple teams for the match and set minimum and maximum team sizes. For example, a rule set might describe a 4x4 match that requires all eight slots to be filled. </p> </li> <li> <p>Player attributes -- Optional. These attributes specify a set of player characteristics to evaluate when looking for a match. Matchmaking requests that use a rule set with player attributes must provide the corresponding attribute values. For example, an attribute might specify a player's skill or level.</p> </li> <li> <p>Rules -- Optional. Rules define how to evaluate potential players for a match based on player attributes. A rule might specify minimum requirements for individual players--such as each player must meet a certain skill level, or may describe an entire group--such as all teams must be evenly matched or have at least one player in a certain role. </p> </li> <li> <p>Expansions -- Optional. Expansions allow you to relax the rules after a period of time if no acceptable matches are found. This feature lets you balance getting players into games in a reasonable amount of time instead of making them wait indefinitely for the best possible match. For example, you might use an expansion to increase the maximum skill variance between players after 30 seconds.</p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Set of rule statements, used with FlexMatch, that determine how to build a certain kind of player match. Each rule set describes a type of group to be created and defines the parameters for acceptable player matches. Rule sets are used in <a>MatchmakingConfiguration</a> objects.</p> <p>A rule set may define the following elements for a match. For detailed information and examples showing how to construct a rule set, see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/match-rules.html">Create Matchmaking Rules for Your Game</a>. </p> <ul> <li> <p>Teams -- Required. A rule set must define one or multiple teams for the match and set minimum and maximum team sizes. For example, a rule set might describe a 4x4 match that requires all eight slots to be filled. </p> </li> <li> <p>Player attributes -- Optional. These attributes specify a set of player characteristics to evaluate when looking for a match. Matchmaking requests that use a rule set with player attributes must provide the corresponding attribute values. For example, an attribute might specify a player's skill or level.</p> </li> <li> <p>Rules -- Optional. Rules define how to evaluate potential players for a match based on player attributes. A rule might specify minimum requirements for individual players--such as each player must meet a certain skill level, or may describe an entire group--such as all teams must be evenly matched or have at least one player in a certain role. </p> </li> <li> <p>Expansions -- Optional. Expansions allow you to relax the rules after a period of time if no acceptable matches are found. This feature lets you balance getting players into games in a reasonable amount of time instead of making them wait indefinitely for the best possible match. For example, you might use an expansion to increase the maximum skill variance between players after 30 seconds.</p> </li> </ul>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MatchmakingRuleSet {
-    #[doc="<p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="CreationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    #[doc="<p>Collection of matchmaking rules, formatted as a JSON string. (Note that comments14 are not allowed in JSON, but most elements support a description field.)</p>"]
-    #[serde(rename="RuleSetBody")]
+    /// <p>Collection of matchmaking rules, formatted as a JSON string. (Note that comments14 are not allowed in JSON, but most elements support a description field.)</p>
+    #[serde(rename = "RuleSetBody")]
     pub rule_set_body: String,
-    #[doc="<p>Unique identifier for a matchmaking rule set</p>"]
-    #[serde(rename="RuleSetName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a matchmaking rule set</p>
+    #[serde(rename = "RuleSetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_set_name: Option<String>,
 }
 
-#[doc="<p>Ticket generated to track the progress of a matchmaking request. Each ticket is uniquely identified by a ticket ID, supplied by the requester, when creating a matchmaking request with <a>StartMatchmaking</a>. Tickets can be retrieved by calling <a>DescribeMatchmaking</a> with the ticket ID.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Ticket generated to track the progress of a matchmaking request. Each ticket is uniquely identified by a ticket ID, supplied by the requester, when creating a matchmaking request with <a>StartMatchmaking</a>. Tickets can be retrieved by calling <a>DescribeMatchmaking</a> with the ticket ID.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MatchmakingTicket {
-    #[doc="<p>Name of the <a>MatchmakingConfiguration</a> that is used with this ticket. Matchmaking configurations determine how players are grouped into a match and how a new game session is created for the match.</p>"]
-    #[serde(rename="ConfigurationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the <a>MatchmakingConfiguration</a> that is used with this ticket. Matchmaking configurations determine how players are grouped into a match and how a new game session is created for the match.</p>
+    #[serde(rename = "ConfigurationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_name: Option<String>,
-    #[doc="<p>Identifier and connection information of the game session created for the match. This information is added to the ticket only after the matchmaking request has been successfully completed.</p>"]
-    #[serde(rename="GameSessionConnectionInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Identifier and connection information of the game session created for the match. This information is added to the ticket only after the matchmaking request has been successfully completed.</p>
+    #[serde(rename = "GameSessionConnectionInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_connection_info: Option<GameSessionConnectionInfo>,
-    #[doc="<p>A set of <code>Player</code> objects, each representing a player to find matches for. Players are identified by a unique player ID and may include latency data for use during matchmaking. If the ticket is in status <code>COMPLETED</code>, the <code>Player</code> objects include the team the players were assigned to in the resulting match.</p>"]
-    #[serde(rename="Players")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A set of <code>Player</code> objects, each representing a player to find matches for. Players are identified by a unique player ID and may include latency data for use during matchmaking. If the ticket is in status <code>COMPLETED</code>, the <code>Player</code> objects include the team the players were assigned to in the resulting match.</p>
+    #[serde(rename = "Players")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub players: Option<Vec<Player>>,
-    #[doc="<p>Time stamp indicating when this matchmaking request was received. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this matchmaking request was received. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>Current status of the matchmaking request.</p> <ul> <li> <p> <b>QUEUED</b> – The matchmaking request has been received and is currently waiting to be processed.</p> </li> <li> <p> <b>SEARCHING</b> – The matchmaking request is currently being processed. </p> </li> <li> <p> <b>REQUIRES_ACCEPTANCE</b> – A match has been proposed and the players must accept the match (see <a>AcceptMatch</a>). This status is used only with requests that use a matchmaking configuration with a player acceptance requirement.</p> </li> <li> <p> <b>PLACING</b> – The FlexMatch engine has matched players and is in the process of placing a new game session for the match.</p> </li> <li> <p> <b>COMPLETED</b> – Players have been matched and a game session is ready to host the players. A ticket in this state contains the necessary connection information for players.</p> </li> <li> <p> <b>FAILED</b> – The matchmaking request was not completed. Tickets with players who fail to accept a proposed match are placed in <code>FAILED</code> status; new matchmaking requests can be submitted for these players.</p> </li> <li> <p> <b>CANCELLED</b> – The matchmaking request was canceled with a call to <a>StopMatchmaking</a>.</p> </li> <li> <p> <b>TIMED_OUT</b> – The matchmaking request was not completed within the duration specified in the matchmaking configuration. Matchmaking requests that time out can be resubmitted.</p> </li> </ul>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Current status of the matchmaking request.</p> <ul> <li> <p> <b>QUEUED</b> – The matchmaking request has been received and is currently waiting to be processed.</p> </li> <li> <p> <b>SEARCHING</b> – The matchmaking request is currently being processed. </p> </li> <li> <p> <b>REQUIRES_ACCEPTANCE</b> – A match has been proposed and the players must accept the match (see <a>AcceptMatch</a>). This status is used only with requests that use a matchmaking configuration with a player acceptance requirement.</p> </li> <li> <p> <b>PLACING</b> – The FlexMatch engine has matched players and is in the process of placing a new game session for the match.</p> </li> <li> <p> <b>COMPLETED</b> – Players have been matched and a game session is ready to host the players. A ticket in this state contains the necessary connection information for players.</p> </li> <li> <p> <b>FAILED</b> – The matchmaking request was not completed. Tickets with players who fail to accept a proposed match are placed in <code>FAILED</code> status; new matchmaking requests can be submitted for these players.</p> </li> <li> <p> <b>CANCELLED</b> – The matchmaking request was canceled with a call to <a>StopMatchmaking</a>.</p> </li> <li> <p> <b>TIMED_OUT</b> – The matchmaking request was not completed within the duration specified in the matchmaking configuration. Matchmaking requests that time out can be resubmitted.</p> </li> </ul>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>Additional information about the current status.</p>"]
-    #[serde(rename="StatusMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Additional information about the current status.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
-    #[doc="<p>Code to explain the current status. For example, a status reason may indicate when a ticket has returned to <code>SEARCHING</code> status after a proposed match fails to receive player acceptances.</p>"]
-    #[serde(rename="StatusReason")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Code to explain the current status. For example, a status reason may indicate when a ticket has returned to <code>SEARCHING</code> status after a proposed match fails to receive player acceptances.</p>
+    #[serde(rename = "StatusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_reason: Option<String>,
-    #[doc="<p>Unique identifier for a matchmaking ticket.</p>"]
-    #[serde(rename="TicketId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a matchmaking ticket.</p>
+    #[serde(rename = "TicketId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ticket_id: Option<String>,
 }
 
-#[doc="<p>Information about a player session that was created as part of a <a>StartGameSessionPlacement</a> request. This object contains only the player ID and player session ID. To retrieve full details on a player session, call <a>DescribePlayerSessions</a> with the player session ID.</p> <p>Player-session-related operations include:</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a player session that was created as part of a <a>StartGameSessionPlacement</a> request. This object contains only the player ID and player session ID. To retrieve full details on a player session, call <a>DescribePlayerSessions</a> with the player session ID.</p> <p>Player-session-related operations include:</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PlacedPlayerSession {
-    #[doc="<p>Unique identifier for a player that is associated with this player session.</p>"]
-    #[serde(rename="PlayerId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a player that is associated with this player session.</p>
+    #[serde(rename = "PlayerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_id: Option<String>,
-    #[doc="<p>Unique identifier for a player session.</p>"]
-    #[serde(rename="PlayerSessionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a player session.</p>
+    #[serde(rename = "PlayerSessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_session_id: Option<String>,
 }
 
-#[doc="<p>Object used in matchmaking to represent a player. When starting a matchmaking request, a player has a player ID and may have latency data. Team information is added after a match has been successfully completed.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Object used in matchmaking to represent a player. When starting a matchmaking request, a player has a player ID and may have latency data. Team information is added after a match has been successfully completed.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Player {
-    #[doc="<p>Set of values, expressed in milliseconds, indicating the amount of latency that a player experiences when connected to AWS regions. If this property is present, FlexMatch considers placing the match only in regions that are included in the object map. If not present (that is, null), FlexMatch ignores latency issues and may place the match in any region in the queue.</p> <note> <p>If this property contains an empty map, FlexMatch assumes that no regions are available to the player. In this scenario, the ticket is not matchable and always times out unless canceled. </p> </note>"]
-    #[serde(rename="LatencyInMs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of values, expressed in milliseconds, indicating the amount of latency that a player experiences when connected to AWS regions. If this property is present, FlexMatch considers placing the match only in regions that are included in the object map. If not present (that is, null), FlexMatch ignores latency issues and may place the match in any region in the queue.</p> <note> <p>If this property contains an empty map, FlexMatch assumes that no regions are available to the player. In this scenario, the ticket is not matchable and always times out unless canceled. </p> </note>
+    #[serde(rename = "LatencyInMs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latency_in_ms: Option<::std::collections::HashMap<String, i64>>,
-    #[doc="<p>Collection of name:value pairs containing player information for use in matchmaking. Player attribute names need to match <i>playerAttributes</i> names in the rule set being used. Example: <code>\"PlayerAttributes\": {\"skill\": {\"N\": \"23\"}, \"gameMode\": {\"S\": \"deathmatch\"}}</code>.</p>"]
-    #[serde(rename="PlayerAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of name:value pairs containing player information for use in matchmaking. Player attribute names need to match <i>playerAttributes</i> names in the rule set being used. Example: <code>"PlayerAttributes": {"skill": {"N": "23"}, "gameMode": {"S": "deathmatch"}}</code>.</p>
+    #[serde(rename = "PlayerAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_attributes: Option<::std::collections::HashMap<String, AttributeValue>>,
-    #[doc="<p>Unique identifier for a player</p>"]
-    #[serde(rename="PlayerId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a player</p>
+    #[serde(rename = "PlayerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_id: Option<String>,
-    #[doc="<p>Name of the team that the player is assigned to in a match. Team names are defined in a matchmaking rule set.</p>"]
-    #[serde(rename="Team")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the team that the player is assigned to in a match. Team names are defined in a matchmaking rule set.</p>
+    #[serde(rename = "Team")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub team: Option<String>,
 }
 
-#[doc="<p>Regional latency information for a player, used when requesting a new game session with <a>StartGameSessionPlacement</a>. This value indicates the amount of time lag that exists when the player is connected to a fleet in the specified region. The relative difference between a player's latency values for multiple regions are used to determine which fleets are best suited to place a new game session for the player. </p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Regional latency information for a player, used when requesting a new game session with <a>StartGameSessionPlacement</a>. This value indicates the amount of time lag that exists when the player is connected to a fleet in the specified region. The relative difference between a player's latency values for multiple regions are used to determine which fleets are best suited to place a new game session for the player. </p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PlayerLatency {
-    #[doc="<p>Amount of time that represents the time lag experienced by the player when connected to the specified region.</p>"]
-    #[serde(rename="LatencyInMilliseconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amount of time that represents the time lag experienced by the player when connected to the specified region.</p>
+    #[serde(rename = "LatencyInMilliseconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latency_in_milliseconds: Option<f32>,
-    #[doc="<p>Unique identifier for a player associated with the latency data.</p>"]
-    #[serde(rename="PlayerId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a player associated with the latency data.</p>
+    #[serde(rename = "PlayerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_id: Option<String>,
-    #[doc="<p>Name of the region that is associated with the latency value.</p>"]
-    #[serde(rename="RegionIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the region that is associated with the latency value.</p>
+    #[serde(rename = "RegionIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub region_identifier: Option<String>,
 }
 
-#[doc="<p>Queue setting that determines the highest latency allowed for individual players when placing a game session. When a latency policy is in force, a game session cannot be placed at any destination in a region where a player is reporting latency higher than the cap. Latency policies are only enforced when the placement request contains player latency information.</p> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Queue setting that determines the highest latency allowed for individual players when placing a game session. When a latency policy is in force, a game session cannot be placed at any destination in a region where a player is reporting latency higher than the cap. Latency policies are only enforced when the placement request contains player latency information.</p> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PlayerLatencyPolicy {
-    #[doc="<p>The maximum latency value that is allowed for any player, in milliseconds. All policies must have a value set for this property.</p>"]
-    #[serde(rename="MaximumIndividualPlayerLatencyMilliseconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum latency value that is allowed for any player, in milliseconds. All policies must have a value set for this property.</p>
+    #[serde(rename = "MaximumIndividualPlayerLatencyMilliseconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_individual_player_latency_milliseconds: Option<i64>,
-    #[doc="<p>The length of time, in seconds, that the policy is enforced while placing a new game session. A null value for this property means that the policy is enforced until the queue times out.</p>"]
-    #[serde(rename="PolicyDurationSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The length of time, in seconds, that the policy is enforced while placing a new game session. A null value for this property means that the policy is enforced until the queue times out.</p>
+    #[serde(rename = "PolicyDurationSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_duration_seconds: Option<i64>,
 }
 
-#[doc="<p>Properties describing a player session. Player session objects are created either by creating a player session for a specific game session, or as part of a game session placement. A player session represents either a player reservation for a game session (status <code>RESERVED</code>) or actual player activity in a game session (status <code>ACTIVE</code>). A player session object (including player data) is automatically passed to a game session when the player connects to the game session and is validated.</p> <p>When a player disconnects, the player session status changes to <code>COMPLETED</code>. Once the session ends, the player session object is retained for 30 days and then removed.</p> <p>Player-session-related operations include:</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Properties describing a player session. Player session objects are created either by creating a player session for a specific game session, or as part of a game session placement. A player session represents either a player reservation for a game session (status <code>RESERVED</code>) or actual player activity in a game session (status <code>ACTIVE</code>). A player session object (including player data) is automatically passed to a game session when the player connects to the game session and is validated.</p> <p>When a player disconnects, the player session status changes to <code>COMPLETED</code>. Once the session ends, the player session object is retained for 30 days and then removed.</p> <p>Player-session-related operations include:</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PlayerSession {
-    #[doc="<p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="CreationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    #[doc="<p>Unique identifier for a fleet that the player's game session is running on.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet that the player's game session is running on.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
-    #[doc="<p>Unique identifier for the game session that the player session is connected to.</p>"]
-    #[serde(rename="GameSessionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for the game session that the player session is connected to.</p>
+    #[serde(rename = "GameSessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_id: Option<String>,
-    #[doc="<p>IP address of the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number.</p>"]
-    #[serde(rename="IpAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>IP address of the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number.</p>
+    #[serde(rename = "IpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    #[doc="<p>Developer-defined information related to a player. Amazon GameLift does not use this data, so it can be formatted as needed for use in the game. </p>"]
-    #[serde(rename="PlayerData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Developer-defined information related to a player. Amazon GameLift does not use this data, so it can be formatted as needed for use in the game. </p>
+    #[serde(rename = "PlayerData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_data: Option<String>,
-    #[doc="<p>Unique identifier for a player that is associated with this player session.</p>"]
-    #[serde(rename="PlayerId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a player that is associated with this player session.</p>
+    #[serde(rename = "PlayerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_id: Option<String>,
-    #[doc="<p>Unique identifier for a player session.</p>"]
-    #[serde(rename="PlayerSessionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a player session.</p>
+    #[serde(rename = "PlayerSessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_session_id: Option<String>,
-    #[doc="<p>Port number for the game session. To connect to a Amazon GameLift server process, an app needs both the IP address and port number.</p>"]
-    #[serde(rename="Port")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Port number for the game session. To connect to a Amazon GameLift server process, an app needs both the IP address and port number.</p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    #[doc="<p>Current status of the player session.</p> <p>Possible player session statuses include the following:</p> <ul> <li> <p> <b>RESERVED</b> – The player session request has been received, but the player has not yet connected to the server process and/or been validated. </p> </li> <li> <p> <b>ACTIVE</b> – The player has been validated by the server process and is currently connected.</p> </li> <li> <p> <b>COMPLETED</b> – The player connection has been dropped.</p> </li> <li> <p> <b>TIMEDOUT</b> – A player session request was received, but the player did not connect and/or was not validated within the time-out limit (60 seconds).</p> </li> </ul>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Current status of the player session.</p> <p>Possible player session statuses include the following:</p> <ul> <li> <p> <b>RESERVED</b> – The player session request has been received, but the player has not yet connected to the server process and/or been validated. </p> </li> <li> <p> <b>ACTIVE</b> – The player has been validated by the server process and is currently connected.</p> </li> <li> <p> <b>COMPLETED</b> – The player connection has been dropped.</p> </li> <li> <p> <b>TIMEDOUT</b> – A player session request was received, but the player did not connect and/or was not validated within the time-out limit (60 seconds).</p> </li> </ul>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>Time stamp indicating when this data object was terminated. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
-    #[serde(rename="TerminationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time stamp indicating when this data object was terminated. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "TerminationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub termination_time: Option<f64>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutScalingPolicyInput {
-    #[doc="<p>Comparison operator to use when measuring the metric against the threshold value.</p>"]
-    #[serde(rename="ComparisonOperator")]
+    /// <p>Comparison operator to use when measuring the metric against the threshold value.</p>
+    #[serde(rename = "ComparisonOperator")]
     pub comparison_operator: String,
-    #[doc="<p>Length of time (in minutes) the metric must be at or beyond the threshold before a scaling event is triggered.</p>"]
-    #[serde(rename="EvaluationPeriods")]
+    /// <p>Length of time (in minutes) the metric must be at or beyond the threshold before a scaling event is triggered.</p>
+    #[serde(rename = "EvaluationPeriods")]
     pub evaluation_periods: i64,
-    #[doc="<p>Unique identifier for a fleet to apply this policy to.</p>"]
-    #[serde(rename="FleetId")]
+    /// <p>Unique identifier for a fleet to apply this policy to.</p>
+    #[serde(rename = "FleetId")]
     pub fleet_id: String,
-    #[doc="<p>Name of the Amazon GameLift-defined metric that is used to trigger an adjustment.</p> <ul> <li> <p> <b>ActivatingGameSessions</b> – number of game sessions in the process of being created (game session status = <code>ACTIVATING</code>).</p> </li> <li> <p> <b>ActiveGameSessions</b> – number of game sessions currently running (game session status = <code>ACTIVE</code>).</p> </li> <li> <p> <b>CurrentPlayerSessions</b> – number of active or reserved player sessions (player session status = <code>ACTIVE</code> or <code>RESERVED</code>). </p> </li> <li> <p> <b>AvailablePlayerSessions</b> – number of player session slots currently available in active game sessions across the fleet, calculated by subtracting a game session's current player session count from its maximum player session count. This number includes game sessions that are not currently accepting players (game session <code>PlayerSessionCreationPolicy</code> = <code>DENY_ALL</code>).</p> </li> <li> <p> <b>ActiveInstances</b> – number of instances currently running a game session.</p> </li> <li> <p> <b>IdleInstances</b> – number of instances not currently running a game session.</p> </li> </ul>"]
-    #[serde(rename="MetricName")]
+    /// <p>Name of the Amazon GameLift-defined metric that is used to trigger an adjustment.</p> <ul> <li> <p> <b>ActivatingGameSessions</b> – number of game sessions in the process of being created (game session status = <code>ACTIVATING</code>).</p> </li> <li> <p> <b>ActiveGameSessions</b> – number of game sessions currently running (game session status = <code>ACTIVE</code>).</p> </li> <li> <p> <b>CurrentPlayerSessions</b> – number of active or reserved player sessions (player session status = <code>ACTIVE</code> or <code>RESERVED</code>). </p> </li> <li> <p> <b>AvailablePlayerSessions</b> – number of player session slots currently available in active game sessions across the fleet, calculated by subtracting a game session's current player session count from its maximum player session count. This number includes game sessions that are not currently accepting players (game session <code>PlayerSessionCreationPolicy</code> = <code>DENY_ALL</code>).</p> </li> <li> <p> <b>ActiveInstances</b> – number of instances currently running a game session.</p> </li> <li> <p> <b>IdleInstances</b> – number of instances not currently running a game session.</p> </li> </ul>
+    #[serde(rename = "MetricName")]
     pub metric_name: String,
-    #[doc="<p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique. A fleet can have only one scaling policy with the same name.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique. A fleet can have only one scaling policy with the same name.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>Amount of adjustment to make, based on the scaling adjustment type.</p>"]
-    #[serde(rename="ScalingAdjustment")]
+    /// <p>Amount of adjustment to make, based on the scaling adjustment type.</p>
+    #[serde(rename = "ScalingAdjustment")]
     pub scaling_adjustment: i64,
-    #[doc="<p>Type of adjustment to make to a fleet's instance count (see <a>FleetCapacity</a>):</p> <ul> <li> <p> <b>ChangeInCapacity</b> – add (or subtract) the scaling adjustment value from the current instance count. Positive values scale up while negative values scale down.</p> </li> <li> <p> <b>ExactCapacity</b> – set the instance count to the scaling adjustment value.</p> </li> <li> <p> <b>PercentChangeInCapacity</b> – increase or reduce the current instance count by the scaling adjustment, read as a percentage. Positive values scale up while negative values scale down; for example, a value of \"-10\" scales the fleet down by 10%.</p> </li> </ul>"]
-    #[serde(rename="ScalingAdjustmentType")]
+    /// <p>Type of adjustment to make to a fleet's instance count (see <a>FleetCapacity</a>):</p> <ul> <li> <p> <b>ChangeInCapacity</b> – add (or subtract) the scaling adjustment value from the current instance count. Positive values scale up while negative values scale down.</p> </li> <li> <p> <b>ExactCapacity</b> – set the instance count to the scaling adjustment value.</p> </li> <li> <p> <b>PercentChangeInCapacity</b> – increase or reduce the current instance count by the scaling adjustment, read as a percentage. Positive values scale up while negative values scale down; for example, a value of "-10" scales the fleet down by 10%.</p> </li> </ul>
+    #[serde(rename = "ScalingAdjustmentType")]
     pub scaling_adjustment_type: String,
-    #[doc="<p>Metric value used to trigger a scaling event.</p>"]
-    #[serde(rename="Threshold")]
+    /// <p>Metric value used to trigger a scaling event.</p>
+    #[serde(rename = "Threshold")]
     pub threshold: f64,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutScalingPolicyOutput {
-    #[doc="<p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RequestUploadCredentialsInput {
-    #[doc="<p>Unique identifier for a build to get credentials for.</p>"]
-    #[serde(rename="BuildId")]
+    /// <p>Unique identifier for a build to get credentials for.</p>
+    #[serde(rename = "BuildId")]
     pub build_id: String,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RequestUploadCredentialsOutput {
-    #[doc="<p>Amazon S3 path and key, identifying where the game build files are stored.</p>"]
-    #[serde(rename="StorageLocation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon S3 path and key, identifying where the game build files are stored.</p>
+    #[serde(rename = "StorageLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_location: Option<S3Location>,
-    #[doc="<p>AWS credentials required when uploading a game build to the storage location. These credentials have a limited lifespan and are valid only for the build they were issued for.</p>"]
-    #[serde(rename="UploadCredentials")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>AWS credentials required when uploading a game build to the storage location. These credentials have a limited lifespan and are valid only for the build they were issued for.</p>
+    #[serde(rename = "UploadCredentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub upload_credentials: Option<AwsCredentials>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ResolveAliasInput {
-    #[doc="<p>Unique identifier for the alias you want to resolve.</p>"]
-    #[serde(rename="AliasId")]
+    /// <p>Unique identifier for the alias you want to resolve.</p>
+    #[serde(rename = "AliasId")]
     pub alias_id: String,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResolveAliasOutput {
-    #[doc="<p>Fleet identifier that is associated with the requested alias.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Fleet identifier that is associated with the requested alias.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
 }
 
-#[doc="<p>Policy that limits the number of game sessions a player can create on the same fleet. This optional policy gives game owners control over how players can consume available game server resources. A resource creation policy makes the following statement: \"An individual player can create a maximum number of new game sessions within a specified time period\".</p> <p>The policy is evaluated when a player tries to create a new game session. For example, with a policy of 10 new game sessions and a time period of 60 minutes, on receiving a <code>CreateGameSession</code> request, Amazon GameLift checks that the player (identified by <code>CreatorId</code>) has created fewer than 10 game sessions in the past 60 minutes.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Policy that limits the number of game sessions a player can create on the same fleet. This optional policy gives game owners control over how players can consume available game server resources. A resource creation policy makes the following statement: "An individual player can create a maximum number of new game sessions within a specified time period".</p> <p>The policy is evaluated when a player tries to create a new game session. For example, with a policy of 10 new game sessions and a time period of 60 minutes, on receiving a <code>CreateGameSession</code> request, Amazon GameLift checks that the player (identified by <code>CreatorId</code>) has created fewer than 10 game sessions in the past 60 minutes.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ResourceCreationLimitPolicy {
-    #[doc="<p>Maximum number of game sessions that an individual can create during the policy period. </p>"]
-    #[serde(rename="NewGameSessionsPerCreator")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of game sessions that an individual can create during the policy period. </p>
+    #[serde(rename = "NewGameSessionsPerCreator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub new_game_sessions_per_creator: Option<i64>,
-    #[doc="<p>Time span used in evaluating the resource creation limit policy. </p>"]
-    #[serde(rename="PolicyPeriodInMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time span used in evaluating the resource creation limit policy. </p>
+    #[serde(rename = "PolicyPeriodInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_period_in_minutes: Option<i64>,
 }
 
-#[doc="<p>Routing configuration for a fleet alias.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Routing configuration for a fleet alias.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RoutingStrategy {
-    #[doc="<p>Unique identifier for a fleet that the alias points to.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet that the alias points to.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
-    #[doc="<p>Message text to be used with a terminal routing strategy.</p>"]
-    #[serde(rename="Message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Message text to be used with a terminal routing strategy.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>Type of routing strategy.</p> <p>Possible routing types include the following:</p> <ul> <li> <p> <b>SIMPLE</b> – The alias resolves to one specific fleet. Use this type when routing to active fleets.</p> </li> <li> <p> <b>TERMINAL</b> – The alias does not resolve to a fleet but instead can be used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException with the <a>RoutingStrategy</a> message embedded.</p> </li> </ul>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Type of routing strategy.</p> <p>Possible routing types include the following:</p> <ul> <li> <p> <b>SIMPLE</b> – The alias resolves to one specific fleet. Use this type when routing to active fleets.</p> </li> <li> <p> <b>TERMINAL</b> – The alias does not resolve to a fleet but instead can be used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException with the <a>RoutingStrategy</a> message embedded.</p> </li> </ul>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>A collection of server process configurations that describe what processes to run on each instance in a fleet. All fleets must have a run-time configuration. Each instance in the fleet launches the server processes specified in the run-time configuration and launches new ones as existing processes end. Each instance regularly checks for an updated run-time configuration and follows the new instructions. </p> <p>The run-time configuration enables the instances in a fleet to run multiple processes simultaneously. Potential scenarios are as follows: (1) Run multiple processes of a single game server executable to maximize usage of your hosting resources. (2) Run one or more processes of different build executables, such as your game server executable and a related program, or two or more different versions of a game server. (3) Run multiple processes of a single game server but with different launch parameters, for example to run one process on each instance in debug mode.</p> <p>A Amazon GameLift instance is limited to 50 processes running simultaneously. A run-time configuration must specify fewer than this limit. To calculate the total number of processes specified in a run-time configuration, add the values of the <code>ConcurrentExecutions</code> parameter for each <code> <a>ServerProcess</a> </code> object in the run-time configuration.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A collection of server process configurations that describe what processes to run on each instance in a fleet. All fleets must have a run-time configuration. Each instance in the fleet launches the server processes specified in the run-time configuration and launches new ones as existing processes end. Each instance regularly checks for an updated run-time configuration and follows the new instructions. </p> <p>The run-time configuration enables the instances in a fleet to run multiple processes simultaneously. Potential scenarios are as follows: (1) Run multiple processes of a single game server executable to maximize usage of your hosting resources. (2) Run one or more processes of different build executables, such as your game server executable and a related program, or two or more different versions of a game server. (3) Run multiple processes of a single game server but with different launch parameters, for example to run one process on each instance in debug mode.</p> <p>A Amazon GameLift instance is limited to 50 processes running simultaneously. A run-time configuration must specify fewer than this limit. To calculate the total number of processes specified in a run-time configuration, add the values of the <code>ConcurrentExecutions</code> parameter for each <code> <a>ServerProcess</a> </code> object in the run-time configuration.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RuntimeConfiguration {
-    #[doc="<p>Maximum amount of time (in seconds) that a game session can remain in status <code>ACTIVATING</code>. If the game session is not active before the timeout, activation is terminated and the game session status is changed to <code>TERMINATED</code>.</p>"]
-    #[serde(rename="GameSessionActivationTimeoutSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum amount of time (in seconds) that a game session can remain in status <code>ACTIVATING</code>. If the game session is not active before the timeout, activation is terminated and the game session status is changed to <code>TERMINATED</code>.</p>
+    #[serde(rename = "GameSessionActivationTimeoutSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_activation_timeout_seconds: Option<i64>,
-    #[doc="<p>Maximum number of game sessions with status <code>ACTIVATING</code> to allow on an instance simultaneously. This setting limits the amount of instance resources that can be used for new game activations at any one time.</p>"]
-    #[serde(rename="MaxConcurrentGameSessionActivations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of game sessions with status <code>ACTIVATING</code> to allow on an instance simultaneously. This setting limits the amount of instance resources that can be used for new game activations at any one time.</p>
+    #[serde(rename = "MaxConcurrentGameSessionActivations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrent_game_session_activations: Option<i64>,
-    #[doc="<p>Collection of server process configurations that describe which server processes to run on each instance in a fleet.</p>"]
-    #[serde(rename="ServerProcesses")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of server process configurations that describe which server processes to run on each instance in a fleet.</p>
+    #[serde(rename = "ServerProcesses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_processes: Option<Vec<ServerProcess>>,
 }
 
-#[doc="<p>Location in Amazon Simple Storage Service (Amazon S3) where build files can be stored for access by Amazon GameLift. This location is specified in a <a>CreateBuild</a> request. For more details, see the <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-cli-uploading.html#gamelift-build-cli-uploading-create-build\">Create a Build with Files in Amazon S3</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Location in Amazon Simple Storage Service (Amazon S3) where build files can be stored for access by Amazon GameLift. This location is specified in a <a>CreateBuild</a> request. For more details, see the <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-cli-uploading.html#gamelift-build-cli-uploading-create-build">Create a Build with Files in Amazon S3</a>.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct S3Location {
-    #[doc="<p>Amazon S3 bucket identifier. This is the name of your S3 bucket.</p>"]
-    #[serde(rename="Bucket")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon S3 bucket identifier. This is the name of your S3 bucket.</p>
+    #[serde(rename = "Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket: Option<String>,
-    #[doc="<p>Name of the zip file containing your build files. </p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the zip file containing your build files. </p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>Amazon Resource Name (<a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html\">ARN</a>) for the access role that allows Amazon GameLift to access your S3 bucket.</p>"]
-    #[serde(rename="RoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon Resource Name (<a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html">ARN</a>) for the access role that allows Amazon GameLift to access your S3 bucket.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
 
-#[doc="<p>Rule that controls how a fleet is scaled. Scaling policies are uniquely identified by the combination of name and fleet ID.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Rule that controls how a fleet is scaled. Scaling policies are uniquely identified by the combination of name and fleet ID.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ScalingPolicy {
-    #[doc="<p>Comparison operator to use when measuring a metric against the threshold value.</p>"]
-    #[serde(rename="ComparisonOperator")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Comparison operator to use when measuring a metric against the threshold value.</p>
+    #[serde(rename = "ComparisonOperator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub comparison_operator: Option<String>,
-    #[doc="<p>Length of time (in minutes) the metric must be at or beyond the threshold before a scaling event is triggered.</p>"]
-    #[serde(rename="EvaluationPeriods")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Length of time (in minutes) the metric must be at or beyond the threshold before a scaling event is triggered.</p>
+    #[serde(rename = "EvaluationPeriods")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_periods: Option<i64>,
-    #[doc="<p>Unique identifier for a fleet that is associated with this scaling policy.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet that is associated with this scaling policy.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
-    #[doc="<p>Name of the Amazon GameLift-defined metric that is used to trigger an adjustment.</p> <ul> <li> <p> <b>ActivatingGameSessions</b> – number of game sessions in the process of being created (game session status = <code>ACTIVATING</code>).</p> </li> <li> <p> <b>ActiveGameSessions</b> – number of game sessions currently running (game session status = <code>ACTIVE</code>).</p> </li> <li> <p> <b>CurrentPlayerSessions</b> – number of active or reserved player sessions (player session status = <code>ACTIVE</code> or <code>RESERVED</code>). </p> </li> <li> <p> <b>AvailablePlayerSessions</b> – number of player session slots currently available in active game sessions across the fleet, calculated by subtracting a game session's current player session count from its maximum player session count. This number does include game sessions that are not currently accepting players (game session <code>PlayerSessionCreationPolicy</code> = <code>DENY_ALL</code>).</p> </li> <li> <p> <b>ActiveInstances</b> – number of instances currently running a game session.</p> </li> <li> <p> <b>IdleInstances</b> – number of instances not currently running a game session.</p> </li> </ul>"]
-    #[serde(rename="MetricName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the Amazon GameLift-defined metric that is used to trigger an adjustment.</p> <ul> <li> <p> <b>ActivatingGameSessions</b> – number of game sessions in the process of being created (game session status = <code>ACTIVATING</code>).</p> </li> <li> <p> <b>ActiveGameSessions</b> – number of game sessions currently running (game session status = <code>ACTIVE</code>).</p> </li> <li> <p> <b>CurrentPlayerSessions</b> – number of active or reserved player sessions (player session status = <code>ACTIVE</code> or <code>RESERVED</code>). </p> </li> <li> <p> <b>AvailablePlayerSessions</b> – number of player session slots currently available in active game sessions across the fleet, calculated by subtracting a game session's current player session count from its maximum player session count. This number does include game sessions that are not currently accepting players (game session <code>PlayerSessionCreationPolicy</code> = <code>DENY_ALL</code>).</p> </li> <li> <p> <b>ActiveInstances</b> – number of instances currently running a game session.</p> </li> <li> <p> <b>IdleInstances</b> – number of instances not currently running a game session.</p> </li> </ul>
+    #[serde(rename = "MetricName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_name: Option<String>,
-    #[doc="<p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Amount of adjustment to make, based on the scaling adjustment type.</p>"]
-    #[serde(rename="ScalingAdjustment")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amount of adjustment to make, based on the scaling adjustment type.</p>
+    #[serde(rename = "ScalingAdjustment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_adjustment: Option<i64>,
-    #[doc="<p>Type of adjustment to make to a fleet's instance count (see <a>FleetCapacity</a>):</p> <ul> <li> <p> <b>ChangeInCapacity</b> – add (or subtract) the scaling adjustment value from the current instance count. Positive values scale up while negative values scale down.</p> </li> <li> <p> <b>ExactCapacity</b> – set the instance count to the scaling adjustment value.</p> </li> <li> <p> <b>PercentChangeInCapacity</b> – increase or reduce the current instance count by the scaling adjustment, read as a percentage. Positive values scale up while negative values scale down.</p> </li> </ul>"]
-    #[serde(rename="ScalingAdjustmentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Type of adjustment to make to a fleet's instance count (see <a>FleetCapacity</a>):</p> <ul> <li> <p> <b>ChangeInCapacity</b> – add (or subtract) the scaling adjustment value from the current instance count. Positive values scale up while negative values scale down.</p> </li> <li> <p> <b>ExactCapacity</b> – set the instance count to the scaling adjustment value.</p> </li> <li> <p> <b>PercentChangeInCapacity</b> – increase or reduce the current instance count by the scaling adjustment, read as a percentage. Positive values scale up while negative values scale down.</p> </li> </ul>
+    #[serde(rename = "ScalingAdjustmentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_adjustment_type: Option<String>,
-    #[doc="<p>Current status of the scaling policy. The scaling policy is only in force when in an <code>ACTIVE</code> status.</p> <ul> <li> <p> <b>ACTIVE</b> – The scaling policy is currently in force.</p> </li> <li> <p> <b>UPDATE_REQUESTED</b> – A request to update the scaling policy has been received.</p> </li> <li> <p> <b>UPDATING</b> – A change is being made to the scaling policy.</p> </li> <li> <p> <b>DELETE_REQUESTED</b> – A request to delete the scaling policy has been received.</p> </li> <li> <p> <b>DELETING</b> – The scaling policy is being deleted.</p> </li> <li> <p> <b>DELETED</b> – The scaling policy has been deleted.</p> </li> <li> <p> <b>ERROR</b> – An error occurred in creating the policy. It should be removed and recreated.</p> </li> </ul>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Current status of the scaling policy. The scaling policy is only in force when in an <code>ACTIVE</code> status.</p> <ul> <li> <p> <b>ACTIVE</b> – The scaling policy is currently in force.</p> </li> <li> <p> <b>UPDATE_REQUESTED</b> – A request to update the scaling policy has been received.</p> </li> <li> <p> <b>UPDATING</b> – A change is being made to the scaling policy.</p> </li> <li> <p> <b>DELETE_REQUESTED</b> – A request to delete the scaling policy has been received.</p> </li> <li> <p> <b>DELETING</b> – The scaling policy is being deleted.</p> </li> <li> <p> <b>DELETED</b> – The scaling policy has been deleted.</p> </li> <li> <p> <b>ERROR</b> – An error occurred in creating the policy. It should be removed and recreated.</p> </li> </ul>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>Metric value used to trigger a scaling event.</p>"]
-    #[serde(rename="Threshold")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Metric value used to trigger a scaling event.</p>
+    #[serde(rename = "Threshold")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub threshold: Option<f64>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SearchGameSessionsInput {
-    #[doc="<p>Unique identifier for an alias associated with the fleet to search for active game sessions. Each request must reference either a fleet ID or alias ID, but not both.</p>"]
-    #[serde(rename="AliasId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for an alias associated with the fleet to search for active game sessions. Each request must reference either a fleet ID or alias ID, but not both.</p>
+    #[serde(rename = "AliasId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alias_id: Option<String>,
-    #[doc="<p>String containing the search criteria for the session search. If no filter expression is included, the request returns results for all game sessions in the fleet that are in <code>ACTIVE</code> status.</p> <p>A filter expression can contain one or multiple conditions. Each condition consists of the following:</p> <ul> <li> <p> <b>Operand</b> -- Name of a game session attribute. Valid values are <code>gameSessionName</code>, <code>gameSessionId</code>, <code>creationTimeMillis</code>, <code>playerSessionCount</code>, <code>maximumSessions</code>, <code>hasAvailablePlayerSessions</code>.</p> </li> <li> <p> <b>Comparator</b> -- Valid comparators are: <code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. </p> </li> <li> <p> <b>Value</b> -- Value to be searched for. Values can be numbers, boolean values (true/false) or strings. String values are case sensitive, enclosed in single quotes. Special characters must be escaped. Boolean and string values can only be used with the comparators <code>=</code> and <code>&lt;&gt;</code>. For example, the following filter expression searches on <code>gameSessionName</code>: \"<code>FilterExpression\": \"gameSessionName = 'Matt\\\\'s Awesome Game 1'\"</code>. </p> </li> </ul> <p>To chain multiple conditions in a single expression, use the logical keywords <code>AND</code>, <code>OR</code>, and <code>NOT</code> and parentheses as needed. For example: <code>x AND y AND NOT z</code>, <code>NOT (x OR y)</code>.</p> <p>Session search evaluates conditions from left to right using the following precedence rules:</p> <ol> <li> <p> <code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code> </p> </li> <li> <p>Parentheses</p> </li> <li> <p>NOT</p> </li> <li> <p>AND</p> </li> <li> <p>OR</p> </li> </ol> <p>For example, this filter expression retrieves game sessions hosting at least ten players that have an open player slot: <code>\"maximumSessions&gt;=10 AND hasAvailablePlayerSessions=true\"</code>. </p>"]
-    #[serde(rename="FilterExpression")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>String containing the search criteria for the session search. If no filter expression is included, the request returns results for all game sessions in the fleet that are in <code>ACTIVE</code> status.</p> <p>A filter expression can contain one or multiple conditions. Each condition consists of the following:</p> <ul> <li> <p> <b>Operand</b> -- Name of a game session attribute. Valid values are <code>gameSessionName</code>, <code>gameSessionId</code>, <code>creationTimeMillis</code>, <code>playerSessionCount</code>, <code>maximumSessions</code>, <code>hasAvailablePlayerSessions</code>.</p> </li> <li> <p> <b>Comparator</b> -- Valid comparators are: <code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. </p> </li> <li> <p> <b>Value</b> -- Value to be searched for. Values can be numbers, boolean values (true/false) or strings. String values are case sensitive, enclosed in single quotes. Special characters must be escaped. Boolean and string values can only be used with the comparators <code>=</code> and <code>&lt;&gt;</code>. For example, the following filter expression searches on <code>gameSessionName</code>: "<code>FilterExpression": "gameSessionName = 'Matt\\'s Awesome Game 1'"</code>. </p> </li> </ul> <p>To chain multiple conditions in a single expression, use the logical keywords <code>AND</code>, <code>OR</code>, and <code>NOT</code> and parentheses as needed. For example: <code>x AND y AND NOT z</code>, <code>NOT (x OR y)</code>.</p> <p>Session search evaluates conditions from left to right using the following precedence rules:</p> <ol> <li> <p> <code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code> </p> </li> <li> <p>Parentheses</p> </li> <li> <p>NOT</p> </li> <li> <p>AND</p> </li> <li> <p>OR</p> </li> </ol> <p>For example, this filter expression retrieves game sessions hosting at least ten players that have an open player slot: <code>"maximumSessions&gt;=10 AND hasAvailablePlayerSessions=true"</code>. </p>
+    #[serde(rename = "FilterExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_expression: Option<String>,
-    #[doc="<p>Unique identifier for a fleet to search for active game sessions. Each request must reference either a fleet ID or alias ID, but not both.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet to search for active game sessions. Each request must reference either a fleet ID or alias ID, but not both.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
-    #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. The maximum number of results returned is 20, even if this value is not set or is set higher than 20. </p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. The maximum number of results returned is 20, even if this value is not set or is set higher than 20. </p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To start at the beginning of the result set, do not specify a value.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Instructions on how to sort the search results. If no sort expression is included, the request returns results in random order. A sort expression consists of the following elements:</p> <ul> <li> <p> <b>Operand</b> -- Name of a game session attribute. Valid values are <code>gameSessionName</code>, <code>gameSessionId</code>, <code>creationTimeMillis</code>, <code>playerSessionCount</code>, <code>maximumSessions</code>, <code>hasAvailablePlayerSessions</code>.</p> </li> <li> <p> <b>Order</b> -- Valid sort orders are <code>ASC</code> (ascending) and <code>DESC</code> (descending).</p> </li> </ul> <p>For example, this sort expression returns the oldest active sessions first: <code>\"SortExpression\": \"creationTimeMillis ASC\"</code>. Results with a null value for the sort operand are returned at the end of the list.</p>"]
-    #[serde(rename="SortExpression")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Instructions on how to sort the search results. If no sort expression is included, the request returns results in random order. A sort expression consists of the following elements:</p> <ul> <li> <p> <b>Operand</b> -- Name of a game session attribute. Valid values are <code>gameSessionName</code>, <code>gameSessionId</code>, <code>creationTimeMillis</code>, <code>playerSessionCount</code>, <code>maximumSessions</code>, <code>hasAvailablePlayerSessions</code>.</p> </li> <li> <p> <b>Order</b> -- Valid sort orders are <code>ASC</code> (ascending) and <code>DESC</code> (descending).</p> </li> </ul> <p>For example, this sort expression returns the oldest active sessions first: <code>"SortExpression": "creationTimeMillis ASC"</code>. Results with a null value for the sort operand are returned at the end of the list.</p>
+    #[serde(rename = "SortExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_expression: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SearchGameSessionsOutput {
-    #[doc="<p>Collection of objects containing game session properties for each session matching the request.</p>"]
-    #[serde(rename="GameSessions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of objects containing game session properties for each session matching the request.</p>
+    #[serde(rename = "GameSessions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_sessions: Option<Vec<GameSession>>,
-    #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>A set of instructions for launching server processes on each instance in a fleet. Each instruction set identifies the location of the server executable, optional launch parameters, and the number of server processes with this configuration to maintain concurrently on the instance. Server process configurations make up a fleet's <code> <a>RuntimeConfiguration</a> </code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A set of instructions for launching server processes on each instance in a fleet. Each instruction set identifies the location of the server executable, optional launch parameters, and the number of server processes with this configuration to maintain concurrently on the instance. Server process configurations make up a fleet's <code> <a>RuntimeConfiguration</a> </code>.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ServerProcess {
-    #[doc="<p>Number of server processes using this configuration to run concurrently on an instance.</p>"]
-    #[serde(rename="ConcurrentExecutions")]
+    /// <p>Number of server processes using this configuration to run concurrently on an instance.</p>
+    #[serde(rename = "ConcurrentExecutions")]
     pub concurrent_executions: i64,
-    #[doc="<p>Location of the server executable in a game build. All game builds are installed on instances at the root : for Windows instances <code>C:\\game</code>, and for Linux instances <code>/local/game</code>. A Windows game build with an executable file located at <code>MyGame\\latest\\server.exe</code> must have a launch path of \"<code>C:\\game\\MyGame\\latest\\server.exe</code>\". A Linux game build with an executable file located at <code>MyGame/latest/server.exe</code> must have a launch path of \"<code>/local/game/MyGame/latest/server.exe</code>\". </p>"]
-    #[serde(rename="LaunchPath")]
+    /// <p>Location of the server executable in a game build. All game builds are installed on instances at the root : for Windows instances <code>C:\game</code>, and for Linux instances <code>/local/game</code>. A Windows game build with an executable file located at <code>MyGame\latest\server.exe</code> must have a launch path of "<code>C:\game\MyGame\latest\server.exe</code>". A Linux game build with an executable file located at <code>MyGame/latest/server.exe</code> must have a launch path of "<code>/local/game/MyGame/latest/server.exe</code>". </p>
+    #[serde(rename = "LaunchPath")]
     pub launch_path: String,
-    #[doc="<p>Optional list of parameters to pass to the server executable on launch.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional list of parameters to pass to the server executable on launch.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartGameSessionPlacementInput {
-    #[doc="<p>Set of information on each player to create a player session for.</p>"]
-    #[serde(rename="DesiredPlayerSessions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of information on each player to create a player session for.</p>
+    #[serde(rename = "DesiredPlayerSessions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub desired_player_sessions: Option<Vec<DesiredPlayerSession>>,
-    #[doc="<p>Set of developer-defined properties for a game session, formatted as a set of type:value pairs. These properties are included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession\">Start a Game Session</a>).</p>"]
-    #[serde(rename="GameProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of developer-defined properties for a game session, formatted as a set of type:value pairs. These properties are included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>).</p>
+    #[serde(rename = "GameProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_properties: Option<Vec<GameProperty>>,
-    #[doc="<p>Set of developer-defined game session properties, formatted as a single string value. This data is included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession\">Start a Game Session</a>).</p>"]
-    #[serde(rename="GameSessionData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of developer-defined game session properties, formatted as a single string value. This data is included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>).</p>
+    #[serde(rename = "GameSessionData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_data: Option<String>,
-    #[doc="<p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>"]
-    #[serde(rename="GameSessionName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>
+    #[serde(rename = "GameSessionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_name: Option<String>,
-    #[doc="<p>Name of the queue to use to place the new game session.</p>"]
-    #[serde(rename="GameSessionQueueName")]
+    /// <p>Name of the queue to use to place the new game session.</p>
+    #[serde(rename = "GameSessionQueueName")]
     pub game_session_queue_name: String,
-    #[doc="<p>Maximum number of players that can be connected simultaneously to the game session.</p>"]
-    #[serde(rename="MaximumPlayerSessionCount")]
+    /// <p>Maximum number of players that can be connected simultaneously to the game session.</p>
+    #[serde(rename = "MaximumPlayerSessionCount")]
     pub maximum_player_session_count: i64,
-    #[doc="<p>Unique identifier to assign to the new game session placement. This value is developer-defined. The value must be unique across all regions and cannot be reused unless you are resubmitting a canceled or timed-out placement request.</p>"]
-    #[serde(rename="PlacementId")]
+    /// <p>Unique identifier to assign to the new game session placement. This value is developer-defined. The value must be unique across all regions and cannot be reused unless you are resubmitting a canceled or timed-out placement request.</p>
+    #[serde(rename = "PlacementId")]
     pub placement_id: String,
-    #[doc="<p>Set of values, expressed in milliseconds, indicating the amount of latency that a player experiences when connected to AWS regions. This information is used to try to place the new game session where it can offer the best possible gameplay experience for the players. </p>"]
-    #[serde(rename="PlayerLatencies")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of values, expressed in milliseconds, indicating the amount of latency that a player experiences when connected to AWS regions. This information is used to try to place the new game session where it can offer the best possible gameplay experience for the players. </p>
+    #[serde(rename = "PlayerLatencies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_latencies: Option<Vec<PlayerLatency>>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartGameSessionPlacementOutput {
-    #[doc="<p>Object that describes the newly created game session placement. This object includes all the information provided in the request, as well as start/end time stamps and placement status. </p>"]
-    #[serde(rename="GameSessionPlacement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that describes the newly created game session placement. This object includes all the information provided in the request, as well as start/end time stamps and placement status. </p>
+    #[serde(rename = "GameSessionPlacement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_placement: Option<GameSessionPlacement>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartMatchmakingInput {
-    #[doc="<p>Name of the matchmaking configuration to use for this request. Matchmaking configurations must exist in the same region as this request.</p>"]
-    #[serde(rename="ConfigurationName")]
+    /// <p>Name of the matchmaking configuration to use for this request. Matchmaking configurations must exist in the same region as this request.</p>
+    #[serde(rename = "ConfigurationName")]
     pub configuration_name: String,
-    #[doc="<p>Information on each player to be matched. This information must include a player ID, and may contain player attributes and latency data to be used in the matchmaking process. After a successful match, <code>Player</code> objects contain the name of the team the player is assigned to.</p>"]
-    #[serde(rename="Players")]
+    /// <p>Information on each player to be matched. This information must include a player ID, and may contain player attributes and latency data to be used in the matchmaking process. After a successful match, <code>Player</code> objects contain the name of the team the player is assigned to.</p>
+    #[serde(rename = "Players")]
     pub players: Vec<Player>,
-    #[doc="<p>Unique identifier for a matchmaking ticket. Use this identifier to track the matchmaking ticket status and retrieve match results.</p>"]
-    #[serde(rename="TicketId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a matchmaking ticket. Use this identifier to track the matchmaking ticket status and retrieve match results.</p>
+    #[serde(rename = "TicketId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ticket_id: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartMatchmakingOutput {
-    #[doc="<p>Ticket representing the matchmaking request. This object include the information included in the request, ticket status, and match results as generated during the matchmaking process.</p>"]
-    #[serde(rename="MatchmakingTicket")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Ticket representing the matchmaking request. This object include the information included in the request, ticket status, and match results as generated during the matchmaking process.</p>
+    #[serde(rename = "MatchmakingTicket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub matchmaking_ticket: Option<MatchmakingTicket>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopGameSessionPlacementInput {
-    #[doc="<p>Unique identifier for a game session placement to cancel.</p>"]
-    #[serde(rename="PlacementId")]
+    /// <p>Unique identifier for a game session placement to cancel.</p>
+    #[serde(rename = "PlacementId")]
     pub placement_id: String,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopGameSessionPlacementOutput {
-    #[doc="<p>Object that describes the canceled game session placement, with <code>CANCELLED</code> status and an end time stamp. </p>"]
-    #[serde(rename="GameSessionPlacement")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that describes the canceled game session placement, with <code>CANCELLED</code> status and an end time stamp. </p>
+    #[serde(rename = "GameSessionPlacement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_placement: Option<GameSessionPlacement>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopMatchmakingInput {
-    #[doc="<p>Unique identifier for a matchmaking ticket.</p>"]
-    #[serde(rename="TicketId")]
+    /// <p>Unique identifier for a matchmaking ticket.</p>
+    #[serde(rename = "TicketId")]
     pub ticket_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopMatchmakingOutput;
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateAliasInput {
-    #[doc="<p>Unique identifier for a fleet alias. Specify the alias you want to update.</p>"]
-    #[serde(rename="AliasId")]
+    /// <p>Unique identifier for a fleet alias. Specify the alias you want to update.</p>
+    #[serde(rename = "AliasId")]
     pub alias_id: String,
-    #[doc="<p>Human-readable description of an alias.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Human-readable description of an alias.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Descriptive label that is associated with an alias. Alias names do not need to be unique.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with an alias. Alias names do not need to be unique.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Object that specifies the fleet and routing type to use for the alias.</p>"]
-    #[serde(rename="RoutingStrategy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that specifies the fleet and routing type to use for the alias.</p>
+    #[serde(rename = "RoutingStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub routing_strategy: Option<RoutingStrategy>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateAliasOutput {
-    #[doc="<p>Object that contains the updated alias configuration.</p>"]
-    #[serde(rename="Alias")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that contains the updated alias configuration.</p>
+    #[serde(rename = "Alias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alias: Option<Alias>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateBuildInput {
-    #[doc="<p>Unique identifier for a build to update.</p>"]
-    #[serde(rename="BuildId")]
+    /// <p>Unique identifier for a build to update.</p>
+    #[serde(rename = "BuildId")]
     pub build_id: String,
-    #[doc="<p>Descriptive label that is associated with a build. Build names do not need to be unique. </p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with a build. Build names do not need to be unique. </p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Version that is associated with this build. Version strings do not need to be unique.</p>"]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Version that is associated with this build. Version strings do not need to be unique.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateBuildOutput {
-    #[doc="<p>Object that contains the updated build record.</p>"]
-    #[serde(rename="Build")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that contains the updated build record.</p>
+    #[serde(rename = "Build")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub build: Option<Build>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateFleetAttributesInput {
-    #[doc="<p>Human-readable description of a fleet.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Human-readable description of a fleet.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Unique identifier for a fleet to update attribute metadata for.</p>"]
-    #[serde(rename="FleetId")]
+    /// <p>Unique identifier for a fleet to update attribute metadata for.</p>
+    #[serde(rename = "FleetId")]
     pub fleet_id: String,
-    #[doc="<p>Names of metric groups to include this fleet in. Amazon CloudWatch uses a fleet metric group is to aggregate metrics from multiple fleets. Use an existing metric group name to add this fleet to the group. Or use a new name to create a new metric group. A fleet can only be included in one metric group at a time.</p>"]
-    #[serde(rename="MetricGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Names of metric groups to include this fleet in. Amazon CloudWatch uses a fleet metric group is to aggregate metrics from multiple fleets. Use an existing metric group name to add this fleet to the group. Or use a new name to create a new metric group. A fleet can only be included in one metric group at a time.</p>
+    #[serde(rename = "MetricGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_groups: Option<Vec<String>>,
-    #[doc="<p>Descriptive label that is associated with a fleet. Fleet names do not need to be unique.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with a fleet. Fleet names do not need to be unique.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Game session protection policy to apply to all new instances created in this fleet. Instances that already exist are not affected. You can set protection for individual instances using <a>UpdateGameSession</a>.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>"]
-    #[serde(rename="NewGameSessionProtectionPolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Game session protection policy to apply to all new instances created in this fleet. Instances that already exist are not affected. You can set protection for individual instances using <a>UpdateGameSession</a>.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>
+    #[serde(rename = "NewGameSessionProtectionPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub new_game_session_protection_policy: Option<String>,
-    #[doc="<p>Policy that limits the number of game sessions an individual player can create over a span of time. </p>"]
-    #[serde(rename="ResourceCreationLimitPolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Policy that limits the number of game sessions an individual player can create over a span of time. </p>
+    #[serde(rename = "ResourceCreationLimitPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_creation_limit_policy: Option<ResourceCreationLimitPolicy>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateFleetAttributesOutput {
-    #[doc="<p>Unique identifier for a fleet that was updated.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet that was updated.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateFleetCapacityInput {
-    #[doc="<p>Number of EC2 instances you want this fleet to host.</p>"]
-    #[serde(rename="DesiredInstances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of EC2 instances you want this fleet to host.</p>
+    #[serde(rename = "DesiredInstances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub desired_instances: Option<i64>,
-    #[doc="<p>Unique identifier for a fleet to update capacity for.</p>"]
-    #[serde(rename="FleetId")]
+    /// <p>Unique identifier for a fleet to update capacity for.</p>
+    #[serde(rename = "FleetId")]
     pub fleet_id: String,
-    #[doc="<p>Maximum value allowed for the fleet's instance count. Default if not set is 1.</p>"]
-    #[serde(rename="MaxSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum value allowed for the fleet's instance count. Default if not set is 1.</p>
+    #[serde(rename = "MaxSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_size: Option<i64>,
-    #[doc="<p>Minimum value allowed for the fleet's instance count. Default if not set is 0.</p>"]
-    #[serde(rename="MinSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Minimum value allowed for the fleet's instance count. Default if not set is 0.</p>
+    #[serde(rename = "MinSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub min_size: Option<i64>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateFleetCapacityOutput {
-    #[doc="<p>Unique identifier for a fleet that was updated.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet that was updated.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateFleetPortSettingsInput {
-    #[doc="<p>Unique identifier for a fleet to update port settings for.</p>"]
-    #[serde(rename="FleetId")]
+    /// <p>Unique identifier for a fleet to update port settings for.</p>
+    #[serde(rename = "FleetId")]
     pub fleet_id: String,
-    #[doc="<p>Collection of port settings to be added to the fleet record.</p>"]
-    #[serde(rename="InboundPermissionAuthorizations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of port settings to be added to the fleet record.</p>
+    #[serde(rename = "InboundPermissionAuthorizations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub inbound_permission_authorizations: Option<Vec<IpPermission>>,
-    #[doc="<p>Collection of port settings to be removed from the fleet record.</p>"]
-    #[serde(rename="InboundPermissionRevocations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of port settings to be removed from the fleet record.</p>
+    #[serde(rename = "InboundPermissionRevocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub inbound_permission_revocations: Option<Vec<IpPermission>>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateFleetPortSettingsOutput {
-    #[doc="<p>Unique identifier for a fleet that was updated.</p>"]
-    #[serde(rename="FleetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a fleet that was updated.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateGameSessionInput {
-    #[doc="<p>Unique identifier for the game session to update.</p>"]
-    #[serde(rename="GameSessionId")]
+    /// <p>Unique identifier for the game session to update.</p>
+    #[serde(rename = "GameSessionId")]
     pub game_session_id: String,
-    #[doc="<p>Maximum number of players that can be connected simultaneously to the game session.</p>"]
-    #[serde(rename="MaximumPlayerSessionCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of players that can be connected simultaneously to the game session.</p>
+    #[serde(rename = "MaximumPlayerSessionCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_player_session_count: Option<i64>,
-    #[doc="<p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Policy determining whether or not the game session accepts new players.</p>"]
-    #[serde(rename="PlayerSessionCreationPolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Policy determining whether or not the game session accepts new players.</p>
+    #[serde(rename = "PlayerSessionCreationPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_session_creation_policy: Option<String>,
-    #[doc="<p>Game session protection policy to apply to this game session only.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>"]
-    #[serde(rename="ProtectionPolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Game session protection policy to apply to this game session only.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>
+    #[serde(rename = "ProtectionPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub protection_policy: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateGameSessionOutput {
-    #[doc="<p>Object that contains the updated game session metadata.</p>"]
-    #[serde(rename="GameSession")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that contains the updated game session metadata.</p>
+    #[serde(rename = "GameSession")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session: Option<GameSession>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateGameSessionQueueInput {
-    #[doc="<p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order. When updating this list, provide a complete list of destinations.</p>"]
-    #[serde(rename="Destinations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order. When updating this list, provide a complete list of destinations.</p>
+    #[serde(rename = "Destinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destinations: Option<Vec<GameSessionQueueDestination>>,
-    #[doc="<p>Descriptive label that is associated with game session queue. Queue names must be unique within each region.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Descriptive label that is associated with game session queue. Queue names must be unique within each region.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>Collection of latency policies to apply when processing game sessions placement requests with player latency information. Multiple policies are evaluated in order of the maximum latency value, starting with the lowest latency values. With just one policy, it is enforced at the start of the game session placement for the duration period. With multiple policies, each policy is enforced consecutively for its duration period. For example, a queue might enforce a 60-second policy followed by a 120-second policy, and then no policy for the remainder of the placement. When updating policies, provide a complete collection of policies.</p>"]
-    #[serde(rename="PlayerLatencyPolicies")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of latency policies to apply when processing game sessions placement requests with player latency information. Multiple policies are evaluated in order of the maximum latency value, starting with the lowest latency values. With just one policy, it is enforced at the start of the game session placement for the duration period. With multiple policies, each policy is enforced consecutively for its duration period. For example, a queue might enforce a 60-second policy followed by a 120-second policy, and then no policy for the remainder of the placement. When updating policies, provide a complete collection of policies.</p>
+    #[serde(rename = "PlayerLatencyPolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub player_latency_policies: Option<Vec<PlayerLatencyPolicy>>,
-    #[doc="<p>Maximum time, in seconds, that a new game session placement request remains in the queue. When a request exceeds this time, the game session placement changes to a <code>TIMED_OUT</code> status.</p>"]
-    #[serde(rename="TimeoutInSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum time, in seconds, that a new game session placement request remains in the queue. When a request exceeds this time, the game session placement changes to a <code>TIMED_OUT</code> status.</p>
+    #[serde(rename = "TimeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_seconds: Option<i64>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateGameSessionQueueOutput {
-    #[doc="<p>Object that describes the newly updated game session queue.</p>"]
-    #[serde(rename="GameSessionQueue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that describes the newly updated game session queue.</p>
+    #[serde(rename = "GameSessionQueue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_queue: Option<GameSessionQueue>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateMatchmakingConfigurationInput {
-    #[doc="<p>Flag that determines whether or not a match that was created with this configuration must be accepted by the matched players. To require acceptance, set to TRUE.</p>"]
-    #[serde(rename="AcceptanceRequired")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Flag that determines whether or not a match that was created with this configuration must be accepted by the matched players. To require acceptance, set to TRUE.</p>
+    #[serde(rename = "AcceptanceRequired")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub acceptance_required: Option<bool>,
-    #[doc="<p>Length of time (in seconds) to wait for players to accept a proposed match. If any player rejects the match or fails to accept before the timeout, the ticket continues to look for an acceptable match.</p>"]
-    #[serde(rename="AcceptanceTimeoutSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Length of time (in seconds) to wait for players to accept a proposed match. If any player rejects the match or fails to accept before the timeout, the ticket continues to look for an acceptable match.</p>
+    #[serde(rename = "AcceptanceTimeoutSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub acceptance_timeout_seconds: Option<i64>,
-    #[doc="<p>Number of player slots in a match to keep open for future players. For example, if the configuration's rule set specifies a match for a single 12-person team, and the additional player count is set to 2, only 10 players are selected for the match.</p>"]
-    #[serde(rename="AdditionalPlayerCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of player slots in a match to keep open for future players. For example, if the configuration's rule set specifies a match for a single 12-person team, and the additional player count is set to 2, only 10 players are selected for the match.</p>
+    #[serde(rename = "AdditionalPlayerCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_player_count: Option<i64>,
-    #[doc="<p>Information to attached to all events related to the matchmaking configuration. </p>"]
-    #[serde(rename="CustomEventData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information to attached to all events related to the matchmaking configuration. </p>
+    #[serde(rename = "CustomEventData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_event_data: Option<String>,
-    #[doc="<p>Descriptive label that is associated with matchmaking configuration.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Descriptive label that is associated with matchmaking configuration.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Set of developer-defined properties for a game session, formatted as a set of type:value pairs. These properties are included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession\">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match. </p>"]
-    #[serde(rename="GameProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of developer-defined properties for a game session, formatted as a set of type:value pairs. These properties are included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match. </p>
+    #[serde(rename = "GameProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_properties: Option<Vec<GameProperty>>,
-    #[doc="<p>Set of developer-defined game session properties, formatted as a single string value. This data is included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession\">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match. </p>"]
-    #[serde(rename="GameSessionData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Set of developer-defined game session properties, formatted as a single string value. This data is included in the <a>GameSession</a> object, which is passed to the game server with a request to start a new game session (see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match. </p>
+    #[serde(rename = "GameSessionData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_data: Option<String>,
-    #[doc="<p>Amazon Resource Name (<a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html\">ARN</a>) that is assigned to a game session queue and uniquely identifies it. Format is <code>arn:aws:gamelift:&lt;region&gt;::fleet/fleet-a1234567-b8c9-0d1e-2fa3-b45c6d7e8912</code>. These queues are used when placing game sessions for matches that are created with this matchmaking configuration. Queues can be located in any region.</p>"]
-    #[serde(rename="GameSessionQueueArns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon Resource Name (<a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html">ARN</a>) that is assigned to a game session queue and uniquely identifies it. Format is <code>arn:aws:gamelift:&lt;region&gt;::fleet/fleet-a1234567-b8c9-0d1e-2fa3-b45c6d7e8912</code>. These queues are used when placing game sessions for matches that are created with this matchmaking configuration. Queues can be located in any region.</p>
+    #[serde(rename = "GameSessionQueueArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_queue_arns: Option<Vec<String>>,
-    #[doc="<p>Unique identifier for a matchmaking configuration to update.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Unique identifier for a matchmaking configuration to update.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>SNS topic ARN that is set up to receive matchmaking notifications. See <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/match-notification.html\"> Setting up Notifications for Matchmaking</a> for more information.</p>"]
-    #[serde(rename="NotificationTarget")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>SNS topic ARN that is set up to receive matchmaking notifications. See <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/match-notification.html"> Setting up Notifications for Matchmaking</a> for more information.</p>
+    #[serde(rename = "NotificationTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_target: Option<String>,
-    #[doc="<p>Maximum duration, in seconds, that a matchmaking ticket can remain in process before timing out. Requests that time out can be resubmitted as needed.</p>"]
-    #[serde(rename="RequestTimeoutSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum duration, in seconds, that a matchmaking ticket can remain in process before timing out. Requests that time out can be resubmitted as needed.</p>
+    #[serde(rename = "RequestTimeoutSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub request_timeout_seconds: Option<i64>,
-    #[doc="<p>Unique identifier for a matchmaking rule set to use with this configuration. A matchmaking configuration can only use rule sets that are defined in the same region.</p>"]
-    #[serde(rename="RuleSetName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier for a matchmaking rule set to use with this configuration. A matchmaking configuration can only use rule sets that are defined in the same region.</p>
+    #[serde(rename = "RuleSetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_set_name: Option<String>,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateMatchmakingConfigurationOutput {
-    #[doc="<p>Object that describes the updated matchmaking configuration.</p>"]
-    #[serde(rename="Configuration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object that describes the updated matchmaking configuration.</p>
+    #[serde(rename = "Configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<MatchmakingConfiguration>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateRuntimeConfigurationInput {
-    #[doc="<p>Unique identifier for a fleet to update run-time configuration for.</p>"]
-    #[serde(rename="FleetId")]
+    /// <p>Unique identifier for a fleet to update run-time configuration for.</p>
+    #[serde(rename = "FleetId")]
     pub fleet_id: String,
-    #[doc="<p>Instructions for launching server processes on each instance in the fleet. The run-time configuration for a fleet has a collection of server process configurations, one for each type of server process to run on an instance. A server process configuration specifies the location of the server executable, launch parameters, and the number of concurrent processes with that configuration to maintain on each instance.</p>"]
-    #[serde(rename="RuntimeConfiguration")]
+    /// <p>Instructions for launching server processes on each instance in the fleet. The run-time configuration for a fleet has a collection of server process configurations, one for each type of server process to run on an instance. A server process configuration specifies the location of the server executable, launch parameters, and the number of concurrent processes with that configuration to maintain on each instance.</p>
+    #[serde(rename = "RuntimeConfiguration")]
     pub runtime_configuration: RuntimeConfiguration,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateRuntimeConfigurationOutput {
-    #[doc="<p>The run-time configuration currently in force. If the update was successful, this object matches the one in the request.</p>"]
-    #[serde(rename="RuntimeConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The run-time configuration currently in force. If the update was successful, this object matches the one in the request.</p>
+    #[serde(rename = "RuntimeConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub runtime_configuration: Option<RuntimeConfiguration>,
 }
 
-#[doc="<p>Represents the input for a request action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ValidateMatchmakingRuleSetInput {
-    #[doc="<p>Collection of matchmaking rules to validate, formatted as a JSON string.</p>"]
-    #[serde(rename="RuleSetBody")]
+    /// <p>Collection of matchmaking rules to validate, formatted as a JSON string.</p>
+    #[serde(rename = "RuleSetBody")]
     pub rule_set_body: String,
 }
 
-#[doc="<p>Represents the returned data in response to a request action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ValidateMatchmakingRuleSetOutput {
-    #[doc="<p>Response indicating whether or not the rule set is valid.</p>"]
-    #[serde(rename="Valid")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Response indicating whether or not the rule set is valid.</p>
+    #[serde(rename = "Valid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub valid: Option<bool>,
 }
 
@@ -2578,7 +2577,6 @@ pub enum AcceptMatchError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AcceptMatchError {
     pub fn from_body(body: &str) -> AcceptMatchError {
@@ -2675,7 +2673,6 @@ pub enum CreateAliasError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateAliasError {
     pub fn from_body(body: &str) -> CreateAliasError {
@@ -2775,7 +2772,6 @@ pub enum CreateBuildError {
     Unknown(String),
 }
 
-
 impl CreateBuildError {
     pub fn from_body(body: &str) -> CreateBuildError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2873,7 +2869,6 @@ pub enum CreateFleetError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateFleetError {
     pub fn from_body(body: &str) -> CreateFleetError {
@@ -2987,7 +2982,6 @@ pub enum CreateGameSessionError {
     Unknown(String),
 }
 
-
 impl CreateGameSessionError {
     pub fn from_body(body: &str) -> CreateGameSessionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3007,7 +3001,11 @@ impl CreateGameSessionError {
                     "FleetCapacityExceededException" => {
                         CreateGameSessionError::FleetCapacityExceeded(String::from(error_message))
                     }
-                    "IdempotentParameterMismatchException" => CreateGameSessionError::IdempotentParameterMismatch(String::from(error_message)),
+                    "IdempotentParameterMismatchException" => {
+                        CreateGameSessionError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalServiceException" => {
                         CreateGameSessionError::InternalService(String::from(error_message))
                     }
@@ -3107,7 +3105,6 @@ pub enum CreateGameSessionQueueError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateGameSessionQueueError {
     pub fn from_body(body: &str) -> CreateGameSessionQueueError {
@@ -3209,7 +3206,6 @@ pub enum CreateMatchmakingConfigurationError {
     Unknown(String),
 }
 
-
 impl CreateMatchmakingConfigurationError {
     pub fn from_body(body: &str) -> CreateMatchmakingConfigurationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3223,13 +3219,29 @@ impl CreateMatchmakingConfigurationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => CreateMatchmakingConfigurationError::InternalService(String::from(error_message)),
-                    "InvalidRequestException" => CreateMatchmakingConfigurationError::InvalidRequest(String::from(error_message)),
-                    "LimitExceededException" => CreateMatchmakingConfigurationError::LimitExceeded(String::from(error_message)),
+                    "InternalServiceException" => {
+                        CreateMatchmakingConfigurationError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        CreateMatchmakingConfigurationError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "LimitExceededException" => {
+                        CreateMatchmakingConfigurationError::LimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotFoundException" => {
                         CreateMatchmakingConfigurationError::NotFound(String::from(error_message))
                     }
-                    "UnsupportedRegionException" => CreateMatchmakingConfigurationError::UnsupportedRegion(String::from(error_message)),
+                    "UnsupportedRegionException" => {
+                        CreateMatchmakingConfigurationError::UnsupportedRegion(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateMatchmakingConfigurationError::Validation(error_message.to_string())
                     }
@@ -3302,7 +3314,6 @@ pub enum CreateMatchmakingRuleSetError {
     Unknown(String),
 }
 
-
 impl CreateMatchmakingRuleSetError {
     pub fn from_body(body: &str) -> CreateMatchmakingRuleSetError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3322,7 +3333,11 @@ impl CreateMatchmakingRuleSetError {
                     "InvalidRequestException" => {
                         CreateMatchmakingRuleSetError::InvalidRequest(String::from(error_message))
                     }
-                    "UnsupportedRegionException" => CreateMatchmakingRuleSetError::UnsupportedRegion(String::from(error_message)),
+                    "UnsupportedRegionException" => {
+                        CreateMatchmakingRuleSetError::UnsupportedRegion(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateMatchmakingRuleSetError::Validation(error_message.to_string())
                     }
@@ -3401,7 +3416,6 @@ pub enum CreatePlayerSessionError {
     Unknown(String),
 }
 
-
 impl CreatePlayerSessionError {
     pub fn from_body(body: &str) -> CreatePlayerSessionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3421,14 +3435,22 @@ impl CreatePlayerSessionError {
                     "InternalServiceException" => {
                         CreatePlayerSessionError::InternalService(String::from(error_message))
                     }
-                    "InvalidGameSessionStatusException" => CreatePlayerSessionError::InvalidGameSessionStatus(String::from(error_message)),
+                    "InvalidGameSessionStatusException" => {
+                        CreatePlayerSessionError::InvalidGameSessionStatus(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidRequestException" => {
                         CreatePlayerSessionError::InvalidRequest(String::from(error_message))
                     }
                     "NotFoundException" => {
                         CreatePlayerSessionError::NotFound(String::from(error_message))
                     }
-                    "TerminalRoutingStrategyException" => CreatePlayerSessionError::TerminalRoutingStrategy(String::from(error_message)),
+                    "TerminalRoutingStrategyException" => {
+                        CreatePlayerSessionError::TerminalRoutingStrategy(String::from(
+                            error_message,
+                        ))
+                    }
                     "UnauthorizedException" => {
                         CreatePlayerSessionError::Unauthorized(String::from(error_message))
                     }
@@ -3514,7 +3536,6 @@ pub enum CreatePlayerSessionsError {
     Unknown(String),
 }
 
-
 impl CreatePlayerSessionsError {
     pub fn from_body(body: &str) -> CreatePlayerSessionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3534,14 +3555,22 @@ impl CreatePlayerSessionsError {
                     "InternalServiceException" => {
                         CreatePlayerSessionsError::InternalService(String::from(error_message))
                     }
-                    "InvalidGameSessionStatusException" => CreatePlayerSessionsError::InvalidGameSessionStatus(String::from(error_message)),
+                    "InvalidGameSessionStatusException" => {
+                        CreatePlayerSessionsError::InvalidGameSessionStatus(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidRequestException" => {
                         CreatePlayerSessionsError::InvalidRequest(String::from(error_message))
                     }
                     "NotFoundException" => {
                         CreatePlayerSessionsError::NotFound(String::from(error_message))
                     }
-                    "TerminalRoutingStrategyException" => CreatePlayerSessionsError::TerminalRoutingStrategy(String::from(error_message)),
+                    "TerminalRoutingStrategyException" => {
+                        CreatePlayerSessionsError::TerminalRoutingStrategy(String::from(
+                            error_message,
+                        ))
+                    }
                     "UnauthorizedException" => {
                         CreatePlayerSessionsError::Unauthorized(String::from(error_message))
                     }
@@ -3620,7 +3649,6 @@ pub enum DeleteAliasError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteAliasError {
     pub fn from_body(body: &str) -> DeleteAliasError {
@@ -3715,7 +3743,6 @@ pub enum DeleteBuildError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteBuildError {
     pub fn from_body(body: &str) -> DeleteBuildError {
@@ -3812,7 +3839,6 @@ pub enum DeleteFleetError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteFleetError {
     pub fn from_body(body: &str) -> DeleteFleetError {
@@ -3912,7 +3938,6 @@ pub enum DeleteGameSessionQueueError {
     Unknown(String),
 }
 
-
 impl DeleteGameSessionQueueError {
     pub fn from_body(body: &str) -> DeleteGameSessionQueueError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4011,7 +4036,6 @@ pub enum DeleteMatchmakingConfigurationError {
     Unknown(String),
 }
 
-
 impl DeleteMatchmakingConfigurationError {
     pub fn from_body(body: &str) -> DeleteMatchmakingConfigurationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4025,12 +4049,24 @@ impl DeleteMatchmakingConfigurationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => DeleteMatchmakingConfigurationError::InternalService(String::from(error_message)),
-                    "InvalidRequestException" => DeleteMatchmakingConfigurationError::InvalidRequest(String::from(error_message)),
+                    "InternalServiceException" => {
+                        DeleteMatchmakingConfigurationError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        DeleteMatchmakingConfigurationError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotFoundException" => {
                         DeleteMatchmakingConfigurationError::NotFound(String::from(error_message))
                     }
-                    "UnsupportedRegionException" => DeleteMatchmakingConfigurationError::UnsupportedRegion(String::from(error_message)),
+                    "UnsupportedRegionException" => {
+                        DeleteMatchmakingConfigurationError::UnsupportedRegion(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteMatchmakingConfigurationError::Validation(error_message.to_string())
                     }
@@ -4103,7 +4139,6 @@ pub enum DeleteScalingPolicyError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteScalingPolicyError {
     pub fn from_body(body: &str) -> DeleteScalingPolicyError {
@@ -4203,7 +4238,6 @@ pub enum DescribeAliasError {
     Unknown(String),
 }
 
-
 impl DescribeAliasError {
     pub fn from_body(body: &str) -> DescribeAliasError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4300,7 +4334,6 @@ pub enum DescribeBuildError {
     Unknown(String),
 }
 
-
 impl DescribeBuildError {
     pub fn from_body(body: &str) -> DescribeBuildError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4395,7 +4428,6 @@ pub enum DescribeEC2InstanceLimitsError {
     Unknown(String),
 }
 
-
 impl DescribeEC2InstanceLimitsError {
     pub fn from_body(body: &str) -> DescribeEC2InstanceLimitsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4489,7 +4521,6 @@ pub enum DescribeFleetAttributesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeFleetAttributesError {
     pub fn from_body(body: &str) -> DescribeFleetAttributesError {
@@ -4589,7 +4620,6 @@ pub enum DescribeFleetCapacityError {
     Unknown(String),
 }
 
-
 impl DescribeFleetCapacityError {
     pub fn from_body(body: &str) -> DescribeFleetCapacityError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4687,7 +4717,6 @@ pub enum DescribeFleetEventsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeFleetEventsError {
     pub fn from_body(body: &str) -> DescribeFleetEventsError {
@@ -4787,7 +4816,6 @@ pub enum DescribeFleetPortSettingsError {
     Unknown(String),
 }
 
-
 impl DescribeFleetPortSettingsError {
     pub fn from_body(body: &str) -> DescribeFleetPortSettingsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4885,7 +4913,6 @@ pub enum DescribeFleetUtilizationError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeFleetUtilizationError {
     pub fn from_body(body: &str) -> DescribeFleetUtilizationError {
@@ -4987,7 +5014,6 @@ pub enum DescribeGameSessionDetailsError {
     Unknown(String),
 }
 
-
 impl DescribeGameSessionDetailsError {
     pub fn from_body(body: &str) -> DescribeGameSessionDetailsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5001,14 +5027,22 @@ impl DescribeGameSessionDetailsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => DescribeGameSessionDetailsError::InternalService(String::from(error_message)),
+                    "InternalServiceException" => {
+                        DescribeGameSessionDetailsError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidRequestException" => {
                         DescribeGameSessionDetailsError::InvalidRequest(String::from(error_message))
                     }
                     "NotFoundException" => {
                         DescribeGameSessionDetailsError::NotFound(String::from(error_message))
                     }
-                    "TerminalRoutingStrategyException" => DescribeGameSessionDetailsError::TerminalRoutingStrategy(String::from(error_message)),
+                    "TerminalRoutingStrategyException" => {
+                        DescribeGameSessionDetailsError::TerminalRoutingStrategy(String::from(
+                            error_message,
+                        ))
+                    }
                     "UnauthorizedException" => {
                         DescribeGameSessionDetailsError::Unauthorized(String::from(error_message))
                     }
@@ -5086,7 +5120,6 @@ pub enum DescribeGameSessionPlacementError {
     Unknown(String),
 }
 
-
 impl DescribeGameSessionPlacementError {
     pub fn from_body(body: &str) -> DescribeGameSessionPlacementError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5100,8 +5133,16 @@ impl DescribeGameSessionPlacementError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => DescribeGameSessionPlacementError::InternalService(String::from(error_message)),
-                    "InvalidRequestException" => DescribeGameSessionPlacementError::InvalidRequest(String::from(error_message)),
+                    "InternalServiceException" => {
+                        DescribeGameSessionPlacementError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeGameSessionPlacementError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotFoundException" => {
                         DescribeGameSessionPlacementError::NotFound(String::from(error_message))
                     }
@@ -5180,7 +5221,6 @@ pub enum DescribeGameSessionQueuesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeGameSessionQueuesError {
     pub fn from_body(body: &str) -> DescribeGameSessionQueuesError {
@@ -5282,7 +5322,6 @@ pub enum DescribeGameSessionsError {
     Unknown(String),
 }
 
-
 impl DescribeGameSessionsError {
     pub fn from_body(body: &str) -> DescribeGameSessionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5305,7 +5344,11 @@ impl DescribeGameSessionsError {
                     "NotFoundException" => {
                         DescribeGameSessionsError::NotFound(String::from(error_message))
                     }
-                    "TerminalRoutingStrategyException" => DescribeGameSessionsError::TerminalRoutingStrategy(String::from(error_message)),
+                    "TerminalRoutingStrategyException" => {
+                        DescribeGameSessionsError::TerminalRoutingStrategy(String::from(
+                            error_message,
+                        ))
+                    }
                     "UnauthorizedException" => {
                         DescribeGameSessionsError::Unauthorized(String::from(error_message))
                     }
@@ -5382,7 +5425,6 @@ pub enum DescribeInstancesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeInstancesError {
     pub fn from_body(body: &str) -> DescribeInstancesError {
@@ -5480,7 +5522,6 @@ pub enum DescribeMatchmakingError {
     Unknown(String),
 }
 
-
 impl DescribeMatchmakingError {
     pub fn from_body(body: &str) -> DescribeMatchmakingError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5573,7 +5614,6 @@ pub enum DescribeMatchmakingConfigurationsError {
     Unknown(String),
 }
 
-
 impl DescribeMatchmakingConfigurationsError {
     pub fn from_body(body: &str) -> DescribeMatchmakingConfigurationsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5587,13 +5627,24 @@ impl DescribeMatchmakingConfigurationsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => DescribeMatchmakingConfigurationsError::InternalService(String::from(error_message)),
-                    "InvalidRequestException" => DescribeMatchmakingConfigurationsError::InvalidRequest(String::from(error_message)),
-                    "UnsupportedRegionException" => DescribeMatchmakingConfigurationsError::UnsupportedRegion(String::from(error_message)),
-                    "ValidationException" => {
-                        DescribeMatchmakingConfigurationsError::Validation(error_message
-                                                                               .to_string())
+                    "InternalServiceException" => {
+                        DescribeMatchmakingConfigurationsError::InternalService(String::from(
+                            error_message,
+                        ))
                     }
+                    "InvalidRequestException" => {
+                        DescribeMatchmakingConfigurationsError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnsupportedRegionException" => {
+                        DescribeMatchmakingConfigurationsError::UnsupportedRegion(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => DescribeMatchmakingConfigurationsError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DescribeMatchmakingConfigurationsError::Unknown(String::from(body)),
                 }
             }
@@ -5663,7 +5714,6 @@ pub enum DescribeMatchmakingRuleSetsError {
     Unknown(String),
 }
 
-
 impl DescribeMatchmakingRuleSetsError {
     pub fn from_body(body: &str) -> DescribeMatchmakingRuleSetsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5677,12 +5727,22 @@ impl DescribeMatchmakingRuleSetsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => DescribeMatchmakingRuleSetsError::InternalService(String::from(error_message)),
-                    "InvalidRequestException" => DescribeMatchmakingRuleSetsError::InvalidRequest(String::from(error_message)),
+                    "InternalServiceException" => {
+                        DescribeMatchmakingRuleSetsError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => DescribeMatchmakingRuleSetsError::InvalidRequest(
+                        String::from(error_message),
+                    ),
                     "NotFoundException" => {
                         DescribeMatchmakingRuleSetsError::NotFound(String::from(error_message))
                     }
-                    "UnsupportedRegionException" => DescribeMatchmakingRuleSetsError::UnsupportedRegion(String::from(error_message)),
+                    "UnsupportedRegionException" => {
+                        DescribeMatchmakingRuleSetsError::UnsupportedRegion(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeMatchmakingRuleSetsError::Validation(error_message.to_string())
                     }
@@ -5755,7 +5815,6 @@ pub enum DescribePlayerSessionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribePlayerSessionsError {
     pub fn from_body(body: &str) -> DescribePlayerSessionsError {
@@ -5855,7 +5914,6 @@ pub enum DescribeRuntimeConfigurationError {
     Unknown(String),
 }
 
-
 impl DescribeRuntimeConfigurationError {
     pub fn from_body(body: &str) -> DescribeRuntimeConfigurationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5869,8 +5927,16 @@ impl DescribeRuntimeConfigurationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => DescribeRuntimeConfigurationError::InternalService(String::from(error_message)),
-                    "InvalidRequestException" => DescribeRuntimeConfigurationError::InvalidRequest(String::from(error_message)),
+                    "InternalServiceException" => {
+                        DescribeRuntimeConfigurationError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeRuntimeConfigurationError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotFoundException" => {
                         DescribeRuntimeConfigurationError::NotFound(String::from(error_message))
                     }
@@ -5949,7 +6015,6 @@ pub enum DescribeScalingPoliciesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeScalingPoliciesError {
     pub fn from_body(body: &str) -> DescribeScalingPoliciesError {
@@ -6049,7 +6114,6 @@ pub enum GetGameSessionLogUrlError {
     Unknown(String),
 }
 
-
 impl GetGameSessionLogUrlError {
     pub fn from_body(body: &str) -> GetGameSessionLogUrlError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6148,7 +6212,6 @@ pub enum GetInstanceAccessError {
     Unknown(String),
 }
 
-
 impl GetInstanceAccessError {
     pub fn from_body(body: &str) -> GetInstanceAccessError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6245,7 +6308,6 @@ pub enum ListAliasesError {
     Unknown(String),
 }
 
-
 impl ListAliasesError {
     pub fn from_body(body: &str) -> ListAliasesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6336,7 +6398,6 @@ pub enum ListBuildsError {
     Unknown(String),
 }
 
-
 impl ListBuildsError {
     pub fn from_body(body: &str) -> ListBuildsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6426,7 +6487,6 @@ pub enum ListFleetsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListFleetsError {
     pub fn from_body(body: &str) -> ListFleetsError {
@@ -6519,7 +6579,6 @@ pub enum PutScalingPolicyError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl PutScalingPolicyError {
     pub fn from_body(body: &str) -> PutScalingPolicyError {
@@ -6616,7 +6675,6 @@ pub enum RequestUploadCredentialsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl RequestUploadCredentialsError {
     pub fn from_body(body: &str) -> RequestUploadCredentialsError {
@@ -6718,7 +6776,6 @@ pub enum ResolveAliasError {
     Unknown(String),
 }
 
-
 impl ResolveAliasError {
     pub fn from_body(body: &str) -> ResolveAliasError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6819,7 +6876,6 @@ pub enum SearchGameSessionsError {
     Unknown(String),
 }
 
-
 impl SearchGameSessionsError {
     pub fn from_body(body: &str) -> SearchGameSessionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6842,7 +6898,11 @@ impl SearchGameSessionsError {
                     "NotFoundException" => {
                         SearchGameSessionsError::NotFound(String::from(error_message))
                     }
-                    "TerminalRoutingStrategyException" => SearchGameSessionsError::TerminalRoutingStrategy(String::from(error_message)),
+                    "TerminalRoutingStrategyException" => {
+                        SearchGameSessionsError::TerminalRoutingStrategy(String::from(
+                            error_message,
+                        ))
+                    }
                     "UnauthorizedException" => {
                         SearchGameSessionsError::Unauthorized(String::from(error_message))
                     }
@@ -6919,7 +6979,6 @@ pub enum StartGameSessionPlacementError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl StartGameSessionPlacementError {
     pub fn from_body(body: &str) -> StartGameSessionPlacementError {
@@ -7019,7 +7078,6 @@ pub enum StartMatchmakingError {
     Unknown(String),
 }
 
-
 impl StartMatchmakingError {
     pub fn from_body(body: &str) -> StartMatchmakingError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7115,7 +7173,6 @@ pub enum StopGameSessionPlacementError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl StopGameSessionPlacementError {
     pub fn from_body(body: &str) -> StopGameSessionPlacementError {
@@ -7215,7 +7272,6 @@ pub enum StopMatchmakingError {
     Unknown(String),
 }
 
-
 impl StopMatchmakingError {
     pub fn from_body(body: &str) -> StopMatchmakingError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7312,7 +7368,6 @@ pub enum UpdateAliasError {
     Unknown(String),
 }
 
-
 impl UpdateAliasError {
     pub fn from_body(body: &str) -> UpdateAliasError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7406,7 +7461,6 @@ pub enum UpdateBuildError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateBuildError {
     pub fn from_body(body: &str) -> UpdateBuildError {
@@ -7507,7 +7561,6 @@ pub enum UpdateFleetAttributesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateFleetAttributesError {
     pub fn from_body(body: &str) -> UpdateFleetAttributesError {
@@ -7625,7 +7678,6 @@ pub enum UpdateFleetCapacityError {
     Unknown(String),
 }
 
-
 impl UpdateFleetCapacityError {
     pub fn from_body(body: &str) -> UpdateFleetCapacityError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7742,7 +7794,6 @@ pub enum UpdateFleetPortSettingsError {
     Unknown(String),
 }
 
-
 impl UpdateFleetPortSettingsError {
     pub fn from_body(body: &str) -> UpdateFleetPortSettingsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7762,7 +7813,11 @@ impl UpdateFleetPortSettingsError {
                     "InternalServiceException" => {
                         UpdateFleetPortSettingsError::InternalService(String::from(error_message))
                     }
-                    "InvalidFleetStatusException" => UpdateFleetPortSettingsError::InvalidFleetStatus(String::from(error_message)),
+                    "InvalidFleetStatusException" => {
+                        UpdateFleetPortSettingsError::InvalidFleetStatus(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidRequestException" => {
                         UpdateFleetPortSettingsError::InvalidRequest(String::from(error_message))
                     }
@@ -7855,7 +7910,6 @@ pub enum UpdateGameSessionError {
     Unknown(String),
 }
 
-
 impl UpdateGameSessionError {
     pub fn from_body(body: &str) -> UpdateGameSessionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7875,7 +7929,11 @@ impl UpdateGameSessionError {
                     "InternalServiceException" => {
                         UpdateGameSessionError::InternalService(String::from(error_message))
                     }
-                    "InvalidGameSessionStatusException" => UpdateGameSessionError::InvalidGameSessionStatus(String::from(error_message)),
+                    "InvalidGameSessionStatusException" => {
+                        UpdateGameSessionError::InvalidGameSessionStatus(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidRequestException" => {
                         UpdateGameSessionError::InvalidRequest(String::from(error_message))
                     }
@@ -7959,7 +8017,6 @@ pub enum UpdateGameSessionQueueError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateGameSessionQueueError {
     pub fn from_body(body: &str) -> UpdateGameSessionQueueError {
@@ -8059,7 +8116,6 @@ pub enum UpdateMatchmakingConfigurationError {
     Unknown(String),
 }
 
-
 impl UpdateMatchmakingConfigurationError {
     pub fn from_body(body: &str) -> UpdateMatchmakingConfigurationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8073,12 +8129,24 @@ impl UpdateMatchmakingConfigurationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => UpdateMatchmakingConfigurationError::InternalService(String::from(error_message)),
-                    "InvalidRequestException" => UpdateMatchmakingConfigurationError::InvalidRequest(String::from(error_message)),
+                    "InternalServiceException" => {
+                        UpdateMatchmakingConfigurationError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        UpdateMatchmakingConfigurationError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
                     "NotFoundException" => {
                         UpdateMatchmakingConfigurationError::NotFound(String::from(error_message))
                     }
-                    "UnsupportedRegionException" => UpdateMatchmakingConfigurationError::UnsupportedRegion(String::from(error_message)),
+                    "UnsupportedRegionException" => {
+                        UpdateMatchmakingConfigurationError::UnsupportedRegion(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         UpdateMatchmakingConfigurationError::Validation(error_message.to_string())
                     }
@@ -8154,7 +8222,6 @@ pub enum UpdateRuntimeConfigurationError {
     Unknown(String),
 }
 
-
 impl UpdateRuntimeConfigurationError {
     pub fn from_body(body: &str) -> UpdateRuntimeConfigurationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8168,8 +8235,16 @@ impl UpdateRuntimeConfigurationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => UpdateRuntimeConfigurationError::InternalService(String::from(error_message)),
-                    "InvalidFleetStatusException" => UpdateRuntimeConfigurationError::InvalidFleetStatus(String::from(error_message)),
+                    "InternalServiceException" => {
+                        UpdateRuntimeConfigurationError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidFleetStatusException" => {
+                        UpdateRuntimeConfigurationError::InvalidFleetStatus(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidRequestException" => {
                         UpdateRuntimeConfigurationError::InvalidRequest(String::from(error_message))
                     }
@@ -8251,7 +8326,6 @@ pub enum ValidateMatchmakingRuleSetError {
     Unknown(String),
 }
 
-
 impl ValidateMatchmakingRuleSetError {
     pub fn from_body(body: &str) -> ValidateMatchmakingRuleSetError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8265,11 +8339,19 @@ impl ValidateMatchmakingRuleSetError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => ValidateMatchmakingRuleSetError::InternalService(String::from(error_message)),
+                    "InternalServiceException" => {
+                        ValidateMatchmakingRuleSetError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidRequestException" => {
                         ValidateMatchmakingRuleSetError::InvalidRequest(String::from(error_message))
                     }
-                    "UnsupportedRegionException" => ValidateMatchmakingRuleSetError::UnsupportedRegion(String::from(error_message)),
+                    "UnsupportedRegionException" => {
+                        ValidateMatchmakingRuleSetError::UnsupportedRegion(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ValidateMatchmakingRuleSetError::Validation(error_message.to_string())
                     }
@@ -8324,374 +8406,329 @@ impl Error for ValidateMatchmakingRuleSetError {
 /// Trait representing the capabilities of the Amazon GameLift API. Amazon GameLift clients implement this trait.
 pub trait GameLift {
     #[doc="<p>Registers a player's acceptance or rejection of a proposed FlexMatch match. A matchmaking configuration may require player acceptance; if so, then matches built with that configuration cannot be completed unless all players accept the proposed match within a specified time limit. </p> <p>When FlexMatch builds a match, all the matchmaking tickets involved in the proposed match are placed into status <code>REQUIRES_ACCEPTANCE</code>. This is a trigger for your game to get acceptance from all players in the ticket. Acceptances are only valid for tickets when they are in this status; all other acceptances result in an error.</p> <p>To register acceptance, specify the ticket ID, a response, and one or more players. Once all players have registered acceptance, the matchmaking tickets advance to status <code>PLACING</code>, where a new game session is created for the match. </p> <p>If any player rejects the match, or if acceptances are not received before a specified timeout, the proposed match is dropped. The matchmaking tickets are then handled in one of two ways: For tickets where all players accepted the match, the ticket status is returned to <code>SEARCHING</code> to find a new match. For tickets where one or more players failed to accept the match, the ticket status is set to <code>FAILED</code>, and processing is terminated. A new matchmaking request for these players can be submitted as needed. </p> <p>Matchmaking-related operations include:</p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> </ul>"]
-    fn accept_match(&self,
-                    input: &AcceptMatchInput)
-                    -> Result<AcceptMatchOutput, AcceptMatchError>;
-
+    fn accept_match(&self, input: &AcceptMatchInput)
+        -> Result<AcceptMatchOutput, AcceptMatchError>;
 
     #[doc="<p>Creates an alias for a fleet. In most situations, you can use an alias ID in place of a fleet ID. By using a fleet alias instead of a specific fleet ID, you can switch gameplay and players to a new fleet without changing your game client or other game components. For example, for games in production, using an alias allows you to seamlessly redirect your player base to a new game server update. </p> <p>Amazon GameLift supports two types of routing strategies for aliases: simple and terminal. A simple alias points to an active fleet. A terminal alias is used to display messaging or link to a URL instead of routing players to an active fleet. For example, you might use a terminal alias when a game version is no longer supported and you want to direct players to an upgrade site. </p> <p>To create a fleet alias, specify an alias name, routing strategy, and optional description. Each simple alias can point to only one fleet, but a fleet can have multiple aliases. If successful, a new alias record is returned, including an alias ID, which you can reference when creating a game session. You can reassign an alias to another fleet by calling <code>UpdateAlias</code>.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>"]
-    fn create_alias(&self,
-                    input: &CreateAliasInput)
-                    -> Result<CreateAliasOutput, CreateAliasError>;
-
+    fn create_alias(&self, input: &CreateAliasInput)
+        -> Result<CreateAliasOutput, CreateAliasError>;
 
     #[doc="<p>Creates a new Amazon GameLift build from a set of game server binary files stored in an Amazon Simple Storage Service (Amazon S3) location. To use this API call, create a <code>.zip</code> file containing all of the files for the build and store it in an Amazon S3 bucket under your AWS account. For help on packaging your build files and creating a build, see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-intro.html\">Uploading Your Game to Amazon GameLift</a>.</p> <important> <p>Use this API action ONLY if you are storing your game build files in an Amazon S3 bucket. To create a build using files stored locally, use the CLI command <a href=\"http://docs.aws.amazon.com/cli/latest/reference/gamelift/upload-build.html\"> <code>upload-build</code> </a>, which uploads the build files from a file location you specify.</p> </important> <p>To create a new build using <code>CreateBuild</code>, identify the storage location and operating system of your game build. You also have the option of specifying a build name and version. If successful, this action creates a new build record with an unique build ID and in <code>INITIALIZED</code> status. Use the API call <a>DescribeBuild</a> to check the status of your build. A build must be in <code>READY</code> status before it can be used to create fleets to host your game.</p> <p>Build-related operations include:</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul>"]
-    fn create_build(&self,
-                    input: &CreateBuildInput)
-                    -> Result<CreateBuildOutput, CreateBuildError>;
-
+    fn create_build(&self, input: &CreateBuildInput)
+        -> Result<CreateBuildOutput, CreateBuildError>;
 
     #[doc="<p>Creates a new fleet to run your game servers. A fleet is a set of Amazon Elastic Compute Cloud (Amazon EC2) instances, each of which can run multiple server processes to host game sessions. You configure a fleet to create instances with certain hardware specifications (see <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for more information), and deploy a specified game build to each instance. A newly created fleet passes through several statuses; once it reaches the <code>ACTIVE</code> status, it can begin hosting game sessions.</p> <p>To create a new fleet, you must specify the following: (1) fleet name, (2) build ID of an uploaded game build, (3) an EC2 instance type, and (4) a run-time configuration that describes which server processes to run on each instance in the fleet. (Although the run-time configuration is not a required parameter, the fleet cannot be successfully activated without it.)</p> <p>You can also configure the new fleet with the following settings:</p> <ul> <li> <p>Fleet description</p> </li> <li> <p>Access permissions for inbound traffic</p> </li> <li> <p>Fleet-wide game session protection</p> </li> <li> <p>Resource creation limit</p> </li> </ul> <p>If you use Amazon CloudWatch for metrics, you can add the new fleet to a metric group. This allows you to view aggregated metrics for a set of fleets. Once you specify a metric group, the new fleet's metrics are included in the metric group's data.</p> <p>If the CreateFleet call is successful, Amazon GameLift performs the following tasks:</p> <ul> <li> <p>Creates a fleet record and sets the status to <code>NEW</code> (followed by other statuses as the fleet is activated).</p> </li> <li> <p>Sets the fleet's target capacity to 1 (desired instances), which causes Amazon GameLift to start one new EC2 instance.</p> </li> <li> <p>Starts launching server processes on the instance. If the fleet is configured to run multiple server processes per instance, Amazon GameLift staggers each launch by a few seconds.</p> </li> <li> <p>Begins writing events to the fleet event log, which can be accessed in the Amazon GameLift console.</p> </li> <li> <p>Sets the fleet's status to <code>ACTIVE</code> as soon as one server process in the fleet is ready to host a game session.</p> </li> </ul> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn create_fleet(&self,
-                    input: &CreateFleetInput)
-                    -> Result<CreateFleetOutput, CreateFleetError>;
-
+    fn create_fleet(&self, input: &CreateFleetInput)
+        -> Result<CreateFleetOutput, CreateFleetError>;
 
     #[doc="<p>Creates a multiplayer game session for players. This action creates a game session record and assigns an available server process in the specified fleet to host the game session. A fleet must have an <code>ACTIVE</code> status before a game session can be created in it.</p> <p>To create a game session, specify either fleet ID or alias ID and indicate a maximum number of players to allow in the game session. You can also provide a name and game-specific properties for this game session. If successful, a <a>GameSession</a> object is returned containing the game session properties and other settings you specified.</p> <p> <b>Idempotency tokens.</b> You can add a token that uniquely identifies game session requests. This is useful for ensuring that game session requests are idempotent. Multiple requests with the same idempotency token are processed only once; subsequent requests return the original result. All response values are the same with the exception of game session status, which may change.</p> <p> <b>Resource creation limits.</b> If you are creating a game session on a fleet with a resource creation limit policy in force, then you must specify a creator ID. Without this ID, Amazon GameLift has no way to evaluate the policy for this new game session request.</p> <p> <b>Player acceptance policy.</b> By default, newly created game sessions are open to new players. You can restrict new player access by using <a>UpdateGameSession</a> to change the game session's player session creation policy.</p> <p> <b>Game session logs.</b> Logs are retained for all active game sessions for 14 days. To access the logs, call <a>GetGameSessionLogUrl</a> to download the log files.</p> <p> <i>Available in Amazon GameLift Local.</i> </p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn create_game_session(&self,
-                           input: &CreateGameSessionInput)
-                           -> Result<CreateGameSessionOutput, CreateGameSessionError>;
-
+    fn create_game_session(
+        &self,
+        input: &CreateGameSessionInput,
+    ) -> Result<CreateGameSessionOutput, CreateGameSessionError>;
 
     #[doc="<p>Establishes a new queue for processing requests to place new game sessions. A queue identifies where new game sessions can be hosted -- by specifying a list of destinations (fleets or aliases) -- and how long requests can wait in the queue before timing out. You can set up a queue to try to place game sessions on fleets in multiple regions. To add placement requests to a queue, call <a>StartGameSessionPlacement</a> and reference the queue name.</p> <p> <b>Destination order.</b> When processing a request for a game session, Amazon GameLift tries each destination in order until it finds one with available resources to host the new game session. A queue's default order is determined by how destinations are listed. The default order is overridden when a game session placement request provides player latency information. Player latency information enables Amazon GameLift to prioritize destinations where players report the lowest average latency, as a result placing the new game session where the majority of players will have the best possible gameplay experience.</p> <p> <b>Player latency policies.</b> For placement requests containing player latency information, use player latency policies to protect individual players from very high latencies. With a latency cap, even when a destination can deliver a low latency for most players, the game is not placed where any individual player is reporting latency higher than a policy's maximum. A queue can have multiple latency policies, which are enforced consecutively starting with the policy with the lowest latency cap. Use multiple policies to gradually relax latency controls; for example, you might set a policy with a low latency cap for the first 60 seconds, a second policy with a higher cap for the next 60 seconds, etc. </p> <p>To create a new queue, provide a name, timeout value, a list of destinations and, if desired, a set of latency policies. If successful, a new queue object is returned.</p> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>"]
-    fn create_game_session_queue
-        (&self,
-         input: &CreateGameSessionQueueInput)
-         -> Result<CreateGameSessionQueueOutput, CreateGameSessionQueueError>;
-
+    fn create_game_session_queue(
+        &self,
+        input: &CreateGameSessionQueueInput,
+    ) -> Result<CreateGameSessionQueueOutput, CreateGameSessionQueueError>;
 
     #[doc="<p>Defines a new matchmaking configuration for use with FlexMatch. A matchmaking configuration sets out guidelines for matching players and getting the matches into games. You can set up multiple matchmaking configurations to handle the scenarios needed for your game. Each matchmaking request (<a>StartMatchmaking</a>) specifies a configuration for the match and provides player attributes to support the configuration being used. </p> <p>To create a matchmaking configuration, at a minimum you must specify the following: configuration name; a rule set that governs how to evaluate players and find acceptable matches; a game session queue to use when placing a new game session for the match; and the maximum time allowed for a matchmaking attempt.</p> <p> <b>Player acceptance</b> -- In each configuration, you have the option to require that all players accept participation in a proposed match. To enable this feature, set <i>AcceptanceRequired</i> to true and specify a time limit for player acceptance. Players have the option to accept or reject a proposed match, and a match does not move ahead to game session placement unless all matched players accept. </p> <p> <b>Matchmaking status notification</b> -- There are two ways to track the progress of matchmaking tickets: (1) polling ticket status with <a>DescribeMatchmaking</a>; or (2) receiving notifications with Amazon Simple Notification Service (SNS). To use notifications, you first need to set up an SNS topic to receive the notifications, and provide the topic ARN in the matchmaking configuration (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/match-notification.html\"> Setting up Notifications for Matchmaking</a>). Since notifications promise only \"best effort\" delivery, we recommend calling <code>DescribeMatchmaking</code> if no notifications are received within 30 seconds.</p> <p>Operations related to match configurations and rule sets include:</p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> </ul>"]
-    fn create_matchmaking_configuration
-        (&self,
-         input: &CreateMatchmakingConfigurationInput)
-         -> Result<CreateMatchmakingConfigurationOutput, CreateMatchmakingConfigurationError>;
-
+    fn create_matchmaking_configuration(
+        &self,
+        input: &CreateMatchmakingConfigurationInput,
+    ) -> Result<CreateMatchmakingConfigurationOutput, CreateMatchmakingConfigurationError>;
 
     #[doc="<p>Creates a new rule set for FlexMatch matchmaking. A rule set describes the type of match to create, such as the number and size of teams, and sets the parameters for acceptable player matches, such as minimum skill level or character type. Rule sets are used in matchmaking configurations, which define how matchmaking requests are handled. Each <a>MatchmakingConfiguration</a> uses one rule set; you can set up multiple rule sets to handle the scenarios that suit your game (such as for different game modes), and create a separate matchmaking configuration for each rule set. See additional information on rule set content in the <a>MatchmakingRuleSet</a> structure. For help creating rule sets, including useful examples, see the topic <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/match-intro.html\"> Adding FlexMatch to Your Game</a>.</p> <p>Once created, matchmaking rule sets cannot be changed or deleted, so we recommend checking the rule set syntax using <a>ValidateMatchmakingRuleSet</a>before creating the rule set.</p> <p>To create a matchmaking rule set, provide the set of rules and a unique name. Rule sets must be defined in the same region as the matchmaking configuration they will be used with. Rule sets cannot be edited or deleted. If you need to change a rule set, create a new one with the necessary edits and then update matchmaking configurations to use the new rule set.</p> <p>Operations related to match configurations and rule sets include:</p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> </ul>"]
-    fn create_matchmaking_rule_set
-        (&self,
-         input: &CreateMatchmakingRuleSetInput)
-         -> Result<CreateMatchmakingRuleSetOutput, CreateMatchmakingRuleSetError>;
-
+    fn create_matchmaking_rule_set(
+        &self,
+        input: &CreateMatchmakingRuleSetInput,
+    ) -> Result<CreateMatchmakingRuleSetOutput, CreateMatchmakingRuleSetError>;
 
     #[doc="<p>Adds a player to a game session and creates a player session record. Before a player can be added, a game session must have an <code>ACTIVE</code> status, have a creation policy of <code>ALLOW_ALL</code>, and have an open player slot. To add a group of players to a game session, use <a>CreatePlayerSessions</a>.</p> <p>To create a player session, specify a game session ID, player ID, and optionally a string of player data. If successful, the player is added to the game session and a new <a>PlayerSession</a> object is returned. Player sessions cannot be updated. </p> <p> <i>Available in Amazon GameLift Local.</i> </p> <p>Player-session-related operations include:</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn create_player_session(&self,
-                             input: &CreatePlayerSessionInput)
-                             -> Result<CreatePlayerSessionOutput, CreatePlayerSessionError>;
-
+    fn create_player_session(
+        &self,
+        input: &CreatePlayerSessionInput,
+    ) -> Result<CreatePlayerSessionOutput, CreatePlayerSessionError>;
 
     #[doc="<p>Adds a group of players to a game session. This action is useful with a team matching feature. Before players can be added, a game session must have an <code>ACTIVE</code> status, have a creation policy of <code>ALLOW_ALL</code>, and have an open player slot. To add a single player to a game session, use <a>CreatePlayerSession</a>.</p> <p>To create player sessions, specify a game session ID, a list of player IDs, and optionally a set of player data strings. If successful, the players are added to the game session and a set of new <a>PlayerSession</a> objects is returned. Player sessions cannot be updated.</p> <p> <i>Available in Amazon GameLift Local.</i> </p> <p>Player-session-related operations include:</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn create_player_sessions(&self,
-                              input: &CreatePlayerSessionsInput)
-                              -> Result<CreatePlayerSessionsOutput, CreatePlayerSessionsError>;
-
+    fn create_player_sessions(
+        &self,
+        input: &CreatePlayerSessionsInput,
+    ) -> Result<CreatePlayerSessionsOutput, CreatePlayerSessionsError>;
 
     #[doc="<p>Deletes an alias. This action removes all record of the alias. Game clients attempting to access a server process using the deleted alias receive an error. To delete an alias, specify the alias ID to be deleted.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>"]
     fn delete_alias(&self, input: &DeleteAliasInput) -> Result<(), DeleteAliasError>;
 
-
     #[doc="<p>Deletes a build. This action permanently deletes the build record and any uploaded build files.</p> <p>To delete a build, specify its ID. Deleting a build does not affect the status of any active fleets using the build, but you can no longer create new fleets with the deleted build.</p> <p>Build-related operations include:</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul>"]
     fn delete_build(&self, input: &DeleteBuildInput) -> Result<(), DeleteBuildError>;
-
 
     #[doc="<p>Deletes everything related to a fleet. Before deleting a fleet, you must set the fleet's desired capacity to zero. See <a>UpdateFleetCapacity</a>.</p> <p>This action removes the fleet's resources and the fleet record. Once a fleet is deleted, you can no longer use that fleet.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
     fn delete_fleet(&self, input: &DeleteFleetInput) -> Result<(), DeleteFleetError>;
 
-
     #[doc="<p>Deletes a game session queue. This action means that any <a>StartGameSessionPlacement</a> requests that reference this queue will fail. To delete a queue, specify the queue name.</p> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>"]
-    fn delete_game_session_queue
-        (&self,
-         input: &DeleteGameSessionQueueInput)
-         -> Result<DeleteGameSessionQueueOutput, DeleteGameSessionQueueError>;
-
+    fn delete_game_session_queue(
+        &self,
+        input: &DeleteGameSessionQueueInput,
+    ) -> Result<DeleteGameSessionQueueOutput, DeleteGameSessionQueueError>;
 
     #[doc="<p>Permanently removes a FlexMatch matchmaking configuration. To delete, specify the configuration name. A matchmaking configuration cannot be deleted if it is being used in any active matchmaking tickets.</p> <p>Operations related to match configurations and rule sets include:</p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> </ul>"]
-    fn delete_matchmaking_configuration
-        (&self,
-         input: &DeleteMatchmakingConfigurationInput)
-         -> Result<DeleteMatchmakingConfigurationOutput, DeleteMatchmakingConfigurationError>;
-
+    fn delete_matchmaking_configuration(
+        &self,
+        input: &DeleteMatchmakingConfigurationInput,
+    ) -> Result<DeleteMatchmakingConfigurationOutput, DeleteMatchmakingConfigurationError>;
 
     #[doc="<p>Deletes a fleet scaling policy. This action means that the policy is no longer in force and removes all record of it. To delete a scaling policy, specify both the scaling policy name and the fleet ID it is associated with.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn delete_scaling_policy(&self,
-                             input: &DeleteScalingPolicyInput)
-                             -> Result<(), DeleteScalingPolicyError>;
-
+    fn delete_scaling_policy(
+        &self,
+        input: &DeleteScalingPolicyInput,
+    ) -> Result<(), DeleteScalingPolicyError>;
 
     #[doc="<p>Retrieves properties for an alias. This operation returns all alias metadata and settings. To get an alias's target fleet ID only, use <code>ResolveAlias</code>. </p> <p>To get alias properties, specify the alias ID. If successful, the requested alias record is returned.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>"]
-    fn describe_alias(&self,
-                      input: &DescribeAliasInput)
-                      -> Result<DescribeAliasOutput, DescribeAliasError>;
-
+    fn describe_alias(
+        &self,
+        input: &DescribeAliasInput,
+    ) -> Result<DescribeAliasOutput, DescribeAliasError>;
 
     #[doc="<p>Retrieves properties for a build. To get a build record, specify a build ID. If successful, an object containing the build properties is returned.</p> <p>Build-related operations include:</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul>"]
-    fn describe_build(&self,
-                      input: &DescribeBuildInput)
-                      -> Result<DescribeBuildOutput, DescribeBuildError>;
-
+    fn describe_build(
+        &self,
+        input: &DescribeBuildInput,
+    ) -> Result<DescribeBuildOutput, DescribeBuildError>;
 
     #[doc="<p>Retrieves the following information for the specified EC2 instance type:</p> <ul> <li> <p>maximum number of instances allowed per AWS account (service limit)</p> </li> <li> <p>current usage level for the AWS account</p> </li> </ul> <p>Service limits vary depending on region. Available regions for Amazon GameLift can be found in the AWS Management Console for Amazon GameLift (see the drop-down list in the upper right corner).</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_ec2_instance_limits
-        (&self,
-         input: &DescribeEC2InstanceLimitsInput)
-         -> Result<DescribeEC2InstanceLimitsOutput, DescribeEC2InstanceLimitsError>;
-
+    fn describe_ec2_instance_limits(
+        &self,
+        input: &DescribeEC2InstanceLimitsInput,
+    ) -> Result<DescribeEC2InstanceLimitsOutput, DescribeEC2InstanceLimitsError>;
 
     #[doc="<p>Retrieves fleet properties, including metadata, status, and configuration, for one or more fleets. You can request attributes for all fleets, or specify a list of one or more fleet IDs. When requesting multiple fleets, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>FleetAttributes</a> object is returned for each requested fleet ID. When specifying a list of fleet IDs, attribute objects are returned only for fleets that currently exist. </p> <note> <p>Some API actions may limit the number of fleet IDs allowed in one request. If a request exceeds this limit, the request fails and the error message includes the maximum allowed.</p> </note> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_fleet_attributes
-        (&self,
-         input: &DescribeFleetAttributesInput)
-         -> Result<DescribeFleetAttributesOutput, DescribeFleetAttributesError>;
-
+    fn describe_fleet_attributes(
+        &self,
+        input: &DescribeFleetAttributesInput,
+    ) -> Result<DescribeFleetAttributesOutput, DescribeFleetAttributesError>;
 
     #[doc="<p>Retrieves the current status of fleet capacity for one or more fleets. This information includes the number of instances that have been requested for the fleet and the number currently active. You can request capacity for all fleets, or specify a list of one or more fleet IDs. When requesting multiple fleets, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>FleetCapacity</a> object is returned for each requested fleet ID. When specifying a list of fleet IDs, attribute objects are returned only for fleets that currently exist. </p> <note> <p>Some API actions may limit the number of fleet IDs allowed in one request. If a request exceeds this limit, the request fails and the error message includes the maximum allowed.</p> </note> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_fleet_capacity
-        (&self,
-         input: &DescribeFleetCapacityInput)
-         -> Result<DescribeFleetCapacityOutput, DescribeFleetCapacityError>;
-
+    fn describe_fleet_capacity(
+        &self,
+        input: &DescribeFleetCapacityInput,
+    ) -> Result<DescribeFleetCapacityOutput, DescribeFleetCapacityError>;
 
     #[doc="<p>Retrieves entries from the specified fleet's event log. You can specify a time range to limit the result set. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a collection of event log entries matching the request are returned.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_fleet_events(&self,
-                             input: &DescribeFleetEventsInput)
-                             -> Result<DescribeFleetEventsOutput, DescribeFleetEventsError>;
-
+    fn describe_fleet_events(
+        &self,
+        input: &DescribeFleetEventsInput,
+    ) -> Result<DescribeFleetEventsOutput, DescribeFleetEventsError>;
 
     #[doc="<p>Retrieves the inbound connection permissions for a fleet. Connection permissions include a range of IP addresses and port settings that incoming traffic can use to access server processes in the fleet. To get a fleet's inbound connection permissions, specify a fleet ID. If successful, a collection of <a>IpPermission</a> objects is returned for the requested fleet ID. If the requested fleet has been deleted, the result set is empty.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_fleet_port_settings
-        (&self,
-         input: &DescribeFleetPortSettingsInput)
-         -> Result<DescribeFleetPortSettingsOutput, DescribeFleetPortSettingsError>;
-
+    fn describe_fleet_port_settings(
+        &self,
+        input: &DescribeFleetPortSettingsInput,
+    ) -> Result<DescribeFleetPortSettingsOutput, DescribeFleetPortSettingsError>;
 
     #[doc="<p>Retrieves utilization statistics for one or more fleets. You can request utilization data for all fleets, or specify a list of one or more fleet IDs. When requesting multiple fleets, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>FleetUtilization</a> object is returned for each requested fleet ID. When specifying a list of fleet IDs, utilization objects are returned only for fleets that currently exist. </p> <note> <p>Some API actions may limit the number of fleet IDs allowed in one request. If a request exceeds this limit, the request fails and the error message includes the maximum allowed.</p> </note> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_fleet_utilization
-        (&self,
-         input: &DescribeFleetUtilizationInput)
-         -> Result<DescribeFleetUtilizationOutput, DescribeFleetUtilizationError>;
-
+    fn describe_fleet_utilization(
+        &self,
+        input: &DescribeFleetUtilizationInput,
+    ) -> Result<DescribeFleetUtilizationOutput, DescribeFleetUtilizationError>;
 
     #[doc="<p>Retrieves properties, including the protection policy in force, for one or more game sessions. This action can be used in several ways: (1) provide a <code>GameSessionId</code> or <code>GameSessionArn</code> to request details for a specific game session; (2) provide either a <code>FleetId</code> or an <code>AliasId</code> to request properties for all game sessions running on a fleet. </p> <p>To get game session record(s), specify just one of the following: game session ID, fleet ID, or alias ID. You can filter this request by game session status. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>GameSessionDetail</a> object is returned for each session matching the request.</p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn describe_game_session_details
-        (&self,
-         input: &DescribeGameSessionDetailsInput)
-         -> Result<DescribeGameSessionDetailsOutput, DescribeGameSessionDetailsError>;
-
+    fn describe_game_session_details(
+        &self,
+        input: &DescribeGameSessionDetailsInput,
+    ) -> Result<DescribeGameSessionDetailsOutput, DescribeGameSessionDetailsError>;
 
     #[doc="<p>Retrieves properties and current status of a game session placement request. To get game session placement details, specify the placement ID. If successful, a <a>GameSessionPlacement</a> object is returned.</p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn describe_game_session_placement
-        (&self,
-         input: &DescribeGameSessionPlacementInput)
-         -> Result<DescribeGameSessionPlacementOutput, DescribeGameSessionPlacementError>;
-
+    fn describe_game_session_placement(
+        &self,
+        input: &DescribeGameSessionPlacementInput,
+    ) -> Result<DescribeGameSessionPlacementOutput, DescribeGameSessionPlacementError>;
 
     #[doc="<p>Retrieves the properties for one or more game session queues. When requesting multiple queues, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>GameSessionQueue</a> object is returned for each requested queue. When specifying a list of queues, objects are returned only for queues that currently exist in the region.</p> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>"]
-    fn describe_game_session_queues
-        (&self,
-         input: &DescribeGameSessionQueuesInput)
-         -> Result<DescribeGameSessionQueuesOutput, DescribeGameSessionQueuesError>;
-
+    fn describe_game_session_queues(
+        &self,
+        input: &DescribeGameSessionQueuesInput,
+    ) -> Result<DescribeGameSessionQueuesOutput, DescribeGameSessionQueuesError>;
 
     #[doc="<p>Retrieves a set of one or more game sessions. Request a specific game session or request all game sessions on a fleet. Alternatively, use <a>SearchGameSessions</a> to request a set of active game sessions that are filtered by certain criteria. To retrieve protection policy settings for game sessions, use <a>DescribeGameSessionDetails</a>.</p> <p>To get game sessions, specify one of the following: game session ID, fleet ID, or alias ID. You can filter this request by game session status. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>GameSession</a> object is returned for each game session matching the request.</p> <p> <i>Available in Amazon GameLift Local.</i> </p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn describe_game_sessions(&self,
-                              input: &DescribeGameSessionsInput)
-                              -> Result<DescribeGameSessionsOutput, DescribeGameSessionsError>;
-
+    fn describe_game_sessions(
+        &self,
+        input: &DescribeGameSessionsInput,
+    ) -> Result<DescribeGameSessionsOutput, DescribeGameSessionsError>;
 
     #[doc="<p>Retrieves information about a fleet's instances, including instance IDs. Use this action to get details on all instances in the fleet or get details on one specific instance.</p> <p>To get a specific instance, specify fleet ID and instance ID. To get all instances in a fleet, specify a fleet ID only. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, an <a>Instance</a> object is returned for each result.</p>"]
-    fn describe_instances(&self,
-                          input: &DescribeInstancesInput)
-                          -> Result<DescribeInstancesOutput, DescribeInstancesError>;
-
+    fn describe_instances(
+        &self,
+        input: &DescribeInstancesInput,
+    ) -> Result<DescribeInstancesOutput, DescribeInstancesError>;
 
     #[doc="<p>Retrieves a set of one or more matchmaking tickets. Use this operation to retrieve ticket information, including status and--once a successful match is made--acquire connection information for the resulting new game session. </p> <p>You can use this operation to track the progress of matchmaking requests (through polling) as an alternative to using event notifications. See more details on tracking matchmaking requests through polling or notifications in <a>StartMatchmaking</a>. </p> <p>You can request data for a one or a list of ticket IDs. If the request is successful, a ticket object is returned for each requested ID. When specifying a list of ticket IDs, objects are returned only for tickets that currently exist. </p> <p>Matchmaking-related operations include:</p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> </ul>"]
-    fn describe_matchmaking(&self,
-                            input: &DescribeMatchmakingInput)
-                            -> Result<DescribeMatchmakingOutput, DescribeMatchmakingError>;
-
+    fn describe_matchmaking(
+        &self,
+        input: &DescribeMatchmakingInput,
+    ) -> Result<DescribeMatchmakingOutput, DescribeMatchmakingError>;
 
     #[doc="<p>Retrieves the details of FlexMatch matchmaking configurations. with this operation, you have the following options: (1) retrieve all existing configurations, (2) provide the names of one or more configurations to retrieve, or (3) retrieve all configurations that use a specified rule set name. When requesting multiple items, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a configuration is returned for each requested name. When specifying a list of names, only configurations that currently exist are returned. </p> <p>Operations related to match configurations and rule sets include:</p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> </ul>"]
-    fn describe_matchmaking_configurations
-        (&self,
-         input: &DescribeMatchmakingConfigurationsInput)
-         -> Result<DescribeMatchmakingConfigurationsOutput, DescribeMatchmakingConfigurationsError>;
-
+    fn describe_matchmaking_configurations(
+        &self,
+        input: &DescribeMatchmakingConfigurationsInput,
+    ) -> Result<DescribeMatchmakingConfigurationsOutput, DescribeMatchmakingConfigurationsError>;
 
     #[doc="<p>Retrieves the details for FlexMatch matchmaking rule sets. You can request all existing rule sets for the region, or provide a list of one or more rule set names. When requesting multiple items, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a rule set is returned for each requested name. </p> <p>Operations related to match configurations and rule sets include:</p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> </ul>"]
-    fn describe_matchmaking_rule_sets
-        (&self,
-         input: &DescribeMatchmakingRuleSetsInput)
-         -> Result<DescribeMatchmakingRuleSetsOutput, DescribeMatchmakingRuleSetsError>;
-
+    fn describe_matchmaking_rule_sets(
+        &self,
+        input: &DescribeMatchmakingRuleSetsInput,
+    ) -> Result<DescribeMatchmakingRuleSetsOutput, DescribeMatchmakingRuleSetsError>;
 
     #[doc="<p>Retrieves properties for one or more player sessions. This action can be used in several ways: (1) provide a <code>PlayerSessionId</code> to request properties for a specific player session; (2) provide a <code>GameSessionId</code> to request properties for all player sessions in the specified game session; (3) provide a <code>PlayerId</code> to request properties for all player sessions of a specified player. </p> <p>To get game session record(s), specify only one of the following: a player session ID, a game session ID, or a player ID. You can filter this request by player session status. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>PlayerSession</a> object is returned for each session matching the request.</p> <p> <i>Available in Amazon GameLift Local.</i> </p> <p>Player-session-related operations include:</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn describe_player_sessions
-        (&self,
-         input: &DescribePlayerSessionsInput)
-         -> Result<DescribePlayerSessionsOutput, DescribePlayerSessionsError>;
-
+    fn describe_player_sessions(
+        &self,
+        input: &DescribePlayerSessionsInput,
+    ) -> Result<DescribePlayerSessionsOutput, DescribePlayerSessionsError>;
 
     #[doc="<p>Retrieves the current run-time configuration for the specified fleet. The run-time configuration tells Amazon GameLift how to launch server processes on instances in the fleet.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_runtime_configuration
-        (&self,
-         input: &DescribeRuntimeConfigurationInput)
-         -> Result<DescribeRuntimeConfigurationOutput, DescribeRuntimeConfigurationError>;
-
+    fn describe_runtime_configuration(
+        &self,
+        input: &DescribeRuntimeConfigurationInput,
+    ) -> Result<DescribeRuntimeConfigurationOutput, DescribeRuntimeConfigurationError>;
 
     #[doc="<p>Retrieves all scaling policies applied to a fleet.</p> <p>To get a fleet's scaling policies, specify the fleet ID. You can filter this request by policy status, such as to retrieve only active scaling policies. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, set of <a>ScalingPolicy</a> objects is returned for the fleet.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_scaling_policies
-        (&self,
-         input: &DescribeScalingPoliciesInput)
-         -> Result<DescribeScalingPoliciesOutput, DescribeScalingPoliciesError>;
-
+    fn describe_scaling_policies(
+        &self,
+        input: &DescribeScalingPoliciesInput,
+    ) -> Result<DescribeScalingPoliciesOutput, DescribeScalingPoliciesError>;
 
     #[doc="<p>Retrieves the location of stored game session logs for a specified game session. When a game session is terminated, Amazon GameLift automatically stores the logs in Amazon S3 and retains them for 14 days. Use this URL to download the logs.</p> <note> <p>See the <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_gamelift\">AWS Service Limits</a> page for maximum log file sizes. Log files that exceed this limit are not saved.</p> </note> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn get_game_session_log_url
-        (&self,
-         input: &GetGameSessionLogUrlInput)
-         -> Result<GetGameSessionLogUrlOutput, GetGameSessionLogUrlError>;
-
+    fn get_game_session_log_url(
+        &self,
+        input: &GetGameSessionLogUrlInput,
+    ) -> Result<GetGameSessionLogUrlOutput, GetGameSessionLogUrlError>;
 
     #[doc="<p>Requests remote access to a fleet instance. Remote access is useful for debugging, gathering benchmarking data, or watching activity in real time. </p> <p>Access requires credentials that match the operating system of the instance. For a Windows instance, Amazon GameLift returns a user name and password as strings for use with a Windows Remote Desktop client. For a Linux instance, Amazon GameLift returns a user name and RSA private key, also as strings, for use with an SSH client. The private key must be saved in the proper format to a <code>.pem</code> file before using. If you're making this request using the AWS CLI, saving the secret can be handled as part of the GetInstanceAccess request. (See the example later in this topic). For more information on remote access, see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-remote-access.html\">Remotely Accessing an Instance</a>.</p> <p>To request access to a specific instance, specify the IDs of the instance and the fleet it belongs to. If successful, an <a>InstanceAccess</a> object is returned containing the instance's IP address and a set of credentials.</p>"]
-    fn get_instance_access(&self,
-                           input: &GetInstanceAccessInput)
-                           -> Result<GetInstanceAccessOutput, GetInstanceAccessError>;
-
+    fn get_instance_access(
+        &self,
+        input: &GetInstanceAccessInput,
+    ) -> Result<GetInstanceAccessOutput, GetInstanceAccessError>;
 
     #[doc="<p>Retrieves all aliases for this AWS account. You can filter the result set by alias name and/or routing strategy type. Use the pagination parameters to retrieve results in sequential pages.</p> <note> <p>Returned aliases are not listed in any particular order.</p> </note> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>"]
-    fn list_aliases(&self,
-                    input: &ListAliasesInput)
-                    -> Result<ListAliasesOutput, ListAliasesError>;
-
+    fn list_aliases(&self, input: &ListAliasesInput)
+        -> Result<ListAliasesOutput, ListAliasesError>;
 
     #[doc="<p>Retrieves build records for all builds associated with the AWS account in use. You can limit results to builds that are in a specific status by using the <code>Status</code> parameter. Use the pagination parameters to retrieve results in a set of sequential pages. </p> <note> <p>Build records are not listed in any particular order.</p> </note> <p>Build-related operations include:</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul>"]
     fn list_builds(&self, input: &ListBuildsInput) -> Result<ListBuildsOutput, ListBuildsError>;
 
-
     #[doc="<p>Retrieves a collection of fleet records for this AWS account. You can filter the result set by build ID. Use the pagination parameters to retrieve results in sequential pages.</p> <note> <p>Fleet records are not listed in any particular order.</p> </note> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
     fn list_fleets(&self, input: &ListFleetsInput) -> Result<ListFleetsOutput, ListFleetsError>;
 
-
     #[doc="<p>Creates or updates a scaling policy for a fleet. An active scaling policy prompts Amazon GameLift to track a certain metric for a fleet and automatically change the fleet's capacity in specific circumstances. Each scaling policy contains one rule statement. Fleets can have multiple scaling policies in force simultaneously.</p> <p>A scaling policy rule statement has the following structure:</p> <p>If <code>[MetricName]</code> is <code>[ComparisonOperator]</code> <code>[Threshold]</code> for <code>[EvaluationPeriods]</code> minutes, then <code>[ScalingAdjustmentType]</code> to/by <code>[ScalingAdjustment]</code>.</p> <p>For example, this policy: \"If the number of idle instances exceeds 20 for more than 15 minutes, then reduce the fleet capacity by 10 instances\" could be implemented as the following rule statement:</p> <p>If [IdleInstances] is [GreaterThanOrEqualToThreshold] [20] for [15] minutes, then [ChangeInCapacity] by [-10].</p> <p>To create or update a scaling policy, specify a unique combination of name and fleet ID, and set the rule values. All parameters for this action are required. If successful, the policy name is returned. Scaling policies cannot be suspended or made inactive. To stop enforcing a scaling policy, call <a>DeleteScalingPolicy</a>.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn put_scaling_policy(&self,
-                          input: &PutScalingPolicyInput)
-                          -> Result<PutScalingPolicyOutput, PutScalingPolicyError>;
-
+    fn put_scaling_policy(
+        &self,
+        input: &PutScalingPolicyInput,
+    ) -> Result<PutScalingPolicyOutput, PutScalingPolicyError>;
 
     #[doc="<p> <i>This API call is not currently in use. </i> Retrieves a fresh set of upload credentials and the assigned Amazon S3 storage location for a specific build. Valid credentials are required to upload your game build files to Amazon S3.</p>"]
-    fn request_upload_credentials
-        (&self,
-         input: &RequestUploadCredentialsInput)
-         -> Result<RequestUploadCredentialsOutput, RequestUploadCredentialsError>;
-
+    fn request_upload_credentials(
+        &self,
+        input: &RequestUploadCredentialsInput,
+    ) -> Result<RequestUploadCredentialsOutput, RequestUploadCredentialsError>;
 
     #[doc="<p>Retrieves the fleet ID that a specified alias is currently pointing to.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>"]
-    fn resolve_alias(&self,
-                     input: &ResolveAliasInput)
-                     -> Result<ResolveAliasOutput, ResolveAliasError>;
-
+    fn resolve_alias(
+        &self,
+        input: &ResolveAliasInput,
+    ) -> Result<ResolveAliasOutput, ResolveAliasError>;
 
     #[doc="<p>Retrieves a set of game sessions that match a set of search criteria and sorts them in a specified order. A game session search is limited to a single fleet. Search results include only game sessions that are in <code>ACTIVE</code> status. If you need to retrieve game sessions with a status other than active, use <a>DescribeGameSessions</a>. If you need to retrieve the protection policy for each game session, use <a>DescribeGameSessionDetails</a>.</p> <p>You can search or sort by the following game session attributes:</p> <ul> <li> <p> <b>gameSessionId</b> -- Unique identifier for the game session. You can use either a <code>GameSessionId</code> or <code>GameSessionArn</code> value. </p> </li> <li> <p> <b>gameSessionName</b> -- Name assigned to a game session. This value is set when requesting a new game session with <a>CreateGameSession</a> or updating with <a>UpdateGameSession</a>. Game session names do not need to be unique to a game session.</p> </li> <li> <p> <b>creationTimeMillis</b> -- Value indicating when a game session was created. It is expressed in Unix time as milliseconds.</p> </li> <li> <p> <b>playerSessionCount</b> -- Number of players currently connected to a game session. This value changes rapidly as players join the session or drop out.</p> </li> <li> <p> <b>maximumSessions</b> -- Maximum number of player sessions allowed for a game session. This value is set when requesting a new game session with <a>CreateGameSession</a> or updating with <a>UpdateGameSession</a>.</p> </li> <li> <p> <b>hasAvailablePlayerSessions</b> -- Boolean value indicating whether a game session has reached its maximum number of players. When searching with this attribute, the search value must be <code>true</code> or <code>false</code>. It is highly recommended that all search requests include this filter attribute to optimize search performance and return only sessions that players can join. </p> </li> </ul> <p>To search or sort, specify either a fleet ID or an alias ID, and provide a search filter expression, a sort expression, or both. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a collection of <a>GameSession</a> objects matching the request is returned.</p> <note> <p>Returned values for <code>playerSessionCount</code> and <code>hasAvailablePlayerSessions</code> change quickly as players join sessions and others drop out. Results should be considered a snapshot in time. Be sure to refresh search results often, and handle sessions that fill up before a player can join. </p> </note> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn search_game_sessions(&self,
-                            input: &SearchGameSessionsInput)
-                            -> Result<SearchGameSessionsOutput, SearchGameSessionsError>;
-
+    fn search_game_sessions(
+        &self,
+        input: &SearchGameSessionsInput,
+    ) -> Result<SearchGameSessionsOutput, SearchGameSessionsError>;
 
     #[doc="<p>Places a request for a new game session in a queue (see <a>CreateGameSessionQueue</a>). When processing a placement request, Amazon GameLift searches for available resources on the queue's destinations, scanning each until it finds resources or the placement request times out.</p> <p>A game session placement request can also request player sessions. When a new game session is successfully created, Amazon GameLift creates a player session for each player included in the request.</p> <p>When placing a game session, by default Amazon GameLift tries each fleet in the order they are listed in the queue configuration. Ideally, a queue's destinations are listed in preference order.</p> <p>Alternatively, when requesting a game session with players, you can also provide latency data for each player in relevant regions. Latency data indicates the performance lag a player experiences when connected to a fleet in the region. Amazon GameLift uses latency data to reorder the list of destinations to place the game session in a region with minimal lag. If latency data is provided for multiple players, Amazon GameLift calculates each region's average lag for all players and reorders to get the best game play across all players. </p> <p>To place a new game session request, specify the following:</p> <ul> <li> <p>The queue name and a set of game session properties and settings</p> </li> <li> <p>A unique ID (such as a UUID) for the placement. You use this ID to track the status of the placement request</p> </li> <li> <p>(Optional) A set of IDs and player data for each player you want to join to the new game session</p> </li> <li> <p>Latency data for all players (if you want to optimize game play for the players)</p> </li> </ul> <p>If successful, a new game session placement is created.</p> <p>To track the status of a placement request, call <a>DescribeGameSessionPlacement</a> and check the request's status. If the status is <code>FULFILLED</code>, a new game session has been created and a game session ARN and region are referenced. If the placement request times out, you can resubmit the request or retry it with a different queue. </p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn start_game_session_placement
-        (&self,
-         input: &StartGameSessionPlacementInput)
-         -> Result<StartGameSessionPlacementOutput, StartGameSessionPlacementError>;
-
+    fn start_game_session_placement(
+        &self,
+        input: &StartGameSessionPlacementInput,
+    ) -> Result<StartGameSessionPlacementOutput, StartGameSessionPlacementError>;
 
     #[doc="<p>Uses FlexMatch to create a game match for a group of players based on custom matchmaking rules, and starts a new game for the matched players. Each matchmaking request specifies the type of match to build (team configuration, rules for an acceptable match, etc.). The request also specifies the players to find a match for and where to host the new game session for optimal performance. A matchmaking request might start with a single player or a group of players who want to play together. FlexMatch finds additional players as needed to fill the match. Match type, rules, and the queue used to place a new game session are defined in a <code>MatchmakingConfiguration</code>. For complete information on setting up and using FlexMatch, see the topic <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/match-intro.html\"> Adding FlexMatch to Your Game</a>.</p> <p>To start matchmaking, provide a unique ticket ID, specify a matchmaking configuration, and include the players to be matched. You must also include a set of player attributes relevant for the matchmaking configuration. If successful, a matchmaking ticket is returned with status set to <code>QUEUED</code>. Track the status of the ticket to respond as needed and acquire game session connection information for sucessfully completed matches.</p> <p> <b>Tracking ticket status</b> -- A couple of options are available for tracking the status of matchmaking requests: </p> <ul> <li> <p>Polling -- Call <code>DescribeMatchmaking</code>. This operation returns the full ticket object, including current status and (for completed tickets) game session connection info. We recommend polling no more than once every 10 seconds.</p> </li> <li> <p>Notifications -- Get event notifications for changes in ticket status using Amazon Simple Notification Service (SNS). Notifications are easy to set up (see <a>CreateMatchmakingConfiguration</a>) and typically deliver match status changes faster and more efficiently than polling. We recommend that you use polling to back up to notifications (since delivery is not guaranteed) and call <code>DescribeMatchmaking</code> only when notifications are not received within 30 seconds.</p> </li> </ul> <p> <b>Processing a matchmaking request</b> -- FlexMatch handles a matchmaking request as follows: </p> <ol> <li> <p>Your client code submits a <code>StartMatchmaking</code> request for one or more players and tracks the status of the request ticket. </p> </li> <li> <p>FlexMatch uses this ticket and others in process to build an acceptable match. When a potential match is identified, all tickets in the proposed match are advanced to the next status. </p> </li> <li> <p>If the match requires player acceptance (set in the matchmaking configuration), the tickets move into status <code>REQUIRES_ACCEPTANCE</code>. This status triggers your client code to solicit acceptance from all players in every ticket involved in the match, and then call <a>AcceptMatch</a> for each player. If any player rejects or fails to accept the match before a specified timeout, the proposed match is dropped (see <code>AcceptMatch</code> for more details).</p> </li> <li> <p>Once a match is proposed and accepted, the matchmaking tickets move into status <code>PLACING</code>. FlexMatch locates resources for a new game session using the game session queue (set in the matchmaking configuration) and creates the game session based on the match data. </p> </li> <li> <p>When the match is successfully placed, the matchmaking tickets move into <code>COMPLETED</code> status. Connection information (including game session endpoint and player session) is added to the matchmaking tickets. Matched players can use the connection information to join the game. </p> </li> </ol> <p>Matchmaking-related operations include:</p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> </ul>"]
-    fn start_matchmaking(&self,
-                         input: &StartMatchmakingInput)
-                         -> Result<StartMatchmakingOutput, StartMatchmakingError>;
-
+    fn start_matchmaking(
+        &self,
+        input: &StartMatchmakingInput,
+    ) -> Result<StartMatchmakingOutput, StartMatchmakingError>;
 
     #[doc="<p>Cancels a game session placement that is in <code>PENDING</code> status. To stop a placement, provide the placement ID values. If successful, the placement is moved to <code>CANCELLED</code> status.</p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn stop_game_session_placement
-        (&self,
-         input: &StopGameSessionPlacementInput)
-         -> Result<StopGameSessionPlacementOutput, StopGameSessionPlacementError>;
-
+    fn stop_game_session_placement(
+        &self,
+        input: &StopGameSessionPlacementInput,
+    ) -> Result<StopGameSessionPlacementOutput, StopGameSessionPlacementError>;
 
     #[doc="<p>Cancels a matchmaking ticket that is currently being processed. To stop the matchmaking operation, specify the ticket ID. If successful, work on the ticket is stopped, and the ticket status is changed to <code>CANCELLED</code>.</p> <p>Matchmaking-related operations include:</p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> </ul>"]
-    fn stop_matchmaking(&self,
-                        input: &StopMatchmakingInput)
-                        -> Result<StopMatchmakingOutput, StopMatchmakingError>;
-
+    fn stop_matchmaking(
+        &self,
+        input: &StopMatchmakingInput,
+    ) -> Result<StopMatchmakingOutput, StopMatchmakingError>;
 
     #[doc="<p>Updates properties for an alias. To update properties, specify the alias ID to be updated and provide the information to be changed. To reassign an alias to another fleet, provide an updated routing strategy. If successful, the updated alias record is returned.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>"]
-    fn update_alias(&self,
-                    input: &UpdateAliasInput)
-                    -> Result<UpdateAliasOutput, UpdateAliasError>;
-
+    fn update_alias(&self, input: &UpdateAliasInput)
+        -> Result<UpdateAliasOutput, UpdateAliasError>;
 
     #[doc="<p>Updates metadata in a build record, including the build name and version. To update the metadata, specify the build ID to update and provide the new values. If successful, a build object containing the updated metadata is returned.</p> <p>Build-related operations include:</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul>"]
-    fn update_build(&self,
-                    input: &UpdateBuildInput)
-                    -> Result<UpdateBuildOutput, UpdateBuildError>;
-
+    fn update_build(&self, input: &UpdateBuildInput)
+        -> Result<UpdateBuildOutput, UpdateBuildError>;
 
     #[doc="<p>Updates fleet properties, including name and description, for a fleet. To update metadata, specify the fleet ID and the property values that you want to change. If successful, the fleet ID for the updated fleet is returned.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn update_fleet_attributes
-        (&self,
-         input: &UpdateFleetAttributesInput)
-         -> Result<UpdateFleetAttributesOutput, UpdateFleetAttributesError>;
-
+    fn update_fleet_attributes(
+        &self,
+        input: &UpdateFleetAttributesInput,
+    ) -> Result<UpdateFleetAttributesOutput, UpdateFleetAttributesError>;
 
     #[doc="<p>Updates capacity settings for a fleet. Use this action to specify the number of EC2 instances (hosts) that you want this fleet to contain. Before calling this action, you may want to call <a>DescribeEC2InstanceLimits</a> to get the maximum capacity based on the fleet's EC2 instance type.</p> <p>If you're using autoscaling (see <a>PutScalingPolicy</a>), you may want to specify a minimum and/or maximum capacity. If you don't provide these, autoscaling can set capacity anywhere between zero and the <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_gamelift\">service limits</a>.</p> <p>To update fleet capacity, specify the fleet ID and the number of instances you want the fleet to host. If successful, Amazon GameLift starts or terminates instances so that the fleet's active instance count matches the desired instance count. You can view a fleet's current capacity information by calling <a>DescribeFleetCapacity</a>. If the desired instance count is higher than the instance type's limit, the \"Limit Exceeded\" exception occurs.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn update_fleet_capacity(&self,
-                             input: &UpdateFleetCapacityInput)
-                             -> Result<UpdateFleetCapacityOutput, UpdateFleetCapacityError>;
-
+    fn update_fleet_capacity(
+        &self,
+        input: &UpdateFleetCapacityInput,
+    ) -> Result<UpdateFleetCapacityOutput, UpdateFleetCapacityError>;
 
     #[doc="<p>Updates port settings for a fleet. To update settings, specify the fleet ID to be updated and list the permissions you want to update. List the permissions you want to add in <code>InboundPermissionAuthorizations</code>, and permissions you want to remove in <code>InboundPermissionRevocations</code>. Permissions to be removed must match existing fleet permissions. If successful, the fleet ID for the updated fleet is returned.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn update_fleet_port_settings
-        (&self,
-         input: &UpdateFleetPortSettingsInput)
-         -> Result<UpdateFleetPortSettingsOutput, UpdateFleetPortSettingsError>;
-
+    fn update_fleet_port_settings(
+        &self,
+        input: &UpdateFleetPortSettingsInput,
+    ) -> Result<UpdateFleetPortSettingsOutput, UpdateFleetPortSettingsError>;
 
     #[doc="<p>Updates game session properties. This includes the session name, maximum player count, protection policy, which controls whether or not an active game session can be terminated during a scale-down event, and the player session creation policy, which controls whether or not new players can join the session. To update a game session, specify the game session ID and the values you want to change. If successful, an updated <a>GameSession</a> object is returned. </p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn update_game_session(&self,
-                           input: &UpdateGameSessionInput)
-                           -> Result<UpdateGameSessionOutput, UpdateGameSessionError>;
-
+    fn update_game_session(
+        &self,
+        input: &UpdateGameSessionInput,
+    ) -> Result<UpdateGameSessionOutput, UpdateGameSessionError>;
 
     #[doc="<p>Updates settings for a game session queue, which determines how new game session requests in the queue are processed. To update settings, specify the queue name to be updated and provide the new settings. When updating destinations, provide a complete list of destinations. </p> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>"]
-    fn update_game_session_queue
-        (&self,
-         input: &UpdateGameSessionQueueInput)
-         -> Result<UpdateGameSessionQueueOutput, UpdateGameSessionQueueError>;
-
+    fn update_game_session_queue(
+        &self,
+        input: &UpdateGameSessionQueueInput,
+    ) -> Result<UpdateGameSessionQueueOutput, UpdateGameSessionQueueError>;
 
     #[doc="<p>Updates settings for a FlexMatch matchmaking configuration. To update settings, specify the configuration name to be updated and provide the new settings. </p> <p>Operations related to match configurations and rule sets include:</p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> </ul>"]
-    fn update_matchmaking_configuration
-        (&self,
-         input: &UpdateMatchmakingConfigurationInput)
-         -> Result<UpdateMatchmakingConfigurationOutput, UpdateMatchmakingConfigurationError>;
-
+    fn update_matchmaking_configuration(
+        &self,
+        input: &UpdateMatchmakingConfigurationInput,
+    ) -> Result<UpdateMatchmakingConfigurationOutput, UpdateMatchmakingConfigurationError>;
 
     #[doc="<p>Updates the current run-time configuration for the specified fleet, which tells Amazon GameLift how to launch server processes on instances in the fleet. You can update a fleet's run-time configuration at any time after the fleet is created; it does not need to be in an <code>ACTIVE</code> status.</p> <p>To update run-time configuration, specify the fleet ID and provide a <code>RuntimeConfiguration</code> object with the updated collection of server process configurations.</p> <p>Each instance in a Amazon GameLift fleet checks regularly for an updated run-time configuration and changes how it launches server processes to comply with the latest version. Existing server processes are not affected by the update; they continue to run until they end, while Amazon GameLift simply adds new server processes to fit the current run-time configuration. As a result, the run-time configuration changes are applied gradually as existing processes shut down and new processes are launched in Amazon GameLift's normal process recycling activity.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn update_runtime_configuration
-        (&self,
-         input: &UpdateRuntimeConfigurationInput)
-         -> Result<UpdateRuntimeConfigurationOutput, UpdateRuntimeConfigurationError>;
-
+    fn update_runtime_configuration(
+        &self,
+        input: &UpdateRuntimeConfigurationInput,
+    ) -> Result<UpdateRuntimeConfigurationOutput, UpdateRuntimeConfigurationError>;
 
     #[doc="<p>Validates the syntax of a matchmaking rule or rule set. This operation checks that the rule set uses syntactically correct JSON and that it conforms to allowed property expressions. To validate syntax, provide a rule set string.</p> <p>Operations related to match configurations and rule sets include:</p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> </ul>"]
-    fn validate_matchmaking_rule_set
-        (&self,
-         input: &ValidateMatchmakingRuleSetInput)
-         -> Result<ValidateMatchmakingRuleSetOutput, ValidateMatchmakingRuleSetError>;
+    fn validate_matchmaking_rule_set(
+        &self,
+        input: &ValidateMatchmakingRuleSetInput,
+    ) -> Result<ValidateMatchmakingRuleSetOutput, ValidateMatchmakingRuleSetError>;
 }
 /// A client for the Amazon GameLift API.
 pub struct GameLiftClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -8699,8 +8736,9 @@ pub struct GameLiftClient<P, D>
 }
 
 impl<P, D> GameLiftClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         GameLiftClient {
@@ -8712,13 +8750,15 @@ impl<P, D> GameLiftClient<P, D>
 }
 
 impl<P, D> GameLift for GameLiftClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Registers a player's acceptance or rejection of a proposed FlexMatch match. A matchmaking configuration may require player acceptance; if so, then matches built with that configuration cannot be completed unless all players accept the proposed match within a specified time limit. </p> <p>When FlexMatch builds a match, all the matchmaking tickets involved in the proposed match are placed into status <code>REQUIRES_ACCEPTANCE</code>. This is a trigger for your game to get acceptance from all players in the ticket. Acceptances are only valid for tickets when they are in this status; all other acceptances result in an error.</p> <p>To register acceptance, specify the ticket ID, a response, and one or more players. Once all players have registered acceptance, the matchmaking tickets advance to status <code>PLACING</code>, where a new game session is created for the match. </p> <p>If any player rejects the match, or if acceptances are not received before a specified timeout, the proposed match is dropped. The matchmaking tickets are then handled in one of two ways: For tickets where all players accepted the match, the ticket status is returned to <code>SEARCHING</code> to find a new match. For tickets where one or more players failed to accept the match, the ticket status is set to <code>FAILED</code>, and processing is terminated. A new matchmaking request for these players can be submitted as needed. </p> <p>Matchmaking-related operations include:</p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> </ul>"]
-    fn accept_match(&self,
-                    input: &AcceptMatchInput)
-                    -> Result<AcceptMatchOutput, AcceptMatchError> {
+    fn accept_match(
+        &self,
+        input: &AcceptMatchInput,
+    ) -> Result<AcceptMatchOutput, AcceptMatchError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8734,23 +8774,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AcceptMatchOutput>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<AcceptMatchOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AcceptMatchError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AcceptMatchError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates an alias for a fleet. In most situations, you can use an alias ID in place of a fleet ID. By using a fleet alias instead of a specific fleet ID, you can switch gameplay and players to a new fleet without changing your game client or other game components. For example, for games in production, using an alias allows you to seamlessly redirect your player base to a new game server update. </p> <p>Amazon GameLift supports two types of routing strategies for aliases: simple and terminal. A simple alias points to an active fleet. A terminal alias is used to display messaging or link to a URL instead of routing players to an active fleet. For example, you might use a terminal alias when a game version is no longer supported and you want to direct players to an upgrade site. </p> <p>To create a fleet alias, specify an alias name, routing strategy, and optional description. Each simple alias can point to only one fleet, but a fleet can have multiple aliases. If successful, a new alias record is returned, including an alias ID, which you can reference when creating a game session. You can reassign an alias to another fleet by calling <code>UpdateAlias</code>.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>"]
-    fn create_alias(&self,
-                    input: &CreateAliasInput)
-                    -> Result<CreateAliasOutput, CreateAliasError> {
+    fn create_alias(
+        &self,
+        input: &CreateAliasInput,
+    ) -> Result<CreateAliasOutput, CreateAliasError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8766,23 +8808,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateAliasOutput>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateAliasOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateAliasError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new Amazon GameLift build from a set of game server binary files stored in an Amazon Simple Storage Service (Amazon S3) location. To use this API call, create a <code>.zip</code> file containing all of the files for the build and store it in an Amazon S3 bucket under your AWS account. For help on packaging your build files and creating a build, see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-intro.html\">Uploading Your Game to Amazon GameLift</a>.</p> <important> <p>Use this API action ONLY if you are storing your game build files in an Amazon S3 bucket. To create a build using files stored locally, use the CLI command <a href=\"http://docs.aws.amazon.com/cli/latest/reference/gamelift/upload-build.html\"> <code>upload-build</code> </a>, which uploads the build files from a file location you specify.</p> </important> <p>To create a new build using <code>CreateBuild</code>, identify the storage location and operating system of your game build. You also have the option of specifying a build name and version. If successful, this action creates a new build record with an unique build ID and in <code>INITIALIZED</code> status. Use the API call <a>DescribeBuild</a> to check the status of your build. A build must be in <code>READY</code> status before it can be used to create fleets to host your game.</p> <p>Build-related operations include:</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul>"]
-    fn create_build(&self,
-                    input: &CreateBuildInput)
-                    -> Result<CreateBuildOutput, CreateBuildError> {
+    fn create_build(
+        &self,
+        input: &CreateBuildInput,
+    ) -> Result<CreateBuildOutput, CreateBuildError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8798,23 +8842,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateBuildOutput>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateBuildOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateBuildError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateBuildError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new fleet to run your game servers. A fleet is a set of Amazon Elastic Compute Cloud (Amazon EC2) instances, each of which can run multiple server processes to host game sessions. You configure a fleet to create instances with certain hardware specifications (see <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for more information), and deploy a specified game build to each instance. A newly created fleet passes through several statuses; once it reaches the <code>ACTIVE</code> status, it can begin hosting game sessions.</p> <p>To create a new fleet, you must specify the following: (1) fleet name, (2) build ID of an uploaded game build, (3) an EC2 instance type, and (4) a run-time configuration that describes which server processes to run on each instance in the fleet. (Although the run-time configuration is not a required parameter, the fleet cannot be successfully activated without it.)</p> <p>You can also configure the new fleet with the following settings:</p> <ul> <li> <p>Fleet description</p> </li> <li> <p>Access permissions for inbound traffic</p> </li> <li> <p>Fleet-wide game session protection</p> </li> <li> <p>Resource creation limit</p> </li> </ul> <p>If you use Amazon CloudWatch for metrics, you can add the new fleet to a metric group. This allows you to view aggregated metrics for a set of fleets. Once you specify a metric group, the new fleet's metrics are included in the metric group's data.</p> <p>If the CreateFleet call is successful, Amazon GameLift performs the following tasks:</p> <ul> <li> <p>Creates a fleet record and sets the status to <code>NEW</code> (followed by other statuses as the fleet is activated).</p> </li> <li> <p>Sets the fleet's target capacity to 1 (desired instances), which causes Amazon GameLift to start one new EC2 instance.</p> </li> <li> <p>Starts launching server processes on the instance. If the fleet is configured to run multiple server processes per instance, Amazon GameLift staggers each launch by a few seconds.</p> </li> <li> <p>Begins writing events to the fleet event log, which can be accessed in the Amazon GameLift console.</p> </li> <li> <p>Sets the fleet's status to <code>ACTIVE</code> as soon as one server process in the fleet is ready to host a game session.</p> </li> </ul> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn create_fleet(&self,
-                    input: &CreateFleetInput)
-                    -> Result<CreateFleetOutput, CreateFleetError> {
+    fn create_fleet(
+        &self,
+        input: &CreateFleetInput,
+    ) -> Result<CreateFleetOutput, CreateFleetError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8830,23 +8876,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateFleetOutput>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateFleetOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateFleetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a multiplayer game session for players. This action creates a game session record and assigns an available server process in the specified fleet to host the game session. A fleet must have an <code>ACTIVE</code> status before a game session can be created in it.</p> <p>To create a game session, specify either fleet ID or alias ID and indicate a maximum number of players to allow in the game session. You can also provide a name and game-specific properties for this game session. If successful, a <a>GameSession</a> object is returned containing the game session properties and other settings you specified.</p> <p> <b>Idempotency tokens.</b> You can add a token that uniquely identifies game session requests. This is useful for ensuring that game session requests are idempotent. Multiple requests with the same idempotency token are processed only once; subsequent requests return the original result. All response values are the same with the exception of game session status, which may change.</p> <p> <b>Resource creation limits.</b> If you are creating a game session on a fleet with a resource creation limit policy in force, then you must specify a creator ID. Without this ID, Amazon GameLift has no way to evaluate the policy for this new game session request.</p> <p> <b>Player acceptance policy.</b> By default, newly created game sessions are open to new players. You can restrict new player access by using <a>UpdateGameSession</a> to change the game session's player session creation policy.</p> <p> <b>Game session logs.</b> Logs are retained for all active game sessions for 14 days. To access the logs, call <a>GetGameSessionLogUrl</a> to download the log files.</p> <p> <i>Available in Amazon GameLift Local.</i> </p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn create_game_session(&self,
-                           input: &CreateGameSessionInput)
-                           -> Result<CreateGameSessionOutput, CreateGameSessionError> {
+    fn create_game_session(
+        &self,
+        input: &CreateGameSessionInput,
+    ) -> Result<CreateGameSessionOutput, CreateGameSessionError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8862,24 +8910,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateGameSessionOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateGameSessionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateGameSessionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateGameSessionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Establishes a new queue for processing requests to place new game sessions. A queue identifies where new game sessions can be hosted -- by specifying a list of destinations (fleets or aliases) -- and how long requests can wait in the queue before timing out. You can set up a queue to try to place game sessions on fleets in multiple regions. To add placement requests to a queue, call <a>StartGameSessionPlacement</a> and reference the queue name.</p> <p> <b>Destination order.</b> When processing a request for a game session, Amazon GameLift tries each destination in order until it finds one with available resources to host the new game session. A queue's default order is determined by how destinations are listed. The default order is overridden when a game session placement request provides player latency information. Player latency information enables Amazon GameLift to prioritize destinations where players report the lowest average latency, as a result placing the new game session where the majority of players will have the best possible gameplay experience.</p> <p> <b>Player latency policies.</b> For placement requests containing player latency information, use player latency policies to protect individual players from very high latencies. With a latency cap, even when a destination can deliver a low latency for most players, the game is not placed where any individual player is reporting latency higher than a policy's maximum. A queue can have multiple latency policies, which are enforced consecutively starting with the policy with the lowest latency cap. Use multiple policies to gradually relax latency controls; for example, you might set a policy with a low latency cap for the first 60 seconds, a second policy with a higher cap for the next 60 seconds, etc. </p> <p>To create a new queue, provide a name, timeout value, a list of destinations and, if desired, a set of latency policies. If successful, a new queue object is returned.</p> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>"]
-    fn create_game_session_queue
-        (&self,
-         input: &CreateGameSessionQueueInput)
-         -> Result<CreateGameSessionQueueOutput, CreateGameSessionQueueError> {
+    fn create_game_session_queue(
+        &self,
+        input: &CreateGameSessionQueueInput,
+    ) -> Result<CreateGameSessionQueueOutput, CreateGameSessionQueueError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8895,22 +8944,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateGameSessionQueueOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateGameSessionQueueOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateGameSessionQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateGameSessionQueueError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Defines a new matchmaking configuration for use with FlexMatch. A matchmaking configuration sets out guidelines for matching players and getting the matches into games. You can set up multiple matchmaking configurations to handle the scenarios needed for your game. Each matchmaking request (<a>StartMatchmaking</a>) specifies a configuration for the match and provides player attributes to support the configuration being used. </p> <p>To create a matchmaking configuration, at a minimum you must specify the following: configuration name; a rule set that governs how to evaluate players and find acceptable matches; a game session queue to use when placing a new game session for the match; and the maximum time allowed for a matchmaking attempt.</p> <p> <b>Player acceptance</b> -- In each configuration, you have the option to require that all players accept participation in a proposed match. To enable this feature, set <i>AcceptanceRequired</i> to true and specify a time limit for player acceptance. Players have the option to accept or reject a proposed match, and a match does not move ahead to game session placement unless all matched players accept. </p> <p> <b>Matchmaking status notification</b> -- There are two ways to track the progress of matchmaking tickets: (1) polling ticket status with <a>DescribeMatchmaking</a>; or (2) receiving notifications with Amazon Simple Notification Service (SNS). To use notifications, you first need to set up an SNS topic to receive the notifications, and provide the topic ARN in the matchmaking configuration (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/match-notification.html\"> Setting up Notifications for Matchmaking</a>). Since notifications promise only \"best effort\" delivery, we recommend calling <code>DescribeMatchmaking</code> if no notifications are received within 30 seconds.</p> <p>Operations related to match configurations and rule sets include:</p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> </ul>"]
-    fn create_matchmaking_configuration
-        (&self,
-         input: &CreateMatchmakingConfigurationInput)
-         -> Result<CreateMatchmakingConfigurationOutput, CreateMatchmakingConfigurationError> {
+    fn create_matchmaking_configuration(
+        &self,
+        input: &CreateMatchmakingConfigurationInput,
+    ) -> Result<CreateMatchmakingConfigurationOutput, CreateMatchmakingConfigurationError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8926,23 +8978,27 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateMatchmakingConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<CreateMatchmakingConfigurationOutput>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateMatchmakingConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(CreateMatchmakingConfigurationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new rule set for FlexMatch matchmaking. A rule set describes the type of match to create, such as the number and size of teams, and sets the parameters for acceptable player matches, such as minimum skill level or character type. Rule sets are used in matchmaking configurations, which define how matchmaking requests are handled. Each <a>MatchmakingConfiguration</a> uses one rule set; you can set up multiple rule sets to handle the scenarios that suit your game (such as for different game modes), and create a separate matchmaking configuration for each rule set. See additional information on rule set content in the <a>MatchmakingRuleSet</a> structure. For help creating rule sets, including useful examples, see the topic <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/match-intro.html\"> Adding FlexMatch to Your Game</a>.</p> <p>Once created, matchmaking rule sets cannot be changed or deleted, so we recommend checking the rule set syntax using <a>ValidateMatchmakingRuleSet</a>before creating the rule set.</p> <p>To create a matchmaking rule set, provide the set of rules and a unique name. Rule sets must be defined in the same region as the matchmaking configuration they will be used with. Rule sets cannot be edited or deleted. If you need to change a rule set, create a new one with the necessary edits and then update matchmaking configurations to use the new rule set.</p> <p>Operations related to match configurations and rule sets include:</p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> </ul>"]
-    fn create_matchmaking_rule_set
-        (&self,
-         input: &CreateMatchmakingRuleSetInput)
-         -> Result<CreateMatchmakingRuleSetOutput, CreateMatchmakingRuleSetError> {
+    fn create_matchmaking_rule_set(
+        &self,
+        input: &CreateMatchmakingRuleSetInput,
+    ) -> Result<CreateMatchmakingRuleSetOutput, CreateMatchmakingRuleSetError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8958,22 +9014,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateMatchmakingRuleSetOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateMatchmakingRuleSetOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateMatchmakingRuleSetError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(CreateMatchmakingRuleSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Adds a player to a game session and creates a player session record. Before a player can be added, a game session must have an <code>ACTIVE</code> status, have a creation policy of <code>ALLOW_ALL</code>, and have an open player slot. To add a group of players to a game session, use <a>CreatePlayerSessions</a>.</p> <p>To create a player session, specify a game session ID, player ID, and optionally a string of player data. If successful, the player is added to the game session and a new <a>PlayerSession</a> object is returned. Player sessions cannot be updated. </p> <p> <i>Available in Amazon GameLift Local.</i> </p> <p>Player-session-related operations include:</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn create_player_session(&self,
-                             input: &CreatePlayerSessionInput)
-                             -> Result<CreatePlayerSessionOutput, CreatePlayerSessionError> {
+    fn create_player_session(
+        &self,
+        input: &CreatePlayerSessionInput,
+    ) -> Result<CreatePlayerSessionOutput, CreatePlayerSessionError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8989,21 +9048,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreatePlayerSessionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreatePlayerSessionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreatePlayerSessionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreatePlayerSessionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Adds a group of players to a game session. This action is useful with a team matching feature. Before players can be added, a game session must have an <code>ACTIVE</code> status, have a creation policy of <code>ALLOW_ALL</code>, and have an open player slot. To add a single player to a game session, use <a>CreatePlayerSession</a>.</p> <p>To create player sessions, specify a game session ID, a list of player IDs, and optionally a set of player data strings. If successful, the players are added to the game session and a set of new <a>PlayerSession</a> objects is returned. Player sessions cannot be updated.</p> <p> <i>Available in Amazon GameLift Local.</i> </p> <p>Player-session-related operations include:</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn create_player_sessions(&self,
-                              input: &CreatePlayerSessionsInput)
-                              -> Result<CreatePlayerSessionsOutput, CreatePlayerSessionsError> {
+    fn create_player_sessions(
+        &self,
+        input: &CreatePlayerSessionsInput,
+    ) -> Result<CreatePlayerSessionsOutput, CreatePlayerSessionsError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9019,16 +9082,19 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreatePlayerSessionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreatePlayerSessionsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreatePlayerSessionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreatePlayerSessionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes an alias. This action removes all record of the alias. Game clients attempting to access a server process using the deleted alias receive an error. To delete an alias, specify the alias ID to be deleted.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>"]
     fn delete_alias(&self, input: &DeleteAliasInput) -> Result<(), DeleteAliasError> {
@@ -9048,11 +9114,12 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteAliasError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes a build. This action permanently deletes the build record and any uploaded build files.</p> <p>To delete a build, specify its ID. Deleting a build does not affect the status of any active fleets using the build, but you can no longer create new fleets with the deleted build.</p> <p>Build-related operations include:</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul>"]
     fn delete_build(&self, input: &DeleteBuildInput) -> Result<(), DeleteBuildError> {
@@ -9072,11 +9139,12 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteBuildError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteBuildError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes everything related to a fleet. Before deleting a fleet, you must set the fleet's desired capacity to zero. See <a>UpdateFleetCapacity</a>.</p> <p>This action removes the fleet's resources and the fleet record. Once a fleet is deleted, you can no longer use that fleet.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
     fn delete_fleet(&self, input: &DeleteFleetInput) -> Result<(), DeleteFleetError> {
@@ -9096,17 +9164,18 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteFleetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteFleetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a game session queue. This action means that any <a>StartGameSessionPlacement</a> requests that reference this queue will fail. To delete a queue, specify the queue name.</p> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>"]
-    fn delete_game_session_queue
-        (&self,
-         input: &DeleteGameSessionQueueInput)
-         -> Result<DeleteGameSessionQueueOutput, DeleteGameSessionQueueError> {
+    fn delete_game_session_queue(
+        &self,
+        input: &DeleteGameSessionQueueInput,
+    ) -> Result<DeleteGameSessionQueueOutput, DeleteGameSessionQueueError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9122,22 +9191,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteGameSessionQueueOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteGameSessionQueueOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteGameSessionQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteGameSessionQueueError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Permanently removes a FlexMatch matchmaking configuration. To delete, specify the configuration name. A matchmaking configuration cannot be deleted if it is being used in any active matchmaking tickets.</p> <p>Operations related to match configurations and rule sets include:</p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> </ul>"]
-    fn delete_matchmaking_configuration
-        (&self,
-         input: &DeleteMatchmakingConfigurationInput)
-         -> Result<DeleteMatchmakingConfigurationOutput, DeleteMatchmakingConfigurationError> {
+    fn delete_matchmaking_configuration(
+        &self,
+        input: &DeleteMatchmakingConfigurationInput,
+    ) -> Result<DeleteMatchmakingConfigurationOutput, DeleteMatchmakingConfigurationError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9153,22 +9225,27 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteMatchmakingConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DeleteMatchmakingConfigurationOutput>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteMatchmakingConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(DeleteMatchmakingConfigurationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a fleet scaling policy. This action means that the policy is no longer in force and removes all record of it. To delete a scaling policy, specify both the scaling policy name and the fleet ID it is associated with.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn delete_scaling_policy(&self,
-                             input: &DeleteScalingPolicyInput)
-                             -> Result<(), DeleteScalingPolicyError> {
+    fn delete_scaling_policy(
+        &self,
+        input: &DeleteScalingPolicyInput,
+    ) -> Result<(), DeleteScalingPolicyError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9185,16 +9262,18 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteScalingPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteScalingPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves properties for an alias. This operation returns all alias metadata and settings. To get an alias's target fleet ID only, use <code>ResolveAlias</code>. </p> <p>To get alias properties, specify the alias ID. If successful, the requested alias record is returned.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>"]
-    fn describe_alias(&self,
-                      input: &DescribeAliasInput)
-                      -> Result<DescribeAliasOutput, DescribeAliasError> {
+    fn describe_alias(
+        &self,
+        input: &DescribeAliasInput,
+    ) -> Result<DescribeAliasOutput, DescribeAliasError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9210,23 +9289,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAliasOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeAliasOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeAliasError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves properties for a build. To get a build record, specify a build ID. If successful, an object containing the build properties is returned.</p> <p>Build-related operations include:</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul>"]
-    fn describe_build(&self,
-                      input: &DescribeBuildInput)
-                      -> Result<DescribeBuildOutput, DescribeBuildError> {
+    fn describe_build(
+        &self,
+        input: &DescribeBuildInput,
+    ) -> Result<DescribeBuildOutput, DescribeBuildError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9242,24 +9323,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeBuildOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeBuildOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeBuildError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeBuildError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the following information for the specified EC2 instance type:</p> <ul> <li> <p>maximum number of instances allowed per AWS account (service limit)</p> </li> <li> <p>current usage level for the AWS account</p> </li> </ul> <p>Service limits vary depending on region. Available regions for Amazon GameLift can be found in the AWS Management Console for Amazon GameLift (see the drop-down list in the upper right corner).</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_ec2_instance_limits
-        (&self,
-         input: &DescribeEC2InstanceLimitsInput)
-         -> Result<DescribeEC2InstanceLimitsOutput, DescribeEC2InstanceLimitsError> {
+    fn describe_ec2_instance_limits(
+        &self,
+        input: &DescribeEC2InstanceLimitsInput,
+    ) -> Result<DescribeEC2InstanceLimitsOutput, DescribeEC2InstanceLimitsError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9275,23 +9357,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEC2InstanceLimitsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeEC2InstanceLimitsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEC2InstanceLimitsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DescribeEC2InstanceLimitsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves fleet properties, including metadata, status, and configuration, for one or more fleets. You can request attributes for all fleets, or specify a list of one or more fleet IDs. When requesting multiple fleets, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>FleetAttributes</a> object is returned for each requested fleet ID. When specifying a list of fleet IDs, attribute objects are returned only for fleets that currently exist. </p> <note> <p>Some API actions may limit the number of fleet IDs allowed in one request. If a request exceeds this limit, the request fails and the error message includes the maximum allowed.</p> </note> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_fleet_attributes
-        (&self,
-         input: &DescribeFleetAttributesInput)
-         -> Result<DescribeFleetAttributesOutput, DescribeFleetAttributesError> {
+    fn describe_fleet_attributes(
+        &self,
+        input: &DescribeFleetAttributesInput,
+    ) -> Result<DescribeFleetAttributesOutput, DescribeFleetAttributesError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9307,23 +9391,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeFleetAttributesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeFleetAttributesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeFleetAttributesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(DescribeFleetAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the current status of fleet capacity for one or more fleets. This information includes the number of instances that have been requested for the fleet and the number currently active. You can request capacity for all fleets, or specify a list of one or more fleet IDs. When requesting multiple fleets, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>FleetCapacity</a> object is returned for each requested fleet ID. When specifying a list of fleet IDs, attribute objects are returned only for fleets that currently exist. </p> <note> <p>Some API actions may limit the number of fleet IDs allowed in one request. If a request exceeds this limit, the request fails and the error message includes the maximum allowed.</p> </note> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_fleet_capacity
-        (&self,
-         input: &DescribeFleetCapacityInput)
-         -> Result<DescribeFleetCapacityOutput, DescribeFleetCapacityError> {
+    fn describe_fleet_capacity(
+        &self,
+        input: &DescribeFleetCapacityInput,
+    ) -> Result<DescribeFleetCapacityOutput, DescribeFleetCapacityError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9339,21 +9425,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeFleetCapacityOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeFleetCapacityOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeFleetCapacityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeFleetCapacityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves entries from the specified fleet's event log. You can specify a time range to limit the result set. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a collection of event log entries matching the request are returned.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_fleet_events(&self,
-                             input: &DescribeFleetEventsInput)
-                             -> Result<DescribeFleetEventsOutput, DescribeFleetEventsError> {
+    fn describe_fleet_events(
+        &self,
+        input: &DescribeFleetEventsInput,
+    ) -> Result<DescribeFleetEventsOutput, DescribeFleetEventsError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9369,22 +9459,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeFleetEventsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeFleetEventsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeFleetEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeFleetEventsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the inbound connection permissions for a fleet. Connection permissions include a range of IP addresses and port settings that incoming traffic can use to access server processes in the fleet. To get a fleet's inbound connection permissions, specify a fleet ID. If successful, a collection of <a>IpPermission</a> objects is returned for the requested fleet ID. If the requested fleet has been deleted, the result set is empty.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_fleet_port_settings
-        (&self,
-         input: &DescribeFleetPortSettingsInput)
-         -> Result<DescribeFleetPortSettingsOutput, DescribeFleetPortSettingsError> {
+    fn describe_fleet_port_settings(
+        &self,
+        input: &DescribeFleetPortSettingsInput,
+    ) -> Result<DescribeFleetPortSettingsOutput, DescribeFleetPortSettingsError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9400,23 +9493,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeFleetPortSettingsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeFleetPortSettingsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeFleetPortSettingsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DescribeFleetPortSettingsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves utilization statistics for one or more fleets. You can request utilization data for all fleets, or specify a list of one or more fleet IDs. When requesting multiple fleets, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>FleetUtilization</a> object is returned for each requested fleet ID. When specifying a list of fleet IDs, utilization objects are returned only for fleets that currently exist. </p> <note> <p>Some API actions may limit the number of fleet IDs allowed in one request. If a request exceeds this limit, the request fails and the error message includes the maximum allowed.</p> </note> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_fleet_utilization
-        (&self,
-         input: &DescribeFleetUtilizationInput)
-         -> Result<DescribeFleetUtilizationOutput, DescribeFleetUtilizationError> {
+    fn describe_fleet_utilization(
+        &self,
+        input: &DescribeFleetUtilizationInput,
+    ) -> Result<DescribeFleetUtilizationOutput, DescribeFleetUtilizationError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9432,23 +9527,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeFleetUtilizationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeFleetUtilizationOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeFleetUtilizationError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DescribeFleetUtilizationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves properties, including the protection policy in force, for one or more game sessions. This action can be used in several ways: (1) provide a <code>GameSessionId</code> or <code>GameSessionArn</code> to request details for a specific game session; (2) provide either a <code>FleetId</code> or an <code>AliasId</code> to request properties for all game sessions running on a fleet. </p> <p>To get game session record(s), specify just one of the following: game session ID, fleet ID, or alias ID. You can filter this request by game session status. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>GameSessionDetail</a> object is returned for each session matching the request.</p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn describe_game_session_details
-        (&self,
-         input: &DescribeGameSessionDetailsInput)
-         -> Result<DescribeGameSessionDetailsOutput, DescribeGameSessionDetailsError> {
+    fn describe_game_session_details(
+        &self,
+        input: &DescribeGameSessionDetailsInput,
+    ) -> Result<DescribeGameSessionDetailsOutput, DescribeGameSessionDetailsError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9464,23 +9561,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeGameSessionDetailsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeGameSessionDetailsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeGameSessionDetailsError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(DescribeGameSessionDetailsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves properties and current status of a game session placement request. To get game session placement details, specify the placement ID. If successful, a <a>GameSessionPlacement</a> object is returned.</p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn describe_game_session_placement
-        (&self,
-         input: &DescribeGameSessionPlacementInput)
-         -> Result<DescribeGameSessionPlacementOutput, DescribeGameSessionPlacementError> {
+    fn describe_game_session_placement(
+        &self,
+        input: &DescribeGameSessionPlacementInput,
+    ) -> Result<DescribeGameSessionPlacementOutput, DescribeGameSessionPlacementError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9496,23 +9595,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeGameSessionPlacementOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeGameSessionPlacementOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeGameSessionPlacementError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(DescribeGameSessionPlacementError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the properties for one or more game session queues. When requesting multiple queues, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>GameSessionQueue</a> object is returned for each requested queue. When specifying a list of queues, objects are returned only for queues that currently exist in the region.</p> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>"]
-    fn describe_game_session_queues
-        (&self,
-         input: &DescribeGameSessionQueuesInput)
-         -> Result<DescribeGameSessionQueuesOutput, DescribeGameSessionQueuesError> {
+    fn describe_game_session_queues(
+        &self,
+        input: &DescribeGameSessionQueuesInput,
+    ) -> Result<DescribeGameSessionQueuesOutput, DescribeGameSessionQueuesError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9528,22 +9629,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeGameSessionQueuesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeGameSessionQueuesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeGameSessionQueuesError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DescribeGameSessionQueuesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves a set of one or more game sessions. Request a specific game session or request all game sessions on a fleet. Alternatively, use <a>SearchGameSessions</a> to request a set of active game sessions that are filtered by certain criteria. To retrieve protection policy settings for game sessions, use <a>DescribeGameSessionDetails</a>.</p> <p>To get game sessions, specify one of the following: game session ID, fleet ID, or alias ID. You can filter this request by game session status. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>GameSession</a> object is returned for each game session matching the request.</p> <p> <i>Available in Amazon GameLift Local.</i> </p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn describe_game_sessions(&self,
-                              input: &DescribeGameSessionsInput)
-                              -> Result<DescribeGameSessionsOutput, DescribeGameSessionsError> {
+    fn describe_game_sessions(
+        &self,
+        input: &DescribeGameSessionsInput,
+    ) -> Result<DescribeGameSessionsOutput, DescribeGameSessionsError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9559,21 +9663,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeGameSessionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeGameSessionsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeGameSessionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeGameSessionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves information about a fleet's instances, including instance IDs. Use this action to get details on all instances in the fleet or get details on one specific instance.</p> <p>To get a specific instance, specify fleet ID and instance ID. To get all instances in a fleet, specify a fleet ID only. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, an <a>Instance</a> object is returned for each result.</p>"]
-    fn describe_instances(&self,
-                          input: &DescribeInstancesInput)
-                          -> Result<DescribeInstancesOutput, DescribeInstancesError> {
+    fn describe_instances(
+        &self,
+        input: &DescribeInstancesInput,
+    ) -> Result<DescribeInstancesOutput, DescribeInstancesError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9589,23 +9697,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeInstancesOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeInstancesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeInstancesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeInstancesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves a set of one or more matchmaking tickets. Use this operation to retrieve ticket information, including status and--once a successful match is made--acquire connection information for the resulting new game session. </p> <p>You can use this operation to track the progress of matchmaking requests (through polling) as an alternative to using event notifications. See more details on tracking matchmaking requests through polling or notifications in <a>StartMatchmaking</a>. </p> <p>You can request data for a one or a list of ticket IDs. If the request is successful, a ticket object is returned for each requested ID. When specifying a list of ticket IDs, objects are returned only for tickets that currently exist. </p> <p>Matchmaking-related operations include:</p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> </ul>"]
-    fn describe_matchmaking(&self,
-                            input: &DescribeMatchmakingInput)
-                            -> Result<DescribeMatchmakingOutput, DescribeMatchmakingError> {
+    fn describe_matchmaking(
+        &self,
+        input: &DescribeMatchmakingInput,
+    ) -> Result<DescribeMatchmakingOutput, DescribeMatchmakingError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9621,22 +9731,26 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeMatchmakingOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeMatchmakingOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeMatchmakingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeMatchmakingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the details of FlexMatch matchmaking configurations. with this operation, you have the following options: (1) retrieve all existing configurations, (2) provide the names of one or more configurations to retrieve, or (3) retrieve all configurations that use a specified rule set name. When requesting multiple items, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a configuration is returned for each requested name. When specifying a list of names, only configurations that currently exist are returned. </p> <p>Operations related to match configurations and rule sets include:</p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> </ul>"]
-    fn describe_matchmaking_configurations
-        (&self,
-         input: &DescribeMatchmakingConfigurationsInput)
-         -> Result<DescribeMatchmakingConfigurationsOutput, DescribeMatchmakingConfigurationsError> {
+    fn describe_matchmaking_configurations(
+        &self,
+        input: &DescribeMatchmakingConfigurationsInput,
+    ) -> Result<DescribeMatchmakingConfigurationsOutput, DescribeMatchmakingConfigurationsError>
+    {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9652,22 +9766,27 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeMatchmakingConfigurationsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeMatchmakingConfigurationsOutput>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeMatchmakingConfigurationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeMatchmakingConfigurationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the details for FlexMatch matchmaking rule sets. You can request all existing rule sets for the region, or provide a list of one or more rule set names. When requesting multiple items, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a rule set is returned for each requested name. </p> <p>Operations related to match configurations and rule sets include:</p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> </ul>"]
-    fn describe_matchmaking_rule_sets
-        (&self,
-         input: &DescribeMatchmakingRuleSetsInput)
-         -> Result<DescribeMatchmakingRuleSetsOutput, DescribeMatchmakingRuleSetsError> {
+    fn describe_matchmaking_rule_sets(
+        &self,
+        input: &DescribeMatchmakingRuleSetsInput,
+    ) -> Result<DescribeMatchmakingRuleSetsOutput, DescribeMatchmakingRuleSetsError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9683,23 +9802,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeMatchmakingRuleSetsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeMatchmakingRuleSetsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeMatchmakingRuleSetsError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(DescribeMatchmakingRuleSetsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves properties for one or more player sessions. This action can be used in several ways: (1) provide a <code>PlayerSessionId</code> to request properties for a specific player session; (2) provide a <code>GameSessionId</code> to request properties for all player sessions in the specified game session; (3) provide a <code>PlayerId</code> to request properties for all player sessions of a specified player. </p> <p>To get game session record(s), specify only one of the following: a player session ID, a game session ID, or a player ID. You can filter this request by player session status. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>PlayerSession</a> object is returned for each session matching the request.</p> <p> <i>Available in Amazon GameLift Local.</i> </p> <p>Player-session-related operations include:</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn describe_player_sessions
-        (&self,
-         input: &DescribePlayerSessionsInput)
-         -> Result<DescribePlayerSessionsOutput, DescribePlayerSessionsError> {
+    fn describe_player_sessions(
+        &self,
+        input: &DescribePlayerSessionsInput,
+    ) -> Result<DescribePlayerSessionsOutput, DescribePlayerSessionsError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9715,22 +9836,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribePlayerSessionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribePlayerSessionsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribePlayerSessionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribePlayerSessionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the current run-time configuration for the specified fleet. The run-time configuration tells Amazon GameLift how to launch server processes on instances in the fleet.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_runtime_configuration
-        (&self,
-         input: &DescribeRuntimeConfigurationInput)
-         -> Result<DescribeRuntimeConfigurationOutput, DescribeRuntimeConfigurationError> {
+    fn describe_runtime_configuration(
+        &self,
+        input: &DescribeRuntimeConfigurationInput,
+    ) -> Result<DescribeRuntimeConfigurationOutput, DescribeRuntimeConfigurationError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9746,23 +9870,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeRuntimeConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeRuntimeConfigurationOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeRuntimeConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(DescribeRuntimeConfigurationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves all scaling policies applied to a fleet.</p> <p>To get a fleet's scaling policies, specify the fleet ID. You can filter this request by policy status, such as to retrieve only active scaling policies. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, set of <a>ScalingPolicy</a> objects is returned for the fleet.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn describe_scaling_policies
-        (&self,
-         input: &DescribeScalingPoliciesInput)
-         -> Result<DescribeScalingPoliciesOutput, DescribeScalingPoliciesError> {
+    fn describe_scaling_policies(
+        &self,
+        input: &DescribeScalingPoliciesInput,
+    ) -> Result<DescribeScalingPoliciesOutput, DescribeScalingPoliciesError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9778,23 +9904,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeScalingPoliciesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeScalingPoliciesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeScalingPoliciesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(DescribeScalingPoliciesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the location of stored game session logs for a specified game session. When a game session is terminated, Amazon GameLift automatically stores the logs in Amazon S3 and retains them for 14 days. Use this URL to download the logs.</p> <note> <p>See the <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_gamelift\">AWS Service Limits</a> page for maximum log file sizes. Log files that exceed this limit are not saved.</p> </note> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn get_game_session_log_url
-        (&self,
-         input: &GetGameSessionLogUrlInput)
-         -> Result<GetGameSessionLogUrlOutput, GetGameSessionLogUrlError> {
+    fn get_game_session_log_url(
+        &self,
+        input: &GetGameSessionLogUrlInput,
+    ) -> Result<GetGameSessionLogUrlOutput, GetGameSessionLogUrlError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9810,21 +9938,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetGameSessionLogUrlOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetGameSessionLogUrlOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetGameSessionLogUrlError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetGameSessionLogUrlError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Requests remote access to a fleet instance. Remote access is useful for debugging, gathering benchmarking data, or watching activity in real time. </p> <p>Access requires credentials that match the operating system of the instance. For a Windows instance, Amazon GameLift returns a user name and password as strings for use with a Windows Remote Desktop client. For a Linux instance, Amazon GameLift returns a user name and RSA private key, also as strings, for use with an SSH client. The private key must be saved in the proper format to a <code>.pem</code> file before using. If you're making this request using the AWS CLI, saving the secret can be handled as part of the GetInstanceAccess request. (See the example later in this topic). For more information on remote access, see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-remote-access.html\">Remotely Accessing an Instance</a>.</p> <p>To request access to a specific instance, specify the IDs of the instance and the fleet it belongs to. If successful, an <a>InstanceAccess</a> object is returned containing the instance's IP address and a set of credentials.</p>"]
-    fn get_instance_access(&self,
-                           input: &GetInstanceAccessInput)
-                           -> Result<GetInstanceAccessOutput, GetInstanceAccessError> {
+    fn get_instance_access(
+        &self,
+        input: &GetInstanceAccessInput,
+    ) -> Result<GetInstanceAccessOutput, GetInstanceAccessError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9840,23 +9972,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetInstanceAccessOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetInstanceAccessOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetInstanceAccessError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetInstanceAccessError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves all aliases for this AWS account. You can filter the result set by alias name and/or routing strategy type. Use the pagination parameters to retrieve results in sequential pages.</p> <note> <p>Returned aliases are not listed in any particular order.</p> </note> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>"]
-    fn list_aliases(&self,
-                    input: &ListAliasesInput)
-                    -> Result<ListAliasesOutput, ListAliasesError> {
+    fn list_aliases(
+        &self,
+        input: &ListAliasesInput,
+    ) -> Result<ListAliasesOutput, ListAliasesError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9872,18 +10006,19 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAliasesOutput>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListAliasesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListAliasesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListAliasesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves build records for all builds associated with the AWS account in use. You can limit results to builds that are in a specific status by using the <code>Status</code> parameter. Use the pagination parameters to retrieve results in a set of sequential pages. </p> <note> <p>Build records are not listed in any particular order.</p> </note> <p>Build-related operations include:</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul>"]
     fn list_builds(&self, input: &ListBuildsInput) -> Result<ListBuildsOutput, ListBuildsError> {
@@ -9902,18 +10037,19 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListBuildsOutput>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListBuildsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListBuildsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListBuildsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves a collection of fleet records for this AWS account. You can filter the result set by build ID. Use the pagination parameters to retrieve results in sequential pages.</p> <note> <p>Fleet records are not listed in any particular order.</p> </note> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
     fn list_fleets(&self, input: &ListFleetsInput) -> Result<ListFleetsOutput, ListFleetsError> {
@@ -9932,23 +10068,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListFleetsOutput>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListFleetsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListFleetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListFleetsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates or updates a scaling policy for a fleet. An active scaling policy prompts Amazon GameLift to track a certain metric for a fleet and automatically change the fleet's capacity in specific circumstances. Each scaling policy contains one rule statement. Fleets can have multiple scaling policies in force simultaneously.</p> <p>A scaling policy rule statement has the following structure:</p> <p>If <code>[MetricName]</code> is <code>[ComparisonOperator]</code> <code>[Threshold]</code> for <code>[EvaluationPeriods]</code> minutes, then <code>[ScalingAdjustmentType]</code> to/by <code>[ScalingAdjustment]</code>.</p> <p>For example, this policy: \"If the number of idle instances exceeds 20 for more than 15 minutes, then reduce the fleet capacity by 10 instances\" could be implemented as the following rule statement:</p> <p>If [IdleInstances] is [GreaterThanOrEqualToThreshold] [20] for [15] minutes, then [ChangeInCapacity] by [-10].</p> <p>To create or update a scaling policy, specify a unique combination of name and fleet ID, and set the rule values. All parameters for this action are required. If successful, the policy name is returned. Scaling policies cannot be suspended or made inactive. To stop enforcing a scaling policy, call <a>DeleteScalingPolicy</a>.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn put_scaling_policy(&self,
-                          input: &PutScalingPolicyInput)
-                          -> Result<PutScalingPolicyOutput, PutScalingPolicyError> {
+    fn put_scaling_policy(
+        &self,
+        input: &PutScalingPolicyInput,
+    ) -> Result<PutScalingPolicyOutput, PutScalingPolicyError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9964,24 +10102,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutScalingPolicyOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<PutScalingPolicyOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutScalingPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutScalingPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p> <i>This API call is not currently in use. </i> Retrieves a fresh set of upload credentials and the assigned Amazon S3 storage location for a specific build. Valid credentials are required to upload your game build files to Amazon S3.</p>"]
-    fn request_upload_credentials
-        (&self,
-         input: &RequestUploadCredentialsInput)
-         -> Result<RequestUploadCredentialsOutput, RequestUploadCredentialsError> {
+    fn request_upload_credentials(
+        &self,
+        input: &RequestUploadCredentialsInput,
+    ) -> Result<RequestUploadCredentialsOutput, RequestUploadCredentialsError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -9997,22 +10136,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RequestUploadCredentialsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<RequestUploadCredentialsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RequestUploadCredentialsError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(RequestUploadCredentialsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the fleet ID that a specified alias is currently pointing to.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>"]
-    fn resolve_alias(&self,
-                     input: &ResolveAliasInput)
-                     -> Result<ResolveAliasOutput, ResolveAliasError> {
+    fn resolve_alias(
+        &self,
+        input: &ResolveAliasInput,
+    ) -> Result<ResolveAliasOutput, ResolveAliasError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10028,23 +10170,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ResolveAliasOutput>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ResolveAliasOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ResolveAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ResolveAliasError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves a set of game sessions that match a set of search criteria and sorts them in a specified order. A game session search is limited to a single fleet. Search results include only game sessions that are in <code>ACTIVE</code> status. If you need to retrieve game sessions with a status other than active, use <a>DescribeGameSessions</a>. If you need to retrieve the protection policy for each game session, use <a>DescribeGameSessionDetails</a>.</p> <p>You can search or sort by the following game session attributes:</p> <ul> <li> <p> <b>gameSessionId</b> -- Unique identifier for the game session. You can use either a <code>GameSessionId</code> or <code>GameSessionArn</code> value. </p> </li> <li> <p> <b>gameSessionName</b> -- Name assigned to a game session. This value is set when requesting a new game session with <a>CreateGameSession</a> or updating with <a>UpdateGameSession</a>. Game session names do not need to be unique to a game session.</p> </li> <li> <p> <b>creationTimeMillis</b> -- Value indicating when a game session was created. It is expressed in Unix time as milliseconds.</p> </li> <li> <p> <b>playerSessionCount</b> -- Number of players currently connected to a game session. This value changes rapidly as players join the session or drop out.</p> </li> <li> <p> <b>maximumSessions</b> -- Maximum number of player sessions allowed for a game session. This value is set when requesting a new game session with <a>CreateGameSession</a> or updating with <a>UpdateGameSession</a>.</p> </li> <li> <p> <b>hasAvailablePlayerSessions</b> -- Boolean value indicating whether a game session has reached its maximum number of players. When searching with this attribute, the search value must be <code>true</code> or <code>false</code>. It is highly recommended that all search requests include this filter attribute to optimize search performance and return only sessions that players can join. </p> </li> </ul> <p>To search or sort, specify either a fleet ID or an alias ID, and provide a search filter expression, a sort expression, or both. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a collection of <a>GameSession</a> objects matching the request is returned.</p> <note> <p>Returned values for <code>playerSessionCount</code> and <code>hasAvailablePlayerSessions</code> change quickly as players join sessions and others drop out. Results should be considered a snapshot in time. Be sure to refresh search results often, and handle sessions that fill up before a player can join. </p> </note> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn search_game_sessions(&self,
-                            input: &SearchGameSessionsInput)
-                            -> Result<SearchGameSessionsOutput, SearchGameSessionsError> {
+    fn search_game_sessions(
+        &self,
+        input: &SearchGameSessionsInput,
+    ) -> Result<SearchGameSessionsOutput, SearchGameSessionsError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10060,24 +10204,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SearchGameSessionsOutput>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<SearchGameSessionsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SearchGameSessionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SearchGameSessionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Places a request for a new game session in a queue (see <a>CreateGameSessionQueue</a>). When processing a placement request, Amazon GameLift searches for available resources on the queue's destinations, scanning each until it finds resources or the placement request times out.</p> <p>A game session placement request can also request player sessions. When a new game session is successfully created, Amazon GameLift creates a player session for each player included in the request.</p> <p>When placing a game session, by default Amazon GameLift tries each fleet in the order they are listed in the queue configuration. Ideally, a queue's destinations are listed in preference order.</p> <p>Alternatively, when requesting a game session with players, you can also provide latency data for each player in relevant regions. Latency data indicates the performance lag a player experiences when connected to a fleet in the region. Amazon GameLift uses latency data to reorder the list of destinations to place the game session in a region with minimal lag. If latency data is provided for multiple players, Amazon GameLift calculates each region's average lag for all players and reorders to get the best game play across all players. </p> <p>To place a new game session request, specify the following:</p> <ul> <li> <p>The queue name and a set of game session properties and settings</p> </li> <li> <p>A unique ID (such as a UUID) for the placement. You use this ID to track the status of the placement request</p> </li> <li> <p>(Optional) A set of IDs and player data for each player you want to join to the new game session</p> </li> <li> <p>Latency data for all players (if you want to optimize game play for the players)</p> </li> </ul> <p>If successful, a new game session placement is created.</p> <p>To track the status of a placement request, call <a>DescribeGameSessionPlacement</a> and check the request's status. If the status is <code>FULFILLED</code>, a new game session has been created and a game session ARN and region are referenced. If the placement request times out, you can resubmit the request or retry it with a different queue. </p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn start_game_session_placement
-        (&self,
-         input: &StartGameSessionPlacementInput)
-         -> Result<StartGameSessionPlacementOutput, StartGameSessionPlacementError> {
+    fn start_game_session_placement(
+        &self,
+        input: &StartGameSessionPlacementInput,
+    ) -> Result<StartGameSessionPlacementOutput, StartGameSessionPlacementError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10093,22 +10238,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartGameSessionPlacementOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StartGameSessionPlacementOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartGameSessionPlacementError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(StartGameSessionPlacementError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Uses FlexMatch to create a game match for a group of players based on custom matchmaking rules, and starts a new game for the matched players. Each matchmaking request specifies the type of match to build (team configuration, rules for an acceptable match, etc.). The request also specifies the players to find a match for and where to host the new game session for optimal performance. A matchmaking request might start with a single player or a group of players who want to play together. FlexMatch finds additional players as needed to fill the match. Match type, rules, and the queue used to place a new game session are defined in a <code>MatchmakingConfiguration</code>. For complete information on setting up and using FlexMatch, see the topic <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/match-intro.html\"> Adding FlexMatch to Your Game</a>.</p> <p>To start matchmaking, provide a unique ticket ID, specify a matchmaking configuration, and include the players to be matched. You must also include a set of player attributes relevant for the matchmaking configuration. If successful, a matchmaking ticket is returned with status set to <code>QUEUED</code>. Track the status of the ticket to respond as needed and acquire game session connection information for sucessfully completed matches.</p> <p> <b>Tracking ticket status</b> -- A couple of options are available for tracking the status of matchmaking requests: </p> <ul> <li> <p>Polling -- Call <code>DescribeMatchmaking</code>. This operation returns the full ticket object, including current status and (for completed tickets) game session connection info. We recommend polling no more than once every 10 seconds.</p> </li> <li> <p>Notifications -- Get event notifications for changes in ticket status using Amazon Simple Notification Service (SNS). Notifications are easy to set up (see <a>CreateMatchmakingConfiguration</a>) and typically deliver match status changes faster and more efficiently than polling. We recommend that you use polling to back up to notifications (since delivery is not guaranteed) and call <code>DescribeMatchmaking</code> only when notifications are not received within 30 seconds.</p> </li> </ul> <p> <b>Processing a matchmaking request</b> -- FlexMatch handles a matchmaking request as follows: </p> <ol> <li> <p>Your client code submits a <code>StartMatchmaking</code> request for one or more players and tracks the status of the request ticket. </p> </li> <li> <p>FlexMatch uses this ticket and others in process to build an acceptable match. When a potential match is identified, all tickets in the proposed match are advanced to the next status. </p> </li> <li> <p>If the match requires player acceptance (set in the matchmaking configuration), the tickets move into status <code>REQUIRES_ACCEPTANCE</code>. This status triggers your client code to solicit acceptance from all players in every ticket involved in the match, and then call <a>AcceptMatch</a> for each player. If any player rejects or fails to accept the match before a specified timeout, the proposed match is dropped (see <code>AcceptMatch</code> for more details).</p> </li> <li> <p>Once a match is proposed and accepted, the matchmaking tickets move into status <code>PLACING</code>. FlexMatch locates resources for a new game session using the game session queue (set in the matchmaking configuration) and creates the game session based on the match data. </p> </li> <li> <p>When the match is successfully placed, the matchmaking tickets move into <code>COMPLETED</code> status. Connection information (including game session endpoint and player session) is added to the matchmaking tickets. Matched players can use the connection information to join the game. </p> </li> </ol> <p>Matchmaking-related operations include:</p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> </ul>"]
-    fn start_matchmaking(&self,
-                         input: &StartMatchmakingInput)
-                         -> Result<StartMatchmakingOutput, StartMatchmakingError> {
+    fn start_matchmaking(
+        &self,
+        input: &StartMatchmakingInput,
+    ) -> Result<StartMatchmakingOutput, StartMatchmakingError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10124,24 +10272,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartMatchmakingOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<StartMatchmakingOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartMatchmakingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StartMatchmakingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Cancels a game session placement that is in <code>PENDING</code> status. To stop a placement, provide the placement ID values. If successful, the placement is moved to <code>CANCELLED</code> status.</p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn stop_game_session_placement
-        (&self,
-         input: &StopGameSessionPlacementInput)
-         -> Result<StopGameSessionPlacementOutput, StopGameSessionPlacementError> {
+    fn stop_game_session_placement(
+        &self,
+        input: &StopGameSessionPlacementInput,
+    ) -> Result<StopGameSessionPlacementOutput, StopGameSessionPlacementError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10157,22 +10306,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopGameSessionPlacementOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StopGameSessionPlacementOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopGameSessionPlacementError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(StopGameSessionPlacementError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Cancels a matchmaking ticket that is currently being processed. To stop the matchmaking operation, specify the ticket ID. If successful, work on the ticket is stopped, and the ticket status is changed to <code>CANCELLED</code>.</p> <p>Matchmaking-related operations include:</p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> </ul>"]
-    fn stop_matchmaking(&self,
-                        input: &StopMatchmakingInput)
-                        -> Result<StopMatchmakingOutput, StopMatchmakingError> {
+    fn stop_matchmaking(
+        &self,
+        input: &StopMatchmakingInput,
+    ) -> Result<StopMatchmakingOutput, StopMatchmakingError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10188,23 +10340,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopMatchmakingOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<StopMatchmakingOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopMatchmakingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StopMatchmakingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates properties for an alias. To update properties, specify the alias ID to be updated and provide the information to be changed. To reassign an alias to another fleet, provide an updated routing strategy. If successful, the updated alias record is returned.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul>"]
-    fn update_alias(&self,
-                    input: &UpdateAliasInput)
-                    -> Result<UpdateAliasOutput, UpdateAliasError> {
+    fn update_alias(
+        &self,
+        input: &UpdateAliasInput,
+    ) -> Result<UpdateAliasOutput, UpdateAliasError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10220,23 +10374,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateAliasOutput>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateAliasOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateAliasError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateAliasError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates metadata in a build record, including the build name and version. To update the metadata, specify the build ID to update and provide the new values. If successful, a build object containing the updated metadata is returned.</p> <p>Build-related operations include:</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul>"]
-    fn update_build(&self,
-                    input: &UpdateBuildInput)
-                    -> Result<UpdateBuildOutput, UpdateBuildError> {
+    fn update_build(
+        &self,
+        input: &UpdateBuildInput,
+    ) -> Result<UpdateBuildOutput, UpdateBuildError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10252,24 +10408,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateBuildOutput>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateBuildOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateBuildError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateBuildError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates fleet properties, including name and description, for a fleet. To update metadata, specify the fleet ID and the property values that you want to change. If successful, the fleet ID for the updated fleet is returned.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn update_fleet_attributes
-        (&self,
-         input: &UpdateFleetAttributesInput)
-         -> Result<UpdateFleetAttributesOutput, UpdateFleetAttributesError> {
+    fn update_fleet_attributes(
+        &self,
+        input: &UpdateFleetAttributesInput,
+    ) -> Result<UpdateFleetAttributesOutput, UpdateFleetAttributesError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10285,21 +10442,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateFleetAttributesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateFleetAttributesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateFleetAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateFleetAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates capacity settings for a fleet. Use this action to specify the number of EC2 instances (hosts) that you want this fleet to contain. Before calling this action, you may want to call <a>DescribeEC2InstanceLimits</a> to get the maximum capacity based on the fleet's EC2 instance type.</p> <p>If you're using autoscaling (see <a>PutScalingPolicy</a>), you may want to specify a minimum and/or maximum capacity. If you don't provide these, autoscaling can set capacity anywhere between zero and the <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_gamelift\">service limits</a>.</p> <p>To update fleet capacity, specify the fleet ID and the number of instances you want the fleet to host. If successful, Amazon GameLift starts or terminates instances so that the fleet's active instance count matches the desired instance count. You can view a fleet's current capacity information by calling <a>DescribeFleetCapacity</a>. If the desired instance count is higher than the instance type's limit, the \"Limit Exceeded\" exception occurs.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn update_fleet_capacity(&self,
-                             input: &UpdateFleetCapacityInput)
-                             -> Result<UpdateFleetCapacityOutput, UpdateFleetCapacityError> {
+    fn update_fleet_capacity(
+        &self,
+        input: &UpdateFleetCapacityInput,
+    ) -> Result<UpdateFleetCapacityOutput, UpdateFleetCapacityError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10315,22 +10476,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateFleetCapacityOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateFleetCapacityOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateFleetCapacityError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateFleetCapacityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates port settings for a fleet. To update settings, specify the fleet ID to be updated and list the permissions you want to update. List the permissions you want to add in <code>InboundPermissionAuthorizations</code>, and permissions you want to remove in <code>InboundPermissionRevocations</code>. Permissions to be removed must match existing fleet permissions. If successful, the fleet ID for the updated fleet is returned.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn update_fleet_port_settings
-        (&self,
-         input: &UpdateFleetPortSettingsInput)
-         -> Result<UpdateFleetPortSettingsOutput, UpdateFleetPortSettingsError> {
+    fn update_fleet_port_settings(
+        &self,
+        input: &UpdateFleetPortSettingsInput,
+    ) -> Result<UpdateFleetPortSettingsOutput, UpdateFleetPortSettingsError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10346,22 +10510,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateFleetPortSettingsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateFleetPortSettingsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateFleetPortSettingsError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(UpdateFleetPortSettingsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates game session properties. This includes the session name, maximum player count, protection policy, which controls whether or not an active game session can be terminated during a scale-down event, and the player session creation policy, which controls whether or not new players can join the session. To update a game session, specify the game session ID and the values you want to change. If successful, an updated <a>GameSession</a> object is returned. </p> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul>"]
-    fn update_game_session(&self,
-                           input: &UpdateGameSessionInput)
-                           -> Result<UpdateGameSessionOutput, UpdateGameSessionError> {
+    fn update_game_session(
+        &self,
+        input: &UpdateGameSessionInput,
+    ) -> Result<UpdateGameSessionOutput, UpdateGameSessionError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10377,24 +10544,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateGameSessionOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateGameSessionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateGameSessionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateGameSessionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates settings for a game session queue, which determines how new game session requests in the queue are processed. To update settings, specify the queue name to be updated and provide the new settings. When updating destinations, provide a complete list of destinations. </p> <p>Queue-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>"]
-    fn update_game_session_queue
-        (&self,
-         input: &UpdateGameSessionQueueInput)
-         -> Result<UpdateGameSessionQueueOutput, UpdateGameSessionQueueError> {
+    fn update_game_session_queue(
+        &self,
+        input: &UpdateGameSessionQueueInput,
+    ) -> Result<UpdateGameSessionQueueOutput, UpdateGameSessionQueueError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10410,22 +10578,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateGameSessionQueueOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateGameSessionQueueOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateGameSessionQueueError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateGameSessionQueueError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates settings for a FlexMatch matchmaking configuration. To update settings, specify the configuration name to be updated and provide the new settings. </p> <p>Operations related to match configurations and rule sets include:</p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> </ul>"]
-    fn update_matchmaking_configuration
-        (&self,
-         input: &UpdateMatchmakingConfigurationInput)
-         -> Result<UpdateMatchmakingConfigurationOutput, UpdateMatchmakingConfigurationError> {
+    fn update_matchmaking_configuration(
+        &self,
+        input: &UpdateMatchmakingConfigurationInput,
+    ) -> Result<UpdateMatchmakingConfigurationOutput, UpdateMatchmakingConfigurationError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10441,23 +10612,27 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateMatchmakingConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<UpdateMatchmakingConfigurationOutput>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateMatchmakingConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(UpdateMatchmakingConfigurationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates the current run-time configuration for the specified fleet, which tells Amazon GameLift how to launch server processes on instances in the fleet. You can update a fleet's run-time configuration at any time after the fleet is created; it does not need to be in an <code>ACTIVE</code> status.</p> <p>To update run-time configuration, specify the fleet ID and provide a <code>RuntimeConfiguration</code> object with the updated collection of server process configurations.</p> <p>Each instance in a Amazon GameLift fleet checks regularly for an updated run-time configuration and changes how it launches server processes to comply with the latest version. Existing server processes are not affected by the update; they continue to run until they end, while Amazon GameLift simply adds new server processes to fit the current run-time configuration. As a result, the run-time configuration changes are applied gradually as existing processes shut down and new processes are launched in Amazon GameLift's normal process recycling activity.</p> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul>"]
-    fn update_runtime_configuration
-        (&self,
-         input: &UpdateRuntimeConfigurationInput)
-         -> Result<UpdateRuntimeConfigurationOutput, UpdateRuntimeConfigurationError> {
+    fn update_runtime_configuration(
+        &self,
+        input: &UpdateRuntimeConfigurationInput,
+    ) -> Result<UpdateRuntimeConfigurationOutput, UpdateRuntimeConfigurationError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10473,23 +10648,25 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateRuntimeConfigurationOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateRuntimeConfigurationOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateRuntimeConfigurationError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(UpdateRuntimeConfigurationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Validates the syntax of a matchmaking rule or rule set. This operation checks that the rule set uses syntactically correct JSON and that it conforms to allowed property expressions. To validate syntax, provide a rule set string.</p> <p>Operations related to match configurations and rule sets include:</p> <ul> <li> <p> <a>CreateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DescribeMatchmakingConfigurations</a> </p> </li> <li> <p> <a>UpdateMatchmakingConfiguration</a> </p> </li> <li> <p> <a>DeleteMatchmakingConfiguration</a> </p> </li> <li> <p> <a>CreateMatchmakingRuleSet</a> </p> </li> <li> <p> <a>DescribeMatchmakingRuleSets</a> </p> </li> <li> <p> <a>ValidateMatchmakingRuleSet</a> </p> </li> </ul>"]
-    fn validate_matchmaking_rule_set
-        (&self,
-         input: &ValidateMatchmakingRuleSetInput)
-         -> Result<ValidateMatchmakingRuleSetOutput, ValidateMatchmakingRuleSetError> {
+    fn validate_matchmaking_rule_set(
+        &self,
+        input: &ValidateMatchmakingRuleSetInput,
+    ) -> Result<ValidateMatchmakingRuleSetOutput, ValidateMatchmakingRuleSetError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -10505,13 +10682,16 @@ impl<P, D> GameLift for GameLiftClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ValidateMatchmakingRuleSetOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ValidateMatchmakingRuleSetOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ValidateMatchmakingRuleSetError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(ValidateMatchmakingRuleSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -31,7 +30,7 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use xml::reader::XmlEvent;
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-use rusoto_core::xmlutil::{characters, end_element, start_element, skip_tree, peek_at_name};
+use rusoto_core::xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element};
 use rusoto_core::xmlerror::*;
 
 enum DeserializerNext {
@@ -42,33 +41,33 @@ enum DeserializerNext {
 struct APIVersionDeserializer;
 impl APIVersionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct ARNDeserializer;
 impl ARNDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The configured access rules for the domain's document and search endpoints, and the current status of those rules.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The configured access rules for the domain's document and search endpoints, and the current status of those rules.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AccessPoliciesStatus {
     pub options: String,
     pub status: OptionStatus,
@@ -77,9 +76,10 @@ pub struct AccessPoliciesStatus {
 struct AccessPoliciesStatusDeserializer;
 impl AccessPoliciesStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AccessPoliciesStatus, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AccessPoliciesStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AccessPoliciesStatus::default();
@@ -94,19 +94,16 @@ impl AccessPoliciesStatusDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Options" => {
-                            obj.options = try!(PolicyDocumentDeserializer::deserialize("Options",
-                                                                                       stack));
-                        }
-                        "Status" => {
-                            obj.status = try!(OptionStatusDeserializer::deserialize("Status",
-                                                                                    stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Options" => {
+                        obj.options =
+                            try!(PolicyDocumentDeserializer::deserialize("Options", stack));
                     }
-                }
+                    "Status" => {
+                        obj.status = try!(OptionStatusDeserializer::deserialize("Status", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -117,44 +114,44 @@ impl AccessPoliciesStatusDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AlgorithmicStemmingDeserializer;
 impl AlgorithmicStemmingDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Synonyms, stopwords, and stemming options for an analysis scheme. Includes tokenization dictionary for Japanese.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Synonyms, stopwords, and stemming options for an analysis scheme. Includes tokenization dictionary for Japanese.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AnalysisOptions {
-    #[doc="<p>The level of algorithmic stemming to perform: <code>none</code>, <code>minimal</code>, <code>light</code>, or <code>full</code>. The available levels vary depending on the language. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/text-processing.html#text-processing-settings\" target=\"_blank\">Language Specific Text Processing Settings</a> in the <i>Amazon CloudSearch Developer Guide</i> </p>"]
+    /// <p>The level of algorithmic stemming to perform: <code>none</code>, <code>minimal</code>, <code>light</code>, or <code>full</code>. The available levels vary depending on the language. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/text-processing.html#text-processing-settings" target="_blank">Language Specific Text Processing Settings</a> in the <i>Amazon CloudSearch Developer Guide</i> </p>
     pub algorithmic_stemming: Option<String>,
-    #[doc="<p>A JSON array that contains a collection of terms, tokens, readings and part of speech for Japanese Tokenizaiton. The Japanese tokenization dictionary enables you to override the default tokenization for selected terms. This is only valid for Japanese language fields.</p>"]
+    /// <p>A JSON array that contains a collection of terms, tokens, readings and part of speech for Japanese Tokenizaiton. The Japanese tokenization dictionary enables you to override the default tokenization for selected terms. This is only valid for Japanese language fields.</p>
     pub japanese_tokenization_dictionary: Option<String>,
-    #[doc="<p>A JSON object that contains a collection of string:value pairs that each map a term to its stem. For example, <code>{\"term1\": \"stem1\", \"term2\": \"stem2\", \"term3\": \"stem3\"}</code>. The stemming dictionary is applied in addition to any algorithmic stemming. This enables you to override the results of the algorithmic stemming to correct specific cases of overstemming or understemming. The maximum size of a stemming dictionary is 500 KB.</p>"]
+    /// <p>A JSON object that contains a collection of string:value pairs that each map a term to its stem. For example, <code>{"term1": "stem1", "term2": "stem2", "term3": "stem3"}</code>. The stemming dictionary is applied in addition to any algorithmic stemming. This enables you to override the results of the algorithmic stemming to correct specific cases of overstemming or understemming. The maximum size of a stemming dictionary is 500 KB.</p>
     pub stemming_dictionary: Option<String>,
-    #[doc="<p>A JSON array of terms to ignore during indexing and searching. For example, <code>[\"a\", \"an\", \"the\", \"of\"]</code>. The stopwords dictionary must explicitly list each word you want to ignore. Wildcards and regular expressions are not supported. </p>"]
+    /// <p>A JSON array of terms to ignore during indexing and searching. For example, <code>["a", "an", "the", "of"]</code>. The stopwords dictionary must explicitly list each word you want to ignore. Wildcards and regular expressions are not supported. </p>
     pub stopwords: Option<String>,
-    #[doc="<p>A JSON object that defines synonym groups and aliases. A synonym group is an array of arrays, where each sub-array is a group of terms where each term in the group is considered a synonym of every other term in the group. The aliases value is an object that contains a collection of string:value pairs where the string specifies a term and the array of values specifies each of the aliases for that term. An alias is considered a synonym of the specified term, but the term is not considered a synonym of the alias. For more information about specifying synonyms, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html#synonyms\">Synonyms</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+    /// <p>A JSON object that defines synonym groups and aliases. A synonym group is an array of arrays, where each sub-array is a group of terms where each term in the group is considered a synonym of every other term in the group. The aliases value is an object that contains a collection of string:value pairs where the string specifies a term and the array of values specifies each of the aliases for that term. An alias is considered a synonym of the specified term, but the term is not considered a synonym of the alias. For more information about specifying synonyms, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html#synonyms">Synonyms</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     pub synonyms: Option<String>,
 }
 
 struct AnalysisOptionsDeserializer;
 impl AnalysisOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AnalysisOptions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AnalysisOptions, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AnalysisOptions::default();
@@ -169,34 +166,37 @@ impl AnalysisOptionsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AlgorithmicStemming" => {
-                            obj.algorithmic_stemming =
-                                Some(try!(AlgorithmicStemmingDeserializer::deserialize("AlgorithmicStemming",
-                                                                                       stack)));
-                        }
-                        "JapaneseTokenizationDictionary" => {
-                            obj.japanese_tokenization_dictionary =
-                                Some(try!(StringDeserializer::deserialize("JapaneseTokenizationDictionary",
-                                                                          stack)));
-                        }
-                        "StemmingDictionary" => {
-                            obj.stemming_dictionary =
-                                Some(try!(StringDeserializer::deserialize("StemmingDictionary",
-                                                                          stack)));
-                        }
-                        "Stopwords" => {
-                            obj.stopwords = Some(try!(StringDeserializer::deserialize("Stopwords",
-                                                                                      stack)));
-                        }
-                        "Synonyms" => {
-                            obj.synonyms = Some(try!(StringDeserializer::deserialize("Synonyms",
-                                                                                     stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AlgorithmicStemming" => {
+                        obj.algorithmic_stemming =
+                            Some(try!(AlgorithmicStemmingDeserializer::deserialize(
+                                "AlgorithmicStemming",
+                                stack
+                            )));
                     }
-                }
+                    "JapaneseTokenizationDictionary" => {
+                        obj.japanese_tokenization_dictionary =
+                            Some(try!(StringDeserializer::deserialize(
+                                "JapaneseTokenizationDictionary",
+                                stack
+                            )));
+                    }
+                    "StemmingDictionary" => {
+                        obj.stemming_dictionary = Some(try!(StringDeserializer::deserialize(
+                            "StemmingDictionary",
+                            stack
+                        )));
+                    }
+                    "Stopwords" => {
+                        obj.stopwords =
+                            Some(try!(StringDeserializer::deserialize("Stopwords", stack)));
+                    }
+                    "Synonyms" => {
+                        obj.synonyms =
+                            Some(try!(StringDeserializer::deserialize("Synonyms", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -207,7 +207,6 @@ impl AnalysisOptionsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -221,31 +220,40 @@ impl AnalysisOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.algorithmic_stemming {
-            params.put(&format!("{}{}", prefix, "AlgorithmicStemming"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "AlgorithmicStemming"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.japanese_tokenization_dictionary {
-            params.put(&format!("{}{}", prefix, "JapaneseTokenizationDictionary"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "JapaneseTokenizationDictionary"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.stemming_dictionary {
-            params.put(&format!("{}{}", prefix, "StemmingDictionary"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "StemmingDictionary"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.stopwords {
-            params.put(&format!("{}{}", prefix, "Stopwords"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Stopwords"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.synonyms {
-            params.put(&format!("{}{}", prefix, "Synonyms"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Synonyms"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>Configuration information for an analysis scheme. Each analysis scheme has a unique name and specifies the language of the text to be processed. The following options can be configured for an analysis scheme: <code>Synonyms</code>, <code>Stopwords</code>, <code>StemmingDictionary</code>, <code>JapaneseTokenizationDictionary</code> and <code>AlgorithmicStemming</code>.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Configuration information for an analysis scheme. Each analysis scheme has a unique name and specifies the language of the text to be processed. The following options can be configured for an analysis scheme: <code>Synonyms</code>, <code>Stopwords</code>, <code>StemmingDictionary</code>, <code>JapaneseTokenizationDictionary</code> and <code>AlgorithmicStemming</code>.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AnalysisScheme {
     pub analysis_options: Option<AnalysisOptions>,
     pub analysis_scheme_language: String,
@@ -255,9 +263,10 @@ pub struct AnalysisScheme {
 struct AnalysisSchemeDeserializer;
 impl AnalysisSchemeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AnalysisScheme, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AnalysisScheme, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AnalysisScheme::default();
@@ -272,26 +281,27 @@ impl AnalysisSchemeDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AnalysisOptions" => {
-                            obj.analysis_options =
-                                Some(try!(AnalysisOptionsDeserializer::deserialize("AnalysisOptions",
-                                                                                   stack)));
-                        }
-                        "AnalysisSchemeLanguage" => {
-                            obj.analysis_scheme_language =
-                                try!(AnalysisSchemeLanguageDeserializer::deserialize("AnalysisSchemeLanguage",
-                                                                                     stack));
-                        }
-                        "AnalysisSchemeName" => {
-                            obj.analysis_scheme_name =
-                                try!(StandardNameDeserializer::deserialize("AnalysisSchemeName",
-                                                                           stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AnalysisOptions" => {
+                        obj.analysis_options = Some(try!(
+                            AnalysisOptionsDeserializer::deserialize("AnalysisOptions", stack)
+                        ));
                     }
-                }
+                    "AnalysisSchemeLanguage" => {
+                        obj.analysis_scheme_language =
+                            try!(AnalysisSchemeLanguageDeserializer::deserialize(
+                                "AnalysisSchemeLanguage",
+                                stack
+                            ));
+                    }
+                    "AnalysisSchemeName" => {
+                        obj.analysis_scheme_name = try!(StandardNameDeserializer::deserialize(
+                            "AnalysisSchemeName",
+                            stack
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -302,7 +312,6 @@ impl AnalysisSchemeDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -316,34 +325,39 @@ impl AnalysisSchemeSerializer {
         }
 
         if let Some(ref field_value) = obj.analysis_options {
-            AnalysisOptionsSerializer::serialize(params,
-                                                 &format!("{}{}", prefix, "AnalysisOptions"),
-                                                 field_value);
+            AnalysisOptionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AnalysisOptions"),
+                field_value,
+            );
         }
-        params.put(&format!("{}{}", prefix, "AnalysisSchemeLanguage"),
-                   &obj.analysis_scheme_language.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "AnalysisSchemeName"),
-                   &obj.analysis_scheme_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "AnalysisSchemeLanguage"),
+            &obj.analysis_scheme_language.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "AnalysisSchemeName"),
+            &obj.analysis_scheme_name.replace("+", "%2B"),
+        );
     }
 }
 
 struct AnalysisSchemeLanguageDeserializer;
 impl AnalysisSchemeLanguageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The status and configuration of an <code>AnalysisScheme</code>.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The status and configuration of an <code>AnalysisScheme</code>.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AnalysisSchemeStatus {
     pub options: AnalysisScheme,
     pub status: OptionStatus,
@@ -352,9 +366,10 @@ pub struct AnalysisSchemeStatus {
 struct AnalysisSchemeStatusDeserializer;
 impl AnalysisSchemeStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AnalysisSchemeStatus, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AnalysisSchemeStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AnalysisSchemeStatus::default();
@@ -369,19 +384,16 @@ impl AnalysisSchemeStatusDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Options" => {
-                            obj.options = try!(AnalysisSchemeDeserializer::deserialize("Options",
-                                                                                       stack));
-                        }
-                        "Status" => {
-                            obj.status = try!(OptionStatusDeserializer::deserialize("Status",
-                                                                                    stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Options" => {
+                        obj.options =
+                            try!(AnalysisSchemeDeserializer::deserialize("Options", stack));
                     }
-                }
+                    "Status" => {
+                        obj.status = try!(OptionStatusDeserializer::deserialize("Status", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -392,16 +404,15 @@ impl AnalysisSchemeStatusDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct AnalysisSchemeStatusListDeserializer;
 impl AnalysisSchemeStatusListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<AnalysisSchemeStatus>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<AnalysisSchemeStatus>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -417,8 +428,10 @@ impl AnalysisSchemeStatusListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(AnalysisSchemeStatusDeserializer::deserialize("member",
-                                                                                    stack)));
+                        obj.push(try!(AnalysisSchemeStatusDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -434,13 +447,12 @@ impl AnalysisSchemeStatusListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The status and configuration of the domain's availability options.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The status and configuration of the domain's availability options.</p>
+#[derive(Default, Debug, Clone)]
 pub struct AvailabilityOptionsStatus {
-    #[doc="<p>The availability options configured for the domain.</p>"]
+    /// <p>The availability options configured for the domain.</p>
     pub options: bool,
     pub status: OptionStatus,
 }
@@ -448,9 +460,10 @@ pub struct AvailabilityOptionsStatus {
 struct AvailabilityOptionsStatusDeserializer;
 impl AvailabilityOptionsStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AvailabilityOptionsStatus, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AvailabilityOptionsStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = AvailabilityOptionsStatus::default();
@@ -465,18 +478,15 @@ impl AvailabilityOptionsStatusDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Options" => {
-                            obj.options = try!(MultiAZDeserializer::deserialize("Options", stack));
-                        }
-                        "Status" => {
-                            obj.status = try!(OptionStatusDeserializer::deserialize("Status",
-                                                                                    stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Options" => {
+                        obj.options = try!(MultiAZDeserializer::deserialize("Options", stack));
                     }
-                }
+                    "Status" => {
+                        obj.status = try!(OptionStatusDeserializer::deserialize("Status", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -487,29 +497,27 @@ impl AvailabilityOptionsStatusDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<bool, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>BuildSuggester</a></code> operation. Specifies the name of the domain you want to update.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>BuildSuggester</a></code> operation. Specifies the name of the domain you want to update.</p>
+#[derive(Default, Debug, Clone)]
 pub struct BuildSuggestersRequest {
     pub domain_name: String,
 }
-
 
 /// Serialize `BuildSuggestersRequest` contents to a `SignedRequest`.
 struct BuildSuggestersRequestSerializer;
@@ -520,14 +528,15 @@ impl BuildSuggestersRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of a <code>BuildSuggester</code> request. Contains a list of the fields used for suggestions.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>BuildSuggester</code> request. Contains a list of the fields used for suggestions.</p>
+#[derive(Default, Debug, Clone)]
 pub struct BuildSuggestersResponse {
     pub field_names: Option<Vec<String>>,
 }
@@ -535,9 +544,10 @@ pub struct BuildSuggestersResponse {
 struct BuildSuggestersResponseDeserializer;
 impl BuildSuggestersResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<BuildSuggestersResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<BuildSuggestersResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = BuildSuggestersResponse::default();
@@ -552,16 +562,15 @@ impl BuildSuggestersResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "FieldNames" => {
-                            obj.field_names =
-                                Some(try!(FieldNameListDeserializer::deserialize("FieldNames",
-                                                                                 stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "FieldNames" => {
+                        obj.field_names = Some(try!(FieldNameListDeserializer::deserialize(
+                            "FieldNames",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -572,16 +581,14 @@ impl BuildSuggestersResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>CreateDomain</a></code> operation. Specifies a name for the new search domain.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>CreateDomain</a></code> operation. Specifies a name for the new search domain.</p>
+#[derive(Default, Debug, Clone)]
 pub struct CreateDomainRequest {
-    #[doc="<p>A name for the domain you are creating. Allowed characters are a-z (lower-case letters), 0-9, and hyphen (-). Domain names must start with a letter or number and be at least 3 and no more than 28 characters long.</p>"]
+    /// <p>A name for the domain you are creating. Allowed characters are a-z (lower-case letters), 0-9, and hyphen (-). Domain names must start with a letter or number and be at least 3 and no more than 28 characters long.</p>
     pub domain_name: String,
 }
-
 
 /// Serialize `CreateDomainRequest` contents to a `SignedRequest`.
 struct CreateDomainRequestSerializer;
@@ -592,14 +599,15 @@ impl CreateDomainRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of a <code>CreateDomainRequest</code>. Contains the status of a newly created domain.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>CreateDomainRequest</code>. Contains the status of a newly created domain.</p>
+#[derive(Default, Debug, Clone)]
 pub struct CreateDomainResponse {
     pub domain_status: Option<DomainStatus>,
 }
@@ -607,9 +615,10 @@ pub struct CreateDomainResponse {
 struct CreateDomainResponseDeserializer;
 impl CreateDomainResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CreateDomainResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateDomainResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = CreateDomainResponse::default();
@@ -624,16 +633,15 @@ impl CreateDomainResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DomainStatus" => {
-                            obj.domain_status =
-                                Some(try!(DomainStatusDeserializer::deserialize("DomainStatus",
-                                                                                stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DomainStatus" => {
+                        obj.domain_status = Some(try!(DomainStatusDeserializer::deserialize(
+                            "DomainStatus",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -644,30 +652,30 @@ impl CreateDomainResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Options for a field that contains an array of dates. Present if <code>IndexFieldType</code> specifies the field is of type <code>date-array</code>. All options are enabled by default.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Options for a field that contains an array of dates. Present if <code>IndexFieldType</code> specifies the field is of type <code>date-array</code>. All options are enabled by default.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DateArrayOptions {
-    #[doc="A value to use for the field if the field isn't specified for a document."]
+    /// A value to use for the field if the field isn't specified for a document.
     pub default_value: Option<String>,
-    #[doc="<p>Whether facet information can be returned for the field.</p>"]
+    /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
+    /// <p>Whether the contents of the field can be returned in the search results.</p>
     pub return_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field are searchable.</p>"]
+    /// <p>Whether the contents of the field are searchable.</p>
     pub search_enabled: Option<bool>,
-    #[doc="<p>A list of source fields to map to the field. </p>"]
+    /// <p>A list of source fields to map to the field. </p>
     pub source_fields: Option<String>,
 }
 
 struct DateArrayOptionsDeserializer;
 impl DateArrayOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DateArrayOptions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DateArrayOptions, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DateArrayOptions::default();
@@ -682,35 +690,38 @@ impl DateArrayOptionsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DefaultValue" => {
-                            obj.default_value =
-                                Some(try!(FieldValueDeserializer::deserialize("DefaultValue",
-                                                                              stack)));
-                        }
-                        "FacetEnabled" => {
-                            obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize("FacetEnabled",
-                                                                                           stack)));
-                        }
-                        "ReturnEnabled" => {
-                            obj.return_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("ReturnEnabled",
-                                                                           stack)));
-                        }
-                        "SearchEnabled" => {
-                            obj.search_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("SearchEnabled",
-                                                                           stack)));
-                        }
-                        "SourceFields" => {
-                            obj.source_fields =
-                                Some(try!(FieldNameCommaListDeserializer::deserialize("SourceFields",
-                                                                                      stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DefaultValue" => {
+                        obj.default_value = Some(try!(FieldValueDeserializer::deserialize(
+                            "DefaultValue",
+                            stack
+                        )));
                     }
-                }
+                    "FacetEnabled" => {
+                        obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "FacetEnabled",
+                            stack
+                        )));
+                    }
+                    "ReturnEnabled" => {
+                        obj.return_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "ReturnEnabled",
+                            stack
+                        )));
+                    }
+                    "SearchEnabled" => {
+                        obj.search_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "SearchEnabled",
+                            stack
+                        )));
+                    }
+                    "SourceFields" => {
+                        obj.source_fields = Some(try!(
+                            FieldNameCommaListDeserializer::deserialize("SourceFields", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -721,7 +732,6 @@ impl DateArrayOptionsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -735,41 +745,50 @@ impl DateArrayOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(&format!("{}{}", prefix, "FacetEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "FacetEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(&format!("{}{}", prefix, "ReturnEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ReturnEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(&format!("{}{}", prefix, "SearchEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SearchEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(&format!("{}{}", prefix, "SourceFields"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SourceFields"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>Options for a date field. Dates and times are specified in UTC (Coordinated Universal Time) according to IETF RFC3339: yyyy-mm-ddT00:00:00Z. Present if <code>IndexFieldType</code> specifies the field is of type <code>date</code>. All options are enabled by default.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Options for a date field. Dates and times are specified in UTC (Coordinated Universal Time) according to IETF RFC3339: yyyy-mm-ddT00:00:00Z. Present if <code>IndexFieldType</code> specifies the field is of type <code>date</code>. All options are enabled by default.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DateOptions {
-    #[doc="A value to use for the field if the field isn't specified for a document."]
+    /// A value to use for the field if the field isn't specified for a document.
     pub default_value: Option<String>,
-    #[doc="<p>Whether facet information can be returned for the field.</p>"]
+    /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
+    /// <p>Whether the contents of the field can be returned in the search results.</p>
     pub return_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field are searchable.</p>"]
+    /// <p>Whether the contents of the field are searchable.</p>
     pub search_enabled: Option<bool>,
-    #[doc="<p>Whether the field can be used to sort the search results.</p>"]
+    /// <p>Whether the field can be used to sort the search results.</p>
     pub sort_enabled: Option<bool>,
     pub source_field: Option<String>,
 }
@@ -777,9 +796,10 @@ pub struct DateOptions {
 struct DateOptionsDeserializer;
 impl DateOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DateOptions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DateOptions, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DateOptions::default();
@@ -794,39 +814,43 @@ impl DateOptionsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DefaultValue" => {
-                            obj.default_value =
-                                Some(try!(FieldValueDeserializer::deserialize("DefaultValue",
-                                                                              stack)));
-                        }
-                        "FacetEnabled" => {
-                            obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize("FacetEnabled",
-                                                                                           stack)));
-                        }
-                        "ReturnEnabled" => {
-                            obj.return_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("ReturnEnabled",
-                                                                           stack)));
-                        }
-                        "SearchEnabled" => {
-                            obj.search_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("SearchEnabled",
-                                                                           stack)));
-                        }
-                        "SortEnabled" => {
-                            obj.sort_enabled = Some(try!(BooleanDeserializer::deserialize("SortEnabled",
-                                                                                          stack)));
-                        }
-                        "SourceField" => {
-                            obj.source_field =
-                                Some(try!(FieldNameDeserializer::deserialize("SourceField",
-                                                                             stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DefaultValue" => {
+                        obj.default_value = Some(try!(FieldValueDeserializer::deserialize(
+                            "DefaultValue",
+                            stack
+                        )));
                     }
-                }
+                    "FacetEnabled" => {
+                        obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "FacetEnabled",
+                            stack
+                        )));
+                    }
+                    "ReturnEnabled" => {
+                        obj.return_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "ReturnEnabled",
+                            stack
+                        )));
+                    }
+                    "SearchEnabled" => {
+                        obj.search_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "SearchEnabled",
+                            stack
+                        )));
+                    }
+                    "SortEnabled" => {
+                        obj.sort_enabled =
+                            Some(try!(BooleanDeserializer::deserialize("SortEnabled", stack)));
+                    }
+                    "SourceField" => {
+                        obj.source_field = Some(try!(FieldNameDeserializer::deserialize(
+                            "SourceField",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -837,7 +861,6 @@ impl DateOptionsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -851,40 +874,50 @@ impl DateOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(&format!("{}{}", prefix, "FacetEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "FacetEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(&format!("{}{}", prefix, "ReturnEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ReturnEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(&format!("{}{}", prefix, "SearchEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SearchEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.sort_enabled {
-            params.put(&format!("{}{}", prefix, "SortEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SortEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(&format!("{}{}", prefix, "SourceField"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SourceField"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>Container for the parameters to the <code><a>DefineAnalysisScheme</a></code> operation. Specifies the name of the domain you want to update and the analysis scheme configuration.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DefineAnalysisScheme</a></code> operation. Specifies the name of the domain you want to update and the analysis scheme configuration.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DefineAnalysisSchemeRequest {
     pub analysis_scheme: AnalysisScheme,
     pub domain_name: String,
 }
-
 
 /// Serialize `DefineAnalysisSchemeRequest` contents to a `SignedRequest`.
 struct DefineAnalysisSchemeRequestSerializer;
@@ -895,17 +928,20 @@ impl DefineAnalysisSchemeRequestSerializer {
             prefix.push_str(".");
         }
 
-        AnalysisSchemeSerializer::serialize(params,
-                                            &format!("{}{}", prefix, "AnalysisScheme"),
-                                            &obj.analysis_scheme);
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-
+        AnalysisSchemeSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "AnalysisScheme"),
+            &obj.analysis_scheme,
+        );
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of a <code><a>DefineAnalysisScheme</a></code> request. Contains the status of the newly-configured analysis scheme.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code><a>DefineAnalysisScheme</a></code> request. Contains the status of the newly-configured analysis scheme.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DefineAnalysisSchemeResponse {
     pub analysis_scheme: AnalysisSchemeStatus,
 }
@@ -913,9 +949,10 @@ pub struct DefineAnalysisSchemeResponse {
 struct DefineAnalysisSchemeResponseDeserializer;
 impl DefineAnalysisSchemeResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DefineAnalysisSchemeResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DefineAnalysisSchemeResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DefineAnalysisSchemeResponse::default();
@@ -930,16 +967,15 @@ impl DefineAnalysisSchemeResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AnalysisScheme" => {
-                            obj.analysis_scheme =
-                                try!(AnalysisSchemeStatusDeserializer::deserialize("AnalysisScheme",
-                                                                                   stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AnalysisScheme" => {
+                        obj.analysis_scheme = try!(AnalysisSchemeStatusDeserializer::deserialize(
+                            "AnalysisScheme",
+                            stack
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -950,16 +986,14 @@ impl DefineAnalysisSchemeResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DefineExpression</a></code> operation. Specifies the name of the domain you want to update and the expression you want to configure.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DefineExpression</a></code> operation. Specifies the name of the domain you want to update and the expression you want to configure.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DefineExpressionRequest {
     pub domain_name: String,
     pub expression: Expression,
 }
-
 
 /// Serialize `DefineExpressionRequest` contents to a `SignedRequest`.
 struct DefineExpressionRequestSerializer;
@@ -970,17 +1004,20 @@ impl DefineExpressionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-        ExpressionSerializer::serialize(params,
-                                        &format!("{}{}", prefix, "Expression"),
-                                        &obj.expression);
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
+        ExpressionSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Expression"),
+            &obj.expression,
+        );
     }
 }
 
-#[doc="<p>The result of a <code>DefineExpression</code> request. Contains the status of the newly-configured expression.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>DefineExpression</code> request. Contains the status of the newly-configured expression.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DefineExpressionResponse {
     pub expression: ExpressionStatus,
 }
@@ -988,9 +1025,10 @@ pub struct DefineExpressionResponse {
 struct DefineExpressionResponseDeserializer;
 impl DefineExpressionResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DefineExpressionResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DefineExpressionResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DefineExpressionResponse::default();
@@ -1005,15 +1043,15 @@ impl DefineExpressionResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Expression" => {
-                            obj.expression = try!(ExpressionStatusDeserializer::deserialize("Expression",
-                                                                                            stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Expression" => {
+                        obj.expression = try!(ExpressionStatusDeserializer::deserialize(
+                            "Expression",
+                            stack
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1024,17 +1062,15 @@ impl DefineExpressionResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DefineIndexField</a></code> operation. Specifies the name of the domain you want to update and the index field configuration.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DefineIndexField</a></code> operation. Specifies the name of the domain you want to update and the index field configuration.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DefineIndexFieldRequest {
     pub domain_name: String,
-    #[doc="<p>The index field and field options you want to configure. </p>"]
+    /// <p>The index field and field options you want to configure. </p>
     pub index_field: IndexField,
 }
-
 
 /// Serialize `DefineIndexFieldRequest` contents to a `SignedRequest`.
 struct DefineIndexFieldRequestSerializer;
@@ -1045,17 +1081,20 @@ impl DefineIndexFieldRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-        IndexFieldSerializer::serialize(params,
-                                        &format!("{}{}", prefix, "IndexField"),
-                                        &obj.index_field);
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
+        IndexFieldSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "IndexField"),
+            &obj.index_field,
+        );
     }
 }
 
-#[doc="<p>The result of a <code><a>DefineIndexField</a></code> request. Contains the status of the newly-configured index field.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code><a>DefineIndexField</a></code> request. Contains the status of the newly-configured index field.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DefineIndexFieldResponse {
     pub index_field: IndexFieldStatus,
 }
@@ -1063,9 +1102,10 @@ pub struct DefineIndexFieldResponse {
 struct DefineIndexFieldResponseDeserializer;
 impl DefineIndexFieldResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DefineIndexFieldResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DefineIndexFieldResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DefineIndexFieldResponse::default();
@@ -1080,16 +1120,15 @@ impl DefineIndexFieldResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "IndexField" => {
-                            obj.index_field =
-                                try!(IndexFieldStatusDeserializer::deserialize("IndexField",
-                                                                               stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "IndexField" => {
+                        obj.index_field = try!(IndexFieldStatusDeserializer::deserialize(
+                            "IndexField",
+                            stack
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1100,16 +1139,14 @@ impl DefineIndexFieldResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DefineSuggester</a></code> operation. Specifies the name of the domain you want to update and the suggester configuration.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DefineSuggester</a></code> operation. Specifies the name of the domain you want to update and the suggester configuration.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DefineSuggesterRequest {
     pub domain_name: String,
     pub suggester: Suggester,
 }
-
 
 /// Serialize `DefineSuggesterRequest` contents to a `SignedRequest`.
 struct DefineSuggesterRequestSerializer;
@@ -1120,17 +1157,20 @@ impl DefineSuggesterRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-        SuggesterSerializer::serialize(params,
-                                       &format!("{}{}", prefix, "Suggester"),
-                                       &obj.suggester);
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
+        SuggesterSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Suggester"),
+            &obj.suggester,
+        );
     }
 }
 
-#[doc="<p>The result of a <code>DefineSuggester</code> request. Contains the status of the newly-configured suggester.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>DefineSuggester</code> request. Contains the status of the newly-configured suggester.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DefineSuggesterResponse {
     pub suggester: SuggesterStatus,
 }
@@ -1138,9 +1178,10 @@ pub struct DefineSuggesterResponse {
 struct DefineSuggesterResponseDeserializer;
 impl DefineSuggesterResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DefineSuggesterResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DefineSuggesterResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DefineSuggesterResponse::default();
@@ -1155,15 +1196,13 @@ impl DefineSuggesterResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Suggester" => {
-                            obj.suggester = try!(SuggesterStatusDeserializer::deserialize("Suggester",
-                                                                                          stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Suggester" => {
+                        obj.suggester =
+                            try!(SuggesterStatusDeserializer::deserialize("Suggester", stack));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1174,17 +1213,15 @@ impl DefineSuggesterResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DeleteAnalysisScheme</a></code> operation. Specifies the name of the domain you want to update and the analysis scheme you want to delete. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DeleteAnalysisScheme</a></code> operation. Specifies the name of the domain you want to update and the analysis scheme you want to delete. </p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteAnalysisSchemeRequest {
-    #[doc="<p>The name of the analysis scheme you want to delete.</p>"]
+    /// <p>The name of the analysis scheme you want to delete.</p>
     pub analysis_scheme_name: String,
     pub domain_name: String,
 }
-
 
 /// Serialize `DeleteAnalysisSchemeRequest` contents to a `SignedRequest`.
 struct DeleteAnalysisSchemeRequestSerializer;
@@ -1195,27 +1232,31 @@ impl DeleteAnalysisSchemeRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "AnalysisSchemeName"),
-                   &obj.analysis_scheme_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "AnalysisSchemeName"),
+            &obj.analysis_scheme_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of a <code>DeleteAnalysisScheme</code> request. Contains the status of the deleted analysis scheme.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>DeleteAnalysisScheme</code> request. Contains the status of the deleted analysis scheme.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteAnalysisSchemeResponse {
-    #[doc="<p>The status of the analysis scheme being deleted.</p>"]
+    /// <p>The status of the analysis scheme being deleted.</p>
     pub analysis_scheme: AnalysisSchemeStatus,
 }
 
 struct DeleteAnalysisSchemeResponseDeserializer;
 impl DeleteAnalysisSchemeResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DeleteAnalysisSchemeResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteAnalysisSchemeResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DeleteAnalysisSchemeResponse::default();
@@ -1230,16 +1271,15 @@ impl DeleteAnalysisSchemeResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AnalysisScheme" => {
-                            obj.analysis_scheme =
-                                try!(AnalysisSchemeStatusDeserializer::deserialize("AnalysisScheme",
-                                                                                   stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AnalysisScheme" => {
+                        obj.analysis_scheme = try!(AnalysisSchemeStatusDeserializer::deserialize(
+                            "AnalysisScheme",
+                            stack
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1250,16 +1290,14 @@ impl DeleteAnalysisSchemeResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DeleteDomain</a></code> operation. Specifies the name of the domain you want to delete.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DeleteDomain</a></code> operation. Specifies the name of the domain you want to delete.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteDomainRequest {
-    #[doc="<p>The name of the domain you want to permanently delete.</p>"]
+    /// <p>The name of the domain you want to permanently delete.</p>
     pub domain_name: String,
 }
-
 
 /// Serialize `DeleteDomainRequest` contents to a `SignedRequest`.
 struct DeleteDomainRequestSerializer;
@@ -1270,14 +1308,15 @@ impl DeleteDomainRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of a <code>DeleteDomain</code> request. Contains the status of a newly deleted domain, or no status if the domain has already been completely deleted.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>DeleteDomain</code> request. Contains the status of a newly deleted domain, or no status if the domain has already been completely deleted.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteDomainResponse {
     pub domain_status: Option<DomainStatus>,
 }
@@ -1285,9 +1324,10 @@ pub struct DeleteDomainResponse {
 struct DeleteDomainResponseDeserializer;
 impl DeleteDomainResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DeleteDomainResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteDomainResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DeleteDomainResponse::default();
@@ -1302,16 +1342,15 @@ impl DeleteDomainResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DomainStatus" => {
-                            obj.domain_status =
-                                Some(try!(DomainStatusDeserializer::deserialize("DomainStatus",
-                                                                                stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DomainStatus" => {
+                        obj.domain_status = Some(try!(DomainStatusDeserializer::deserialize(
+                            "DomainStatus",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1322,17 +1361,15 @@ impl DeleteDomainResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DeleteExpression</a></code> operation. Specifies the name of the domain you want to update and the name of the expression you want to delete.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DeleteExpression</a></code> operation. Specifies the name of the domain you want to update and the name of the expression you want to delete.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteExpressionRequest {
     pub domain_name: String,
-    #[doc="<p>The name of the <code><a>Expression</a></code> to delete.</p>"]
+    /// <p>The name of the <code><a>Expression</a></code> to delete.</p>
     pub expression_name: String,
 }
-
 
 /// Serialize `DeleteExpressionRequest` contents to a `SignedRequest`.
 struct DeleteExpressionRequestSerializer;
@@ -1343,27 +1380,31 @@ impl DeleteExpressionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "ExpressionName"),
-                   &obj.expression_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "ExpressionName"),
+            &obj.expression_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of a <code><a>DeleteExpression</a></code> request. Specifies the expression being deleted.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code><a>DeleteExpression</a></code> request. Specifies the expression being deleted.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteExpressionResponse {
-    #[doc="<p>The status of the expression being deleted.</p>"]
+    /// <p>The status of the expression being deleted.</p>
     pub expression: ExpressionStatus,
 }
 
 struct DeleteExpressionResponseDeserializer;
 impl DeleteExpressionResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DeleteExpressionResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteExpressionResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DeleteExpressionResponse::default();
@@ -1378,15 +1419,15 @@ impl DeleteExpressionResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Expression" => {
-                            obj.expression = try!(ExpressionStatusDeserializer::deserialize("Expression",
-                                                                                            stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Expression" => {
+                        obj.expression = try!(ExpressionStatusDeserializer::deserialize(
+                            "Expression",
+                            stack
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1397,17 +1438,15 @@ impl DeleteExpressionResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DeleteIndexField</a></code> operation. Specifies the name of the domain you want to update and the name of the index field you want to delete.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DeleteIndexField</a></code> operation. Specifies the name of the domain you want to update and the name of the index field you want to delete.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteIndexFieldRequest {
     pub domain_name: String,
-    #[doc="<p>The name of the index field your want to remove from the domain's indexing options.</p>"]
+    /// <p>The name of the index field your want to remove from the domain's indexing options.</p>
     pub index_field_name: String,
 }
-
 
 /// Serialize `DeleteIndexFieldRequest` contents to a `SignedRequest`.
 struct DeleteIndexFieldRequestSerializer;
@@ -1418,27 +1457,31 @@ impl DeleteIndexFieldRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "IndexFieldName"),
-                   &obj.index_field_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "IndexFieldName"),
+            &obj.index_field_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of a <code><a>DeleteIndexField</a></code> request.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code><a>DeleteIndexField</a></code> request.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteIndexFieldResponse {
-    #[doc="<p>The status of the index field being deleted.</p>"]
+    /// <p>The status of the index field being deleted.</p>
     pub index_field: IndexFieldStatus,
 }
 
 struct DeleteIndexFieldResponseDeserializer;
 impl DeleteIndexFieldResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DeleteIndexFieldResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteIndexFieldResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DeleteIndexFieldResponse::default();
@@ -1453,16 +1496,15 @@ impl DeleteIndexFieldResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "IndexField" => {
-                            obj.index_field =
-                                try!(IndexFieldStatusDeserializer::deserialize("IndexField",
-                                                                               stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "IndexField" => {
+                        obj.index_field = try!(IndexFieldStatusDeserializer::deserialize(
+                            "IndexField",
+                            stack
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1473,17 +1515,15 @@ impl DeleteIndexFieldResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DeleteSuggester</a></code> operation. Specifies the name of the domain you want to update and name of the suggester you want to delete.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DeleteSuggester</a></code> operation. Specifies the name of the domain you want to update and name of the suggester you want to delete.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteSuggesterRequest {
     pub domain_name: String,
-    #[doc="<p>Specifies the name of the suggester you want to delete.</p>"]
+    /// <p>Specifies the name of the suggester you want to delete.</p>
     pub suggester_name: String,
 }
-
 
 /// Serialize `DeleteSuggesterRequest` contents to a `SignedRequest`.
 struct DeleteSuggesterRequestSerializer;
@@ -1494,27 +1534,31 @@ impl DeleteSuggesterRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "SuggesterName"),
-                   &obj.suggester_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "SuggesterName"),
+            &obj.suggester_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of a <code>DeleteSuggester</code> request. Contains the status of the deleted suggester.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>DeleteSuggester</code> request. Contains the status of the deleted suggester.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DeleteSuggesterResponse {
-    #[doc="<p>The status of the suggester being deleted.</p>"]
+    /// <p>The status of the suggester being deleted.</p>
     pub suggester: SuggesterStatus,
 }
 
 struct DeleteSuggesterResponseDeserializer;
 impl DeleteSuggesterResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DeleteSuggesterResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteSuggesterResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DeleteSuggesterResponse::default();
@@ -1529,15 +1573,13 @@ impl DeleteSuggesterResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Suggester" => {
-                            obj.suggester = try!(SuggesterStatusDeserializer::deserialize("Suggester",
-                                                                                          stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Suggester" => {
+                        obj.suggester =
+                            try!(SuggesterStatusDeserializer::deserialize("Suggester", stack));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1548,20 +1590,18 @@ impl DeleteSuggesterResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DescribeAnalysisSchemes</a></code> operation. Specifies the name of the domain you want to describe. To limit the response to particular analysis schemes, specify the names of the analysis schemes you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DescribeAnalysisSchemes</a></code> operation. Specifies the name of the domain you want to describe. To limit the response to particular analysis schemes, specify the names of the analysis schemes you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>. </p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeAnalysisSchemesRequest {
-    #[doc="<p>The analysis schemes you want to describe.</p>"]
+    /// <p>The analysis schemes you want to describe.</p>
     pub analysis_scheme_names: Option<Vec<String>>,
-    #[doc="<p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>"]
+    /// <p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>
     pub deployed: Option<bool>,
-    #[doc="<p>The name of the domain you want to describe.</p>"]
+    /// <p>The name of the domain you want to describe.</p>
     pub domain_name: String,
 }
-
 
 /// Serialize `DescribeAnalysisSchemesRequest` contents to a `SignedRequest`.
 struct DescribeAnalysisSchemesRequestSerializer;
@@ -1573,34 +1613,39 @@ impl DescribeAnalysisSchemesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.analysis_scheme_names {
-            StandardNameListSerializer::serialize(params,
-                                                  &format!("{}{}", prefix, "AnalysisSchemeNames"),
-                                                  field_value);
+            StandardNameListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AnalysisSchemeNames"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.deployed {
-            params.put(&format!("{}{}", prefix, "Deployed"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Deployed"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of a <code>DescribeAnalysisSchemes</code> request. Contains the analysis schemes configured for the domain specified in the request.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>DescribeAnalysisSchemes</code> request. Contains the analysis schemes configured for the domain specified in the request.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeAnalysisSchemesResponse {
-    #[doc="<p>The analysis scheme descriptions.</p>"]
+    /// <p>The analysis scheme descriptions.</p>
     pub analysis_schemes: Vec<AnalysisSchemeStatus>,
 }
 
 struct DescribeAnalysisSchemesResponseDeserializer;
 impl DescribeAnalysisSchemesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<DescribeAnalysisSchemesResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeAnalysisSchemesResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeAnalysisSchemesResponse::default();
@@ -1615,16 +1660,16 @@ impl DescribeAnalysisSchemesResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AnalysisSchemes" => {
-                            obj.analysis_schemes =
-                                try!(AnalysisSchemeStatusListDeserializer::deserialize("AnalysisSchemes",
-                                                                                       stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AnalysisSchemes" => {
+                        obj.analysis_schemes =
+                            try!(AnalysisSchemeStatusListDeserializer::deserialize(
+                                "AnalysisSchemes",
+                                stack
+                            ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1635,18 +1680,16 @@ impl DescribeAnalysisSchemesResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DescribeAvailabilityOptions</a></code> operation. Specifies the name of the domain you want to describe. To show the active configuration and exclude any pending changes, set the Deployed option to <code>true</code>.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DescribeAvailabilityOptions</a></code> operation. Specifies the name of the domain you want to describe. To show the active configuration and exclude any pending changes, set the Deployed option to <code>true</code>.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeAvailabilityOptionsRequest {
-    #[doc="<p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>"]
+    /// <p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>
     pub deployed: Option<bool>,
-    #[doc="<p>The name of the domain you want to describe.</p>"]
+    /// <p>The name of the domain you want to describe.</p>
     pub domain_name: String,
 }
-
 
 /// Serialize `DescribeAvailabilityOptionsRequest` contents to a `SignedRequest`.
 struct DescribeAvailabilityOptionsRequestSerializer;
@@ -1658,29 +1701,32 @@ impl DescribeAvailabilityOptionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.deployed {
-            params.put(&format!("{}{}", prefix, "Deployed"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Deployed"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of a <code>DescribeAvailabilityOptions</code> request. Indicates whether or not the Multi-AZ option is enabled for the domain specified in the request. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>DescribeAvailabilityOptions</code> request. Indicates whether or not the Multi-AZ option is enabled for the domain specified in the request. </p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeAvailabilityOptionsResponse {
-    #[doc="<p>The availability options configured for the domain. Indicates whether Multi-AZ is enabled for the domain. </p>"]
+    /// <p>The availability options configured for the domain. Indicates whether Multi-AZ is enabled for the domain. </p>
     pub availability_options: Option<AvailabilityOptionsStatus>,
 }
 
 struct DescribeAvailabilityOptionsResponseDeserializer;
 impl DescribeAvailabilityOptionsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<DescribeAvailabilityOptionsResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeAvailabilityOptionsResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeAvailabilityOptionsResponse::default();
@@ -1695,14 +1741,16 @@ impl DescribeAvailabilityOptionsResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AvailabilityOptions" => {
-                            obj.availability_options = Some(try!(AvailabilityOptionsStatusDeserializer::deserialize("AvailabilityOptions", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AvailabilityOptions" => {
+                        obj.availability_options =
+                            Some(try!(AvailabilityOptionsStatusDeserializer::deserialize(
+                                "AvailabilityOptions",
+                                stack
+                            )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1713,16 +1761,14 @@ impl DescribeAvailabilityOptionsResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DescribeDomains</a></code> operation. By default shows the status of all domains. To restrict the response to particular domains, specify the names of the domains you want to describe.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DescribeDomains</a></code> operation. By default shows the status of all domains. To restrict the response to particular domains, specify the names of the domains you want to describe.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeDomainsRequest {
-    #[doc="<p>The names of the domains you want to include in the response.</p>"]
+    /// <p>The names of the domains you want to include in the response.</p>
     pub domain_names: Option<Vec<String>>,
 }
-
 
 /// Serialize `DescribeDomainsRequest` contents to a `SignedRequest`.
 struct DescribeDomainsRequestSerializer;
@@ -1734,16 +1780,17 @@ impl DescribeDomainsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.domain_names {
-            DomainNameListSerializer::serialize(params,
-                                                &format!("{}{}", prefix, "DomainNames"),
-                                                field_value);
+            DomainNameListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "DomainNames"),
+                field_value,
+            );
         }
-
     }
 }
 
-#[doc="<p>The result of a <code>DescribeDomains</code> request. Contains the status of the domains specified in the request or all domains owned by the account.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>DescribeDomains</code> request. Contains the status of the domains specified in the request or all domains owned by the account.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeDomainsResponse {
     pub domain_status_list: Vec<DomainStatus>,
 }
@@ -1751,9 +1798,10 @@ pub struct DescribeDomainsResponse {
 struct DescribeDomainsResponseDeserializer;
 impl DescribeDomainsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DescribeDomainsResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDomainsResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeDomainsResponse::default();
@@ -1768,16 +1816,15 @@ impl DescribeDomainsResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DomainStatusList" => {
-                            obj.domain_status_list =
-                                try!(DomainStatusListDeserializer::deserialize("DomainStatusList",
-                                                                               stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DomainStatusList" => {
+                        obj.domain_status_list = try!(DomainStatusListDeserializer::deserialize(
+                            "DomainStatusList",
+                            stack
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1788,20 +1835,18 @@ impl DescribeDomainsResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DescribeDomains</a></code> operation. Specifies the name of the domain you want to describe. To restrict the response to particular expressions, specify the names of the expressions you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DescribeDomains</a></code> operation. Specifies the name of the domain you want to describe. To restrict the response to particular expressions, specify the names of the expressions you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeExpressionsRequest {
-    #[doc="<p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>"]
+    /// <p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>
     pub deployed: Option<bool>,
-    #[doc="<p>The name of the domain you want to describe.</p>"]
+    /// <p>The name of the domain you want to describe.</p>
     pub domain_name: String,
-    #[doc="<p>Limits the <code><a>DescribeExpressions</a></code> response to the specified expressions. If not specified, all expressions are shown.</p>"]
+    /// <p>Limits the <code><a>DescribeExpressions</a></code> response to the specified expressions. If not specified, all expressions are shown.</p>
     pub expression_names: Option<Vec<String>>,
 }
-
 
 /// Serialize `DescribeExpressionsRequest` contents to a `SignedRequest`.
 struct DescribeExpressionsRequestSerializer;
@@ -1813,33 +1858,39 @@ impl DescribeExpressionsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.deployed {
-            params.put(&format!("{}{}", prefix, "Deployed"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Deployed"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.expression_names {
-            StandardNameListSerializer::serialize(params,
-                                                  &format!("{}{}", prefix, "ExpressionNames"),
-                                                  field_value);
+            StandardNameListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ExpressionNames"),
+                field_value,
+            );
         }
-
     }
 }
 
-#[doc="<p>The result of a <code>DescribeExpressions</code> request. Contains the expressions configured for the domain specified in the request.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>DescribeExpressions</code> request. Contains the expressions configured for the domain specified in the request.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeExpressionsResponse {
-    #[doc="<p>The expressions configured for the domain.</p>"]
+    /// <p>The expressions configured for the domain.</p>
     pub expressions: Vec<ExpressionStatus>,
 }
 
 struct DescribeExpressionsResponseDeserializer;
 impl DescribeExpressionsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DescribeExpressionsResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeExpressionsResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeExpressionsResponse::default();
@@ -1854,16 +1905,15 @@ impl DescribeExpressionsResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Expressions" => {
-                            obj.expressions =
-                                try!(ExpressionStatusListDeserializer::deserialize("Expressions",
-                                                                                   stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Expressions" => {
+                        obj.expressions = try!(ExpressionStatusListDeserializer::deserialize(
+                            "Expressions",
+                            stack
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1874,20 +1924,18 @@ impl DescribeExpressionsResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DescribeIndexFields</a></code> operation. Specifies the name of the domain you want to describe. To restrict the response to particular index fields, specify the names of the index fields you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DescribeIndexFields</a></code> operation. Specifies the name of the domain you want to describe. To restrict the response to particular index fields, specify the names of the index fields you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeIndexFieldsRequest {
-    #[doc="<p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>"]
+    /// <p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>
     pub deployed: Option<bool>,
-    #[doc="<p>The name of the domain you want to describe.</p>"]
+    /// <p>The name of the domain you want to describe.</p>
     pub domain_name: String,
-    #[doc="<p>A list of the index fields you want to describe. If not specified, information is returned for all configured index fields.</p>"]
+    /// <p>A list of the index fields you want to describe. If not specified, information is returned for all configured index fields.</p>
     pub field_names: Option<Vec<String>>,
 }
-
 
 /// Serialize `DescribeIndexFieldsRequest` contents to a `SignedRequest`.
 struct DescribeIndexFieldsRequestSerializer;
@@ -1899,33 +1947,39 @@ impl DescribeIndexFieldsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.deployed {
-            params.put(&format!("{}{}", prefix, "Deployed"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Deployed"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.field_names {
-            DynamicFieldNameListSerializer::serialize(params,
-                                                      &format!("{}{}", prefix, "FieldNames"),
-                                                      field_value);
+            DynamicFieldNameListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "FieldNames"),
+                field_value,
+            );
         }
-
     }
 }
 
-#[doc="<p>The result of a <code>DescribeIndexFields</code> request. Contains the index fields configured for the domain specified in the request.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>DescribeIndexFields</code> request. Contains the index fields configured for the domain specified in the request.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeIndexFieldsResponse {
-    #[doc="<p>The index fields configured for the domain.</p>"]
+    /// <p>The index fields configured for the domain.</p>
     pub index_fields: Vec<IndexFieldStatus>,
 }
 
 struct DescribeIndexFieldsResponseDeserializer;
 impl DescribeIndexFieldsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DescribeIndexFieldsResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeIndexFieldsResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeIndexFieldsResponse::default();
@@ -1940,16 +1994,15 @@ impl DescribeIndexFieldsResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "IndexFields" => {
-                            obj.index_fields =
-                                try!(IndexFieldStatusListDeserializer::deserialize("IndexFields",
-                                                                                   stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "IndexFields" => {
+                        obj.index_fields = try!(IndexFieldStatusListDeserializer::deserialize(
+                            "IndexFields",
+                            stack
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1960,15 +2013,13 @@ impl DescribeIndexFieldsResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DescribeScalingParameters</a></code> operation. Specifies the name of the domain you want to describe. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DescribeScalingParameters</a></code> operation. Specifies the name of the domain you want to describe. </p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeScalingParametersRequest {
     pub domain_name: String,
 }
-
 
 /// Serialize `DescribeScalingParametersRequest` contents to a `SignedRequest`.
 struct DescribeScalingParametersRequestSerializer;
@@ -1979,14 +2030,15 @@ impl DescribeScalingParametersRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of a <code>DescribeScalingParameters</code> request. Contains the scaling parameters configured for the domain specified in the request.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>DescribeScalingParameters</code> request. Contains the scaling parameters configured for the domain specified in the request.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeScalingParametersResponse {
     pub scaling_parameters: ScalingParametersStatus,
 }
@@ -1994,10 +2046,10 @@ pub struct DescribeScalingParametersResponse {
 struct DescribeScalingParametersResponseDeserializer;
 impl DescribeScalingParametersResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<DescribeScalingParametersResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeScalingParametersResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeScalingParametersResponse::default();
@@ -2012,16 +2064,16 @@ impl DescribeScalingParametersResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ScalingParameters" => {
-                            obj.scaling_parameters =
-                                try!(ScalingParametersStatusDeserializer::deserialize("ScalingParameters",
-                                                                                      stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ScalingParameters" => {
+                        obj.scaling_parameters =
+                            try!(ScalingParametersStatusDeserializer::deserialize(
+                                "ScalingParameters",
+                                stack
+                            ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2032,18 +2084,16 @@ impl DescribeScalingParametersResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DescribeServiceAccessPolicies</a></code> operation. Specifies the name of the domain you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DescribeServiceAccessPolicies</a></code> operation. Specifies the name of the domain you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeServiceAccessPoliciesRequest {
-    #[doc="<p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>"]
+    /// <p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>
     pub deployed: Option<bool>,
-    #[doc="<p>The name of the domain you want to describe.</p>"]
+    /// <p>The name of the domain you want to describe.</p>
     pub domain_name: String,
 }
-
 
 /// Serialize `DescribeServiceAccessPoliciesRequest` contents to a `SignedRequest`.
 struct DescribeServiceAccessPoliciesRequestSerializer;
@@ -2055,29 +2105,32 @@ impl DescribeServiceAccessPoliciesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.deployed {
-            params.put(&format!("{}{}", prefix, "Deployed"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Deployed"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of a <code>DescribeServiceAccessPolicies</code> request.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>DescribeServiceAccessPolicies</code> request.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeServiceAccessPoliciesResponse {
-    #[doc="<p>The access rules configured for the domain specified in the request.</p>"]
+    /// <p>The access rules configured for the domain specified in the request.</p>
     pub access_policies: AccessPoliciesStatus,
 }
 
 struct DescribeServiceAccessPoliciesResponseDeserializer;
 impl DescribeServiceAccessPoliciesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<DescribeServiceAccessPoliciesResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeServiceAccessPoliciesResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeServiceAccessPoliciesResponse::default();
@@ -2092,16 +2145,15 @@ impl DescribeServiceAccessPoliciesResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AccessPolicies" => {
-                            obj.access_policies =
-                                try!(AccessPoliciesStatusDeserializer::deserialize("AccessPolicies",
-                                                                                   stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AccessPolicies" => {
+                        obj.access_policies = try!(AccessPoliciesStatusDeserializer::deserialize(
+                            "AccessPolicies",
+                            stack
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2112,20 +2164,18 @@ impl DescribeServiceAccessPoliciesResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>DescribeSuggester</a></code> operation. Specifies the name of the domain you want to describe. To restrict the response to particular suggesters, specify the names of the suggesters you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>DescribeSuggester</a></code> operation. Specifies the name of the domain you want to describe. To restrict the response to particular suggesters, specify the names of the suggesters you want to describe. To show the active configuration and exclude any pending changes, set the <code>Deployed</code> option to <code>true</code>.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeSuggestersRequest {
-    #[doc="<p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>"]
+    /// <p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>
     pub deployed: Option<bool>,
-    #[doc="<p>The name of the domain you want to describe.</p>"]
+    /// <p>The name of the domain you want to describe.</p>
     pub domain_name: String,
-    #[doc="<p>The suggesters you want to describe.</p>"]
+    /// <p>The suggesters you want to describe.</p>
     pub suggester_names: Option<Vec<String>>,
 }
-
 
 /// Serialize `DescribeSuggestersRequest` contents to a `SignedRequest`.
 struct DescribeSuggestersRequestSerializer;
@@ -2137,33 +2187,39 @@ impl DescribeSuggestersRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.deployed {
-            params.put(&format!("{}{}", prefix, "Deployed"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "Deployed"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.suggester_names {
-            StandardNameListSerializer::serialize(params,
-                                                  &format!("{}{}", prefix, "SuggesterNames"),
-                                                  field_value);
+            StandardNameListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SuggesterNames"),
+                field_value,
+            );
         }
-
     }
 }
 
-#[doc="<p>The result of a <code>DescribeSuggesters</code> request.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>DescribeSuggesters</code> request.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DescribeSuggestersResponse {
-    #[doc="<p>The suggesters configured for the domain specified in the request.</p>"]
+    /// <p>The suggesters configured for the domain specified in the request.</p>
     pub suggesters: Vec<SuggesterStatus>,
 }
 
 struct DescribeSuggestersResponseDeserializer;
 impl DescribeSuggestersResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DescribeSuggestersResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeSuggestersResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DescribeSuggestersResponse::default();
@@ -2178,16 +2234,15 @@ impl DescribeSuggestersResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Suggesters" => {
-                            obj.suggesters =
-                                try!(SuggesterStatusListDeserializer::deserialize("Suggesters",
-                                                                                  stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Suggesters" => {
+                        obj.suggesters = try!(SuggesterStatusListDeserializer::deserialize(
+                            "Suggesters",
+                            stack
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2198,26 +2253,26 @@ impl DescribeSuggestersResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Options for a search suggester.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Options for a search suggester.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DocumentSuggesterOptions {
-    #[doc="<p>The level of fuzziness allowed when suggesting matches for a string: <code>none</code>, <code>low</code>, or <code>high</code>. With none, the specified string is treated as an exact prefix. With low, suggestions must differ from the specified string by no more than one character. With high, suggestions can differ by up to two characters. The default is none. </p>"]
+    /// <p>The level of fuzziness allowed when suggesting matches for a string: <code>none</code>, <code>low</code>, or <code>high</code>. With none, the specified string is treated as an exact prefix. With low, suggestions must differ from the specified string by no more than one character. With high, suggestions can differ by up to two characters. The default is none. </p>
     pub fuzzy_matching: Option<String>,
-    #[doc="<p>An expression that computes a score for each suggestion to control how they are sorted. The scores are rounded to the nearest integer, with a floor of 0 and a ceiling of 2^31-1. A document's relevance score is not computed for suggestions, so sort expressions cannot reference the <code>_score</code> value. To sort suggestions using a numeric field or existing expression, simply specify the name of the field or expression. If no expression is configured for the suggester, the suggestions are sorted with the closest matches listed first.</p>"]
+    /// <p>An expression that computes a score for each suggestion to control how they are sorted. The scores are rounded to the nearest integer, with a floor of 0 and a ceiling of 2^31-1. A document's relevance score is not computed for suggestions, so sort expressions cannot reference the <code>_score</code> value. To sort suggestions using a numeric field or existing expression, simply specify the name of the field or expression. If no expression is configured for the suggester, the suggestions are sorted with the closest matches listed first.</p>
     pub sort_expression: Option<String>,
-    #[doc="<p>The name of the index field you want to use for suggestions. </p>"]
+    /// <p>The name of the index field you want to use for suggestions. </p>
     pub source_field: String,
 }
 
 struct DocumentSuggesterOptionsDeserializer;
 impl DocumentSuggesterOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DocumentSuggesterOptions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DocumentSuggesterOptions, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DocumentSuggesterOptions::default();
@@ -2232,25 +2287,24 @@ impl DocumentSuggesterOptionsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "FuzzyMatching" => {
-                            obj.fuzzy_matching =
-                                Some(try!(SuggesterFuzzyMatchingDeserializer::deserialize("FuzzyMatching",
-                                                                                          stack)));
-                        }
-                        "SortExpression" => {
-                            obj.sort_expression =
-                                Some(try!(StringDeserializer::deserialize("SortExpression",
-                                                                          stack)));
-                        }
-                        "SourceField" => {
-                            obj.source_field = try!(FieldNameDeserializer::deserialize("SourceField",
-                                                                                       stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "FuzzyMatching" => {
+                        obj.fuzzy_matching = Some(try!(
+                            SuggesterFuzzyMatchingDeserializer::deserialize("FuzzyMatching", stack)
+                        ));
                     }
-                }
+                    "SortExpression" => {
+                        obj.sort_expression = Some(try!(StringDeserializer::deserialize(
+                            "SortExpression",
+                            stack
+                        )));
+                    }
+                    "SourceField" => {
+                        obj.source_field =
+                            try!(FieldNameDeserializer::deserialize("SourceField", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2261,7 +2315,6 @@ impl DocumentSuggesterOptionsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -2275,45 +2328,50 @@ impl DocumentSuggesterOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.fuzzy_matching {
-            params.put(&format!("{}{}", prefix, "FuzzyMatching"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "FuzzyMatching"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.sort_expression {
-            params.put(&format!("{}{}", prefix, "SortExpression"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SortExpression"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-        params.put(&format!("{}{}", prefix, "SourceField"),
-                   &obj.source_field.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "SourceField"),
+            &obj.source_field.replace("+", "%2B"),
+        );
     }
 }
 
 struct DomainIdDeserializer;
 impl DomainIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct DomainNameDeserializer;
 impl DomainNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -2331,10 +2389,10 @@ impl DomainNameListSerializer {
 struct DomainNameMapDeserializer;
 impl DomainNameMapDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ::std::collections::HashMap::new();
@@ -2349,42 +2407,42 @@ impl DomainNameMapDeserializer {
 
         try!(end_element(tag_name, stack));
         Ok(obj)
-
     }
 }
-#[doc="<p>The current status of the search domain.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The current status of the search domain.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DomainStatus {
     pub arn: Option<String>,
-    #[doc="<p>True if the search domain is created. It can take several minutes to initialize a domain when <a>CreateDomain</a> is called. Newly created search domains are returned from <a>DescribeDomains</a> with a false value for Created until domain creation is complete.</p>"]
+    /// <p>True if the search domain is created. It can take several minutes to initialize a domain when <a>CreateDomain</a> is called. Newly created search domains are returned from <a>DescribeDomains</a> with a false value for Created until domain creation is complete.</p>
     pub created: Option<bool>,
-    #[doc="<p>True if the search domain has been deleted. The system must clean up resources dedicated to the search domain when <a>DeleteDomain</a> is called. Newly deleted search domains are returned from <a>DescribeDomains</a> with a true value for IsDeleted for several minutes until resource cleanup is complete.</p>"]
+    /// <p>True if the search domain has been deleted. The system must clean up resources dedicated to the search domain when <a>DeleteDomain</a> is called. Newly deleted search domains are returned from <a>DescribeDomains</a> with a true value for IsDeleted for several minutes until resource cleanup is complete.</p>
     pub deleted: Option<bool>,
-    #[doc="<p>The service endpoint for updating documents in a search domain.</p>"]
+    /// <p>The service endpoint for updating documents in a search domain.</p>
     pub doc_service: Option<ServiceEndpoint>,
     pub domain_id: String,
     pub domain_name: String,
     pub limits: Option<Limits>,
-    #[doc="<p>True if processing is being done to activate the current domain configuration.</p>"]
+    /// <p>True if processing is being done to activate the current domain configuration.</p>
     pub processing: Option<bool>,
-    #[doc="<p>True if <a>IndexDocuments</a> needs to be called to activate the current domain configuration.</p>"]
+    /// <p>True if <a>IndexDocuments</a> needs to be called to activate the current domain configuration.</p>
     pub requires_index_documents: bool,
-    #[doc="<p>The number of search instances that are available to process search requests.</p>"]
+    /// <p>The number of search instances that are available to process search requests.</p>
     pub search_instance_count: Option<i64>,
-    #[doc="<p>The instance type that is being used to process search requests.</p>"]
+    /// <p>The instance type that is being used to process search requests.</p>
     pub search_instance_type: Option<String>,
-    #[doc="<p>The number of partitions across which the search index is spread.</p>"]
+    /// <p>The number of partitions across which the search index is spread.</p>
     pub search_partition_count: Option<i64>,
-    #[doc="<p>The service endpoint for requesting search results from a search domain.</p>"]
+    /// <p>The service endpoint for requesting search results from a search domain.</p>
     pub search_service: Option<ServiceEndpoint>,
 }
 
 struct DomainStatusDeserializer;
 impl DomainStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DomainStatus, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DomainStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DomainStatus::default();
@@ -2399,68 +2457,69 @@ impl DomainStatusDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ARN" => {
-                            obj.arn = Some(try!(ARNDeserializer::deserialize("ARN", stack)));
-                        }
-                        "Created" => {
-                            obj.created = Some(try!(BooleanDeserializer::deserialize("Created",
-                                                                                     stack)));
-                        }
-                        "Deleted" => {
-                            obj.deleted = Some(try!(BooleanDeserializer::deserialize("Deleted",
-                                                                                     stack)));
-                        }
-                        "DocService" => {
-                            obj.doc_service =
-                                Some(try!(ServiceEndpointDeserializer::deserialize("DocService",
-                                                                                   stack)));
-                        }
-                        "DomainId" => {
-                            obj.domain_id = try!(DomainIdDeserializer::deserialize("DomainId",
-                                                                                   stack));
-                        }
-                        "DomainName" => {
-                            obj.domain_name = try!(DomainNameDeserializer::deserialize("DomainName",
-                                                                                       stack));
-                        }
-                        "Limits" => {
-                            obj.limits = Some(try!(LimitsDeserializer::deserialize("Limits",
-                                                                                   stack)));
-                        }
-                        "Processing" => {
-                            obj.processing = Some(try!(BooleanDeserializer::deserialize("Processing",
-                                                                                        stack)));
-                        }
-                        "RequiresIndexDocuments" => {
-                            obj.requires_index_documents =
-                                try!(BooleanDeserializer::deserialize("RequiresIndexDocuments",
-                                                                      stack));
-                        }
-                        "SearchInstanceCount" => {
-                            obj.search_instance_count =
-                                Some(try!(InstanceCountDeserializer::deserialize("SearchInstanceCount",
-                                                                                 stack)));
-                        }
-                        "SearchInstanceType" => {
-                            obj.search_instance_type =
-                                Some(try!(SearchInstanceTypeDeserializer::deserialize("SearchInstanceType",
-                                                                                      stack)));
-                        }
-                        "SearchPartitionCount" => {
-                            obj.search_partition_count =
-                                Some(try!(PartitionCountDeserializer::deserialize("SearchPartitionCount",
-                                                                                  stack)));
-                        }
-                        "SearchService" => {
-                            obj.search_service =
-                                Some(try!(ServiceEndpointDeserializer::deserialize("SearchService",
-                                                                                   stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ARN" => {
+                        obj.arn = Some(try!(ARNDeserializer::deserialize("ARN", stack)));
                     }
-                }
+                    "Created" => {
+                        obj.created =
+                            Some(try!(BooleanDeserializer::deserialize("Created", stack)));
+                    }
+                    "Deleted" => {
+                        obj.deleted =
+                            Some(try!(BooleanDeserializer::deserialize("Deleted", stack)));
+                    }
+                    "DocService" => {
+                        obj.doc_service = Some(try!(ServiceEndpointDeserializer::deserialize(
+                            "DocService",
+                            stack
+                        )));
+                    }
+                    "DomainId" => {
+                        obj.domain_id = try!(DomainIdDeserializer::deserialize("DomainId", stack));
+                    }
+                    "DomainName" => {
+                        obj.domain_name =
+                            try!(DomainNameDeserializer::deserialize("DomainName", stack));
+                    }
+                    "Limits" => {
+                        obj.limits = Some(try!(LimitsDeserializer::deserialize("Limits", stack)));
+                    }
+                    "Processing" => {
+                        obj.processing =
+                            Some(try!(BooleanDeserializer::deserialize("Processing", stack)));
+                    }
+                    "RequiresIndexDocuments" => {
+                        obj.requires_index_documents = try!(BooleanDeserializer::deserialize(
+                            "RequiresIndexDocuments",
+                            stack
+                        ));
+                    }
+                    "SearchInstanceCount" => {
+                        obj.search_instance_count = Some(try!(
+                            InstanceCountDeserializer::deserialize("SearchInstanceCount", stack)
+                        ));
+                    }
+                    "SearchInstanceType" => {
+                        obj.search_instance_type =
+                            Some(try!(SearchInstanceTypeDeserializer::deserialize(
+                                "SearchInstanceType",
+                                stack
+                            )));
+                    }
+                    "SearchPartitionCount" => {
+                        obj.search_partition_count = Some(try!(
+                            PartitionCountDeserializer::deserialize("SearchPartitionCount", stack)
+                        ));
+                    }
+                    "SearchService" => {
+                        obj.search_service = Some(try!(ServiceEndpointDeserializer::deserialize(
+                            "SearchService",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2471,16 +2530,15 @@ impl DomainStatusDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct DomainStatusListDeserializer;
 impl DomainStatusListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<DomainStatus>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<DomainStatus>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -2512,44 +2570,44 @@ impl DomainStatusListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 struct DoubleDeserializer;
 impl DoubleDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<f64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Options for a field that contains an array of double-precision 64-bit floating point values. Present if <code>IndexFieldType</code> specifies the field is of type <code>double-array</code>. All options are enabled by default.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Options for a field that contains an array of double-precision 64-bit floating point values. Present if <code>IndexFieldType</code> specifies the field is of type <code>double-array</code>. All options are enabled by default.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DoubleArrayOptions {
-    #[doc="A value to use for the field if the field isn't specified for a document."]
+    /// A value to use for the field if the field isn't specified for a document.
     pub default_value: Option<f64>,
-    #[doc="<p>Whether facet information can be returned for the field.</p>"]
+    /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
+    /// <p>Whether the contents of the field can be returned in the search results.</p>
     pub return_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field are searchable.</p>"]
+    /// <p>Whether the contents of the field are searchable.</p>
     pub search_enabled: Option<bool>,
-    #[doc="<p>A list of source fields to map to the field. </p>"]
+    /// <p>A list of source fields to map to the field. </p>
     pub source_fields: Option<String>,
 }
 
 struct DoubleArrayOptionsDeserializer;
 impl DoubleArrayOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DoubleArrayOptions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DoubleArrayOptions, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DoubleArrayOptions::default();
@@ -2564,34 +2622,36 @@ impl DoubleArrayOptionsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DefaultValue" => {
-                            obj.default_value = Some(try!(DoubleDeserializer::deserialize("DefaultValue",
-                                                                                          stack)));
-                        }
-                        "FacetEnabled" => {
-                            obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize("FacetEnabled",
-                                                                                           stack)));
-                        }
-                        "ReturnEnabled" => {
-                            obj.return_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("ReturnEnabled",
-                                                                           stack)));
-                        }
-                        "SearchEnabled" => {
-                            obj.search_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("SearchEnabled",
-                                                                           stack)));
-                        }
-                        "SourceFields" => {
-                            obj.source_fields =
-                                Some(try!(FieldNameCommaListDeserializer::deserialize("SourceFields",
-                                                                                      stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DefaultValue" => {
+                        obj.default_value =
+                            Some(try!(DoubleDeserializer::deserialize("DefaultValue", stack)));
                     }
-                }
+                    "FacetEnabled" => {
+                        obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "FacetEnabled",
+                            stack
+                        )));
+                    }
+                    "ReturnEnabled" => {
+                        obj.return_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "ReturnEnabled",
+                            stack
+                        )));
+                    }
+                    "SearchEnabled" => {
+                        obj.search_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "SearchEnabled",
+                            stack
+                        )));
+                    }
+                    "SourceFields" => {
+                        obj.source_fields = Some(try!(
+                            FieldNameCommaListDeserializer::deserialize("SourceFields", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2602,7 +2662,6 @@ impl DoubleArrayOptionsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -2616,52 +2675,62 @@ impl DoubleArrayOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(&format!("{}{}", prefix, "FacetEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "FacetEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(&format!("{}{}", prefix, "ReturnEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ReturnEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(&format!("{}{}", prefix, "SearchEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SearchEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(&format!("{}{}", prefix, "SourceFields"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SourceFields"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>Options for a double-precision 64-bit floating point field. Present if <code>IndexFieldType</code> specifies the field is of type <code>double</code>. All options are enabled by default.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Options for a double-precision 64-bit floating point field. Present if <code>IndexFieldType</code> specifies the field is of type <code>double</code>. All options are enabled by default.</p>
+#[derive(Default, Debug, Clone)]
 pub struct DoubleOptions {
-    #[doc="<p>A value to use for the field if the field isn't specified for a document. This can be important if you are using the field in an expression and that field is not present in every document.</p>"]
+    /// <p>A value to use for the field if the field isn't specified for a document. This can be important if you are using the field in an expression and that field is not present in every document.</p>
     pub default_value: Option<f64>,
-    #[doc="<p>Whether facet information can be returned for the field.</p>"]
+    /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
+    /// <p>Whether the contents of the field can be returned in the search results.</p>
     pub return_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field are searchable.</p>"]
+    /// <p>Whether the contents of the field are searchable.</p>
     pub search_enabled: Option<bool>,
-    #[doc="<p>Whether the field can be used to sort the search results.</p>"]
+    /// <p>Whether the field can be used to sort the search results.</p>
     pub sort_enabled: Option<bool>,
-    #[doc="<p>The name of the source field to map to the field. </p>"]
+    /// <p>The name of the source field to map to the field. </p>
     pub source_field: Option<String>,
 }
 
 struct DoubleOptionsDeserializer;
 impl DoubleOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DoubleOptions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DoubleOptions, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = DoubleOptions::default();
@@ -2676,38 +2745,41 @@ impl DoubleOptionsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DefaultValue" => {
-                            obj.default_value = Some(try!(DoubleDeserializer::deserialize("DefaultValue",
-                                                                                          stack)));
-                        }
-                        "FacetEnabled" => {
-                            obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize("FacetEnabled",
-                                                                                           stack)));
-                        }
-                        "ReturnEnabled" => {
-                            obj.return_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("ReturnEnabled",
-                                                                           stack)));
-                        }
-                        "SearchEnabled" => {
-                            obj.search_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("SearchEnabled",
-                                                                           stack)));
-                        }
-                        "SortEnabled" => {
-                            obj.sort_enabled = Some(try!(BooleanDeserializer::deserialize("SortEnabled",
-                                                                                          stack)));
-                        }
-                        "SourceField" => {
-                            obj.source_field =
-                                Some(try!(FieldNameDeserializer::deserialize("SourceField",
-                                                                             stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DefaultValue" => {
+                        obj.default_value =
+                            Some(try!(DoubleDeserializer::deserialize("DefaultValue", stack)));
                     }
-                }
+                    "FacetEnabled" => {
+                        obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "FacetEnabled",
+                            stack
+                        )));
+                    }
+                    "ReturnEnabled" => {
+                        obj.return_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "ReturnEnabled",
+                            stack
+                        )));
+                    }
+                    "SearchEnabled" => {
+                        obj.search_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "SearchEnabled",
+                            stack
+                        )));
+                    }
+                    "SortEnabled" => {
+                        obj.sort_enabled =
+                            Some(try!(BooleanDeserializer::deserialize("SortEnabled", stack)));
+                    }
+                    "SourceField" => {
+                        obj.source_field = Some(try!(FieldNameDeserializer::deserialize(
+                            "SourceField",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2718,7 +2790,6 @@ impl DoubleOptionsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -2732,45 +2803,56 @@ impl DoubleOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(&format!("{}{}", prefix, "FacetEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "FacetEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(&format!("{}{}", prefix, "ReturnEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ReturnEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(&format!("{}{}", prefix, "SearchEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SearchEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.sort_enabled {
-            params.put(&format!("{}{}", prefix, "SortEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SortEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(&format!("{}{}", prefix, "SourceField"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SourceField"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
 struct DynamicFieldNameDeserializer;
 impl DynamicFieldNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -2785,8 +2867,8 @@ impl DynamicFieldNameListSerializer {
     }
 }
 
-#[doc="<p>A named expression that can be evaluated at search time. Can be used to sort the search results, define other expressions, or return computed information in the search results. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>A named expression that can be evaluated at search time. Can be used to sort the search results, define other expressions, or return computed information in the search results. </p>
+#[derive(Default, Debug, Clone)]
 pub struct Expression {
     pub expression_name: String,
     pub expression_value: String,
@@ -2795,9 +2877,10 @@ pub struct Expression {
 struct ExpressionDeserializer;
 impl ExpressionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Expression, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Expression, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Expression::default();
@@ -2812,21 +2895,21 @@ impl ExpressionDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ExpressionName" => {
-                            obj.expression_name =
-                                try!(StandardNameDeserializer::deserialize("ExpressionName",
-                                                                           stack));
-                        }
-                        "ExpressionValue" => {
-                            obj.expression_value =
-                                try!(ExpressionValueDeserializer::deserialize("ExpressionValue",
-                                                                              stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ExpressionName" => {
+                        obj.expression_name = try!(StandardNameDeserializer::deserialize(
+                            "ExpressionName",
+                            stack
+                        ));
                     }
-                }
+                    "ExpressionValue" => {
+                        obj.expression_value = try!(ExpressionValueDeserializer::deserialize(
+                            "ExpressionValue",
+                            stack
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2837,7 +2920,6 @@ impl ExpressionDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -2850,18 +2932,21 @@ impl ExpressionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ExpressionName"),
-                   &obj.expression_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "ExpressionValue"),
-                   &obj.expression_value.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "ExpressionName"),
+            &obj.expression_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "ExpressionValue"),
+            &obj.expression_value.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The value of an <code>Expression</code> and its current status.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The value of an <code>Expression</code> and its current status.</p>
+#[derive(Default, Debug, Clone)]
 pub struct ExpressionStatus {
-    #[doc="<p>The expression that is evaluated for sorting while processing a search request.</p>"]
+    /// <p>The expression that is evaluated for sorting while processing a search request.</p>
     pub options: Expression,
     pub status: OptionStatus,
 }
@@ -2869,9 +2954,10 @@ pub struct ExpressionStatus {
 struct ExpressionStatusDeserializer;
 impl ExpressionStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ExpressionStatus, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ExpressionStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ExpressionStatus::default();
@@ -2886,19 +2972,15 @@ impl ExpressionStatusDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Options" => {
-                            obj.options = try!(ExpressionDeserializer::deserialize("Options",
-                                                                                   stack));
-                        }
-                        "Status" => {
-                            obj.status = try!(OptionStatusDeserializer::deserialize("Status",
-                                                                                    stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Options" => {
+                        obj.options = try!(ExpressionDeserializer::deserialize("Options", stack));
                     }
-                }
+                    "Status" => {
+                        obj.status = try!(OptionStatusDeserializer::deserialize("Status", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2909,16 +2991,15 @@ impl ExpressionStatusDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct ExpressionStatusListDeserializer;
 impl ExpressionStatusListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<ExpressionStatus>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ExpressionStatus>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -2934,7 +3015,10 @@ impl ExpressionStatusListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ExpressionStatusDeserializer::deserialize("member", stack)));
+                        obj.push(try!(ExpressionStatusDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -2950,58 +3034,57 @@ impl ExpressionStatusListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 struct ExpressionValueDeserializer;
 impl ExpressionValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct FieldNameDeserializer;
 impl FieldNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct FieldNameCommaListDeserializer;
 impl FieldNameCommaListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct FieldNameListDeserializer;
 impl FieldNameListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<String>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -3033,29 +3116,27 @@ impl FieldNameListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 struct FieldValueDeserializer;
 impl FieldValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>IndexDocuments</a></code> operation. Specifies the name of the domain you want to re-index.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>IndexDocuments</a></code> operation. Specifies the name of the domain you want to re-index.</p>
+#[derive(Default, Debug, Clone)]
 pub struct IndexDocumentsRequest {
     pub domain_name: String,
 }
-
 
 /// Serialize `IndexDocumentsRequest` contents to a `SignedRequest`.
 struct IndexDocumentsRequestSerializer;
@@ -3066,25 +3147,27 @@ impl IndexDocumentsRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of an <code>IndexDocuments</code> request. Contains the status of the indexing operation, including the fields being indexed.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of an <code>IndexDocuments</code> request. Contains the status of the indexing operation, including the fields being indexed.</p>
+#[derive(Default, Debug, Clone)]
 pub struct IndexDocumentsResponse {
-    #[doc="<p>The names of the fields that are currently being indexed.</p>"]
+    /// <p>The names of the fields that are currently being indexed.</p>
     pub field_names: Option<Vec<String>>,
 }
 
 struct IndexDocumentsResponseDeserializer;
 impl IndexDocumentsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<IndexDocumentsResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<IndexDocumentsResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = IndexDocumentsResponse::default();
@@ -3099,16 +3182,15 @@ impl IndexDocumentsResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "FieldNames" => {
-                            obj.field_names =
-                                Some(try!(FieldNameListDeserializer::deserialize("FieldNames",
-                                                                                 stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "FieldNames" => {
+                        obj.field_names = Some(try!(FieldNameListDeserializer::deserialize(
+                            "FieldNames",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3119,17 +3201,16 @@ impl IndexDocumentsResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Configuration information for a field in the index, including its name, type, and options. The supported options depend on the <code><a>IndexFieldType</a></code>.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Configuration information for a field in the index, including its name, type, and options. The supported options depend on the <code><a>IndexFieldType</a></code>.</p>
+#[derive(Default, Debug, Clone)]
 pub struct IndexField {
     pub date_array_options: Option<DateArrayOptions>,
     pub date_options: Option<DateOptions>,
     pub double_array_options: Option<DoubleArrayOptions>,
     pub double_options: Option<DoubleOptions>,
-    #[doc="<p>A string that represents the name of an index field. CloudSearch supports regular index fields as well as dynamic fields. A dynamic field's name defines a pattern that begins or ends with a wildcard. Any document fields that don't map to a regular index field but do match a dynamic field's pattern are configured with the dynamic field's indexing options. </p> <p>Regular field names begin with a letter and can contain the following characters: a-z (lowercase), 0-9, and _ (underscore). Dynamic field names must begin or end with a wildcard (*). The wildcard can also be the only character in a dynamic field name. Multiple wildcards, and wildcards embedded within a string are not supported. </p> <p>The name <code>score</code> is reserved and cannot be used as a field name. To reference a document's ID, you can use the name <code>_id</code>. </p>"]
+    /// <p>A string that represents the name of an index field. CloudSearch supports regular index fields as well as dynamic fields. A dynamic field's name defines a pattern that begins or ends with a wildcard. Any document fields that don't map to a regular index field but do match a dynamic field's pattern are configured with the dynamic field's indexing options. </p> <p>Regular field names begin with a letter and can contain the following characters: a-z (lowercase), 0-9, and _ (underscore). Dynamic field names must begin or end with a wildcard (*). The wildcard can also be the only character in a dynamic field name. Multiple wildcards, and wildcards embedded within a string are not supported. </p> <p>The name <code>score</code> is reserved and cannot be used as a field name. To reference a document's ID, you can use the name <code>_id</code>. </p>
     pub index_field_name: String,
     pub index_field_type: String,
     pub int_array_options: Option<IntArrayOptions>,
@@ -3144,9 +3225,10 @@ pub struct IndexField {
 struct IndexFieldDeserializer;
 impl IndexFieldDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<IndexField, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<IndexField, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = IndexField::default();
@@ -3161,76 +3243,86 @@ impl IndexFieldDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DateArrayOptions" => {
-                            obj.date_array_options =
-                                Some(try!(DateArrayOptionsDeserializer::deserialize("DateArrayOptions",
-                                                                                    stack)));
-                        }
-                        "DateOptions" => {
-                            obj.date_options =
-                                Some(try!(DateOptionsDeserializer::deserialize("DateOptions",
-                                                                               stack)));
-                        }
-                        "DoubleArrayOptions" => {
-                            obj.double_array_options =
-                                Some(try!(DoubleArrayOptionsDeserializer::deserialize("DoubleArrayOptions",
-                                                                                      stack)));
-                        }
-                        "DoubleOptions" => {
-                            obj.double_options =
-                                Some(try!(DoubleOptionsDeserializer::deserialize("DoubleOptions",
-                                                                                 stack)));
-                        }
-                        "IndexFieldName" => {
-                            obj.index_field_name =
-                                try!(DynamicFieldNameDeserializer::deserialize("IndexFieldName",
-                                                                               stack));
-                        }
-                        "IndexFieldType" => {
-                            obj.index_field_type =
-                                try!(IndexFieldTypeDeserializer::deserialize("IndexFieldType",
-                                                                             stack));
-                        }
-                        "IntArrayOptions" => {
-                            obj.int_array_options =
-                                Some(try!(IntArrayOptionsDeserializer::deserialize("IntArrayOptions",
-                                                                                   stack)));
-                        }
-                        "IntOptions" => {
-                            obj.int_options =
-                                Some(try!(IntOptionsDeserializer::deserialize("IntOptions",
-                                                                              stack)));
-                        }
-                        "LatLonOptions" => {
-                            obj.lat_lon_options =
-                                Some(try!(LatLonOptionsDeserializer::deserialize("LatLonOptions",
-                                                                                 stack)));
-                        }
-                        "LiteralArrayOptions" => {
-                            obj.literal_array_options =
-                                Some(try!(LiteralArrayOptionsDeserializer::deserialize("LiteralArrayOptions",
-                                                                                       stack)));
-                        }
-                        "LiteralOptions" => {
-                            obj.literal_options =
-                                Some(try!(LiteralOptionsDeserializer::deserialize("LiteralOptions",
-                                                                                  stack)));
-                        }
-                        "TextArrayOptions" => {
-                            obj.text_array_options =
-                                Some(try!(TextArrayOptionsDeserializer::deserialize("TextArrayOptions",
-                                                                                    stack)));
-                        }
-                        "TextOptions" => {
-                            obj.text_options =
-                                Some(try!(TextOptionsDeserializer::deserialize("TextOptions",
-                                                                               stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DateArrayOptions" => {
+                        obj.date_array_options = Some(try!(
+                            DateArrayOptionsDeserializer::deserialize("DateArrayOptions", stack)
+                        ));
                     }
-                }
+                    "DateOptions" => {
+                        obj.date_options = Some(try!(DateOptionsDeserializer::deserialize(
+                            "DateOptions",
+                            stack
+                        )));
+                    }
+                    "DoubleArrayOptions" => {
+                        obj.double_array_options =
+                            Some(try!(DoubleArrayOptionsDeserializer::deserialize(
+                                "DoubleArrayOptions",
+                                stack
+                            )));
+                    }
+                    "DoubleOptions" => {
+                        obj.double_options = Some(try!(DoubleOptionsDeserializer::deserialize(
+                            "DoubleOptions",
+                            stack
+                        )));
+                    }
+                    "IndexFieldName" => {
+                        obj.index_field_name = try!(DynamicFieldNameDeserializer::deserialize(
+                            "IndexFieldName",
+                            stack
+                        ));
+                    }
+                    "IndexFieldType" => {
+                        obj.index_field_type = try!(IndexFieldTypeDeserializer::deserialize(
+                            "IndexFieldType",
+                            stack
+                        ));
+                    }
+                    "IntArrayOptions" => {
+                        obj.int_array_options = Some(try!(
+                            IntArrayOptionsDeserializer::deserialize("IntArrayOptions", stack)
+                        ));
+                    }
+                    "IntOptions" => {
+                        obj.int_options = Some(try!(IntOptionsDeserializer::deserialize(
+                            "IntOptions",
+                            stack
+                        )));
+                    }
+                    "LatLonOptions" => {
+                        obj.lat_lon_options = Some(try!(LatLonOptionsDeserializer::deserialize(
+                            "LatLonOptions",
+                            stack
+                        )));
+                    }
+                    "LiteralArrayOptions" => {
+                        obj.literal_array_options =
+                            Some(try!(LiteralArrayOptionsDeserializer::deserialize(
+                                "LiteralArrayOptions",
+                                stack
+                            )));
+                    }
+                    "LiteralOptions" => {
+                        obj.literal_options = Some(try!(LiteralOptionsDeserializer::deserialize(
+                            "LiteralOptions",
+                            stack
+                        )));
+                    }
+                    "TextArrayOptions" => {
+                        obj.text_array_options = Some(try!(
+                            TextArrayOptionsDeserializer::deserialize("TextArrayOptions", stack)
+                        ));
+                    }
+                    "TextOptions" => {
+                        obj.text_options = Some(try!(TextOptionsDeserializer::deserialize(
+                            "TextOptions",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3241,7 +3333,6 @@ impl IndexFieldDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -3255,72 +3346,95 @@ impl IndexFieldSerializer {
         }
 
         if let Some(ref field_value) = obj.date_array_options {
-            DateArrayOptionsSerializer::serialize(params,
-                                                  &format!("{}{}", prefix, "DateArrayOptions"),
-                                                  field_value);
+            DateArrayOptionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "DateArrayOptions"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.date_options {
-            DateOptionsSerializer::serialize(params,
-                                             &format!("{}{}", prefix, "DateOptions"),
-                                             field_value);
+            DateOptionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "DateOptions"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.double_array_options {
-            DoubleArrayOptionsSerializer::serialize(params,
-                                                    &format!("{}{}", prefix, "DoubleArrayOptions"),
-                                                    field_value);
+            DoubleArrayOptionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "DoubleArrayOptions"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.double_options {
-            DoubleOptionsSerializer::serialize(params,
-                                               &format!("{}{}", prefix, "DoubleOptions"),
-                                               field_value);
+            DoubleOptionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "DoubleOptions"),
+                field_value,
+            );
         }
-        params.put(&format!("{}{}", prefix, "IndexFieldName"),
-                   &obj.index_field_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "IndexFieldType"),
-                   &obj.index_field_type.replace("+", "%2B"));
+        params.put(
+            &format!("{}{}", prefix, "IndexFieldName"),
+            &obj.index_field_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "IndexFieldType"),
+            &obj.index_field_type.replace("+", "%2B"),
+        );
         if let Some(ref field_value) = obj.int_array_options {
-            IntArrayOptionsSerializer::serialize(params,
-                                                 &format!("{}{}", prefix, "IntArrayOptions"),
-                                                 field_value);
+            IntArrayOptionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "IntArrayOptions"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.int_options {
-            IntOptionsSerializer::serialize(params,
-                                            &format!("{}{}", prefix, "IntOptions"),
-                                            field_value);
+            IntOptionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "IntOptions"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.lat_lon_options {
-            LatLonOptionsSerializer::serialize(params,
-                                               &format!("{}{}", prefix, "LatLonOptions"),
-                                               field_value);
+            LatLonOptionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LatLonOptions"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.literal_array_options {
-            LiteralArrayOptionsSerializer::serialize(params,
-                                                     &format!("{}{}",
-                                                             prefix,
-                                                             "LiteralArrayOptions"),
-                                                     field_value);
+            LiteralArrayOptionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LiteralArrayOptions"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.literal_options {
-            LiteralOptionsSerializer::serialize(params,
-                                                &format!("{}{}", prefix, "LiteralOptions"),
-                                                field_value);
+            LiteralOptionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LiteralOptions"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.text_array_options {
-            TextArrayOptionsSerializer::serialize(params,
-                                                  &format!("{}{}", prefix, "TextArrayOptions"),
-                                                  field_value);
+            TextArrayOptionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TextArrayOptions"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.text_options {
-            TextOptionsSerializer::serialize(params,
-                                             &format!("{}{}", prefix, "TextOptions"),
-                                             field_value);
+            TextOptionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TextOptions"),
+                field_value,
+            );
         }
-
     }
 }
 
-#[doc="<p>The value of an <code>IndexField</code> and its current status.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The value of an <code>IndexField</code> and its current status.</p>
+#[derive(Default, Debug, Clone)]
 pub struct IndexFieldStatus {
     pub options: IndexField,
     pub status: OptionStatus,
@@ -3329,9 +3443,10 @@ pub struct IndexFieldStatus {
 struct IndexFieldStatusDeserializer;
 impl IndexFieldStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<IndexFieldStatus, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<IndexFieldStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = IndexFieldStatus::default();
@@ -3346,19 +3461,15 @@ impl IndexFieldStatusDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Options" => {
-                            obj.options = try!(IndexFieldDeserializer::deserialize("Options",
-                                                                                   stack));
-                        }
-                        "Status" => {
-                            obj.status = try!(OptionStatusDeserializer::deserialize("Status",
-                                                                                    stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Options" => {
+                        obj.options = try!(IndexFieldDeserializer::deserialize("Options", stack));
                     }
-                }
+                    "Status" => {
+                        obj.status = try!(OptionStatusDeserializer::deserialize("Status", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3369,16 +3480,15 @@ impl IndexFieldStatusDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct IndexFieldStatusListDeserializer;
 impl IndexFieldStatusListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<IndexFieldStatus>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<IndexFieldStatus>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -3394,7 +3504,10 @@ impl IndexFieldStatusListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(IndexFieldStatusDeserializer::deserialize("member", stack)));
+                        obj.push(try!(IndexFieldStatusDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -3410,58 +3523,58 @@ impl IndexFieldStatusListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
 struct IndexFieldTypeDeserializer;
 impl IndexFieldTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct InstanceCountDeserializer;
 impl InstanceCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Options for a field that contains an array of 64-bit signed integers. Present if <code>IndexFieldType</code> specifies the field is of type <code>int-array</code>. All options are enabled by default.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Options for a field that contains an array of 64-bit signed integers. Present if <code>IndexFieldType</code> specifies the field is of type <code>int-array</code>. All options are enabled by default.</p>
+#[derive(Default, Debug, Clone)]
 pub struct IntArrayOptions {
-    #[doc="A value to use for the field if the field isn't specified for a document."]
+    /// A value to use for the field if the field isn't specified for a document.
     pub default_value: Option<i64>,
-    #[doc="<p>Whether facet information can be returned for the field.</p>"]
+    /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
+    /// <p>Whether the contents of the field can be returned in the search results.</p>
     pub return_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field are searchable.</p>"]
+    /// <p>Whether the contents of the field are searchable.</p>
     pub search_enabled: Option<bool>,
-    #[doc="<p>A list of source fields to map to the field. </p>"]
+    /// <p>A list of source fields to map to the field. </p>
     pub source_fields: Option<String>,
 }
 
 struct IntArrayOptionsDeserializer;
 impl IntArrayOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<IntArrayOptions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<IntArrayOptions, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = IntArrayOptions::default();
@@ -3476,34 +3589,36 @@ impl IntArrayOptionsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DefaultValue" => {
-                            obj.default_value = Some(try!(LongDeserializer::deserialize("DefaultValue",
-                                                                                        stack)));
-                        }
-                        "FacetEnabled" => {
-                            obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize("FacetEnabled",
-                                                                                           stack)));
-                        }
-                        "ReturnEnabled" => {
-                            obj.return_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("ReturnEnabled",
-                                                                           stack)));
-                        }
-                        "SearchEnabled" => {
-                            obj.search_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("SearchEnabled",
-                                                                           stack)));
-                        }
-                        "SourceFields" => {
-                            obj.source_fields =
-                                Some(try!(FieldNameCommaListDeserializer::deserialize("SourceFields",
-                                                                                      stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DefaultValue" => {
+                        obj.default_value =
+                            Some(try!(LongDeserializer::deserialize("DefaultValue", stack)));
                     }
-                }
+                    "FacetEnabled" => {
+                        obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "FacetEnabled",
+                            stack
+                        )));
+                    }
+                    "ReturnEnabled" => {
+                        obj.return_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "ReturnEnabled",
+                            stack
+                        )));
+                    }
+                    "SearchEnabled" => {
+                        obj.search_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "SearchEnabled",
+                            stack
+                        )));
+                    }
+                    "SourceFields" => {
+                        obj.source_fields = Some(try!(
+                            FieldNameCommaListDeserializer::deserialize("SourceFields", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3514,7 +3629,6 @@ impl IntArrayOptionsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -3528,52 +3642,62 @@ impl IntArrayOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(&format!("{}{}", prefix, "FacetEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "FacetEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(&format!("{}{}", prefix, "ReturnEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ReturnEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(&format!("{}{}", prefix, "SearchEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SearchEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(&format!("{}{}", prefix, "SourceFields"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SourceFields"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>Options for a 64-bit signed integer field. Present if <code>IndexFieldType</code> specifies the field is of type <code>int</code>. All options are enabled by default.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Options for a 64-bit signed integer field. Present if <code>IndexFieldType</code> specifies the field is of type <code>int</code>. All options are enabled by default.</p>
+#[derive(Default, Debug, Clone)]
 pub struct IntOptions {
-    #[doc="A value to use for the field if the field isn't specified for a document. This can be important if you are using the field in an expression and that field is not present in every document."]
+    /// A value to use for the field if the field isn't specified for a document. This can be important if you are using the field in an expression and that field is not present in every document.
     pub default_value: Option<i64>,
-    #[doc="<p>Whether facet information can be returned for the field.</p>"]
+    /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
+    /// <p>Whether the contents of the field can be returned in the search results.</p>
     pub return_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field are searchable.</p>"]
+    /// <p>Whether the contents of the field are searchable.</p>
     pub search_enabled: Option<bool>,
-    #[doc="<p>Whether the field can be used to sort the search results.</p>"]
+    /// <p>Whether the field can be used to sort the search results.</p>
     pub sort_enabled: Option<bool>,
-    #[doc="<p>The name of the source field to map to the field. </p>"]
+    /// <p>The name of the source field to map to the field. </p>
     pub source_field: Option<String>,
 }
 
 struct IntOptionsDeserializer;
 impl IntOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<IntOptions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<IntOptions, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = IntOptions::default();
@@ -3588,38 +3712,41 @@ impl IntOptionsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DefaultValue" => {
-                            obj.default_value = Some(try!(LongDeserializer::deserialize("DefaultValue",
-                                                                                        stack)));
-                        }
-                        "FacetEnabled" => {
-                            obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize("FacetEnabled",
-                                                                                           stack)));
-                        }
-                        "ReturnEnabled" => {
-                            obj.return_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("ReturnEnabled",
-                                                                           stack)));
-                        }
-                        "SearchEnabled" => {
-                            obj.search_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("SearchEnabled",
-                                                                           stack)));
-                        }
-                        "SortEnabled" => {
-                            obj.sort_enabled = Some(try!(BooleanDeserializer::deserialize("SortEnabled",
-                                                                                          stack)));
-                        }
-                        "SourceField" => {
-                            obj.source_field =
-                                Some(try!(FieldNameDeserializer::deserialize("SourceField",
-                                                                             stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DefaultValue" => {
+                        obj.default_value =
+                            Some(try!(LongDeserializer::deserialize("DefaultValue", stack)));
                     }
-                }
+                    "FacetEnabled" => {
+                        obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "FacetEnabled",
+                            stack
+                        )));
+                    }
+                    "ReturnEnabled" => {
+                        obj.return_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "ReturnEnabled",
+                            stack
+                        )));
+                    }
+                    "SearchEnabled" => {
+                        obj.search_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "SearchEnabled",
+                            stack
+                        )));
+                    }
+                    "SortEnabled" => {
+                        obj.sort_enabled =
+                            Some(try!(BooleanDeserializer::deserialize("SortEnabled", stack)));
+                    }
+                    "SourceField" => {
+                        obj.source_field = Some(try!(FieldNameDeserializer::deserialize(
+                            "SourceField",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3630,7 +3757,6 @@ impl IntOptionsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -3644,45 +3770,56 @@ impl IntOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(&format!("{}{}", prefix, "FacetEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "FacetEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(&format!("{}{}", prefix, "ReturnEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ReturnEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(&format!("{}{}", prefix, "SearchEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SearchEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.sort_enabled {
-            params.put(&format!("{}{}", prefix, "SortEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SortEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(&format!("{}{}", prefix, "SourceField"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SourceField"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>Options for a latlon field. A latlon field contains a location stored as a latitude and longitude value pair. Present if <code>IndexFieldType</code> specifies the field is of type <code>latlon</code>. All options are enabled by default.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Options for a latlon field. A latlon field contains a location stored as a latitude and longitude value pair. Present if <code>IndexFieldType</code> specifies the field is of type <code>latlon</code>. All options are enabled by default.</p>
+#[derive(Default, Debug, Clone)]
 pub struct LatLonOptions {
-    #[doc="A value to use for the field if the field isn't specified for a document."]
+    /// A value to use for the field if the field isn't specified for a document.
     pub default_value: Option<String>,
-    #[doc="<p>Whether facet information can be returned for the field.</p>"]
+    /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
+    /// <p>Whether the contents of the field can be returned in the search results.</p>
     pub return_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field are searchable.</p>"]
+    /// <p>Whether the contents of the field are searchable.</p>
     pub search_enabled: Option<bool>,
-    #[doc="<p>Whether the field can be used to sort the search results.</p>"]
+    /// <p>Whether the field can be used to sort the search results.</p>
     pub sort_enabled: Option<bool>,
     pub source_field: Option<String>,
 }
@@ -3690,9 +3827,10 @@ pub struct LatLonOptions {
 struct LatLonOptionsDeserializer;
 impl LatLonOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<LatLonOptions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LatLonOptions, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = LatLonOptions::default();
@@ -3707,39 +3845,43 @@ impl LatLonOptionsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DefaultValue" => {
-                            obj.default_value =
-                                Some(try!(FieldValueDeserializer::deserialize("DefaultValue",
-                                                                              stack)));
-                        }
-                        "FacetEnabled" => {
-                            obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize("FacetEnabled",
-                                                                                           stack)));
-                        }
-                        "ReturnEnabled" => {
-                            obj.return_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("ReturnEnabled",
-                                                                           stack)));
-                        }
-                        "SearchEnabled" => {
-                            obj.search_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("SearchEnabled",
-                                                                           stack)));
-                        }
-                        "SortEnabled" => {
-                            obj.sort_enabled = Some(try!(BooleanDeserializer::deserialize("SortEnabled",
-                                                                                          stack)));
-                        }
-                        "SourceField" => {
-                            obj.source_field =
-                                Some(try!(FieldNameDeserializer::deserialize("SourceField",
-                                                                             stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DefaultValue" => {
+                        obj.default_value = Some(try!(FieldValueDeserializer::deserialize(
+                            "DefaultValue",
+                            stack
+                        )));
                     }
-                }
+                    "FacetEnabled" => {
+                        obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "FacetEnabled",
+                            stack
+                        )));
+                    }
+                    "ReturnEnabled" => {
+                        obj.return_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "ReturnEnabled",
+                            stack
+                        )));
+                    }
+                    "SearchEnabled" => {
+                        obj.search_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "SearchEnabled",
+                            stack
+                        )));
+                    }
+                    "SortEnabled" => {
+                        obj.sort_enabled =
+                            Some(try!(BooleanDeserializer::deserialize("SortEnabled", stack)));
+                    }
+                    "SourceField" => {
+                        obj.source_field = Some(try!(FieldNameDeserializer::deserialize(
+                            "SourceField",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3750,7 +3892,6 @@ impl LatLonOptionsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -3764,34 +3905,45 @@ impl LatLonOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(&format!("{}{}", prefix, "FacetEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "FacetEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(&format!("{}{}", prefix, "ReturnEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ReturnEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(&format!("{}{}", prefix, "SearchEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SearchEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.sort_enabled {
-            params.put(&format!("{}{}", prefix, "SortEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SortEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(&format!("{}{}", prefix, "SourceField"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SourceField"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct Limits {
     pub maximum_partition_count: i64,
     pub maximum_replication_count: i64,
@@ -3800,9 +3952,10 @@ pub struct Limits {
 struct LimitsDeserializer;
 impl LimitsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Limits, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Limits, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Limits::default();
@@ -3817,21 +3970,23 @@ impl LimitsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "MaximumPartitionCount" => {
-                            obj.maximum_partition_count =
-                                try!(MaximumPartitionCountDeserializer::deserialize("MaximumPartitionCount",
-                                                                                    stack));
-                        }
-                        "MaximumReplicationCount" => {
-                            obj.maximum_replication_count =
-                                try!(MaximumReplicationCountDeserializer::deserialize("MaximumReplicationCount",
-                                                                                      stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "MaximumPartitionCount" => {
+                        obj.maximum_partition_count =
+                            try!(MaximumPartitionCountDeserializer::deserialize(
+                                "MaximumPartitionCount",
+                                stack
+                            ));
                     }
-                }
+                    "MaximumReplicationCount" => {
+                        obj.maximum_replication_count =
+                            try!(MaximumReplicationCountDeserializer::deserialize(
+                                "MaximumReplicationCount",
+                                stack
+                            ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3842,22 +3997,22 @@ impl LimitsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The result of a <code>ListDomainNames</code> request. Contains a list of the domains owned by an account.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>ListDomainNames</code> request. Contains a list of the domains owned by an account.</p>
+#[derive(Default, Debug, Clone)]
 pub struct ListDomainNamesResponse {
-    #[doc="<p>The names of the search domains owned by an account.</p>"]
+    /// <p>The names of the search domains owned by an account.</p>
     pub domain_names: Option<::std::collections::HashMap<String, String>>,
 }
 
 struct ListDomainNamesResponseDeserializer;
 impl ListDomainNamesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ListDomainNamesResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListDomainNamesResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ListDomainNamesResponse::default();
@@ -3872,16 +4027,15 @@ impl ListDomainNamesResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DomainNames" => {
-                            obj.domain_names =
-                                Some(try!(DomainNameMapDeserializer::deserialize("DomainNames",
-                                                                                 stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DomainNames" => {
+                        obj.domain_names = Some(try!(DomainNameMapDeserializer::deserialize(
+                            "DomainNames",
+                            stack
+                        )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3892,30 +4046,30 @@ impl ListDomainNamesResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Options for a field that contains an array of literal strings. Present if <code>IndexFieldType</code> specifies the field is of type <code>literal-array</code>. All options are enabled by default.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Options for a field that contains an array of literal strings. Present if <code>IndexFieldType</code> specifies the field is of type <code>literal-array</code>. All options are enabled by default.</p>
+#[derive(Default, Debug, Clone)]
 pub struct LiteralArrayOptions {
-    #[doc="A value to use for the field if the field isn't specified for a document."]
+    /// A value to use for the field if the field isn't specified for a document.
     pub default_value: Option<String>,
-    #[doc="<p>Whether facet information can be returned for the field.</p>"]
+    /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
+    /// <p>Whether the contents of the field can be returned in the search results.</p>
     pub return_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field are searchable.</p>"]
+    /// <p>Whether the contents of the field are searchable.</p>
     pub search_enabled: Option<bool>,
-    #[doc="<p>A list of source fields to map to the field. </p>"]
+    /// <p>A list of source fields to map to the field. </p>
     pub source_fields: Option<String>,
 }
 
 struct LiteralArrayOptionsDeserializer;
 impl LiteralArrayOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<LiteralArrayOptions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LiteralArrayOptions, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = LiteralArrayOptions::default();
@@ -3930,35 +4084,38 @@ impl LiteralArrayOptionsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DefaultValue" => {
-                            obj.default_value =
-                                Some(try!(FieldValueDeserializer::deserialize("DefaultValue",
-                                                                              stack)));
-                        }
-                        "FacetEnabled" => {
-                            obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize("FacetEnabled",
-                                                                                           stack)));
-                        }
-                        "ReturnEnabled" => {
-                            obj.return_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("ReturnEnabled",
-                                                                           stack)));
-                        }
-                        "SearchEnabled" => {
-                            obj.search_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("SearchEnabled",
-                                                                           stack)));
-                        }
-                        "SourceFields" => {
-                            obj.source_fields =
-                                Some(try!(FieldNameCommaListDeserializer::deserialize("SourceFields",
-                                                                                      stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DefaultValue" => {
+                        obj.default_value = Some(try!(FieldValueDeserializer::deserialize(
+                            "DefaultValue",
+                            stack
+                        )));
                     }
-                }
+                    "FacetEnabled" => {
+                        obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "FacetEnabled",
+                            stack
+                        )));
+                    }
+                    "ReturnEnabled" => {
+                        obj.return_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "ReturnEnabled",
+                            stack
+                        )));
+                    }
+                    "SearchEnabled" => {
+                        obj.search_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "SearchEnabled",
+                            stack
+                        )));
+                    }
+                    "SourceFields" => {
+                        obj.source_fields = Some(try!(
+                            FieldNameCommaListDeserializer::deserialize("SourceFields", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -3969,7 +4126,6 @@ impl LiteralArrayOptionsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -3983,41 +4139,50 @@ impl LiteralArrayOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(&format!("{}{}", prefix, "FacetEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "FacetEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(&format!("{}{}", prefix, "ReturnEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ReturnEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(&format!("{}{}", prefix, "SearchEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SearchEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(&format!("{}{}", prefix, "SourceFields"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SourceFields"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>Options for literal field. Present if <code>IndexFieldType</code> specifies the field is of type <code>literal</code>. All options are enabled by default.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Options for literal field. Present if <code>IndexFieldType</code> specifies the field is of type <code>literal</code>. All options are enabled by default.</p>
+#[derive(Default, Debug, Clone)]
 pub struct LiteralOptions {
-    #[doc="A value to use for the field if the field isn't specified for a document."]
+    /// A value to use for the field if the field isn't specified for a document.
     pub default_value: Option<String>,
-    #[doc="<p>Whether facet information can be returned for the field.</p>"]
+    /// <p>Whether facet information can be returned for the field.</p>
     pub facet_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
+    /// <p>Whether the contents of the field can be returned in the search results.</p>
     pub return_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field are searchable.</p>"]
+    /// <p>Whether the contents of the field are searchable.</p>
     pub search_enabled: Option<bool>,
-    #[doc="<p>Whether the field can be used to sort the search results.</p>"]
+    /// <p>Whether the field can be used to sort the search results.</p>
     pub sort_enabled: Option<bool>,
     pub source_field: Option<String>,
 }
@@ -4025,9 +4190,10 @@ pub struct LiteralOptions {
 struct LiteralOptionsDeserializer;
 impl LiteralOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<LiteralOptions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LiteralOptions, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = LiteralOptions::default();
@@ -4042,39 +4208,43 @@ impl LiteralOptionsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DefaultValue" => {
-                            obj.default_value =
-                                Some(try!(FieldValueDeserializer::deserialize("DefaultValue",
-                                                                              stack)));
-                        }
-                        "FacetEnabled" => {
-                            obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize("FacetEnabled",
-                                                                                           stack)));
-                        }
-                        "ReturnEnabled" => {
-                            obj.return_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("ReturnEnabled",
-                                                                           stack)));
-                        }
-                        "SearchEnabled" => {
-                            obj.search_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("SearchEnabled",
-                                                                           stack)));
-                        }
-                        "SortEnabled" => {
-                            obj.sort_enabled = Some(try!(BooleanDeserializer::deserialize("SortEnabled",
-                                                                                          stack)));
-                        }
-                        "SourceField" => {
-                            obj.source_field =
-                                Some(try!(FieldNameDeserializer::deserialize("SourceField",
-                                                                             stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DefaultValue" => {
+                        obj.default_value = Some(try!(FieldValueDeserializer::deserialize(
+                            "DefaultValue",
+                            stack
+                        )));
                     }
-                }
+                    "FacetEnabled" => {
+                        obj.facet_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "FacetEnabled",
+                            stack
+                        )));
+                    }
+                    "ReturnEnabled" => {
+                        obj.return_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "ReturnEnabled",
+                            stack
+                        )));
+                    }
+                    "SearchEnabled" => {
+                        obj.search_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "SearchEnabled",
+                            stack
+                        )));
+                    }
+                    "SortEnabled" => {
+                        obj.sort_enabled =
+                            Some(try!(BooleanDeserializer::deserialize("SortEnabled", stack)));
+                    }
+                    "SourceField" => {
+                        obj.source_field = Some(try!(FieldNameDeserializer::deserialize(
+                            "SourceField",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4085,7 +4255,6 @@ impl LiteralOptionsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -4099,124 +4268,136 @@ impl LiteralOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.facet_enabled {
-            params.put(&format!("{}{}", prefix, "FacetEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "FacetEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(&format!("{}{}", prefix, "ReturnEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ReturnEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.search_enabled {
-            params.put(&format!("{}{}", prefix, "SearchEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SearchEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.sort_enabled {
-            params.put(&format!("{}{}", prefix, "SortEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SortEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(&format!("{}{}", prefix, "SourceField"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SourceField"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
 struct LongDeserializer;
 impl LongDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct MaximumPartitionCountDeserializer;
 impl MaximumPartitionCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct MaximumReplicationCountDeserializer;
 impl MaximumReplicationCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct MultiAZDeserializer;
 impl MultiAZDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<bool, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct OptionStateDeserializer;
 impl OptionStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The status of domain configuration option.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The status of domain configuration option.</p>
+#[derive(Default, Debug, Clone)]
 pub struct OptionStatus {
-    #[doc="<p>A timestamp for when this option was created.</p>"]
+    /// <p>A timestamp for when this option was created.</p>
     pub creation_date: String,
-    #[doc="<p>Indicates that the option will be deleted once processing is complete.</p>"]
+    /// <p>Indicates that the option will be deleted once processing is complete.</p>
     pub pending_deletion: Option<bool>,
-    #[doc="<p>The state of processing a change to an option. Possible values:</p> <ul> <li> <code>RequiresIndexDocuments</code>: the option's latest value will not be deployed until <a>IndexDocuments</a> has been called and indexing is complete.</li> <li> <code>Processing</code>: the option's latest value is in the process of being activated. </li> <li> <code>Active</code>: the option's latest value is completely deployed.</li> <li> <code>FailedToValidate</code>: the option value is not compatible with the domain's data and cannot be used to index the data. You must either modify the option value or update or remove the incompatible documents.</li> </ul>"]
+    /// <p>The state of processing a change to an option. Possible values:</p> <ul> <li> <code>RequiresIndexDocuments</code>: the option's latest value will not be deployed until <a>IndexDocuments</a> has been called and indexing is complete.</li> <li> <code>Processing</code>: the option's latest value is in the process of being activated. </li> <li> <code>Active</code>: the option's latest value is completely deployed.</li> <li> <code>FailedToValidate</code>: the option value is not compatible with the domain's data and cannot be used to index the data. You must either modify the option value or update or remove the incompatible documents.</li> </ul>
     pub state: String,
-    #[doc="<p>A timestamp for when this option was last updated.</p>"]
+    /// <p>A timestamp for when this option was last updated.</p>
     pub update_date: String,
-    #[doc="<p>A unique integer that indicates when this option was last updated.</p>"]
+    /// <p>A unique integer that indicates when this option was last updated.</p>
     pub update_version: Option<i64>,
 }
 
 struct OptionStatusDeserializer;
 impl OptionStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<OptionStatus, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OptionStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = OptionStatus::default();
@@ -4231,33 +4412,36 @@ impl OptionStatusDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CreationDate" => {
-                            obj.creation_date =
-                                try!(UpdateTimestampDeserializer::deserialize("CreationDate",
-                                                                              stack));
-                        }
-                        "PendingDeletion" => {
-                            obj.pending_deletion =
-                                Some(try!(BooleanDeserializer::deserialize("PendingDeletion",
-                                                                           stack)));
-                        }
-                        "State" => {
-                            obj.state = try!(OptionStateDeserializer::deserialize("State", stack));
-                        }
-                        "UpdateDate" => {
-                            obj.update_date = try!(UpdateTimestampDeserializer::deserialize("UpdateDate",
-                                                                                            stack));
-                        }
-                        "UpdateVersion" => {
-                            obj.update_version =
-                                Some(try!(UIntValueDeserializer::deserialize("UpdateVersion",
-                                                                             stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CreationDate" => {
+                        obj.creation_date = try!(UpdateTimestampDeserializer::deserialize(
+                            "CreationDate",
+                            stack
+                        ));
                     }
-                }
+                    "PendingDeletion" => {
+                        obj.pending_deletion = Some(try!(BooleanDeserializer::deserialize(
+                            "PendingDeletion",
+                            stack
+                        )));
+                    }
+                    "State" => {
+                        obj.state = try!(OptionStateDeserializer::deserialize("State", stack));
+                    }
+                    "UpdateDate" => {
+                        obj.update_date = try!(UpdateTimestampDeserializer::deserialize(
+                            "UpdateDate",
+                            stack
+                        ));
+                    }
+                    "UpdateVersion" => {
+                        obj.update_version = Some(try!(UIntValueDeserializer::deserialize(
+                            "UpdateVersion",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4268,68 +4452,68 @@ impl OptionStatusDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct PartitionCountDeserializer;
 impl PartitionCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct PartitionInstanceTypeDeserializer;
 impl PartitionInstanceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct PolicyDocumentDeserializer;
 impl PolicyDocumentDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The desired instance type and desired number of replicas of each index partition.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The desired instance type and desired number of replicas of each index partition.</p>
+#[derive(Default, Debug, Clone)]
 pub struct ScalingParameters {
-    #[doc="<p>The instance type that you want to preconfigure for your domain. For example, <code>search.m1.small</code>.</p>"]
+    /// <p>The instance type that you want to preconfigure for your domain. For example, <code>search.m1.small</code>.</p>
     pub desired_instance_type: Option<String>,
-    #[doc="<p>The number of partitions you want to preconfigure for your domain. Only valid when you select <code>m2.2xlarge</code> as the desired instance type.</p>"]
+    /// <p>The number of partitions you want to preconfigure for your domain. Only valid when you select <code>m2.2xlarge</code> as the desired instance type.</p>
     pub desired_partition_count: Option<i64>,
-    #[doc="<p>The number of replicas you want to preconfigure for each index partition.</p>"]
+    /// <p>The number of replicas you want to preconfigure for each index partition.</p>
     pub desired_replication_count: Option<i64>,
 }
 
 struct ScalingParametersDeserializer;
 impl ScalingParametersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ScalingParameters, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ScalingParameters, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ScalingParameters::default();
@@ -4344,26 +4528,26 @@ impl ScalingParametersDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DesiredInstanceType" => {
-                            obj.desired_instance_type =
-                                Some(try!(PartitionInstanceTypeDeserializer::deserialize("DesiredInstanceType",
-                                                                                         stack)));
-                        }
-                        "DesiredPartitionCount" => {
-                            obj.desired_partition_count =
-                                Some(try!(UIntValueDeserializer::deserialize("DesiredPartitionCount",
-                                                                             stack)));
-                        }
-                        "DesiredReplicationCount" => {
-                            obj.desired_replication_count =
-                                Some(try!(UIntValueDeserializer::deserialize("DesiredReplicationCount",
-                                                                             stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DesiredInstanceType" => {
+                        obj.desired_instance_type =
+                            Some(try!(PartitionInstanceTypeDeserializer::deserialize(
+                                "DesiredInstanceType",
+                                stack
+                            )));
                     }
-                }
+                    "DesiredPartitionCount" => {
+                        obj.desired_partition_count = Some(try!(
+                            UIntValueDeserializer::deserialize("DesiredPartitionCount", stack)
+                        ));
+                    }
+                    "DesiredReplicationCount" => {
+                        obj.desired_replication_count = Some(try!(
+                            UIntValueDeserializer::deserialize("DesiredReplicationCount", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4374,7 +4558,6 @@ impl ScalingParametersDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -4388,23 +4571,28 @@ impl ScalingParametersSerializer {
         }
 
         if let Some(ref field_value) = obj.desired_instance_type {
-            params.put(&format!("{}{}", prefix, "DesiredInstanceType"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DesiredInstanceType"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.desired_partition_count {
-            params.put(&format!("{}{}", prefix, "DesiredPartitionCount"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DesiredPartitionCount"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.desired_replication_count {
-            params.put(&format!("{}{}", prefix, "DesiredReplicationCount"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DesiredReplicationCount"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>The status and configuration of a search domain's scaling parameters. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The status and configuration of a search domain's scaling parameters. </p>
+#[derive(Default, Debug, Clone)]
 pub struct ScalingParametersStatus {
     pub options: ScalingParameters,
     pub status: OptionStatus,
@@ -4413,9 +4601,10 @@ pub struct ScalingParametersStatus {
 struct ScalingParametersStatusDeserializer;
 impl ScalingParametersStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ScalingParametersStatus, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ScalingParametersStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ScalingParametersStatus::default();
@@ -4430,19 +4619,16 @@ impl ScalingParametersStatusDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Options" => {
-                            obj.options = try!(ScalingParametersDeserializer::deserialize("Options",
-                                                                                          stack));
-                        }
-                        "Status" => {
-                            obj.status = try!(OptionStatusDeserializer::deserialize("Status",
-                                                                                    stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Options" => {
+                        obj.options =
+                            try!(ScalingParametersDeserializer::deserialize("Options", stack));
                     }
-                }
+                    "Status" => {
+                        obj.status = try!(OptionStatusDeserializer::deserialize("Status", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4453,25 +4639,24 @@ impl ScalingParametersStatusDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SearchInstanceTypeDeserializer;
 impl SearchInstanceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The endpoint to which service requests can be submitted.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The endpoint to which service requests can be submitted.</p>
+#[derive(Default, Debug, Clone)]
 pub struct ServiceEndpoint {
     pub endpoint: Option<String>,
 }
@@ -4479,9 +4664,10 @@ pub struct ServiceEndpoint {
 struct ServiceEndpointDeserializer;
 impl ServiceEndpointDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ServiceEndpoint, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ServiceEndpoint, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ServiceEndpoint::default();
@@ -4496,15 +4682,13 @@ impl ServiceEndpointDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Endpoint" => {
-                            obj.endpoint = Some(try!(ServiceUrlDeserializer::deserialize("Endpoint",
-                                                                                         stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Endpoint" => {
+                        obj.endpoint =
+                            Some(try!(ServiceUrlDeserializer::deserialize("Endpoint", stack)));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4515,35 +4699,34 @@ impl ServiceEndpointDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct ServiceUrlDeserializer;
 impl ServiceUrlDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct StandardNameDeserializer;
 impl StandardNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -4561,19 +4744,19 @@ impl StandardNameListSerializer {
 struct StringDeserializer;
 impl StringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Configuration information for a search suggester. Each suggester has a unique name and specifies the text field you want to use for suggestions. The following options can be configured for a suggester: <code>FuzzyMatching</code>, <code>SortExpression</code>. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Configuration information for a search suggester. Each suggester has a unique name and specifies the text field you want to use for suggestions. The following options can be configured for a suggester: <code>FuzzyMatching</code>, <code>SortExpression</code>. </p>
+#[derive(Default, Debug, Clone)]
 pub struct Suggester {
     pub document_suggester_options: DocumentSuggesterOptions,
     pub suggester_name: String,
@@ -4582,9 +4765,10 @@ pub struct Suggester {
 struct SuggesterDeserializer;
 impl SuggesterDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Suggester, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Suggester, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = Suggester::default();
@@ -4599,20 +4783,22 @@ impl SuggesterDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DocumentSuggesterOptions" => {
-                            obj.document_suggester_options =
-                                try!(DocumentSuggesterOptionsDeserializer::deserialize("DocumentSuggesterOptions",
-                                                                                       stack));
-                        }
-                        "SuggesterName" => {
-                            obj.suggester_name = try!(StandardNameDeserializer::deserialize("SuggesterName",
-                                                                                            stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DocumentSuggesterOptions" => {
+                        obj.document_suggester_options =
+                            try!(DocumentSuggesterOptionsDeserializer::deserialize(
+                                "DocumentSuggesterOptions",
+                                stack
+                            ));
                     }
-                }
+                    "SuggesterName" => {
+                        obj.suggester_name = try!(StandardNameDeserializer::deserialize(
+                            "SuggesterName",
+                            stack
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4623,7 +4809,6 @@ impl SuggesterDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -4636,33 +4821,34 @@ impl SuggesterSerializer {
             prefix.push_str(".");
         }
 
-        DocumentSuggesterOptionsSerializer::serialize(params,
-                                                      &format!("{}{}",
-                                                              prefix,
-                                                              "DocumentSuggesterOptions"),
-                                                      &obj.document_suggester_options);
-        params.put(&format!("{}{}", prefix, "SuggesterName"),
-                   &obj.suggester_name.replace("+", "%2B"));
-
+        DocumentSuggesterOptionsSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "DocumentSuggesterOptions"),
+            &obj.document_suggester_options,
+        );
+        params.put(
+            &format!("{}{}", prefix, "SuggesterName"),
+            &obj.suggester_name.replace("+", "%2B"),
+        );
     }
 }
 
 struct SuggesterFuzzyMatchingDeserializer;
 impl SuggesterFuzzyMatchingDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>The value of a <code>Suggester</code> and its current status.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The value of a <code>Suggester</code> and its current status.</p>
+#[derive(Default, Debug, Clone)]
 pub struct SuggesterStatus {
     pub options: Suggester,
     pub status: OptionStatus,
@@ -4671,9 +4857,10 @@ pub struct SuggesterStatus {
 struct SuggesterStatusDeserializer;
 impl SuggesterStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<SuggesterStatus, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SuggesterStatus, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = SuggesterStatus::default();
@@ -4688,19 +4875,15 @@ impl SuggesterStatusDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Options" => {
-                            obj.options = try!(SuggesterDeserializer::deserialize("Options",
-                                                                                  stack));
-                        }
-                        "Status" => {
-                            obj.status = try!(OptionStatusDeserializer::deserialize("Status",
-                                                                                    stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Options" => {
+                        obj.options = try!(SuggesterDeserializer::deserialize("Options", stack));
                     }
-                }
+                    "Status" => {
+                        obj.status = try!(OptionStatusDeserializer::deserialize("Status", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4711,16 +4894,15 @@ impl SuggesterStatusDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct SuggesterStatusListDeserializer;
 impl SuggesterStatusListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Vec<SuggesterStatus>, XmlParseError> {
-
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<SuggesterStatus>, XmlParseError> {
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
 
@@ -4736,7 +4918,10 @@ impl SuggesterStatusListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(SuggesterStatusDeserializer::deserialize("member", stack)));
+                        obj.push(try!(SuggesterStatusDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -4752,30 +4937,30 @@ impl SuggesterStatusListDeserializer {
         }
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Options for a field that contains an array of text strings. Present if <code>IndexFieldType</code> specifies the field is of type <code>text-array</code>. A <code>text-array</code> field is always searchable. All options are enabled by default.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Options for a field that contains an array of text strings. Present if <code>IndexFieldType</code> specifies the field is of type <code>text-array</code>. A <code>text-array</code> field is always searchable. All options are enabled by default.</p>
+#[derive(Default, Debug, Clone)]
 pub struct TextArrayOptions {
-    #[doc="<p>The name of an analysis scheme for a <code>text-array</code> field.</p>"]
+    /// <p>The name of an analysis scheme for a <code>text-array</code> field.</p>
     pub analysis_scheme: Option<String>,
-    #[doc="A value to use for the field if the field isn't specified for a document."]
+    /// A value to use for the field if the field isn't specified for a document.
     pub default_value: Option<String>,
-    #[doc="<p>Whether highlights can be returned for the field.</p>"]
+    /// <p>Whether highlights can be returned for the field.</p>
     pub highlight_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
+    /// <p>Whether the contents of the field can be returned in the search results.</p>
     pub return_enabled: Option<bool>,
-    #[doc="<p>A list of source fields to map to the field. </p>"]
+    /// <p>A list of source fields to map to the field. </p>
     pub source_fields: Option<String>,
 }
 
 struct TextArrayOptionsDeserializer;
 impl TextArrayOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<TextArrayOptions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TextArrayOptions, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = TextArrayOptions::default();
@@ -4790,35 +4975,36 @@ impl TextArrayOptionsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AnalysisScheme" => {
-                            obj.analysis_scheme = Some(try!(WordDeserializer::deserialize("AnalysisScheme",
-                                                                                          stack)));
-                        }
-                        "DefaultValue" => {
-                            obj.default_value =
-                                Some(try!(FieldValueDeserializer::deserialize("DefaultValue",
-                                                                              stack)));
-                        }
-                        "HighlightEnabled" => {
-                            obj.highlight_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("HighlightEnabled",
-                                                                           stack)));
-                        }
-                        "ReturnEnabled" => {
-                            obj.return_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("ReturnEnabled",
-                                                                           stack)));
-                        }
-                        "SourceFields" => {
-                            obj.source_fields =
-                                Some(try!(FieldNameCommaListDeserializer::deserialize("SourceFields",
-                                                                                      stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AnalysisScheme" => {
+                        obj.analysis_scheme =
+                            Some(try!(WordDeserializer::deserialize("AnalysisScheme", stack)));
                     }
-                }
+                    "DefaultValue" => {
+                        obj.default_value = Some(try!(FieldValueDeserializer::deserialize(
+                            "DefaultValue",
+                            stack
+                        )));
+                    }
+                    "HighlightEnabled" => {
+                        obj.highlight_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "HighlightEnabled",
+                            stack
+                        )));
+                    }
+                    "ReturnEnabled" => {
+                        obj.return_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "ReturnEnabled",
+                            stack
+                        )));
+                    }
+                    "SourceFields" => {
+                        obj.source_fields = Some(try!(
+                            FieldNameCommaListDeserializer::deserialize("SourceFields", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4829,7 +5015,6 @@ impl TextArrayOptionsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -4843,41 +5028,50 @@ impl TextArrayOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.analysis_scheme {
-            params.put(&format!("{}{}", prefix, "AnalysisScheme"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "AnalysisScheme"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.highlight_enabled {
-            params.put(&format!("{}{}", prefix, "HighlightEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "HighlightEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(&format!("{}{}", prefix, "ReturnEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ReturnEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(&format!("{}{}", prefix, "SourceFields"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SourceFields"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
-#[doc="<p>Options for text field. Present if <code>IndexFieldType</code> specifies the field is of type <code>text</code>. A <code>text</code> field is always searchable. All options are enabled by default.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Options for text field. Present if <code>IndexFieldType</code> specifies the field is of type <code>text</code>. A <code>text</code> field is always searchable. All options are enabled by default.</p>
+#[derive(Default, Debug, Clone)]
 pub struct TextOptions {
-    #[doc="<p>The name of an analysis scheme for a <code>text</code> field.</p>"]
+    /// <p>The name of an analysis scheme for a <code>text</code> field.</p>
     pub analysis_scheme: Option<String>,
-    #[doc="A value to use for the field if the field isn't specified for a document."]
+    /// A value to use for the field if the field isn't specified for a document.
     pub default_value: Option<String>,
-    #[doc="<p>Whether highlights can be returned for the field.</p>"]
+    /// <p>Whether highlights can be returned for the field.</p>
     pub highlight_enabled: Option<bool>,
-    #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
+    /// <p>Whether the contents of the field can be returned in the search results.</p>
     pub return_enabled: Option<bool>,
-    #[doc="<p>Whether the field can be used to sort the search results.</p>"]
+    /// <p>Whether the field can be used to sort the search results.</p>
     pub sort_enabled: Option<bool>,
     pub source_field: Option<String>,
 }
@@ -4885,9 +5079,10 @@ pub struct TextOptions {
 struct TextOptionsDeserializer;
 impl TextOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<TextOptions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TextOptions, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = TextOptions::default();
@@ -4902,39 +5097,41 @@ impl TextOptionsDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AnalysisScheme" => {
-                            obj.analysis_scheme = Some(try!(WordDeserializer::deserialize("AnalysisScheme",
-                                                                                          stack)));
-                        }
-                        "DefaultValue" => {
-                            obj.default_value =
-                                Some(try!(FieldValueDeserializer::deserialize("DefaultValue",
-                                                                              stack)));
-                        }
-                        "HighlightEnabled" => {
-                            obj.highlight_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("HighlightEnabled",
-                                                                           stack)));
-                        }
-                        "ReturnEnabled" => {
-                            obj.return_enabled =
-                                Some(try!(BooleanDeserializer::deserialize("ReturnEnabled",
-                                                                           stack)));
-                        }
-                        "SortEnabled" => {
-                            obj.sort_enabled = Some(try!(BooleanDeserializer::deserialize("SortEnabled",
-                                                                                          stack)));
-                        }
-                        "SourceField" => {
-                            obj.source_field =
-                                Some(try!(FieldNameDeserializer::deserialize("SourceField",
-                                                                             stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AnalysisScheme" => {
+                        obj.analysis_scheme =
+                            Some(try!(WordDeserializer::deserialize("AnalysisScheme", stack)));
                     }
-                }
+                    "DefaultValue" => {
+                        obj.default_value = Some(try!(FieldValueDeserializer::deserialize(
+                            "DefaultValue",
+                            stack
+                        )));
+                    }
+                    "HighlightEnabled" => {
+                        obj.highlight_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "HighlightEnabled",
+                            stack
+                        )));
+                    }
+                    "ReturnEnabled" => {
+                        obj.return_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "ReturnEnabled",
+                            stack
+                        )));
+                    }
+                    "SortEnabled" => {
+                        obj.sort_enabled =
+                            Some(try!(BooleanDeserializer::deserialize("SortEnabled", stack)));
+                    }
+                    "SourceField" => {
+                        obj.source_field = Some(try!(FieldNameDeserializer::deserialize(
+                            "SourceField",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4945,7 +5142,6 @@ impl TextOptionsDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 
@@ -4959,55 +5155,65 @@ impl TextOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.analysis_scheme {
-            params.put(&format!("{}{}", prefix, "AnalysisScheme"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "AnalysisScheme"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.highlight_enabled {
-            params.put(&format!("{}{}", prefix, "HighlightEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "HighlightEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.return_enabled {
-            params.put(&format!("{}{}", prefix, "ReturnEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "ReturnEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.sort_enabled {
-            params.put(&format!("{}{}", prefix, "SortEnabled"),
-                       &field_value.to_string().replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SortEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(&format!("{}{}", prefix, "SourceField"),
-                       &field_value.replace("+", "%2B"));
+            params.put(
+                &format!("{}{}", prefix, "SourceField"),
+                &field_value.replace("+", "%2B"),
+            );
         }
-
     }
 }
 
 struct UIntValueDeserializer;
 impl UIntValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<i64, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>UpdateAvailabilityOptions</a></code> operation. Specifies the name of the domain you want to update and the Multi-AZ availability option.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>UpdateAvailabilityOptions</a></code> operation. Specifies the name of the domain you want to update and the Multi-AZ availability option.</p>
+#[derive(Default, Debug, Clone)]
 pub struct UpdateAvailabilityOptionsRequest {
     pub domain_name: String,
-    #[doc="<p>You expand an existing search domain to a second Availability Zone by setting the Multi-AZ option to true. Similarly, you can turn off the Multi-AZ option to downgrade the domain to a single Availability Zone by setting the Multi-AZ option to <code>false</code>. </p>"]
+    /// <p>You expand an existing search domain to a second Availability Zone by setting the Multi-AZ option to true. Similarly, you can turn off the Multi-AZ option to downgrade the domain to a single Availability Zone by setting the Multi-AZ option to <code>false</code>. </p>
     pub multi_az: bool,
 }
-
 
 /// Serialize `UpdateAvailabilityOptionsRequest` contents to a `SignedRequest`.
 struct UpdateAvailabilityOptionsRequestSerializer;
@@ -5018,28 +5224,31 @@ impl UpdateAvailabilityOptionsRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "MultiAZ"),
-                   &obj.multi_az.to_string().replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "MultiAZ"),
+            &obj.multi_az.to_string().replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of a <code>UpdateAvailabilityOptions</code> request. Contains the status of the domain's availability options. </p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>UpdateAvailabilityOptions</code> request. Contains the status of the domain's availability options. </p>
+#[derive(Default, Debug, Clone)]
 pub struct UpdateAvailabilityOptionsResponse {
-    #[doc="<p>The newly-configured availability options. Indicates whether Multi-AZ is enabled for the domain. </p>"]
+    /// <p>The newly-configured availability options. Indicates whether Multi-AZ is enabled for the domain. </p>
     pub availability_options: Option<AvailabilityOptionsStatus>,
 }
 
 struct UpdateAvailabilityOptionsResponseDeserializer;
 impl UpdateAvailabilityOptionsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<UpdateAvailabilityOptionsResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateAvailabilityOptionsResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = UpdateAvailabilityOptionsResponse::default();
@@ -5054,14 +5263,16 @@ impl UpdateAvailabilityOptionsResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AvailabilityOptions" => {
-                            obj.availability_options = Some(try!(AvailabilityOptionsStatusDeserializer::deserialize("AvailabilityOptions", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AvailabilityOptions" => {
+                        obj.availability_options =
+                            Some(try!(AvailabilityOptionsStatusDeserializer::deserialize(
+                                "AvailabilityOptions",
+                                stack
+                            )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5072,16 +5283,14 @@ impl UpdateAvailabilityOptionsResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>UpdateScalingParameters</a></code> operation. Specifies the name of the domain you want to update and the scaling parameters you want to configure.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>UpdateScalingParameters</a></code> operation. Specifies the name of the domain you want to update and the scaling parameters you want to configure.</p>
+#[derive(Default, Debug, Clone)]
 pub struct UpdateScalingParametersRequest {
     pub domain_name: String,
     pub scaling_parameters: ScalingParameters,
 }
-
 
 /// Serialize `UpdateScalingParametersRequest` contents to a `SignedRequest`.
 struct UpdateScalingParametersRequestSerializer;
@@ -5092,17 +5301,20 @@ impl UpdateScalingParametersRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-        ScalingParametersSerializer::serialize(params,
-                                               &format!("{}{}", prefix, "ScalingParameters"),
-                                               &obj.scaling_parameters);
-
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
+        ScalingParametersSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "ScalingParameters"),
+            &obj.scaling_parameters,
+        );
     }
 }
 
-#[doc="<p>The result of a <code>UpdateScalingParameters</code> request. Contains the status of the newly-configured scaling parameters.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of a <code>UpdateScalingParameters</code> request. Contains the status of the newly-configured scaling parameters.</p>
+#[derive(Default, Debug, Clone)]
 pub struct UpdateScalingParametersResponse {
     pub scaling_parameters: ScalingParametersStatus,
 }
@@ -5110,10 +5322,10 @@ pub struct UpdateScalingParametersResponse {
 struct UpdateScalingParametersResponseDeserializer;
 impl UpdateScalingParametersResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<UpdateScalingParametersResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateScalingParametersResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = UpdateScalingParametersResponse::default();
@@ -5128,16 +5340,16 @@ impl UpdateScalingParametersResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ScalingParameters" => {
-                            obj.scaling_parameters =
-                                try!(ScalingParametersStatusDeserializer::deserialize("ScalingParameters",
-                                                                                      stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ScalingParameters" => {
+                        obj.scaling_parameters =
+                            try!(ScalingParametersStatusDeserializer::deserialize(
+                                "ScalingParameters",
+                                stack
+                            ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5148,17 +5360,15 @@ impl UpdateScalingParametersResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
-#[doc="<p>Container for the parameters to the <code><a>UpdateServiceAccessPolicies</a></code> operation. Specifies the name of the domain you want to update and the access rules you want to configure.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>Container for the parameters to the <code><a>UpdateServiceAccessPolicies</a></code> operation. Specifies the name of the domain you want to update and the access rules you want to configure.</p>
+#[derive(Default, Debug, Clone)]
 pub struct UpdateServiceAccessPoliciesRequest {
-    #[doc="<p>The access rules you want to configure. These rules replace any existing rules. </p>"]
+    /// <p>The access rules you want to configure. These rules replace any existing rules. </p>
     pub access_policies: String,
     pub domain_name: String,
 }
-
 
 /// Serialize `UpdateServiceAccessPoliciesRequest` contents to a `SignedRequest`.
 struct UpdateServiceAccessPoliciesRequestSerializer;
@@ -5169,28 +5379,31 @@ impl UpdateServiceAccessPoliciesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "AccessPolicies"),
-                   &obj.access_policies.replace("+", "%2B"));
-        params.put(&format!("{}{}", prefix, "DomainName"),
-                   &obj.domain_name.replace("+", "%2B"));
-
+        params.put(
+            &format!("{}{}", prefix, "AccessPolicies"),
+            &obj.access_policies.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.replace("+", "%2B"),
+        );
     }
 }
 
-#[doc="<p>The result of an <code>UpdateServiceAccessPolicies</code> request. Contains the new access policies.</p>"]
-#[derive(Default,Debug,Clone)]
+/// <p>The result of an <code>UpdateServiceAccessPolicies</code> request. Contains the new access policies.</p>
+#[derive(Default, Debug, Clone)]
 pub struct UpdateServiceAccessPoliciesResponse {
-    #[doc="<p>The access rules configured for the domain.</p>"]
+    /// <p>The access rules configured for the domain.</p>
     pub access_policies: AccessPoliciesStatus,
 }
 
 struct UpdateServiceAccessPoliciesResponseDeserializer;
 impl UpdateServiceAccessPoliciesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<UpdateServiceAccessPoliciesResponse, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateServiceAccessPoliciesResponse, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = UpdateServiceAccessPoliciesResponse::default();
@@ -5205,16 +5418,15 @@ impl UpdateServiceAccessPoliciesResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AccessPolicies" => {
-                            obj.access_policies =
-                                try!(AccessPoliciesStatusDeserializer::deserialize("AccessPolicies",
-                                                                                   stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AccessPolicies" => {
+                        obj.access_policies = try!(AccessPoliciesStatusDeserializer::deserialize(
+                            "AccessPolicies",
+                            stack
+                        ));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5225,35 +5437,34 @@ impl UpdateServiceAccessPoliciesResponseDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct UpdateTimestampDeserializer;
 impl UpdateTimestampDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 struct WordDeserializer;
 impl WordDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<String, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
-
     }
 }
 /// Errors returned by BuildSuggesters
@@ -5275,7 +5486,6 @@ pub enum BuildSuggestersError {
     Unknown(String),
 }
 
-
 impl BuildSuggestersError {
     pub fn from_body(body: &str) -> BuildSuggestersError {
         let reader = EventReader::new(body.as_bytes());
@@ -5283,20 +5493,16 @@ impl BuildSuggestersError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        BuildSuggestersError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        BuildSuggestersError::Internal(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => {
-                        BuildSuggestersError::ResourceNotFound(String::from(parsed_error.message))
-                    }
-                    _ => BuildSuggestersError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => BuildSuggestersError::Base(String::from(parsed_error.message)),
+                "InternalException" => {
+                    BuildSuggestersError::Internal(String::from(parsed_error.message))
                 }
-            }
+                "ResourceNotFoundException" => {
+                    BuildSuggestersError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                _ => BuildSuggestersError::Unknown(String::from(body)),
+            },
             Err(_) => BuildSuggestersError::Unknown(body.to_string()),
         }
     }
@@ -5360,7 +5566,6 @@ pub enum CreateDomainError {
     Unknown(String),
 }
 
-
 impl CreateDomainError {
     pub fn from_body(body: &str) -> CreateDomainError {
         let reader = EventReader::new(body.as_bytes());
@@ -5368,18 +5573,16 @@ impl CreateDomainError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => CreateDomainError::Base(String::from(parsed_error.message)),
-                    "InternalException" => {
-                        CreateDomainError::Internal(String::from(parsed_error.message))
-                    }
-                    "LimitExceededException" => {
-                        CreateDomainError::LimitExceeded(String::from(parsed_error.message))
-                    }
-                    _ => CreateDomainError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => CreateDomainError::Base(String::from(parsed_error.message)),
+                "InternalException" => {
+                    CreateDomainError::Internal(String::from(parsed_error.message))
                 }
-            }
+                "LimitExceededException" => {
+                    CreateDomainError::LimitExceeded(String::from(parsed_error.message))
+                }
+                _ => CreateDomainError::Unknown(String::from(body)),
+            },
             Err(_) => CreateDomainError::Unknown(body.to_string()),
         }
     }
@@ -5447,7 +5650,6 @@ pub enum DefineAnalysisSchemeError {
     Unknown(String),
 }
 
-
 impl DefineAnalysisSchemeError {
     pub fn from_body(body: &str) -> DefineAnalysisSchemeError {
         let reader = EventReader::new(body.as_bytes());
@@ -5455,24 +5657,24 @@ impl DefineAnalysisSchemeError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DefineAnalysisSchemeError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        DefineAnalysisSchemeError::Internal(String::from(parsed_error.message))
-                    }
-                    "LimitExceededException" => {
-                        DefineAnalysisSchemeError::LimitExceeded(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => DefineAnalysisSchemeError::ResourceNotFound(String::from(parsed_error.message)),
-                    "InvalidTypeException" => {
-                        DefineAnalysisSchemeError::InvalidType(String::from(parsed_error.message))
-                    }
-                    _ => DefineAnalysisSchemeError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => {
+                    DefineAnalysisSchemeError::Base(String::from(parsed_error.message))
                 }
-            }
+                "InternalException" => {
+                    DefineAnalysisSchemeError::Internal(String::from(parsed_error.message))
+                }
+                "LimitExceededException" => {
+                    DefineAnalysisSchemeError::LimitExceeded(String::from(parsed_error.message))
+                }
+                "ResourceNotFoundException" => {
+                    DefineAnalysisSchemeError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                "InvalidTypeException" => {
+                    DefineAnalysisSchemeError::InvalidType(String::from(parsed_error.message))
+                }
+                _ => DefineAnalysisSchemeError::Unknown(String::from(body)),
+            },
             Err(_) => DefineAnalysisSchemeError::Unknown(body.to_string()),
         }
     }
@@ -5544,7 +5746,6 @@ pub enum DefineExpressionError {
     Unknown(String),
 }
 
-
 impl DefineExpressionError {
     pub fn from_body(body: &str) -> DefineExpressionError {
         let reader = EventReader::new(body.as_bytes());
@@ -5552,26 +5753,22 @@ impl DefineExpressionError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DefineExpressionError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        DefineExpressionError::Internal(String::from(parsed_error.message))
-                    }
-                    "LimitExceededException" => {
-                        DefineExpressionError::LimitExceeded(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DefineExpressionError::ResourceNotFound(String::from(parsed_error.message))
-                    }
-                    "InvalidTypeException" => {
-                        DefineExpressionError::InvalidType(String::from(parsed_error.message))
-                    }
-                    _ => DefineExpressionError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => DefineExpressionError::Base(String::from(parsed_error.message)),
+                "InternalException" => {
+                    DefineExpressionError::Internal(String::from(parsed_error.message))
                 }
-            }
+                "LimitExceededException" => {
+                    DefineExpressionError::LimitExceeded(String::from(parsed_error.message))
+                }
+                "ResourceNotFoundException" => {
+                    DefineExpressionError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                "InvalidTypeException" => {
+                    DefineExpressionError::InvalidType(String::from(parsed_error.message))
+                }
+                _ => DefineExpressionError::Unknown(String::from(body)),
+            },
             Err(_) => DefineExpressionError::Unknown(body.to_string()),
         }
     }
@@ -5641,7 +5838,6 @@ pub enum DefineIndexFieldError {
     Unknown(String),
 }
 
-
 impl DefineIndexFieldError {
     pub fn from_body(body: &str) -> DefineIndexFieldError {
         let reader = EventReader::new(body.as_bytes());
@@ -5649,26 +5845,22 @@ impl DefineIndexFieldError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DefineIndexFieldError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        DefineIndexFieldError::Internal(String::from(parsed_error.message))
-                    }
-                    "LimitExceededException" => {
-                        DefineIndexFieldError::LimitExceeded(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DefineIndexFieldError::ResourceNotFound(String::from(parsed_error.message))
-                    }
-                    "InvalidTypeException" => {
-                        DefineIndexFieldError::InvalidType(String::from(parsed_error.message))
-                    }
-                    _ => DefineIndexFieldError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => DefineIndexFieldError::Base(String::from(parsed_error.message)),
+                "InternalException" => {
+                    DefineIndexFieldError::Internal(String::from(parsed_error.message))
                 }
-            }
+                "LimitExceededException" => {
+                    DefineIndexFieldError::LimitExceeded(String::from(parsed_error.message))
+                }
+                "ResourceNotFoundException" => {
+                    DefineIndexFieldError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                "InvalidTypeException" => {
+                    DefineIndexFieldError::InvalidType(String::from(parsed_error.message))
+                }
+                _ => DefineIndexFieldError::Unknown(String::from(body)),
+            },
             Err(_) => DefineIndexFieldError::Unknown(body.to_string()),
         }
     }
@@ -5738,7 +5930,6 @@ pub enum DefineSuggesterError {
     Unknown(String),
 }
 
-
 impl DefineSuggesterError {
     pub fn from_body(body: &str) -> DefineSuggesterError {
         let reader = EventReader::new(body.as_bytes());
@@ -5746,26 +5937,22 @@ impl DefineSuggesterError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DefineSuggesterError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        DefineSuggesterError::Internal(String::from(parsed_error.message))
-                    }
-                    "LimitExceededException" => {
-                        DefineSuggesterError::LimitExceeded(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DefineSuggesterError::ResourceNotFound(String::from(parsed_error.message))
-                    }
-                    "InvalidTypeException" => {
-                        DefineSuggesterError::InvalidType(String::from(parsed_error.message))
-                    }
-                    _ => DefineSuggesterError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => DefineSuggesterError::Base(String::from(parsed_error.message)),
+                "InternalException" => {
+                    DefineSuggesterError::Internal(String::from(parsed_error.message))
                 }
-            }
+                "LimitExceededException" => {
+                    DefineSuggesterError::LimitExceeded(String::from(parsed_error.message))
+                }
+                "ResourceNotFoundException" => {
+                    DefineSuggesterError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                "InvalidTypeException" => {
+                    DefineSuggesterError::InvalidType(String::from(parsed_error.message))
+                }
+                _ => DefineSuggesterError::Unknown(String::from(body)),
+            },
             Err(_) => DefineSuggesterError::Unknown(body.to_string()),
         }
     }
@@ -5833,7 +6020,6 @@ pub enum DeleteAnalysisSchemeError {
     Unknown(String),
 }
 
-
 impl DeleteAnalysisSchemeError {
     pub fn from_body(body: &str) -> DeleteAnalysisSchemeError {
         let reader = EventReader::new(body.as_bytes());
@@ -5841,21 +6027,21 @@ impl DeleteAnalysisSchemeError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DeleteAnalysisSchemeError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        DeleteAnalysisSchemeError::Internal(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => DeleteAnalysisSchemeError::ResourceNotFound(String::from(parsed_error.message)),
-                    "InvalidTypeException" => {
-                        DeleteAnalysisSchemeError::InvalidType(String::from(parsed_error.message))
-                    }
-                    _ => DeleteAnalysisSchemeError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => {
+                    DeleteAnalysisSchemeError::Base(String::from(parsed_error.message))
                 }
-            }
+                "InternalException" => {
+                    DeleteAnalysisSchemeError::Internal(String::from(parsed_error.message))
+                }
+                "ResourceNotFoundException" => {
+                    DeleteAnalysisSchemeError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                "InvalidTypeException" => {
+                    DeleteAnalysisSchemeError::InvalidType(String::from(parsed_error.message))
+                }
+                _ => DeleteAnalysisSchemeError::Unknown(String::from(body)),
+            },
             Err(_) => DeleteAnalysisSchemeError::Unknown(body.to_string()),
         }
     }
@@ -5920,7 +6106,6 @@ pub enum DeleteDomainError {
     Unknown(String),
 }
 
-
 impl DeleteDomainError {
     pub fn from_body(body: &str) -> DeleteDomainError {
         let reader = EventReader::new(body.as_bytes());
@@ -5928,15 +6113,13 @@ impl DeleteDomainError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => DeleteDomainError::Base(String::from(parsed_error.message)),
-                    "InternalException" => {
-                        DeleteDomainError::Internal(String::from(parsed_error.message))
-                    }
-                    _ => DeleteDomainError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => DeleteDomainError::Base(String::from(parsed_error.message)),
+                "InternalException" => {
+                    DeleteDomainError::Internal(String::from(parsed_error.message))
                 }
-            }
+                _ => DeleteDomainError::Unknown(String::from(body)),
+            },
             Err(_) => DeleteDomainError::Unknown(body.to_string()),
         }
     }
@@ -6001,7 +6184,6 @@ pub enum DeleteExpressionError {
     Unknown(String),
 }
 
-
 impl DeleteExpressionError {
     pub fn from_body(body: &str) -> DeleteExpressionError {
         let reader = EventReader::new(body.as_bytes());
@@ -6009,23 +6191,19 @@ impl DeleteExpressionError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DeleteExpressionError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        DeleteExpressionError::Internal(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteExpressionError::ResourceNotFound(String::from(parsed_error.message))
-                    }
-                    "InvalidTypeException" => {
-                        DeleteExpressionError::InvalidType(String::from(parsed_error.message))
-                    }
-                    _ => DeleteExpressionError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => DeleteExpressionError::Base(String::from(parsed_error.message)),
+                "InternalException" => {
+                    DeleteExpressionError::Internal(String::from(parsed_error.message))
                 }
-            }
+                "ResourceNotFoundException" => {
+                    DeleteExpressionError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                "InvalidTypeException" => {
+                    DeleteExpressionError::InvalidType(String::from(parsed_error.message))
+                }
+                _ => DeleteExpressionError::Unknown(String::from(body)),
+            },
             Err(_) => DeleteExpressionError::Unknown(body.to_string()),
         }
     }
@@ -6092,7 +6270,6 @@ pub enum DeleteIndexFieldError {
     Unknown(String),
 }
 
-
 impl DeleteIndexFieldError {
     pub fn from_body(body: &str) -> DeleteIndexFieldError {
         let reader = EventReader::new(body.as_bytes());
@@ -6100,23 +6277,19 @@ impl DeleteIndexFieldError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DeleteIndexFieldError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        DeleteIndexFieldError::Internal(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteIndexFieldError::ResourceNotFound(String::from(parsed_error.message))
-                    }
-                    "InvalidTypeException" => {
-                        DeleteIndexFieldError::InvalidType(String::from(parsed_error.message))
-                    }
-                    _ => DeleteIndexFieldError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => DeleteIndexFieldError::Base(String::from(parsed_error.message)),
+                "InternalException" => {
+                    DeleteIndexFieldError::Internal(String::from(parsed_error.message))
                 }
-            }
+                "ResourceNotFoundException" => {
+                    DeleteIndexFieldError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                "InvalidTypeException" => {
+                    DeleteIndexFieldError::InvalidType(String::from(parsed_error.message))
+                }
+                _ => DeleteIndexFieldError::Unknown(String::from(body)),
+            },
             Err(_) => DeleteIndexFieldError::Unknown(body.to_string()),
         }
     }
@@ -6183,7 +6356,6 @@ pub enum DeleteSuggesterError {
     Unknown(String),
 }
 
-
 impl DeleteSuggesterError {
     pub fn from_body(body: &str) -> DeleteSuggesterError {
         let reader = EventReader::new(body.as_bytes());
@@ -6191,23 +6363,19 @@ impl DeleteSuggesterError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DeleteSuggesterError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        DeleteSuggesterError::Internal(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteSuggesterError::ResourceNotFound(String::from(parsed_error.message))
-                    }
-                    "InvalidTypeException" => {
-                        DeleteSuggesterError::InvalidType(String::from(parsed_error.message))
-                    }
-                    _ => DeleteSuggesterError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => DeleteSuggesterError::Base(String::from(parsed_error.message)),
+                "InternalException" => {
+                    DeleteSuggesterError::Internal(String::from(parsed_error.message))
                 }
-            }
+                "ResourceNotFoundException" => {
+                    DeleteSuggesterError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                "InvalidTypeException" => {
+                    DeleteSuggesterError::InvalidType(String::from(parsed_error.message))
+                }
+                _ => DeleteSuggesterError::Unknown(String::from(body)),
+            },
             Err(_) => DeleteSuggesterError::Unknown(body.to_string()),
         }
     }
@@ -6272,7 +6440,6 @@ pub enum DescribeAnalysisSchemesError {
     Unknown(String),
 }
 
-
 impl DescribeAnalysisSchemesError {
     pub fn from_body(body: &str) -> DescribeAnalysisSchemesError {
         let reader = EventReader::new(body.as_bytes());
@@ -6280,18 +6447,18 @@ impl DescribeAnalysisSchemesError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DescribeAnalysisSchemesError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        DescribeAnalysisSchemesError::Internal(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => DescribeAnalysisSchemesError::ResourceNotFound(String::from(parsed_error.message)),
-                    _ => DescribeAnalysisSchemesError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => {
+                    DescribeAnalysisSchemesError::Base(String::from(parsed_error.message))
                 }
-            }
+                "InternalException" => {
+                    DescribeAnalysisSchemesError::Internal(String::from(parsed_error.message))
+                }
+                "ResourceNotFoundException" => DescribeAnalysisSchemesError::ResourceNotFound(
+                    String::from(parsed_error.message),
+                ),
+                _ => DescribeAnalysisSchemesError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeAnalysisSchemesError::Unknown(body.to_string()),
         }
     }
@@ -6363,7 +6530,6 @@ pub enum DescribeAvailabilityOptionsError {
     Unknown(String),
 }
 
-
 impl DescribeAvailabilityOptionsError {
     pub fn from_body(body: &str) -> DescribeAvailabilityOptionsError {
         let reader = EventReader::new(body.as_bytes());
@@ -6371,19 +6537,29 @@ impl DescribeAvailabilityOptionsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DescribeAvailabilityOptionsError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => DescribeAvailabilityOptionsError::Internal(String::from(parsed_error.message)),
-                    "LimitExceededException" => DescribeAvailabilityOptionsError::LimitExceeded(String::from(parsed_error.message)),
-                    "DisabledOperationException" => DescribeAvailabilityOptionsError::DisabledOperation(String::from(parsed_error.message)),
-                    "ResourceNotFoundException" => DescribeAvailabilityOptionsError::ResourceNotFound(String::from(parsed_error.message)),
-                    "InvalidTypeException" => DescribeAvailabilityOptionsError::InvalidType(String::from(parsed_error.message)),
-                    _ => DescribeAvailabilityOptionsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => {
+                    DescribeAvailabilityOptionsError::Base(String::from(parsed_error.message))
                 }
-            }
+                "InternalException" => {
+                    DescribeAvailabilityOptionsError::Internal(String::from(parsed_error.message))
+                }
+                "LimitExceededException" => DescribeAvailabilityOptionsError::LimitExceeded(
+                    String::from(parsed_error.message),
+                ),
+                "DisabledOperationException" => {
+                    DescribeAvailabilityOptionsError::DisabledOperation(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ResourceNotFoundException" => DescribeAvailabilityOptionsError::ResourceNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidTypeException" => DescribeAvailabilityOptionsError::InvalidType(
+                    String::from(parsed_error.message),
+                ),
+                _ => DescribeAvailabilityOptionsError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeAvailabilityOptionsError::Unknown(body.to_string()),
         }
     }
@@ -6450,7 +6626,6 @@ pub enum DescribeDomainsError {
     Unknown(String),
 }
 
-
 impl DescribeDomainsError {
     pub fn from_body(body: &str) -> DescribeDomainsError {
         let reader = EventReader::new(body.as_bytes());
@@ -6458,17 +6633,13 @@ impl DescribeDomainsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DescribeDomainsError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        DescribeDomainsError::Internal(String::from(parsed_error.message))
-                    }
-                    _ => DescribeDomainsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => DescribeDomainsError::Base(String::from(parsed_error.message)),
+                "InternalException" => {
+                    DescribeDomainsError::Internal(String::from(parsed_error.message))
                 }
-            }
+                _ => DescribeDomainsError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeDomainsError::Unknown(body.to_string()),
         }
     }
@@ -6531,7 +6702,6 @@ pub enum DescribeExpressionsError {
     Unknown(String),
 }
 
-
 impl DescribeExpressionsError {
     pub fn from_body(body: &str) -> DescribeExpressionsError {
         let reader = EventReader::new(body.as_bytes());
@@ -6539,18 +6709,18 @@ impl DescribeExpressionsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DescribeExpressionsError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        DescribeExpressionsError::Internal(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => DescribeExpressionsError::ResourceNotFound(String::from(parsed_error.message)),
-                    _ => DescribeExpressionsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => {
+                    DescribeExpressionsError::Base(String::from(parsed_error.message))
                 }
-            }
+                "InternalException" => {
+                    DescribeExpressionsError::Internal(String::from(parsed_error.message))
+                }
+                "ResourceNotFoundException" => {
+                    DescribeExpressionsError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                _ => DescribeExpressionsError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeExpressionsError::Unknown(body.to_string()),
         }
     }
@@ -6616,7 +6786,6 @@ pub enum DescribeIndexFieldsError {
     Unknown(String),
 }
 
-
 impl DescribeIndexFieldsError {
     pub fn from_body(body: &str) -> DescribeIndexFieldsError {
         let reader = EventReader::new(body.as_bytes());
@@ -6624,18 +6793,18 @@ impl DescribeIndexFieldsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DescribeIndexFieldsError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        DescribeIndexFieldsError::Internal(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => DescribeIndexFieldsError::ResourceNotFound(String::from(parsed_error.message)),
-                    _ => DescribeIndexFieldsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => {
+                    DescribeIndexFieldsError::Base(String::from(parsed_error.message))
                 }
-            }
+                "InternalException" => {
+                    DescribeIndexFieldsError::Internal(String::from(parsed_error.message))
+                }
+                "ResourceNotFoundException" => {
+                    DescribeIndexFieldsError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                _ => DescribeIndexFieldsError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeIndexFieldsError::Unknown(body.to_string()),
         }
     }
@@ -6701,7 +6870,6 @@ pub enum DescribeScalingParametersError {
     Unknown(String),
 }
 
-
 impl DescribeScalingParametersError {
     pub fn from_body(body: &str) -> DescribeScalingParametersError {
         let reader = EventReader::new(body.as_bytes());
@@ -6709,18 +6877,18 @@ impl DescribeScalingParametersError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DescribeScalingParametersError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        DescribeScalingParametersError::Internal(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => DescribeScalingParametersError::ResourceNotFound(String::from(parsed_error.message)),
-                    _ => DescribeScalingParametersError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => {
+                    DescribeScalingParametersError::Base(String::from(parsed_error.message))
                 }
-            }
+                "InternalException" => {
+                    DescribeScalingParametersError::Internal(String::from(parsed_error.message))
+                }
+                "ResourceNotFoundException" => DescribeScalingParametersError::ResourceNotFound(
+                    String::from(parsed_error.message),
+                ),
+                _ => DescribeScalingParametersError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeScalingParametersError::Unknown(body.to_string()),
         }
     }
@@ -6786,7 +6954,6 @@ pub enum DescribeServiceAccessPoliciesError {
     Unknown(String),
 }
 
-
 impl DescribeServiceAccessPoliciesError {
     pub fn from_body(body: &str) -> DescribeServiceAccessPoliciesError {
         let reader = EventReader::new(body.as_bytes());
@@ -6794,16 +6961,20 @@ impl DescribeServiceAccessPoliciesError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DescribeServiceAccessPoliciesError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => DescribeServiceAccessPoliciesError::Internal(String::from(parsed_error.message)),
-                    "ResourceNotFoundException" => DescribeServiceAccessPoliciesError::ResourceNotFound(String::from(parsed_error.message)),
-                    _ => DescribeServiceAccessPoliciesError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => {
+                    DescribeServiceAccessPoliciesError::Base(String::from(parsed_error.message))
                 }
-            }
+                "InternalException" => {
+                    DescribeServiceAccessPoliciesError::Internal(String::from(parsed_error.message))
+                }
+                "ResourceNotFoundException" => {
+                    DescribeServiceAccessPoliciesError::ResourceNotFound(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => DescribeServiceAccessPoliciesError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeServiceAccessPoliciesError::Unknown(body.to_string()),
         }
     }
@@ -6869,7 +7040,6 @@ pub enum DescribeSuggestersError {
     Unknown(String),
 }
 
-
 impl DescribeSuggestersError {
     pub fn from_body(body: &str) -> DescribeSuggestersError {
         let reader = EventReader::new(body.as_bytes());
@@ -6877,18 +7047,18 @@ impl DescribeSuggestersError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        DescribeSuggestersError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        DescribeSuggestersError::Internal(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => DescribeSuggestersError::ResourceNotFound(String::from(parsed_error.message)),
-                    _ => DescribeSuggestersError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => {
+                    DescribeSuggestersError::Base(String::from(parsed_error.message))
                 }
-            }
+                "InternalException" => {
+                    DescribeSuggestersError::Internal(String::from(parsed_error.message))
+                }
+                "ResourceNotFoundException" => {
+                    DescribeSuggestersError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                _ => DescribeSuggestersError::Unknown(String::from(body)),
+            },
             Err(_) => DescribeSuggestersError::Unknown(body.to_string()),
         }
     }
@@ -6954,7 +7124,6 @@ pub enum IndexDocumentsError {
     Unknown(String),
 }
 
-
 impl IndexDocumentsError {
     pub fn from_body(body: &str) -> IndexDocumentsError {
         let reader = EventReader::new(body.as_bytes());
@@ -6962,20 +7131,16 @@ impl IndexDocumentsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        IndexDocumentsError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        IndexDocumentsError::Internal(String::from(parsed_error.message))
-                    }
-                    "ResourceNotFoundException" => {
-                        IndexDocumentsError::ResourceNotFound(String::from(parsed_error.message))
-                    }
-                    _ => IndexDocumentsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => IndexDocumentsError::Base(String::from(parsed_error.message)),
+                "InternalException" => {
+                    IndexDocumentsError::Internal(String::from(parsed_error.message))
                 }
-            }
+                "ResourceNotFoundException" => {
+                    IndexDocumentsError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                _ => IndexDocumentsError::Unknown(String::from(body)),
+            },
             Err(_) => IndexDocumentsError::Unknown(body.to_string()),
         }
     }
@@ -7035,7 +7200,6 @@ pub enum ListDomainNamesError {
     Unknown(String),
 }
 
-
 impl ListDomainNamesError {
     pub fn from_body(body: &str) -> ListDomainNamesError {
         let reader = EventReader::new(body.as_bytes());
@@ -7043,14 +7207,10 @@ impl ListDomainNamesError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        ListDomainNamesError::Base(String::from(parsed_error.message))
-                    }
-                    _ => ListDomainNamesError::Unknown(String::from(body)),
-                }
-            }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => ListDomainNamesError::Base(String::from(parsed_error.message)),
+                _ => ListDomainNamesError::Unknown(String::from(body)),
+            },
             Err(_) => ListDomainNamesError::Unknown(body.to_string()),
         }
     }
@@ -7118,7 +7278,6 @@ pub enum UpdateAvailabilityOptionsError {
     Unknown(String),
 }
 
-
 impl UpdateAvailabilityOptionsError {
     pub fn from_body(body: &str) -> UpdateAvailabilityOptionsError {
         let reader = EventReader::new(body.as_bytes());
@@ -7126,21 +7285,27 @@ impl UpdateAvailabilityOptionsError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        UpdateAvailabilityOptionsError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        UpdateAvailabilityOptionsError::Internal(String::from(parsed_error.message))
-                    }
-                    "LimitExceededException" => UpdateAvailabilityOptionsError::LimitExceeded(String::from(parsed_error.message)),
-                    "DisabledOperationException" => UpdateAvailabilityOptionsError::DisabledOperation(String::from(parsed_error.message)),
-                    "ResourceNotFoundException" => UpdateAvailabilityOptionsError::ResourceNotFound(String::from(parsed_error.message)),
-                    "InvalidTypeException" => UpdateAvailabilityOptionsError::InvalidType(String::from(parsed_error.message)),
-                    _ => UpdateAvailabilityOptionsError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => {
+                    UpdateAvailabilityOptionsError::Base(String::from(parsed_error.message))
                 }
-            }
+                "InternalException" => {
+                    UpdateAvailabilityOptionsError::Internal(String::from(parsed_error.message))
+                }
+                "LimitExceededException" => UpdateAvailabilityOptionsError::LimitExceeded(
+                    String::from(parsed_error.message),
+                ),
+                "DisabledOperationException" => UpdateAvailabilityOptionsError::DisabledOperation(
+                    String::from(parsed_error.message),
+                ),
+                "ResourceNotFoundException" => UpdateAvailabilityOptionsError::ResourceNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidTypeException" => {
+                    UpdateAvailabilityOptionsError::InvalidType(String::from(parsed_error.message))
+                }
+                _ => UpdateAvailabilityOptionsError::Unknown(String::from(body)),
+            },
             Err(_) => UpdateAvailabilityOptionsError::Unknown(body.to_string()),
         }
     }
@@ -7213,7 +7378,6 @@ pub enum UpdateScalingParametersError {
     Unknown(String),
 }
 
-
 impl UpdateScalingParametersError {
     pub fn from_body(body: &str) -> UpdateScalingParametersError {
         let reader = EventReader::new(body.as_bytes());
@@ -7221,20 +7385,24 @@ impl UpdateScalingParametersError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        UpdateScalingParametersError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => {
-                        UpdateScalingParametersError::Internal(String::from(parsed_error.message))
-                    }
-                    "LimitExceededException" => UpdateScalingParametersError::LimitExceeded(String::from(parsed_error.message)),
-                    "ResourceNotFoundException" => UpdateScalingParametersError::ResourceNotFound(String::from(parsed_error.message)),
-                    "InvalidTypeException" => UpdateScalingParametersError::InvalidType(String::from(parsed_error.message)),
-                    _ => UpdateScalingParametersError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => {
+                    UpdateScalingParametersError::Base(String::from(parsed_error.message))
                 }
-            }
+                "InternalException" => {
+                    UpdateScalingParametersError::Internal(String::from(parsed_error.message))
+                }
+                "LimitExceededException" => {
+                    UpdateScalingParametersError::LimitExceeded(String::from(parsed_error.message))
+                }
+                "ResourceNotFoundException" => UpdateScalingParametersError::ResourceNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidTypeException" => {
+                    UpdateScalingParametersError::InvalidType(String::from(parsed_error.message))
+                }
+                _ => UpdateScalingParametersError::Unknown(String::from(body)),
+            },
             Err(_) => UpdateScalingParametersError::Unknown(body.to_string()),
         }
     }
@@ -7306,7 +7474,6 @@ pub enum UpdateServiceAccessPoliciesError {
     Unknown(String),
 }
 
-
 impl UpdateServiceAccessPoliciesError {
     pub fn from_body(body: &str) -> UpdateServiceAccessPoliciesError {
         let reader = EventReader::new(body.as_bytes());
@@ -7314,18 +7481,24 @@ impl UpdateServiceAccessPoliciesError {
         let _start_document = stack.next();
         let _response_envelope = stack.next();
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
-            Ok(parsed_error) => {
-                match &parsed_error.code[..] {
-                    "BaseException" => {
-                        UpdateServiceAccessPoliciesError::Base(String::from(parsed_error.message))
-                    }
-                    "InternalException" => UpdateServiceAccessPoliciesError::Internal(String::from(parsed_error.message)),
-                    "LimitExceededException" => UpdateServiceAccessPoliciesError::LimitExceeded(String::from(parsed_error.message)),
-                    "ResourceNotFoundException" => UpdateServiceAccessPoliciesError::ResourceNotFound(String::from(parsed_error.message)),
-                    "InvalidTypeException" => UpdateServiceAccessPoliciesError::InvalidType(String::from(parsed_error.message)),
-                    _ => UpdateServiceAccessPoliciesError::Unknown(String::from(body)),
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "BaseException" => {
+                    UpdateServiceAccessPoliciesError::Base(String::from(parsed_error.message))
                 }
-            }
+                "InternalException" => {
+                    UpdateServiceAccessPoliciesError::Internal(String::from(parsed_error.message))
+                }
+                "LimitExceededException" => UpdateServiceAccessPoliciesError::LimitExceeded(
+                    String::from(parsed_error.message),
+                ),
+                "ResourceNotFoundException" => UpdateServiceAccessPoliciesError::ResourceNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidTypeException" => UpdateServiceAccessPoliciesError::InvalidType(
+                    String::from(parsed_error.message),
+                ),
+                _ => UpdateServiceAccessPoliciesError::Unknown(String::from(body)),
+            },
             Err(_) => UpdateServiceAccessPoliciesError::Unknown(body.to_string()),
         }
     }
@@ -7377,159 +7550,151 @@ impl Error for UpdateServiceAccessPoliciesError {
 /// Trait representing the capabilities of the Amazon CloudSearch API. Amazon CloudSearch clients implement this trait.
 pub trait CloudSearch {
     #[doc="<p>Indexes the search suggestions. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters\">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn build_suggesters(&self,
-                        input: &BuildSuggestersRequest)
-                        -> Result<BuildSuggestersResponse, BuildSuggestersError>;
-
+    fn build_suggesters(
+        &self,
+        input: &BuildSuggestersRequest,
+    ) -> Result<BuildSuggestersResponse, BuildSuggestersError>;
 
     #[doc="<p>Creates a new search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/creating-domains.html\" target=\"_blank\">Creating a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn create_domain(&self,
-                     input: &CreateDomainRequest)
-                     -> Result<CreateDomainResponse, CreateDomainError>;
-
+    fn create_domain(
+        &self,
+        input: &CreateDomainRequest,
+    ) -> Result<CreateDomainResponse, CreateDomainError>;
 
     #[doc="<p>Configures an analysis scheme that can be applied to a <code>text</code> or <code>text-array</code> field to define language-specific text processing options. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn define_analysis_scheme
-        (&self,
-         input: &DefineAnalysisSchemeRequest)
-         -> Result<DefineAnalysisSchemeResponse, DefineAnalysisSchemeError>;
-
+    fn define_analysis_scheme(
+        &self,
+        input: &DefineAnalysisSchemeRequest,
+    ) -> Result<DefineAnalysisSchemeResponse, DefineAnalysisSchemeError>;
 
     #[doc="<p>Configures an <code><a>Expression</a></code> for the search domain. Used to create new expressions and modify existing ones. If the expression exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn define_expression(&self,
-                         input: &DefineExpressionRequest)
-                         -> Result<DefineExpressionResponse, DefineExpressionError>;
-
+    fn define_expression(
+        &self,
+        input: &DefineExpressionRequest,
+    ) -> Result<DefineExpressionResponse, DefineExpressionError>;
 
     #[doc="<p>Configures an <code><a>IndexField</a></code> for the search domain. Used to create new fields and modify existing ones. You must specify the name of the domain you are configuring and an index field configuration. The index field configuration specifies a unique name, the index field type, and the options you want to configure for the field. The options you can specify depend on the <code><a>IndexFieldType</a></code>. If the field exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-    fn define_index_field(&self,
-                          input: &DefineIndexFieldRequest)
-                          -> Result<DefineIndexFieldResponse, DefineIndexFieldError>;
-
+    fn define_index_field(
+        &self,
+        input: &DefineIndexFieldRequest,
+    ) -> Result<DefineIndexFieldResponse, DefineIndexFieldError>;
 
     #[doc="<p>Configures a suggester for a domain. A suggester enables you to display possible matches before users finish typing their queries. When you configure a suggester, you must specify the name of the text field you want to search for possible matches and a unique name for the suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn define_suggester(&self,
-                        input: &DefineSuggesterRequest)
-                        -> Result<DefineSuggesterResponse, DefineSuggesterError>;
-
+    fn define_suggester(
+        &self,
+        input: &DefineSuggesterRequest,
+    ) -> Result<DefineSuggesterResponse, DefineSuggesterError>;
 
     #[doc="<p>Deletes an analysis scheme. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-    fn delete_analysis_scheme
-        (&self,
-         input: &DeleteAnalysisSchemeRequest)
-         -> Result<DeleteAnalysisSchemeResponse, DeleteAnalysisSchemeError>;
-
+    fn delete_analysis_scheme(
+        &self,
+        input: &DeleteAnalysisSchemeRequest,
+    ) -> Result<DeleteAnalysisSchemeResponse, DeleteAnalysisSchemeError>;
 
     #[doc="<p>Permanently deletes a search domain and all of its data. Once a domain has been deleted, it cannot be recovered. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/deleting-domains.html\" target=\"_blank\">Deleting a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-    fn delete_domain(&self,
-                     input: &DeleteDomainRequest)
-                     -> Result<DeleteDomainResponse, DeleteDomainError>;
-
+    fn delete_domain(
+        &self,
+        input: &DeleteDomainRequest,
+    ) -> Result<DeleteDomainResponse, DeleteDomainError>;
 
     #[doc="<p>Removes an <code><a>Expression</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn delete_expression(&self,
-                         input: &DeleteExpressionRequest)
-                         -> Result<DeleteExpressionResponse, DeleteExpressionError>;
-
+    fn delete_expression(
+        &self,
+        input: &DeleteExpressionRequest,
+    ) -> Result<DeleteExpressionResponse, DeleteExpressionError>;
 
     #[doc="<p>Removes an <code><a>IndexField</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn delete_index_field(&self,
-                          input: &DeleteIndexFieldRequest)
-                          -> Result<DeleteIndexFieldResponse, DeleteIndexFieldError>;
-
+    fn delete_index_field(
+        &self,
+        input: &DeleteIndexFieldRequest,
+    ) -> Result<DeleteIndexFieldResponse, DeleteIndexFieldError>;
 
     #[doc="<p>Deletes a suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn delete_suggester(&self,
-                        input: &DeleteSuggesterRequest)
-                        -> Result<DeleteSuggesterResponse, DeleteSuggesterError>;
-
+    fn delete_suggester(
+        &self,
+        input: &DeleteSuggesterRequest,
+    ) -> Result<DeleteSuggesterResponse, DeleteSuggesterError>;
 
     #[doc="<p>Gets the analysis schemes configured for a domain. An analysis scheme defines language-specific text processing options for a <code>text</code> field. Can be limited to specific analysis schemes by name. By default, shows all analysis schemes and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_analysis_schemes
-        (&self,
-         input: &DescribeAnalysisSchemesRequest)
-         -> Result<DescribeAnalysisSchemesResponse, DescribeAnalysisSchemesError>;
-
+    fn describe_analysis_schemes(
+        &self,
+        input: &DescribeAnalysisSchemesRequest,
+    ) -> Result<DescribeAnalysisSchemesResponse, DescribeAnalysisSchemesError>;
 
     #[doc="<p>Gets the availability options configured for a domain. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html\" target=\"_blank\">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_availability_options
-        (&self,
-         input: &DescribeAvailabilityOptionsRequest)
-         -> Result<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError>;
-
+    fn describe_availability_options(
+        &self,
+        input: &DescribeAvailabilityOptionsRequest,
+    ) -> Result<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError>;
 
     #[doc="<p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_domains(&self,
-                        input: &DescribeDomainsRequest)
-                        -> Result<DescribeDomainsResponse, DescribeDomainsError>;
-
+    fn describe_domains(
+        &self,
+        input: &DescribeDomainsRequest,
+    ) -> Result<DescribeDomainsResponse, DescribeDomainsError>;
 
     #[doc="<p>Gets the expressions configured for the search domain. Can be limited to specific expressions by name. By default, shows all expressions and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_expressions(&self,
-                            input: &DescribeExpressionsRequest)
-                            -> Result<DescribeExpressionsResponse, DescribeExpressionsError>;
-
+    fn describe_expressions(
+        &self,
+        input: &DescribeExpressionsRequest,
+    ) -> Result<DescribeExpressionsResponse, DescribeExpressionsError>;
 
     #[doc="<p>Gets information about the index fields configured for the search domain. Can be limited to specific fields by name. By default, shows all fields and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Domain Information</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_index_fields(&self,
-                             input: &DescribeIndexFieldsRequest)
-                             -> Result<DescribeIndexFieldsResponse, DescribeIndexFieldsError>;
-
+    fn describe_index_fields(
+        &self,
+        input: &DescribeIndexFieldsRequest,
+    ) -> Result<DescribeIndexFieldsResponse, DescribeIndexFieldsError>;
 
     #[doc="<p>Gets the scaling parameters configured for a domain. A domain's scaling parameters specify the desired search instance type and replication count. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html\" target=\"_blank\">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_scaling_parameters
-        (&self,
-         input: &DescribeScalingParametersRequest)
-         -> Result<DescribeScalingParametersResponse, DescribeScalingParametersError>;
-
+    fn describe_scaling_parameters(
+        &self,
+        input: &DescribeScalingParametersRequest,
+    ) -> Result<DescribeScalingParametersResponse, DescribeScalingParametersError>;
 
     #[doc="<p>Gets information about the access policies that control access to the domain's document and search endpoints. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\">Configuring Access for a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_service_access_policies
-        (&self,
-         input: &DescribeServiceAccessPoliciesRequest)
-         -> Result<DescribeServiceAccessPoliciesResponse, DescribeServiceAccessPoliciesError>;
-
+    fn describe_service_access_policies(
+        &self,
+        input: &DescribeServiceAccessPoliciesRequest,
+    ) -> Result<DescribeServiceAccessPoliciesResponse, DescribeServiceAccessPoliciesError>;
 
     #[doc="<p>Gets the suggesters configured for a domain. A suggester enables you to display possible matches before users finish typing their queries. Can be limited to specific suggesters by name. By default, shows all suggesters and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_suggesters(&self,
-                           input: &DescribeSuggestersRequest)
-                           -> Result<DescribeSuggestersResponse, DescribeSuggestersError>;
-
+    fn describe_suggesters(
+        &self,
+        input: &DescribeSuggestersRequest,
+    ) -> Result<DescribeSuggestersResponse, DescribeSuggestersError>;
 
     #[doc="<p>Tells the search domain to start indexing its documents using the latest indexing options. This operation must be invoked to activate options whose <a>OptionStatus</a> is <code>RequiresIndexDocuments</code>.</p>"]
-    fn index_documents(&self,
-                       input: &IndexDocumentsRequest)
-                       -> Result<IndexDocumentsResponse, IndexDocumentsError>;
+    fn index_documents(
+        &self,
+        input: &IndexDocumentsRequest,
+    ) -> Result<IndexDocumentsResponse, IndexDocumentsError>;
 
-
-    #[doc="<p>Lists all search domains owned by an account.</p>"]
+    #[doc = "<p>Lists all search domains owned by an account.</p>"]
     fn list_domain_names(&self) -> Result<ListDomainNamesResponse, ListDomainNamesError>;
 
-
     #[doc="<p>Configures the availability options for a domain. Enabling the Multi-AZ option expands an Amazon CloudSearch domain to an additional Availability Zone in the same Region to increase fault tolerance in the event of a service disruption. Changes to the Multi-AZ option can take about half an hour to become active. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html\" target=\"_blank\">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn update_availability_options
-        (&self,
-         input: &UpdateAvailabilityOptionsRequest)
-         -> Result<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError>;
-
+    fn update_availability_options(
+        &self,
+        input: &UpdateAvailabilityOptionsRequest,
+    ) -> Result<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError>;
 
     #[doc="<p>Configures scaling parameters for a domain. A domain's scaling parameters specify the desired search instance type and replication count. Amazon CloudSearch will still automatically scale your domain based on the volume of data and traffic, but not below the desired instance type and replication count. If the Multi-AZ option is enabled, these values control the resources used per Availability Zone. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html\" target=\"_blank\">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-    fn update_scaling_parameters
-        (&self,
-         input: &UpdateScalingParametersRequest)
-         -> Result<UpdateScalingParametersResponse, UpdateScalingParametersError>;
-
+    fn update_scaling_parameters(
+        &self,
+        input: &UpdateScalingParametersRequest,
+    ) -> Result<UpdateScalingParametersResponse, UpdateScalingParametersError>;
 
     #[doc="<p>Configures the access rules that control access to the domain's document and search endpoints. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\"> Configuring Access for an Amazon CloudSearch Domain</a>.</p>"]
-    fn update_service_access_policies
-        (&self,
-         input: &UpdateServiceAccessPoliciesRequest)
-         -> Result<UpdateServiceAccessPoliciesResponse, UpdateServiceAccessPoliciesError>;
+    fn update_service_access_policies(
+        &self,
+        input: &UpdateServiceAccessPoliciesRequest,
+    ) -> Result<UpdateServiceAccessPoliciesResponse, UpdateServiceAccessPoliciesError>;
 }
 /// A client for the Amazon CloudSearch API.
 pub struct CloudSearchClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -7537,8 +7702,9 @@ pub struct CloudSearchClient<P, D>
 }
 
 impl<P, D> CloudSearchClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         CloudSearchClient {
@@ -7550,13 +7716,15 @@ impl<P, D> CloudSearchClient<P, D>
 }
 
 impl<P, D> CloudSearch for CloudSearchClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Indexes the search suggestions. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters\">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn build_suggesters(&self,
-                        input: &BuildSuggestersRequest)
-                        -> Result<BuildSuggestersResponse, BuildSuggestersError> {
+    fn build_suggesters(
+        &self,
+        input: &BuildSuggestersRequest,
+    ) -> Result<BuildSuggestersResponse, BuildSuggestersError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7569,7 +7737,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7577,15 +7744,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = BuildSuggestersResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(BuildSuggestersResponseDeserializer::deserialize("BuildSuggestersResult",
-                                                                                   &mut stack));
+                    result = try!(BuildSuggestersResponseDeserializer::deserialize(
+                        "BuildSuggestersResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -7594,16 +7764,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BuildSuggestersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(BuildSuggestersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/creating-domains.html\" target=\"_blank\">Creating a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn create_domain(&self,
-                     input: &CreateDomainRequest)
-                     -> Result<CreateDomainResponse, CreateDomainError> {
+    fn create_domain(
+        &self,
+        input: &CreateDomainRequest,
+    ) -> Result<CreateDomainResponse, CreateDomainError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7616,7 +7788,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7624,15 +7795,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = CreateDomainResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateDomainResponseDeserializer::deserialize("CreateDomainResult",
-                                                                                &mut stack));
+                    result = try!(CreateDomainResponseDeserializer::deserialize(
+                        "CreateDomainResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -7641,17 +7815,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateDomainError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Configures an analysis scheme that can be applied to a <code>text</code> or <code>text-array</code> field to define language-specific text processing options. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn define_analysis_scheme
-        (&self,
-         input: &DefineAnalysisSchemeRequest)
-         -> Result<DefineAnalysisSchemeResponse, DefineAnalysisSchemeError> {
+    fn define_analysis_scheme(
+        &self,
+        input: &DefineAnalysisSchemeRequest,
+    ) -> Result<DefineAnalysisSchemeResponse, DefineAnalysisSchemeError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7664,7 +7839,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7672,16 +7846,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DefineAnalysisSchemeResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DefineAnalysisSchemeResponseDeserializer::deserialize("DefineAnalysisSchemeResult",
-                                                                                   &mut stack));
+                    result = try!(DefineAnalysisSchemeResponseDeserializer::deserialize(
+                        "DefineAnalysisSchemeResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -7690,16 +7866,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DefineAnalysisSchemeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DefineAnalysisSchemeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Configures an <code><a>Expression</a></code> for the search domain. Used to create new expressions and modify existing ones. If the expression exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn define_expression(&self,
-                         input: &DefineExpressionRequest)
-                         -> Result<DefineExpressionResponse, DefineExpressionError> {
+    fn define_expression(
+        &self,
+        input: &DefineExpressionRequest,
+    ) -> Result<DefineExpressionResponse, DefineExpressionError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7712,7 +7890,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7720,15 +7897,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DefineExpressionResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DefineExpressionResponseDeserializer::deserialize("DefineExpressionResult",
-                                                                                    &mut stack));
+                    result = try!(DefineExpressionResponseDeserializer::deserialize(
+                        "DefineExpressionResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -7737,16 +7917,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DefineExpressionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DefineExpressionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Configures an <code><a>IndexField</a></code> for the search domain. Used to create new fields and modify existing ones. You must specify the name of the domain you are configuring and an index field configuration. The index field configuration specifies a unique name, the index field type, and the options you want to configure for the field. The options you can specify depend on the <code><a>IndexFieldType</a></code>. If the field exists, the new configuration replaces the old one. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-    fn define_index_field(&self,
-                          input: &DefineIndexFieldRequest)
-                          -> Result<DefineIndexFieldResponse, DefineIndexFieldError> {
+    fn define_index_field(
+        &self,
+        input: &DefineIndexFieldRequest,
+    ) -> Result<DefineIndexFieldResponse, DefineIndexFieldError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7759,7 +7941,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7767,15 +7948,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DefineIndexFieldResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DefineIndexFieldResponseDeserializer::deserialize("DefineIndexFieldResult",
-                                                                                    &mut stack));
+                    result = try!(DefineIndexFieldResponseDeserializer::deserialize(
+                        "DefineIndexFieldResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -7784,16 +7968,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DefineIndexFieldError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DefineIndexFieldError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Configures a suggester for a domain. A suggester enables you to display possible matches before users finish typing their queries. When you configure a suggester, you must specify the name of the text field you want to search for possible matches and a unique name for the suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn define_suggester(&self,
-                        input: &DefineSuggesterRequest)
-                        -> Result<DefineSuggesterResponse, DefineSuggesterError> {
+    fn define_suggester(
+        &self,
+        input: &DefineSuggesterRequest,
+    ) -> Result<DefineSuggesterResponse, DefineSuggesterError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7806,7 +7992,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7814,15 +7999,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DefineSuggesterResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DefineSuggesterResponseDeserializer::deserialize("DefineSuggesterResult",
-                                                                                   &mut stack));
+                    result = try!(DefineSuggesterResponseDeserializer::deserialize(
+                        "DefineSuggesterResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -7831,17 +8019,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DefineSuggesterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DefineSuggesterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes an analysis scheme. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-    fn delete_analysis_scheme
-        (&self,
-         input: &DeleteAnalysisSchemeRequest)
-         -> Result<DeleteAnalysisSchemeResponse, DeleteAnalysisSchemeError> {
+    fn delete_analysis_scheme(
+        &self,
+        input: &DeleteAnalysisSchemeRequest,
+    ) -> Result<DeleteAnalysisSchemeResponse, DeleteAnalysisSchemeError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7854,7 +8043,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7862,16 +8050,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DeleteAnalysisSchemeResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DeleteAnalysisSchemeResponseDeserializer::deserialize("DeleteAnalysisSchemeResult",
-                                                                                   &mut stack));
+                    result = try!(DeleteAnalysisSchemeResponseDeserializer::deserialize(
+                        "DeleteAnalysisSchemeResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -7880,16 +8070,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteAnalysisSchemeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteAnalysisSchemeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Permanently deletes a search domain and all of its data. Once a domain has been deleted, it cannot be recovered. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/deleting-domains.html\" target=\"_blank\">Deleting a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-    fn delete_domain(&self,
-                     input: &DeleteDomainRequest)
-                     -> Result<DeleteDomainResponse, DeleteDomainError> {
+    fn delete_domain(
+        &self,
+        input: &DeleteDomainRequest,
+    ) -> Result<DeleteDomainResponse, DeleteDomainError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7902,7 +8094,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7910,15 +8101,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DeleteDomainResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteDomainResponseDeserializer::deserialize("DeleteDomainResult",
-                                                                                &mut stack));
+                    result = try!(DeleteDomainResponseDeserializer::deserialize(
+                        "DeleteDomainResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -7927,16 +8121,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteDomainError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteDomainError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes an <code><a>Expression</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn delete_expression(&self,
-                         input: &DeleteExpressionRequest)
-                         -> Result<DeleteExpressionResponse, DeleteExpressionError> {
+    fn delete_expression(
+        &self,
+        input: &DeleteExpressionRequest,
+    ) -> Result<DeleteExpressionResponse, DeleteExpressionError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7949,7 +8145,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -7957,15 +8152,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DeleteExpressionResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteExpressionResponseDeserializer::deserialize("DeleteExpressionResult",
-                                                                                    &mut stack));
+                    result = try!(DeleteExpressionResponseDeserializer::deserialize(
+                        "DeleteExpressionResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -7974,16 +8172,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteExpressionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteExpressionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes an <code><a>IndexField</a></code> from the search domain. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn delete_index_field(&self,
-                          input: &DeleteIndexFieldRequest)
-                          -> Result<DeleteIndexFieldResponse, DeleteIndexFieldError> {
+    fn delete_index_field(
+        &self,
+        input: &DeleteIndexFieldRequest,
+    ) -> Result<DeleteIndexFieldResponse, DeleteIndexFieldError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -7996,7 +8196,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8004,15 +8203,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DeleteIndexFieldResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteIndexFieldResponseDeserializer::deserialize("DeleteIndexFieldResult",
-                                                                                    &mut stack));
+                    result = try!(DeleteIndexFieldResponseDeserializer::deserialize(
+                        "DeleteIndexFieldResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8021,16 +8223,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteIndexFieldError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteIndexFieldError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a suggester. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn delete_suggester(&self,
-                        input: &DeleteSuggesterRequest)
-                        -> Result<DeleteSuggesterResponse, DeleteSuggesterError> {
+    fn delete_suggester(
+        &self,
+        input: &DeleteSuggesterRequest,
+    ) -> Result<DeleteSuggesterResponse, DeleteSuggesterError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8043,7 +8247,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8051,15 +8254,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DeleteSuggesterResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteSuggesterResponseDeserializer::deserialize("DeleteSuggesterResult",
-                                                                                   &mut stack));
+                    result = try!(DeleteSuggesterResponseDeserializer::deserialize(
+                        "DeleteSuggesterResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8068,17 +8274,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteSuggesterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteSuggesterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets the analysis schemes configured for a domain. An analysis scheme defines language-specific text processing options for a <code>text</code> field. Can be limited to specific analysis schemes by name. By default, shows all analysis schemes and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html\" target=\"_blank\">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_analysis_schemes
-        (&self,
-         input: &DescribeAnalysisSchemesRequest)
-         -> Result<DescribeAnalysisSchemesResponse, DescribeAnalysisSchemesError> {
+    fn describe_analysis_schemes(
+        &self,
+        input: &DescribeAnalysisSchemesRequest,
+    ) -> Result<DescribeAnalysisSchemesResponse, DescribeAnalysisSchemesError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8091,7 +8298,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8099,16 +8305,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DescribeAnalysisSchemesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DescribeAnalysisSchemesResponseDeserializer::deserialize("DescribeAnalysisSchemesResult",
-                                                                                      &mut stack));
+                    result = try!(DescribeAnalysisSchemesResponseDeserializer::deserialize(
+                        "DescribeAnalysisSchemesResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8117,18 +8325,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAnalysisSchemesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(DescribeAnalysisSchemesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets the availability options configured for a domain. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html\" target=\"_blank\">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_availability_options
-        (&self,
-         input: &DescribeAvailabilityOptionsRequest)
-         -> Result<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError> {
+    fn describe_availability_options(
+        &self,
+        input: &DescribeAvailabilityOptionsRequest,
+    ) -> Result<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8141,7 +8349,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8149,14 +8356,20 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DescribeAvailabilityOptionsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeAvailabilityOptionsResponseDeserializer::deserialize("DescribeAvailabilityOptionsResult", &mut stack));
+                    result = try!(
+                        DescribeAvailabilityOptionsResponseDeserializer::deserialize(
+                            "DescribeAvailabilityOptionsResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8165,17 +8378,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAvailabilityOptionsError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(DescribeAvailabilityOptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_domains(&self,
-                        input: &DescribeDomainsRequest)
-                        -> Result<DescribeDomainsResponse, DescribeDomainsError> {
+    fn describe_domains(
+        &self,
+        input: &DescribeDomainsRequest,
+    ) -> Result<DescribeDomainsResponse, DescribeDomainsError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8188,7 +8402,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8196,15 +8409,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DescribeDomainsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeDomainsResponseDeserializer::deserialize("DescribeDomainsResult",
-                                                                                   &mut stack));
+                    result = try!(DescribeDomainsResponseDeserializer::deserialize(
+                        "DescribeDomainsResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8213,16 +8429,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeDomainsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeDomainsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets the expressions configured for the search domain. Can be limited to specific expressions by name. By default, shows all expressions and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_expressions(&self,
-                            input: &DescribeExpressionsRequest)
-                            -> Result<DescribeExpressionsResponse, DescribeExpressionsError> {
+    fn describe_expressions(
+        &self,
+        input: &DescribeExpressionsRequest,
+    ) -> Result<DescribeExpressionsResponse, DescribeExpressionsError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8235,7 +8453,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8243,15 +8460,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DescribeExpressionsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeExpressionsResponseDeserializer::deserialize("DescribeExpressionsResult",
-                                                                                       &mut stack));
+                    result = try!(DescribeExpressionsResponseDeserializer::deserialize(
+                        "DescribeExpressionsResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8260,16 +8480,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeExpressionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeExpressionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets information about the index fields configured for the search domain. Can be limited to specific fields by name. By default, shows all fields and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html\" target=\"_blank\">Getting Domain Information</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_index_fields(&self,
-                             input: &DescribeIndexFieldsRequest)
-                             -> Result<DescribeIndexFieldsResponse, DescribeIndexFieldsError> {
+    fn describe_index_fields(
+        &self,
+        input: &DescribeIndexFieldsRequest,
+    ) -> Result<DescribeIndexFieldsResponse, DescribeIndexFieldsError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8282,7 +8504,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8290,15 +8511,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DescribeIndexFieldsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeIndexFieldsResponseDeserializer::deserialize("DescribeIndexFieldsResult",
-                                                                                       &mut stack));
+                    result = try!(DescribeIndexFieldsResponseDeserializer::deserialize(
+                        "DescribeIndexFieldsResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8307,17 +8531,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeIndexFieldsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeIndexFieldsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets the scaling parameters configured for a domain. A domain's scaling parameters specify the desired search instance type and replication count. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html\" target=\"_blank\">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_scaling_parameters
-        (&self,
-         input: &DescribeScalingParametersRequest)
-         -> Result<DescribeScalingParametersResponse, DescribeScalingParametersError> {
+    fn describe_scaling_parameters(
+        &self,
+        input: &DescribeScalingParametersRequest,
+    ) -> Result<DescribeScalingParametersResponse, DescribeScalingParametersError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8330,7 +8555,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8338,14 +8562,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DescribeScalingParametersResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeScalingParametersResponseDeserializer::deserialize("DescribeScalingParametersResult", &mut stack));
+                    result = try!(DescribeScalingParametersResponseDeserializer::deserialize(
+                        "DescribeScalingParametersResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8354,18 +8582,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeScalingParametersError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DescribeScalingParametersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets information about the access policies that control access to the domain's document and search endpoints. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\">Configuring Access for a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_service_access_policies
-        (&self,
-         input: &DescribeServiceAccessPoliciesRequest)
-         -> Result<DescribeServiceAccessPoliciesResponse, DescribeServiceAccessPoliciesError> {
+    fn describe_service_access_policies(
+        &self,
+        input: &DescribeServiceAccessPoliciesRequest,
+    ) -> Result<DescribeServiceAccessPoliciesResponse, DescribeServiceAccessPoliciesError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8378,7 +8606,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8386,14 +8613,20 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DescribeServiceAccessPoliciesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeServiceAccessPoliciesResponseDeserializer::deserialize("DescribeServiceAccessPoliciesResult", &mut stack));
+                    result = try!(
+                        DescribeServiceAccessPoliciesResponseDeserializer::deserialize(
+                            "DescribeServiceAccessPoliciesResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8402,17 +8635,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeServiceAccessPoliciesError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(DescribeServiceAccessPoliciesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets the suggesters configured for a domain. A suggester enables you to display possible matches before users finish typing their queries. Can be limited to specific suggesters by name. By default, shows all suggesters and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html\" target=\"_blank\">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn describe_suggesters(&self,
-                           input: &DescribeSuggestersRequest)
-                           -> Result<DescribeSuggestersResponse, DescribeSuggestersError> {
+    fn describe_suggesters(
+        &self,
+        input: &DescribeSuggestersRequest,
+    ) -> Result<DescribeSuggestersResponse, DescribeSuggestersError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8425,7 +8659,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8433,15 +8666,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = DescribeSuggestersResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeSuggestersResponseDeserializer::deserialize("DescribeSuggestersResult",
-                                                                                      &mut stack));
+                    result = try!(DescribeSuggestersResponseDeserializer::deserialize(
+                        "DescribeSuggestersResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8450,16 +8686,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeSuggestersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeSuggestersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Tells the search domain to start indexing its documents using the latest indexing options. This operation must be invoked to activate options whose <a>OptionStatus</a> is <code>RequiresIndexDocuments</code>.</p>"]
-    fn index_documents(&self,
-                       input: &IndexDocumentsRequest)
-                       -> Result<IndexDocumentsResponse, IndexDocumentsError> {
+    fn index_documents(
+        &self,
+        input: &IndexDocumentsRequest,
+    ) -> Result<IndexDocumentsResponse, IndexDocumentsError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8472,7 +8710,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8480,15 +8717,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = IndexDocumentsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(IndexDocumentsResponseDeserializer::deserialize("IndexDocumentsResult",
-                                                                                  &mut stack));
+                    result = try!(IndexDocumentsResponseDeserializer::deserialize(
+                        "IndexDocumentsResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8497,13 +8737,14 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(IndexDocumentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(IndexDocumentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all search domains owned by an account.</p>"]
+    #[doc = "<p>Lists all search domains owned by an account.</p>"]
     fn list_domain_names(&self) -> Result<ListDomainNamesResponse, ListDomainNamesError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
@@ -8517,7 +8758,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8525,15 +8765,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = ListDomainNamesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListDomainNamesResponseDeserializer::deserialize("ListDomainNamesResult",
-                                                                                   &mut stack));
+                    result = try!(ListDomainNamesResponseDeserializer::deserialize(
+                        "ListDomainNamesResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8542,17 +8785,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDomainNamesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListDomainNamesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Configures the availability options for a domain. Enabling the Multi-AZ option expands an Amazon CloudSearch domain to an additional Availability Zone in the same Region to increase fault tolerance in the event of a service disruption. Changes to the Multi-AZ option can take about half an hour to become active. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html\" target=\"_blank\">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-    fn update_availability_options
-        (&self,
-         input: &UpdateAvailabilityOptionsRequest)
-         -> Result<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError> {
+    fn update_availability_options(
+        &self,
+        input: &UpdateAvailabilityOptionsRequest,
+    ) -> Result<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8565,7 +8809,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8573,14 +8816,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = UpdateAvailabilityOptionsResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(UpdateAvailabilityOptionsResponseDeserializer::deserialize("UpdateAvailabilityOptionsResult", &mut stack));
+                    result = try!(UpdateAvailabilityOptionsResponseDeserializer::deserialize(
+                        "UpdateAvailabilityOptionsResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8589,18 +8836,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateAvailabilityOptionsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(UpdateAvailabilityOptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Configures scaling parameters for a domain. A domain's scaling parameters specify the desired search instance type and replication count. Amazon CloudSearch will still automatically scale your domain based on the volume of data and traffic, but not below the desired instance type and replication count. If the Multi-AZ option is enabled, these values control the resources used per Availability Zone. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html\" target=\"_blank\">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>"]
-    fn update_scaling_parameters
-        (&self,
-         input: &UpdateScalingParametersRequest)
-         -> Result<UpdateScalingParametersResponse, UpdateScalingParametersError> {
+    fn update_scaling_parameters(
+        &self,
+        input: &UpdateScalingParametersRequest,
+    ) -> Result<UpdateScalingParametersResponse, UpdateScalingParametersError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8613,7 +8860,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8621,16 +8867,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = UpdateScalingParametersResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(UpdateScalingParametersResponseDeserializer::deserialize("UpdateScalingParametersResult",
-                                                                                      &mut stack));
+                    result = try!(UpdateScalingParametersResponseDeserializer::deserialize(
+                        "UpdateScalingParametersResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8639,18 +8887,18 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateScalingParametersError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(UpdateScalingParametersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Configures the access rules that control access to the domain's document and search endpoints. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\"> Configuring Access for an Amazon CloudSearch Domain</a>.</p>"]
-    fn update_service_access_policies
-        (&self,
-         input: &UpdateServiceAccessPoliciesRequest)
-         -> Result<UpdateServiceAccessPoliciesResponse, UpdateServiceAccessPoliciesError> {
+    fn update_service_access_policies(
+        &self,
+        input: &UpdateServiceAccessPoliciesRequest,
+    ) -> Result<UpdateServiceAccessPoliciesResponse, UpdateServiceAccessPoliciesError> {
         let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
         let mut params = Params::new();
 
@@ -8663,7 +8911,6 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
             StatusCode::Ok => {
-
                 let result;
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -8671,14 +8918,20 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
                 if body.is_empty() {
                     result = UpdateServiceAccessPoliciesResponse::default();
                 } else {
-                    let reader = EventReader::new_with_config(body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(UpdateServiceAccessPoliciesResponseDeserializer::deserialize("UpdateServiceAccessPoliciesResult", &mut stack));
+                    result = try!(
+                        UpdateServiceAccessPoliciesResponseDeserializer::deserialize(
+                            "UpdateServiceAccessPoliciesResult",
+                            &mut stack
+                        )
+                    );
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -8687,8 +8940,9 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateServiceAccessPoliciesError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(UpdateServiceAccessPoliciesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

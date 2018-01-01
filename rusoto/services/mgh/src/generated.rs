@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,454 +27,454 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateCreatedArtifactRequest {
-    #[doc="<p>An ARN of the AWS resource related to the migration (e.g., AMI, EC2 instance, RDS instance, etc.) </p>"]
-    #[serde(rename="CreatedArtifact")]
+    /// <p>An ARN of the AWS resource related to the migration (e.g., AMI, EC2 instance, RDS instance, etc.) </p>
+    #[serde(rename = "CreatedArtifact")]
     pub created_artifact: CreatedArtifact,
-    #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
-    #[serde(rename="DryRun")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
+    #[serde(rename = "DryRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    #[doc="<p>Unique identifier that references the migration task.</p>"]
-    #[serde(rename="MigrationTaskName")]
+    /// <p>Unique identifier that references the migration task.</p>
+    #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
-    #[doc="<p>The name of the ProgressUpdateStream. </p>"]
-    #[serde(rename="ProgressUpdateStream")]
+    /// <p>The name of the ProgressUpdateStream. </p>
+    #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociateCreatedArtifactResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateDiscoveredResourceRequest {
-    #[doc="<p>Object representing a Resource.</p>"]
-    #[serde(rename="DiscoveredResource")]
+    /// <p>Object representing a Resource.</p>
+    #[serde(rename = "DiscoveredResource")]
     pub discovered_resource: DiscoveredResource,
-    #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
-    #[serde(rename="DryRun")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
+    #[serde(rename = "DryRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    #[doc="<p>The identifier given to the MigrationTask.</p>"]
-    #[serde(rename="MigrationTaskName")]
+    /// <p>The identifier given to the MigrationTask.</p>
+    #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
-    #[doc="<p>The name of the ProgressUpdateStream.</p>"]
-    #[serde(rename="ProgressUpdateStream")]
+    /// <p>The name of the ProgressUpdateStream.</p>
+    #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociateDiscoveredResourceResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateProgressUpdateStreamRequest {
-    #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
-    #[serde(rename="DryRun")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
+    #[serde(rename = "DryRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    #[doc="<p>The name of the ProgressUpdateStream. </p>"]
-    #[serde(rename="ProgressUpdateStreamName")]
+    /// <p>The name of the ProgressUpdateStream. </p>
+    #[serde(rename = "ProgressUpdateStreamName")]
     pub progress_update_stream_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateProgressUpdateStreamResult;
 
-#[doc="<p>An ARN of the AWS cloud resource target receiving the migration (e.g., AMI, EC2 instance, RDS instance, etc.).</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>An ARN of the AWS cloud resource target receiving the migration (e.g., AMI, EC2 instance, RDS instance, etc.).</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CreatedArtifact {
-    #[doc="<p>A description that can be free-form text to record additional detail about the artifact for clarity or for later reference.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description that can be free-form text to record additional detail about the artifact for clarity or for later reference.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>An ARN that uniquely identifies the result of a migration task.</p>"]
-    #[serde(rename="Name")]
+    /// <p>An ARN that uniquely identifies the result of a migration task.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteProgressUpdateStreamRequest {
-    #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
-    #[serde(rename="DryRun")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
+    #[serde(rename = "DryRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    #[doc="<p>The name of the ProgressUpdateStream. </p>"]
-    #[serde(rename="ProgressUpdateStreamName")]
+    /// <p>The name of the ProgressUpdateStream. </p>
+    #[serde(rename = "ProgressUpdateStreamName")]
     pub progress_update_stream_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteProgressUpdateStreamResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeApplicationStateRequest {
-    #[doc="<p>The configurationId in ADS that uniquely identifies the grouped application.</p>"]
-    #[serde(rename="ApplicationId")]
+    /// <p>The configurationId in ADS that uniquely identifies the grouped application.</p>
+    #[serde(rename = "ApplicationId")]
     pub application_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeApplicationStateResult {
-    #[doc="<p>Status of the application - Not Started, In-Progress, Complete.</p>"]
-    #[serde(rename="ApplicationStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Status of the application - Not Started, In-Progress, Complete.</p>
+    #[serde(rename = "ApplicationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub application_status: Option<String>,
-    #[doc="<p>The timestamp when the application status was last updated.</p>"]
-    #[serde(rename="LastUpdatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The timestamp when the application status was last updated.</p>
+    #[serde(rename = "LastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_time: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeMigrationTaskRequest {
-    #[doc="<p>The identifier given to the MigrationTask.</p>"]
-    #[serde(rename="MigrationTaskName")]
+    /// <p>The identifier given to the MigrationTask.</p>
+    #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
-    #[doc="<p>The name of the ProgressUpdateStream. </p>"]
-    #[serde(rename="ProgressUpdateStream")]
+    /// <p>The name of the ProgressUpdateStream. </p>
+    #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeMigrationTaskResult {
-    #[doc="<p>Object encapsulating information about the migration task.</p>"]
-    #[serde(rename="MigrationTask")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Object encapsulating information about the migration task.</p>
+    #[serde(rename = "MigrationTask")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub migration_task: Option<MigrationTask>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateCreatedArtifactRequest {
-    #[doc="<p>An ARN of the AWS resource related to the migration (e.g., AMI, EC2 instance, RDS instance, etc.)</p>"]
-    #[serde(rename="CreatedArtifactName")]
+    /// <p>An ARN of the AWS resource related to the migration (e.g., AMI, EC2 instance, RDS instance, etc.)</p>
+    #[serde(rename = "CreatedArtifactName")]
     pub created_artifact_name: String,
-    #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
-    #[serde(rename="DryRun")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
+    #[serde(rename = "DryRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    #[doc="<p>Unique identifier that references the migration task to be disassociated with the artifact.</p>"]
-    #[serde(rename="MigrationTaskName")]
+    /// <p>Unique identifier that references the migration task to be disassociated with the artifact.</p>
+    #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
-    #[doc="<p>The name of the ProgressUpdateStream. </p>"]
-    #[serde(rename="ProgressUpdateStream")]
+    /// <p>The name of the ProgressUpdateStream. </p>
+    #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisassociateCreatedArtifactResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateDiscoveredResourceRequest {
-    #[doc="<p>ConfigurationId of the ADS resource to be disassociated.</p>"]
-    #[serde(rename="ConfigurationId")]
+    /// <p>ConfigurationId of the ADS resource to be disassociated.</p>
+    #[serde(rename = "ConfigurationId")]
     pub configuration_id: String,
-    #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
-    #[serde(rename="DryRun")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
+    #[serde(rename = "DryRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    #[doc="<p>The identifier given to the MigrationTask.</p>"]
-    #[serde(rename="MigrationTaskName")]
+    /// <p>The identifier given to the MigrationTask.</p>
+    #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
-    #[doc="<p>The name of the ProgressUpdateStream.</p>"]
-    #[serde(rename="ProgressUpdateStream")]
+    /// <p>The name of the ProgressUpdateStream.</p>
+    #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisassociateDiscoveredResourceResult;
 
-#[doc="<p>Object representing the on-premises resource being migrated.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Object representing the on-premises resource being migrated.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DiscoveredResource {
-    #[doc="<p>The configurationId in ADS that uniquely identifies the on-premise resource.</p>"]
-    #[serde(rename="ConfigurationId")]
+    /// <p>The configurationId in ADS that uniquely identifies the on-premise resource.</p>
+    #[serde(rename = "ConfigurationId")]
     pub configuration_id: String,
-    #[doc="<p>A description that can be free-form text to record additional detail about the discovered resource for clarity or later reference.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description that can be free-form text to record additional detail about the discovered resource for clarity or later reference.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ImportMigrationTaskRequest {
-    #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
-    #[serde(rename="DryRun")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
+    #[serde(rename = "DryRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    #[doc="<p>Unique identifier that references the migration task.</p>"]
-    #[serde(rename="MigrationTaskName")]
+    /// <p>Unique identifier that references the migration task.</p>
+    #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
-    #[doc="<p>The name of the ProgressUpdateStream. </p>"]
-    #[serde(rename="ProgressUpdateStream")]
+    /// <p>The name of the ProgressUpdateStream. </p>
+    #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ImportMigrationTaskResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListCreatedArtifactsRequest {
-    #[doc="<p>Maximum number of results to be returned per page.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to be returned per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Unique identifier that references the migration task.</p>"]
-    #[serde(rename="MigrationTaskName")]
+    /// <p>Unique identifier that references the migration task.</p>
+    #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
-    #[doc="<p>If a <code>NextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>NextToken</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a <code>NextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>NextToken</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The name of the ProgressUpdateStream. </p>"]
-    #[serde(rename="ProgressUpdateStream")]
+    /// <p>The name of the ProgressUpdateStream. </p>
+    #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListCreatedArtifactsResult {
-    #[doc="<p>List of created artifacts up to the maximum number of results specified in the request.</p>"]
-    #[serde(rename="CreatedArtifactList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of created artifacts up to the maximum number of results specified in the request.</p>
+    #[serde(rename = "CreatedArtifactList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_artifact_list: Option<Vec<CreatedArtifact>>,
-    #[doc="<p>If there are more created artifacts than the max result, return the next token to be passed to the next call as a bookmark of where to start from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If there are more created artifacts than the max result, return the next token to be passed to the next call as a bookmark of where to start from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDiscoveredResourcesRequest {
-    #[doc="<p>The maximum number of results returned per page.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results returned per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The name of the MigrationTask.</p>"]
-    #[serde(rename="MigrationTaskName")]
+    /// <p>The name of the MigrationTask.</p>
+    #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
-    #[doc="<p>If a <code>NextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>NextToken</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a <code>NextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>NextToken</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The name of the ProgressUpdateStream.</p>"]
-    #[serde(rename="ProgressUpdateStream")]
+    /// <p>The name of the ProgressUpdateStream.</p>
+    #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDiscoveredResourcesResult {
-    #[doc="<p>Returned list of discovered resources associated with the given MigrationTask.</p>"]
-    #[serde(rename="DiscoveredResourceList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returned list of discovered resources associated with the given MigrationTask.</p>
+    #[serde(rename = "DiscoveredResourceList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub discovered_resource_list: Option<Vec<DiscoveredResource>>,
-    #[doc="<p>If there are more discovered resources than the max result, return the next token to be passed to the next call as a bookmark of where to start from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If there are more discovered resources than the max result, return the next token to be passed to the next call as a bookmark of where to start from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListMigrationTasksRequest {
-    #[doc="<p>Value to specify how many results are returned per page.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Value to specify how many results are returned per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>If a <code>NextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>NextToken</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a <code>NextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>NextToken</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Filter migration tasks by discovered resource name.</p>"]
-    #[serde(rename="ResourceName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filter migration tasks by discovered resource name.</p>
+    #[serde(rename = "ResourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListMigrationTasksResult {
-    #[doc="<p>Lists the migration task's summary which includes: <code>MigrationTaskName</code>, <code>ProgressPercent</code>, <code>ProgressUpdateStream</code>, <code>Status</code>, and the <code>UpdateDateTime</code> for each task.</p>"]
-    #[serde(rename="MigrationTaskSummaryList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Lists the migration task's summary which includes: <code>MigrationTaskName</code>, <code>ProgressPercent</code>, <code>ProgressUpdateStream</code>, <code>Status</code>, and the <code>UpdateDateTime</code> for each task.</p>
+    #[serde(rename = "MigrationTaskSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub migration_task_summary_list: Option<Vec<MigrationTaskSummary>>,
-    #[doc="<p>If there are more migration tasks than the max result, return the next token to be passed to the next call as a bookmark of where to start from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If there are more migration tasks than the max result, return the next token to be passed to the next call as a bookmark of where to start from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListProgressUpdateStreamsRequest {
-    #[doc="<p>Filter to limit the maximum number of results to list per page.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filter to limit the maximum number of results to list per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>If a <code>NextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>NextToken</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a <code>NextToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>NextToken</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListProgressUpdateStreamsResult {
-    #[doc="<p>If there are more streams created than the max result, return the next token to be passed to the next call as a bookmark of where to start from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If there are more streams created than the max result, return the next token to be passed to the next call as a bookmark of where to start from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>List of progress update streams up to the max number of results passed in the input.</p>"]
-    #[serde(rename="ProgressUpdateStreamSummaryList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of progress update streams up to the max number of results passed in the input.</p>
+    #[serde(rename = "ProgressUpdateStreamSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_update_stream_summary_list: Option<Vec<ProgressUpdateStreamSummary>>,
 }
 
-#[doc="<p>Represents a migration task in a migration tool.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a migration task in a migration tool.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MigrationTask {
-    #[doc="<p>Unique identifier that references the migration task.</p>"]
-    #[serde(rename="MigrationTaskName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier that references the migration task.</p>
+    #[serde(rename = "MigrationTaskName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub migration_task_name: Option<String>,
-    #[doc="<p>A name that identifies the vendor of the migration tool being used.</p>"]
-    #[serde(rename="ProgressUpdateStream")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A name that identifies the vendor of the migration tool being used.</p>
+    #[serde(rename = "ProgressUpdateStream")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_update_stream: Option<String>,
-    #[doc="<p/>"]
-    #[serde(rename="ResourceAttributeList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p/>
+    #[serde(rename = "ResourceAttributeList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_attribute_list: Option<Vec<ResourceAttribute>>,
-    #[doc="<p>Task object encapsulating task information.</p>"]
-    #[serde(rename="Task")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Task object encapsulating task information.</p>
+    #[serde(rename = "Task")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task: Option<Task>,
-    #[doc="<p>The timestamp when the task was gathered.</p>"]
-    #[serde(rename="UpdateDateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The timestamp when the task was gathered.</p>
+    #[serde(rename = "UpdateDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_date_time: Option<f64>,
 }
 
-#[doc="<p>MigrationTaskSummary includes <code>MigrationTaskName</code>, <code>ProgressPercent</code>, <code>ProgressUpdateStream</code>, <code>Status</code>, and <code>UpdateDateTime</code> for each task.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>MigrationTaskSummary includes <code>MigrationTaskName</code>, <code>ProgressPercent</code>, <code>ProgressUpdateStream</code>, <code>Status</code>, and <code>UpdateDateTime</code> for each task.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MigrationTaskSummary {
-    #[doc="<p>Unique identifier that references the migration task.</p>"]
-    #[serde(rename="MigrationTaskName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique identifier that references the migration task.</p>
+    #[serde(rename = "MigrationTaskName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub migration_task_name: Option<String>,
-    #[doc="<p/>"]
-    #[serde(rename="ProgressPercent")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p/>
+    #[serde(rename = "ProgressPercent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_percent: Option<i64>,
-    #[doc="<p>An AWS resource used for access control. It should uniquely identify the migration tool as it is used for all updates made by the tool.</p>"]
-    #[serde(rename="ProgressUpdateStream")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An AWS resource used for access control. It should uniquely identify the migration tool as it is used for all updates made by the tool.</p>
+    #[serde(rename = "ProgressUpdateStream")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_update_stream: Option<String>,
-    #[doc="<p>Status of the task.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Status of the task.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>Detail information of what is being done within the overall status state.</p>"]
-    #[serde(rename="StatusDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Detail information of what is being done within the overall status state.</p>
+    #[serde(rename = "StatusDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_detail: Option<String>,
-    #[doc="<p>The timestamp when the task was gathered.</p>"]
-    #[serde(rename="UpdateDateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The timestamp when the task was gathered.</p>
+    #[serde(rename = "UpdateDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub update_date_time: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct NotifyApplicationStateRequest {
-    #[doc="<p>The configurationId in ADS that uniquely identifies the grouped application.</p>"]
-    #[serde(rename="ApplicationId")]
+    /// <p>The configurationId in ADS that uniquely identifies the grouped application.</p>
+    #[serde(rename = "ApplicationId")]
     pub application_id: String,
-    #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
-    #[serde(rename="DryRun")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
+    #[serde(rename = "DryRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    #[doc="<p>Status of the application - Not Started, In-Progress, Complete.</p>"]
-    #[serde(rename="Status")]
+    /// <p>Status of the application - Not Started, In-Progress, Complete.</p>
+    #[serde(rename = "Status")]
     pub status: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct NotifyApplicationStateResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct NotifyMigrationTaskStateRequest {
-    #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
-    #[serde(rename="DryRun")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
+    #[serde(rename = "DryRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    #[doc="<p>Unique identifier that references the migration task.</p>"]
-    #[serde(rename="MigrationTaskName")]
+    /// <p>Unique identifier that references the migration task.</p>
+    #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
-    #[doc="<p>Number of seconds after the UpdateDateTime within which the Migration Hub can expect an update. If Migration Hub does not receive an update within the specified interval, then the migration task will be considered stale.</p>"]
-    #[serde(rename="NextUpdateSeconds")]
+    /// <p>Number of seconds after the UpdateDateTime within which the Migration Hub can expect an update. If Migration Hub does not receive an update within the specified interval, then the migration task will be considered stale.</p>
+    #[serde(rename = "NextUpdateSeconds")]
     pub next_update_seconds: i64,
-    #[doc="<p>The name of the ProgressUpdateStream. </p>"]
-    #[serde(rename="ProgressUpdateStream")]
+    /// <p>The name of the ProgressUpdateStream. </p>
+    #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
-    #[doc="<p>Information about the task's progress and status.</p>"]
-    #[serde(rename="Task")]
+    /// <p>Information about the task's progress and status.</p>
+    #[serde(rename = "Task")]
     pub task: Task,
-    #[doc="<p>The timestamp when the task was gathered.</p>"]
-    #[serde(rename="UpdateDateTime")]
+    /// <p>The timestamp when the task was gathered.</p>
+    #[serde(rename = "UpdateDateTime")]
     pub update_date_time: f64,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct NotifyMigrationTaskStateResult;
 
-#[doc="<p>Summary of the AWS resource used for access control that is implicitly linked to your AWS account.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Summary of the AWS resource used for access control that is implicitly linked to your AWS account.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProgressUpdateStreamSummary {
-    #[doc="<p>The name of the ProgressUpdateStream. </p>"]
-    #[serde(rename="ProgressUpdateStreamName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the ProgressUpdateStream. </p>
+    #[serde(rename = "ProgressUpdateStreamName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_update_stream_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutResourceAttributesRequest {
-    #[doc="<p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>"]
-    #[serde(rename="DryRun")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional boolean flag to indicate whether any effect should take place. Used to test if the caller has permission to make the call.</p>
+    #[serde(rename = "DryRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dry_run: Option<bool>,
-    #[doc="<p>Unique identifier that references the migration task.</p>"]
-    #[serde(rename="MigrationTaskName")]
+    /// <p>Unique identifier that references the migration task.</p>
+    #[serde(rename = "MigrationTaskName")]
     pub migration_task_name: String,
-    #[doc="<p>The name of the ProgressUpdateStream. </p>"]
-    #[serde(rename="ProgressUpdateStream")]
+    /// <p>The name of the ProgressUpdateStream. </p>
+    #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
-    #[doc="<p>Information about the resource that is being migrated. This data will be used to map the task to a resource in the Application Discovery Service (ADS)'s repository.</p>"]
-    #[serde(rename="ResourceAttributeList")]
+    /// <p>Information about the resource that is being migrated. This data will be used to map the task to a resource in the Application Discovery Service (ADS)'s repository.</p>
+    #[serde(rename = "ResourceAttributeList")]
     pub resource_attribute_list: Vec<ResourceAttribute>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutResourceAttributesResult;
 
-#[doc="<p>Attribute associated with a resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Attribute associated with a resource.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ResourceAttribute {
-    #[doc="<p>Type of resource.</p>"]
-    #[serde(rename="Type")]
+    /// <p>Type of resource.</p>
+    #[serde(rename = "Type")]
     pub type_: String,
-    #[doc="<p>Value of the resource type.</p>"]
-    #[serde(rename="Value")]
+    /// <p>Value of the resource type.</p>
+    #[serde(rename = "Value")]
     pub value: String,
 }
 
-#[doc="<p>Task object encapsulating task information.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Task object encapsulating task information.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Task {
-    #[doc="<p>Indication of the percentage completion of the task.</p>"]
-    #[serde(rename="ProgressPercent")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indication of the percentage completion of the task.</p>
+    #[serde(rename = "ProgressPercent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_percent: Option<i64>,
-    #[doc="<p>Status of the task - Not Started, In-Progress, Complete.</p>"]
-    #[serde(rename="Status")]
+    /// <p>Status of the task - Not Started, In-Progress, Complete.</p>
+    #[serde(rename = "Status")]
     pub status: String,
-    #[doc="<p>Details of task status as notified by a migration tool. A tool might use this field to provide clarifying information about the status that is unique to that tool or that explains an error state.</p>"]
-    #[serde(rename="StatusDetail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Details of task status as notified by a migration tool. A tool might use this field to provide clarifying information about the status that is unique to that tool or that explains an error state.</p>
+    #[serde(rename = "StatusDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_detail: Option<String>,
 }
 
@@ -506,7 +505,6 @@ pub enum AssociateCreatedArtifactError {
     Unknown(String),
 }
 
-
 impl AssociateCreatedArtifactError {
     pub fn from_body(body: &str) -> AssociateCreatedArtifactError {
         match from_str::<SerdeJsonValue>(body) {
@@ -526,15 +524,25 @@ impl AssociateCreatedArtifactError {
                     "DryRunOperation" => {
                         AssociateCreatedArtifactError::DryRunOperation(String::from(error_message))
                     }
-                    "InternalServerError" => AssociateCreatedArtifactError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => AssociateCreatedArtifactError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidInputException" => {
                         AssociateCreatedArtifactError::InvalidInput(String::from(error_message))
                     }
                     "ResourceNotFoundException" => {
                         AssociateCreatedArtifactError::ResourceNotFound(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => AssociateCreatedArtifactError::ServiceUnavailable(String::from(error_message)),
-                    "UnauthorizedOperation" => AssociateCreatedArtifactError::UnauthorizedOperation(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        AssociateCreatedArtifactError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperation" => {
+                        AssociateCreatedArtifactError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AssociateCreatedArtifactError::Validation(error_message.to_string())
                     }
@@ -619,7 +627,6 @@ pub enum AssociateDiscoveredResourceError {
     Unknown(String),
 }
 
-
 impl AssociateDiscoveredResourceError {
     pub fn from_body(body: &str) -> AssociateDiscoveredResourceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -636,17 +643,35 @@ impl AssociateDiscoveredResourceError {
                     "AccessDeniedException" => {
                         AssociateDiscoveredResourceError::AccessDenied(String::from(error_message))
                     }
-                    "DryRunOperation" => AssociateDiscoveredResourceError::DryRunOperation(String::from(error_message)),
-                    "InternalServerError" => AssociateDiscoveredResourceError::InternalServerError(String::from(error_message)),
+                    "DryRunOperation" => AssociateDiscoveredResourceError::DryRunOperation(
+                        String::from(error_message),
+                    ),
+                    "InternalServerError" => {
+                        AssociateDiscoveredResourceError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidInputException" => {
                         AssociateDiscoveredResourceError::InvalidInput(String::from(error_message))
                     }
                     "PolicyErrorException" => {
                         AssociateDiscoveredResourceError::PolicyError(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => AssociateDiscoveredResourceError::ResourceNotFound(String::from(error_message)),
-                    "ServiceUnavailableException" => AssociateDiscoveredResourceError::ServiceUnavailable(String::from(error_message)),
-                    "UnauthorizedOperation" => AssociateDiscoveredResourceError::UnauthorizedOperation(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        AssociateDiscoveredResourceError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceUnavailableException" => {
+                        AssociateDiscoveredResourceError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperation" => {
+                        AssociateDiscoveredResourceError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         AssociateDiscoveredResourceError::Validation(error_message.to_string())
                     }
@@ -728,7 +753,6 @@ pub enum CreateProgressUpdateStreamError {
     Unknown(String),
 }
 
-
 impl CreateProgressUpdateStreamError {
     pub fn from_body(body: &str) -> CreateProgressUpdateStreamError {
         match from_str::<SerdeJsonValue>(body) {
@@ -745,13 +769,25 @@ impl CreateProgressUpdateStreamError {
                     "AccessDeniedException" => {
                         CreateProgressUpdateStreamError::AccessDenied(String::from(error_message))
                     }
-                    "DryRunOperation" => CreateProgressUpdateStreamError::DryRunOperation(String::from(error_message)),
-                    "InternalServerError" => CreateProgressUpdateStreamError::InternalServerError(String::from(error_message)),
+                    "DryRunOperation" => CreateProgressUpdateStreamError::DryRunOperation(
+                        String::from(error_message),
+                    ),
+                    "InternalServerError" => CreateProgressUpdateStreamError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidInputException" => {
                         CreateProgressUpdateStreamError::InvalidInput(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => CreateProgressUpdateStreamError::ServiceUnavailable(String::from(error_message)),
-                    "UnauthorizedOperation" => CreateProgressUpdateStreamError::UnauthorizedOperation(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        CreateProgressUpdateStreamError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperation" => {
+                        CreateProgressUpdateStreamError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateProgressUpdateStreamError::Validation(error_message.to_string())
                     }
@@ -833,7 +869,6 @@ pub enum DeleteProgressUpdateStreamError {
     Unknown(String),
 }
 
-
 impl DeleteProgressUpdateStreamError {
     pub fn from_body(body: &str) -> DeleteProgressUpdateStreamError {
         match from_str::<SerdeJsonValue>(body) {
@@ -850,14 +885,30 @@ impl DeleteProgressUpdateStreamError {
                     "AccessDeniedException" => {
                         DeleteProgressUpdateStreamError::AccessDenied(String::from(error_message))
                     }
-                    "DryRunOperation" => DeleteProgressUpdateStreamError::DryRunOperation(String::from(error_message)),
-                    "InternalServerError" => DeleteProgressUpdateStreamError::InternalServerError(String::from(error_message)),
+                    "DryRunOperation" => DeleteProgressUpdateStreamError::DryRunOperation(
+                        String::from(error_message),
+                    ),
+                    "InternalServerError" => DeleteProgressUpdateStreamError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidInputException" => {
                         DeleteProgressUpdateStreamError::InvalidInput(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => DeleteProgressUpdateStreamError::ResourceNotFound(String::from(error_message)),
-                    "ServiceUnavailableException" => DeleteProgressUpdateStreamError::ServiceUnavailable(String::from(error_message)),
-                    "UnauthorizedOperation" => DeleteProgressUpdateStreamError::UnauthorizedOperation(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        DeleteProgressUpdateStreamError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceUnavailableException" => {
+                        DeleteProgressUpdateStreamError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperation" => {
+                        DeleteProgressUpdateStreamError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteProgressUpdateStreamError::Validation(error_message.to_string())
                     }
@@ -938,7 +989,6 @@ pub enum DescribeApplicationStateError {
     Unknown(String),
 }
 
-
 impl DescribeApplicationStateError {
     pub fn from_body(body: &str) -> DescribeApplicationStateError {
         match from_str::<SerdeJsonValue>(body) {
@@ -955,7 +1005,9 @@ impl DescribeApplicationStateError {
                     "AccessDeniedException" => {
                         DescribeApplicationStateError::AccessDenied(String::from(error_message))
                     }
-                    "InternalServerError" => DescribeApplicationStateError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => DescribeApplicationStateError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidInputException" => {
                         DescribeApplicationStateError::InvalidInput(String::from(error_message))
                     }
@@ -965,7 +1017,11 @@ impl DescribeApplicationStateError {
                     "ResourceNotFoundException" => {
                         DescribeApplicationStateError::ResourceNotFound(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => DescribeApplicationStateError::ServiceUnavailable(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        DescribeApplicationStateError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeApplicationStateError::Validation(error_message.to_string())
                     }
@@ -1042,7 +1098,6 @@ pub enum DescribeMigrationTaskError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeMigrationTaskError {
     pub fn from_body(body: &str) -> DescribeMigrationTaskError {
@@ -1152,7 +1207,6 @@ pub enum DisassociateCreatedArtifactError {
     Unknown(String),
 }
 
-
 impl DisassociateCreatedArtifactError {
     pub fn from_body(body: &str) -> DisassociateCreatedArtifactError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1169,14 +1223,32 @@ impl DisassociateCreatedArtifactError {
                     "AccessDeniedException" => {
                         DisassociateCreatedArtifactError::AccessDenied(String::from(error_message))
                     }
-                    "DryRunOperation" => DisassociateCreatedArtifactError::DryRunOperation(String::from(error_message)),
-                    "InternalServerError" => DisassociateCreatedArtifactError::InternalServerError(String::from(error_message)),
+                    "DryRunOperation" => DisassociateCreatedArtifactError::DryRunOperation(
+                        String::from(error_message),
+                    ),
+                    "InternalServerError" => {
+                        DisassociateCreatedArtifactError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidInputException" => {
                         DisassociateCreatedArtifactError::InvalidInput(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => DisassociateCreatedArtifactError::ResourceNotFound(String::from(error_message)),
-                    "ServiceUnavailableException" => DisassociateCreatedArtifactError::ServiceUnavailable(String::from(error_message)),
-                    "UnauthorizedOperation" => DisassociateCreatedArtifactError::UnauthorizedOperation(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        DisassociateCreatedArtifactError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceUnavailableException" => {
+                        DisassociateCreatedArtifactError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperation" => {
+                        DisassociateCreatedArtifactError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DisassociateCreatedArtifactError::Validation(error_message.to_string())
                     }
@@ -1259,7 +1331,6 @@ pub enum DisassociateDiscoveredResourceError {
     Unknown(String),
 }
 
-
 impl DisassociateDiscoveredResourceError {
     pub fn from_body(body: &str) -> DisassociateDiscoveredResourceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1273,13 +1344,35 @@ impl DisassociateDiscoveredResourceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AccessDeniedException" => DisassociateDiscoveredResourceError::AccessDenied(String::from(error_message)),
-                    "DryRunOperation" => DisassociateDiscoveredResourceError::DryRunOperation(String::from(error_message)),
-                    "InternalServerError" => DisassociateDiscoveredResourceError::InternalServerError(String::from(error_message)),
-                    "InvalidInputException" => DisassociateDiscoveredResourceError::InvalidInput(String::from(error_message)),
-                    "ResourceNotFoundException" => DisassociateDiscoveredResourceError::ResourceNotFound(String::from(error_message)),
-                    "ServiceUnavailableException" => DisassociateDiscoveredResourceError::ServiceUnavailable(String::from(error_message)),
-                    "UnauthorizedOperation" => DisassociateDiscoveredResourceError::UnauthorizedOperation(String::from(error_message)),
+                    "AccessDeniedException" => DisassociateDiscoveredResourceError::AccessDenied(
+                        String::from(error_message),
+                    ),
+                    "DryRunOperation" => DisassociateDiscoveredResourceError::DryRunOperation(
+                        String::from(error_message),
+                    ),
+                    "InternalServerError" => {
+                        DisassociateDiscoveredResourceError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInputException" => DisassociateDiscoveredResourceError::InvalidInput(
+                        String::from(error_message),
+                    ),
+                    "ResourceNotFoundException" => {
+                        DisassociateDiscoveredResourceError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceUnavailableException" => {
+                        DisassociateDiscoveredResourceError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperation" => {
+                        DisassociateDiscoveredResourceError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DisassociateDiscoveredResourceError::Validation(error_message.to_string())
                     }
@@ -1361,7 +1454,6 @@ pub enum ImportMigrationTaskError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ImportMigrationTaskError {
     pub fn from_body(body: &str) -> ImportMigrationTaskError {
@@ -1475,7 +1567,6 @@ pub enum ListCreatedArtifactsError {
     Unknown(String),
 }
 
-
 impl ListCreatedArtifactsError {
     pub fn from_body(body: &str) -> ListCreatedArtifactsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1580,7 +1671,6 @@ pub enum ListDiscoveredResourcesError {
     Unknown(String),
 }
 
-
 impl ListDiscoveredResourcesError {
     pub fn from_body(body: &str) -> ListDiscoveredResourcesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1597,14 +1687,20 @@ impl ListDiscoveredResourcesError {
                     "AccessDeniedException" => {
                         ListDiscoveredResourcesError::AccessDenied(String::from(error_message))
                     }
-                    "InternalServerError" => ListDiscoveredResourcesError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => ListDiscoveredResourcesError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidInputException" => {
                         ListDiscoveredResourcesError::InvalidInput(String::from(error_message))
                     }
                     "ResourceNotFoundException" => {
                         ListDiscoveredResourcesError::ResourceNotFound(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => ListDiscoveredResourcesError::ServiceUnavailable(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        ListDiscoveredResourcesError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ListDiscoveredResourcesError::Validation(error_message.to_string())
                     }
@@ -1682,7 +1778,6 @@ pub enum ListMigrationTasksError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListMigrationTasksError {
     pub fn from_body(body: &str) -> ListMigrationTasksError {
@@ -1790,7 +1885,6 @@ pub enum ListProgressUpdateStreamsError {
     Unknown(String),
 }
 
-
 impl ListProgressUpdateStreamsError {
     pub fn from_body(body: &str) -> ListProgressUpdateStreamsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1807,11 +1901,17 @@ impl ListProgressUpdateStreamsError {
                     "AccessDeniedException" => {
                         ListProgressUpdateStreamsError::AccessDenied(String::from(error_message))
                     }
-                    "InternalServerError" => ListProgressUpdateStreamsError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => ListProgressUpdateStreamsError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidInputException" => {
                         ListProgressUpdateStreamsError::InvalidInput(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => ListProgressUpdateStreamsError::ServiceUnavailable(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        ListProgressUpdateStreamsError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ListProgressUpdateStreamsError::Validation(error_message.to_string())
                     }
@@ -1893,7 +1993,6 @@ pub enum NotifyApplicationStateError {
     Unknown(String),
 }
 
-
 impl NotifyApplicationStateError {
     pub fn from_body(body: &str) -> NotifyApplicationStateError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1913,7 +2012,9 @@ impl NotifyApplicationStateError {
                     "DryRunOperation" => {
                         NotifyApplicationStateError::DryRunOperation(String::from(error_message))
                     }
-                    "InternalServerError" => NotifyApplicationStateError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => NotifyApplicationStateError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidInputException" => {
                         NotifyApplicationStateError::InvalidInput(String::from(error_message))
                     }
@@ -1926,7 +2027,9 @@ impl NotifyApplicationStateError {
                     "ServiceUnavailableException" => {
                         NotifyApplicationStateError::ServiceUnavailable(String::from(error_message))
                     }
-                    "UnauthorizedOperation" => NotifyApplicationStateError::UnauthorizedOperation(String::from(error_message)),
+                    "UnauthorizedOperation" => NotifyApplicationStateError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         NotifyApplicationStateError::Validation(error_message.to_string())
                     }
@@ -2010,7 +2113,6 @@ pub enum NotifyMigrationTaskStateError {
     Unknown(String),
 }
 
-
 impl NotifyMigrationTaskStateError {
     pub fn from_body(body: &str) -> NotifyMigrationTaskStateError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2030,15 +2132,25 @@ impl NotifyMigrationTaskStateError {
                     "DryRunOperation" => {
                         NotifyMigrationTaskStateError::DryRunOperation(String::from(error_message))
                     }
-                    "InternalServerError" => NotifyMigrationTaskStateError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => NotifyMigrationTaskStateError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidInputException" => {
                         NotifyMigrationTaskStateError::InvalidInput(String::from(error_message))
                     }
                     "ResourceNotFoundException" => {
                         NotifyMigrationTaskStateError::ResourceNotFound(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => NotifyMigrationTaskStateError::ServiceUnavailable(String::from(error_message)),
-                    "UnauthorizedOperation" => NotifyMigrationTaskStateError::UnauthorizedOperation(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        NotifyMigrationTaskStateError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperation" => {
+                        NotifyMigrationTaskStateError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         NotifyMigrationTaskStateError::Validation(error_message.to_string())
                     }
@@ -2121,7 +2233,6 @@ pub enum PutResourceAttributesError {
     Unknown(String),
 }
 
-
 impl PutResourceAttributesError {
     pub fn from_body(body: &str) -> PutResourceAttributesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2153,7 +2264,9 @@ impl PutResourceAttributesError {
                     "ServiceUnavailableException" => {
                         PutResourceAttributesError::ServiceUnavailable(String::from(error_message))
                     }
-                    "UnauthorizedOperation" => PutResourceAttributesError::UnauthorizedOperation(String::from(error_message)),
+                    "UnauthorizedOperation" => PutResourceAttributesError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         PutResourceAttributesError::Validation(error_message.to_string())
                     }
@@ -2212,117 +2325,106 @@ impl Error for PutResourceAttributesError {
 /// Trait representing the capabilities of the AWS Migration Hub API. AWS Migration Hub clients implement this trait.
 pub trait MigrationHub {
     #[doc="<p>Associates a created artifact of an AWS cloud resource, the target receiving the migration, with the migration task performed by a migration tool. This API has the following traits:</p> <ul> <li> <p>Migration tools can call the <code>AssociateCreatedArtifact</code> operation to indicate which AWS artifact is associated with a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI's, EC2 instance, or DMS endpoint, etc.</p> </li> </ul>"]
-    fn associate_created_artifact
-        (&self,
-         input: &AssociateCreatedArtifactRequest)
-         -> Result<AssociateCreatedArtifactResult, AssociateCreatedArtifactError>;
-
+    fn associate_created_artifact(
+        &self,
+        input: &AssociateCreatedArtifactRequest,
+    ) -> Result<AssociateCreatedArtifactResult, AssociateCreatedArtifactError>;
 
     #[doc="<p>Associates a discovered resource ID from Application Discovery Service (ADS) with a migration task.</p>"]
-    fn associate_discovered_resource
-        (&self,
-         input: &AssociateDiscoveredResourceRequest)
-         -> Result<AssociateDiscoveredResourceResult, AssociateDiscoveredResourceError>;
-
+    fn associate_discovered_resource(
+        &self,
+        input: &AssociateDiscoveredResourceRequest,
+    ) -> Result<AssociateDiscoveredResourceResult, AssociateDiscoveredResourceError>;
 
     #[doc="<p>Creates a progress update stream which is an AWS resource used for access control as well as a namespace for migration task names that is implicitly linked to your AWS account. It must uniquely identify the migration tool as it is used for all updates made by the tool; however, it does not need to be unique for each AWS account because it is scoped to the AWS account.</p>"]
-    fn create_progress_update_stream
-        (&self,
-         input: &CreateProgressUpdateStreamRequest)
-         -> Result<CreateProgressUpdateStreamResult, CreateProgressUpdateStreamError>;
-
+    fn create_progress_update_stream(
+        &self,
+        input: &CreateProgressUpdateStreamRequest,
+    ) -> Result<CreateProgressUpdateStreamResult, CreateProgressUpdateStreamError>;
 
     #[doc="<p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously be doing the actual delete of the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs realted to the tasks belonging to the stream will throw \"InvalidInputException\" if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul>"]
-    fn delete_progress_update_stream
-        (&self,
-         input: &DeleteProgressUpdateStreamRequest)
-         -> Result<DeleteProgressUpdateStreamResult, DeleteProgressUpdateStreamError>;
+    fn delete_progress_update_stream(
+        &self,
+        input: &DeleteProgressUpdateStreamRequest,
+    ) -> Result<DeleteProgressUpdateStreamResult, DeleteProgressUpdateStreamError>;
 
+    #[doc = "<p>Gets the migration status of an application.</p>"]
+    fn describe_application_state(
+        &self,
+        input: &DescribeApplicationStateRequest,
+    ) -> Result<DescribeApplicationStateResult, DescribeApplicationStateError>;
 
-    #[doc="<p>Gets the migration status of an application.</p>"]
-    fn describe_application_state
-        (&self,
-         input: &DescribeApplicationStateRequest)
-         -> Result<DescribeApplicationStateResult, DescribeApplicationStateError>;
-
-
-    #[doc="<p>Retrieves a list of all attributes associated with a specific migration task.</p>"]
-    fn describe_migration_task
-        (&self,
-         input: &DescribeMigrationTaskRequest)
-         -> Result<DescribeMigrationTaskResult, DescribeMigrationTaskError>;
-
+    #[doc = "<p>Retrieves a list of all attributes associated with a specific migration task.</p>"]
+    fn describe_migration_task(
+        &self,
+        input: &DescribeMigrationTaskRequest,
+    ) -> Result<DescribeMigrationTaskResult, DescribeMigrationTaskError>;
 
     #[doc="<p>Disassociates a created artifact of an AWS resource with a migration task performed by a migration tool that was previously associated. This API has the following traits:</p> <ul> <li> <p>A migration user can call the <code>DisassociateCreatedArtifacts</code> operation to disassociate a created AWS Artifact from a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI's, EC2 instance, or RDS instance, etc.</p> </li> </ul>"]
-    fn disassociate_created_artifact
-        (&self,
-         input: &DisassociateCreatedArtifactRequest)
-         -> Result<DisassociateCreatedArtifactResult, DisassociateCreatedArtifactError>;
-
+    fn disassociate_created_artifact(
+        &self,
+        input: &DisassociateCreatedArtifactRequest,
+    ) -> Result<DisassociateCreatedArtifactResult, DisassociateCreatedArtifactError>;
 
     #[doc="<p>Disassociate an Application Discovery Service (ADS) discovered resource from a migration task.</p>"]
-    fn disassociate_discovered_resource
-        (&self,
-         input: &DisassociateDiscoveredResourceRequest)
-         -> Result<DisassociateDiscoveredResourceResult, DisassociateDiscoveredResourceError>;
-
+    fn disassociate_discovered_resource(
+        &self,
+        input: &DisassociateDiscoveredResourceRequest,
+    ) -> Result<DisassociateDiscoveredResourceResult, DisassociateDiscoveredResourceError>;
 
     #[doc="<p>Registers a new migration task which represents a server, database, etc., being migrated to AWS by a migration tool.</p> <p>This API is a prerequisite to calling the <code>NotifyMigrationTaskState</code> API as the migration tool must first register the migration task with Migration Hub.</p>"]
-    fn import_migration_task(&self,
-                             input: &ImportMigrationTaskRequest)
-                             -> Result<ImportMigrationTaskResult, ImportMigrationTaskError>;
-
+    fn import_migration_task(
+        &self,
+        input: &ImportMigrationTaskRequest,
+    ) -> Result<ImportMigrationTaskResult, ImportMigrationTaskError>;
 
     #[doc="<p>Lists the created artifacts attached to a given migration task in an update stream. This API has the following traits:</p> <ul> <li> <p>Gets the list of the created artifacts while migration is taking place.</p> </li> <li> <p>Shows the artifacts created by the migration tool that was associated by the <code>AssociateCreatedArtifact</code> API. </p> </li> <li> <p>Lists created artifacts in a paginated interface. </p> </li> </ul>"]
-    fn list_created_artifacts(&self,
-                              input: &ListCreatedArtifactsRequest)
-                              -> Result<ListCreatedArtifactsResult, ListCreatedArtifactsError>;
-
+    fn list_created_artifacts(
+        &self,
+        input: &ListCreatedArtifactsRequest,
+    ) -> Result<ListCreatedArtifactsResult, ListCreatedArtifactsError>;
 
     #[doc="<p>Lists discovered resources associated with the given <code>MigrationTask</code>.</p>"]
-    fn list_discovered_resources
-        (&self,
-         input: &ListDiscoveredResourcesRequest)
-         -> Result<ListDiscoveredResourcesResult, ListDiscoveredResourcesError>;
-
+    fn list_discovered_resources(
+        &self,
+        input: &ListDiscoveredResourcesRequest,
+    ) -> Result<ListDiscoveredResourcesResult, ListDiscoveredResourcesError>;
 
     #[doc="<p>Lists all, or filtered by resource name, migration tasks associated with the user account making this call. This API has the following traits:</p> <ul> <li> <p>Can show a summary list of the most recent migration tasks.</p> </li> <li> <p>Can show a summary list of migration tasks associated with a given discovered resource.</p> </li> <li> <p>Lists migration tasks in a paginated interface.</p> </li> </ul>"]
-    fn list_migration_tasks(&self,
-                            input: &ListMigrationTasksRequest)
-                            -> Result<ListMigrationTasksResult, ListMigrationTasksError>;
-
+    fn list_migration_tasks(
+        &self,
+        input: &ListMigrationTasksRequest,
+    ) -> Result<ListMigrationTasksResult, ListMigrationTasksError>;
 
     #[doc="<p>Lists progress update streams associated with the user account making this call.</p>"]
-    fn list_progress_update_streams
-        (&self,
-         input: &ListProgressUpdateStreamsRequest)
-         -> Result<ListProgressUpdateStreamsResult, ListProgressUpdateStreamsError>;
-
+    fn list_progress_update_streams(
+        &self,
+        input: &ListProgressUpdateStreamsRequest,
+    ) -> Result<ListProgressUpdateStreamsResult, ListProgressUpdateStreamsError>;
 
     #[doc="<p>Sets the migration state of an application. For a given application identified by the value passed to <code>ApplicationId</code>, its status is set or updated by passing one of three values to <code>Status</code>: <code>NOT_STARTED | IN_PROGRESS | COMPLETED</code>.</p>"]
-    fn notify_application_state
-        (&self,
-         input: &NotifyApplicationStateRequest)
-         -> Result<NotifyApplicationStateResult, NotifyApplicationStateError>;
-
+    fn notify_application_state(
+        &self,
+        input: &NotifyApplicationStateRequest,
+    ) -> Result<NotifyApplicationStateResult, NotifyApplicationStateError>;
 
     #[doc="<p>Notifies Migration Hub of the current status, progress, or other detail regarding a migration task. This API has the following traits:</p> <ul> <li> <p>Migration tools will call the <code>NotifyMigrationTaskState</code> API to share the latest progress and status.</p> </li> <li> <p> <code>MigrationTaskName</code> is used for addressing updates to the correct target.</p> </li> <li> <p> <code>ProgressUpdateStream</code> is used for access control and to provide a namespace for each migration tool.</p> </li> </ul>"]
-    fn notify_migration_task_state
-        (&self,
-         input: &NotifyMigrationTaskStateRequest)
-         -> Result<NotifyMigrationTaskStateResult, NotifyMigrationTaskStateError>;
-
+    fn notify_migration_task_state(
+        &self,
+        input: &NotifyMigrationTaskStateRequest,
+    ) -> Result<NotifyMigrationTaskStateResult, NotifyMigrationTaskStateError>;
 
     #[doc="<p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)'s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListAssociatedResource</code>.</p> </note>"]
-    fn put_resource_attributes
-        (&self,
-         input: &PutResourceAttributesRequest)
-         -> Result<PutResourceAttributesResult, PutResourceAttributesError>;
+    fn put_resource_attributes(
+        &self,
+        input: &PutResourceAttributesRequest,
+    ) -> Result<PutResourceAttributesResult, PutResourceAttributesError>;
 }
 /// A client for the AWS Migration Hub API.
 pub struct MigrationHubClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -2330,8 +2432,9 @@ pub struct MigrationHubClient<P, D>
 }
 
 impl<P, D> MigrationHubClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         MigrationHubClient {
@@ -2343,14 +2446,15 @@ impl<P, D> MigrationHubClient<P, D>
 }
 
 impl<P, D> MigrationHub for MigrationHubClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Associates a created artifact of an AWS cloud resource, the target receiving the migration, with the migration task performed by a migration tool. This API has the following traits:</p> <ul> <li> <p>Migration tools can call the <code>AssociateCreatedArtifact</code> operation to indicate which AWS artifact is associated with a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI's, EC2 instance, or DMS endpoint, etc.</p> </li> </ul>"]
-    fn associate_created_artifact
-        (&self,
-         input: &AssociateCreatedArtifactRequest)
-         -> Result<AssociateCreatedArtifactResult, AssociateCreatedArtifactError> {
+    fn associate_created_artifact(
+        &self,
+        input: &AssociateCreatedArtifactRequest,
+    ) -> Result<AssociateCreatedArtifactResult, AssociateCreatedArtifactError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2366,28 +2470,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AssociateCreatedArtifactResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AssociateCreatedArtifactResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssociateCreatedArtifactError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(AssociateCreatedArtifactError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Associates a discovered resource ID from Application Discovery Service (ADS) with a migration task.</p>"]
-    fn associate_discovered_resource
-        (&self,
-         input: &AssociateDiscoveredResourceRequest)
-         -> Result<AssociateDiscoveredResourceResult, AssociateDiscoveredResourceError> {
+    fn associate_discovered_resource(
+        &self,
+        input: &AssociateDiscoveredResourceRequest,
+    ) -> Result<AssociateDiscoveredResourceResult, AssociateDiscoveredResourceError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSMigrationHub.AssociateDiscoveredResource");
+        request.add_header(
+            "x-amz-target",
+            "AWSMigrationHub.AssociateDiscoveredResource",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2399,23 +2507,25 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AssociateDiscoveredResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<AssociateDiscoveredResourceResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssociateDiscoveredResourceError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(AssociateDiscoveredResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a progress update stream which is an AWS resource used for access control as well as a namespace for migration task names that is implicitly linked to your AWS account. It must uniquely identify the migration tool as it is used for all updates made by the tool; however, it does not need to be unique for each AWS account because it is scoped to the AWS account.</p>"]
-    fn create_progress_update_stream
-        (&self,
-         input: &CreateProgressUpdateStreamRequest)
-         -> Result<CreateProgressUpdateStreamResult, CreateProgressUpdateStreamError> {
+    fn create_progress_update_stream(
+        &self,
+        input: &CreateProgressUpdateStreamRequest,
+    ) -> Result<CreateProgressUpdateStreamResult, CreateProgressUpdateStreamError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2431,23 +2541,25 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateProgressUpdateStreamResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateProgressUpdateStreamResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateProgressUpdateStreamError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(CreateProgressUpdateStreamError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously be doing the actual delete of the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs realted to the tasks belonging to the stream will throw \"InvalidInputException\" if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul>"]
-    fn delete_progress_update_stream
-        (&self,
-         input: &DeleteProgressUpdateStreamRequest)
-         -> Result<DeleteProgressUpdateStreamResult, DeleteProgressUpdateStreamError> {
+    fn delete_progress_update_stream(
+        &self,
+        input: &DeleteProgressUpdateStreamRequest,
+    ) -> Result<DeleteProgressUpdateStreamResult, DeleteProgressUpdateStreamError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2463,23 +2575,25 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteProgressUpdateStreamResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteProgressUpdateStreamResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteProgressUpdateStreamError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(DeleteProgressUpdateStreamError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets the migration status of an application.</p>"]
-    fn describe_application_state
-        (&self,
-         input: &DescribeApplicationStateRequest)
-         -> Result<DescribeApplicationStateResult, DescribeApplicationStateError> {
+    #[doc = "<p>Gets the migration status of an application.</p>"]
+    fn describe_application_state(
+        &self,
+        input: &DescribeApplicationStateRequest,
+    ) -> Result<DescribeApplicationStateResult, DescribeApplicationStateError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2495,23 +2609,25 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeApplicationStateResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeApplicationStateResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeApplicationStateError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DescribeApplicationStateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves a list of all attributes associated with a specific migration task.</p>"]
-    fn describe_migration_task
-        (&self,
-         input: &DescribeMigrationTaskRequest)
-         -> Result<DescribeMigrationTaskResult, DescribeMigrationTaskError> {
+    #[doc = "<p>Retrieves a list of all attributes associated with a specific migration task.</p>"]
+    fn describe_migration_task(
+        &self,
+        input: &DescribeMigrationTaskRequest,
+    ) -> Result<DescribeMigrationTaskResult, DescribeMigrationTaskError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2527,27 +2643,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeMigrationTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeMigrationTaskResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeMigrationTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeMigrationTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Disassociates a created artifact of an AWS resource with a migration task performed by a migration tool that was previously associated. This API has the following traits:</p> <ul> <li> <p>A migration user can call the <code>DisassociateCreatedArtifacts</code> operation to disassociate a created AWS Artifact from a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI's, EC2 instance, or RDS instance, etc.</p> </li> </ul>"]
-    fn disassociate_created_artifact
-        (&self,
-         input: &DisassociateCreatedArtifactRequest)
-         -> Result<DisassociateCreatedArtifactResult, DisassociateCreatedArtifactError> {
+    fn disassociate_created_artifact(
+        &self,
+        input: &DisassociateCreatedArtifactRequest,
+    ) -> Result<DisassociateCreatedArtifactResult, DisassociateCreatedArtifactError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSMigrationHub.DisassociateCreatedArtifact");
+        request.add_header(
+            "x-amz-target",
+            "AWSMigrationHub.DisassociateCreatedArtifact",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2559,28 +2680,32 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociateCreatedArtifactResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DisassociateCreatedArtifactResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisassociateCreatedArtifactError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(DisassociateCreatedArtifactError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Disassociate an Application Discovery Service (ADS) discovered resource from a migration task.</p>"]
-    fn disassociate_discovered_resource
-        (&self,
-         input: &DisassociateDiscoveredResourceRequest)
-         -> Result<DisassociateDiscoveredResourceResult, DisassociateDiscoveredResourceError> {
+    fn disassociate_discovered_resource(
+        &self,
+        input: &DisassociateDiscoveredResourceRequest,
+    ) -> Result<DisassociateDiscoveredResourceResult, DisassociateDiscoveredResourceError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSMigrationHub.DisassociateDiscoveredResource");
+        request.add_header(
+            "x-amz-target",
+            "AWSMigrationHub.DisassociateDiscoveredResource",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2592,22 +2717,27 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociateDiscoveredResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DisassociateDiscoveredResourceResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisassociateDiscoveredResourceError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(DisassociateDiscoveredResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Registers a new migration task which represents a server, database, etc., being migrated to AWS by a migration tool.</p> <p>This API is a prerequisite to calling the <code>NotifyMigrationTaskState</code> API as the migration tool must first register the migration task with Migration Hub.</p>"]
-    fn import_migration_task(&self,
-                             input: &ImportMigrationTaskRequest)
-                             -> Result<ImportMigrationTaskResult, ImportMigrationTaskError> {
+    fn import_migration_task(
+        &self,
+        input: &ImportMigrationTaskRequest,
+    ) -> Result<ImportMigrationTaskResult, ImportMigrationTaskError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2623,21 +2753,25 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ImportMigrationTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ImportMigrationTaskResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ImportMigrationTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ImportMigrationTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the created artifacts attached to a given migration task in an update stream. This API has the following traits:</p> <ul> <li> <p>Gets the list of the created artifacts while migration is taking place.</p> </li> <li> <p>Shows the artifacts created by the migration tool that was associated by the <code>AssociateCreatedArtifact</code> API. </p> </li> <li> <p>Lists created artifacts in a paginated interface. </p> </li> </ul>"]
-    fn list_created_artifacts(&self,
-                              input: &ListCreatedArtifactsRequest)
-                              -> Result<ListCreatedArtifactsResult, ListCreatedArtifactsError> {
+    fn list_created_artifacts(
+        &self,
+        input: &ListCreatedArtifactsRequest,
+    ) -> Result<ListCreatedArtifactsResult, ListCreatedArtifactsError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2653,22 +2787,25 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListCreatedArtifactsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListCreatedArtifactsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListCreatedArtifactsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListCreatedArtifactsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists discovered resources associated with the given <code>MigrationTask</code>.</p>"]
-    fn list_discovered_resources
-        (&self,
-         input: &ListDiscoveredResourcesRequest)
-         -> Result<ListDiscoveredResourcesResult, ListDiscoveredResourcesError> {
+    fn list_discovered_resources(
+        &self,
+        input: &ListDiscoveredResourcesRequest,
+    ) -> Result<ListDiscoveredResourcesResult, ListDiscoveredResourcesError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2684,22 +2821,25 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListDiscoveredResourcesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListDiscoveredResourcesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDiscoveredResourcesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(ListDiscoveredResourcesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists all, or filtered by resource name, migration tasks associated with the user account making this call. This API has the following traits:</p> <ul> <li> <p>Can show a summary list of the most recent migration tasks.</p> </li> <li> <p>Can show a summary list of migration tasks associated with a given discovered resource.</p> </li> <li> <p>Lists migration tasks in a paginated interface.</p> </li> </ul>"]
-    fn list_migration_tasks(&self,
-                            input: &ListMigrationTasksRequest)
-                            -> Result<ListMigrationTasksResult, ListMigrationTasksError> {
+    fn list_migration_tasks(
+        &self,
+        input: &ListMigrationTasksRequest,
+    ) -> Result<ListMigrationTasksResult, ListMigrationTasksError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2715,24 +2855,25 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListMigrationTasksResult>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListMigrationTasksResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListMigrationTasksError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListMigrationTasksError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists progress update streams associated with the user account making this call.</p>"]
-    fn list_progress_update_streams
-        (&self,
-         input: &ListProgressUpdateStreamsRequest)
-         -> Result<ListProgressUpdateStreamsResult, ListProgressUpdateStreamsError> {
+    fn list_progress_update_streams(
+        &self,
+        input: &ListProgressUpdateStreamsRequest,
+    ) -> Result<ListProgressUpdateStreamsResult, ListProgressUpdateStreamsError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2748,23 +2889,25 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListProgressUpdateStreamsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListProgressUpdateStreamsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListProgressUpdateStreamsError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(ListProgressUpdateStreamsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Sets the migration state of an application. For a given application identified by the value passed to <code>ApplicationId</code>, its status is set or updated by passing one of three values to <code>Status</code>: <code>NOT_STARTED | IN_PROGRESS | COMPLETED</code>.</p>"]
-    fn notify_application_state
-        (&self,
-         input: &NotifyApplicationStateRequest)
-         -> Result<NotifyApplicationStateResult, NotifyApplicationStateError> {
+    fn notify_application_state(
+        &self,
+        input: &NotifyApplicationStateRequest,
+    ) -> Result<NotifyApplicationStateResult, NotifyApplicationStateError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2780,22 +2923,25 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<NotifyApplicationStateResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<NotifyApplicationStateResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(NotifyApplicationStateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(NotifyApplicationStateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Notifies Migration Hub of the current status, progress, or other detail regarding a migration task. This API has the following traits:</p> <ul> <li> <p>Migration tools will call the <code>NotifyMigrationTaskState</code> API to share the latest progress and status.</p> </li> <li> <p> <code>MigrationTaskName</code> is used for addressing updates to the correct target.</p> </li> <li> <p> <code>ProgressUpdateStream</code> is used for access control and to provide a namespace for each migration tool.</p> </li> </ul>"]
-    fn notify_migration_task_state
-        (&self,
-         input: &NotifyMigrationTaskStateRequest)
-         -> Result<NotifyMigrationTaskStateResult, NotifyMigrationTaskStateError> {
+    fn notify_migration_task_state(
+        &self,
+        input: &NotifyMigrationTaskStateRequest,
+    ) -> Result<NotifyMigrationTaskStateResult, NotifyMigrationTaskStateError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2811,23 +2957,25 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<NotifyMigrationTaskStateResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<NotifyMigrationTaskStateResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(NotifyMigrationTaskStateError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(NotifyMigrationTaskStateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)'s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListAssociatedResource</code>.</p> </note>"]
-    fn put_resource_attributes
-        (&self,
-         input: &PutResourceAttributesRequest)
-         -> Result<PutResourceAttributesResult, PutResourceAttributesError> {
+    fn put_resource_attributes(
+        &self,
+        input: &PutResourceAttributesRequest,
+    ) -> Result<PutResourceAttributesResult, PutResourceAttributesError> {
         let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2843,12 +2991,16 @@ impl<P, D> MigrationHub for MigrationHubClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutResourceAttributesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<PutResourceAttributesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutResourceAttributesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutResourceAttributesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

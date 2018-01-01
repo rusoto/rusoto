@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,627 +27,627 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Contains information about the compute type of a WorkSpace bundle.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about the compute type of a WorkSpace bundle.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ComputeType {
-    #[doc="<p>The name of the compute type for the bundle.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the compute type for the bundle.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>The request of the <a>CreateTags</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The request of the <a>CreateTags</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateTagsRequest {
-    #[doc="<p>The resource ID of the request.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The resource ID of the request.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    #[doc="<p>The tags of the request.</p>"]
-    #[serde(rename="Tags")]
+    /// <p>The tags of the request.</p>
+    #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
 
-#[doc="<p>The result of the <a>CreateTags</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The result of the <a>CreateTags</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateTagsResult;
 
-#[doc="<p>Contains the inputs for the <a>CreateWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>CreateWorkspaces</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateWorkspacesRequest {
-    #[doc="<p>An array of structures that specify the WorkSpaces to create.</p>"]
-    #[serde(rename="Workspaces")]
+    /// <p>An array of structures that specify the WorkSpaces to create.</p>
+    #[serde(rename = "Workspaces")]
     pub workspaces: Vec<WorkspaceRequest>,
 }
 
-#[doc="<p>Contains the result of the <a>CreateWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the result of the <a>CreateWorkspaces</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateWorkspacesResult {
-    #[doc="<p>An array of structures that represent the WorkSpaces that could not be created.</p>"]
-    #[serde(rename="FailedRequests")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of structures that represent the WorkSpaces that could not be created.</p>
+    #[serde(rename = "FailedRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedCreateWorkspaceRequest>>,
-    #[doc="<p>An array of structures that represent the WorkSpaces that were created.</p> <p>Because this operation is asynchronous, the identifier in <code>WorkspaceId</code> is not immediately available. If you immediately call <a>DescribeWorkspaces</a> with this identifier, no information will be returned.</p>"]
-    #[serde(rename="PendingRequests")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of structures that represent the WorkSpaces that were created.</p> <p>Because this operation is asynchronous, the identifier in <code>WorkspaceId</code> is not immediately available. If you immediately call <a>DescribeWorkspaces</a> with this identifier, no information will be returned.</p>
+    #[serde(rename = "PendingRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pending_requests: Option<Vec<Workspace>>,
 }
 
-#[doc="<p>Contains default WorkSpace creation information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains default WorkSpace creation information.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DefaultWorkspaceCreationProperties {
-    #[doc="<p>The identifier of any custom security groups that are applied to the WorkSpaces when they are created.</p>"]
-    #[serde(rename="CustomSecurityGroupId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of any custom security groups that are applied to the WorkSpaces when they are created.</p>
+    #[serde(rename = "CustomSecurityGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_security_group_id: Option<String>,
-    #[doc="<p>The organizational unit (OU) in the directory that the WorkSpace machine accounts are placed in.</p>"]
-    #[serde(rename="DefaultOu")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The organizational unit (OU) in the directory that the WorkSpace machine accounts are placed in.</p>
+    #[serde(rename = "DefaultOu")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_ou: Option<String>,
-    #[doc="<p>A public IP address will be attached to all WorkSpaces that are created or rebuilt.</p>"]
-    #[serde(rename="EnableInternetAccess")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A public IP address will be attached to all WorkSpaces that are created or rebuilt.</p>
+    #[serde(rename = "EnableInternetAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_internet_access: Option<bool>,
-    #[doc="<p>Specifies if the directory is enabled for Amazon WorkDocs.</p>"]
-    #[serde(rename="EnableWorkDocs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies if the directory is enabled for Amazon WorkDocs.</p>
+    #[serde(rename = "EnableWorkDocs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_work_docs: Option<bool>,
-    #[doc="<p>The WorkSpace user is an administrator on the WorkSpace.</p>"]
-    #[serde(rename="UserEnabledAsLocalAdministrator")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The WorkSpace user is an administrator on the WorkSpace.</p>
+    #[serde(rename = "UserEnabledAsLocalAdministrator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_enabled_as_local_administrator: Option<bool>,
 }
 
-#[doc="<p>The request of the <a>DeleteTags</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The request of the <a>DeleteTags</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteTagsRequest {
-    #[doc="<p>The resource ID of the request.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The resource ID of the request.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    #[doc="<p>The tag keys of the request.</p>"]
-    #[serde(rename="TagKeys")]
+    /// <p>The tag keys of the request.</p>
+    #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
 
-#[doc="<p>The result of the <a>DeleteTags</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The result of the <a>DeleteTags</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteTagsResult;
 
-#[doc="<p>The request of the <a>DescribeTags</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The request of the <a>DescribeTags</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeTagsRequest {
-    #[doc="<p>The resource ID of the request.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The resource ID of the request.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
 
-#[doc="<p>The result of the <a>DescribeTags</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The result of the <a>DescribeTags</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeTagsResult {
-    #[doc="<p>The list of tags.</p>"]
-    #[serde(rename="TagList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of tags.</p>
+    #[serde(rename = "TagList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_list: Option<Vec<Tag>>,
 }
 
-#[doc="<p>Contains the inputs for the <a>DescribeWorkspaceBundles</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>DescribeWorkspaceBundles</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeWorkspaceBundlesRequest {
-    #[doc="<p>An array of strings that contains the identifiers of the bundles to retrieve. This parameter cannot be combined with any other filter parameter.</p>"]
-    #[serde(rename="BundleIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of strings that contains the identifiers of the bundles to retrieve. This parameter cannot be combined with any other filter parameter.</p>
+    #[serde(rename = "BundleIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_ids: Option<Vec<String>>,
-    #[doc="<p>The <code>NextToken</code> value from a previous call to this operation. Pass null if this is the first call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>NextToken</code> value from a previous call to this operation. Pass null if this is the first call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The owner of the bundles to retrieve. This parameter cannot be combined with any other filter parameter.</p> <p>This contains one of the following values:</p> <ul> <li> <p>null- Retrieves the bundles that belong to the account making the call.</p> </li> <li> <p> <code>AMAZON</code>- Retrieves the bundles that are provided by AWS.</p> </li> </ul>"]
-    #[serde(rename="Owner")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The owner of the bundles to retrieve. This parameter cannot be combined with any other filter parameter.</p> <p>This contains one of the following values:</p> <ul> <li> <p>null- Retrieves the bundles that belong to the account making the call.</p> </li> <li> <p> <code>AMAZON</code>- Retrieves the bundles that are provided by AWS.</p> </li> </ul>
+    #[serde(rename = "Owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
 }
 
-#[doc="<p>Contains the results of the <a>DescribeWorkspaceBundles</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the results of the <a>DescribeWorkspaceBundles</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeWorkspaceBundlesResult {
-    #[doc="<p>An array of structures that contain information about the bundles.</p>"]
-    #[serde(rename="Bundles")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of structures that contain information about the bundles.</p>
+    #[serde(rename = "Bundles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bundles: Option<Vec<WorkspaceBundle>>,
-    #[doc="<p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. This token is valid for one day and must be used within that time frame.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. This token is valid for one day and must be used within that time frame.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Contains the inputs for the <a>DescribeWorkspaceDirectories</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>DescribeWorkspaceDirectories</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeWorkspaceDirectoriesRequest {
-    #[doc="<p>An array of strings that contains the directory identifiers to retrieve information for. If this member is null, all directories are retrieved.</p>"]
-    #[serde(rename="DirectoryIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of strings that contains the directory identifiers to retrieve information for. If this member is null, all directories are retrieved.</p>
+    #[serde(rename = "DirectoryIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_ids: Option<Vec<String>>,
-    #[doc="<p>The <code>NextToken</code> value from a previous call to this operation. Pass null if this is the first call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>NextToken</code> value from a previous call to this operation. Pass null if this is the first call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Contains the results of the <a>DescribeWorkspaceDirectories</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the results of the <a>DescribeWorkspaceDirectories</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeWorkspaceDirectoriesResult {
-    #[doc="<p>An array of structures that contain information about the directories.</p>"]
-    #[serde(rename="Directories")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of structures that contain information about the directories.</p>
+    #[serde(rename = "Directories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub directories: Option<Vec<WorkspaceDirectory>>,
-    #[doc="<p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. This token is valid for one day and must be used within that time frame.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. This token is valid for one day and must be used within that time frame.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeWorkspacesConnectionStatusRequest {
-    #[doc="<p>The next token of the request.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The next token of the request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>An array of strings that contain the identifiers of the WorkSpaces.</p>"]
-    #[serde(rename="WorkspaceIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of strings that contain the identifiers of the WorkSpaces.</p>
+    #[serde(rename = "WorkspaceIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_ids: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeWorkspacesConnectionStatusResult {
-    #[doc="<p>The next token of the result.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The next token of the result.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The connection status of the WorkSpace.</p>"]
-    #[serde(rename="WorkspacesConnectionStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The connection status of the WorkSpace.</p>
+    #[serde(rename = "WorkspacesConnectionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub workspaces_connection_status: Option<Vec<WorkspaceConnectionStatus>>,
 }
 
-#[doc="<p>Contains the inputs for the <a>DescribeWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>DescribeWorkspaces</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeWorkspacesRequest {
-    #[doc="<p>The identifier of a bundle to obtain the WorkSpaces for. All WorkSpaces that are created from this bundle will be retrieved. This parameter cannot be combined with any other filter parameter.</p>"]
-    #[serde(rename="BundleId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of a bundle to obtain the WorkSpaces for. All WorkSpaces that are created from this bundle will be retrieved. This parameter cannot be combined with any other filter parameter.</p>
+    #[serde(rename = "BundleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_id: Option<String>,
-    #[doc="<p>Specifies the directory identifier to which to limit the WorkSpaces. Optionally, you can specify a specific directory user with the <code>UserName</code> parameter. This parameter cannot be combined with any other filter parameter.</p>"]
-    #[serde(rename="DirectoryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the directory identifier to which to limit the WorkSpaces. Optionally, you can specify a specific directory user with the <code>UserName</code> parameter. This parameter cannot be combined with any other filter parameter.</p>
+    #[serde(rename = "DirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_id: Option<String>,
-    #[doc="<p>The maximum number of items to return.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The <code>NextToken</code> value from a previous call to this operation. Pass null if this is the first call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>NextToken</code> value from a previous call to this operation. Pass null if this is the first call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Used with the <code>DirectoryId</code> parameter to specify the directory user for whom to obtain the WorkSpace.</p>"]
-    #[serde(rename="UserName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Used with the <code>DirectoryId</code> parameter to specify the directory user for whom to obtain the WorkSpace.</p>
+    #[serde(rename = "UserName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_name: Option<String>,
-    #[doc="<p>An array of strings that contain the identifiers of the WorkSpaces for which to retrieve information. This parameter cannot be combined with any other filter parameter.</p> <p>Because the <a>CreateWorkspaces</a> operation is asynchronous, the identifier it returns is not immediately available. If you immediately call <a>DescribeWorkspaces</a> with this identifier, no information is returned.</p>"]
-    #[serde(rename="WorkspaceIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of strings that contain the identifiers of the WorkSpaces for which to retrieve information. This parameter cannot be combined with any other filter parameter.</p> <p>Because the <a>CreateWorkspaces</a> operation is asynchronous, the identifier it returns is not immediately available. If you immediately call <a>DescribeWorkspaces</a> with this identifier, no information is returned.</p>
+    #[serde(rename = "WorkspaceIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_ids: Option<Vec<String>>,
 }
 
-#[doc="<p>Contains the results for the <a>DescribeWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the results for the <a>DescribeWorkspaces</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeWorkspacesResult {
-    #[doc="<p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. This token is valid for one day and must be used within that time frame.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. This token is valid for one day and must be used within that time frame.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>An array of structures that contain the information about the WorkSpaces.</p> <p>Because the <a>CreateWorkspaces</a> operation is asynchronous, some of this information may be incomplete for a newly-created WorkSpace.</p>"]
-    #[serde(rename="Workspaces")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of structures that contain the information about the WorkSpaces.</p> <p>Because the <a>CreateWorkspaces</a> operation is asynchronous, some of this information may be incomplete for a newly-created WorkSpace.</p>
+    #[serde(rename = "Workspaces")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub workspaces: Option<Vec<Workspace>>,
 }
 
-#[doc="<p>Contains information about a WorkSpace that could not be created.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about a WorkSpace that could not be created.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct FailedCreateWorkspaceRequest {
-    #[doc="<p>The error code.</p>"]
-    #[serde(rename="ErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    #[doc="<p>The textual error message.</p>"]
-    #[serde(rename="ErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The textual error message.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="<p>A <a>FailedCreateWorkspaceRequest$WorkspaceRequest</a> object that contains the information about the WorkSpace that could not be created.</p>"]
-    #[serde(rename="WorkspaceRequest")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A <a>FailedCreateWorkspaceRequest$WorkspaceRequest</a> object that contains the information about the WorkSpace that could not be created.</p>
+    #[serde(rename = "WorkspaceRequest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_request: Option<WorkspaceRequest>,
 }
 
-#[doc="<p>Contains information about a WorkSpace that could not be rebooted (<a>RebootWorkspaces</a>), rebuilt (<a>RebuildWorkspaces</a>), terminated (<a>TerminateWorkspaces</a>), started (<a>StartWorkspaces</a>), or stopped (<a>StopWorkspaces</a>).</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about a WorkSpace that could not be rebooted (<a>RebootWorkspaces</a>), rebuilt (<a>RebuildWorkspaces</a>), terminated (<a>TerminateWorkspaces</a>), started (<a>StartWorkspaces</a>), or stopped (<a>StopWorkspaces</a>).</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct FailedWorkspaceChangeRequest {
-    #[doc="<p>The error code.</p>"]
-    #[serde(rename="ErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    #[doc="<p>The textual error message.</p>"]
-    #[serde(rename="ErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The textual error message.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="<p>The identifier of the WorkSpace.</p>"]
-    #[serde(rename="WorkspaceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the WorkSpace.</p>
+    #[serde(rename = "WorkspaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyWorkspacePropertiesRequest {
-    #[doc="<p>The ID of the WorkSpace.</p>"]
-    #[serde(rename="WorkspaceId")]
+    /// <p>The ID of the WorkSpace.</p>
+    #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
-    #[doc="<p>The WorkSpace properties of the request.</p>"]
-    #[serde(rename="WorkspaceProperties")]
+    /// <p>The WorkSpace properties of the request.</p>
+    #[serde(rename = "WorkspaceProperties")]
     pub workspace_properties: WorkspaceProperties,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyWorkspacePropertiesResult;
 
-#[doc="<p>Contains information used with the <a>RebootWorkspaces</a> operation to reboot a WorkSpace.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains information used with the <a>RebootWorkspaces</a> operation to reboot a WorkSpace.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RebootRequest {
-    #[doc="<p>The identifier of the WorkSpace to reboot.</p>"]
-    #[serde(rename="WorkspaceId")]
+    /// <p>The identifier of the WorkSpace to reboot.</p>
+    #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
 }
 
-#[doc="<p>Contains the inputs for the <a>RebootWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>RebootWorkspaces</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RebootWorkspacesRequest {
-    #[doc="<p>An array of structures that specify the WorkSpaces to reboot.</p>"]
-    #[serde(rename="RebootWorkspaceRequests")]
+    /// <p>An array of structures that specify the WorkSpaces to reboot.</p>
+    #[serde(rename = "RebootWorkspaceRequests")]
     pub reboot_workspace_requests: Vec<RebootRequest>,
 }
 
-#[doc="<p>Contains the results of the <a>RebootWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the results of the <a>RebootWorkspaces</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RebootWorkspacesResult {
-    #[doc="<p>An array of structures representing any WorkSpaces that could not be rebooted.</p>"]
-    #[serde(rename="FailedRequests")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of structures representing any WorkSpaces that could not be rebooted.</p>
+    #[serde(rename = "FailedRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-#[doc="<p>Contains information used with the <a>RebuildWorkspaces</a> operation to rebuild a WorkSpace.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains information used with the <a>RebuildWorkspaces</a> operation to rebuild a WorkSpace.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RebuildRequest {
-    #[doc="<p>The identifier of the WorkSpace to rebuild.</p>"]
-    #[serde(rename="WorkspaceId")]
+    /// <p>The identifier of the WorkSpace to rebuild.</p>
+    #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
 }
 
-#[doc="<p>Contains the inputs for the <a>RebuildWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>RebuildWorkspaces</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RebuildWorkspacesRequest {
-    #[doc="<p>An array of structures that specify the WorkSpaces to rebuild.</p>"]
-    #[serde(rename="RebuildWorkspaceRequests")]
+    /// <p>An array of structures that specify the WorkSpaces to rebuild.</p>
+    #[serde(rename = "RebuildWorkspaceRequests")]
     pub rebuild_workspace_requests: Vec<RebuildRequest>,
 }
 
-#[doc="<p>Contains the results of the <a>RebuildWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the results of the <a>RebuildWorkspaces</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RebuildWorkspacesResult {
-    #[doc="<p>An array of structures representing any WorkSpaces that could not be rebuilt.</p>"]
-    #[serde(rename="FailedRequests")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of structures representing any WorkSpaces that could not be rebuilt.</p>
+    #[serde(rename = "FailedRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-#[doc="<p>Describes the start request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Describes the start request.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartRequest {
-    #[doc="<p>The ID of the WorkSpace.</p>"]
-    #[serde(rename="WorkspaceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the WorkSpace.</p>
+    #[serde(rename = "WorkspaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartWorkspacesRequest {
-    #[doc="<p>The requests.</p>"]
-    #[serde(rename="StartWorkspaceRequests")]
+    /// <p>The requests.</p>
+    #[serde(rename = "StartWorkspaceRequests")]
     pub start_workspace_requests: Vec<StartRequest>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartWorkspacesResult {
-    #[doc="<p>The failed requests.</p>"]
-    #[serde(rename="FailedRequests")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The failed requests.</p>
+    #[serde(rename = "FailedRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-#[doc="<p>Describes the stop request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Describes the stop request.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopRequest {
-    #[doc="<p>The ID of the WorkSpace.</p>"]
-    #[serde(rename="WorkspaceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the WorkSpace.</p>
+    #[serde(rename = "WorkspaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopWorkspacesRequest {
-    #[doc="<p>The requests.</p>"]
-    #[serde(rename="StopWorkspaceRequests")]
+    /// <p>The requests.</p>
+    #[serde(rename = "StopWorkspaceRequests")]
     pub stop_workspace_requests: Vec<StopRequest>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopWorkspacesResult {
-    #[doc="<p>The failed requests.</p>"]
-    #[serde(rename="FailedRequests")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The failed requests.</p>
+    #[serde(rename = "FailedRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-#[doc="<p>Describes the tag of the WorkSpace.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes the tag of the WorkSpace.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
-    #[doc="<p>The key of the tag.</p>"]
-    #[serde(rename="Key")]
+    /// <p>The key of the tag.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>The value of the tag.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value of the tag.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>Contains information used with the <a>TerminateWorkspaces</a> operation to terminate a WorkSpace.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains information used with the <a>TerminateWorkspaces</a> operation to terminate a WorkSpace.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TerminateRequest {
-    #[doc="<p>The identifier of the WorkSpace to terminate.</p>"]
-    #[serde(rename="WorkspaceId")]
+    /// <p>The identifier of the WorkSpace to terminate.</p>
+    #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
 }
 
-#[doc="<p>Contains the inputs for the <a>TerminateWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Contains the inputs for the <a>TerminateWorkspaces</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TerminateWorkspacesRequest {
-    #[doc="<p>An array of structures that specify the WorkSpaces to terminate.</p>"]
-    #[serde(rename="TerminateWorkspaceRequests")]
+    /// <p>An array of structures that specify the WorkSpaces to terminate.</p>
+    #[serde(rename = "TerminateWorkspaceRequests")]
     pub terminate_workspace_requests: Vec<TerminateRequest>,
 }
 
-#[doc="<p>Contains the results of the <a>TerminateWorkspaces</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the results of the <a>TerminateWorkspaces</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TerminateWorkspacesResult {
-    #[doc="<p>An array of structures representing any WorkSpaces that could not be terminated.</p>"]
-    #[serde(rename="FailedRequests")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of structures representing any WorkSpaces that could not be terminated.</p>
+    #[serde(rename = "FailedRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-#[doc="<p>Contains information about the user storage for a WorkSpace bundle.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about the user storage for a WorkSpace bundle.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserStorage {
-    #[doc="<p>The amount of user storage for the bundle.</p>"]
-    #[serde(rename="Capacity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The amount of user storage for the bundle.</p>
+    #[serde(rename = "Capacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub capacity: Option<String>,
 }
 
-#[doc="<p>Contains information about a WorkSpace.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about a WorkSpace.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Workspace {
-    #[doc="<p>The identifier of the bundle that the WorkSpace was created from.</p>"]
-    #[serde(rename="BundleId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the bundle that the WorkSpace was created from.</p>
+    #[serde(rename = "BundleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_id: Option<String>,
-    #[doc="<p>The name of the WorkSpace as seen by the operating system.</p>"]
-    #[serde(rename="ComputerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the WorkSpace as seen by the operating system.</p>
+    #[serde(rename = "ComputerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub computer_name: Option<String>,
-    #[doc="<p>The identifier of the AWS Directory Service directory that the WorkSpace belongs to.</p>"]
-    #[serde(rename="DirectoryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the AWS Directory Service directory that the WorkSpace belongs to.</p>
+    #[serde(rename = "DirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_id: Option<String>,
-    #[doc="<p>If the WorkSpace could not be created, this contains the error code.</p>"]
-    #[serde(rename="ErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the WorkSpace could not be created, this contains the error code.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    #[doc="<p>If the WorkSpace could not be created, this contains a textual error message that describes the failure.</p>"]
-    #[serde(rename="ErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the WorkSpace could not be created, this contains a textual error message that describes the failure.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="<p>The IP address of the WorkSpace.</p>"]
-    #[serde(rename="IpAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IP address of the WorkSpace.</p>
+    #[serde(rename = "IpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    #[doc="<p>Specifies whether the data stored on the root volume, or C: drive, is encrypted.</p>"]
-    #[serde(rename="RootVolumeEncryptionEnabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the data stored on the root volume, or C: drive, is encrypted.</p>
+    #[serde(rename = "RootVolumeEncryptionEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub root_volume_encryption_enabled: Option<bool>,
-    #[doc="<p>The operational state of the WorkSpace.</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The operational state of the WorkSpace.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    #[doc="<p>The identifier of the subnet that the WorkSpace is in.</p>"]
-    #[serde(rename="SubnetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the subnet that the WorkSpace is in.</p>
+    #[serde(rename = "SubnetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
-    #[doc="<p>The user that the WorkSpace is assigned to.</p>"]
-    #[serde(rename="UserName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user that the WorkSpace is assigned to.</p>
+    #[serde(rename = "UserName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_name: Option<String>,
-    #[doc="<p>Specifies whether the data stored on the user volume, or D: drive, is encrypted.</p>"]
-    #[serde(rename="UserVolumeEncryptionEnabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the data stored on the user volume, or D: drive, is encrypted.</p>
+    #[serde(rename = "UserVolumeEncryptionEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_volume_encryption_enabled: Option<bool>,
-    #[doc="<p>The KMS key used to encrypt data stored on your WorkSpace.</p>"]
-    #[serde(rename="VolumeEncryptionKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The KMS key used to encrypt data stored on your WorkSpace.</p>
+    #[serde(rename = "VolumeEncryptionKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_encryption_key: Option<String>,
-    #[doc="<p>The identifier of the WorkSpace.</p>"]
-    #[serde(rename="WorkspaceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the WorkSpace.</p>
+    #[serde(rename = "WorkspaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_id: Option<String>,
-    #[serde(rename="WorkspaceProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "WorkspaceProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_properties: Option<WorkspaceProperties>,
 }
 
-#[doc="<p>Contains information about a WorkSpace bundle.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about a WorkSpace bundle.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct WorkspaceBundle {
-    #[doc="<p>The bundle identifier.</p>"]
-    #[serde(rename="BundleId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The bundle identifier.</p>
+    #[serde(rename = "BundleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_id: Option<String>,
-    #[doc="<p>A <a>ComputeType</a> object that specifies the compute type for the bundle.</p>"]
-    #[serde(rename="ComputeType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A <a>ComputeType</a> object that specifies the compute type for the bundle.</p>
+    #[serde(rename = "ComputeType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_type: Option<ComputeType>,
-    #[doc="<p>The bundle description.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The bundle description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the bundle.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the bundle.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The owner of the bundle. This contains the owner's account identifier, or <code>AMAZON</code> if the bundle is provided by AWS.</p>"]
-    #[serde(rename="Owner")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The owner of the bundle. This contains the owner's account identifier, or <code>AMAZON</code> if the bundle is provided by AWS.</p>
+    #[serde(rename = "Owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    #[doc="<p>A <a>UserStorage</a> object that specifies the amount of user storage that the bundle contains.</p>"]
-    #[serde(rename="UserStorage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A <a>UserStorage</a> object that specifies the amount of user storage that the bundle contains.</p>
+    #[serde(rename = "UserStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_storage: Option<UserStorage>,
 }
 
-#[doc="<p>Describes the connection status of a WorkSpace.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the connection status of a WorkSpace.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct WorkspaceConnectionStatus {
-    #[doc="<p>The connection state of the WorkSpace. Returns UNKOWN if the WorkSpace is in a Stopped state.</p>"]
-    #[serde(rename="ConnectionState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The connection state of the WorkSpace. Returns UNKOWN if the WorkSpace is in a Stopped state.</p>
+    #[serde(rename = "ConnectionState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_state: Option<String>,
-    #[doc="<p>The timestamp of the connection state check.</p>"]
-    #[serde(rename="ConnectionStateCheckTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The timestamp of the connection state check.</p>
+    #[serde(rename = "ConnectionStateCheckTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_state_check_timestamp: Option<f64>,
-    #[doc="<p>The timestamp of the last known user connection.</p>"]
-    #[serde(rename="LastKnownUserConnectionTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The timestamp of the last known user connection.</p>
+    #[serde(rename = "LastKnownUserConnectionTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_known_user_connection_timestamp: Option<f64>,
-    #[doc="<p>The ID of the WorkSpace.</p>"]
-    #[serde(rename="WorkspaceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the WorkSpace.</p>
+    #[serde(rename = "WorkspaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_id: Option<String>,
 }
 
-#[doc="<p>Contains information about an AWS Directory Service directory for use with Amazon WorkSpaces.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about an AWS Directory Service directory for use with Amazon WorkSpaces.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct WorkspaceDirectory {
-    #[doc="<p>The directory alias.</p>"]
-    #[serde(rename="Alias")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The directory alias.</p>
+    #[serde(rename = "Alias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alias: Option<String>,
-    #[doc="<p>The user name for the service account.</p>"]
-    #[serde(rename="CustomerUserName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user name for the service account.</p>
+    #[serde(rename = "CustomerUserName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_user_name: Option<String>,
-    #[doc="<p>The directory identifier.</p>"]
-    #[serde(rename="DirectoryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The directory identifier.</p>
+    #[serde(rename = "DirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_id: Option<String>,
-    #[doc="<p>The name of the directory.</p>"]
-    #[serde(rename="DirectoryName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the directory.</p>
+    #[serde(rename = "DirectoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_name: Option<String>,
-    #[doc="<p>The directory type.</p>"]
-    #[serde(rename="DirectoryType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The directory type.</p>
+    #[serde(rename = "DirectoryType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_type: Option<String>,
-    #[doc="<p>An array of strings that contains the IP addresses of the DNS servers for the directory.</p>"]
-    #[serde(rename="DnsIpAddresses")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of strings that contains the IP addresses of the DNS servers for the directory.</p>
+    #[serde(rename = "DnsIpAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub dns_ip_addresses: Option<Vec<String>>,
-    #[doc="<p>The identifier of the IAM role. This is the role that allows Amazon WorkSpaces to make calls to other services, such as Amazon EC2, on your behalf.</p>"]
-    #[serde(rename="IamRoleId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the IAM role. This is the role that allows Amazon WorkSpaces to make calls to other services, such as Amazon EC2, on your behalf.</p>
+    #[serde(rename = "IamRoleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_id: Option<String>,
-    #[doc="<p>The registration code for the directory. This is the code that users enter in their Amazon WorkSpaces client application to connect to the directory.</p>"]
-    #[serde(rename="RegistrationCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The registration code for the directory. This is the code that users enter in their Amazon WorkSpaces client application to connect to the directory.</p>
+    #[serde(rename = "RegistrationCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registration_code: Option<String>,
-    #[doc="<p>The state of the directory's registration with Amazon WorkSpaces</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The state of the directory's registration with Amazon WorkSpaces</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    #[doc="<p>An array of strings that contains the identifiers of the subnets used with the directory.</p>"]
-    #[serde(rename="SubnetIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of strings that contains the identifiers of the subnets used with the directory.</p>
+    #[serde(rename = "SubnetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
-    #[doc="<p>A structure that specifies the default creation properties for all WorkSpaces in the directory.</p>"]
-    #[serde(rename="WorkspaceCreationProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that specifies the default creation properties for all WorkSpaces in the directory.</p>
+    #[serde(rename = "WorkspaceCreationProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_creation_properties: Option<DefaultWorkspaceCreationProperties>,
-    #[doc="<p>The identifier of the security group that is assigned to new WorkSpaces.</p>"]
-    #[serde(rename="WorkspaceSecurityGroupId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The identifier of the security group that is assigned to new WorkSpaces.</p>
+    #[serde(rename = "WorkspaceSecurityGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_security_group_id: Option<String>,
 }
 
-#[doc="<p>Describes the properties of a WorkSpace.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes the properties of a WorkSpace.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct WorkspaceProperties {
-    #[doc="<p>The running mode of the WorkSpace. AlwaysOn WorkSpaces are billed monthly. AutoStop WorkSpaces are billed by the hour and stopped when no longer being used in order to save on costs.</p>"]
-    #[serde(rename="RunningMode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The running mode of the WorkSpace. AlwaysOn WorkSpaces are billed monthly. AutoStop WorkSpaces are billed by the hour and stopped when no longer being used in order to save on costs.</p>
+    #[serde(rename = "RunningMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub running_mode: Option<String>,
-    #[doc="<p>The time after a user logs off when WorkSpaces are automatically stopped. Configured in 60 minute intervals.</p>"]
-    #[serde(rename="RunningModeAutoStopTimeoutInMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time after a user logs off when WorkSpaces are automatically stopped. Configured in 60 minute intervals.</p>
+    #[serde(rename = "RunningModeAutoStopTimeoutInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub running_mode_auto_stop_timeout_in_minutes: Option<i64>,
 }
 
-#[doc="<p>Contains information about a WorkSpace creation request.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Contains information about a WorkSpace creation request.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct WorkspaceRequest {
-    #[doc="<p>The identifier of the bundle to create the WorkSpace from. You can use the <a>DescribeWorkspaceBundles</a> operation to obtain a list of the bundles that are available.</p>"]
-    #[serde(rename="BundleId")]
+    /// <p>The identifier of the bundle to create the WorkSpace from. You can use the <a>DescribeWorkspaceBundles</a> operation to obtain a list of the bundles that are available.</p>
+    #[serde(rename = "BundleId")]
     pub bundle_id: String,
-    #[doc="<p>The identifier of the AWS Directory Service directory to create the WorkSpace in. You can use the <a>DescribeWorkspaceDirectories</a> operation to obtain a list of the directories that are available.</p>"]
-    #[serde(rename="DirectoryId")]
+    /// <p>The identifier of the AWS Directory Service directory to create the WorkSpace in. You can use the <a>DescribeWorkspaceDirectories</a> operation to obtain a list of the directories that are available.</p>
+    #[serde(rename = "DirectoryId")]
     pub directory_id: String,
-    #[doc="<p>Specifies whether the data stored on the root volume, or C: drive, is encrypted.</p>"]
-    #[serde(rename="RootVolumeEncryptionEnabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the data stored on the root volume, or C: drive, is encrypted.</p>
+    #[serde(rename = "RootVolumeEncryptionEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub root_volume_encryption_enabled: Option<bool>,
-    #[doc="<p>The tags of the WorkSpace request.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tags of the WorkSpace request.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    #[doc="<p>The username that the WorkSpace is assigned to. This username must exist in the AWS Directory Service directory specified by the <code>DirectoryId</code> member.</p>"]
-    #[serde(rename="UserName")]
+    /// <p>The username that the WorkSpace is assigned to. This username must exist in the AWS Directory Service directory specified by the <code>DirectoryId</code> member.</p>
+    #[serde(rename = "UserName")]
     pub user_name: String,
-    #[doc="<p>Specifies whether the data stored on the user volume, or D: drive, is encrypted.</p>"]
-    #[serde(rename="UserVolumeEncryptionEnabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the data stored on the user volume, or D: drive, is encrypted.</p>
+    #[serde(rename = "UserVolumeEncryptionEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_volume_encryption_enabled: Option<bool>,
-    #[doc="<p>The KMS key used to encrypt data stored on your WorkSpace.</p>"]
-    #[serde(rename="VolumeEncryptionKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The KMS key used to encrypt data stored on your WorkSpace.</p>
+    #[serde(rename = "VolumeEncryptionKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_encryption_key: Option<String>,
-    #[serde(rename="WorkspaceProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "WorkspaceProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_properties: Option<WorkspaceProperties>,
 }
 
@@ -670,7 +669,6 @@ pub enum CreateTagsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateTagsError {
     pub fn from_body(body: &str) -> CreateTagsError {
@@ -758,7 +756,6 @@ pub enum CreateWorkspacesError {
     Unknown(String),
 }
 
-
 impl CreateWorkspacesError {
     pub fn from_body(body: &str) -> CreateWorkspacesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -843,7 +840,6 @@ pub enum DeleteTagsError {
     Unknown(String),
 }
 
-
 impl DeleteTagsError {
     pub fn from_body(body: &str) -> DeleteTagsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -924,7 +920,6 @@ pub enum DescribeTagsError {
     Unknown(String),
 }
 
-
 impl DescribeTagsError {
     pub fn from_body(body: &str) -> DescribeTagsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1003,7 +998,6 @@ pub enum DescribeWorkspaceBundlesError {
     Unknown(String),
 }
 
-
 impl DescribeWorkspaceBundlesError {
     pub fn from_body(body: &str) -> DescribeWorkspaceBundlesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1017,7 +1011,11 @@ impl DescribeWorkspaceBundlesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterValuesException" => DescribeWorkspaceBundlesError::InvalidParameterValues(String::from(error_message)),
+                    "InvalidParameterValuesException" => {
+                        DescribeWorkspaceBundlesError::InvalidParameterValues(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeWorkspaceBundlesError::Validation(error_message.to_string())
                     }
@@ -1082,7 +1080,6 @@ pub enum DescribeWorkspaceDirectoriesError {
     Unknown(String),
 }
 
-
 impl DescribeWorkspaceDirectoriesError {
     pub fn from_body(body: &str) -> DescribeWorkspaceDirectoriesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1096,7 +1093,11 @@ impl DescribeWorkspaceDirectoriesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterValuesException" => DescribeWorkspaceDirectoriesError::InvalidParameterValues(String::from(error_message)),
+                    "InvalidParameterValuesException" => {
+                        DescribeWorkspaceDirectoriesError::InvalidParameterValues(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeWorkspaceDirectoriesError::Validation(error_message.to_string())
                     }
@@ -1162,7 +1163,6 @@ pub enum DescribeWorkspacesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeWorkspacesError {
     pub fn from_body(body: &str) -> DescribeWorkspacesError {
@@ -1248,7 +1248,6 @@ pub enum DescribeWorkspacesConnectionStatusError {
     Unknown(String),
 }
 
-
 impl DescribeWorkspacesConnectionStatusError {
     pub fn from_body(body: &str) -> DescribeWorkspacesConnectionStatusError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1262,11 +1261,14 @@ impl DescribeWorkspacesConnectionStatusError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterValuesException" => DescribeWorkspacesConnectionStatusError::InvalidParameterValues(String::from(error_message)),
-                    "ValidationException" => {
-                        DescribeWorkspacesConnectionStatusError::Validation(error_message
-                                                                                .to_string())
+                    "InvalidParameterValuesException" => {
+                        DescribeWorkspacesConnectionStatusError::InvalidParameterValues(
+                            String::from(error_message),
+                        )
                     }
+                    "ValidationException" => DescribeWorkspacesConnectionStatusError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DescribeWorkspacesConnectionStatusError::Unknown(String::from(body)),
                 }
             }
@@ -1340,7 +1342,6 @@ pub enum ModifyWorkspacePropertiesError {
     Unknown(String),
 }
 
-
 impl ModifyWorkspacePropertiesError {
     pub fn from_body(body: &str) -> ModifyWorkspacePropertiesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1357,12 +1358,36 @@ impl ModifyWorkspacePropertiesError {
                     "AccessDeniedException" => {
                         ModifyWorkspacePropertiesError::AccessDenied(String::from(error_message))
                     }
-                    "InvalidParameterValuesException" => ModifyWorkspacePropertiesError::InvalidParameterValues(String::from(error_message)),
-                    "InvalidResourceStateException" => ModifyWorkspacePropertiesError::InvalidResourceState(String::from(error_message)),
-                    "OperationInProgressException" => ModifyWorkspacePropertiesError::OperationInProgress(String::from(error_message)),
-                    "ResourceNotFoundException" => ModifyWorkspacePropertiesError::ResourceNotFound(String::from(error_message)),
-                    "ResourceUnavailableException" => ModifyWorkspacePropertiesError::ResourceUnavailable(String::from(error_message)),
-                    "UnsupportedWorkspaceConfigurationException" => ModifyWorkspacePropertiesError::UnsupportedWorkspaceConfiguration(String::from(error_message)),
+                    "InvalidParameterValuesException" => {
+                        ModifyWorkspacePropertiesError::InvalidParameterValues(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidResourceStateException" => {
+                        ModifyWorkspacePropertiesError::InvalidResourceState(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OperationInProgressException" => {
+                        ModifyWorkspacePropertiesError::OperationInProgress(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        ModifyWorkspacePropertiesError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceUnavailableException" => {
+                        ModifyWorkspacePropertiesError::ResourceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnsupportedWorkspaceConfigurationException" => {
+                        ModifyWorkspacePropertiesError::UnsupportedWorkspaceConfiguration(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         ModifyWorkspacePropertiesError::Validation(error_message.to_string())
                     }
@@ -1430,7 +1455,6 @@ pub enum RebootWorkspacesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl RebootWorkspacesError {
     pub fn from_body(body: &str) -> RebootWorkspacesError {
@@ -1503,7 +1527,6 @@ pub enum RebuildWorkspacesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl RebuildWorkspacesError {
     pub fn from_body(body: &str) -> RebuildWorkspacesError {
@@ -1579,7 +1602,6 @@ pub enum StartWorkspacesError {
     Unknown(String),
 }
 
-
 impl StartWorkspacesError {
     pub fn from_body(body: &str) -> StartWorkspacesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1651,7 +1673,6 @@ pub enum StopWorkspacesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl StopWorkspacesError {
     pub fn from_body(body: &str) -> StopWorkspacesError {
@@ -1725,7 +1746,6 @@ pub enum TerminateWorkspacesError {
     Unknown(String),
 }
 
-
 impl TerminateWorkspacesError {
     pub fn from_body(body: &str) -> TerminateWorkspacesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1789,94 +1809,89 @@ impl Error for TerminateWorkspacesError {
 }
 /// Trait representing the capabilities of the Amazon WorkSpaces API. Amazon WorkSpaces clients implement this trait.
 pub trait Workspaces {
-    #[doc="<p>Creates tags for a WorkSpace.</p>"]
+    #[doc = "<p>Creates tags for a WorkSpace.</p>"]
     fn create_tags(&self, input: &CreateTagsRequest) -> Result<CreateTagsResult, CreateTagsError>;
 
-
     #[doc="<p>Creates one or more WorkSpaces.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p> </note>"]
-    fn create_workspaces(&self,
-                         input: &CreateWorkspacesRequest)
-                         -> Result<CreateWorkspacesResult, CreateWorkspacesError>;
+    fn create_workspaces(
+        &self,
+        input: &CreateWorkspacesRequest,
+    ) -> Result<CreateWorkspacesResult, CreateWorkspacesError>;
 
-
-    #[doc="<p>Deletes tags from a WorkSpace.</p>"]
+    #[doc = "<p>Deletes tags from a WorkSpace.</p>"]
     fn delete_tags(&self, input: &DeleteTagsRequest) -> Result<DeleteTagsResult, DeleteTagsError>;
 
-
-    #[doc="<p>Describes tags for a WorkSpace.</p>"]
-    fn describe_tags(&self,
-                     input: &DescribeTagsRequest)
-                     -> Result<DescribeTagsResult, DescribeTagsError>;
-
+    #[doc = "<p>Describes tags for a WorkSpace.</p>"]
+    fn describe_tags(
+        &self,
+        input: &DescribeTagsRequest,
+    ) -> Result<DescribeTagsResult, DescribeTagsError>;
 
     #[doc="<p>Obtains information about the WorkSpace bundles that are available to your account in the specified region.</p> <p>You can filter the results with either the <code>BundleIds</code> parameter, or the <code>Owner</code> parameter, but not both.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
-    fn describe_workspace_bundles
-        (&self,
-         input: &DescribeWorkspaceBundlesRequest)
-         -> Result<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError>;
-
+    fn describe_workspace_bundles(
+        &self,
+        input: &DescribeWorkspaceBundlesRequest,
+    ) -> Result<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError>;
 
     #[doc="<p>Retrieves information about the AWS Directory Service directories in the region that are registered with Amazon WorkSpaces and are available to your account.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
-    fn describe_workspace_directories
-        (&self,
-         input: &DescribeWorkspaceDirectoriesRequest)
-         -> Result<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError>;
-
+    fn describe_workspace_directories(
+        &self,
+        input: &DescribeWorkspaceDirectoriesRequest,
+    ) -> Result<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError>;
 
     #[doc="<p>Obtains information about the specified WorkSpaces.</p> <p>Only one of the filter parameters, such as <code>BundleId</code>, <code>DirectoryId</code>, or <code>WorkspaceIds</code>, can be specified at a time.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
-    fn describe_workspaces(&self,
-                           input: &DescribeWorkspacesRequest)
-                           -> Result<DescribeWorkspacesResult, DescribeWorkspacesError>;
+    fn describe_workspaces(
+        &self,
+        input: &DescribeWorkspacesRequest,
+    ) -> Result<DescribeWorkspacesResult, DescribeWorkspacesError>;
 
-
-    #[doc="<p>Describes the connection status of a specified WorkSpace.</p>"]
-    fn describe_workspaces_connection_status
-        (&self,
-         input: &DescribeWorkspacesConnectionStatusRequest)
-         -> Result<DescribeWorkspacesConnectionStatusResult,
-                   DescribeWorkspacesConnectionStatusError>;
-
+    #[doc = "<p>Describes the connection status of a specified WorkSpace.</p>"]
+    fn describe_workspaces_connection_status(
+        &self,
+        input: &DescribeWorkspacesConnectionStatusRequest,
+    ) -> Result<DescribeWorkspacesConnectionStatusResult, DescribeWorkspacesConnectionStatusError>;
 
     #[doc="<p>Modifies the WorkSpace properties, including the running mode and AutoStop time.</p>"]
-    fn modify_workspace_properties
-        (&self,
-         input: &ModifyWorkspacePropertiesRequest)
-         -> Result<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError>;
-
+    fn modify_workspace_properties(
+        &self,
+        input: &ModifyWorkspacePropertiesRequest,
+    ) -> Result<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError>;
 
     #[doc="<p>Reboots the specified WorkSpaces.</p> <p>To be able to reboot a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p> </note>"]
-    fn reboot_workspaces(&self,
-                         input: &RebootWorkspacesRequest)
-                         -> Result<RebootWorkspacesResult, RebootWorkspacesError>;
-
+    fn reboot_workspaces(
+        &self,
+        input: &RebootWorkspacesRequest,
+    ) -> Result<RebootWorkspacesResult, RebootWorkspacesError>;
 
     #[doc="<p>Rebuilds the specified WorkSpaces.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. Rebuilding a WorkSpace causes the following to occur:</p> <ul> <li> <p>The system is restored to the image of the bundle that the WorkSpace is created from. Any applications that have been installed, or system settings that have been made since the WorkSpace was created will be lost.</p> </li> <li> <p>The data drive (D drive) is re-created from the last automatic snapshot taken of the data drive. The current contents of the data drive are overwritten. Automatic snapshots of the data drive are taken every 12 hours, so the snapshot can be as much as 12 hours old.</p> </li> </ul> <p>To be able to rebuild a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code> or <code>ERROR</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p> </note>"]
-    fn rebuild_workspaces(&self,
-                          input: &RebuildWorkspacesRequest)
-                          -> Result<RebuildWorkspacesResult, RebuildWorkspacesError>;
-
+    fn rebuild_workspaces(
+        &self,
+        input: &RebuildWorkspacesRequest,
+    ) -> Result<RebuildWorkspacesResult, RebuildWorkspacesError>;
 
     #[doc="<p>Starts the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of STOPPED.</p>"]
-    fn start_workspaces(&self,
-                        input: &StartWorkspacesRequest)
-                        -> Result<StartWorkspacesResult, StartWorkspacesError>;
-
+    fn start_workspaces(
+        &self,
+        input: &StartWorkspacesRequest,
+    ) -> Result<StartWorkspacesResult, StartWorkspacesError>;
 
     #[doc="<p> Stops the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>"]
-    fn stop_workspaces(&self,
-                       input: &StopWorkspacesRequest)
-                       -> Result<StopWorkspacesResult, StopWorkspacesError>;
-
+    fn stop_workspaces(
+        &self,
+        input: &StopWorkspacesRequest,
+    ) -> Result<StopWorkspacesResult, StopWorkspacesError>;
 
     #[doc="<p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is not maintained and will be destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p> </note>"]
-    fn terminate_workspaces(&self,
-                            input: &TerminateWorkspacesRequest)
-                            -> Result<TerminateWorkspacesResult, TerminateWorkspacesError>;
+    fn terminate_workspaces(
+        &self,
+        input: &TerminateWorkspacesRequest,
+    ) -> Result<TerminateWorkspacesResult, TerminateWorkspacesError>;
 }
 /// A client for the Amazon WorkSpaces API.
 pub struct WorkspacesClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -1884,8 +1899,9 @@ pub struct WorkspacesClient<P, D>
 }
 
 impl<P, D> WorkspacesClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         WorkspacesClient {
@@ -1897,10 +1913,11 @@ impl<P, D> WorkspacesClient<P, D>
 }
 
 impl<P, D> Workspaces for WorkspacesClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
-    #[doc="<p>Creates tags for a WorkSpace.</p>"]
+    #[doc = "<p>Creates tags for a WorkSpace.</p>"]
     fn create_tags(&self, input: &CreateTagsRequest) -> Result<CreateTagsResult, CreateTagsError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
@@ -1917,23 +1934,25 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateTagsResult>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateTagsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates one or more WorkSpaces.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p> </note>"]
-    fn create_workspaces(&self,
-                         input: &CreateWorkspacesRequest)
-                         -> Result<CreateWorkspacesResult, CreateWorkspacesError> {
+    fn create_workspaces(
+        &self,
+        input: &CreateWorkspacesRequest,
+    ) -> Result<CreateWorkspacesResult, CreateWorkspacesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1949,20 +1968,21 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateWorkspacesResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateWorkspacesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateWorkspacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateWorkspacesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes tags from a WorkSpace.</p>"]
+    #[doc = "<p>Deletes tags from a WorkSpace.</p>"]
     fn delete_tags(&self, input: &DeleteTagsRequest) -> Result<DeleteTagsResult, DeleteTagsError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
@@ -1979,23 +1999,25 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteTagsResult>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteTagsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes tags for a WorkSpace.</p>"]
-    fn describe_tags(&self,
-                     input: &DescribeTagsRequest)
-                     -> Result<DescribeTagsResult, DescribeTagsError> {
+    #[doc = "<p>Describes tags for a WorkSpace.</p>"]
+    fn describe_tags(
+        &self,
+        input: &DescribeTagsRequest,
+    ) -> Result<DescribeTagsResult, DescribeTagsError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2011,24 +2033,25 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeTagsResult>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeTagsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Obtains information about the WorkSpace bundles that are available to your account in the specified region.</p> <p>You can filter the results with either the <code>BundleIds</code> parameter, or the <code>Owner</code> parameter, but not both.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
-    fn describe_workspace_bundles
-        (&self,
-         input: &DescribeWorkspaceBundlesRequest)
-         -> Result<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError> {
+    fn describe_workspace_bundles(
+        &self,
+        input: &DescribeWorkspaceBundlesRequest,
+    ) -> Result<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2044,28 +2067,32 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeWorkspaceBundlesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeWorkspaceBundlesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeWorkspaceBundlesError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DescribeWorkspaceBundlesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves information about the AWS Directory Service directories in the region that are registered with Amazon WorkSpaces and are available to your account.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
-    fn describe_workspace_directories
-        (&self,
-         input: &DescribeWorkspaceDirectoriesRequest)
-         -> Result<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError> {
+    fn describe_workspace_directories(
+        &self,
+        input: &DescribeWorkspaceDirectoriesRequest,
+    ) -> Result<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "WorkspacesService.DescribeWorkspaceDirectories");
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.DescribeWorkspaceDirectories",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2077,22 +2104,25 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeWorkspaceDirectoriesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeWorkspaceDirectoriesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeWorkspaceDirectoriesError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(DescribeWorkspaceDirectoriesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Obtains information about the specified WorkSpaces.</p> <p>Only one of the filter parameters, such as <code>BundleId</code>, <code>DirectoryId</code>, or <code>WorkspaceIds</code>, can be specified at a time.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
-    fn describe_workspaces(&self,
-                           input: &DescribeWorkspacesRequest)
-                           -> Result<DescribeWorkspacesResult, DescribeWorkspacesError> {
+    fn describe_workspaces(
+        &self,
+        input: &DescribeWorkspacesRequest,
+    ) -> Result<DescribeWorkspacesResult, DescribeWorkspacesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2108,30 +2138,33 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeWorkspacesResult>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeWorkspacesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeWorkspacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeWorkspacesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes the connection status of a specified WorkSpace.</p>"]
-    fn describe_workspaces_connection_status
-        (&self,
-         input: &DescribeWorkspacesConnectionStatusRequest)
-         -> Result<DescribeWorkspacesConnectionStatusResult,
-                   DescribeWorkspacesConnectionStatusError> {
+    #[doc = "<p>Describes the connection status of a specified WorkSpace.</p>"]
+    fn describe_workspaces_connection_status(
+        &self,
+        input: &DescribeWorkspacesConnectionStatusRequest,
+    ) -> Result<DescribeWorkspacesConnectionStatusResult, DescribeWorkspacesConnectionStatusError>
+    {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "WorkspacesService.DescribeWorkspacesConnectionStatus");
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.DescribeWorkspacesConnectionStatus",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2143,27 +2176,34 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeWorkspacesConnectionStatusResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeWorkspacesConnectionStatusResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeWorkspacesConnectionStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeWorkspacesConnectionStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Modifies the WorkSpace properties, including the running mode and AutoStop time.</p>"]
-    fn modify_workspace_properties
-        (&self,
-         input: &ModifyWorkspacePropertiesRequest)
-         -> Result<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError> {
+    fn modify_workspace_properties(
+        &self,
+        input: &ModifyWorkspacePropertiesRequest,
+    ) -> Result<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "WorkspacesService.ModifyWorkspaceProperties");
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.ModifyWorkspaceProperties",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2175,22 +2215,25 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ModifyWorkspacePropertiesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ModifyWorkspacePropertiesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ModifyWorkspacePropertiesError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(ModifyWorkspacePropertiesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Reboots the specified WorkSpaces.</p> <p>To be able to reboot a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p> </note>"]
-    fn reboot_workspaces(&self,
-                         input: &RebootWorkspacesRequest)
-                         -> Result<RebootWorkspacesResult, RebootWorkspacesError> {
+    fn reboot_workspaces(
+        &self,
+        input: &RebootWorkspacesRequest,
+    ) -> Result<RebootWorkspacesResult, RebootWorkspacesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2206,23 +2249,25 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RebootWorkspacesResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<RebootWorkspacesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RebootWorkspacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RebootWorkspacesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Rebuilds the specified WorkSpaces.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. Rebuilding a WorkSpace causes the following to occur:</p> <ul> <li> <p>The system is restored to the image of the bundle that the WorkSpace is created from. Any applications that have been installed, or system settings that have been made since the WorkSpace was created will be lost.</p> </li> <li> <p>The data drive (D drive) is re-created from the last automatic snapshot taken of the data drive. The current contents of the data drive are overwritten. Automatic snapshots of the data drive are taken every 12 hours, so the snapshot can be as much as 12 hours old.</p> </li> </ul> <p>To be able to rebuild a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code> or <code>ERROR</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p> </note>"]
-    fn rebuild_workspaces(&self,
-                          input: &RebuildWorkspacesRequest)
-                          -> Result<RebuildWorkspacesResult, RebuildWorkspacesError> {
+    fn rebuild_workspaces(
+        &self,
+        input: &RebuildWorkspacesRequest,
+    ) -> Result<RebuildWorkspacesResult, RebuildWorkspacesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2238,23 +2283,25 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RebuildWorkspacesResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<RebuildWorkspacesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RebuildWorkspacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RebuildWorkspacesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Starts the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of STOPPED.</p>"]
-    fn start_workspaces(&self,
-                        input: &StartWorkspacesRequest)
-                        -> Result<StartWorkspacesResult, StartWorkspacesError> {
+    fn start_workspaces(
+        &self,
+        input: &StartWorkspacesRequest,
+    ) -> Result<StartWorkspacesResult, StartWorkspacesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2270,23 +2317,25 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartWorkspacesResult>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<StartWorkspacesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartWorkspacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StartWorkspacesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p> Stops the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>"]
-    fn stop_workspaces(&self,
-                       input: &StopWorkspacesRequest)
-                       -> Result<StopWorkspacesResult, StopWorkspacesError> {
+    fn stop_workspaces(
+        &self,
+        input: &StopWorkspacesRequest,
+    ) -> Result<StopWorkspacesResult, StopWorkspacesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2302,23 +2351,25 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopWorkspacesResult>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<StopWorkspacesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopWorkspacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StopWorkspacesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is not maintained and will be destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p> </note>"]
-    fn terminate_workspaces(&self,
-                            input: &TerminateWorkspacesRequest)
-                            -> Result<TerminateWorkspacesResult, TerminateWorkspacesError> {
+    fn terminate_workspaces(
+        &self,
+        input: &TerminateWorkspacesRequest,
+    ) -> Result<TerminateWorkspacesResult, TerminateWorkspacesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2334,12 +2385,16 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TerminateWorkspacesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<TerminateWorkspacesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(TerminateWorkspacesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(TerminateWorkspacesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

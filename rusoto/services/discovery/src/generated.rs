@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,678 +27,678 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Information about agents or connectors that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation, and whether the agent/connector configuration was updated.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about agents or connectors that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation, and whether the agent/connector configuration was updated.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AgentConfigurationStatus {
-    #[doc="<p>The agent/connector ID.</p>"]
-    #[serde(rename="agentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The agent/connector ID.</p>
+    #[serde(rename = "agentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_id: Option<String>,
-    #[doc="<p>A description of the operation performed.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the operation performed.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Information about the status of the <code>StartDataCollection</code> and <code>StopDataCollection</code> operations. The system has recorded the data collection operation. The agent/connector receives this command the next time it polls for a new command. </p>"]
-    #[serde(rename="operationSucceeded")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the status of the <code>StartDataCollection</code> and <code>StopDataCollection</code> operations. The system has recorded the data collection operation. The agent/connector receives this command the next time it polls for a new command. </p>
+    #[serde(rename = "operationSucceeded")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operation_succeeded: Option<bool>,
 }
 
-#[doc="<p>Information about agents or connectors associated with the user’s AWS account. Information includes agent or connector IDs, IP addresses, media access control (MAC) addresses, agent or connector health, hostname where the agent or connector resides, and agent version for each agent.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about agents or connectors associated with the user’s AWS account. Information includes agent or connector IDs, IP addresses, media access control (MAC) addresses, agent or connector health, hostname where the agent or connector resides, and agent version for each agent.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AgentInfo {
-    #[doc="<p>The agent or connector ID.</p>"]
-    #[serde(rename="agentId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The agent or connector ID.</p>
+    #[serde(rename = "agentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_id: Option<String>,
-    #[doc="<p>Network details about the host where the agent or connector resides.</p>"]
-    #[serde(rename="agentNetworkInfoList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Network details about the host where the agent or connector resides.</p>
+    #[serde(rename = "agentNetworkInfoList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_network_info_list: Option<Vec<AgentNetworkInfo>>,
-    #[doc="<p>Type of agent.</p>"]
-    #[serde(rename="agentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Type of agent.</p>
+    #[serde(rename = "agentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_type: Option<String>,
-    #[doc="<p>Status of the collection process for an agent or connector.</p>"]
-    #[serde(rename="collectionStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Status of the collection process for an agent or connector.</p>
+    #[serde(rename = "collectionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub collection_status: Option<String>,
-    #[doc="<p>The ID of the connector.</p>"]
-    #[serde(rename="connectorId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the connector.</p>
+    #[serde(rename = "connectorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connector_id: Option<String>,
-    #[doc="<p>The health of the agent or connector.</p>"]
-    #[serde(rename="health")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The health of the agent or connector.</p>
+    #[serde(rename = "health")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub health: Option<String>,
-    #[doc="<p>The name of the host where the agent or connector resides. The host can be a server or virtual machine.</p>"]
-    #[serde(rename="hostName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the host where the agent or connector resides. The host can be a server or virtual machine.</p>
+    #[serde(rename = "hostName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub host_name: Option<String>,
-    #[doc="<p>Time since agent or connector health was reported.</p>"]
-    #[serde(rename="lastHealthPingTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time since agent or connector health was reported.</p>
+    #[serde(rename = "lastHealthPingTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_health_ping_time: Option<String>,
-    #[doc="<p>Agent's first registration timestamp in UTC.</p>"]
-    #[serde(rename="registeredTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Agent's first registration timestamp in UTC.</p>
+    #[serde(rename = "registeredTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registered_time: Option<String>,
-    #[doc="<p>The agent or connector version.</p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The agent or connector version.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[doc="<p>Network details about the host where the agent/connector resides.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Network details about the host where the agent/connector resides.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AgentNetworkInfo {
-    #[doc="<p>The IP address for the host where the agent/connector resides.</p>"]
-    #[serde(rename="ipAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IP address for the host where the agent/connector resides.</p>
+    #[serde(rename = "ipAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    #[doc="<p>The MAC address for the host where the agent/connector resides.</p>"]
-    #[serde(rename="macAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The MAC address for the host where the agent/connector resides.</p>
+    #[serde(rename = "macAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mac_address: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateConfigurationItemsToApplicationRequest {
-    #[doc="<p>The configuration ID of an application with which items are to be associated.</p>"]
-    #[serde(rename="applicationConfigurationId")]
+    /// <p>The configuration ID of an application with which items are to be associated.</p>
+    #[serde(rename = "applicationConfigurationId")]
     pub application_configuration_id: String,
-    #[doc="<p>The ID of each configuration item to be associated with an application.</p>"]
-    #[serde(rename="configurationIds")]
+    /// <p>The ID of each configuration item to be associated with an application.</p>
+    #[serde(rename = "configurationIds")]
     pub configuration_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociateConfigurationItemsToApplicationResponse;
 
-#[doc="<p>Tags for a configuration item. Tags are metadata that help you categorize IT assets.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Tags for a configuration item. Tags are metadata that help you categorize IT assets.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfigurationTag {
-    #[doc="<p>The configuration ID for the item to tag. You can specify a list of keys and values.</p>"]
-    #[serde(rename="configurationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The configuration ID for the item to tag. You can specify a list of keys and values.</p>
+    #[serde(rename = "configurationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_id: Option<String>,
-    #[doc="<p>A type of IT asset to tag.</p>"]
-    #[serde(rename="configurationType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A type of IT asset to tag.</p>
+    #[serde(rename = "configurationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_type: Option<String>,
-    #[doc="<p>A type of tag on which to filter. For example, <i>serverType</i>.</p>"]
-    #[serde(rename="key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A type of tag on which to filter. For example, <i>serverType</i>.</p>
+    #[serde(rename = "key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The time the configuration tag was created in Coordinated Universal Time (UTC).</p>"]
-    #[serde(rename="timeOfCreation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the configuration tag was created in Coordinated Universal Time (UTC).</p>
+    #[serde(rename = "timeOfCreation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub time_of_creation: Option<f64>,
-    #[doc="<p>A value on which to filter. For example <i>key = serverType</i> and <i>value = web server</i>.</p>"]
-    #[serde(rename="value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A value on which to filter. For example <i>key = serverType</i> and <i>value = web server</i>.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateApplicationRequest {
-    #[doc="<p>Description of the application to be created.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Description of the application to be created.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Name of the application to be created.</p>"]
-    #[serde(rename="name")]
+    /// <p>Name of the application to be created.</p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateApplicationResponse {
-    #[doc="<p>Configuration ID of an application to be created.</p>"]
-    #[serde(rename="configurationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Configuration ID of an application to be created.</p>
+    #[serde(rename = "configurationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateTagsRequest {
-    #[doc="<p>A list of configuration items that you want to tag.</p>"]
-    #[serde(rename="configurationIds")]
+    /// <p>A list of configuration items that you want to tag.</p>
+    #[serde(rename = "configurationIds")]
     pub configuration_ids: Vec<String>,
-    #[doc="<p>Tags that you want to associate with one or more configuration items. Specify the tags that you want to create in a <i>key</i>-<i>value</i> format. For example:</p> <p> <code>{\"key\": \"serverType\", \"value\": \"webServer\"}</code> </p>"]
-    #[serde(rename="tags")]
+    /// <p>Tags that you want to associate with one or more configuration items. Specify the tags that you want to create in a <i>key</i>-<i>value</i> format. For example:</p> <p> <code>{"key": "serverType", "value": "webServer"}</code> </p>
+    #[serde(rename = "tags")]
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateTagsResponse;
 
-#[doc="<p>Inventory data for installed discovery agents.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Inventory data for installed discovery agents.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CustomerAgentInfo {
-    #[doc="<p>Number of active discovery agents.</p>"]
-    #[serde(rename="activeAgents")]
+    /// <p>Number of active discovery agents.</p>
+    #[serde(rename = "activeAgents")]
     pub active_agents: i64,
-    #[doc="<p>Number of blacklisted discovery agents.</p>"]
-    #[serde(rename="blackListedAgents")]
+    /// <p>Number of blacklisted discovery agents.</p>
+    #[serde(rename = "blackListedAgents")]
     pub black_listed_agents: i64,
-    #[doc="<p>Number of healthy discovery agents</p>"]
-    #[serde(rename="healthyAgents")]
+    /// <p>Number of healthy discovery agents</p>
+    #[serde(rename = "healthyAgents")]
     pub healthy_agents: i64,
-    #[doc="<p>Number of discovery agents with status SHUTDOWN.</p>"]
-    #[serde(rename="shutdownAgents")]
+    /// <p>Number of discovery agents with status SHUTDOWN.</p>
+    #[serde(rename = "shutdownAgents")]
     pub shutdown_agents: i64,
-    #[doc="<p>Total number of discovery agents.</p>"]
-    #[serde(rename="totalAgents")]
+    /// <p>Total number of discovery agents.</p>
+    #[serde(rename = "totalAgents")]
     pub total_agents: i64,
-    #[doc="<p>Number of unhealthy discovery agents.</p>"]
-    #[serde(rename="unhealthyAgents")]
+    /// <p>Number of unhealthy discovery agents.</p>
+    #[serde(rename = "unhealthyAgents")]
     pub unhealthy_agents: i64,
-    #[doc="<p>Number of unknown discovery agents.</p>"]
-    #[serde(rename="unknownAgents")]
+    /// <p>Number of unknown discovery agents.</p>
+    #[serde(rename = "unknownAgents")]
     pub unknown_agents: i64,
 }
 
-#[doc="<p>Inventory data for installed discovery connectors.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Inventory data for installed discovery connectors.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CustomerConnectorInfo {
-    #[doc="<p>Number of active discovery connectors.</p>"]
-    #[serde(rename="activeConnectors")]
+    /// <p>Number of active discovery connectors.</p>
+    #[serde(rename = "activeConnectors")]
     pub active_connectors: i64,
-    #[doc="<p>Number of blacklisted discovery connectors.</p>"]
-    #[serde(rename="blackListedConnectors")]
+    /// <p>Number of blacklisted discovery connectors.</p>
+    #[serde(rename = "blackListedConnectors")]
     pub black_listed_connectors: i64,
-    #[doc="<p>Number of healthy discovery connectors.</p>"]
-    #[serde(rename="healthyConnectors")]
+    /// <p>Number of healthy discovery connectors.</p>
+    #[serde(rename = "healthyConnectors")]
     pub healthy_connectors: i64,
-    #[doc="<p>Number of discovery connectors with status SHUTDOWN,</p>"]
-    #[serde(rename="shutdownConnectors")]
+    /// <p>Number of discovery connectors with status SHUTDOWN,</p>
+    #[serde(rename = "shutdownConnectors")]
     pub shutdown_connectors: i64,
-    #[doc="<p>Total number of discovery connectors.</p>"]
-    #[serde(rename="totalConnectors")]
+    /// <p>Total number of discovery connectors.</p>
+    #[serde(rename = "totalConnectors")]
     pub total_connectors: i64,
-    #[doc="<p>Number of unhealthy discovery connectors.</p>"]
-    #[serde(rename="unhealthyConnectors")]
+    /// <p>Number of unhealthy discovery connectors.</p>
+    #[serde(rename = "unhealthyConnectors")]
     pub unhealthy_connectors: i64,
-    #[doc="<p>Number of unknown discovery connectors.</p>"]
-    #[serde(rename="unknownConnectors")]
+    /// <p>Number of unknown discovery connectors.</p>
+    #[serde(rename = "unknownConnectors")]
     pub unknown_connectors: i64,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteApplicationsRequest {
-    #[doc="<p>Configuration ID of an application to be deleted.</p>"]
-    #[serde(rename="configurationIds")]
+    /// <p>Configuration ID of an application to be deleted.</p>
+    #[serde(rename = "configurationIds")]
     pub configuration_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteApplicationsResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteTagsRequest {
-    #[doc="<p>A list of configuration items with tags that you want to delete.</p>"]
-    #[serde(rename="configurationIds")]
+    /// <p>A list of configuration items with tags that you want to delete.</p>
+    #[serde(rename = "configurationIds")]
     pub configuration_ids: Vec<String>,
-    #[doc="<p>Tags that you want to delete from one or more configuration items. Specify the tags that you want to delete in a <i>key</i>-<i>value</i> format. For example:</p> <p> <code>{\"key\": \"serverType\", \"value\": \"webServer\"}</code> </p>"]
-    #[serde(rename="tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Tags that you want to delete from one or more configuration items. Specify the tags that you want to delete in a <i>key</i>-<i>value</i> format. For example:</p> <p> <code>{"key": "serverType", "value": "webServer"}</code> </p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteTagsResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAgentsRequest {
-    #[doc="<p>The agent or the Connector IDs for which you want information. If you specify no IDs, the system returns information about all agents/Connectors associated with your AWS user account.</p>"]
-    #[serde(rename="agentIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The agent or the Connector IDs for which you want information. If you specify no IDs, the system returns information about all agents/Connectors associated with your AWS user account.</p>
+    #[serde(rename = "agentIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_ids: Option<Vec<String>>,
-    #[doc="<p>You can filter the request using various logical operators and a <i>key</i>-<i>value</i> format. For example: </p> <p> <code>{\"key\": \"collectionStatus\", \"value\": \"STARTED\"}</code> </p>"]
-    #[serde(rename="filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can filter the request using various logical operators and a <i>key</i>-<i>value</i> format. For example: </p> <p> <code>{"key": "collectionStatus", "value": "STARTED"}</code> </p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    #[doc="<p>The total number of agents/Connectors to return in a single page of output. The maximum value is 100.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of agents/Connectors to return in a single page of output. The maximum value is 100.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Token to retrieve the next set of results. For example, if you previously specified 100 IDs for <code>DescribeAgentsRequest$agentIds</code> but set <code>DescribeAgentsRequest$maxResults</code> to 10, you received a set of 10 results along with a token. Use that token in this query to get the next set of 10.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token to retrieve the next set of results. For example, if you previously specified 100 IDs for <code>DescribeAgentsRequest$agentIds</code> but set <code>DescribeAgentsRequest$maxResults</code> to 10, you received a set of 10 results along with a token. Use that token in this query to get the next set of 10.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeAgentsResponse {
-    #[doc="<p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an agent/Connector ID. The output includes agent/Connector IDs, IP addresses, media access control (MAC) addresses, agent/Connector health, host name where the agent/Connector resides, and the version number of each agent/Connector.</p>"]
-    #[serde(rename="agentsInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an agent/Connector ID. The output includes agent/Connector IDs, IP addresses, media access control (MAC) addresses, agent/Connector health, host name where the agent/Connector resides, and the version number of each agent/Connector.</p>
+    #[serde(rename = "agentsInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub agents_info: Option<Vec<AgentInfo>>,
-    #[doc="<p>Token to retrieve the next set of results. For example, if you specified 100 IDs for <code>DescribeAgentsRequest$agentIds</code> but set <code>DescribeAgentsRequest$maxResults</code> to 10, you received a set of 10 results along with this token. Use this token in the next query to retrieve the next set of 10.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token to retrieve the next set of results. For example, if you specified 100 IDs for <code>DescribeAgentsRequest$agentIds</code> but set <code>DescribeAgentsRequest$maxResults</code> to 10, you received a set of 10 results along with this token. Use this token in the next query to retrieve the next set of 10.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConfigurationsRequest {
-    #[doc="<p>One or more configuration IDs.</p>"]
-    #[serde(rename="configurationIds")]
+    /// <p>One or more configuration IDs.</p>
+    #[serde(rename = "configurationIds")]
     pub configuration_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeConfigurationsResponse {
-    #[doc="<p>A key in the response map. The value is an array of data.</p>"]
-    #[serde(rename="configurations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A key in the response map. The value is an array of data.</p>
+    #[serde(rename = "configurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configurations: Option<Vec<::std::collections::HashMap<String, String>>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeExportConfigurationsRequest {
-    #[doc="<p>A unique identifier that you can use to query the export status.</p>"]
-    #[serde(rename="exportIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique identifier that you can use to query the export status.</p>
+    #[serde(rename = "exportIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub export_ids: Option<Vec<String>>,
-    #[doc="<p>The maximum number of results that you want to display as a part of the query.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results that you want to display as a part of the query.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A token to get the next set of results. For example, if you specify 100 IDs for <code>DescribeExportConfigurationsRequest$exportIds</code> but set <code>DescribeExportConfigurationsRequest$maxResults</code> to 10, you get results in a set of 10. Use the token in the query to get the next set of 10.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token to get the next set of results. For example, if you specify 100 IDs for <code>DescribeExportConfigurationsRequest$exportIds</code> but set <code>DescribeExportConfigurationsRequest$maxResults</code> to 10, you get results in a set of 10. Use the token in the query to get the next set of 10.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeExportConfigurationsResponse {
-    #[doc="<p>Returns export details. When the status is complete, the response includes a URL for an Amazon S3 bucket where you can view the data in a CSV file.</p>"]
-    #[serde(rename="exportsInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returns export details. When the status is complete, the response includes a URL for an Amazon S3 bucket where you can view the data in a CSV file.</p>
+    #[serde(rename = "exportsInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub exports_info: Option<Vec<ExportInfo>>,
-    #[doc="<p>A token to get the next set of results. For example, if you specify 100 IDs for <code>DescribeExportConfigurationsRequest$exportIds</code> but set <code>DescribeExportConfigurationsRequest$maxResults</code> to 10, you get results in a set of 10. Use the token in the query to get the next set of 10.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token to get the next set of results. For example, if you specify 100 IDs for <code>DescribeExportConfigurationsRequest$exportIds</code> but set <code>DescribeExportConfigurationsRequest$maxResults</code> to 10, you get results in a set of 10. Use the token in the query to get the next set of 10.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeExportTasksRequest {
-    #[doc="<p>One or more unique identifiers used to query the status of an export request.</p>"]
-    #[serde(rename="exportIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more unique identifiers used to query the status of an export request.</p>
+    #[serde(rename = "exportIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub export_ids: Option<Vec<String>>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>AgentId</code> - ID of the agent whose collected data will be exported</p> </li> </ul>"]
-    #[serde(rename="filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more filters.</p> <ul> <li> <p> <code>AgentId</code> - ID of the agent whose collected data will be exported</p> </li> </ul>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<ExportFilter>>,
-    #[doc="<p>The maximum number of volume results returned by <code>DescribeExportTasks</code> in paginated output. When this parameter is used, <code>DescribeExportTasks</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of volume results returned by <code>DescribeExportTasks</code> in paginated output. When this parameter is used, <code>DescribeExportTasks</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeExportTasks</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is null when there are no more results to return.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeExportTasks</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is null when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeExportTasksResponse {
-    #[doc="<p>Contains one or more sets of export request details. When the status of a request is <code>SUCCEEDED</code>, the response includes a URL for an Amazon S3 bucket where you can view the data in a CSV file.</p>"]
-    #[serde(rename="exportsInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Contains one or more sets of export request details. When the status of a request is <code>SUCCEEDED</code>, the response includes a URL for an Amazon S3 bucket where you can view the data in a CSV file.</p>
+    #[serde(rename = "exportsInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub exports_info: Option<Vec<ExportInfo>>,
-    #[doc="<p>The <code>nextToken</code> value to include in a future <code>DescribeExportTasks</code> request. When the results of a <code>DescribeExportTasks</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is null when there are no more results to return.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>nextToken</code> value to include in a future <code>DescribeExportTasks</code> request. When the results of a <code>DescribeExportTasks</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is null when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeTagsRequest {
-    #[doc="<p>You can filter the list using a <i>key</i>-<i>value</i> format. You can separate these items by using logical operators. Allowed filters include <code>tagKey</code>, <code>tagValue</code>, and <code>configurationId</code>. </p>"]
-    #[serde(rename="filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can filter the list using a <i>key</i>-<i>value</i> format. You can separate these items by using logical operators. Allowed filters include <code>tagKey</code>, <code>tagValue</code>, and <code>configurationId</code>. </p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<TagFilter>>,
-    #[doc="<p>The total number of items to return in a single page of output. The maximum value is 100.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of items to return in a single page of output. The maximum value is 100.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A token to start the list. Use this token to get the next set of results.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token to start the list. Use this token to get the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeTagsResponse {
-    #[doc="<p>The call returns a token. Use this token to get the next set of results.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The call returns a token. Use this token to get the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Depending on the input, this is a list of configuration items tagged with a specific tag, or a list of tags for a specific configuration item.</p>"]
-    #[serde(rename="tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Depending on the input, this is a list of configuration items tagged with a specific tag, or a list of tags for a specific configuration item.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<ConfigurationTag>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateConfigurationItemsFromApplicationRequest {
-    #[doc="<p>Configuration ID of an application from which each item is disassociated.</p>"]
-    #[serde(rename="applicationConfigurationId")]
+    /// <p>Configuration ID of an application from which each item is disassociated.</p>
+    #[serde(rename = "applicationConfigurationId")]
     pub application_configuration_id: String,
-    #[doc="<p>Configuration ID of each item to be disassociated from an application.</p>"]
-    #[serde(rename="configurationIds")]
+    /// <p>Configuration ID of each item to be disassociated from an application.</p>
+    #[serde(rename = "configurationIds")]
     pub configuration_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisassociateConfigurationItemsFromApplicationResponse;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ExportConfigurationsResponse {
-    #[doc="<p>A unique identifier that you can use to query the export status.</p>"]
-    #[serde(rename="exportId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique identifier that you can use to query the export status.</p>
+    #[serde(rename = "exportId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub export_id: Option<String>,
 }
 
-#[doc="<p>Used to select which agent's data is to be exported. A single agent ID may be selected for export using the <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_StartExportTask.html\">StartExportTask</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Used to select which agent's data is to be exported. A single agent ID may be selected for export using the <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_StartExportTask.html">StartExportTask</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ExportFilter {
-    #[doc="<p>Supported condition: <code>EQUALS</code> </p>"]
-    #[serde(rename="condition")]
+    /// <p>Supported condition: <code>EQUALS</code> </p>
+    #[serde(rename = "condition")]
     pub condition: String,
-    #[doc="<p>A single <code>ExportFilter</code> name. Supported filters: <code>agentId</code>.</p>"]
-    #[serde(rename="name")]
+    /// <p>A single <code>ExportFilter</code> name. Supported filters: <code>agentId</code>.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>A single <code>agentId</code> for a Discovery Agent. An <code>agentId</code> can be found using the <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html\">DescribeAgents</a> action. Typically an ADS <code>agentId</code> is in the form <code>o-0123456789abcdef0</code>.</p>"]
-    #[serde(rename="values")]
+    /// <p>A single <code>agentId</code> for a Discovery Agent. An <code>agentId</code> can be found using the <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html">DescribeAgents</a> action. Typically an ADS <code>agentId</code> is in the form <code>o-0123456789abcdef0</code>.</p>
+    #[serde(rename = "values")]
     pub values: Vec<String>,
 }
 
-#[doc="<p>Information regarding the export status of discovered data. The value is an array of objects.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information regarding the export status of discovered data. The value is an array of objects.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ExportInfo {
-    #[doc="<p>A URL for an Amazon S3 bucket where you can review the exported data. The URL is displayed only if the export succeeded.</p>"]
-    #[serde(rename="configurationsDownloadUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A URL for an Amazon S3 bucket where you can review the exported data. The URL is displayed only if the export succeeded.</p>
+    #[serde(rename = "configurationsDownloadUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configurations_download_url: Option<String>,
-    #[doc="<p>A unique identifier used to query an export.</p>"]
-    #[serde(rename="exportId")]
+    /// <p>A unique identifier used to query an export.</p>
+    #[serde(rename = "exportId")]
     pub export_id: String,
-    #[doc="<p>The time that the data export was initiated.</p>"]
-    #[serde(rename="exportRequestTime")]
+    /// <p>The time that the data export was initiated.</p>
+    #[serde(rename = "exportRequestTime")]
     pub export_request_time: f64,
-    #[doc="<p>The status of the data export job.</p>"]
-    #[serde(rename="exportStatus")]
+    /// <p>The status of the data export job.</p>
+    #[serde(rename = "exportStatus")]
     pub export_status: String,
-    #[doc="<p>If true, the export of agent information exceeded the size limit for a single export and the exported data is incomplete for the requested time range. To address this, select a smaller time range for the export by using <code>startDate</code> and <code>endDate</code>.</p>"]
-    #[serde(rename="isTruncated")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If true, the export of agent information exceeded the size limit for a single export and the exported data is incomplete for the requested time range. To address this, select a smaller time range for the export by using <code>startDate</code> and <code>endDate</code>.</p>
+    #[serde(rename = "isTruncated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub is_truncated: Option<bool>,
-    #[doc="<p>The <code>endTime</code> used in the <code>StartExportTask</code> request. If no <code>endTime</code> was requested, this result does not appear in <code>ExportInfo</code>.</p>"]
-    #[serde(rename="requestedEndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>endTime</code> used in the <code>StartExportTask</code> request. If no <code>endTime</code> was requested, this result does not appear in <code>ExportInfo</code>.</p>
+    #[serde(rename = "requestedEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub requested_end_time: Option<f64>,
-    #[doc="<p>The value of <code>startTime</code> parameter in the <code>StartExportTask</code> request. If no <code>startTime</code> was requested, this result does not appear in <code>ExportInfo</code>.</p>"]
-    #[serde(rename="requestedStartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value of <code>startTime</code> parameter in the <code>StartExportTask</code> request. If no <code>startTime</code> was requested, this result does not appear in <code>ExportInfo</code>.</p>
+    #[serde(rename = "requestedStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub requested_start_time: Option<f64>,
-    #[doc="<p>A status message provided for API callers.</p>"]
-    #[serde(rename="statusMessage")]
+    /// <p>A status message provided for API callers.</p>
+    #[serde(rename = "statusMessage")]
     pub status_message: String,
 }
 
-#[doc="<p>A filter that can use conditional operators.</p> <p>For more information about filters, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html\">Querying Discovered Configuration Items</a>. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A filter that can use conditional operators.</p> <p>For more information about filters, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html">Querying Discovered Configuration Items</a>. </p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct Filter {
-    #[doc="<p>A conditional operator. The following operators are valid: EQUALS, NOT_EQUALS, CONTAINS, NOT_CONTAINS. If you specify multiple filters, the system utilizes all filters as though concatenated by <i>AND</i>. If you specify multiple values for a particular filter, the system differentiates the values using <i>OR</i>. Calling either <i>DescribeConfigurations</i> or <i>ListConfigurations</i> returns attributes of matching configuration items.</p>"]
-    #[serde(rename="condition")]
+    /// <p>A conditional operator. The following operators are valid: EQUALS, NOT_EQUALS, CONTAINS, NOT_CONTAINS. If you specify multiple filters, the system utilizes all filters as though concatenated by <i>AND</i>. If you specify multiple values for a particular filter, the system differentiates the values using <i>OR</i>. Calling either <i>DescribeConfigurations</i> or <i>ListConfigurations</i> returns attributes of matching configuration items.</p>
+    #[serde(rename = "condition")]
     pub condition: String,
-    #[doc="<p>The name of the filter.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>A string value on which to filter. For example, if you choose the <code>destinationServer.osVersion</code> filter name, you could specify <code>Ubuntu</code> for the value.</p>"]
-    #[serde(rename="values")]
+    /// <p>A string value on which to filter. For example, if you choose the <code>destinationServer.osVersion</code> filter name, you could specify <code>Ubuntu</code> for the value.</p>
+    #[serde(rename = "values")]
     pub values: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDiscoverySummaryRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDiscoverySummaryResponse {
-    #[doc="<p>Details about discovered agents, including agent status and health.</p>"]
-    #[serde(rename="agentSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Details about discovered agents, including agent status and health.</p>
+    #[serde(rename = "agentSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_summary: Option<CustomerAgentInfo>,
-    #[doc="<p>The number of applications discovered.</p>"]
-    #[serde(rename="applications")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of applications discovered.</p>
+    #[serde(rename = "applications")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub applications: Option<i64>,
-    #[doc="<p>Details about discovered connectors, including connector status and health.</p>"]
-    #[serde(rename="connectorSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Details about discovered connectors, including connector status and health.</p>
+    #[serde(rename = "connectorSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connector_summary: Option<CustomerConnectorInfo>,
-    #[doc="<p>The number of servers discovered.</p>"]
-    #[serde(rename="servers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of servers discovered.</p>
+    #[serde(rename = "servers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub servers: Option<i64>,
-    #[doc="<p>The number of servers mapped to applications.</p>"]
-    #[serde(rename="serversMappedToApplications")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of servers mapped to applications.</p>
+    #[serde(rename = "serversMappedToApplications")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub servers_mapped_to_applications: Option<i64>,
-    #[doc="<p>The number of servers mapped to tags.</p>"]
-    #[serde(rename="serversMappedtoTags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of servers mapped to tags.</p>
+    #[serde(rename = "serversMappedtoTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub servers_mappedto_tags: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListConfigurationsRequest {
-    #[doc="<p>A valid configuration identified by Application Discovery Service. </p>"]
-    #[serde(rename="configurationType")]
+    /// <p>A valid configuration identified by Application Discovery Service. </p>
+    #[serde(rename = "configurationType")]
     pub configuration_type: String,
-    #[doc="<p>You can filter the request using various logical operators and a <i>key</i>-<i>value</i> format. For example: </p> <p> <code>{\"key\": \"serverType\", \"value\": \"webServer\"}</code> </p> <p>For a complete list of filter options and guidance about using them with this action, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#ListConfigurations\">Querying Discovered Configuration Items</a>. </p>"]
-    #[serde(rename="filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can filter the request using various logical operators and a <i>key</i>-<i>value</i> format. For example: </p> <p> <code>{"key": "serverType", "value": "webServer"}</code> </p> <p>For a complete list of filter options and guidance about using them with this action, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#ListConfigurations">Querying Discovered Configuration Items</a>. </p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    #[doc="<p>The total number of items to return. The maximum value is 100.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of items to return. The maximum value is 100.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Token to retrieve the next set of results. For example, if a previous call to ListConfigurations returned 100 items, but you set <code>ListConfigurationsRequest$maxResults</code> to 10, you received a set of 10 results along with a token. Use that token in this query to get the next set of 10.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token to retrieve the next set of results. For example, if a previous call to ListConfigurations returned 100 items, but you set <code>ListConfigurationsRequest$maxResults</code> to 10, you received a set of 10 results along with a token. Use that token in this query to get the next set of 10.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Certain filter criteria return output that can be sorted in ascending or descending order. For a list of output characteristics for each filter, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#ListConfigurations\">Using the ListConfigurations Action</a>.</p>"]
-    #[serde(rename="orderBy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Certain filter criteria return output that can be sorted in ascending or descending order. For a list of output characteristics for each filter, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#ListConfigurations">Using the ListConfigurations Action</a>.</p>
+    #[serde(rename = "orderBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub order_by: Option<Vec<OrderByElement>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListConfigurationsResponse {
-    #[doc="<p>Returns configuration details, including the configuration ID, attribute names, and attribute values.</p>"]
-    #[serde(rename="configurations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returns configuration details, including the configuration ID, attribute names, and attribute values.</p>
+    #[serde(rename = "configurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configurations: Option<Vec<::std::collections::HashMap<String, String>>>,
-    #[doc="<p>Token to retrieve the next set of results. For example, if your call to ListConfigurations returned 100 items, but you set <code>ListConfigurationsRequest$maxResults</code> to 10, you received a set of 10 results along with this token. Use this token in the next query to retrieve the next set of 10.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token to retrieve the next set of results. For example, if your call to ListConfigurations returned 100 items, but you set <code>ListConfigurationsRequest$maxResults</code> to 10, you received a set of 10 results along with this token. Use this token in the next query to retrieve the next set of 10.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListServerNeighborsRequest {
-    #[doc="<p>Configuration ID of the server for which neighbors are being listed.</p>"]
-    #[serde(rename="configurationId")]
+    /// <p>Configuration ID of the server for which neighbors are being listed.</p>
+    #[serde(rename = "configurationId")]
     pub configuration_id: String,
-    #[doc="<p>Maximum number of results to return in a single page of output.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Maximum number of results to return in a single page of output.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>List of configuration IDs to test for one-hop-away.</p>"]
-    #[serde(rename="neighborConfigurationIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of configuration IDs to test for one-hop-away.</p>
+    #[serde(rename = "neighborConfigurationIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub neighbor_configuration_ids: Option<Vec<String>>,
-    #[doc="<p>Token to retrieve the next set of results. For example, if you previously specified 100 IDs for <code>ListServerNeighborsRequest$neighborConfigurationIds</code> but set <code>ListServerNeighborsRequest$maxResults</code> to 10, you received a set of 10 results along with a token. Use that token in this query to get the next set of 10.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token to retrieve the next set of results. For example, if you previously specified 100 IDs for <code>ListServerNeighborsRequest$neighborConfigurationIds</code> but set <code>ListServerNeighborsRequest$maxResults</code> to 10, you received a set of 10 results along with a token. Use that token in this query to get the next set of 10.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Flag to indicate if port and protocol information is needed as part of the response.</p>"]
-    #[serde(rename="portInformationNeeded")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Flag to indicate if port and protocol information is needed as part of the response.</p>
+    #[serde(rename = "portInformationNeeded")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub port_information_needed: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListServerNeighborsResponse {
-    #[doc="<p>Count of distinct servers that are one hop away from the given server.</p>"]
-    #[serde(rename="knownDependencyCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Count of distinct servers that are one hop away from the given server.</p>
+    #[serde(rename = "knownDependencyCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub known_dependency_count: Option<i64>,
-    #[doc="<p>List of distinct servers that are one hop away from the given server.</p>"]
-    #[serde(rename="neighbors")]
+    /// <p>List of distinct servers that are one hop away from the given server.</p>
+    #[serde(rename = "neighbors")]
     pub neighbors: Vec<NeighborConnectionDetail>,
-    #[doc="<p>Token to retrieve the next set of results. For example, if you specified 100 IDs for <code>ListServerNeighborsRequest$neighborConfigurationIds</code> but set <code>ListServerNeighborsRequest$maxResults</code> to 10, you received a set of 10 results along with this token. Use this token in the next query to retrieve the next set of 10.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Token to retrieve the next set of results. For example, if you specified 100 IDs for <code>ListServerNeighborsRequest$neighborConfigurationIds</code> but set <code>ListServerNeighborsRequest$maxResults</code> to 10, you received a set of 10 results along with this token. Use this token in the next query to retrieve the next set of 10.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Details about neighboring servers.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Details about neighboring servers.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct NeighborConnectionDetail {
-    #[doc="<p>The number of open network connections with the neighboring server.</p>"]
-    #[serde(rename="connectionsCount")]
+    /// <p>The number of open network connections with the neighboring server.</p>
+    #[serde(rename = "connectionsCount")]
     pub connections_count: i64,
-    #[doc="<p>The destination network port for the connection.</p>"]
-    #[serde(rename="destinationPort")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The destination network port for the connection.</p>
+    #[serde(rename = "destinationPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_port: Option<i64>,
-    #[doc="<p>The ID of the server that accepted the network connection.</p>"]
-    #[serde(rename="destinationServerId")]
+    /// <p>The ID of the server that accepted the network connection.</p>
+    #[serde(rename = "destinationServerId")]
     pub destination_server_id: String,
-    #[doc="<p>The ID of the server that opened the network connection.</p>"]
-    #[serde(rename="sourceServerId")]
+    /// <p>The ID of the server that opened the network connection.</p>
+    #[serde(rename = "sourceServerId")]
     pub source_server_id: String,
-    #[doc="<p>The network protocol used for the connection.</p>"]
-    #[serde(rename="transportProtocol")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The network protocol used for the connection.</p>
+    #[serde(rename = "transportProtocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub transport_protocol: Option<String>,
 }
 
-#[doc="<p>A field and direction for ordered output.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A field and direction for ordered output.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct OrderByElement {
-    #[doc="<p>The field on which to order.</p>"]
-    #[serde(rename="fieldName")]
+    /// <p>The field on which to order.</p>
+    #[serde(rename = "fieldName")]
     pub field_name: String,
-    #[doc="<p>Ordering direction.</p>"]
-    #[serde(rename="sortOrder")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Ordering direction.</p>
+    #[serde(rename = "sortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_order: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartDataCollectionByAgentIdsRequest {
-    #[doc="<p>The IDs of the agents or connectors from which to start collecting data. If you send a request to an agent/connector ID that you do not have permission to contact, according to your AWS account, the service does not throw an exception. Instead, it returns the error in the <i>Description</i> field. If you send a request to multiple agents/connectors and you do not have permission to contact some of those agents/connectors, the system does not throw an exception. Instead, the system shows <code>Failed</code> in the <i>Description</i> field.</p>"]
-    #[serde(rename="agentIds")]
+    /// <p>The IDs of the agents or connectors from which to start collecting data. If you send a request to an agent/connector ID that you do not have permission to contact, according to your AWS account, the service does not throw an exception. Instead, it returns the error in the <i>Description</i> field. If you send a request to multiple agents/connectors and you do not have permission to contact some of those agents/connectors, the system does not throw an exception. Instead, the system shows <code>Failed</code> in the <i>Description</i> field.</p>
+    #[serde(rename = "agentIds")]
     pub agent_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartDataCollectionByAgentIdsResponse {
-    #[doc="<p>Information about agents or the connector that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation performed, and whether the agent/connector configuration was updated.</p>"]
-    #[serde(rename="agentsConfigurationStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about agents or the connector that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation performed, and whether the agent/connector configuration was updated.</p>
+    #[serde(rename = "agentsConfigurationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub agents_configuration_status: Option<Vec<AgentConfigurationStatus>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartExportTaskRequest {
-    #[doc="<p>The end timestamp for exported data from the single Application Discovery Agent selected in the filters. If no value is specified, exported data includes the most recent data collected by the agent.</p>"]
-    #[serde(rename="endTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The end timestamp for exported data from the single Application Discovery Agent selected in the filters. If no value is specified, exported data includes the most recent data collected by the agent.</p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>The file format for the returned export data. Default value is <code>CSV</code>.</p>"]
-    #[serde(rename="exportDataFormat")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The file format for the returned export data. Default value is <code>CSV</code>.</p>
+    #[serde(rename = "exportDataFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub export_data_format: Option<Vec<String>>,
-    #[doc="<p>If a filter is present, it selects the single <code>agentId</code> of the Application Discovery Agent for which data is exported. The <code>agentId</code> can be found in the results of the <code>DescribeAgents</code> API or CLI. If no filter is present, <code>startTime</code> and <code>endTime</code> are ignored and exported data includes both Agentless Discovery Connector data and summary data from Application Discovery agents. </p>"]
-    #[serde(rename="filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a filter is present, it selects the single <code>agentId</code> of the Application Discovery Agent for which data is exported. The <code>agentId</code> can be found in the results of the <code>DescribeAgents</code> API or CLI. If no filter is present, <code>startTime</code> and <code>endTime</code> are ignored and exported data includes both Agentless Discovery Connector data and summary data from Application Discovery agents. </p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<ExportFilter>>,
-    #[doc="<p>The start timestamp for exported data from the single Application Discovery Agent selected in the filters. If no value is specified, data is exported starting from the first data collected by the agent.</p>"]
-    #[serde(rename="startTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The start timestamp for exported data from the single Application Discovery Agent selected in the filters. If no value is specified, data is exported starting from the first data collected by the agent.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartExportTaskResponse {
-    #[doc="<p>A unique identifier used to query the status of an export request.</p>"]
-    #[serde(rename="exportId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique identifier used to query the status of an export request.</p>
+    #[serde(rename = "exportId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub export_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopDataCollectionByAgentIdsRequest {
-    #[doc="<p>The IDs of the agents or connectors from which to stop collecting data.</p>"]
-    #[serde(rename="agentIds")]
+    /// <p>The IDs of the agents or connectors from which to stop collecting data.</p>
+    #[serde(rename = "agentIds")]
     pub agent_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopDataCollectionByAgentIdsResponse {
-    #[doc="<p>Information about the agents or connector that were instructed to stop collecting data. Information includes the agent/connector ID, a description of the operation performed, and whether the agent/connector configuration was updated.</p>"]
-    #[serde(rename="agentsConfigurationStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the agents or connector that were instructed to stop collecting data. Information includes the agent/connector ID, a description of the operation performed, and whether the agent/connector configuration was updated.</p>
+    #[serde(rename = "agentsConfigurationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub agents_configuration_status: Option<Vec<AgentConfigurationStatus>>,
 }
 
-#[doc="<p>Metadata that help you categorize IT assets.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Metadata that help you categorize IT assets.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct Tag {
-    #[doc="<p>The type of tag on which to filter.</p>"]
-    #[serde(rename="key")]
+    /// <p>The type of tag on which to filter.</p>
+    #[serde(rename = "key")]
     pub key: String,
-    #[doc="<p>A value for a tag key on which to filter.</p>"]
-    #[serde(rename="value")]
+    /// <p>A value for a tag key on which to filter.</p>
+    #[serde(rename = "value")]
     pub value: String,
 }
 
-#[doc="<p>The tag filter. Valid names are: <code>tagKey</code>, <code>tagValue</code>, <code>configurationId</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The tag filter. Valid names are: <code>tagKey</code>, <code>tagValue</code>, <code>configurationId</code>.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TagFilter {
-    #[doc="<p>A name of the tag filter.</p>"]
-    #[serde(rename="name")]
+    /// <p>A name of the tag filter.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>Values for the tag filter.</p>"]
-    #[serde(rename="values")]
+    /// <p>Values for the tag filter.</p>
+    #[serde(rename = "values")]
     pub values: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateApplicationRequest {
-    #[doc="<p>Configuration ID of the application to be updated.</p>"]
-    #[serde(rename="configurationId")]
+    /// <p>Configuration ID of the application to be updated.</p>
+    #[serde(rename = "configurationId")]
     pub configuration_id: String,
-    #[doc="<p>New description of the application to be updated.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>New description of the application to be updated.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>New name of the application to be updated.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>New name of the application to be updated.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateApplicationResponse;
 
 /// Errors returned by AssociateConfigurationItemsToApplication
@@ -723,7 +722,6 @@ pub enum AssociateConfigurationItemsToApplicationError {
     Unknown(String),
 }
 
-
 impl AssociateConfigurationItemsToApplicationError {
     pub fn from_body(body: &str) -> AssociateConfigurationItemsToApplicationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -737,11 +735,31 @@ impl AssociateConfigurationItemsToApplicationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AuthorizationErrorException" => AssociateConfigurationItemsToApplicationError::AuthorizationError(String::from(error_message)),
-                    "InvalidParameterException" => AssociateConfigurationItemsToApplicationError::InvalidParameter(String::from(error_message)),
-                    "InvalidParameterValueException" => AssociateConfigurationItemsToApplicationError::InvalidParameterValue(String::from(error_message)),
-                    "ServerInternalErrorException" => AssociateConfigurationItemsToApplicationError::ServerInternalError(String::from(error_message)),
-                    "ValidationException" => AssociateConfigurationItemsToApplicationError::Validation(error_message.to_string()),
+                    "AuthorizationErrorException" => {
+                        AssociateConfigurationItemsToApplicationError::AuthorizationError(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidParameterException" => {
+                        AssociateConfigurationItemsToApplicationError::InvalidParameter(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidParameterValueException" => {
+                        AssociateConfigurationItemsToApplicationError::InvalidParameterValue(
+                            String::from(error_message),
+                        )
+                    }
+                    "ServerInternalErrorException" => {
+                        AssociateConfigurationItemsToApplicationError::ServerInternalError(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        AssociateConfigurationItemsToApplicationError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
                     _ => AssociateConfigurationItemsToApplicationError::Unknown(String::from(body)),
                 }
             }
@@ -815,7 +833,6 @@ pub enum CreateApplicationError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateApplicationError {
     pub fn from_body(body: &str) -> CreateApplicationError {
@@ -917,7 +934,6 @@ pub enum CreateTagsError {
     Unknown(String),
 }
 
-
 impl CreateTagsError {
     pub fn from_body(body: &str) -> CreateTagsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1015,7 +1031,6 @@ pub enum DeleteApplicationsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteApplicationsError {
     pub fn from_body(body: &str) -> DeleteApplicationsError {
@@ -1117,7 +1132,6 @@ pub enum DeleteTagsError {
     Unknown(String),
 }
 
-
 impl DeleteTagsError {
     pub fn from_body(body: &str) -> DeleteTagsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1216,7 +1230,6 @@ pub enum DescribeAgentsError {
     Unknown(String),
 }
 
-
 impl DescribeAgentsError {
     pub fn from_body(body: &str) -> DescribeAgentsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1313,7 +1326,6 @@ pub enum DescribeConfigurationsError {
     Unknown(String),
 }
 
-
 impl DescribeConfigurationsError {
     pub fn from_body(body: &str) -> DescribeConfigurationsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1333,8 +1345,16 @@ impl DescribeConfigurationsError {
                     "InvalidParameterException" => {
                         DescribeConfigurationsError::InvalidParameter(String::from(error_message))
                     }
-                    "InvalidParameterValueException" => DescribeConfigurationsError::InvalidParameterValue(String::from(error_message)),
-                    "ServerInternalErrorException" => DescribeConfigurationsError::ServerInternalError(String::from(error_message)),
+                    "InvalidParameterValueException" => {
+                        DescribeConfigurationsError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServerInternalErrorException" => {
+                        DescribeConfigurationsError::ServerInternalError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeConfigurationsError::Validation(error_message.to_string())
                     }
@@ -1410,7 +1430,6 @@ pub enum DescribeExportConfigurationsError {
     Unknown(String),
 }
 
-
 impl DescribeExportConfigurationsError {
     pub fn from_body(body: &str) -> DescribeExportConfigurationsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1424,11 +1443,31 @@ impl DescribeExportConfigurationsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AuthorizationErrorException" => DescribeExportConfigurationsError::AuthorizationError(String::from(error_message)),
-                    "InvalidParameterException" => DescribeExportConfigurationsError::InvalidParameter(String::from(error_message)),
-                    "InvalidParameterValueException" => DescribeExportConfigurationsError::InvalidParameterValue(String::from(error_message)),
-                    "ResourceNotFoundException" => DescribeExportConfigurationsError::ResourceNotFound(String::from(error_message)),
-                    "ServerInternalErrorException" => DescribeExportConfigurationsError::ServerInternalError(String::from(error_message)),
+                    "AuthorizationErrorException" => {
+                        DescribeExportConfigurationsError::AuthorizationError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterException" => {
+                        DescribeExportConfigurationsError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        DescribeExportConfigurationsError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeExportConfigurationsError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServerInternalErrorException" => {
+                        DescribeExportConfigurationsError::ServerInternalError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeExportConfigurationsError::Validation(error_message.to_string())
                     }
@@ -1502,7 +1541,6 @@ pub enum DescribeExportTasksError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeExportTasksError {
     pub fn from_body(body: &str) -> DescribeExportTasksError {
@@ -1604,7 +1642,6 @@ pub enum DescribeTagsError {
     Unknown(String),
 }
 
-
 impl DescribeTagsError {
     pub fn from_body(body: &str) -> DescribeTagsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1705,7 +1742,6 @@ pub enum DisassociateConfigurationItemsFromApplicationError {
     Unknown(String),
 }
 
-
 impl DisassociateConfigurationItemsFromApplicationError {
     pub fn from_body(body: &str) -> DisassociateConfigurationItemsFromApplicationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1719,12 +1755,34 @@ impl DisassociateConfigurationItemsFromApplicationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AuthorizationErrorException" => DisassociateConfigurationItemsFromApplicationError::AuthorizationError(String::from(error_message)),
-                    "InvalidParameterException" => DisassociateConfigurationItemsFromApplicationError::InvalidParameter(String::from(error_message)),
-                    "InvalidParameterValueException" => DisassociateConfigurationItemsFromApplicationError::InvalidParameterValue(String::from(error_message)),
-                    "ServerInternalErrorException" => DisassociateConfigurationItemsFromApplicationError::ServerInternalError(String::from(error_message)),
-                    "ValidationException" => DisassociateConfigurationItemsFromApplicationError::Validation(error_message.to_string()),
-                    _ => DisassociateConfigurationItemsFromApplicationError::Unknown(String::from(body)),
+                    "AuthorizationErrorException" => {
+                        DisassociateConfigurationItemsFromApplicationError::AuthorizationError(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidParameterException" => {
+                        DisassociateConfigurationItemsFromApplicationError::InvalidParameter(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidParameterValueException" => {
+                        DisassociateConfigurationItemsFromApplicationError::InvalidParameterValue(
+                            String::from(error_message),
+                        )
+                    }
+                    "ServerInternalErrorException" => {
+                        DisassociateConfigurationItemsFromApplicationError::ServerInternalError(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DisassociateConfigurationItemsFromApplicationError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
+                    _ => DisassociateConfigurationItemsFromApplicationError::Unknown(
+                        String::from(body),
+                    ),
                 }
             }
             Err(_) => {
@@ -1751,7 +1809,9 @@ impl From<HttpDispatchError> for DisassociateConfigurationItemsFromApplicationEr
 }
 impl From<io::Error> for DisassociateConfigurationItemsFromApplicationError {
     fn from(err: io::Error) -> DisassociateConfigurationItemsFromApplicationError {
-        DisassociateConfigurationItemsFromApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        DisassociateConfigurationItemsFromApplicationError::HttpDispatch(HttpDispatchError::from(
+            err,
+        ))
     }
 }
 impl fmt::Display for DisassociateConfigurationItemsFromApplicationError {
@@ -1768,7 +1828,9 @@ impl Error for DisassociateConfigurationItemsFromApplicationError {
             DisassociateConfigurationItemsFromApplicationError::InvalidParameter(ref cause) => {
                 cause
             }
-            DisassociateConfigurationItemsFromApplicationError::InvalidParameterValue(ref cause) => cause,
+            DisassociateConfigurationItemsFromApplicationError::InvalidParameterValue(
+                ref cause,
+            ) => cause,
             DisassociateConfigurationItemsFromApplicationError::ServerInternalError(ref cause) => {
                 cause
             }
@@ -1776,7 +1838,9 @@ impl Error for DisassociateConfigurationItemsFromApplicationError {
             DisassociateConfigurationItemsFromApplicationError::Credentials(ref err) => {
                 err.description()
             }
-            DisassociateConfigurationItemsFromApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DisassociateConfigurationItemsFromApplicationError::HttpDispatch(
+                ref dispatch_error,
+            ) => dispatch_error.description(),
             DisassociateConfigurationItemsFromApplicationError::Unknown(ref cause) => cause,
         }
     }
@@ -1804,7 +1868,6 @@ pub enum ExportConfigurationsError {
     Unknown(String),
 }
 
-
 impl ExportConfigurationsError {
     pub fn from_body(body: &str) -> ExportConfigurationsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1824,8 +1887,16 @@ impl ExportConfigurationsError {
                     "InvalidParameterException" => {
                         ExportConfigurationsError::InvalidParameter(String::from(error_message))
                     }
-                    "InvalidParameterValueException" => ExportConfigurationsError::InvalidParameterValue(String::from(error_message)),
-                    "OperationNotPermittedException" => ExportConfigurationsError::OperationNotPermitted(String::from(error_message)),
+                    "InvalidParameterValueException" => {
+                        ExportConfigurationsError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OperationNotPermittedException" => {
+                        ExportConfigurationsError::OperationNotPermitted(String::from(
+                            error_message,
+                        ))
+                    }
                     "ServerInternalErrorException" => {
                         ExportConfigurationsError::ServerInternalError(String::from(error_message))
                     }
@@ -1902,7 +1973,6 @@ pub enum GetDiscoverySummaryError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetDiscoverySummaryError {
     pub fn from_body(body: &str) -> GetDiscoverySummaryError {
@@ -2003,7 +2073,6 @@ pub enum ListConfigurationsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListConfigurationsError {
     pub fn from_body(body: &str) -> ListConfigurationsError {
@@ -2107,7 +2176,6 @@ pub enum ListServerNeighborsError {
     Unknown(String),
 }
 
-
 impl ListServerNeighborsError {
     pub fn from_body(body: &str) -> ListServerNeighborsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2206,7 +2274,6 @@ pub enum StartDataCollectionByAgentIdsError {
     Unknown(String),
 }
 
-
 impl StartDataCollectionByAgentIdsError {
     pub fn from_body(body: &str) -> StartDataCollectionByAgentIdsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2220,10 +2287,26 @@ impl StartDataCollectionByAgentIdsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AuthorizationErrorException" => StartDataCollectionByAgentIdsError::AuthorizationError(String::from(error_message)),
-                    "InvalidParameterException" => StartDataCollectionByAgentIdsError::InvalidParameter(String::from(error_message)),
-                    "InvalidParameterValueException" => StartDataCollectionByAgentIdsError::InvalidParameterValue(String::from(error_message)),
-                    "ServerInternalErrorException" => StartDataCollectionByAgentIdsError::ServerInternalError(String::from(error_message)),
+                    "AuthorizationErrorException" => {
+                        StartDataCollectionByAgentIdsError::AuthorizationError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterException" => {
+                        StartDataCollectionByAgentIdsError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        StartDataCollectionByAgentIdsError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServerInternalErrorException" => {
+                        StartDataCollectionByAgentIdsError::ServerInternalError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         StartDataCollectionByAgentIdsError::Validation(error_message.to_string())
                     }
@@ -2298,7 +2381,6 @@ pub enum StartExportTaskError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl StartExportTaskError {
     pub fn from_body(body: &str) -> StartExportTaskError {
@@ -2400,7 +2482,6 @@ pub enum StopDataCollectionByAgentIdsError {
     Unknown(String),
 }
 
-
 impl StopDataCollectionByAgentIdsError {
     pub fn from_body(body: &str) -> StopDataCollectionByAgentIdsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2414,10 +2495,26 @@ impl StopDataCollectionByAgentIdsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AuthorizationErrorException" => StopDataCollectionByAgentIdsError::AuthorizationError(String::from(error_message)),
-                    "InvalidParameterException" => StopDataCollectionByAgentIdsError::InvalidParameter(String::from(error_message)),
-                    "InvalidParameterValueException" => StopDataCollectionByAgentIdsError::InvalidParameterValue(String::from(error_message)),
-                    "ServerInternalErrorException" => StopDataCollectionByAgentIdsError::ServerInternalError(String::from(error_message)),
+                    "AuthorizationErrorException" => {
+                        StopDataCollectionByAgentIdsError::AuthorizationError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterException" => {
+                        StopDataCollectionByAgentIdsError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        StopDataCollectionByAgentIdsError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServerInternalErrorException" => {
+                        StopDataCollectionByAgentIdsError::ServerInternalError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         StopDataCollectionByAgentIdsError::Validation(error_message.to_string())
                     }
@@ -2490,7 +2587,6 @@ pub enum UpdateApplicationError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateApplicationError {
     pub fn from_body(body: &str) -> UpdateApplicationError {
@@ -2571,121 +2667,125 @@ impl Error for UpdateApplicationError {
 }
 /// Trait representing the capabilities of the AWS Application Discovery Service API. AWS Application Discovery Service clients implement this trait.
 pub trait Discovery {
-    #[doc="<p>Associates one or more configuration items with an application.</p>"]
-    fn associate_configuration_items_to_application(&self, input: &AssociateConfigurationItemsToApplicationRequest)  -> Result<AssociateConfigurationItemsToApplicationResponse, AssociateConfigurationItemsToApplicationError>;
+    #[doc = "<p>Associates one or more configuration items with an application.</p>"]
+    fn associate_configuration_items_to_application(
+        &self,
+        input: &AssociateConfigurationItemsToApplicationRequest,
+    ) -> Result<
+        AssociateConfigurationItemsToApplicationResponse,
+        AssociateConfigurationItemsToApplicationError,
+    >;
 
-
-    #[doc="<p>Creates an application with the given name and description.</p>"]
-    fn create_application(&self,
-                          input: &CreateApplicationRequest)
-                          -> Result<CreateApplicationResponse, CreateApplicationError>;
-
+    #[doc = "<p>Creates an application with the given name and description.</p>"]
+    fn create_application(
+        &self,
+        input: &CreateApplicationRequest,
+    ) -> Result<CreateApplicationResponse, CreateApplicationError>;
 
     #[doc="<p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>"]
-    fn create_tags(&self,
-                   input: &CreateTagsRequest)
-                   -> Result<CreateTagsResponse, CreateTagsError>;
+    fn create_tags(&self, input: &CreateTagsRequest)
+        -> Result<CreateTagsResponse, CreateTagsError>;
 
-
-    #[doc="<p>Deletes a list of applications and their associations with configuration items.</p>"]
-    fn delete_applications(&self,
-                           input: &DeleteApplicationsRequest)
-                           -> Result<DeleteApplicationsResponse, DeleteApplicationsError>;
-
+    #[doc = "<p>Deletes a list of applications and their associations with configuration items.</p>"]
+    fn delete_applications(
+        &self,
+        input: &DeleteApplicationsRequest,
+    ) -> Result<DeleteApplicationsResponse, DeleteApplicationsError>;
 
     #[doc="<p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>"]
-    fn delete_tags(&self,
-                   input: &DeleteTagsRequest)
-                   -> Result<DeleteTagsResponse, DeleteTagsError>;
-
+    fn delete_tags(&self, input: &DeleteTagsRequest)
+        -> Result<DeleteTagsResponse, DeleteTagsError>;
 
     #[doc="<p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an ID.</p>"]
-    fn describe_agents(&self,
-                       input: &DescribeAgentsRequest)
-                       -> Result<DescribeAgentsResponse, DescribeAgentsError>;
-
+    fn describe_agents(
+        &self,
+        input: &DescribeAgentsRequest,
+    ) -> Result<DescribeAgentsResponse, DescribeAgentsError>;
 
     #[doc="<p>Retrieves attributes for a list of configuration item IDs. All of the supplied IDs must be for the same asset type (server, application, process, or connection). Output fields are specific to the asset type selected. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, and number of network cards.</p> <p>For a complete list of outputs for each asset type, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations\">Using the DescribeConfigurations Action</a>.</p>"]
-    fn describe_configurations
-        (&self,
-         input: &DescribeConfigurationsRequest)
-         -> Result<DescribeConfigurationsResponse, DescribeConfigurationsError>;
-
+    fn describe_configurations(
+        &self,
+        input: &DescribeConfigurationsRequest,
+    ) -> Result<DescribeConfigurationsResponse, DescribeConfigurationsError>;
 
     #[doc="<p>Deprecated. Use <code>DescribeExportTasks</code> instead.</p> <p>Retrieves the status of a given export process. You can retrieve status from a maximum of 100 processes.</p>"]
-    fn describe_export_configurations
-        (&self,
-         input: &DescribeExportConfigurationsRequest)
-         -> Result<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError>;
-
+    fn describe_export_configurations(
+        &self,
+        input: &DescribeExportConfigurationsRequest,
+    ) -> Result<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError>;
 
     #[doc="<p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>"]
-    fn describe_export_tasks(&self,
-                             input: &DescribeExportTasksRequest)
-                             -> Result<DescribeExportTasksResponse, DescribeExportTasksError>;
-
+    fn describe_export_tasks(
+        &self,
+        input: &DescribeExportTasksRequest,
+    ) -> Result<DescribeExportTasksResponse, DescribeExportTasksError>;
 
     #[doc="<p>Retrieves a list of configuration items that are tagged with a specific tag. Or retrieves a list of all tags assigned to a specific configuration item.</p>"]
-    fn describe_tags(&self,
-                     input: &DescribeTagsRequest)
-                     -> Result<DescribeTagsResponse, DescribeTagsError>;
+    fn describe_tags(
+        &self,
+        input: &DescribeTagsRequest,
+    ) -> Result<DescribeTagsResponse, DescribeTagsError>;
 
-
-    #[doc="<p>Disassociates one or more configuration items from an application.</p>"]
-    fn disassociate_configuration_items_from_application(&self, input: &DisassociateConfigurationItemsFromApplicationRequest)  -> Result<DisassociateConfigurationItemsFromApplicationResponse, DisassociateConfigurationItemsFromApplicationError>;
-
+    #[doc = "<p>Disassociates one or more configuration items from an application.</p>"]
+    fn disassociate_configuration_items_from_application(
+        &self,
+        input: &DisassociateConfigurationItemsFromApplicationRequest,
+    ) -> Result<
+        DisassociateConfigurationItemsFromApplicationResponse,
+        DisassociateConfigurationItemsFromApplicationError,
+    >;
 
     #[doc="<p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>"]
-    fn export_configurations(&self)
-                             -> Result<ExportConfigurationsResponse, ExportConfigurationsError>;
+    fn export_configurations(
+        &self,
+    ) -> Result<ExportConfigurationsResponse, ExportConfigurationsError>;
 
-
-    #[doc="<p>Retrieves a short summary of discovered assets.</p>"]
-    fn get_discovery_summary(&self)
-                             -> Result<GetDiscoverySummaryResponse, GetDiscoverySummaryError>;
-
+    #[doc = "<p>Retrieves a short summary of discovered assets.</p>"]
+    fn get_discovery_summary(
+        &self,
+    ) -> Result<GetDiscoverySummaryResponse, GetDiscoverySummaryError>;
 
     #[doc="<p>Retrieves a list of configuration items according to criteria that you specify in a filter. The filter criteria identifies the relationship requirements.</p>"]
-    fn list_configurations(&self,
-                           input: &ListConfigurationsRequest)
-                           -> Result<ListConfigurationsResponse, ListConfigurationsError>;
-
+    fn list_configurations(
+        &self,
+        input: &ListConfigurationsRequest,
+    ) -> Result<ListConfigurationsResponse, ListConfigurationsError>;
 
     #[doc="<p>Retrieves a list of servers that are one network hop away from a specified server.</p>"]
-    fn list_server_neighbors(&self,
-                             input: &ListServerNeighborsRequest)
-                             -> Result<ListServerNeighborsResponse, ListServerNeighborsError>;
+    fn list_server_neighbors(
+        &self,
+        input: &ListServerNeighborsRequest,
+    ) -> Result<ListServerNeighborsResponse, ListServerNeighborsError>;
 
-
-    #[doc="<p>Instructs the specified agents or connectors to start collecting data.</p>"]
-    fn start_data_collection_by_agent_ids
-        (&self,
-         input: &StartDataCollectionByAgentIdsRequest)
-         -> Result<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError>;
-
+    #[doc = "<p>Instructs the specified agents or connectors to start collecting data.</p>"]
+    fn start_data_collection_by_agent_ids(
+        &self,
+        input: &StartDataCollectionByAgentIdsRequest,
+    ) -> Result<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError>;
 
     #[doc="<p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentId</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentId</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>"]
-    fn start_export_task(&self,
-                         input: &StartExportTaskRequest)
-                         -> Result<StartExportTaskResponse, StartExportTaskError>;
+    fn start_export_task(
+        &self,
+        input: &StartExportTaskRequest,
+    ) -> Result<StartExportTaskResponse, StartExportTaskError>;
 
+    #[doc = "<p>Instructs the specified agents or connectors to stop collecting data.</p>"]
+    fn stop_data_collection_by_agent_ids(
+        &self,
+        input: &StopDataCollectionByAgentIdsRequest,
+    ) -> Result<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError>;
 
-    #[doc="<p>Instructs the specified agents or connectors to stop collecting data.</p>"]
-    fn stop_data_collection_by_agent_ids
-        (&self,
-         input: &StopDataCollectionByAgentIdsRequest)
-         -> Result<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError>;
-
-
-    #[doc="<p>Updates metadata about an application.</p>"]
-    fn update_application(&self,
-                          input: &UpdateApplicationRequest)
-                          -> Result<UpdateApplicationResponse, UpdateApplicationError>;
+    #[doc = "<p>Updates metadata about an application.</p>"]
+    fn update_application(
+        &self,
+        input: &UpdateApplicationRequest,
+    ) -> Result<UpdateApplicationResponse, UpdateApplicationError>;
 }
 /// A client for the AWS Application Discovery Service API.
 pub struct DiscoveryClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -2693,8 +2793,9 @@ pub struct DiscoveryClient<P, D>
 }
 
 impl<P, D> DiscoveryClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         DiscoveryClient {
@@ -2706,15 +2807,25 @@ impl<P, D> DiscoveryClient<P, D>
 }
 
 impl<P, D> Discovery for DiscoveryClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
-    #[doc="<p>Associates one or more configuration items with an application.</p>"]
-fn associate_configuration_items_to_application(&self, input: &AssociateConfigurationItemsToApplicationRequest)  -> Result<AssociateConfigurationItemsToApplicationResponse, AssociateConfigurationItemsToApplicationError>{
+    #[doc = "<p>Associates one or more configuration items with an application.</p>"]
+    fn associate_configuration_items_to_application(
+        &self,
+        input: &AssociateConfigurationItemsToApplicationRequest,
+    ) -> Result<
+        AssociateConfigurationItemsToApplicationResponse,
+        AssociateConfigurationItemsToApplicationError,
+    > {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target", "AWSPoseidonService_V2015_11_01.AssociateConfigurationItemsToApplication");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.AssociateConfigurationItemsToApplication",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2726,26 +2837,34 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AssociateConfigurationItemsToApplicationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<AssociateConfigurationItemsToApplicationResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AssociateConfigurationItemsToApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AssociateConfigurationItemsToApplicationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates an application with the given name and description.</p>"]
-    fn create_application(&self,
-                          input: &CreateApplicationRequest)
-                          -> Result<CreateApplicationResponse, CreateApplicationError> {
+    #[doc = "<p>Creates an application with the given name and description.</p>"]
+    fn create_application(
+        &self,
+        input: &CreateApplicationRequest,
+    ) -> Result<CreateApplicationResponse, CreateApplicationError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.CreateApplication");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.CreateApplication",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2757,21 +2876,25 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateApplicationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateApplicationResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateApplicationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>"]
-    fn create_tags(&self,
-                   input: &CreateTagsRequest)
-                   -> Result<CreateTagsResponse, CreateTagsError> {
+    fn create_tags(
+        &self,
+        input: &CreateTagsRequest,
+    ) -> Result<CreateTagsResponse, CreateTagsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2787,28 +2910,32 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateTagsResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateTagsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a list of applications and their associations with configuration items.</p>"]
-    fn delete_applications(&self,
-                           input: &DeleteApplicationsRequest)
-                           -> Result<DeleteApplicationsResponse, DeleteApplicationsError> {
+    #[doc = "<p>Deletes a list of applications and their associations with configuration items.</p>"]
+    fn delete_applications(
+        &self,
+        input: &DeleteApplicationsRequest,
+    ) -> Result<DeleteApplicationsResponse, DeleteApplicationsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.DeleteApplications");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.DeleteApplications",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2820,21 +2947,25 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteApplicationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteApplicationsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteApplicationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteApplicationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>"]
-    fn delete_tags(&self,
-                   input: &DeleteTagsRequest)
-                   -> Result<DeleteTagsResponse, DeleteTagsError> {
+    fn delete_tags(
+        &self,
+        input: &DeleteTagsRequest,
+    ) -> Result<DeleteTagsResponse, DeleteTagsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2850,28 +2981,32 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteTagsResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteTagsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an ID.</p>"]
-    fn describe_agents(&self,
-                       input: &DescribeAgentsRequest)
-                       -> Result<DescribeAgentsResponse, DescribeAgentsError> {
+    fn describe_agents(
+        &self,
+        input: &DescribeAgentsRequest,
+    ) -> Result<DescribeAgentsResponse, DescribeAgentsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.DescribeAgents");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.DescribeAgents",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2883,29 +3018,32 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAgentsResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeAgentsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAgentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeAgentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves attributes for a list of configuration item IDs. All of the supplied IDs must be for the same asset type (server, application, process, or connection). Output fields are specific to the asset type selected. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, and number of network cards.</p> <p>For a complete list of outputs for each asset type, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations\">Using the DescribeConfigurations Action</a>.</p>"]
-    fn describe_configurations
-        (&self,
-         input: &DescribeConfigurationsRequest)
-         -> Result<DescribeConfigurationsResponse, DescribeConfigurationsError> {
+    fn describe_configurations(
+        &self,
+        input: &DescribeConfigurationsRequest,
+    ) -> Result<DescribeConfigurationsResponse, DescribeConfigurationsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.DescribeConfigurations");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.DescribeConfigurations",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2917,27 +3055,32 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeConfigurationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeConfigurationsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeConfigurationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeConfigurationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deprecated. Use <code>DescribeExportTasks</code> instead.</p> <p>Retrieves the status of a given export process. You can retrieve status from a maximum of 100 processes.</p>"]
-    fn describe_export_configurations
-        (&self,
-         input: &DescribeExportConfigurationsRequest)
-         -> Result<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError> {
+    fn describe_export_configurations(
+        &self,
+        input: &DescribeExportConfigurationsRequest,
+    ) -> Result<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.DescribeExportConfigurations");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.DescribeExportConfigurations",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2949,27 +3092,34 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeExportConfigurationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeExportConfigurationsResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeExportConfigurationsError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(DescribeExportConfigurationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>"]
-    fn describe_export_tasks(&self,
-                             input: &DescribeExportTasksRequest)
-                             -> Result<DescribeExportTasksResponse, DescribeExportTasksError> {
+    fn describe_export_tasks(
+        &self,
+        input: &DescribeExportTasksRequest,
+    ) -> Result<DescribeExportTasksResponse, DescribeExportTasksError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.DescribeExportTasks");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.DescribeExportTasks",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2981,26 +3131,32 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeExportTasksResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeExportTasksResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeExportTasksError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeExportTasksError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves a list of configuration items that are tagged with a specific tag. Or retrieves a list of all tags assigned to a specific configuration item.</p>"]
-    fn describe_tags(&self,
-                     input: &DescribeTagsRequest)
-                     -> Result<DescribeTagsResponse, DescribeTagsError> {
+    fn describe_tags(
+        &self,
+        input: &DescribeTagsRequest,
+    ) -> Result<DescribeTagsResponse, DescribeTagsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.DescribeTags");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.DescribeTags",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3012,25 +3168,35 @@ fn associate_configuration_items_to_application(&self, input: &AssociateConfigur
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeTagsResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeTagsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Disassociates one or more configuration items from an application.</p>"]
-fn disassociate_configuration_items_from_application(&self, input: &DisassociateConfigurationItemsFromApplicationRequest)  -> Result<DisassociateConfigurationItemsFromApplicationResponse, DisassociateConfigurationItemsFromApplicationError>{
+    #[doc = "<p>Disassociates one or more configuration items from an application.</p>"]
+    fn disassociate_configuration_items_from_application(
+        &self,
+        input: &DisassociateConfigurationItemsFromApplicationRequest,
+    ) -> Result<
+        DisassociateConfigurationItemsFromApplicationResponse,
+        DisassociateConfigurationItemsFromApplicationError,
+    > {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target", "AWSPoseidonService_V2015_11_01.DisassociateConfigurationItemsFromApplication");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.DisassociateConfigurationItemsFromApplication",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3042,25 +3208,35 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociateConfigurationItemsFromApplicationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DisassociateConfigurationItemsFromApplicationResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisassociateConfigurationItemsFromApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(
+                    DisassociateConfigurationItemsFromApplicationError::from_body(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ),
+                )
             }
         }
     }
-
 
     #[doc="<p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>"]
-    fn export_configurations(&self)
-                             -> Result<ExportConfigurationsResponse, ExportConfigurationsError> {
+    fn export_configurations(
+        &self,
+    ) -> Result<ExportConfigurationsResponse, ExportConfigurationsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.ExportConfigurations");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.ExportConfigurations",
+        );
         request.set_payload(Some(b"{}".to_vec()));
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
@@ -3071,25 +3247,31 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ExportConfigurationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ExportConfigurationsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ExportConfigurationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ExportConfigurationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves a short summary of discovered assets.</p>"]
-    fn get_discovery_summary(&self)
-                             -> Result<GetDiscoverySummaryResponse, GetDiscoverySummaryError> {
+    #[doc = "<p>Retrieves a short summary of discovered assets.</p>"]
+    fn get_discovery_summary(
+        &self,
+    ) -> Result<GetDiscoverySummaryResponse, GetDiscoverySummaryError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.GetDiscoverySummary");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.GetDiscoverySummary",
+        );
         request.set_payload(Some(b"{}".to_vec()));
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
@@ -3100,26 +3282,32 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDiscoverySummaryResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetDiscoverySummaryResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDiscoverySummaryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDiscoverySummaryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves a list of configuration items according to criteria that you specify in a filter. The filter criteria identifies the relationship requirements.</p>"]
-    fn list_configurations(&self,
-                           input: &ListConfigurationsRequest)
-                           -> Result<ListConfigurationsResponse, ListConfigurationsError> {
+    fn list_configurations(
+        &self,
+        input: &ListConfigurationsRequest,
+    ) -> Result<ListConfigurationsResponse, ListConfigurationsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.ListConfigurations");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.ListConfigurations",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3131,26 +3319,32 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListConfigurationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListConfigurationsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListConfigurationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListConfigurationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves a list of servers that are one network hop away from a specified server.</p>"]
-    fn list_server_neighbors(&self,
-                             input: &ListServerNeighborsRequest)
-                             -> Result<ListServerNeighborsResponse, ListServerNeighborsError> {
+    fn list_server_neighbors(
+        &self,
+        input: &ListServerNeighborsRequest,
+    ) -> Result<ListServerNeighborsResponse, ListServerNeighborsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.ListServerNeighbors");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.ListServerNeighbors",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3162,27 +3356,32 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListServerNeighborsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListServerNeighborsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListServerNeighborsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListServerNeighborsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Instructs the specified agents or connectors to start collecting data.</p>"]
-    fn start_data_collection_by_agent_ids
-        (&self,
-         input: &StartDataCollectionByAgentIdsRequest)
-         -> Result<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError> {
+    #[doc = "<p>Instructs the specified agents or connectors to start collecting data.</p>"]
+    fn start_data_collection_by_agent_ids(
+        &self,
+        input: &StartDataCollectionByAgentIdsRequest,
+    ) -> Result<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.StartDataCollectionByAgentIds");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.StartDataCollectionByAgentIds",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3194,27 +3393,34 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartDataCollectionByAgentIdsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<StartDataCollectionByAgentIdsResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartDataCollectionByAgentIdsError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(StartDataCollectionByAgentIdsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentId</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentId</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>"]
-    fn start_export_task(&self,
-                         input: &StartExportTaskRequest)
-                         -> Result<StartExportTaskResponse, StartExportTaskError> {
+    fn start_export_task(
+        &self,
+        input: &StartExportTaskRequest,
+    ) -> Result<StartExportTaskResponse, StartExportTaskError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.StartExportTask");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.StartExportTask",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3226,29 +3432,32 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartExportTaskResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<StartExportTaskResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartExportTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StartExportTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Instructs the specified agents or connectors to stop collecting data.</p>"]
-    fn stop_data_collection_by_agent_ids
-        (&self,
-         input: &StopDataCollectionByAgentIdsRequest)
-         -> Result<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError> {
+    #[doc = "<p>Instructs the specified agents or connectors to stop collecting data.</p>"]
+    fn stop_data_collection_by_agent_ids(
+        &self,
+        input: &StopDataCollectionByAgentIdsRequest,
+    ) -> Result<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.StopDataCollectionByAgentIds");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.StopDataCollectionByAgentIds",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3260,27 +3469,34 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopDataCollectionByAgentIdsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<StopDataCollectionByAgentIdsResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopDataCollectionByAgentIdsError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(StopDataCollectionByAgentIdsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates metadata about an application.</p>"]
-    fn update_application(&self,
-                          input: &UpdateApplicationRequest)
-                          -> Result<UpdateApplicationResponse, UpdateApplicationError> {
+    #[doc = "<p>Updates metadata about an application.</p>"]
+    fn update_application(
+        &self,
+        input: &UpdateApplicationRequest,
+    ) -> Result<UpdateApplicationResponse, UpdateApplicationError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSPoseidonService_V2015_11_01.UpdateApplication");
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.UpdateApplication",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3292,12 +3508,16 @@ fn disassociate_configuration_items_from_application(&self, input: &Disassociate
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateApplicationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateApplicationResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateApplicationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateApplicationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

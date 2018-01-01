@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,1154 +27,1154 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Compliance {
-    #[doc="<p>The number of AWS resources or AWS Config rules that cause a result of <code>NON_COMPLIANT</code>, up to a maximum number.</p>"]
-    #[serde(rename="ComplianceContributorCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of AWS resources or AWS Config rules that cause a result of <code>NON_COMPLIANT</code>, up to a maximum number.</p>
+    #[serde(rename = "ComplianceContributorCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_contributor_count: Option<ComplianceContributorCount>,
-    #[doc="<p>Indicates whether an AWS resource or AWS Config rule is compliant.</p> <p>A resource is compliant if it complies with all of the AWS Config rules that evaluate it, and it is noncompliant if it does not comply with one or more of these rules.</p> <p>A rule is compliant if all of the resources that the rule evaluates comply with it, and it is noncompliant if any of these resources do not comply.</p> <p>AWS Config returns the <code>INSUFFICIENT_DATA</code> value when no evaluation results are available for the AWS resource or Config rule.</p> <p>For the <code>Compliance</code> data type, AWS Config supports only <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code> values. AWS Config does not support the <code>NOT_APPLICABLE</code> value for the <code>Compliance</code> data type.</p>"]
-    #[serde(rename="ComplianceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether an AWS resource or AWS Config rule is compliant.</p> <p>A resource is compliant if it complies with all of the AWS Config rules that evaluate it, and it is noncompliant if it does not comply with one or more of these rules.</p> <p>A rule is compliant if all of the resources that the rule evaluates comply with it, and it is noncompliant if any of these resources do not comply.</p> <p>AWS Config returns the <code>INSUFFICIENT_DATA</code> value when no evaluation results are available for the AWS resource or Config rule.</p> <p>For the <code>Compliance</code> data type, AWS Config supports only <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code> values. AWS Config does not support the <code>NOT_APPLICABLE</code> value for the <code>Compliance</code> data type.</p>
+    #[serde(rename = "ComplianceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_type: Option<String>,
 }
 
-#[doc="<p>Indicates whether an AWS Config rule is compliant. A rule is compliant if all of the resources that the rule evaluated comply with it, and it is noncompliant if any of these resources do not comply.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Indicates whether an AWS Config rule is compliant. A rule is compliant if all of the resources that the rule evaluated comply with it, and it is noncompliant if any of these resources do not comply.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ComplianceByConfigRule {
-    #[doc="<p>Indicates whether the AWS Config rule is compliant.</p>"]
-    #[serde(rename="Compliance")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the AWS Config rule is compliant.</p>
+    #[serde(rename = "Compliance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance: Option<Compliance>,
-    #[doc="<p>The name of the AWS Config rule.</p>"]
-    #[serde(rename="ConfigRuleName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the AWS Config rule.</p>
+    #[serde(rename = "ConfigRuleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_name: Option<String>,
 }
 
-#[doc="<p>Indicates whether an AWS resource that is evaluated according to one or more AWS Config rules is compliant. A resource is compliant if it complies with all of the rules that evaluate it, and it is noncompliant if it does not comply with one or more of these rules.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Indicates whether an AWS resource that is evaluated according to one or more AWS Config rules is compliant. A resource is compliant if it complies with all of the rules that evaluate it, and it is noncompliant if it does not comply with one or more of these rules.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ComplianceByResource {
-    #[doc="<p>Indicates whether the AWS resource complies with all of the AWS Config rules that evaluated it.</p>"]
-    #[serde(rename="Compliance")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the AWS resource complies with all of the AWS Config rules that evaluated it.</p>
+    #[serde(rename = "Compliance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance: Option<Compliance>,
-    #[doc="<p>The ID of the AWS resource that was evaluated.</p>"]
-    #[serde(rename="ResourceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the AWS resource that was evaluated.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
-    #[doc="<p>The type of the AWS resource that was evaluated.</p>"]
-    #[serde(rename="ResourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the AWS resource that was evaluated.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
 }
 
-#[doc="<p>The number of AWS resources or AWS Config rules responsible for the current compliance of the item, up to a maximum number.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The number of AWS resources or AWS Config rules responsible for the current compliance of the item, up to a maximum number.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ComplianceContributorCount {
-    #[doc="<p>Indicates whether the maximum count is reached.</p>"]
-    #[serde(rename="CapExceeded")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the maximum count is reached.</p>
+    #[serde(rename = "CapExceeded")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cap_exceeded: Option<bool>,
-    #[doc="<p>The number of AWS resources or AWS Config rules responsible for the current compliance of the item.</p>"]
-    #[serde(rename="CappedCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of AWS resources or AWS Config rules responsible for the current compliance of the item.</p>
+    #[serde(rename = "CappedCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub capped_count: Option<i64>,
 }
 
-#[doc="<p>The number of AWS Config rules or AWS resources that are compliant and noncompliant.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The number of AWS Config rules or AWS resources that are compliant and noncompliant.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ComplianceSummary {
-    #[doc="<p>The time that AWS Config created the compliance summary.</p>"]
-    #[serde(rename="ComplianceSummaryTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time that AWS Config created the compliance summary.</p>
+    #[serde(rename = "ComplianceSummaryTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_summary_timestamp: Option<f64>,
-    #[doc="<p>The number of AWS Config rules or AWS resources that are compliant, up to a maximum of 25 for rules and 100 for resources.</p>"]
-    #[serde(rename="CompliantResourceCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of AWS Config rules or AWS resources that are compliant, up to a maximum of 25 for rules and 100 for resources.</p>
+    #[serde(rename = "CompliantResourceCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliant_resource_count: Option<ComplianceContributorCount>,
-    #[doc="<p>The number of AWS Config rules or AWS resources that are noncompliant, up to a maximum of 25 for rules and 100 for resources.</p>"]
-    #[serde(rename="NonCompliantResourceCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of AWS Config rules or AWS resources that are noncompliant, up to a maximum of 25 for rules and 100 for resources.</p>
+    #[serde(rename = "NonCompliantResourceCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub non_compliant_resource_count: Option<ComplianceContributorCount>,
 }
 
-#[doc="<p>The number of AWS resources of a specific type that are compliant or noncompliant, up to a maximum of 100 for each compliance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The number of AWS resources of a specific type that are compliant or noncompliant, up to a maximum of 100 for each compliance.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ComplianceSummaryByResourceType {
-    #[doc="<p>The number of AWS resources that are compliant or noncompliant, up to a maximum of 100 for each compliance.</p>"]
-    #[serde(rename="ComplianceSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of AWS resources that are compliant or noncompliant, up to a maximum of 100 for each compliance.</p>
+    #[serde(rename = "ComplianceSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_summary: Option<ComplianceSummary>,
-    #[doc="<p>The type of AWS resource.</p>"]
-    #[serde(rename="ResourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of AWS resource.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
 }
 
-#[doc="<p>A list that contains the status of the delivery of either the snapshot or the configuration history to the specified Amazon S3 bucket.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A list that contains the status of the delivery of either the snapshot or the configuration history to the specified Amazon S3 bucket.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfigExportDeliveryInfo {
-    #[doc="<p>The time of the last attempted delivery.</p>"]
-    #[serde(rename="lastAttemptTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time of the last attempted delivery.</p>
+    #[serde(rename = "lastAttemptTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_attempt_time: Option<f64>,
-    #[doc="<p>The error code from the last attempted delivery.</p>"]
-    #[serde(rename="lastErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code from the last attempted delivery.</p>
+    #[serde(rename = "lastErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_error_code: Option<String>,
-    #[doc="<p>The error message from the last attempted delivery.</p>"]
-    #[serde(rename="lastErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error message from the last attempted delivery.</p>
+    #[serde(rename = "lastErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_error_message: Option<String>,
-    #[doc="<p>Status of the last attempted delivery.</p>"]
-    #[serde(rename="lastStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Status of the last attempted delivery.</p>
+    #[serde(rename = "lastStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_status: Option<String>,
-    #[doc="<p>The time of the last successful delivery.</p>"]
-    #[serde(rename="lastSuccessfulTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time of the last successful delivery.</p>
+    #[serde(rename = "lastSuccessfulTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_successful_time: Option<f64>,
-    #[doc="<p>The time that the next delivery occurs.</p>"]
-    #[serde(rename="nextDeliveryTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time that the next delivery occurs.</p>
+    #[serde(rename = "nextDeliveryTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_delivery_time: Option<f64>,
 }
 
-#[doc="<p>An AWS Config rule represents an AWS Lambda function that you create for a custom rule or a predefined function for an AWS managed rule. The function evaluates configuration items to assess whether your AWS resources comply with your desired configurations. This function can run when AWS Config detects a configuration change to an AWS resource and at a periodic frequency that you choose (for example, every 24 hours).</p> <note> <p>You can use the AWS CLI and AWS SDKs if you want to create a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot. For more information, see <a>ConfigSnapshotDeliveryProperties</a>.</p> </note> <p>For more information about developing and using AWS Config rules, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html\">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>An AWS Config rule represents an AWS Lambda function that you create for a custom rule or a predefined function for an AWS managed rule. The function evaluates configuration items to assess whether your AWS resources comply with your desired configurations. This function can run when AWS Config detects a configuration change to an AWS resource and at a periodic frequency that you choose (for example, every 24 hours).</p> <note> <p>You can use the AWS CLI and AWS SDKs if you want to create a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot. For more information, see <a>ConfigSnapshotDeliveryProperties</a>.</p> </note> <p>For more information about developing and using AWS Config rules, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ConfigRule {
-    #[doc="<p>The Amazon Resource Name (ARN) of the AWS Config rule.</p>"]
-    #[serde(rename="ConfigRuleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the AWS Config rule.</p>
+    #[serde(rename = "ConfigRuleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_arn: Option<String>,
-    #[doc="<p>The ID of the AWS Config rule.</p>"]
-    #[serde(rename="ConfigRuleId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the AWS Config rule.</p>
+    #[serde(rename = "ConfigRuleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_id: Option<String>,
-    #[doc="<p>The name that you assign to the AWS Config rule. The name is required if you are adding a new rule.</p>"]
-    #[serde(rename="ConfigRuleName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name that you assign to the AWS Config rule. The name is required if you are adding a new rule.</p>
+    #[serde(rename = "ConfigRuleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_name: Option<String>,
-    #[doc="<p>Indicates whether the AWS Config rule is active or is currently being deleted by AWS Config. It can also indicate the evaluation status for the Config rule.</p> <p>AWS Config sets the state of the rule to <code>EVALUATING</code> temporarily after you use the <code>StartConfigRulesEvaluation</code> request to evaluate your resources against the Config rule.</p> <p>AWS Config sets the state of the rule to <code>DELETING_RESULTS</code> temporarily after you use the <code>DeleteEvaluationResults</code> request to delete the current evaluation results for the Config rule.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> temporarily after you use the <code>DeleteConfigRule</code> request to delete the rule. After AWS Config deletes the rule, the rule and all of its evaluations are erased and are no longer available.</p>"]
-    #[serde(rename="ConfigRuleState")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the AWS Config rule is active or is currently being deleted by AWS Config. It can also indicate the evaluation status for the Config rule.</p> <p>AWS Config sets the state of the rule to <code>EVALUATING</code> temporarily after you use the <code>StartConfigRulesEvaluation</code> request to evaluate your resources against the Config rule.</p> <p>AWS Config sets the state of the rule to <code>DELETING_RESULTS</code> temporarily after you use the <code>DeleteEvaluationResults</code> request to delete the current evaluation results for the Config rule.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> temporarily after you use the <code>DeleteConfigRule</code> request to delete the rule. After AWS Config deletes the rule, the rule and all of its evaluations are erased and are no longer available.</p>
+    #[serde(rename = "ConfigRuleState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_state: Option<String>,
-    #[doc="<p>The description that you provide for the AWS Config rule.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description that you provide for the AWS Config rule.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A string in JSON format that is passed to the AWS Config rule Lambda function.</p>"]
-    #[serde(rename="InputParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string in JSON format that is passed to the AWS Config rule Lambda function.</p>
+    #[serde(rename = "InputParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input_parameters: Option<String>,
-    #[doc="<p>The maximum frequency with which AWS Config runs evaluations for a rule. You can specify a value for <code>MaximumExecutionFrequency</code> when:</p> <ul> <li> <p>You are using an AWS managed rule that is triggered at a periodic frequency.</p> </li> <li> <p>Your custom rule is triggered when AWS Config delivers the configuration snapshot. For more information, see <a>ConfigSnapshotDeliveryProperties</a>.</p> </li> </ul> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note>"]
-    #[serde(rename="MaximumExecutionFrequency")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum frequency with which AWS Config runs evaluations for a rule. You can specify a value for <code>MaximumExecutionFrequency</code> when:</p> <ul> <li> <p>You are using an AWS managed rule that is triggered at a periodic frequency.</p> </li> <li> <p>Your custom rule is triggered when AWS Config delivers the configuration snapshot. For more information, see <a>ConfigSnapshotDeliveryProperties</a>.</p> </li> </ul> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note>
+    #[serde(rename = "MaximumExecutionFrequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_execution_frequency: Option<String>,
-    #[doc="<p>Defines which resources can trigger an evaluation for the rule. The scope can include one or more resource types, a combination of one resource type and one resource ID, or a combination of a tag key and value. Specify a scope to constrain the resources that can trigger an evaluation for the rule. If you do not specify a scope, evaluations are triggered when any resource in the recording group changes.</p>"]
-    #[serde(rename="Scope")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Defines which resources can trigger an evaluation for the rule. The scope can include one or more resource types, a combination of one resource type and one resource ID, or a combination of a tag key and value. Specify a scope to constrain the resources that can trigger an evaluation for the rule. If you do not specify a scope, evaluations are triggered when any resource in the recording group changes.</p>
+    #[serde(rename = "Scope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub scope: Option<Scope>,
-    #[doc="<p>Provides the rule owner (AWS or customer), the rule identifier, and the notifications that cause the function to evaluate your AWS resources.</p>"]
-    #[serde(rename="Source")]
+    /// <p>Provides the rule owner (AWS or customer), the rule identifier, and the notifications that cause the function to evaluate your AWS resources.</p>
+    #[serde(rename = "Source")]
     pub source: Source,
 }
 
-#[doc="<p>Status information for your AWS managed Config rules. The status includes information such as the last time the rule ran, the last time it failed, and the related error for the last failure.</p> <p>This action does not return status information about custom Config rules.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Status information for your AWS managed Config rules. The status includes information such as the last time the rule ran, the last time it failed, and the related error for the last failure.</p> <p>This action does not return status information about custom Config rules.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfigRuleEvaluationStatus {
-    #[doc="<p>The Amazon Resource Name (ARN) of the AWS Config rule.</p>"]
-    #[serde(rename="ConfigRuleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the AWS Config rule.</p>
+    #[serde(rename = "ConfigRuleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_arn: Option<String>,
-    #[doc="<p>The ID of the AWS Config rule.</p>"]
-    #[serde(rename="ConfigRuleId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the AWS Config rule.</p>
+    #[serde(rename = "ConfigRuleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_id: Option<String>,
-    #[doc="<p>The name of the AWS Config rule.</p>"]
-    #[serde(rename="ConfigRuleName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the AWS Config rule.</p>
+    #[serde(rename = "ConfigRuleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_name: Option<String>,
-    #[doc="<p>The time that you first activated the AWS Config rule.</p>"]
-    #[serde(rename="FirstActivatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time that you first activated the AWS Config rule.</p>
+    #[serde(rename = "FirstActivatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub first_activated_time: Option<f64>,
-    #[doc="<p>Indicates whether AWS Config has evaluated your resources against the rule at least once.</p> <ul> <li> <p> <code>true</code> - AWS Config has evaluated your AWS resources against the rule at least once.</p> </li> <li> <p> <code>false</code> - AWS Config has not once finished evaluating your AWS resources against the rule.</p> </li> </ul>"]
-    #[serde(rename="FirstEvaluationStarted")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether AWS Config has evaluated your resources against the rule at least once.</p> <ul> <li> <p> <code>true</code> - AWS Config has evaluated your AWS resources against the rule at least once.</p> </li> <li> <p> <code>false</code> - AWS Config has not once finished evaluating your AWS resources against the rule.</p> </li> </ul>
+    #[serde(rename = "FirstEvaluationStarted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub first_evaluation_started: Option<bool>,
-    #[doc="<p>The error code that AWS Config returned when the rule last failed.</p>"]
-    #[serde(rename="LastErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code that AWS Config returned when the rule last failed.</p>
+    #[serde(rename = "LastErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_error_code: Option<String>,
-    #[doc="<p>The error message that AWS Config returned when the rule last failed.</p>"]
-    #[serde(rename="LastErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error message that AWS Config returned when the rule last failed.</p>
+    #[serde(rename = "LastErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_error_message: Option<String>,
-    #[doc="<p>The time that AWS Config last failed to evaluate your AWS resources against the rule.</p>"]
-    #[serde(rename="LastFailedEvaluationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time that AWS Config last failed to evaluate your AWS resources against the rule.</p>
+    #[serde(rename = "LastFailedEvaluationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_failed_evaluation_time: Option<f64>,
-    #[doc="<p>The time that AWS Config last failed to invoke the AWS Config rule to evaluate your AWS resources.</p>"]
-    #[serde(rename="LastFailedInvocationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time that AWS Config last failed to invoke the AWS Config rule to evaluate your AWS resources.</p>
+    #[serde(rename = "LastFailedInvocationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_failed_invocation_time: Option<f64>,
-    #[doc="<p>The time that AWS Config last successfully evaluated your AWS resources against the rule.</p>"]
-    #[serde(rename="LastSuccessfulEvaluationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time that AWS Config last successfully evaluated your AWS resources against the rule.</p>
+    #[serde(rename = "LastSuccessfulEvaluationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_successful_evaluation_time: Option<f64>,
-    #[doc="<p>The time that AWS Config last successfully invoked the AWS Config rule to evaluate your AWS resources.</p>"]
-    #[serde(rename="LastSuccessfulInvocationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time that AWS Config last successfully invoked the AWS Config rule to evaluate your AWS resources.</p>
+    #[serde(rename = "LastSuccessfulInvocationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_successful_invocation_time: Option<f64>,
 }
 
-#[doc="<p>Provides options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket in your delivery channel.</p> <note> <p>If you want to create a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot, see the following:</p> </note> <p>The frequency for a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot is set by one of two values, depending on which is less frequent:</p> <ul> <li> <p>The value for the <code>deliveryFrequency</code> parameter within the delivery channel configuration, which sets how often AWS Config delivers configuration snapshots. This value also sets how often AWS Config invokes evaluations for Config rules.</p> </li> <li> <p>The value for the <code>MaximumExecutionFrequency</code> parameter, which sets the maximum frequency with which AWS Config invokes evaluations for the rule. For more information, see <a>ConfigRule</a>.</p> </li> </ul> <p>If the <code>deliveryFrequency</code> value is less frequent than the <code>MaximumExecutionFrequency</code> value for a rule, AWS Config invokes the rule only as often as the <code>deliveryFrequency</code> value.</p> <ol> <li> <p>For example, you want your rule to run evaluations when AWS Config delivers the configuration snapshot.</p> </li> <li> <p>You specify the <code>MaximumExecutionFrequency</code> value for <code>Six_Hours</code>. </p> </li> <li> <p>You then specify the delivery channel <code>deliveryFrequency</code> value for <code>TwentyFour_Hours</code>.</p> </li> <li> <p>Because the value for <code>deliveryFrequency</code> is less frequent than <code>MaximumExecutionFrequency</code>, AWS Config invokes evaluations for the rule every 24 hours. </p> </li> </ol> <p>You should set the <code>MaximumExecutionFrequency</code> value to be at least as frequent as the <code>deliveryFrequency</code> value. You can view the <code>deliveryFrequency</code> value by using the <code>DescribeDeliveryChannnels</code> action.</p> <p>To update the <code>deliveryFrequency</code> with which AWS Config delivers your configuration snapshots, use the <code>PutDeliveryChannel</code> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Provides options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket in your delivery channel.</p> <note> <p>If you want to create a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot, see the following:</p> </note> <p>The frequency for a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot is set by one of two values, depending on which is less frequent:</p> <ul> <li> <p>The value for the <code>deliveryFrequency</code> parameter within the delivery channel configuration, which sets how often AWS Config delivers configuration snapshots. This value also sets how often AWS Config invokes evaluations for Config rules.</p> </li> <li> <p>The value for the <code>MaximumExecutionFrequency</code> parameter, which sets the maximum frequency with which AWS Config invokes evaluations for the rule. For more information, see <a>ConfigRule</a>.</p> </li> </ul> <p>If the <code>deliveryFrequency</code> value is less frequent than the <code>MaximumExecutionFrequency</code> value for a rule, AWS Config invokes the rule only as often as the <code>deliveryFrequency</code> value.</p> <ol> <li> <p>For example, you want your rule to run evaluations when AWS Config delivers the configuration snapshot.</p> </li> <li> <p>You specify the <code>MaximumExecutionFrequency</code> value for <code>Six_Hours</code>. </p> </li> <li> <p>You then specify the delivery channel <code>deliveryFrequency</code> value for <code>TwentyFour_Hours</code>.</p> </li> <li> <p>Because the value for <code>deliveryFrequency</code> is less frequent than <code>MaximumExecutionFrequency</code>, AWS Config invokes evaluations for the rule every 24 hours. </p> </li> </ol> <p>You should set the <code>MaximumExecutionFrequency</code> value to be at least as frequent as the <code>deliveryFrequency</code> value. You can view the <code>deliveryFrequency</code> value by using the <code>DescribeDeliveryChannnels</code> action.</p> <p>To update the <code>deliveryFrequency</code> with which AWS Config delivers your configuration snapshots, use the <code>PutDeliveryChannel</code> action.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ConfigSnapshotDeliveryProperties {
-    #[doc="<p>The frequency with which AWS Config delivers configuration snapshots.</p>"]
-    #[serde(rename="deliveryFrequency")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The frequency with which AWS Config delivers configuration snapshots.</p>
+    #[serde(rename = "deliveryFrequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_frequency: Option<String>,
 }
 
-#[doc="<p>A list that contains the status of the delivery of the configuration stream notification to the Amazon SNS topic.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A list that contains the status of the delivery of the configuration stream notification to the Amazon SNS topic.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfigStreamDeliveryInfo {
-    #[doc="<p>The error code from the last attempted delivery.</p>"]
-    #[serde(rename="lastErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code from the last attempted delivery.</p>
+    #[serde(rename = "lastErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_error_code: Option<String>,
-    #[doc="<p>The error message from the last attempted delivery.</p>"]
-    #[serde(rename="lastErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error message from the last attempted delivery.</p>
+    #[serde(rename = "lastErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_error_message: Option<String>,
-    #[doc="<p>Status of the last attempted delivery.</p> <p> <b>Note</b> Providing an SNS topic on a <a href=\"http://docs.aws.amazon.com/config/latest/APIReference/API_DeliveryChannel.html\">DeliveryChannel</a> for AWS Config is optional. If the SNS delivery is turned off, the last status will be <b>Not_Applicable</b>.</p>"]
-    #[serde(rename="lastStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Status of the last attempted delivery.</p> <p> <b>Note</b> Providing an SNS topic on a <a href="http://docs.aws.amazon.com/config/latest/APIReference/API_DeliveryChannel.html">DeliveryChannel</a> for AWS Config is optional. If the SNS delivery is turned off, the last status will be <b>Not_Applicable</b>.</p>
+    #[serde(rename = "lastStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_status: Option<String>,
-    #[doc="<p>The time from the last status change.</p>"]
-    #[serde(rename="lastStatusChangeTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time from the last status change.</p>
+    #[serde(rename = "lastStatusChangeTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_status_change_time: Option<f64>,
 }
 
-#[doc="<p>A list that contains detailed configurations of a specified resource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A list that contains detailed configurations of a specified resource.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfigurationItem {
-    #[doc="<p>The 12 digit AWS account ID associated with the resource.</p>"]
-    #[serde(rename="accountId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The 12 digit AWS account ID associated with the resource.</p>
+    #[serde(rename = "accountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the resource.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The Availability Zone associated with the resource.</p>"]
-    #[serde(rename="availabilityZone")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Availability Zone associated with the resource.</p>
+    #[serde(rename = "availabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
-    #[doc="<p>The region where the resource resides.</p>"]
-    #[serde(rename="awsRegion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The region where the resource resides.</p>
+    #[serde(rename = "awsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_region: Option<String>,
-    #[doc="<p>The description of the resource configuration.</p>"]
-    #[serde(rename="configuration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the resource configuration.</p>
+    #[serde(rename = "configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<String>,
-    #[doc="<p>The time when the configuration recording was initiated.</p>"]
-    #[serde(rename="configurationItemCaptureTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time when the configuration recording was initiated.</p>
+    #[serde(rename = "configurationItemCaptureTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_item_capture_time: Option<f64>,
-    #[doc="<p>Unique MD5 hash that represents the configuration item's state.</p> <p>You can use MD5 hash to compare the states of two or more configuration items that are associated with the same resource.</p>"]
-    #[serde(rename="configurationItemMD5Hash")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Unique MD5 hash that represents the configuration item's state.</p> <p>You can use MD5 hash to compare the states of two or more configuration items that are associated with the same resource.</p>
+    #[serde(rename = "configurationItemMD5Hash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_item_md5_hash: Option<String>,
-    #[doc="<p>The configuration item status.</p>"]
-    #[serde(rename="configurationItemStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The configuration item status.</p>
+    #[serde(rename = "configurationItemStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_item_status: Option<String>,
-    #[doc="<p>An identifier that indicates the ordering of the configuration items of a resource.</p>"]
-    #[serde(rename="configurationStateId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that indicates the ordering of the configuration items of a resource.</p>
+    #[serde(rename = "configurationStateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_state_id: Option<String>,
-    #[doc="<p>A list of CloudTrail event IDs.</p> <p>A populated field indicates that the current configuration was initiated by the events recorded in the CloudTrail log. For more information about CloudTrail, see <a href=\"http://docs.aws.amazon.com/awscloudtrail/latest/userguide/what_is_cloud_trail_top_level.html\">What is AWS CloudTrail?</a>.</p> <p>An empty field indicates that the current configuration was not initiated by any event.</p>"]
-    #[serde(rename="relatedEvents")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of CloudTrail event IDs.</p> <p>A populated field indicates that the current configuration was initiated by the events recorded in the CloudTrail log. For more information about CloudTrail, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/what_is_cloud_trail_top_level.html">What is AWS CloudTrail?</a>.</p> <p>An empty field indicates that the current configuration was not initiated by any event.</p>
+    #[serde(rename = "relatedEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub related_events: Option<Vec<String>>,
-    #[doc="<p>A list of related AWS resources.</p>"]
-    #[serde(rename="relationships")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of related AWS resources.</p>
+    #[serde(rename = "relationships")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub relationships: Option<Vec<Relationship>>,
-    #[doc="<p>The time stamp when the resource was created.</p>"]
-    #[serde(rename="resourceCreationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time stamp when the resource was created.</p>
+    #[serde(rename = "resourceCreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_creation_time: Option<f64>,
-    #[doc="<p>The ID of the resource (for example., <code>sg-xxxxxx</code>).</p>"]
-    #[serde(rename="resourceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the resource (for example., <code>sg-xxxxxx</code>).</p>
+    #[serde(rename = "resourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
-    #[doc="<p>The custom name of the resource, if available.</p>"]
-    #[serde(rename="resourceName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The custom name of the resource, if available.</p>
+    #[serde(rename = "resourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_name: Option<String>,
-    #[doc="<p>The type of AWS resource.</p>"]
-    #[serde(rename="resourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of AWS resource.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
-    #[doc="<p>Configuration attributes that AWS Config returns for certain resource types to supplement the information returned for the <code>configuration</code> parameter.</p>"]
-    #[serde(rename="supplementaryConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Configuration attributes that AWS Config returns for certain resource types to supplement the information returned for the <code>configuration</code> parameter.</p>
+    #[serde(rename = "supplementaryConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub supplementary_configuration: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>A mapping of key value tags associated with the resource.</p>"]
-    #[serde(rename="tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A mapping of key value tags associated with the resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The version number of the resource configuration.</p>"]
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version number of the resource configuration.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[doc="<p>An object that represents the recording of configuration changes of an AWS resource.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>An object that represents the recording of configuration changes of an AWS resource.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ConfigurationRecorder {
-    #[doc="<p>The name of the recorder. By default, AWS Config automatically assigns the name \"default\" when creating the configuration recorder. You cannot change the assigned name.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the recorder. By default, AWS Config automatically assigns the name "default" when creating the configuration recorder. You cannot change the assigned name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Specifies the types of AWS resource for which AWS Config records configuration changes.</p>"]
-    #[serde(rename="recordingGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the types of AWS resource for which AWS Config records configuration changes.</p>
+    #[serde(rename = "recordingGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub recording_group: Option<RecordingGroup>,
-    #[doc="<p>Amazon Resource Name (ARN) of the IAM role used to describe the AWS resources associated with the account.</p>"]
-    #[serde(rename="roleARN")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon Resource Name (ARN) of the IAM role used to describe the AWS resources associated with the account.</p>
+    #[serde(rename = "roleARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
 
-#[doc="<p>The current status of the configuration recorder.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The current status of the configuration recorder.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfigurationRecorderStatus {
-    #[doc="<p>The error code indicating that the recording failed.</p>"]
-    #[serde(rename="lastErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code indicating that the recording failed.</p>
+    #[serde(rename = "lastErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_error_code: Option<String>,
-    #[doc="<p>The message indicating that the recording failed due to an error.</p>"]
-    #[serde(rename="lastErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The message indicating that the recording failed due to an error.</p>
+    #[serde(rename = "lastErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_error_message: Option<String>,
-    #[doc="<p>The time the recorder was last started.</p>"]
-    #[serde(rename="lastStartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the recorder was last started.</p>
+    #[serde(rename = "lastStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_start_time: Option<f64>,
-    #[doc="<p>The last (previous) status of the recorder.</p>"]
-    #[serde(rename="lastStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last (previous) status of the recorder.</p>
+    #[serde(rename = "lastStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_status: Option<String>,
-    #[doc="<p>The time when the status was last changed.</p>"]
-    #[serde(rename="lastStatusChangeTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time when the status was last changed.</p>
+    #[serde(rename = "lastStatusChangeTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_status_change_time: Option<f64>,
-    #[doc="<p>The time the recorder was last stopped.</p>"]
-    #[serde(rename="lastStopTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the recorder was last stopped.</p>
+    #[serde(rename = "lastStopTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_stop_time: Option<f64>,
-    #[doc="<p>The name of the configuration recorder.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the configuration recorder.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Specifies whether the recorder is currently recording or not.</p>"]
-    #[serde(rename="recording")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether the recorder is currently recording or not.</p>
+    #[serde(rename = "recording")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub recording: Option<bool>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteConfigRuleRequest {
-    #[doc="<p>The name of the AWS Config rule that you want to delete.</p>"]
-    #[serde(rename="ConfigRuleName")]
+    /// <p>The name of the AWS Config rule that you want to delete.</p>
+    #[serde(rename = "ConfigRuleName")]
     pub config_rule_name: String,
 }
 
-#[doc="<p>The request object for the <code>DeleteConfigurationRecorder</code> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The request object for the <code>DeleteConfigurationRecorder</code> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteConfigurationRecorderRequest {
-    #[doc="<p>The name of the configuration recorder to be deleted. You can retrieve the name of your configuration recorder by using the <code>DescribeConfigurationRecorders</code> action.</p>"]
-    #[serde(rename="ConfigurationRecorderName")]
+    /// <p>The name of the configuration recorder to be deleted. You can retrieve the name of your configuration recorder by using the <code>DescribeConfigurationRecorders</code> action.</p>
+    #[serde(rename = "ConfigurationRecorderName")]
     pub configuration_recorder_name: String,
 }
 
-#[doc="<p>The input for the <a>DeleteDeliveryChannel</a> action. The action accepts the following data in JSON format. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the <a>DeleteDeliveryChannel</a> action. The action accepts the following data in JSON format. </p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDeliveryChannelRequest {
-    #[doc="<p>The name of the delivery channel to delete.</p>"]
-    #[serde(rename="DeliveryChannelName")]
+    /// <p>The name of the delivery channel to delete.</p>
+    #[serde(rename = "DeliveryChannelName")]
     pub delivery_channel_name: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteEvaluationResultsRequest {
-    #[doc="<p>The name of the Config rule for which you want to delete the evaluation results.</p>"]
-    #[serde(rename="ConfigRuleName")]
+    /// <p>The name of the Config rule for which you want to delete the evaluation results.</p>
+    #[serde(rename = "ConfigRuleName")]
     pub config_rule_name: String,
 }
 
-#[doc="<p>The output when you delete the evaluation results for the specified Config rule.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output when you delete the evaluation results for the specified Config rule.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteEvaluationResultsResponse;
 
-#[doc="<p>The input for the <a>DeliverConfigSnapshot</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the <a>DeliverConfigSnapshot</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeliverConfigSnapshotRequest {
-    #[doc="<p>The name of the delivery channel through which the snapshot is delivered.</p>"]
-    #[serde(rename="deliveryChannelName")]
+    /// <p>The name of the delivery channel through which the snapshot is delivered.</p>
+    #[serde(rename = "deliveryChannelName")]
     pub delivery_channel_name: String,
 }
 
-#[doc="<p>The output for the <a>DeliverConfigSnapshot</a> action in JSON format.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output for the <a>DeliverConfigSnapshot</a> action in JSON format.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeliverConfigSnapshotResponse {
-    #[doc="<p>The ID of the snapshot that is being created.</p>"]
-    #[serde(rename="configSnapshotId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the snapshot that is being created.</p>
+    #[serde(rename = "configSnapshotId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_snapshot_id: Option<String>,
 }
 
-#[doc="<p>The channel through which AWS Config delivers notifications and updated configuration states.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The channel through which AWS Config delivers notifications and updated configuration states.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DeliveryChannel {
-    #[doc="<p>The options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket.</p>"]
-    #[serde(rename="configSnapshotDeliveryProperties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket.</p>
+    #[serde(rename = "configSnapshotDeliveryProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_snapshot_delivery_properties: Option<ConfigSnapshotDeliveryProperties>,
-    #[doc="<p>The name of the delivery channel. By default, AWS Config assigns the name \"default\" when creating the delivery channel. To change the delivery channel name, you must use the DeleteDeliveryChannel action to delete your current delivery channel, and then you must use the PutDeliveryChannel command to create a delivery channel that has the desired name.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the delivery channel. By default, AWS Config assigns the name "default" when creating the delivery channel. To change the delivery channel name, you must use the DeleteDeliveryChannel action to delete your current delivery channel, and then you must use the PutDeliveryChannel command to create a delivery channel that has the desired name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The name of the Amazon S3 bucket to which AWS Config delivers configuration snapshots and configuration history files.</p> <p>If you specify a bucket that belongs to another AWS account, that bucket must have policies that grant access permissions to AWS Config. For more information, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/s3-bucket-policy.html\">Permissions for the Amazon S3 Bucket</a> in the AWS Config Developer Guide.</p>"]
-    #[serde(rename="s3BucketName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Amazon S3 bucket to which AWS Config delivers configuration snapshots and configuration history files.</p> <p>If you specify a bucket that belongs to another AWS account, that bucket must have policies that grant access permissions to AWS Config. For more information, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/s3-bucket-policy.html">Permissions for the Amazon S3 Bucket</a> in the AWS Config Developer Guide.</p>
+    #[serde(rename = "s3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_bucket_name: Option<String>,
-    #[doc="<p>The prefix for the specified Amazon S3 bucket.</p>"]
-    #[serde(rename="s3KeyPrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The prefix for the specified Amazon S3 bucket.</p>
+    #[serde(rename = "s3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_key_prefix: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which AWS Config sends notifications about configuration changes.</p> <p>If you choose a topic from another account, the topic must have policies that grant access permissions to AWS Config. For more information, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/sns-topic-policy.html\">Permissions for the Amazon SNS Topic</a> in the AWS Config Developer Guide.</p>"]
-    #[serde(rename="snsTopicARN")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which AWS Config sends notifications about configuration changes.</p> <p>If you choose a topic from another account, the topic must have policies that grant access permissions to AWS Config. For more information, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/sns-topic-policy.html">Permissions for the Amazon SNS Topic</a> in the AWS Config Developer Guide.</p>
+    #[serde(rename = "snsTopicARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_arn: Option<String>,
 }
 
-#[doc="<p>The status of a specified delivery channel.</p> <p>Valid values: <code>Success</code> | <code>Failure</code> </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The status of a specified delivery channel.</p> <p>Valid values: <code>Success</code> | <code>Failure</code> </p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeliveryChannelStatus {
-    #[doc="<p>A list that contains the status of the delivery of the configuration history to the specified Amazon S3 bucket.</p>"]
-    #[serde(rename="configHistoryDeliveryInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list that contains the status of the delivery of the configuration history to the specified Amazon S3 bucket.</p>
+    #[serde(rename = "configHistoryDeliveryInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_history_delivery_info: Option<ConfigExportDeliveryInfo>,
-    #[doc="<p>A list containing the status of the delivery of the snapshot to the specified Amazon S3 bucket.</p>"]
-    #[serde(rename="configSnapshotDeliveryInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list containing the status of the delivery of the snapshot to the specified Amazon S3 bucket.</p>
+    #[serde(rename = "configSnapshotDeliveryInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_snapshot_delivery_info: Option<ConfigExportDeliveryInfo>,
-    #[doc="<p>A list containing the status of the delivery of the configuration stream notification to the specified Amazon SNS topic.</p>"]
-    #[serde(rename="configStreamDeliveryInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list containing the status of the delivery of the configuration stream notification to the specified Amazon SNS topic.</p>
+    #[serde(rename = "configStreamDeliveryInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_stream_delivery_info: Option<ConfigStreamDeliveryInfo>,
-    #[doc="<p>The name of the delivery channel.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the delivery channel.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeComplianceByConfigRuleRequest {
-    #[doc="<p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>"]
-    #[serde(rename="ComplianceTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>
+    #[serde(rename = "ComplianceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_types: Option<Vec<String>>,
-    #[doc="<p>Specify one or more AWS Config rule names to filter the results by rule.</p>"]
-    #[serde(rename="ConfigRuleNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specify one or more AWS Config rule names to filter the results by rule.</p>
+    #[serde(rename = "ConfigRuleNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_names: Option<Vec<String>>,
-    #[doc="<p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeComplianceByConfigRuleResponse {
-    #[doc="<p>Indicates whether each of the specified AWS Config rules is compliant.</p>"]
-    #[serde(rename="ComplianceByConfigRules")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether each of the specified AWS Config rules is compliant.</p>
+    #[serde(rename = "ComplianceByConfigRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_by_config_rules: Option<Vec<ComplianceByConfigRule>>,
-    #[doc="<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeComplianceByResourceRequest {
-    #[doc="<p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>"]
-    #[serde(rename="ComplianceTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>
+    #[serde(rename = "ComplianceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_types: Option<Vec<String>>,
-    #[doc="<p>The maximum number of evaluation results returned on each page. The default is 10. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of evaluation results returned on each page. The default is 10. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The ID of the AWS resource for which you want compliance information. You can specify only one resource ID. If you specify a resource ID, you must also specify a type for <code>ResourceType</code>.</p>"]
-    #[serde(rename="ResourceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the AWS resource for which you want compliance information. You can specify only one resource ID. If you specify a resource ID, you must also specify a type for <code>ResourceType</code>.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
-    #[doc="<p>The types of AWS resources for which you want compliance information; for example, <code>AWS::EC2::Instance</code>. For this action, you can specify that the resource type is an AWS account by specifying <code>AWS::::Account</code>.</p>"]
-    #[serde(rename="ResourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The types of AWS resources for which you want compliance information; for example, <code>AWS::EC2::Instance</code>. For this action, you can specify that the resource type is an AWS account by specifying <code>AWS::::Account</code>.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeComplianceByResourceResponse {
-    #[doc="<p>Indicates whether the specified AWS resource complies with all of the AWS Config rules that evaluate it.</p>"]
-    #[serde(rename="ComplianceByResources")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the specified AWS resource complies with all of the AWS Config rules that evaluate it.</p>
+    #[serde(rename = "ComplianceByResources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_by_resources: Option<Vec<ComplianceByResource>>,
-    #[doc="<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConfigRuleEvaluationStatusRequest {
-    #[doc="<p>The name of the AWS managed Config rules for which you want status information. If you do not specify any names, AWS Config returns status information for all AWS managed Config rules that you use.</p>"]
-    #[serde(rename="ConfigRuleNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the AWS managed Config rules for which you want status information. If you do not specify any names, AWS Config returns status information for all AWS managed Config rules that you use.</p>
+    #[serde(rename = "ConfigRuleNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_names: Option<Vec<String>>,
-    #[doc="<p>The number of rule evaluation results that you want returned.</p> <p>This parameter is required if the rule limit for your account is more than the default of 50 rules.</p> <p>For more information about requesting a rule limit increase, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config\">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of rule evaluation results that you want returned.</p> <p>This parameter is required if the rule limit for your account is more than the default of 50 rules.</p> <p>For more information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeConfigRuleEvaluationStatusResponse {
-    #[doc="<p>Status information about your AWS managed Config rules.</p>"]
-    #[serde(rename="ConfigRulesEvaluationStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Status information about your AWS managed Config rules.</p>
+    #[serde(rename = "ConfigRulesEvaluationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rules_evaluation_status: Option<Vec<ConfigRuleEvaluationStatus>>,
-    #[doc="<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConfigRulesRequest {
-    #[doc="<p>The names of the AWS Config rules for which you want details. If you do not specify any names, AWS Config returns details for all your rules.</p>"]
-    #[serde(rename="ConfigRuleNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The names of the AWS Config rules for which you want details. If you do not specify any names, AWS Config returns details for all your rules.</p>
+    #[serde(rename = "ConfigRuleNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_names: Option<Vec<String>>,
-    #[doc="<p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeConfigRulesResponse {
-    #[doc="<p>The details about your AWS Config rules.</p>"]
-    #[serde(rename="ConfigRules")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The details about your AWS Config rules.</p>
+    #[serde(rename = "ConfigRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rules: Option<Vec<ConfigRule>>,
-    #[doc="<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>The input for the <a>DescribeConfigurationRecorderStatus</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the <a>DescribeConfigurationRecorderStatus</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConfigurationRecorderStatusRequest {
-    #[doc="<p>The name(s) of the configuration recorder. If the name is not specified, the action returns the current status of all the configuration recorders associated with the account.</p>"]
-    #[serde(rename="ConfigurationRecorderNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name(s) of the configuration recorder. If the name is not specified, the action returns the current status of all the configuration recorders associated with the account.</p>
+    #[serde(rename = "ConfigurationRecorderNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_recorder_names: Option<Vec<String>>,
 }
 
-#[doc="<p>The output for the <a>DescribeConfigurationRecorderStatus</a> action in JSON format.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output for the <a>DescribeConfigurationRecorderStatus</a> action in JSON format.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeConfigurationRecorderStatusResponse {
-    #[doc="<p>A list that contains status of the specified recorders.</p>"]
-    #[serde(rename="ConfigurationRecordersStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list that contains status of the specified recorders.</p>
+    #[serde(rename = "ConfigurationRecordersStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_recorders_status: Option<Vec<ConfigurationRecorderStatus>>,
 }
 
-#[doc="<p>The input for the <a>DescribeConfigurationRecorders</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the <a>DescribeConfigurationRecorders</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConfigurationRecordersRequest {
-    #[doc="<p>A list of configuration recorder names.</p>"]
-    #[serde(rename="ConfigurationRecorderNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of configuration recorder names.</p>
+    #[serde(rename = "ConfigurationRecorderNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_recorder_names: Option<Vec<String>>,
 }
 
-#[doc="<p>The output for the <a>DescribeConfigurationRecorders</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output for the <a>DescribeConfigurationRecorders</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeConfigurationRecordersResponse {
-    #[doc="<p>A list that contains the descriptions of the specified configuration recorders.</p>"]
-    #[serde(rename="ConfigurationRecorders")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list that contains the descriptions of the specified configuration recorders.</p>
+    #[serde(rename = "ConfigurationRecorders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_recorders: Option<Vec<ConfigurationRecorder>>,
 }
 
-#[doc="<p>The input for the <a>DeliveryChannelStatus</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the <a>DeliveryChannelStatus</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeDeliveryChannelStatusRequest {
-    #[doc="<p>A list of delivery channel names.</p>"]
-    #[serde(rename="DeliveryChannelNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of delivery channel names.</p>
+    #[serde(rename = "DeliveryChannelNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_channel_names: Option<Vec<String>>,
 }
 
-#[doc="<p>The output for the <a>DescribeDeliveryChannelStatus</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output for the <a>DescribeDeliveryChannelStatus</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeDeliveryChannelStatusResponse {
-    #[doc="<p>A list that contains the status of a specified delivery channel.</p>"]
-    #[serde(rename="DeliveryChannelsStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list that contains the status of a specified delivery channel.</p>
+    #[serde(rename = "DeliveryChannelsStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_channels_status: Option<Vec<DeliveryChannelStatus>>,
 }
 
-#[doc="<p>The input for the <a>DescribeDeliveryChannels</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the <a>DescribeDeliveryChannels</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeDeliveryChannelsRequest {
-    #[doc="<p>A list of delivery channel names.</p>"]
-    #[serde(rename="DeliveryChannelNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of delivery channel names.</p>
+    #[serde(rename = "DeliveryChannelNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_channel_names: Option<Vec<String>>,
 }
 
-#[doc="<p>The output for the <a>DescribeDeliveryChannels</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output for the <a>DescribeDeliveryChannels</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeDeliveryChannelsResponse {
-    #[doc="<p>A list that contains the descriptions of the specified delivery channel.</p>"]
-    #[serde(rename="DeliveryChannels")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list that contains the descriptions of the specified delivery channel.</p>
+    #[serde(rename = "DeliveryChannels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_channels: Option<Vec<DeliveryChannel>>,
 }
 
-#[doc="<p>Identifies an AWS resource and indicates whether it complies with the AWS Config rule that it was evaluated against.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Identifies an AWS resource and indicates whether it complies with the AWS Config rule that it was evaluated against.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Evaluation {
-    #[doc="<p>Supplementary information about how the evaluation determined the compliance.</p>"]
-    #[serde(rename="Annotation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Supplementary information about how the evaluation determined the compliance.</p>
+    #[serde(rename = "Annotation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub annotation: Option<String>,
-    #[doc="<p>The ID of the AWS resource that was evaluated.</p>"]
-    #[serde(rename="ComplianceResourceId")]
+    /// <p>The ID of the AWS resource that was evaluated.</p>
+    #[serde(rename = "ComplianceResourceId")]
     pub compliance_resource_id: String,
-    #[doc="<p>The type of AWS resource that was evaluated.</p>"]
-    #[serde(rename="ComplianceResourceType")]
+    /// <p>The type of AWS resource that was evaluated.</p>
+    #[serde(rename = "ComplianceResourceType")]
     pub compliance_resource_type: String,
-    #[doc="<p>Indicates whether the AWS resource complies with the AWS Config rule that it was evaluated against.</p> <p>For the <code>Evaluation</code> data type, AWS Config supports only the <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code> values. AWS Config does not support the <code>INSUFFICIENT_DATA</code> value for this data type.</p> <p>Similarly, AWS Config does not accept <code>INSUFFICIENT_DATA</code> as the value for <code>ComplianceType</code> from a <code>PutEvaluations</code> request. For example, an AWS Lambda function for a custom Config rule cannot pass an <code>INSUFFICIENT_DATA</code> value to AWS Config.</p>"]
-    #[serde(rename="ComplianceType")]
+    /// <p>Indicates whether the AWS resource complies with the AWS Config rule that it was evaluated against.</p> <p>For the <code>Evaluation</code> data type, AWS Config supports only the <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code> values. AWS Config does not support the <code>INSUFFICIENT_DATA</code> value for this data type.</p> <p>Similarly, AWS Config does not accept <code>INSUFFICIENT_DATA</code> as the value for <code>ComplianceType</code> from a <code>PutEvaluations</code> request. For example, an AWS Lambda function for a custom Config rule cannot pass an <code>INSUFFICIENT_DATA</code> value to AWS Config.</p>
+    #[serde(rename = "ComplianceType")]
     pub compliance_type: String,
-    #[doc="<p>The time of the event in AWS Config that triggered the evaluation. For event-based evaluations, the time indicates when AWS Config created the configuration item that triggered the evaluation. For periodic evaluations, the time indicates when AWS Config triggered the evaluation at the frequency that you specified (for example, every 24 hours).</p>"]
-    #[serde(rename="OrderingTimestamp")]
+    /// <p>The time of the event in AWS Config that triggered the evaluation. For event-based evaluations, the time indicates when AWS Config created the configuration item that triggered the evaluation. For periodic evaluations, the time indicates when AWS Config triggered the evaluation at the frequency that you specified (for example, every 24 hours).</p>
+    #[serde(rename = "OrderingTimestamp")]
     pub ordering_timestamp: f64,
 }
 
-#[doc="<p>The details of an AWS Config evaluation. Provides the AWS resource that was evaluated, the compliance of the resource, related timestamps, and supplementary information.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The details of an AWS Config evaluation. Provides the AWS resource that was evaluated, the compliance of the resource, related timestamps, and supplementary information.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EvaluationResult {
-    #[doc="<p>Supplementary information about how the evaluation determined the compliance.</p>"]
-    #[serde(rename="Annotation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Supplementary information about how the evaluation determined the compliance.</p>
+    #[serde(rename = "Annotation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub annotation: Option<String>,
-    #[doc="<p>Indicates whether the AWS resource complies with the AWS Config rule that evaluated it.</p> <p>For the <code>EvaluationResult</code> data type, AWS Config supports only the <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code> values. AWS Config does not support the <code>INSUFFICIENT_DATA</code> value for the <code>EvaluationResult</code> data type.</p>"]
-    #[serde(rename="ComplianceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the AWS resource complies with the AWS Config rule that evaluated it.</p> <p>For the <code>EvaluationResult</code> data type, AWS Config supports only the <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code> values. AWS Config does not support the <code>INSUFFICIENT_DATA</code> value for the <code>EvaluationResult</code> data type.</p>
+    #[serde(rename = "ComplianceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_type: Option<String>,
-    #[doc="<p>The time when the AWS Config rule evaluated the AWS resource.</p>"]
-    #[serde(rename="ConfigRuleInvokedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time when the AWS Config rule evaluated the AWS resource.</p>
+    #[serde(rename = "ConfigRuleInvokedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_invoked_time: Option<f64>,
-    #[doc="<p>Uniquely identifies the evaluation result.</p>"]
-    #[serde(rename="EvaluationResultIdentifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Uniquely identifies the evaluation result.</p>
+    #[serde(rename = "EvaluationResultIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_result_identifier: Option<EvaluationResultIdentifier>,
-    #[doc="<p>The time when AWS Config recorded the evaluation result.</p>"]
-    #[serde(rename="ResultRecordedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time when AWS Config recorded the evaluation result.</p>
+    #[serde(rename = "ResultRecordedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result_recorded_time: Option<f64>,
-    #[doc="<p>An encrypted token that associates an evaluation with an AWS Config rule. The token identifies the rule, the AWS resource being evaluated, and the event that triggered the evaluation.</p>"]
-    #[serde(rename="ResultToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An encrypted token that associates an evaluation with an AWS Config rule. The token identifies the rule, the AWS resource being evaluated, and the event that triggered the evaluation.</p>
+    #[serde(rename = "ResultToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result_token: Option<String>,
 }
 
-#[doc="<p>Uniquely identifies an evaluation result.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Uniquely identifies an evaluation result.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EvaluationResultIdentifier {
-    #[doc="<p>Identifies an AWS Config rule used to evaluate an AWS resource, and provides the type and ID of the evaluated resource.</p>"]
-    #[serde(rename="EvaluationResultQualifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Identifies an AWS Config rule used to evaluate an AWS resource, and provides the type and ID of the evaluated resource.</p>
+    #[serde(rename = "EvaluationResultQualifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_result_qualifier: Option<EvaluationResultQualifier>,
-    #[doc="<p>The time of the event that triggered the evaluation of your AWS resources. The time can indicate when AWS Config delivered a configuration item change notification, or it can indicate when AWS Config delivered the configuration snapshot, depending on which event triggered the evaluation.</p>"]
-    #[serde(rename="OrderingTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time of the event that triggered the evaluation of your AWS resources. The time can indicate when AWS Config delivered a configuration item change notification, or it can indicate when AWS Config delivered the configuration snapshot, depending on which event triggered the evaluation.</p>
+    #[serde(rename = "OrderingTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ordering_timestamp: Option<f64>,
 }
 
-#[doc="<p>Identifies an AWS Config rule that evaluated an AWS resource, and provides the type and ID of the resource that the rule evaluated.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Identifies an AWS Config rule that evaluated an AWS resource, and provides the type and ID of the resource that the rule evaluated.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EvaluationResultQualifier {
-    #[doc="<p>The name of the AWS Config rule that was used in the evaluation.</p>"]
-    #[serde(rename="ConfigRuleName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the AWS Config rule that was used in the evaluation.</p>
+    #[serde(rename = "ConfigRuleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_name: Option<String>,
-    #[doc="<p>The ID of the evaluated AWS resource.</p>"]
-    #[serde(rename="ResourceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the evaluated AWS resource.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
-    #[doc="<p>The type of AWS resource that was evaluated.</p>"]
-    #[serde(rename="ResourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of AWS resource that was evaluated.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetComplianceDetailsByConfigRuleRequest {
-    #[doc="<p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>"]
-    #[serde(rename="ComplianceTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>
+    #[serde(rename = "ComplianceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_types: Option<Vec<String>>,
-    #[doc="<p>The name of the AWS Config rule for which you want compliance information.</p>"]
-    #[serde(rename="ConfigRuleName")]
+    /// <p>The name of the AWS Config rule for which you want compliance information.</p>
+    #[serde(rename = "ConfigRuleName")]
     pub config_rule_name: String,
-    #[doc="<p>The maximum number of evaluation results returned on each page. The default is 10. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>"]
-    #[serde(rename="Limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of evaluation results returned on each page. The default is 10. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetComplianceDetailsByConfigRuleResponse {
-    #[doc="<p>Indicates whether the AWS resource complies with the specified AWS Config rule.</p>"]
-    #[serde(rename="EvaluationResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the AWS resource complies with the specified AWS Config rule.</p>
+    #[serde(rename = "EvaluationResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_results: Option<Vec<EvaluationResult>>,
-    #[doc="<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetComplianceDetailsByResourceRequest {
-    #[doc="<p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>"]
-    #[serde(rename="ComplianceTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>
+    #[serde(rename = "ComplianceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_types: Option<Vec<String>>,
-    #[doc="<p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The ID of the AWS resource for which you want compliance information.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The ID of the AWS resource for which you want compliance information.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    #[doc="<p>The type of the AWS resource for which you want compliance information.</p>"]
-    #[serde(rename="ResourceType")]
+    /// <p>The type of the AWS resource for which you want compliance information.</p>
+    #[serde(rename = "ResourceType")]
     pub resource_type: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetComplianceDetailsByResourceResponse {
-    #[doc="<p>Indicates whether the specified AWS resource complies each AWS Config rule.</p>"]
-    #[serde(rename="EvaluationResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether the specified AWS resource complies each AWS Config rule.</p>
+    #[serde(rename = "EvaluationResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_results: Option<Vec<EvaluationResult>>,
-    #[doc="<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetComplianceSummaryByConfigRuleResponse {
-    #[doc="<p>The number of AWS Config rules that are compliant and the number that are noncompliant, up to a maximum of 25 for each.</p>"]
-    #[serde(rename="ComplianceSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of AWS Config rules that are compliant and the number that are noncompliant, up to a maximum of 25 for each.</p>
+    #[serde(rename = "ComplianceSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_summary: Option<ComplianceSummary>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetComplianceSummaryByResourceTypeRequest {
-    #[doc="<p>Specify one or more resource types to get the number of resources that are compliant and the number that are noncompliant for each resource type.</p> <p>For this request, you can specify an AWS resource type such as <code>AWS::EC2::Instance</code>, and you can specify that the resource type is an AWS account by specifying <code>AWS::::Account</code>.</p>"]
-    #[serde(rename="ResourceTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specify one or more resource types to get the number of resources that are compliant and the number that are noncompliant for each resource type.</p> <p>For this request, you can specify an AWS resource type such as <code>AWS::EC2::Instance</code>, and you can specify that the resource type is an AWS account by specifying <code>AWS::::Account</code>.</p>
+    #[serde(rename = "ResourceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetComplianceSummaryByResourceTypeResponse {
-    #[doc="<p>The number of resources that are compliant and the number that are noncompliant. If one or more resource types were provided with the request, the numbers are returned for each resource type. The maximum number returned is 100.</p>"]
-    #[serde(rename="ComplianceSummariesByResourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of resources that are compliant and the number that are noncompliant. If one or more resource types were provided with the request, the numbers are returned for each resource type. The maximum number returned is 100.</p>
+    #[serde(rename = "ComplianceSummariesByResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_summaries_by_resource_type: Option<Vec<ComplianceSummaryByResourceType>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDiscoveredResourceCountsRequest {
-    #[doc="<p>The maximum number of <a>ResourceCount</a> objects returned on each page. The default is 100. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>"]
-    #[serde(rename="limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of <a>ResourceCount</a> objects returned on each page. The default is 100. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The comma-separated list that specifies the resource types that you want the AWS Config to return. For example, (<code>\"AWS::EC2::Instance\"</code>, <code>\"AWS::IAM::User\"</code>).</p> <p>If a value for <code>resourceTypes</code> is not specified, AWS Config returns all resource types that AWS Config is recording in the region for your account.</p> <note> <p>If the configuration recorder is turned off, AWS Config returns an empty list of <a>ResourceCount</a> objects. If the configuration recorder is not recording a specific resource type (for example, S3 buckets), that resource type is not returned in the list of <a>ResourceCount</a> objects.</p> </note>"]
-    #[serde(rename="resourceTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The comma-separated list that specifies the resource types that you want the AWS Config to return. For example, (<code>"AWS::EC2::Instance"</code>, <code>"AWS::IAM::User"</code>).</p> <p>If a value for <code>resourceTypes</code> is not specified, AWS Config returns all resource types that AWS Config is recording in the region for your account.</p> <note> <p>If the configuration recorder is turned off, AWS Config returns an empty list of <a>ResourceCount</a> objects. If the configuration recorder is not recording a specific resource type (for example, S3 buckets), that resource type is not returned in the list of <a>ResourceCount</a> objects.</p> </note>
+    #[serde(rename = "resourceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDiscoveredResourceCountsResponse {
-    #[doc="<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The list of <code>ResourceCount</code> objects. Each object is listed in descending order by the number of resources.</p>"]
-    #[serde(rename="resourceCounts")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of <code>ResourceCount</code> objects. Each object is listed in descending order by the number of resources.</p>
+    #[serde(rename = "resourceCounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_counts: Option<Vec<ResourceCount>>,
-    #[doc="<p>The total number of resources that AWS Config is recording in the region for your account. If you specify resource types in the request, AWS Config returns only the total number of resources for those resource types.</p> <p class=\"title\"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets, for a total of 60 resources.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify the resource type, <code>\"AWS::EC2::Instances\"</code> in the request.</p> </li> <li> <p>AWS Config returns 25 for <code>totalDiscoveredResources</code>.</p> </li> </ol>"]
-    #[serde(rename="totalDiscoveredResources")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of resources that AWS Config is recording in the region for your account. If you specify resource types in the request, AWS Config returns only the total number of resources for those resource types.</p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets, for a total of 60 resources.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify the resource type, <code>"AWS::EC2::Instances"</code> in the request.</p> </li> <li> <p>AWS Config returns 25 for <code>totalDiscoveredResources</code>.</p> </li> </ol>
+    #[serde(rename = "totalDiscoveredResources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub total_discovered_resources: Option<i64>,
 }
 
-#[doc="<p>The input for the <a>GetResourceConfigHistory</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the <a>GetResourceConfigHistory</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetResourceConfigHistoryRequest {
-    #[doc="<p>The chronological order for configuration items listed. By default the results are listed in reverse chronological order.</p>"]
-    #[serde(rename="chronologicalOrder")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The chronological order for configuration items listed. By default the results are listed in reverse chronological order.</p>
+    #[serde(rename = "chronologicalOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub chronological_order: Option<String>,
-    #[doc="<p>The time stamp that indicates an earlier time. If not specified, the action returns paginated results that contain configuration items that start from when the first configuration item was recorded.</p>"]
-    #[serde(rename="earlierTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time stamp that indicates an earlier time. If not specified, the action returns paginated results that contain configuration items that start from when the first configuration item was recorded.</p>
+    #[serde(rename = "earlierTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub earlier_time: Option<f64>,
-    #[doc="<p>The time stamp that indicates a later time. If not specified, current time is taken.</p>"]
-    #[serde(rename="laterTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time stamp that indicates a later time. If not specified, current time is taken.</p>
+    #[serde(rename = "laterTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub later_time: Option<f64>,
-    #[doc="<p>The maximum number of configuration items returned on each page. The default is 10. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>"]
-    #[serde(rename="limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of configuration items returned on each page. The default is 10. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The ID of the resource (for example., <code>sg-xxxxxx</code>).</p>"]
-    #[serde(rename="resourceId")]
+    /// <p>The ID of the resource (for example., <code>sg-xxxxxx</code>).</p>
+    #[serde(rename = "resourceId")]
     pub resource_id: String,
-    #[doc="<p>The resource type.</p>"]
-    #[serde(rename="resourceType")]
+    /// <p>The resource type.</p>
+    #[serde(rename = "resourceType")]
     pub resource_type: String,
 }
 
-#[doc="<p>The output for the <a>GetResourceConfigHistory</a> action.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output for the <a>GetResourceConfigHistory</a> action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetResourceConfigHistoryResponse {
-    #[doc="<p>A list that contains the configuration history of one or more resources.</p>"]
-    #[serde(rename="configurationItems")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list that contains the configuration history of one or more resources.</p>
+    #[serde(rename = "configurationItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_items: Option<Vec<ConfigurationItem>>,
-    #[doc="<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDiscoveredResourcesRequest {
-    #[doc="<p>Specifies whether AWS Config includes deleted resources in the results. By default, deleted resources are not included.</p>"]
-    #[serde(rename="includeDeletedResources")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether AWS Config includes deleted resources in the results. By default, deleted resources are not included.</p>
+    #[serde(rename = "includeDeletedResources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub include_deleted_resources: Option<bool>,
-    #[doc="<p>The maximum number of resource identifiers returned on each page. The default is 100. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>"]
-    #[serde(rename="limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of resource identifiers returned on each page. The default is 100. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The IDs of only those resources that you want AWS Config to list in the response. If you do not specify this parameter, AWS Config lists all resources of the specified type that it has discovered.</p>"]
-    #[serde(rename="resourceIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IDs of only those resources that you want AWS Config to list in the response. If you do not specify this parameter, AWS Config lists all resources of the specified type that it has discovered.</p>
+    #[serde(rename = "resourceIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_ids: Option<Vec<String>>,
-    #[doc="<p>The custom name of only those resources that you want AWS Config to list in the response. If you do not specify this parameter, AWS Config lists all resources of the specified type that it has discovered.</p>"]
-    #[serde(rename="resourceName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The custom name of only those resources that you want AWS Config to list in the response. If you do not specify this parameter, AWS Config lists all resources of the specified type that it has discovered.</p>
+    #[serde(rename = "resourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_name: Option<String>,
-    #[doc="<p>The type of resources that you want AWS Config to list in the response.</p>"]
-    #[serde(rename="resourceType")]
+    /// <p>The type of resources that you want AWS Config to list in the response.</p>
+    #[serde(rename = "resourceType")]
     pub resource_type: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDiscoveredResourcesResponse {
-    #[doc="<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The details that identify a resource that is discovered by AWS Config, including the resource type, ID, and (if available) the custom resource name.</p>"]
-    #[serde(rename="resourceIdentifiers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The details that identify a resource that is discovered by AWS Config, including the resource type, ID, and (if available) the custom resource name.</p>
+    #[serde(rename = "resourceIdentifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_identifiers: Option<Vec<ResourceIdentifier>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutConfigRuleRequest {
-    #[doc="<p>The rule that you want to add to your account.</p>"]
-    #[serde(rename="ConfigRule")]
+    /// <p>The rule that you want to add to your account.</p>
+    #[serde(rename = "ConfigRule")]
     pub config_rule: ConfigRule,
 }
 
-#[doc="<p>The input for the <a>PutConfigurationRecorder</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the <a>PutConfigurationRecorder</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutConfigurationRecorderRequest {
-    #[doc="<p>The configuration recorder object that records each configuration change made to the resources.</p>"]
-    #[serde(rename="ConfigurationRecorder")]
+    /// <p>The configuration recorder object that records each configuration change made to the resources.</p>
+    #[serde(rename = "ConfigurationRecorder")]
     pub configuration_recorder: ConfigurationRecorder,
 }
 
-#[doc="<p>The input for the <a>PutDeliveryChannel</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the <a>PutDeliveryChannel</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutDeliveryChannelRequest {
-    #[doc="<p>The configuration delivery channel object that delivers the configuration information to an Amazon S3 bucket, and to an Amazon SNS topic.</p>"]
-    #[serde(rename="DeliveryChannel")]
+    /// <p>The configuration delivery channel object that delivers the configuration information to an Amazon S3 bucket, and to an Amazon SNS topic.</p>
+    #[serde(rename = "DeliveryChannel")]
     pub delivery_channel: DeliveryChannel,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutEvaluationsRequest {
-    #[doc="<p>The assessments that the AWS Lambda function performs. Each evaluation identifies an AWS resource and indicates whether it complies with the AWS Config rule that invokes the AWS Lambda function.</p>"]
-    #[serde(rename="Evaluations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The assessments that the AWS Lambda function performs. Each evaluation identifies an AWS resource and indicates whether it complies with the AWS Config rule that invokes the AWS Lambda function.</p>
+    #[serde(rename = "Evaluations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluations: Option<Vec<Evaluation>>,
-    #[doc="<p>An encrypted token that associates an evaluation with an AWS Config rule. Identifies the rule and the event that triggered the evaluation</p>"]
-    #[serde(rename="ResultToken")]
+    /// <p>An encrypted token that associates an evaluation with an AWS Config rule. Identifies the rule and the event that triggered the evaluation</p>
+    #[serde(rename = "ResultToken")]
     pub result_token: String,
-    #[doc="<p>Use this parameter to specify a test run for <code>PutEvaluations</code>. You can verify whether your AWS Lambda function will deliver evaluation results to AWS Config. No updates occur to your existing evaluations, and evaluation results are not sent to AWS Config.</p> <note> <p>When <code>TestMode</code> is <code>true</code>, <code>PutEvaluations</code> doesn't require a valid value for the <code>ResultToken</code> parameter, but the value cannot be null.</p> </note>"]
-    #[serde(rename="TestMode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Use this parameter to specify a test run for <code>PutEvaluations</code>. You can verify whether your AWS Lambda function will deliver evaluation results to AWS Config. No updates occur to your existing evaluations, and evaluation results are not sent to AWS Config.</p> <note> <p>When <code>TestMode</code> is <code>true</code>, <code>PutEvaluations</code> doesn't require a valid value for the <code>ResultToken</code> parameter, but the value cannot be null.</p> </note>
+    #[serde(rename = "TestMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub test_mode: Option<bool>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutEvaluationsResponse {
-    #[doc="<p>Requests that failed because of a client or server error.</p>"]
-    #[serde(rename="FailedEvaluations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Requests that failed because of a client or server error.</p>
+    #[serde(rename = "FailedEvaluations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_evaluations: Option<Vec<Evaluation>>,
 }
 
-#[doc="<p>Specifies the types of AWS resource for which AWS Config records configuration changes.</p> <p>In the recording group, you specify whether all supported types or specific types of resources are recorded.</p> <p>By default, AWS Config records configuration changes for all supported types of regional resources that AWS Config discovers in the region in which it is running. Regional resources are tied to a region and can be used only in that region. Examples of regional resources are EC2 instances and EBS volumes.</p> <p>You can also have AWS Config record configuration changes for supported types of global resources (for example, IAM resources). Global resources are not tied to an individual region and can be used in all regions.</p> <important> <p>The configuration details for any global resource are the same in all regions. If you customize AWS Config in multiple regions to record global resources, it will create multiple configuration items each time a global resource changes: one configuration item for each region. These configuration items will contain identical data. To prevent duplicate configuration items, you should consider customizing AWS Config in only one region to record global resources, unless you want the configuration items to be available in multiple regions.</p> </important> <p>If you don't want AWS Config to record all resources, you can specify which types of resources it will record with the <code>resourceTypes</code> parameter.</p> <p>For a list of supported resource types, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources\">Supported resource types</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/select-resources.html\">Selecting Which Resources AWS Config Records</a>.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Specifies the types of AWS resource for which AWS Config records configuration changes.</p> <p>In the recording group, you specify whether all supported types or specific types of resources are recorded.</p> <p>By default, AWS Config records configuration changes for all supported types of regional resources that AWS Config discovers in the region in which it is running. Regional resources are tied to a region and can be used only in that region. Examples of regional resources are EC2 instances and EBS volumes.</p> <p>You can also have AWS Config record configuration changes for supported types of global resources (for example, IAM resources). Global resources are not tied to an individual region and can be used in all regions.</p> <important> <p>The configuration details for any global resource are the same in all regions. If you customize AWS Config in multiple regions to record global resources, it will create multiple configuration items each time a global resource changes: one configuration item for each region. These configuration items will contain identical data. To prevent duplicate configuration items, you should consider customizing AWS Config in only one region to record global resources, unless you want the configuration items to be available in multiple regions.</p> </important> <p>If you don't want AWS Config to record all resources, you can specify which types of resources it will record with the <code>resourceTypes</code> parameter.</p> <p>For a list of supported resource types, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources">Supported resource types</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/select-resources.html">Selecting Which Resources AWS Config Records</a>.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RecordingGroup {
-    #[doc="<p>Specifies whether AWS Config records configuration changes for every supported type of regional resource.</p> <p>If you set this option to <code>true</code>, when AWS Config adds support for a new type of regional resource, it automatically starts recording resources of that type.</p> <p>If you set this option to <code>true</code>, you cannot enumerate a list of <code>resourceTypes</code>.</p>"]
-    #[serde(rename="allSupported")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether AWS Config records configuration changes for every supported type of regional resource.</p> <p>If you set this option to <code>true</code>, when AWS Config adds support for a new type of regional resource, it automatically starts recording resources of that type.</p> <p>If you set this option to <code>true</code>, you cannot enumerate a list of <code>resourceTypes</code>.</p>
+    #[serde(rename = "allSupported")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub all_supported: Option<bool>,
-    #[doc="<p>Specifies whether AWS Config includes all supported types of global resources (for example, IAM resources) with the resources that it records.</p> <p>Before you can set this option to <code>true</code>, you must set the <code>allSupported</code> option to <code>true</code>.</p> <p>If you set this option to <code>true</code>, when AWS Config adds support for a new type of global resource, it automatically starts recording resources of that type.</p> <p>The configuration details for any global resource are the same in all regions. To prevent duplicate configuration items, you should consider customizing AWS Config in only one region to record global resources.</p>"]
-    #[serde(rename="includeGlobalResourceTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether AWS Config includes all supported types of global resources (for example, IAM resources) with the resources that it records.</p> <p>Before you can set this option to <code>true</code>, you must set the <code>allSupported</code> option to <code>true</code>.</p> <p>If you set this option to <code>true</code>, when AWS Config adds support for a new type of global resource, it automatically starts recording resources of that type.</p> <p>The configuration details for any global resource are the same in all regions. To prevent duplicate configuration items, you should consider customizing AWS Config in only one region to record global resources.</p>
+    #[serde(rename = "includeGlobalResourceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub include_global_resource_types: Option<bool>,
-    #[doc="<p>A comma-separated list that specifies the types of AWS resources for which AWS Config records configuration changes (for example, <code>AWS::EC2::Instance</code> or <code>AWS::CloudTrail::Trail</code>).</p> <p>Before you can set this option to <code>true</code>, you must set the <code>allSupported</code> option to <code>false</code>.</p> <p>If you set this option to <code>true</code>, when AWS Config adds support for a new type of resource, it will not record resources of that type unless you manually add that type to your recording group.</p> <p>For a list of valid <code>resourceTypes</code> values, see the <b>resourceType Value</b> column in <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources\">Supported AWS Resource Types</a>.</p>"]
-    #[serde(rename="resourceTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A comma-separated list that specifies the types of AWS resources for which AWS Config records configuration changes (for example, <code>AWS::EC2::Instance</code> or <code>AWS::CloudTrail::Trail</code>).</p> <p>Before you can set this option to <code>true</code>, you must set the <code>allSupported</code> option to <code>false</code>.</p> <p>If you set this option to <code>true</code>, when AWS Config adds support for a new type of resource, it will not record resources of that type unless you manually add that type to your recording group.</p> <p>For a list of valid <code>resourceTypes</code> values, see the <b>resourceType Value</b> column in <a href="http://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources">Supported AWS Resource Types</a>.</p>
+    #[serde(rename = "resourceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
 }
 
-#[doc="<p>The relationship of the related resource to the main resource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The relationship of the related resource to the main resource.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Relationship {
-    #[doc="<p>The type of relationship with the related resource.</p>"]
-    #[serde(rename="relationshipName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of relationship with the related resource.</p>
+    #[serde(rename = "relationshipName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub relationship_name: Option<String>,
-    #[doc="<p>The ID of the related resource (for example, <code>sg-xxxxxx</code>).</p>"]
-    #[serde(rename="resourceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the related resource (for example, <code>sg-xxxxxx</code>).</p>
+    #[serde(rename = "resourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
-    #[doc="<p>The custom name of the related resource, if available.</p>"]
-    #[serde(rename="resourceName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The custom name of the related resource, if available.</p>
+    #[serde(rename = "resourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_name: Option<String>,
-    #[doc="<p>The resource type of the related resource.</p>"]
-    #[serde(rename="resourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resource type of the related resource.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
 }
 
-#[doc="<p>An object that contains the resource type and the number of resources.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An object that contains the resource type and the number of resources.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourceCount {
-    #[doc="<p>The number of resources.</p>"]
-    #[serde(rename="count")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of resources.</p>
+    #[serde(rename = "count")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
-    #[doc="<p>The resource type, for example <code>\"AWS::EC2::Instance\"</code>.</p>"]
-    #[serde(rename="resourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resource type, for example <code>"AWS::EC2::Instance"</code>.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
 }
 
-#[doc="<p>The details that identify a resource that is discovered by AWS Config, including the resource type, ID, and (if available) the custom resource name.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The details that identify a resource that is discovered by AWS Config, including the resource type, ID, and (if available) the custom resource name.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourceIdentifier {
-    #[doc="<p>The time that the resource was deleted.</p>"]
-    #[serde(rename="resourceDeletionTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time that the resource was deleted.</p>
+    #[serde(rename = "resourceDeletionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_deletion_time: Option<f64>,
-    #[doc="<p>The ID of the resource (for example., <code>sg-xxxxxx</code>).</p>"]
-    #[serde(rename="resourceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the resource (for example., <code>sg-xxxxxx</code>).</p>
+    #[serde(rename = "resourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
-    #[doc="<p>The custom name of the resource (if available).</p>"]
-    #[serde(rename="resourceName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The custom name of the resource (if available).</p>
+    #[serde(rename = "resourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_name: Option<String>,
-    #[doc="<p>The type of resource.</p>"]
-    #[serde(rename="resourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of resource.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
 }
 
-#[doc="<p>Defines which resources trigger an evaluation for an AWS Config rule. The scope can include one or more resource types, a combination of a tag key and value, or a combination of one resource type and one resource ID. Specify a scope to constrain which resources trigger an evaluation for a rule. Otherwise, evaluations for the rule are triggered when any resource in your recording group changes in configuration.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Defines which resources trigger an evaluation for an AWS Config rule. The scope can include one or more resource types, a combination of a tag key and value, or a combination of one resource type and one resource ID. Specify a scope to constrain which resources trigger an evaluation for a rule. Otherwise, evaluations for the rule are triggered when any resource in your recording group changes in configuration.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Scope {
-    #[doc="<p>The IDs of the only AWS resource that you want to trigger an evaluation for the rule. If you specify a resource ID, you must specify one resource type for <code>ComplianceResourceTypes</code>.</p>"]
-    #[serde(rename="ComplianceResourceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IDs of the only AWS resource that you want to trigger an evaluation for the rule. If you specify a resource ID, you must specify one resource type for <code>ComplianceResourceTypes</code>.</p>
+    #[serde(rename = "ComplianceResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_resource_id: Option<String>,
-    #[doc="<p>The resource types of only those AWS resources that you want to trigger an evaluation for the rule. You can only specify one type if you also specify a resource ID for <code>ComplianceResourceId</code>.</p>"]
-    #[serde(rename="ComplianceResourceTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resource types of only those AWS resources that you want to trigger an evaluation for the rule. You can only specify one type if you also specify a resource ID for <code>ComplianceResourceId</code>.</p>
+    #[serde(rename = "ComplianceResourceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_resource_types: Option<Vec<String>>,
-    #[doc="<p>The tag key that is applied to only those AWS resources that you want you want to trigger an evaluation for the rule.</p>"]
-    #[serde(rename="TagKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tag key that is applied to only those AWS resources that you want you want to trigger an evaluation for the rule.</p>
+    #[serde(rename = "TagKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_key: Option<String>,
-    #[doc="<p>The tag value applied to only those AWS resources that you want to trigger an evaluation for the rule. If you specify a value for <code>TagValue</code>, you must also specify a value for <code>TagKey</code>.</p>"]
-    #[serde(rename="TagValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tag value applied to only those AWS resources that you want to trigger an evaluation for the rule. If you specify a value for <code>TagValue</code>, you must also specify a value for <code>TagKey</code>.</p>
+    #[serde(rename = "TagValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_value: Option<String>,
 }
 
-#[doc="<p>Provides the AWS Config rule owner (AWS or customer), the rule identifier, and the events that trigger the evaluation of your AWS resources.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Provides the AWS Config rule owner (AWS or customer), the rule identifier, and the events that trigger the evaluation of your AWS resources.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Source {
-    #[doc="<p>Indicates whether AWS or the customer owns and manages the AWS Config rule.</p>"]
-    #[serde(rename="Owner")]
+    /// <p>Indicates whether AWS or the customer owns and manages the AWS Config rule.</p>
+    #[serde(rename = "Owner")]
     pub owner: String,
-    #[doc="<p>Provides the source and type of the event that causes AWS Config to evaluate your AWS resources.</p>"]
-    #[serde(rename="SourceDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides the source and type of the event that causes AWS Config to evaluate your AWS resources.</p>
+    #[serde(rename = "SourceDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source_details: Option<Vec<SourceDetail>>,
-    #[doc="<p>For AWS Config managed rules, a predefined identifier from a list. For example, <code>IAM_PASSWORD_POLICY</code> is a managed rule. To reference a managed rule, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">Using AWS Managed Config Rules</a>.</p> <p>For custom rules, the identifier is the Amazon Resource Name (ARN) of the rule's AWS Lambda function, such as <code>arn:aws:lambda:us-east-2:123456789012:function:custom_rule_name</code>.</p>"]
-    #[serde(rename="SourceIdentifier")]
+    /// <p>For AWS Config managed rules, a predefined identifier from a list. For example, <code>IAM_PASSWORD_POLICY</code> is a managed rule. To reference a managed rule, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html">Using AWS Managed Config Rules</a>.</p> <p>For custom rules, the identifier is the Amazon Resource Name (ARN) of the rule's AWS Lambda function, such as <code>arn:aws:lambda:us-east-2:123456789012:function:custom_rule_name</code>.</p>
+    #[serde(rename = "SourceIdentifier")]
     pub source_identifier: String,
 }
 
-#[doc="<p>Provides the source and the message types that trigger AWS Config to evaluate your AWS resources against a rule. It also provides the frequency with which you want AWS Config to run evaluations for the rule if the trigger type is periodic. You can specify the parameter values for <code>SourceDetail</code> only for custom rules. </p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Provides the source and the message types that trigger AWS Config to evaluate your AWS resources against a rule. It also provides the frequency with which you want AWS Config to run evaluations for the rule if the trigger type is periodic. You can specify the parameter values for <code>SourceDetail</code> only for custom rules. </p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct SourceDetail {
-    #[doc="<p>The source of the event, such as an AWS service, that triggers AWS Config to evaluate your AWS resources.</p>"]
-    #[serde(rename="EventSource")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The source of the event, such as an AWS service, that triggers AWS Config to evaluate your AWS resources.</p>
+    #[serde(rename = "EventSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_source: Option<String>,
-    #[doc="<p>The frequency that you want AWS Config to run evaluations for a custom rule with a periodic trigger. If you specify a value for <code>MaximumExecutionFrequency</code>, then <code>MessageType</code> must use the <code>ScheduledNotification</code> value.</p> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note>"]
-    #[serde(rename="MaximumExecutionFrequency")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The frequency that you want AWS Config to run evaluations for a custom rule with a periodic trigger. If you specify a value for <code>MaximumExecutionFrequency</code>, then <code>MessageType</code> must use the <code>ScheduledNotification</code> value.</p> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note>
+    #[serde(rename = "MaximumExecutionFrequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_execution_frequency: Option<String>,
-    #[doc="<p>The type of notification that triggers AWS Config to run an evaluation for a rule. You can specify the following notification types:</p> <ul> <li> <p> <code>ConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers a configuration item as a result of a resource change.</p> </li> <li> <p> <code>OversizedConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers an oversized configuration item. AWS Config may generate this notification type when a resource changes and the notification exceeds the maximum size allowed by Amazon SNS.</p> </li> <li> <p> <code>ScheduledNotification</code> - Triggers a periodic evaluation at the frequency specified for <code>MaximumExecutionFrequency</code>.</p> </li> <li> <p> <code>ConfigurationSnapshotDeliveryCompleted</code> - Triggers a periodic evaluation when AWS Config delivers a configuration snapshot.</p> </li> </ul> <p>If you want your custom rule to be triggered by configuration changes, specify both <code>ConfigurationItemChangeNotification</code> and <code>OversizedConfigurationItemChangeNotification</code>. </p>"]
-    #[serde(rename="MessageType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of notification that triggers AWS Config to run an evaluation for a rule. You can specify the following notification types:</p> <ul> <li> <p> <code>ConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers a configuration item as a result of a resource change.</p> </li> <li> <p> <code>OversizedConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers an oversized configuration item. AWS Config may generate this notification type when a resource changes and the notification exceeds the maximum size allowed by Amazon SNS.</p> </li> <li> <p> <code>ScheduledNotification</code> - Triggers a periodic evaluation at the frequency specified for <code>MaximumExecutionFrequency</code>.</p> </li> <li> <p> <code>ConfigurationSnapshotDeliveryCompleted</code> - Triggers a periodic evaluation when AWS Config delivers a configuration snapshot.</p> </li> </ul> <p>If you want your custom rule to be triggered by configuration changes, specify both <code>ConfigurationItemChangeNotification</code> and <code>OversizedConfigurationItemChangeNotification</code>. </p>
+    #[serde(rename = "MessageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message_type: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartConfigRulesEvaluationRequest {
-    #[doc="<p>The list of names of Config rules that you want to run evaluations for.</p>"]
-    #[serde(rename="ConfigRuleNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of names of Config rules that you want to run evaluations for.</p>
+    #[serde(rename = "ConfigRuleNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_names: Option<Vec<String>>,
 }
 
-#[doc="<p>The output when you start the evaluation for the specified Config rule.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The output when you start the evaluation for the specified Config rule.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartConfigRulesEvaluationResponse;
 
-#[doc="<p>The input for the <a>StartConfigurationRecorder</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the <a>StartConfigurationRecorder</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartConfigurationRecorderRequest {
-    #[doc="<p>The name of the recorder object that records each configuration change made to the resources.</p>"]
-    #[serde(rename="ConfigurationRecorderName")]
+    /// <p>The name of the recorder object that records each configuration change made to the resources.</p>
+    #[serde(rename = "ConfigurationRecorderName")]
     pub configuration_recorder_name: String,
 }
 
-#[doc="<p>The input for the <a>StopConfigurationRecorder</a> action.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The input for the <a>StopConfigurationRecorder</a> action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopConfigurationRecorderRequest {
-    #[doc="<p>The name of the recorder object that records each configuration change made to the resources.</p>"]
-    #[serde(rename="ConfigurationRecorderName")]
+    /// <p>The name of the recorder object that records each configuration change made to the resources.</p>
+    #[serde(rename = "ConfigurationRecorderName")]
     pub configuration_recorder_name: String,
 }
 
@@ -1195,7 +1194,6 @@ pub enum DeleteConfigRuleError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteConfigRuleError {
     pub fn from_body(body: &str) -> DeleteConfigRuleError {
@@ -1279,7 +1277,6 @@ pub enum DeleteConfigurationRecorderError {
     Unknown(String),
 }
 
-
 impl DeleteConfigurationRecorderError {
     pub fn from_body(body: &str) -> DeleteConfigurationRecorderError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1293,7 +1290,11 @@ impl DeleteConfigurationRecorderError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "NoSuchConfigurationRecorderException" => DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(error_message)),
+                    "NoSuchConfigurationRecorderException" => {
+                        DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         DeleteConfigurationRecorderError::Validation(error_message.to_string())
                     }
@@ -1360,7 +1361,6 @@ pub enum DeleteDeliveryChannelError {
     Unknown(String),
 }
 
-
 impl DeleteDeliveryChannelError {
     pub fn from_body(body: &str) -> DeleteDeliveryChannelError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1374,8 +1374,16 @@ impl DeleteDeliveryChannelError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "LastDeliveryChannelDeleteFailedException" => DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(String::from(error_message)),
-                    "NoSuchDeliveryChannelException" => DeleteDeliveryChannelError::NoSuchDeliveryChannel(String::from(error_message)),
+                    "LastDeliveryChannelDeleteFailedException" => {
+                        DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NoSuchDeliveryChannelException" => {
+                        DeleteDeliveryChannelError::NoSuchDeliveryChannel(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteDeliveryChannelError::Validation(error_message.to_string())
                     }
@@ -1442,7 +1450,6 @@ pub enum DeleteEvaluationResultsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteEvaluationResultsError {
     pub fn from_body(body: &str) -> DeleteEvaluationResultsError {
@@ -1532,7 +1539,6 @@ pub enum DeliverConfigSnapshotError {
     Unknown(String),
 }
 
-
 impl DeliverConfigSnapshotError {
     pub fn from_body(body: &str) -> DeliverConfigSnapshotError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1546,9 +1552,21 @@ impl DeliverConfigSnapshotError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "NoAvailableConfigurationRecorderException" => DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(String::from(error_message)),
-                    "NoRunningConfigurationRecorderException" => DeliverConfigSnapshotError::NoRunningConfigurationRecorder(String::from(error_message)),
-                    "NoSuchDeliveryChannelException" => DeliverConfigSnapshotError::NoSuchDeliveryChannel(String::from(error_message)),
+                    "NoAvailableConfigurationRecorderException" => {
+                        DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NoRunningConfigurationRecorderException" => {
+                        DeliverConfigSnapshotError::NoRunningConfigurationRecorder(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NoSuchDeliveryChannelException" => {
+                        DeliverConfigSnapshotError::NoSuchDeliveryChannel(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeliverConfigSnapshotError::Validation(error_message.to_string())
                     }
@@ -1619,7 +1637,6 @@ pub enum DescribeComplianceByConfigRuleError {
     Unknown(String),
 }
 
-
 impl DescribeComplianceByConfigRuleError {
     pub fn from_body(body: &str) -> DescribeComplianceByConfigRuleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1633,9 +1650,21 @@ impl DescribeComplianceByConfigRuleError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidNextTokenException" => DescribeComplianceByConfigRuleError::InvalidNextToken(String::from(error_message)),
-                    "InvalidParameterValueException" => DescribeComplianceByConfigRuleError::InvalidParameterValue(String::from(error_message)),
-                    "NoSuchConfigRuleException" => DescribeComplianceByConfigRuleError::NoSuchConfigRule(String::from(error_message)),
+                    "InvalidNextTokenException" => {
+                        DescribeComplianceByConfigRuleError::InvalidNextToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        DescribeComplianceByConfigRuleError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NoSuchConfigRuleException" => {
+                        DescribeComplianceByConfigRuleError::NoSuchConfigRule(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeComplianceByConfigRuleError::Validation(error_message.to_string())
                     }
@@ -1704,7 +1733,6 @@ pub enum DescribeComplianceByResourceError {
     Unknown(String),
 }
 
-
 impl DescribeComplianceByResourceError {
     pub fn from_body(body: &str) -> DescribeComplianceByResourceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1718,8 +1746,16 @@ impl DescribeComplianceByResourceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidNextTokenException" => DescribeComplianceByResourceError::InvalidNextToken(String::from(error_message)),
-                    "InvalidParameterValueException" => DescribeComplianceByResourceError::InvalidParameterValue(String::from(error_message)),
+                    "InvalidNextTokenException" => {
+                        DescribeComplianceByResourceError::InvalidNextToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        DescribeComplianceByResourceError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeComplianceByResourceError::Validation(error_message.to_string())
                     }
@@ -1789,7 +1825,6 @@ pub enum DescribeConfigRuleEvaluationStatusError {
     Unknown(String),
 }
 
-
 impl DescribeConfigRuleEvaluationStatusError {
     pub fn from_body(body: &str) -> DescribeConfigRuleEvaluationStatusError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1803,13 +1838,24 @@ impl DescribeConfigRuleEvaluationStatusError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidNextTokenException" => DescribeConfigRuleEvaluationStatusError::InvalidNextToken(String::from(error_message)),
-                    "InvalidParameterValueException" => DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(String::from(error_message)),
-                    "NoSuchConfigRuleException" => DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(String::from(error_message)),
-                    "ValidationException" => {
-                        DescribeConfigRuleEvaluationStatusError::Validation(error_message
-                                                                                .to_string())
+                    "InvalidNextTokenException" => {
+                        DescribeConfigRuleEvaluationStatusError::InvalidNextToken(String::from(
+                            error_message,
+                        ))
                     }
+                    "InvalidParameterValueException" => {
+                        DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(
+                            String::from(error_message),
+                        )
+                    }
+                    "NoSuchConfigRuleException" => {
+                        DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => DescribeConfigRuleEvaluationStatusError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DescribeConfigRuleEvaluationStatusError::Unknown(String::from(body)),
                 }
             }
@@ -1874,7 +1920,6 @@ pub enum DescribeConfigRulesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeConfigRulesError {
     pub fn from_body(body: &str) -> DescribeConfigRulesError {
@@ -1960,7 +2005,6 @@ pub enum DescribeConfigurationRecorderStatusError {
     Unknown(String),
 }
 
-
 impl DescribeConfigurationRecorderStatusError {
     pub fn from_body(body: &str) -> DescribeConfigurationRecorderStatusError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1974,11 +2018,14 @@ impl DescribeConfigurationRecorderStatusError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "NoSuchConfigurationRecorderException" => DescribeConfigurationRecorderStatusError::NoSuchConfigurationRecorder(String::from(error_message)),
-                    "ValidationException" => {
-                        DescribeConfigurationRecorderStatusError::Validation(error_message
-                                                                                 .to_string())
+                    "NoSuchConfigurationRecorderException" => {
+                        DescribeConfigurationRecorderStatusError::NoSuchConfigurationRecorder(
+                            String::from(error_message),
+                        )
                     }
+                    "ValidationException" => DescribeConfigurationRecorderStatusError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DescribeConfigurationRecorderStatusError::Unknown(String::from(body)),
                 }
             }
@@ -2042,7 +2089,6 @@ pub enum DescribeConfigurationRecordersError {
     Unknown(String),
 }
 
-
 impl DescribeConfigurationRecordersError {
     pub fn from_body(body: &str) -> DescribeConfigurationRecordersError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2056,7 +2102,11 @@ impl DescribeConfigurationRecordersError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "NoSuchConfigurationRecorderException" => DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(String::from(error_message)),
+                    "NoSuchConfigurationRecorderException" => {
+                        DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         DescribeConfigurationRecordersError::Validation(error_message.to_string())
                     }
@@ -2121,7 +2171,6 @@ pub enum DescribeDeliveryChannelStatusError {
     Unknown(String),
 }
 
-
 impl DescribeDeliveryChannelStatusError {
     pub fn from_body(body: &str) -> DescribeDeliveryChannelStatusError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2135,7 +2184,11 @@ impl DescribeDeliveryChannelStatusError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "NoSuchDeliveryChannelException" => DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(String::from(error_message)),
+                    "NoSuchDeliveryChannelException" => {
+                        DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeDeliveryChannelStatusError::Validation(error_message.to_string())
                     }
@@ -2200,7 +2253,6 @@ pub enum DescribeDeliveryChannelsError {
     Unknown(String),
 }
 
-
 impl DescribeDeliveryChannelsError {
     pub fn from_body(body: &str) -> DescribeDeliveryChannelsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2214,7 +2266,11 @@ impl DescribeDeliveryChannelsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "NoSuchDeliveryChannelException" => DescribeDeliveryChannelsError::NoSuchDeliveryChannel(String::from(error_message)),
+                    "NoSuchDeliveryChannelException" => {
+                        DescribeDeliveryChannelsError::NoSuchDeliveryChannel(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeDeliveryChannelsError::Validation(error_message.to_string())
                     }
@@ -2283,7 +2339,6 @@ pub enum GetComplianceDetailsByConfigRuleError {
     Unknown(String),
 }
 
-
 impl GetComplianceDetailsByConfigRuleError {
     pub fn from_body(body: &str) -> GetComplianceDetailsByConfigRuleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2297,9 +2352,21 @@ impl GetComplianceDetailsByConfigRuleError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidNextTokenException" => GetComplianceDetailsByConfigRuleError::InvalidNextToken(String::from(error_message)),
-                    "InvalidParameterValueException" => GetComplianceDetailsByConfigRuleError::InvalidParameterValue(String::from(error_message)),
-                    "NoSuchConfigRuleException" => GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(String::from(error_message)),
+                    "InvalidNextTokenException" => {
+                        GetComplianceDetailsByConfigRuleError::InvalidNextToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        GetComplianceDetailsByConfigRuleError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NoSuchConfigRuleException" => {
+                        GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetComplianceDetailsByConfigRuleError::Validation(error_message.to_string())
                     }
@@ -2366,7 +2433,6 @@ pub enum GetComplianceDetailsByResourceError {
     Unknown(String),
 }
 
-
 impl GetComplianceDetailsByResourceError {
     pub fn from_body(body: &str) -> GetComplianceDetailsByResourceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2380,7 +2446,11 @@ impl GetComplianceDetailsByResourceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterValueException" => GetComplianceDetailsByResourceError::InvalidParameterValue(String::from(error_message)),
+                    "InvalidParameterValueException" => {
+                        GetComplianceDetailsByResourceError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetComplianceDetailsByResourceError::Validation(error_message.to_string())
                     }
@@ -2442,7 +2512,6 @@ pub enum GetComplianceSummaryByConfigRuleError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetComplianceSummaryByConfigRuleError {
     pub fn from_body(body: &str) -> GetComplianceSummaryByConfigRuleError {
@@ -2520,7 +2589,6 @@ pub enum GetComplianceSummaryByResourceTypeError {
     Unknown(String),
 }
 
-
 impl GetComplianceSummaryByResourceTypeError {
     pub fn from_body(body: &str) -> GetComplianceSummaryByResourceTypeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2534,11 +2602,14 @@ impl GetComplianceSummaryByResourceTypeError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterValueException" => GetComplianceSummaryByResourceTypeError::InvalidParameterValue(String::from(error_message)),
-                    "ValidationException" => {
-                        GetComplianceSummaryByResourceTypeError::Validation(error_message
-                                                                                .to_string())
+                    "InvalidParameterValueException" => {
+                        GetComplianceSummaryByResourceTypeError::InvalidParameterValue(
+                            String::from(error_message),
+                        )
                     }
+                    "ValidationException" => GetComplianceSummaryByResourceTypeError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => GetComplianceSummaryByResourceTypeError::Unknown(String::from(body)),
                 }
             }
@@ -2602,7 +2673,6 @@ pub enum GetDiscoveredResourceCountsError {
     Unknown(String),
 }
 
-
 impl GetDiscoveredResourceCountsError {
     pub fn from_body(body: &str) -> GetDiscoveredResourceCountsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2619,7 +2689,11 @@ impl GetDiscoveredResourceCountsError {
                     "InvalidLimitException" => {
                         GetDiscoveredResourceCountsError::InvalidLimit(String::from(error_message))
                     }
-                    "InvalidNextTokenException" => GetDiscoveredResourceCountsError::InvalidNextToken(String::from(error_message)),
+                    "InvalidNextTokenException" => {
+                        GetDiscoveredResourceCountsError::InvalidNextToken(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetDiscoveredResourceCountsError::Validation(error_message.to_string())
                     }
@@ -2693,7 +2767,6 @@ pub enum GetResourceConfigHistoryError {
     Unknown(String),
 }
 
-
 impl GetResourceConfigHistoryError {
     pub fn from_body(body: &str) -> GetResourceConfigHistoryError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2716,8 +2789,16 @@ impl GetResourceConfigHistoryError {
                     "InvalidTimeRangeException" => {
                         GetResourceConfigHistoryError::InvalidTimeRange(String::from(error_message))
                     }
-                    "NoAvailableConfigurationRecorderException" => GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(String::from(error_message)),
-                    "ResourceNotDiscoveredException" => GetResourceConfigHistoryError::ResourceNotDiscovered(String::from(error_message)),
+                    "NoAvailableConfigurationRecorderException" => {
+                        GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(
+                            String::from(error_message),
+                        )
+                    }
+                    "ResourceNotDiscoveredException" => {
+                        GetResourceConfigHistoryError::ResourceNotDiscovered(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetResourceConfigHistoryError::Validation(error_message.to_string())
                     }
@@ -2790,7 +2871,6 @@ pub enum ListDiscoveredResourcesError {
     Unknown(String),
 }
 
-
 impl ListDiscoveredResourcesError {
     pub fn from_body(body: &str) -> ListDiscoveredResourcesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2810,7 +2890,11 @@ impl ListDiscoveredResourcesError {
                     "InvalidNextTokenException" => {
                         ListDiscoveredResourcesError::InvalidNextToken(String::from(error_message))
                     }
-                    "NoAvailableConfigurationRecorderException" => ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(String::from(error_message)),
+                    "NoAvailableConfigurationRecorderException" => {
+                        ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         ListDiscoveredResourcesError::Validation(error_message.to_string())
                     }
@@ -2885,7 +2969,6 @@ pub enum PutConfigRuleError {
     Unknown(String),
 }
 
-
 impl PutConfigRuleError {
     pub fn from_body(body: &str) -> PutConfigRuleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2905,8 +2988,16 @@ impl PutConfigRuleError {
                     "InvalidParameterValueException" => {
                         PutConfigRuleError::InvalidParameterValue(String::from(error_message))
                     }
-                    "MaxNumberOfConfigRulesExceededException" => PutConfigRuleError::MaxNumberOfConfigRulesExceeded(String::from(error_message)),
-                    "NoAvailableConfigurationRecorderException" => PutConfigRuleError::NoAvailableConfigurationRecorder(String::from(error_message)),
+                    "MaxNumberOfConfigRulesExceededException" => {
+                        PutConfigRuleError::MaxNumberOfConfigRulesExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NoAvailableConfigurationRecorderException" => {
+                        PutConfigRuleError::NoAvailableConfigurationRecorder(String::from(
+                            error_message,
+                        ))
+                    }
                     "ResourceInUseException" => {
                         PutConfigRuleError::ResourceInUse(String::from(error_message))
                     }
@@ -2982,7 +3073,6 @@ pub enum PutConfigurationRecorderError {
     Unknown(String),
 }
 
-
 impl PutConfigurationRecorderError {
     pub fn from_body(body: &str) -> PutConfigurationRecorderError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2996,12 +3086,24 @@ impl PutConfigurationRecorderError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidConfigurationRecorderNameException" => PutConfigurationRecorderError::InvalidConfigurationRecorderName(String::from(error_message)),
-                    "InvalidRecordingGroupException" => PutConfigurationRecorderError::InvalidRecordingGroup(String::from(error_message)),
+                    "InvalidConfigurationRecorderNameException" => {
+                        PutConfigurationRecorderError::InvalidConfigurationRecorderName(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidRecordingGroupException" => {
+                        PutConfigurationRecorderError::InvalidRecordingGroup(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidRoleException" => {
                         PutConfigurationRecorderError::InvalidRole(String::from(error_message))
                     }
-                    "MaxNumberOfConfigurationRecordersExceededException" => PutConfigurationRecorderError::MaxNumberOfConfigurationRecordersExceeded(String::from(error_message)),
+                    "MaxNumberOfConfigurationRecordersExceededException" => {
+                        PutConfigurationRecorderError::MaxNumberOfConfigurationRecordersExceeded(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         PutConfigurationRecorderError::Validation(error_message.to_string())
                     }
@@ -3083,7 +3185,6 @@ pub enum PutDeliveryChannelError {
     Unknown(String),
 }
 
-
 impl PutDeliveryChannelError {
     pub fn from_body(body: &str) -> PutDeliveryChannelError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3097,16 +3198,32 @@ impl PutDeliveryChannelError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InsufficientDeliveryPolicyException" => PutDeliveryChannelError::InsufficientDeliveryPolicy(String::from(error_message)),
-                    "InvalidDeliveryChannelNameException" => PutDeliveryChannelError::InvalidDeliveryChannelName(String::from(error_message)),
+                    "InsufficientDeliveryPolicyException" => {
+                        PutDeliveryChannelError::InsufficientDeliveryPolicy(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeliveryChannelNameException" => {
+                        PutDeliveryChannelError::InvalidDeliveryChannelName(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidS3KeyPrefixException" => {
                         PutDeliveryChannelError::InvalidS3KeyPrefix(String::from(error_message))
                     }
                     "InvalidSNSTopicARNException" => {
                         PutDeliveryChannelError::InvalidSNSTopicARN(String::from(error_message))
                     }
-                    "MaxNumberOfDeliveryChannelsExceededException" => PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(String::from(error_message)),
-                    "NoAvailableConfigurationRecorderException" => PutDeliveryChannelError::NoAvailableConfigurationRecorder(String::from(error_message)),
+                    "MaxNumberOfDeliveryChannelsExceededException" => {
+                        PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NoAvailableConfigurationRecorderException" => {
+                        PutDeliveryChannelError::NoAvailableConfigurationRecorder(String::from(
+                            error_message,
+                        ))
+                    }
                     "NoSuchBucketException" => {
                         PutDeliveryChannelError::NoSuchBucket(String::from(error_message))
                     }
@@ -3183,7 +3300,6 @@ pub enum PutEvaluationsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl PutEvaluationsError {
     pub fn from_body(body: &str) -> PutEvaluationsError {
@@ -3277,7 +3393,6 @@ pub enum StartConfigRulesEvaluationError {
     Unknown(String),
 }
 
-
 impl StartConfigRulesEvaluationError {
     pub fn from_body(body: &str) -> StartConfigRulesEvaluationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3291,11 +3406,19 @@ impl StartConfigRulesEvaluationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterValueException" => StartConfigRulesEvaluationError::InvalidParameterValue(String::from(error_message)),
+                    "InvalidParameterValueException" => {
+                        StartConfigRulesEvaluationError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
                     "LimitExceededException" => {
                         StartConfigRulesEvaluationError::LimitExceeded(String::from(error_message))
                     }
-                    "NoSuchConfigRuleException" => StartConfigRulesEvaluationError::NoSuchConfigRule(String::from(error_message)),
+                    "NoSuchConfigRuleException" => {
+                        StartConfigRulesEvaluationError::NoSuchConfigRule(String::from(
+                            error_message,
+                        ))
+                    }
                     "ResourceInUseException" => {
                         StartConfigRulesEvaluationError::ResourceInUse(String::from(error_message))
                     }
@@ -3368,7 +3491,6 @@ pub enum StartConfigurationRecorderError {
     Unknown(String),
 }
 
-
 impl StartConfigurationRecorderError {
     pub fn from_body(body: &str) -> StartConfigurationRecorderError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3382,8 +3504,16 @@ impl StartConfigurationRecorderError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "NoAvailableDeliveryChannelException" => StartConfigurationRecorderError::NoAvailableDeliveryChannel(String::from(error_message)),
-                    "NoSuchConfigurationRecorderException" => StartConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(error_message)),
+                    "NoAvailableDeliveryChannelException" => {
+                        StartConfigurationRecorderError::NoAvailableDeliveryChannel(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NoSuchConfigurationRecorderException" => {
+                        StartConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         StartConfigurationRecorderError::Validation(error_message.to_string())
                     }
@@ -3449,7 +3579,6 @@ pub enum StopConfigurationRecorderError {
     Unknown(String),
 }
 
-
 impl StopConfigurationRecorderError {
     pub fn from_body(body: &str) -> StopConfigurationRecorderError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3463,7 +3592,11 @@ impl StopConfigurationRecorderError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "NoSuchConfigurationRecorderException" => StopConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(error_message)),
+                    "NoSuchConfigurationRecorderException" => {
+                        StopConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         StopConfigurationRecorderError::Validation(error_message.to_string())
                     }
@@ -3516,187 +3649,168 @@ impl Error for StopConfigurationRecorderError {
 /// Trait representing the capabilities of the Config Service API. Config Service clients implement this trait.
 pub trait ConfigService {
     #[doc="<p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>"]
-    fn delete_config_rule(&self,
-                          input: &DeleteConfigRuleRequest)
-                          -> Result<(), DeleteConfigRuleError>;
-
+    fn delete_config_rule(
+        &self,
+        input: &DeleteConfigRuleRequest,
+    ) -> Result<(), DeleteConfigRuleError>;
 
     #[doc="<p>Deletes the configuration recorder.</p> <p>After the configuration recorder is deleted, AWS Config will not record resource configuration changes until you create a new configuration recorder.</p> <p>This action does not delete the configuration information that was previously recorded. You will be able to access the previously recorded information by using the <code>GetResourceConfigHistory</code> action, but you will not be able to access this information in the AWS Config console until you create a new configuration recorder.</p>"]
-    fn delete_configuration_recorder(&self,
-                                     input: &DeleteConfigurationRecorderRequest)
-                                     -> Result<(), DeleteConfigurationRecorderError>;
-
+    fn delete_configuration_recorder(
+        &self,
+        input: &DeleteConfigurationRecorderRequest,
+    ) -> Result<(), DeleteConfigurationRecorderError>;
 
     #[doc="<p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>"]
-    fn delete_delivery_channel(&self,
-                               input: &DeleteDeliveryChannelRequest)
-                               -> Result<(), DeleteDeliveryChannelError>;
-
+    fn delete_delivery_channel(
+        &self,
+        input: &DeleteDeliveryChannelRequest,
+    ) -> Result<(), DeleteDeliveryChannelError>;
 
     #[doc="<p>Deletes the evaluation results for the specified Config rule. You can specify one Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>"]
-    fn delete_evaluation_results
-        (&self,
-         input: &DeleteEvaluationResultsRequest)
-         -> Result<DeleteEvaluationResultsResponse, DeleteEvaluationResultsError>;
-
+    fn delete_evaluation_results(
+        &self,
+        input: &DeleteEvaluationResultsRequest,
+    ) -> Result<DeleteEvaluationResultsResponse, DeleteEvaluationResultsError>;
 
     #[doc="<p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of starting the delivery.</p> </li> <li> <p>Notification of delivery completed, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed to complete.</p> </li> </ul>"]
-    fn deliver_config_snapshot
-        (&self,
-         input: &DeliverConfigSnapshotRequest)
-         -> Result<DeliverConfigSnapshotResponse, DeliverConfigSnapshotError>;
-
+    fn deliver_config_snapshot(
+        &self,
+        input: &DeliverConfigSnapshotRequest,
+    ) -> Result<DeliverConfigSnapshotResponse, DeliverConfigSnapshotError>;
 
     #[doc="<p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it, and it is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT_DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule's AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule's AWS Lambda function has returned <code>NOT_APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule's scope.</p> </li> </ul>"]
-    fn describe_compliance_by_config_rule
-        (&self,
-         input: &DescribeComplianceByConfigRuleRequest)
-         -> Result<DescribeComplianceByConfigRuleResponse, DescribeComplianceByConfigRuleError>;
-
+    fn describe_compliance_by_config_rule(
+        &self,
+        input: &DescribeComplianceByConfigRuleRequest,
+    ) -> Result<DescribeComplianceByConfigRuleResponse, DescribeComplianceByConfigRuleError>;
 
     #[doc="<p>Indicates whether the specified AWS resources are compliant. If a resource is noncompliant, this action returns the number of AWS Config rules that the resource does not comply with.</p> <p>A resource is compliant if it complies with all the AWS Config rules that evaluate it. It is noncompliant if it does not comply with one or more of these rules.</p> <p>If AWS Config has no current evaluation results for the resource, it returns <code>INSUFFICIENT_DATA</code>. This result might indicate one of the following conditions about the rules that evaluate the resource:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule's AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule's AWS Lambda function has returned <code>NOT_APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule's scope.</p> </li> </ul>"]
-    fn describe_compliance_by_resource
-        (&self,
-         input: &DescribeComplianceByResourceRequest)
-         -> Result<DescribeComplianceByResourceResponse, DescribeComplianceByResourceError>;
-
+    fn describe_compliance_by_resource(
+        &self,
+        input: &DescribeComplianceByResourceRequest,
+    ) -> Result<DescribeComplianceByResourceResponse, DescribeComplianceByResourceError>;
 
     #[doc="<p>Returns status information for each of your AWS managed Config rules. The status includes information such as the last time AWS Config invoked the rule, the last time AWS Config failed to invoke the rule, and the related error for the last failure.</p>"]
-    fn describe_config_rule_evaluation_status
-        (&self,
-         input: &DescribeConfigRuleEvaluationStatusRequest)
-         -> Result<DescribeConfigRuleEvaluationStatusResponse,
-                   DescribeConfigRuleEvaluationStatusError>;
+    fn describe_config_rule_evaluation_status(
+        &self,
+        input: &DescribeConfigRuleEvaluationStatusRequest,
+    ) -> Result<DescribeConfigRuleEvaluationStatusResponse, DescribeConfigRuleEvaluationStatusError>;
 
-
-    #[doc="<p>Returns details about your AWS Config rules.</p>"]
-    fn describe_config_rules(&self,
-                             input: &DescribeConfigRulesRequest)
-                             -> Result<DescribeConfigRulesResponse, DescribeConfigRulesError>;
-
+    #[doc = "<p>Returns details about your AWS Config rules.</p>"]
+    fn describe_config_rules(
+        &self,
+        input: &DescribeConfigRulesRequest,
+    ) -> Result<DescribeConfigRulesResponse, DescribeConfigRulesError>;
 
     #[doc="<p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorder associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note>"]
-    fn describe_configuration_recorder_status
-        (&self,
-         input: &DescribeConfigurationRecorderStatusRequest)
-         -> Result<DescribeConfigurationRecorderStatusResponse,
-                   DescribeConfigurationRecorderStatusError>;
-
+    fn describe_configuration_recorder_status(
+        &self,
+        input: &DescribeConfigurationRecorderStatusRequest,
+    ) -> Result<DescribeConfigurationRecorderStatusResponse, DescribeConfigurationRecorderStatusError>;
 
     #[doc="<p>Returns the details for the specified configuration recorders. If the configuration recorder is not specified, this action returns the details for all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note>"]
-    fn describe_configuration_recorders
-        (&self,
-         input: &DescribeConfigurationRecordersRequest)
-         -> Result<DescribeConfigurationRecordersResponse, DescribeConfigurationRecordersError>;
-
+    fn describe_configuration_recorders(
+        &self,
+        input: &DescribeConfigurationRecordersRequest,
+    ) -> Result<DescribeConfigurationRecordersResponse, DescribeConfigurationRecordersError>;
 
     #[doc="<p>Returns the current status of the specified delivery channel. If a delivery channel is not specified, this action returns the current status of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note>"]
-    fn describe_delivery_channel_status
-        (&self,
-         input: &DescribeDeliveryChannelStatusRequest)
-         -> Result<DescribeDeliveryChannelStatusResponse, DescribeDeliveryChannelStatusError>;
-
+    fn describe_delivery_channel_status(
+        &self,
+        input: &DescribeDeliveryChannelStatusRequest,
+    ) -> Result<DescribeDeliveryChannelStatusResponse, DescribeDeliveryChannelStatusError>;
 
     #[doc="<p>Returns details about the specified delivery channel. If a delivery channel is not specified, this action returns the details of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note>"]
-    fn describe_delivery_channels
-        (&self,
-         input: &DescribeDeliveryChannelsRequest)
-         -> Result<DescribeDeliveryChannelsResponse, DescribeDeliveryChannelsError>;
-
+    fn describe_delivery_channels(
+        &self,
+        input: &DescribeDeliveryChannelsRequest,
+    ) -> Result<DescribeDeliveryChannelsResponse, DescribeDeliveryChannelsError>;
 
     #[doc="<p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>"]
-    fn get_compliance_details_by_config_rule
-        (&self,
-         input: &GetComplianceDetailsByConfigRuleRequest)
-         -> Result<GetComplianceDetailsByConfigRuleResponse, GetComplianceDetailsByConfigRuleError>;
-
+    fn get_compliance_details_by_config_rule(
+        &self,
+        input: &GetComplianceDetailsByConfigRuleRequest,
+    ) -> Result<GetComplianceDetailsByConfigRuleResponse, GetComplianceDetailsByConfigRuleError>;
 
     #[doc="<p>Returns the evaluation results for the specified AWS resource. The results indicate which AWS Config rules were used to evaluate the resource, when each rule was last used, and whether the resource complies with each rule.</p>"]
-    fn get_compliance_details_by_resource
-        (&self,
-         input: &GetComplianceDetailsByResourceRequest)
-         -> Result<GetComplianceDetailsByResourceResponse, GetComplianceDetailsByResourceError>;
-
+    fn get_compliance_details_by_resource(
+        &self,
+        input: &GetComplianceDetailsByResourceRequest,
+    ) -> Result<GetComplianceDetailsByResourceResponse, GetComplianceDetailsByResourceError>;
 
     #[doc="<p>Returns the number of AWS Config rules that are compliant and noncompliant, up to a maximum of 25 for each.</p>"]
-    fn get_compliance_summary_by_config_rule
-        (&self)
-         -> Result<GetComplianceSummaryByConfigRuleResponse, GetComplianceSummaryByConfigRuleError>;
-
+    fn get_compliance_summary_by_config_rule(
+        &self,
+    ) -> Result<GetComplianceSummaryByConfigRuleResponse, GetComplianceSummaryByConfigRuleError>;
 
     #[doc="<p>Returns the number of resources that are compliant and the number that are noncompliant. You can specify one or more resource types to get these numbers for each resource type. The maximum number returned is 100.</p>"]
-    fn get_compliance_summary_by_resource_type
-        (&self,
-         input: &GetComplianceSummaryByResourceTypeRequest)
-         -> Result<GetComplianceSummaryByResourceTypeResponse,
-                   GetComplianceSummaryByResourceTypeError>;
-
+    fn get_compliance_summary_by_resource_type(
+        &self,
+        input: &GetComplianceSummaryByResourceTypeRequest,
+    ) -> Result<GetComplianceSummaryByResourceTypeResponse, GetComplianceSummaryByResourceTypeError>;
 
     #[doc="<p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class=\"title\"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets)</p> </li> <li> <p>The number of each resource type (25, 20, and 15)</p> </li> <li> <p>The total number of all resources (60)</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you may not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer</p> </li> <li> <p>You just enabled resource recording</p> </li> </ul> <p>It may take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note>"]
-    fn get_discovered_resource_counts
-        (&self,
-         input: &GetDiscoveredResourceCountsRequest)
-         -> Result<GetDiscoveredResourceCountsResponse, GetDiscoveredResourceCountsError>;
-
+    fn get_discovered_resource_counts(
+        &self,
+        input: &GetDiscoveredResourceCountsRequest,
+    ) -> Result<GetDiscoveredResourceCountsResponse, GetDiscoveredResourceCountsError>;
 
     #[doc="<p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval.</p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note>"]
-    fn get_resource_config_history
-        (&self,
-         input: &GetResourceConfigHistoryRequest)
-         -> Result<GetResourceConfigHistoryResponse, GetResourceConfigHistoryError>;
-
+    fn get_resource_config_history(
+        &self,
+        input: &GetResourceConfigHistoryRequest,
+    ) -> Result<GetResourceConfigHistoryResponse, GetResourceConfigHistoryError>;
 
     #[doc="<p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name but not both in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>"]
-    fn list_discovered_resources
-        (&self,
-         input: &ListDiscoveredResourcesRequest)
-         -> Result<ListDiscoveredResourcesResponse, ListDiscoveredResourcesError>;
-
+    fn list_discovered_resources(
+        &self,
+        input: &ListDiscoveredResourcesRequest,
+    ) -> Result<ListDiscoveredResourcesResponse, ListDiscoveredResourcesError>;
 
     #[doc="<p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config\">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html\">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>"]
     fn put_config_rule(&self, input: &PutConfigRuleRequest) -> Result<(), PutConfigRuleError>;
 
-
     #[doc="<p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> and/or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note>"]
-    fn put_configuration_recorder(&self,
-                                  input: &PutConfigurationRecorderRequest)
-                                  -> Result<(), PutConfigurationRecorderError>;
-
+    fn put_configuration_recorder(
+        &self,
+        input: &PutConfigurationRecorderRequest,
+    ) -> Result<(), PutConfigurationRecorderError>;
 
     #[doc="<p>Creates a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.</p> <p>Before you can create a delivery channel, you must create a configuration recorder.</p> <p>You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.</p> <note> <p>You can have only one delivery channel per region in your account.</p> </note>"]
-    fn put_delivery_channel(&self,
-                            input: &PutDeliveryChannelRequest)
-                            -> Result<(), PutDeliveryChannelError>;
-
+    fn put_delivery_channel(
+        &self,
+        input: &PutDeliveryChannelRequest,
+    ) -> Result<(), PutDeliveryChannelError>;
 
     #[doc="<p>Used by an AWS Lambda function to deliver evaluation results to AWS Config. This action is required in every AWS Lambda function that is invoked by an AWS Config rule.</p>"]
-    fn put_evaluations(&self,
-                       input: &PutEvaluationsRequest)
-                       -> Result<PutEvaluationsResponse, PutEvaluationsError>;
-
+    fn put_evaluations(
+        &self,
+        input: &PutEvaluationsRequest,
+    ) -> Result<PutEvaluationsResponse, PutEvaluationsError>;
 
     #[doc="<p>Runs an on-demand evaluation for the specified Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test a rule that you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources; it re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call must complete for the specified rules before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don't need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a new rule, AWS Config automatically evaluates your resources against the rule. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol>"]
-    fn start_config_rules_evaluation
-        (&self,
-         input: &StartConfigRulesEvaluationRequest)
-         -> Result<StartConfigRulesEvaluationResponse, StartConfigRulesEvaluationError>;
-
+    fn start_config_rules_evaluation(
+        &self,
+        input: &StartConfigRulesEvaluationRequest,
+    ) -> Result<StartConfigRulesEvaluationResponse, StartConfigRulesEvaluationError>;
 
     #[doc="<p>Starts recording configurations of the AWS resources you have selected to record in your AWS account.</p> <p>You must have created at least one delivery channel to successfully start the configuration recorder.</p>"]
-    fn start_configuration_recorder(&self,
-                                    input: &StartConfigurationRecorderRequest)
-                                    -> Result<(), StartConfigurationRecorderError>;
-
+    fn start_configuration_recorder(
+        &self,
+        input: &StartConfigurationRecorderRequest,
+    ) -> Result<(), StartConfigurationRecorderError>;
 
     #[doc="<p>Stops recording configurations of the AWS resources you have selected to record in your AWS account.</p>"]
-    fn stop_configuration_recorder(&self,
-                                   input: &StopConfigurationRecorderRequest)
-                                   -> Result<(), StopConfigurationRecorderError>;
+    fn stop_configuration_recorder(
+        &self,
+        input: &StopConfigurationRecorderRequest,
+    ) -> Result<(), StopConfigurationRecorderError>;
 }
 /// A client for the Config Service API.
 pub struct ConfigServiceClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -3704,8 +3818,9 @@ pub struct ConfigServiceClient<P, D>
 }
 
 impl<P, D> ConfigServiceClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         ConfigServiceClient {
@@ -3717,13 +3832,15 @@ impl<P, D> ConfigServiceClient<P, D>
 }
 
 impl<P, D> ConfigService for ConfigServiceClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>"]
-    fn delete_config_rule(&self,
-                          input: &DeleteConfigRuleRequest)
-                          -> Result<(), DeleteConfigRuleError> {
+    fn delete_config_rule(
+        &self,
+        input: &DeleteConfigRuleRequest,
+    ) -> Result<(), DeleteConfigRuleError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3740,21 +3857,25 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteConfigRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteConfigRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the configuration recorder.</p> <p>After the configuration recorder is deleted, AWS Config will not record resource configuration changes until you create a new configuration recorder.</p> <p>This action does not delete the configuration information that was previously recorded. You will be able to access the previously recorded information by using the <code>GetResourceConfigHistory</code> action, but you will not be able to access this information in the AWS Config console until you create a new configuration recorder.</p>"]
-    fn delete_configuration_recorder(&self,
-                                     input: &DeleteConfigurationRecorderRequest)
-                                     -> Result<(), DeleteConfigurationRecorderError> {
+    fn delete_configuration_recorder(
+        &self,
+        input: &DeleteConfigurationRecorderRequest,
+    ) -> Result<(), DeleteConfigurationRecorderError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.DeleteConfigurationRecorder");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DeleteConfigurationRecorder",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3767,17 +3888,18 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteConfigurationRecorderError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(DeleteConfigurationRecorderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>"]
-    fn delete_delivery_channel(&self,
-                               input: &DeleteDeliveryChannelRequest)
-                               -> Result<(), DeleteDeliveryChannelError> {
+    fn delete_delivery_channel(
+        &self,
+        input: &DeleteDeliveryChannelRequest,
+    ) -> Result<(), DeleteDeliveryChannelError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3794,22 +3916,25 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteDeliveryChannelError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteDeliveryChannelError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the evaluation results for the specified Config rule. You can specify one Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>"]
-    fn delete_evaluation_results
-        (&self,
-         input: &DeleteEvaluationResultsRequest)
-         -> Result<DeleteEvaluationResultsResponse, DeleteEvaluationResultsError> {
+    fn delete_evaluation_results(
+        &self,
+        input: &DeleteEvaluationResultsRequest,
+    ) -> Result<DeleteEvaluationResultsResponse, DeleteEvaluationResultsError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.DeleteEvaluationResults");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DeleteEvaluationResults",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3821,23 +3946,25 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteEvaluationResultsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteEvaluationResultsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteEvaluationResultsError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(DeleteEvaluationResultsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of starting the delivery.</p> </li> <li> <p>Notification of delivery completed, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed to complete.</p> </li> </ul>"]
-    fn deliver_config_snapshot
-        (&self,
-         input: &DeliverConfigSnapshotRequest)
-         -> Result<DeliverConfigSnapshotResponse, DeliverConfigSnapshotError> {
+    fn deliver_config_snapshot(
+        &self,
+        input: &DeliverConfigSnapshotRequest,
+    ) -> Result<DeliverConfigSnapshotResponse, DeliverConfigSnapshotError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3853,27 +3980,32 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeliverConfigSnapshotResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeliverConfigSnapshotResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeliverConfigSnapshotError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeliverConfigSnapshotError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it, and it is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT_DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule's AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule's AWS Lambda function has returned <code>NOT_APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule's scope.</p> </li> </ul>"]
-    fn describe_compliance_by_config_rule
-        (&self,
-         input: &DescribeComplianceByConfigRuleRequest)
-         -> Result<DescribeComplianceByConfigRuleResponse, DescribeComplianceByConfigRuleError> {
+    fn describe_compliance_by_config_rule(
+        &self,
+        input: &DescribeComplianceByConfigRuleRequest,
+    ) -> Result<DescribeComplianceByConfigRuleResponse, DescribeComplianceByConfigRuleError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.DescribeComplianceByConfigRule");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeComplianceByConfigRule",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3885,28 +4017,34 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeComplianceByConfigRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeComplianceByConfigRuleResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeComplianceByConfigRuleError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(DescribeComplianceByConfigRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Indicates whether the specified AWS resources are compliant. If a resource is noncompliant, this action returns the number of AWS Config rules that the resource does not comply with.</p> <p>A resource is compliant if it complies with all the AWS Config rules that evaluate it. It is noncompliant if it does not comply with one or more of these rules.</p> <p>If AWS Config has no current evaluation results for the resource, it returns <code>INSUFFICIENT_DATA</code>. This result might indicate one of the following conditions about the rules that evaluate the resource:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule's AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule's AWS Lambda function has returned <code>NOT_APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule's scope.</p> </li> </ul>"]
-    fn describe_compliance_by_resource
-        (&self,
-         input: &DescribeComplianceByResourceRequest)
-         -> Result<DescribeComplianceByResourceResponse, DescribeComplianceByResourceError> {
+    fn describe_compliance_by_resource(
+        &self,
+        input: &DescribeComplianceByResourceRequest,
+    ) -> Result<DescribeComplianceByResourceResponse, DescribeComplianceByResourceError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.DescribeComplianceByResource");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeComplianceByResource",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3918,29 +4056,35 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeComplianceByResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeComplianceByResourceResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeComplianceByResourceError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(DescribeComplianceByResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns status information for each of your AWS managed Config rules. The status includes information such as the last time AWS Config invoked the rule, the last time AWS Config failed to invoke the rule, and the related error for the last failure.</p>"]
-    fn describe_config_rule_evaluation_status
-        (&self,
-         input: &DescribeConfigRuleEvaluationStatusRequest)
-         -> Result<DescribeConfigRuleEvaluationStatusResponse,
-                   DescribeConfigRuleEvaluationStatusError> {
+    fn describe_config_rule_evaluation_status(
+        &self,
+        input: &DescribeConfigRuleEvaluationStatusRequest,
+    ) -> Result<DescribeConfigRuleEvaluationStatusResponse, DescribeConfigRuleEvaluationStatusError>
+    {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.DescribeConfigRuleEvaluationStatus");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeConfigRuleEvaluationStatus",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3952,21 +4096,27 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeConfigRuleEvaluationStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeConfigRuleEvaluationStatusResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeConfigRuleEvaluationStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeConfigRuleEvaluationStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns details about your AWS Config rules.</p>"]
-    fn describe_config_rules(&self,
-                             input: &DescribeConfigRulesRequest)
-                             -> Result<DescribeConfigRulesResponse, DescribeConfigRulesError> {
+    #[doc = "<p>Returns details about your AWS Config rules.</p>"]
+    fn describe_config_rules(
+        &self,
+        input: &DescribeConfigRulesRequest,
+    ) -> Result<DescribeConfigRulesResponse, DescribeConfigRulesError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3982,28 +4132,33 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeConfigRulesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeConfigRulesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeConfigRulesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeConfigRulesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorder associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note>"]
-    fn describe_configuration_recorder_status
-        (&self,
-         input: &DescribeConfigurationRecorderStatusRequest)
-         -> Result<DescribeConfigurationRecorderStatusResponse,
-                   DescribeConfigurationRecorderStatusError> {
+    fn describe_configuration_recorder_status(
+        &self,
+        input: &DescribeConfigurationRecorderStatusRequest,
+    ) -> Result<DescribeConfigurationRecorderStatusResponse, DescribeConfigurationRecorderStatusError>
+    {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.DescribeConfigurationRecorderStatus");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeConfigurationRecorderStatus",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4015,27 +4170,34 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeConfigurationRecorderStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeConfigurationRecorderStatusResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeConfigurationRecorderStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeConfigurationRecorderStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns the details for the specified configuration recorders. If the configuration recorder is not specified, this action returns the details for all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note>"]
-    fn describe_configuration_recorders
-        (&self,
-         input: &DescribeConfigurationRecordersRequest)
-         -> Result<DescribeConfigurationRecordersResponse, DescribeConfigurationRecordersError> {
+    fn describe_configuration_recorders(
+        &self,
+        input: &DescribeConfigurationRecordersRequest,
+    ) -> Result<DescribeConfigurationRecordersResponse, DescribeConfigurationRecordersError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.DescribeConfigurationRecorders");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeConfigurationRecorders",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4047,28 +4209,34 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeConfigurationRecordersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeConfigurationRecordersResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeConfigurationRecordersError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(DescribeConfigurationRecordersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns the current status of the specified delivery channel. If a delivery channel is not specified, this action returns the current status of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note>"]
-    fn describe_delivery_channel_status
-        (&self,
-         input: &DescribeDeliveryChannelStatusRequest)
-         -> Result<DescribeDeliveryChannelStatusResponse, DescribeDeliveryChannelStatusError> {
+    fn describe_delivery_channel_status(
+        &self,
+        input: &DescribeDeliveryChannelStatusRequest,
+    ) -> Result<DescribeDeliveryChannelStatusResponse, DescribeDeliveryChannelStatusError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.DescribeDeliveryChannelStatus");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeDeliveryChannelStatus",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4080,28 +4248,34 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeDeliveryChannelStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeDeliveryChannelStatusResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeDeliveryChannelStatusError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(DescribeDeliveryChannelStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns details about the specified delivery channel. If a delivery channel is not specified, this action returns the details of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note>"]
-    fn describe_delivery_channels
-        (&self,
-         input: &DescribeDeliveryChannelsRequest)
-         -> Result<DescribeDeliveryChannelsResponse, DescribeDeliveryChannelsError> {
+    fn describe_delivery_channels(
+        &self,
+        input: &DescribeDeliveryChannelsRequest,
+    ) -> Result<DescribeDeliveryChannelsResponse, DescribeDeliveryChannelsError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.DescribeDeliveryChannels");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeDeliveryChannels",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4113,28 +4287,33 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeDeliveryChannelsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeDeliveryChannelsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeDeliveryChannelsError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DescribeDeliveryChannelsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>"]
-    fn get_compliance_details_by_config_rule
-        (&self,
-         input: &GetComplianceDetailsByConfigRuleRequest)
-         -> Result<GetComplianceDetailsByConfigRuleResponse, GetComplianceDetailsByConfigRuleError> {
+    fn get_compliance_details_by_config_rule(
+        &self,
+        input: &GetComplianceDetailsByConfigRuleRequest,
+    ) -> Result<GetComplianceDetailsByConfigRuleResponse, GetComplianceDetailsByConfigRuleError>
+    {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.GetComplianceDetailsByConfigRule");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetComplianceDetailsByConfigRule",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4146,27 +4325,34 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetComplianceDetailsByConfigRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<GetComplianceDetailsByConfigRuleResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetComplianceDetailsByConfigRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetComplianceDetailsByConfigRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns the evaluation results for the specified AWS resource. The results indicate which AWS Config rules were used to evaluate the resource, when each rule was last used, and whether the resource complies with each rule.</p>"]
-    fn get_compliance_details_by_resource
-        (&self,
-         input: &GetComplianceDetailsByResourceRequest)
-         -> Result<GetComplianceDetailsByResourceResponse, GetComplianceDetailsByResourceError> {
+    fn get_compliance_details_by_resource(
+        &self,
+        input: &GetComplianceDetailsByResourceRequest,
+    ) -> Result<GetComplianceDetailsByResourceResponse, GetComplianceDetailsByResourceError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.GetComplianceDetailsByResource");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetComplianceDetailsByResource",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4178,27 +4364,34 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetComplianceDetailsByResourceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<GetComplianceDetailsByResourceResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetComplianceDetailsByResourceError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(GetComplianceDetailsByResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns the number of AWS Config rules that are compliant and noncompliant, up to a maximum of 25 for each.</p>"]
-    fn get_compliance_summary_by_config_rule
-        (&self)
-         -> Result<GetComplianceSummaryByConfigRuleResponse, GetComplianceSummaryByConfigRuleError> {
+    fn get_compliance_summary_by_config_rule(
+        &self,
+    ) -> Result<GetComplianceSummaryByConfigRuleResponse, GetComplianceSummaryByConfigRuleError>
+    {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.GetComplianceSummaryByConfigRule");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetComplianceSummaryByConfigRule",
+        );
         request.set_payload(Some(b"{}".to_vec()));
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
@@ -4209,28 +4402,35 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetComplianceSummaryByConfigRuleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<GetComplianceSummaryByConfigRuleResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetComplianceSummaryByConfigRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetComplianceSummaryByConfigRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns the number of resources that are compliant and the number that are noncompliant. You can specify one or more resource types to get these numbers for each resource type. The maximum number returned is 100.</p>"]
-    fn get_compliance_summary_by_resource_type
-        (&self,
-         input: &GetComplianceSummaryByResourceTypeRequest)
-         -> Result<GetComplianceSummaryByResourceTypeResponse,
-                   GetComplianceSummaryByResourceTypeError> {
+    fn get_compliance_summary_by_resource_type(
+        &self,
+        input: &GetComplianceSummaryByResourceTypeRequest,
+    ) -> Result<GetComplianceSummaryByResourceTypeResponse, GetComplianceSummaryByResourceTypeError>
+    {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.GetComplianceSummaryByResourceType");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetComplianceSummaryByResourceType",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4242,27 +4442,34 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetComplianceSummaryByResourceTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<GetComplianceSummaryByResourceTypeResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetComplianceSummaryByResourceTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetComplianceSummaryByResourceTypeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class=\"title\"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets)</p> </li> <li> <p>The number of each resource type (25, 20, and 15)</p> </li> <li> <p>The total number of all resources (60)</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you may not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer</p> </li> <li> <p>You just enabled resource recording</p> </li> </ul> <p>It may take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note>"]
-    fn get_discovered_resource_counts
-        (&self,
-         input: &GetDiscoveredResourceCountsRequest)
-         -> Result<GetDiscoveredResourceCountsResponse, GetDiscoveredResourceCountsError> {
+    fn get_discovered_resource_counts(
+        &self,
+        input: &GetDiscoveredResourceCountsRequest,
+    ) -> Result<GetDiscoveredResourceCountsResponse, GetDiscoveredResourceCountsError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.GetDiscoveredResourceCounts");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetDiscoveredResourceCounts",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4274,28 +4481,32 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDiscoveredResourceCountsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetDiscoveredResourceCountsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDiscoveredResourceCountsError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(GetDiscoveredResourceCountsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval.</p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note>"]
-    fn get_resource_config_history
-        (&self,
-         input: &GetResourceConfigHistoryRequest)
-         -> Result<GetResourceConfigHistoryResponse, GetResourceConfigHistoryError> {
+    fn get_resource_config_history(
+        &self,
+        input: &GetResourceConfigHistoryRequest,
+    ) -> Result<GetResourceConfigHistoryResponse, GetResourceConfigHistoryError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.GetResourceConfigHistory");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetResourceConfigHistory",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4307,28 +4518,32 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetResourceConfigHistoryResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetResourceConfigHistoryResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetResourceConfigHistoryError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(GetResourceConfigHistoryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name but not both in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>"]
-    fn list_discovered_resources
-        (&self,
-         input: &ListDiscoveredResourcesRequest)
-         -> Result<ListDiscoveredResourcesResponse, ListDiscoveredResourcesError> {
+    fn list_discovered_resources(
+        &self,
+        input: &ListDiscoveredResourcesRequest,
+    ) -> Result<ListDiscoveredResourcesResponse, ListDiscoveredResourcesError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.ListDiscoveredResources");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.ListDiscoveredResources",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4340,17 +4555,19 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListDiscoveredResourcesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListDiscoveredResourcesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDiscoveredResourcesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(ListDiscoveredResourcesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config\">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html\">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>"]
     fn put_config_rule(&self, input: &PutConfigRuleRequest) -> Result<(), PutConfigRuleError> {
@@ -4370,21 +4587,25 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutConfigRuleError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutConfigRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> and/or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note>"]
-    fn put_configuration_recorder(&self,
-                                  input: &PutConfigurationRecorderRequest)
-                                  -> Result<(), PutConfigurationRecorderError> {
+    fn put_configuration_recorder(
+        &self,
+        input: &PutConfigurationRecorderRequest,
+    ) -> Result<(), PutConfigurationRecorderError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.PutConfigurationRecorder");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.PutConfigurationRecorder",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4397,17 +4618,18 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutConfigurationRecorderError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(PutConfigurationRecorderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.</p> <p>Before you can create a delivery channel, you must create a configuration recorder.</p> <p>You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.</p> <note> <p>You can have only one delivery channel per region in your account.</p> </note>"]
-    fn put_delivery_channel(&self,
-                            input: &PutDeliveryChannelRequest)
-                            -> Result<(), PutDeliveryChannelError> {
+    fn put_delivery_channel(
+        &self,
+        input: &PutDeliveryChannelRequest,
+    ) -> Result<(), PutDeliveryChannelError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4424,16 +4646,18 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutDeliveryChannelError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutDeliveryChannelError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Used by an AWS Lambda function to deliver evaluation results to AWS Config. This action is required in every AWS Lambda function that is invoked by an AWS Config rule.</p>"]
-    fn put_evaluations(&self,
-                       input: &PutEvaluationsRequest)
-                       -> Result<PutEvaluationsResponse, PutEvaluationsError> {
+    fn put_evaluations(
+        &self,
+        input: &PutEvaluationsRequest,
+    ) -> Result<PutEvaluationsResponse, PutEvaluationsError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4449,29 +4673,32 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutEvaluationsResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<PutEvaluationsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutEvaluationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutEvaluationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Runs an on-demand evaluation for the specified Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test a rule that you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources; it re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call must complete for the specified rules before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don't need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a new rule, AWS Config automatically evaluates your resources against the rule. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol>"]
-    fn start_config_rules_evaluation
-        (&self,
-         input: &StartConfigRulesEvaluationRequest)
-         -> Result<StartConfigRulesEvaluationResponse, StartConfigRulesEvaluationError> {
+    fn start_config_rules_evaluation(
+        &self,
+        input: &StartConfigRulesEvaluationRequest,
+    ) -> Result<StartConfigRulesEvaluationResponse, StartConfigRulesEvaluationError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.StartConfigRulesEvaluation");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.StartConfigRulesEvaluation",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4483,27 +4710,32 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartConfigRulesEvaluationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StartConfigRulesEvaluationResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartConfigRulesEvaluationError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(StartConfigRulesEvaluationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Starts recording configurations of the AWS resources you have selected to record in your AWS account.</p> <p>You must have created at least one delivery channel to successfully start the configuration recorder.</p>"]
-    fn start_configuration_recorder(&self,
-                                    input: &StartConfigurationRecorderRequest)
-                                    -> Result<(), StartConfigurationRecorderError> {
+    fn start_configuration_recorder(
+        &self,
+        input: &StartConfigurationRecorderRequest,
+    ) -> Result<(), StartConfigurationRecorderError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.StartConfigurationRecorder");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.StartConfigurationRecorder",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4516,22 +4748,25 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartConfigurationRecorderError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(StartConfigurationRecorderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Stops recording configurations of the AWS resources you have selected to record in your AWS account.</p>"]
-    fn stop_configuration_recorder(&self,
-                                   input: &StopConfigurationRecorderRequest)
-                                   -> Result<(), StopConfigurationRecorderError> {
+    fn stop_configuration_recorder(
+        &self,
+        input: &StopConfigurationRecorderRequest,
+    ) -> Result<(), StopConfigurationRecorderError> {
         let mut request = SignedRequest::new("POST", "config", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "StarlingDoveService.StopConfigurationRecorder");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.StopConfigurationRecorder",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4544,8 +4779,9 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopConfigurationRecorderError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(StopConfigurationRecorderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

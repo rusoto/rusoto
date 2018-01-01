@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,355 +27,347 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="Object representing a Connector"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// Object representing a Connector
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Connector {
-    #[serde(rename="associatedOn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "associatedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub associated_on: Option<f64>,
-    #[serde(rename="capabilityList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "capabilityList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub capability_list: Option<Vec<String>>,
-    #[serde(rename="connectorId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "connectorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connector_id: Option<String>,
-    #[serde(rename="ipAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "ipAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    #[serde(rename="macAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "macAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mac_address: Option<String>,
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[serde(rename="version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-    #[serde(rename="vmManagerId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "vmManagerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_manager_id: Option<String>,
-    #[serde(rename="vmManagerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "vmManagerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_manager_name: Option<String>,
-    #[serde(rename="vmManagerType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "vmManagerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_manager_type: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateReplicationJobRequest {
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[serde(rename="frequency")]
-    pub frequency: i64,
-    #[serde(rename="licenseType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "frequency")] pub frequency: i64,
+    #[serde(rename = "licenseType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub license_type: Option<String>,
-    #[serde(rename="roleName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "roleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,
-    #[serde(rename="seedReplicationTime")]
-    pub seed_replication_time: f64,
-    #[serde(rename="serverId")]
-    pub server_id: String,
+    #[serde(rename = "seedReplicationTime")] pub seed_replication_time: f64,
+    #[serde(rename = "serverId")] pub server_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateReplicationJobResponse {
-    #[serde(rename="replicationJobId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "replicationJobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_job_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteReplicationJobRequest {
-    #[serde(rename="replicationJobId")]
-    pub replication_job_id: String,
+    #[serde(rename = "replicationJobId")] pub replication_job_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteReplicationJobResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteServerCatalogRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteServerCatalogResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateConnectorRequest {
-    #[serde(rename="connectorId")]
-    pub connector_id: String,
+    #[serde(rename = "connectorId")] pub connector_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisassociateConnectorResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetConnectorsRequest {
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetConnectorsResponse {
-    #[serde(rename="connectorList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "connectorList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub connector_list: Option<Vec<Connector>>,
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetReplicationJobsRequest {
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[serde(rename="replicationJobId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "replicationJobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_job_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetReplicationJobsResponse {
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[serde(rename="replicationJobList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "replicationJobList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_job_list: Option<Vec<ReplicationJob>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetReplicationRunsRequest {
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[serde(rename="replicationJobId")]
-    pub replication_job_id: String,
+    #[serde(rename = "replicationJobId")] pub replication_job_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetReplicationRunsResponse {
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[serde(rename="replicationJob")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "replicationJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_job: Option<ReplicationJob>,
-    #[serde(rename="replicationRunList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "replicationRunList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_run_list: Option<Vec<ReplicationRun>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetServersRequest {
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetServersResponse {
-    #[serde(rename="lastModifiedOn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "lastModifiedOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_on: Option<f64>,
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[serde(rename="serverCatalogStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "serverCatalogStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_catalog_status: Option<String>,
-    #[serde(rename="serverList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "serverList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_list: Option<Vec<Server>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ImportServerCatalogRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ImportServerCatalogResponse;
 
-#[doc="Object representing a Replication Job"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// Object representing a Replication Job
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationJob {
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[serde(rename="frequency")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "frequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<i64>,
-    #[serde(rename="latestAmiId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "latestAmiId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_ami_id: Option<String>,
-    #[serde(rename="licenseType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "licenseType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub license_type: Option<String>,
-    #[serde(rename="nextReplicationRunStartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextReplicationRunStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_replication_run_start_time: Option<f64>,
-    #[serde(rename="replicationJobId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "replicationJobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_job_id: Option<String>,
-    #[serde(rename="replicationRunList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "replicationRunList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_run_list: Option<Vec<ReplicationRun>>,
-    #[serde(rename="roleName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "roleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,
-    #[serde(rename="seedReplicationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "seedReplicationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub seed_replication_time: Option<f64>,
-    #[serde(rename="serverId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "serverId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_id: Option<String>,
-    #[serde(rename="serverType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "serverType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_type: Option<String>,
-    #[serde(rename="state")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "state")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    #[serde(rename="statusMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "statusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
-    #[serde(rename="vmServer")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "vmServer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_server: Option<VmServer>,
 }
 
-#[doc="Object representing a Replication Run"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// Object representing a Replication Run
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationRun {
-    #[serde(rename="amiId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "amiId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_id: Option<String>,
-    #[serde(rename="completedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "completedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub completed_time: Option<f64>,
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[serde(rename="replicationRunId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "replicationRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_run_id: Option<String>,
-    #[serde(rename="scheduledStartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "scheduledStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub scheduled_start_time: Option<f64>,
-    #[serde(rename="state")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "state")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    #[serde(rename="statusMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "statusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="Object representing a server"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// Object representing a server
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Server {
-    #[serde(rename="replicationJobId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "replicationJobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_job_id: Option<String>,
-    #[serde(rename="replicationJobTerminated")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "replicationJobTerminated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_job_terminated: Option<bool>,
-    #[serde(rename="serverId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "serverId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_id: Option<String>,
-    #[serde(rename="serverType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "serverType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub server_type: Option<String>,
-    #[serde(rename="vmServer")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "vmServer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_server: Option<VmServer>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartOnDemandReplicationRunRequest {
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[serde(rename="replicationJobId")]
-    pub replication_job_id: String,
+    #[serde(rename = "replicationJobId")] pub replication_job_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartOnDemandReplicationRunResponse {
-    #[serde(rename="replicationRunId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "replicationRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_run_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateReplicationJobRequest {
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[serde(rename="frequency")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "frequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<i64>,
-    #[serde(rename="licenseType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "licenseType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub license_type: Option<String>,
-    #[serde(rename="nextReplicationRunStartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextReplicationRunStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_replication_run_start_time: Option<f64>,
-    #[serde(rename="replicationJobId")]
-    pub replication_job_id: String,
-    #[serde(rename="roleName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "replicationJobId")] pub replication_job_id: String,
+    #[serde(rename = "roleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateReplicationJobResponse;
 
-#[doc="Object representing a VM server"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// Object representing a VM server
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct VmServer {
-    #[serde(rename="vmManagerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "vmManagerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_manager_name: Option<String>,
-    #[serde(rename="vmManagerType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "vmManagerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_manager_type: Option<String>,
-    #[serde(rename="vmName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "vmName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_name: Option<String>,
-    #[serde(rename="vmPath")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "vmPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_path: Option<String>,
-    #[serde(rename="vmServerAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "vmServerAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_server_address: Option<VmServerAddress>,
 }
 
-#[doc="Object representing a server's location"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// Object representing a server's location
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct VmServerAddress {
-    #[serde(rename="vmId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "vmId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_id: Option<String>,
-    #[serde(rename="vmManagerId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "vmManagerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vm_manager_id: Option<String>,
 }
 
@@ -409,7 +400,6 @@ pub enum CreateReplicationJobError {
     Unknown(String),
 }
 
-
 impl CreateReplicationJobError {
     pub fn from_body(body: &str) -> CreateReplicationJobError {
         match from_str::<SerdeJsonValue>(body) {
@@ -429,12 +419,36 @@ impl CreateReplicationJobError {
                     "InvalidParameterException" => {
                         CreateReplicationJobError::InvalidParameter(String::from(error_message))
                     }
-                    "MissingRequiredParameterException" => CreateReplicationJobError::MissingRequiredParameter(String::from(error_message)),
-                    "NoConnectorsAvailableException" => CreateReplicationJobError::NoConnectorsAvailable(String::from(error_message)),
-                    "OperationNotPermittedException" => CreateReplicationJobError::OperationNotPermitted(String::from(error_message)),
-                    "ReplicationJobAlreadyExistsException" => CreateReplicationJobError::ReplicationJobAlreadyExists(String::from(error_message)),
-                    "ServerCannotBeReplicatedException" => CreateReplicationJobError::ServerCannotBeReplicated(String::from(error_message)),
-                    "UnauthorizedOperationException" => CreateReplicationJobError::UnauthorizedOperation(String::from(error_message)),
+                    "MissingRequiredParameterException" => {
+                        CreateReplicationJobError::MissingRequiredParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NoConnectorsAvailableException" => {
+                        CreateReplicationJobError::NoConnectorsAvailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OperationNotPermittedException" => {
+                        CreateReplicationJobError::OperationNotPermitted(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ReplicationJobAlreadyExistsException" => {
+                        CreateReplicationJobError::ReplicationJobAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServerCannotBeReplicatedException" => {
+                        CreateReplicationJobError::ServerCannotBeReplicated(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperationException" => {
+                        CreateReplicationJobError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateReplicationJobError::Validation(error_message.to_string())
                     }
@@ -514,7 +528,6 @@ pub enum DeleteReplicationJobError {
     Unknown(String),
 }
 
-
 impl DeleteReplicationJobError {
     pub fn from_body(body: &str) -> DeleteReplicationJobError {
         match from_str::<SerdeJsonValue>(body) {
@@ -531,10 +544,26 @@ impl DeleteReplicationJobError {
                     "InvalidParameterException" => {
                         DeleteReplicationJobError::InvalidParameter(String::from(error_message))
                     }
-                    "MissingRequiredParameterException" => DeleteReplicationJobError::MissingRequiredParameter(String::from(error_message)),
-                    "OperationNotPermittedException" => DeleteReplicationJobError::OperationNotPermitted(String::from(error_message)),
-                    "ReplicationJobNotFoundException" => DeleteReplicationJobError::ReplicationJobNotFound(String::from(error_message)),
-                    "UnauthorizedOperationException" => DeleteReplicationJobError::UnauthorizedOperation(String::from(error_message)),
+                    "MissingRequiredParameterException" => {
+                        DeleteReplicationJobError::MissingRequiredParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OperationNotPermittedException" => {
+                        DeleteReplicationJobError::OperationNotPermitted(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ReplicationJobNotFoundException" => {
+                        DeleteReplicationJobError::ReplicationJobNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperationException" => {
+                        DeleteReplicationJobError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteReplicationJobError::Validation(error_message.to_string())
                     }
@@ -609,7 +638,6 @@ pub enum DeleteServerCatalogError {
     Unknown(String),
 }
 
-
 impl DeleteServerCatalogError {
     pub fn from_body(body: &str) -> DeleteServerCatalogError {
         match from_str::<SerdeJsonValue>(body) {
@@ -626,7 +654,11 @@ impl DeleteServerCatalogError {
                     "InvalidParameterException" => {
                         DeleteServerCatalogError::InvalidParameter(String::from(error_message))
                     }
-                    "MissingRequiredParameterException" => DeleteServerCatalogError::MissingRequiredParameter(String::from(error_message)),
+                    "MissingRequiredParameterException" => {
+                        DeleteServerCatalogError::MissingRequiredParameter(String::from(
+                            error_message,
+                        ))
+                    }
                     "OperationNotPermittedException" => {
                         DeleteServerCatalogError::OperationNotPermitted(String::from(error_message))
                     }
@@ -706,7 +738,6 @@ pub enum DisassociateConnectorError {
     Unknown(String),
 }
 
-
 impl DisassociateConnectorError {
     pub fn from_body(body: &str) -> DisassociateConnectorError {
         match from_str::<SerdeJsonValue>(body) {
@@ -723,9 +754,21 @@ impl DisassociateConnectorError {
                     "InvalidParameterException" => {
                         DisassociateConnectorError::InvalidParameter(String::from(error_message))
                     }
-                    "MissingRequiredParameterException" => DisassociateConnectorError::MissingRequiredParameter(String::from(error_message)),
-                    "OperationNotPermittedException" => DisassociateConnectorError::OperationNotPermitted(String::from(error_message)),
-                    "UnauthorizedOperationException" => DisassociateConnectorError::UnauthorizedOperation(String::from(error_message)),
+                    "MissingRequiredParameterException" => {
+                        DisassociateConnectorError::MissingRequiredParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OperationNotPermittedException" => {
+                        DisassociateConnectorError::OperationNotPermitted(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperationException" => {
+                        DisassociateConnectorError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DisassociateConnectorError::Validation(error_message.to_string())
                     }
@@ -792,7 +835,6 @@ pub enum GetConnectorsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetConnectorsError {
     pub fn from_body(body: &str) -> GetConnectorsError {
@@ -876,7 +918,6 @@ pub enum GetReplicationJobsError {
     Unknown(String),
 }
 
-
 impl GetReplicationJobsError {
     pub fn from_body(body: &str) -> GetReplicationJobsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -893,7 +934,11 @@ impl GetReplicationJobsError {
                     "InvalidParameterException" => {
                         GetReplicationJobsError::InvalidParameter(String::from(error_message))
                     }
-                    "MissingRequiredParameterException" => GetReplicationJobsError::MissingRequiredParameter(String::from(error_message)),
+                    "MissingRequiredParameterException" => {
+                        GetReplicationJobsError::MissingRequiredParameter(String::from(
+                            error_message,
+                        ))
+                    }
                     "UnauthorizedOperationException" => {
                         GetReplicationJobsError::UnauthorizedOperation(String::from(error_message))
                     }
@@ -967,7 +1012,6 @@ pub enum GetReplicationRunsError {
     Unknown(String),
 }
 
-
 impl GetReplicationRunsError {
     pub fn from_body(body: &str) -> GetReplicationRunsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -984,7 +1028,11 @@ impl GetReplicationRunsError {
                     "InvalidParameterException" => {
                         GetReplicationRunsError::InvalidParameter(String::from(error_message))
                     }
-                    "MissingRequiredParameterException" => GetReplicationRunsError::MissingRequiredParameter(String::from(error_message)),
+                    "MissingRequiredParameterException" => {
+                        GetReplicationRunsError::MissingRequiredParameter(String::from(
+                            error_message,
+                        ))
+                    }
                     "UnauthorizedOperationException" => {
                         GetReplicationRunsError::UnauthorizedOperation(String::from(error_message))
                     }
@@ -1053,7 +1101,6 @@ pub enum GetServersError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetServersError {
     pub fn from_body(body: &str) -> GetServersError {
@@ -1139,7 +1186,6 @@ pub enum ImportServerCatalogError {
     Unknown(String),
 }
 
-
 impl ImportServerCatalogError {
     pub fn from_body(body: &str) -> ImportServerCatalogError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1156,7 +1202,11 @@ impl ImportServerCatalogError {
                     "InvalidParameterException" => {
                         ImportServerCatalogError::InvalidParameter(String::from(error_message))
                     }
-                    "MissingRequiredParameterException" => ImportServerCatalogError::MissingRequiredParameter(String::from(error_message)),
+                    "MissingRequiredParameterException" => {
+                        ImportServerCatalogError::MissingRequiredParameter(String::from(
+                            error_message,
+                        ))
+                    }
                     "NoConnectorsAvailableException" => {
                         ImportServerCatalogError::NoConnectorsAvailable(String::from(error_message))
                     }
@@ -1242,7 +1292,6 @@ pub enum StartOnDemandReplicationRunError {
     Unknown(String),
 }
 
-
 impl StartOnDemandReplicationRunError {
     pub fn from_body(body: &str) -> StartOnDemandReplicationRunError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1256,11 +1305,31 @@ impl StartOnDemandReplicationRunError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterException" => StartOnDemandReplicationRunError::InvalidParameter(String::from(error_message)),
-                    "MissingRequiredParameterException" => StartOnDemandReplicationRunError::MissingRequiredParameter(String::from(error_message)),
-                    "OperationNotPermittedException" => StartOnDemandReplicationRunError::OperationNotPermitted(String::from(error_message)),
-                    "ReplicationRunLimitExceededException" => StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(String::from(error_message)),
-                    "UnauthorizedOperationException" => StartOnDemandReplicationRunError::UnauthorizedOperation(String::from(error_message)),
+                    "InvalidParameterException" => {
+                        StartOnDemandReplicationRunError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "MissingRequiredParameterException" => {
+                        StartOnDemandReplicationRunError::MissingRequiredParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OperationNotPermittedException" => {
+                        StartOnDemandReplicationRunError::OperationNotPermitted(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ReplicationRunLimitExceededException" => {
+                        StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(
+                            String::from(error_message),
+                        )
+                    }
+                    "UnauthorizedOperationException" => {
+                        StartOnDemandReplicationRunError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         StartOnDemandReplicationRunError::Validation(error_message.to_string())
                     }
@@ -1341,7 +1410,6 @@ pub enum UpdateReplicationJobError {
     Unknown(String),
 }
 
-
 impl UpdateReplicationJobError {
     pub fn from_body(body: &str) -> UpdateReplicationJobError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1361,11 +1429,31 @@ impl UpdateReplicationJobError {
                     "InvalidParameterException" => {
                         UpdateReplicationJobError::InvalidParameter(String::from(error_message))
                     }
-                    "MissingRequiredParameterException" => UpdateReplicationJobError::MissingRequiredParameter(String::from(error_message)),
-                    "OperationNotPermittedException" => UpdateReplicationJobError::OperationNotPermitted(String::from(error_message)),
-                    "ReplicationJobNotFoundException" => UpdateReplicationJobError::ReplicationJobNotFound(String::from(error_message)),
-                    "ServerCannotBeReplicatedException" => UpdateReplicationJobError::ServerCannotBeReplicated(String::from(error_message)),
-                    "UnauthorizedOperationException" => UpdateReplicationJobError::UnauthorizedOperation(String::from(error_message)),
+                    "MissingRequiredParameterException" => {
+                        UpdateReplicationJobError::MissingRequiredParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OperationNotPermittedException" => {
+                        UpdateReplicationJobError::OperationNotPermitted(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ReplicationJobNotFoundException" => {
+                        UpdateReplicationJobError::ReplicationJobNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServerCannotBeReplicatedException" => {
+                        UpdateReplicationJobError::ServerCannotBeReplicated(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedOperationException" => {
+                        UpdateReplicationJobError::UnauthorizedOperation(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         UpdateReplicationJobError::Validation(error_message.to_string())
                     }
@@ -1424,77 +1512,72 @@ impl Error for UpdateReplicationJobError {
 /// Trait representing the capabilities of the SMS API. SMS clients implement this trait.
 pub trait ServerMigrationService {
     #[doc="The CreateReplicationJob API is used to create a ReplicationJob to replicate a server on AWS. Call this API to first create a ReplicationJob, which will then schedule periodic ReplicationRuns to replicate your server to AWS. Each ReplicationRun will result in the creation of an AWS AMI."]
-    fn create_replication_job
-        (&self,
-         input: &CreateReplicationJobRequest)
-         -> Result<CreateReplicationJobResponse, CreateReplicationJobError>;
-
+    fn create_replication_job(
+        &self,
+        input: &CreateReplicationJobRequest,
+    ) -> Result<CreateReplicationJobResponse, CreateReplicationJobError>;
 
     #[doc="The DeleteReplicationJob API is used to delete a ReplicationJob, resulting in no further ReplicationRuns. This will delete the contents of the S3 bucket used to store SMS artifacts, but will not delete any AMIs created by the SMS service."]
-    fn delete_replication_job
-        (&self,
-         input: &DeleteReplicationJobRequest)
-         -> Result<DeleteReplicationJobResponse, DeleteReplicationJobError>;
-
+    fn delete_replication_job(
+        &self,
+        input: &DeleteReplicationJobRequest,
+    ) -> Result<DeleteReplicationJobResponse, DeleteReplicationJobError>;
 
     #[doc="The DeleteServerCatalog API clears all servers from your server catalog. This means that these servers will no longer be accessible to the Server Migration Service."]
-    fn delete_server_catalog(&self)
-                             -> Result<DeleteServerCatalogResponse, DeleteServerCatalogError>;
-
+    fn delete_server_catalog(
+        &self,
+    ) -> Result<DeleteServerCatalogResponse, DeleteServerCatalogError>;
 
     #[doc="The DisassociateConnector API will disassociate a connector from the Server Migration Service, rendering it unavailable to support replication jobs."]
-    fn disassociate_connector
-        (&self,
-         input: &DisassociateConnectorRequest)
-         -> Result<DisassociateConnectorResponse, DisassociateConnectorError>;
-
+    fn disassociate_connector(
+        &self,
+        input: &DisassociateConnectorRequest,
+    ) -> Result<DisassociateConnectorResponse, DisassociateConnectorError>;
 
     #[doc="The GetConnectors API returns a list of connectors that are registered with the Server Migration Service."]
-    fn get_connectors(&self,
-                      input: &GetConnectorsRequest)
-                      -> Result<GetConnectorsResponse, GetConnectorsError>;
-
+    fn get_connectors(
+        &self,
+        input: &GetConnectorsRequest,
+    ) -> Result<GetConnectorsResponse, GetConnectorsError>;
 
     #[doc="The GetReplicationJobs API will return all of your ReplicationJobs and their details. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationJobs."]
-    fn get_replication_jobs(&self,
-                            input: &GetReplicationJobsRequest)
-                            -> Result<GetReplicationJobsResponse, GetReplicationJobsError>;
-
+    fn get_replication_jobs(
+        &self,
+        input: &GetReplicationJobsRequest,
+    ) -> Result<GetReplicationJobsResponse, GetReplicationJobsError>;
 
     #[doc="The GetReplicationRuns API will return all ReplicationRuns for a given ReplicationJob. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationRuns for a ReplicationJob."]
-    fn get_replication_runs(&self,
-                            input: &GetReplicationRunsRequest)
-                            -> Result<GetReplicationRunsResponse, GetReplicationRunsError>;
-
+    fn get_replication_runs(
+        &self,
+        input: &GetReplicationRunsRequest,
+    ) -> Result<GetReplicationRunsResponse, GetReplicationRunsError>;
 
     #[doc="The GetServers API returns a list of all servers in your server catalog. For this call to succeed, you must previously have called ImportServerCatalog."]
-    fn get_servers(&self,
-                   input: &GetServersRequest)
-                   -> Result<GetServersResponse, GetServersError>;
-
+    fn get_servers(&self, input: &GetServersRequest)
+        -> Result<GetServersResponse, GetServersError>;
 
     #[doc="The ImportServerCatalog API is used to gather the complete list of on-premises servers on your premises. This API call requires connectors to be installed and monitoring all servers you would like imported. This API call returns immediately, but may take some time to retrieve all of the servers."]
-    fn import_server_catalog(&self)
-                             -> Result<ImportServerCatalogResponse, ImportServerCatalogError>;
-
+    fn import_server_catalog(
+        &self,
+    ) -> Result<ImportServerCatalogResponse, ImportServerCatalogError>;
 
     #[doc="The StartOnDemandReplicationRun API is used to start a ReplicationRun on demand (in addition to those that are scheduled based on your frequency). This ReplicationRun will start immediately. StartOnDemandReplicationRun is subject to limits on how many on demand ReplicationRuns you may call per 24-hour period."]
-    fn start_on_demand_replication_run
-        (&self,
-         input: &StartOnDemandReplicationRunRequest)
-         -> Result<StartOnDemandReplicationRunResponse, StartOnDemandReplicationRunError>;
-
+    fn start_on_demand_replication_run(
+        &self,
+        input: &StartOnDemandReplicationRunRequest,
+    ) -> Result<StartOnDemandReplicationRunResponse, StartOnDemandReplicationRunError>;
 
     #[doc="The UpdateReplicationJob API is used to change the settings of your existing ReplicationJob created using CreateReplicationJob. Calling this API will affect the next scheduled ReplicationRun."]
-    fn update_replication_job
-        (&self,
-         input: &UpdateReplicationJobRequest)
-         -> Result<UpdateReplicationJobResponse, UpdateReplicationJobError>;
+    fn update_replication_job(
+        &self,
+        input: &UpdateReplicationJobRequest,
+    ) -> Result<UpdateReplicationJobResponse, UpdateReplicationJobError>;
 }
 /// A client for the SMS API.
 pub struct ServerMigrationServiceClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -1502,8 +1585,9 @@ pub struct ServerMigrationServiceClient<P, D>
 }
 
 impl<P, D> ServerMigrationServiceClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         ServerMigrationServiceClient {
@@ -1515,19 +1599,22 @@ impl<P, D> ServerMigrationServiceClient<P, D>
 }
 
 impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="The CreateReplicationJob API is used to create a ReplicationJob to replicate a server on AWS. Call this API to first create a ReplicationJob, which will then schedule periodic ReplicationRuns to replicate your server to AWS. Each ReplicationRun will result in the creation of an AWS AMI."]
-    fn create_replication_job
-        (&self,
-         input: &CreateReplicationJobRequest)
-         -> Result<CreateReplicationJobResponse, CreateReplicationJobError> {
+    fn create_replication_job(
+        &self,
+        input: &CreateReplicationJobRequest,
+    ) -> Result<CreateReplicationJobResponse, CreateReplicationJobError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSServerMigrationService_V2016_10_24.CreateReplicationJob");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.CreateReplicationJob",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -1539,27 +1626,32 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateReplicationJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateReplicationJobResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateReplicationJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateReplicationJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="The DeleteReplicationJob API is used to delete a ReplicationJob, resulting in no further ReplicationRuns. This will delete the contents of the S3 bucket used to store SMS artifacts, but will not delete any AMIs created by the SMS service."]
-    fn delete_replication_job
-        (&self,
-         input: &DeleteReplicationJobRequest)
-         -> Result<DeleteReplicationJobResponse, DeleteReplicationJobError> {
+    fn delete_replication_job(
+        &self,
+        input: &DeleteReplicationJobRequest,
+    ) -> Result<DeleteReplicationJobResponse, DeleteReplicationJobError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSServerMigrationService_V2016_10_24.DeleteReplicationJob");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.DeleteReplicationJob",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -1571,25 +1663,31 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteReplicationJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteReplicationJobResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteReplicationJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteReplicationJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="The DeleteServerCatalog API clears all servers from your server catalog. This means that these servers will no longer be accessible to the Server Migration Service."]
-    fn delete_server_catalog(&self)
-                             -> Result<DeleteServerCatalogResponse, DeleteServerCatalogError> {
+    fn delete_server_catalog(
+        &self,
+    ) -> Result<DeleteServerCatalogResponse, DeleteServerCatalogError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSServerMigrationService_V2016_10_24.DeleteServerCatalog");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.DeleteServerCatalog",
+        );
         request.set_payload(Some(b"{}".to_vec()));
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
@@ -1600,27 +1698,32 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteServerCatalogResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteServerCatalogResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteServerCatalogError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteServerCatalogError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="The DisassociateConnector API will disassociate a connector from the Server Migration Service, rendering it unavailable to support replication jobs."]
-    fn disassociate_connector
-        (&self,
-         input: &DisassociateConnectorRequest)
-         -> Result<DisassociateConnectorResponse, DisassociateConnectorError> {
+    fn disassociate_connector(
+        &self,
+        input: &DisassociateConnectorRequest,
+    ) -> Result<DisassociateConnectorResponse, DisassociateConnectorError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSServerMigrationService_V2016_10_24.DisassociateConnector");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.DisassociateConnector",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -1632,26 +1735,32 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociateConnectorResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DisassociateConnectorResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisassociateConnectorError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DisassociateConnectorError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="The GetConnectors API returns a list of connectors that are registered with the Server Migration Service."]
-    fn get_connectors(&self,
-                      input: &GetConnectorsRequest)
-                      -> Result<GetConnectorsResponse, GetConnectorsError> {
+    fn get_connectors(
+        &self,
+        input: &GetConnectorsRequest,
+    ) -> Result<GetConnectorsResponse, GetConnectorsError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSServerMigrationService_V2016_10_24.GetConnectors");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.GetConnectors",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -1663,28 +1772,32 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetConnectorsResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetConnectorsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetConnectorsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetConnectorsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="The GetReplicationJobs API will return all of your ReplicationJobs and their details. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationJobs."]
-    fn get_replication_jobs(&self,
-                            input: &GetReplicationJobsRequest)
-                            -> Result<GetReplicationJobsResponse, GetReplicationJobsError> {
+    fn get_replication_jobs(
+        &self,
+        input: &GetReplicationJobsRequest,
+    ) -> Result<GetReplicationJobsResponse, GetReplicationJobsError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSServerMigrationService_V2016_10_24.GetReplicationJobs");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.GetReplicationJobs",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -1696,26 +1809,32 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetReplicationJobsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetReplicationJobsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetReplicationJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetReplicationJobsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="The GetReplicationRuns API will return all ReplicationRuns for a given ReplicationJob. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationRuns for a ReplicationJob."]
-    fn get_replication_runs(&self,
-                            input: &GetReplicationRunsRequest)
-                            -> Result<GetReplicationRunsResponse, GetReplicationRunsError> {
+    fn get_replication_runs(
+        &self,
+        input: &GetReplicationRunsRequest,
+    ) -> Result<GetReplicationRunsResponse, GetReplicationRunsError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSServerMigrationService_V2016_10_24.GetReplicationRuns");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.GetReplicationRuns",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -1727,26 +1846,32 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetReplicationRunsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetReplicationRunsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetReplicationRunsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetReplicationRunsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="The GetServers API returns a list of all servers in your server catalog. For this call to succeed, you must previously have called ImportServerCatalog."]
-    fn get_servers(&self,
-                   input: &GetServersRequest)
-                   -> Result<GetServersResponse, GetServersError> {
+    fn get_servers(
+        &self,
+        input: &GetServersRequest,
+    ) -> Result<GetServersResponse, GetServersError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSServerMigrationService_V2016_10_24.GetServers");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.GetServers",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -1758,27 +1883,31 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetServersResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetServersResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetServersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetServersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="The ImportServerCatalog API is used to gather the complete list of on-premises servers on your premises. This API call requires connectors to be installed and monitoring all servers you would like imported. This API call returns immediately, but may take some time to retrieve all of the servers."]
-    fn import_server_catalog(&self)
-                             -> Result<ImportServerCatalogResponse, ImportServerCatalogError> {
+    fn import_server_catalog(
+        &self,
+    ) -> Result<ImportServerCatalogResponse, ImportServerCatalogError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSServerMigrationService_V2016_10_24.ImportServerCatalog");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.ImportServerCatalog",
+        );
         request.set_payload(Some(b"{}".to_vec()));
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
@@ -1789,27 +1918,32 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ImportServerCatalogResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ImportServerCatalogResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ImportServerCatalogError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ImportServerCatalogError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="The StartOnDemandReplicationRun API is used to start a ReplicationRun on demand (in addition to those that are scheduled based on your frequency). This ReplicationRun will start immediately. StartOnDemandReplicationRun is subject to limits on how many on demand ReplicationRuns you may call per 24-hour period."]
-    fn start_on_demand_replication_run
-        (&self,
-         input: &StartOnDemandReplicationRunRequest)
-         -> Result<StartOnDemandReplicationRunResponse, StartOnDemandReplicationRunError> {
+    fn start_on_demand_replication_run(
+        &self,
+        input: &StartOnDemandReplicationRunRequest,
+    ) -> Result<StartOnDemandReplicationRunResponse, StartOnDemandReplicationRunError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSServerMigrationService_V2016_10_24.StartOnDemandReplicationRun");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.StartOnDemandReplicationRun",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -1821,28 +1955,32 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartOnDemandReplicationRunResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StartOnDemandReplicationRunResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartOnDemandReplicationRunError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(StartOnDemandReplicationRunError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="The UpdateReplicationJob API is used to change the settings of your existing ReplicationJob created using CreateReplicationJob. Calling this API will affect the next scheduled ReplicationRun."]
-    fn update_replication_job
-        (&self,
-         input: &UpdateReplicationJobRequest)
-         -> Result<UpdateReplicationJobResponse, UpdateReplicationJobError> {
+    fn update_replication_job(
+        &self,
+        input: &UpdateReplicationJobRequest,
+    ) -> Result<UpdateReplicationJobResponse, UpdateReplicationJobError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSServerMigrationService_V2016_10_24.UpdateReplicationJob");
+        request.add_header(
+            "x-amz-target",
+            "AWSServerMigrationService_V2016_10_24.UpdateReplicationJob",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -1854,12 +1992,16 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateReplicationJobResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateReplicationJobResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateReplicationJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateReplicationJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

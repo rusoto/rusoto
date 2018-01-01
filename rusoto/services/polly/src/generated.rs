@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -29,208 +28,208 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteLexiconInput {
-    #[doc="<p>The name of the lexicon to delete. Must be an existing lexicon in the region.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the lexicon to delete. Must be an existing lexicon in the region.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteLexiconOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeVoicesInput {
-    #[doc="<p> The language identification tag (ISO 639 code for the language name-ISO 3166 country code) for filtering the list of voices returned. If you don't specify this optional parameter, all available voices are returned. </p>"]
-    #[serde(rename="LanguageCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The language identification tag (ISO 639 code for the language name-ISO 3166 country code) for filtering the list of voices returned. If you don't specify this optional parameter, all available voices are returned. </p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
-    #[doc="<p>An opaque pagination token returned from the previous <code>DescribeVoices</code> operation. If present, this indicates where to continue the listing.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An opaque pagination token returned from the previous <code>DescribeVoices</code> operation. If present, this indicates where to continue the listing.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeVoicesOutput {
-    #[doc="<p>The pagination token to use in the next request to continue the listing of voices. <code>NextToken</code> is returned only if the response is truncated.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The pagination token to use in the next request to continue the listing of voices. <code>NextToken</code> is returned only if the response is truncated.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of voices with their properties.</p>"]
-    #[serde(rename="Voices")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of voices with their properties.</p>
+    #[serde(rename = "Voices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub voices: Option<Vec<Voice>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetLexiconInput {
-    #[doc="<p>Name of the lexicon.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the lexicon.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetLexiconOutput {
-    #[doc="<p>Lexicon object that provides name and the string content of the lexicon. </p>"]
-    #[serde(rename="Lexicon")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Lexicon object that provides name and the string content of the lexicon. </p>
+    #[serde(rename = "Lexicon")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lexicon: Option<Lexicon>,
-    #[doc="<p>Metadata of the lexicon, including phonetic alphabetic used, language code, lexicon ARN, number of lexemes defined in the lexicon, and size of lexicon in bytes.</p>"]
-    #[serde(rename="LexiconAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Metadata of the lexicon, including phonetic alphabetic used, language code, lexicon ARN, number of lexemes defined in the lexicon, and size of lexicon in bytes.</p>
+    #[serde(rename = "LexiconAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lexicon_attributes: Option<LexiconAttributes>,
 }
 
-#[doc="<p>Provides lexicon name and lexicon content in string format. For more information, see <a href=\"https://www.w3.org/TR/pronunciation-lexicon/\">Pronunciation Lexicon Specification (PLS) Version 1.0</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Provides lexicon name and lexicon content in string format. For more information, see <a href="https://www.w3.org/TR/pronunciation-lexicon/">Pronunciation Lexicon Specification (PLS) Version 1.0</a>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Lexicon {
-    #[doc="<p>Lexicon content in string format. The content of a lexicon must be in PLS format.</p>"]
-    #[serde(rename="Content")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Lexicon content in string format. The content of a lexicon must be in PLS format.</p>
+    #[serde(rename = "Content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
-    #[doc="<p>Name of the lexicon.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the lexicon.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Contains metadata describing the lexicon such as the number of lexemes, language code, and so on. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains metadata describing the lexicon such as the number of lexemes, language code, and so on. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LexiconAttributes {
-    #[doc="<p>Phonetic alphabet used in the lexicon. Valid values are <code>ipa</code> and <code>x-sampa</code>.</p>"]
-    #[serde(rename="Alphabet")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Phonetic alphabet used in the lexicon. Valid values are <code>ipa</code> and <code>x-sampa</code>.</p>
+    #[serde(rename = "Alphabet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alphabet: Option<String>,
-    #[doc="<p>Language code that the lexicon applies to. A lexicon with a language code such as \"en\" would be applied to all English languages (en-GB, en-US, en-AUS, en-WLS, and so on.</p>"]
-    #[serde(rename="LanguageCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Language code that the lexicon applies to. A lexicon with a language code such as "en" would be applied to all English languages (en-GB, en-US, en-AUS, en-WLS, and so on.</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
-    #[doc="<p>Date lexicon was last modified (a timestamp value).</p>"]
-    #[serde(rename="LastModified")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Date lexicon was last modified (a timestamp value).</p>
+    #[serde(rename = "LastModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified: Option<f64>,
-    #[doc="<p>Number of lexemes in the lexicon.</p>"]
-    #[serde(rename="LexemesCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Number of lexemes in the lexicon.</p>
+    #[serde(rename = "LexemesCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lexemes_count: Option<i64>,
-    #[doc="<p>Amazon Resource Name (ARN) of the lexicon.</p>"]
-    #[serde(rename="LexiconArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon Resource Name (ARN) of the lexicon.</p>
+    #[serde(rename = "LexiconArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lexicon_arn: Option<String>,
-    #[doc="<p>Total size of the lexicon, in characters.</p>"]
-    #[serde(rename="Size")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Total size of the lexicon, in characters.</p>
+    #[serde(rename = "Size")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub size: Option<i64>,
 }
 
-#[doc="<p>Describes the content of the lexicon.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the content of the lexicon.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LexiconDescription {
-    #[doc="<p>Provides lexicon metadata.</p>"]
-    #[serde(rename="Attributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides lexicon metadata.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<LexiconAttributes>,
-    #[doc="<p>Name of the lexicon.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the lexicon.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListLexiconsInput {
-    #[doc="<p>An opaque pagination token returned from previous <code>ListLexicons</code> operation. If present, indicates where to continue the list of lexicons.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An opaque pagination token returned from previous <code>ListLexicons</code> operation. If present, indicates where to continue the list of lexicons.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListLexiconsOutput {
-    #[doc="<p>A list of lexicon names and attributes.</p>"]
-    #[serde(rename="Lexicons")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of lexicon names and attributes.</p>
+    #[serde(rename = "Lexicons")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lexicons: Option<Vec<LexiconDescription>>,
-    #[doc="<p>The pagination token to use in the next request to continue the listing of lexicons. <code>NextToken</code> is returned only if the response is truncated.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The pagination token to use in the next request to continue the listing of lexicons. <code>NextToken</code> is returned only if the response is truncated.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutLexiconInput {
-    #[doc="<p>Content of the PLS lexicon as string data.</p>"]
-    #[serde(rename="Content")]
+    /// <p>Content of the PLS lexicon as string data.</p>
+    #[serde(rename = "Content")]
     pub content: String,
-    #[doc="<p>Name of the lexicon. The name must follow the regular express format [0-9A-Za-z]{1,20}. That is, the name is a case-sensitive alphanumeric string up to 20 characters long. </p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the lexicon. The name must follow the regular express format [0-9A-Za-z]{1,20}. That is, the name is a case-sensitive alphanumeric string up to 20 characters long. </p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutLexiconOutput;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SynthesizeSpeechInput {
-    #[doc="<p>List of one or more pronunciation lexicon names you want the service to apply during synthesis. Lexicons are applied only if the language of the lexicon is the same as the language of the voice. For information about storing lexicons, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/API_PutLexicon.html\">PutLexicon</a>.</p>"]
-    #[serde(rename="LexiconNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of one or more pronunciation lexicon names you want the service to apply during synthesis. Lexicons are applied only if the language of the lexicon is the same as the language of the voice. For information about storing lexicons, see <a href="http://docs.aws.amazon.com/polly/latest/dg/API_PutLexicon.html">PutLexicon</a>.</p>
+    #[serde(rename = "LexiconNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lexicon_names: Option<Vec<String>>,
-    #[doc="<p> The format in which the returned output will be encoded. For audio stream, this will be mp3, ogg_vorbis, or pcm. For speech marks, this will be json. </p>"]
-    #[serde(rename="OutputFormat")]
+    /// <p> The format in which the returned output will be encoded. For audio stream, this will be mp3, ogg_vorbis, or pcm. For speech marks, this will be json. </p>
+    #[serde(rename = "OutputFormat")]
     pub output_format: String,
-    #[doc="<p> The audio frequency specified in Hz. </p> <p>The valid values for <code>mp3</code> and <code>ogg_vorbis</code> are \"8000\", \"16000\", and \"22050\". The default value is \"22050\". </p> <p> Valid values for <code>pcm</code> are \"8000\" and \"16000\" The default value is \"16000\". </p>"]
-    #[serde(rename="SampleRate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> The audio frequency specified in Hz. </p> <p>The valid values for <code>mp3</code> and <code>ogg_vorbis</code> are "8000", "16000", and "22050". The default value is "22050". </p> <p> Valid values for <code>pcm</code> are "8000" and "16000" The default value is "16000". </p>
+    #[serde(rename = "SampleRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_rate: Option<String>,
-    #[doc="<p>The type of speech marks returned for the input text.</p>"]
-    #[serde(rename="SpeechMarkTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of speech marks returned for the input text.</p>
+    #[serde(rename = "SpeechMarkTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub speech_mark_types: Option<Vec<String>>,
-    #[doc="<p> Input text to synthesize. If you specify <code>ssml</code> as the <code>TextType</code>, follow the SSML format for the input text. </p>"]
-    #[serde(rename="Text")]
+    /// <p> Input text to synthesize. If you specify <code>ssml</code> as the <code>TextType</code>, follow the SSML format for the input text. </p>
+    #[serde(rename = "Text")]
     pub text: String,
-    #[doc="<p> Specifies whether the input text is plain text or SSML. The default value is plain text. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/ssml.html\">Using SSML</a>.</p>"]
-    #[serde(rename="TextType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Specifies whether the input text is plain text or SSML. The default value is plain text. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/ssml.html">Using SSML</a>.</p>
+    #[serde(rename = "TextType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub text_type: Option<String>,
-    #[doc="<p> Voice ID to use for the synthesis. You can get a list of available voice IDs by calling the <a href=\"http://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html\">DescribeVoices</a> operation. </p>"]
-    #[serde(rename="VoiceId")]
+    /// <p> Voice ID to use for the synthesis. You can get a list of available voice IDs by calling the <a href="http://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html">DescribeVoices</a> operation. </p>
+    #[serde(rename = "VoiceId")]
     pub voice_id: String,
 }
 
-#[derive(Default,Debug,Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct SynthesizeSpeechOutput {
-    #[doc="<p> Stream containing the synthesized speech. </p>"]
+    /// <p> Stream containing the synthesized speech. </p>
     pub audio_stream: Option<Vec<u8>>,
-    #[doc="<p> Specifies the type audio stream. This should reflect the <code>OutputFormat</code> parameter in your request. </p> <ul> <li> <p> If you request <code>mp3</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/mpeg. </p> </li> <li> <p> If you request <code>ogg_vorbis</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/ogg. </p> </li> <li> <p> If you request <code>pcm</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/pcm in a signed 16-bit, 1 channel (mono), little-endian format. </p> </li> <li> <p>If you request <code>json</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/json.</p> </li> </ul> <p> </p>"]
+    /// <p> Specifies the type audio stream. This should reflect the <code>OutputFormat</code> parameter in your request. </p> <ul> <li> <p> If you request <code>mp3</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/mpeg. </p> </li> <li> <p> If you request <code>ogg_vorbis</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/ogg. </p> </li> <li> <p> If you request <code>pcm</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/pcm in a signed 16-bit, 1 channel (mono), little-endian format. </p> </li> <li> <p>If you request <code>json</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/json.</p> </li> </ul> <p> </p>
     pub content_type: Option<String>,
-    #[doc="<p>Number of characters synthesized.</p>"]
+    /// <p>Number of characters synthesized.</p>
     pub request_characters: Option<i64>,
 }
 
-#[doc="<p>Description of the voice.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Description of the voice.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Voice {
-    #[doc="<p>Gender of the voice.</p>"]
-    #[serde(rename="Gender")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Gender of the voice.</p>
+    #[serde(rename = "Gender")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub gender: Option<String>,
-    #[doc="<p>Amazon Polly assigned voice ID. This is the ID that you specify when calling the <code>SynthesizeSpeech</code> operation.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon Polly assigned voice ID. This is the ID that you specify when calling the <code>SynthesizeSpeech</code> operation.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>Language code of the voice.</p>"]
-    #[serde(rename="LanguageCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Language code of the voice.</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
-    #[doc="<p>Human readable name of the language in English.</p>"]
-    #[serde(rename="LanguageName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Human readable name of the language in English.</p>
+    #[serde(rename = "LanguageName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub language_name: Option<String>,
-    #[doc="<p>Name of the voice (for example, Salli, Kendra, etc.). This provides a human readable voice name that you might display in your application.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Name of the voice (for example, Salli, Kendra, etc.). This provides a human readable voice name that you might display in your application.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
@@ -250,7 +249,6 @@ pub enum DeleteLexiconError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteLexiconError {
     pub fn from_body(body: &str) -> DeleteLexiconError {
@@ -336,7 +334,6 @@ pub enum DescribeVoicesError {
     Unknown(String),
 }
 
-
 impl DescribeVoicesError {
     pub fn from_body(body: &str) -> DescribeVoicesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -421,7 +418,6 @@ pub enum GetLexiconError {
     Unknown(String),
 }
 
-
 impl GetLexiconError {
     pub fn from_body(body: &str) -> GetLexiconError {
         match from_str::<SerdeJsonValue>(body) {
@@ -503,7 +499,6 @@ pub enum ListLexiconsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListLexiconsError {
     pub fn from_body(body: &str) -> ListLexiconsError {
@@ -598,7 +593,6 @@ pub enum PutLexiconError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl PutLexiconError {
     pub fn from_body(body: &str) -> PutLexiconError {
@@ -712,7 +706,6 @@ pub enum SynthesizeSpeechError {
     Unknown(String),
 }
 
-
 impl SynthesizeSpeechError {
     pub fn from_body(body: &str) -> SynthesizeSpeechError {
         match from_str::<SerdeJsonValue>(body) {
@@ -735,11 +728,19 @@ impl SynthesizeSpeechError {
                     "LexiconNotFoundException" => {
                         SynthesizeSpeechError::LexiconNotFound(String::from(error_message))
                     }
-                    "MarksNotSupportedForFormatException" => SynthesizeSpeechError::MarksNotSupportedForFormat(String::from(error_message)),
+                    "MarksNotSupportedForFormatException" => {
+                        SynthesizeSpeechError::MarksNotSupportedForFormat(String::from(
+                            error_message,
+                        ))
+                    }
                     "ServiceFailureException" => {
                         SynthesizeSpeechError::ServiceFailure(String::from(error_message))
                     }
-                    "SsmlMarksNotSupportedForTextTypeException" => SynthesizeSpeechError::SsmlMarksNotSupportedForTextType(String::from(error_message)),
+                    "SsmlMarksNotSupportedForTextTypeException" => {
+                        SynthesizeSpeechError::SsmlMarksNotSupportedForTextType(String::from(
+                            error_message,
+                        ))
+                    }
                     "TextLengthExceededException" => {
                         SynthesizeSpeechError::TextLengthExceeded(String::from(error_message))
                     }
@@ -799,40 +800,40 @@ impl Error for SynthesizeSpeechError {
 /// Trait representing the capabilities of the Amazon Polly API. Amazon Polly clients implement this trait.
 pub trait Polly {
     #[doc="<p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
-    fn delete_lexicon(&self,
-                      input: &DeleteLexiconInput)
-                      -> Result<DeleteLexiconOutput, DeleteLexiconError>;
-
+    fn delete_lexicon(
+        &self,
+        input: &DeleteLexiconInput,
+    ) -> Result<DeleteLexiconOutput, DeleteLexiconError>;
 
     #[doc="<p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>"]
-    fn describe_voices(&self,
-                       input: &DescribeVoicesInput)
-                       -> Result<DescribeVoicesOutput, DescribeVoicesError>;
-
+    fn describe_voices(
+        &self,
+        input: &DescribeVoicesInput,
+    ) -> Result<DescribeVoicesOutput, DescribeVoicesError>;
 
     #[doc="<p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
     fn get_lexicon(&self, input: &GetLexiconInput) -> Result<GetLexiconOutput, GetLexiconError>;
 
-
     #[doc="<p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
-    fn list_lexicons(&self,
-                     input: &ListLexiconsInput)
-                     -> Result<ListLexiconsOutput, ListLexiconsError>;
-
+    fn list_lexicons(
+        &self,
+        input: &ListLexiconsInput,
+    ) -> Result<ListLexiconsOutput, ListLexiconsError>;
 
     #[doc="<p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
     fn put_lexicon(&self, input: &PutLexiconInput) -> Result<PutLexiconOutput, PutLexiconError>;
 
-
     #[doc="<p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html\">How it Works</a>.</p>"]
-    fn synthesize_speech(&self,
-                         input: &SynthesizeSpeechInput)
-                         -> Result<SynthesizeSpeechOutput, SynthesizeSpeechError>;
+    fn synthesize_speech(
+        &self,
+        input: &SynthesizeSpeechInput,
+    ) -> Result<SynthesizeSpeechOutput, SynthesizeSpeechError>;
 }
 /// A client for the Amazon Polly API.
 pub struct PollyClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -840,8 +841,9 @@ pub struct PollyClient<P, D>
 }
 
 impl<P, D> PollyClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         PollyClient {
@@ -853,29 +855,25 @@ impl<P, D> PollyClient<P, D>
 }
 
 impl<P, D> Polly for PollyClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
-    fn delete_lexicon(&self,
-                      input: &DeleteLexiconInput)
-                      -> Result<DeleteLexiconOutput, DeleteLexiconError> {
+    fn delete_lexicon(
+        &self,
+        input: &DeleteLexiconInput,
+    ) -> Result<DeleteLexiconOutput, DeleteLexiconError> {
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -887,30 +885,27 @@ impl<P, D> Polly for PollyClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DeleteLexiconOutput>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteLexiconError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteLexiconError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>"]
-    fn describe_voices(&self,
-                       input: &DescribeVoicesInput)
-                       -> Result<DescribeVoicesOutput, DescribeVoicesError> {
+    fn describe_voices(
+        &self,
+        input: &DescribeVoicesInput,
+    ) -> Result<DescribeVoicesOutput, DescribeVoicesError> {
         let request_uri = "/v1/voices";
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.language_code {
@@ -926,7 +921,6 @@ impl<P, D> Polly for PollyClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -938,18 +932,17 @@ impl<P, D> Polly for PollyClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DescribeVoicesOutput>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeVoicesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeVoicesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
     fn get_lexicon(&self, input: &GetLexiconInput) -> Result<GetLexiconOutput, GetLexiconError> {
@@ -958,17 +951,11 @@ impl<P, D> Polly for PollyClient<P, D>
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
-
-
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -980,30 +967,27 @@ impl<P, D> Polly for PollyClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<GetLexiconOutput>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetLexiconError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetLexiconError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
-    fn list_lexicons(&self,
-                     input: &ListLexiconsInput)
-                     -> Result<ListLexiconsOutput, ListLexiconsError> {
+    fn list_lexicons(
+        &self,
+        input: &ListLexiconsInput,
+    ) -> Result<ListLexiconsOutput, ListLexiconsError> {
         let request_uri = "/v1/lexicons";
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.next_token {
@@ -1016,7 +1000,6 @@ impl<P, D> Polly for PollyClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -1028,18 +1011,17 @@ impl<P, D> Polly for PollyClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<ListLexiconsOutput>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListLexiconsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListLexiconsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
     fn put_lexicon(&self, input: &PutLexiconInput) -> Result<PutLexiconOutput, PutLexiconError> {
@@ -1048,18 +1030,14 @@ impl<P, D> Polly for PollyClient<P, D>
         let mut request = SignedRequest::new("PUT", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -1071,40 +1049,36 @@ impl<P, D> Polly for PollyClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<PutLexiconOutput>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutLexiconError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutLexiconError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html\">How it Works</a>.</p>"]
-    fn synthesize_speech(&self,
-                         input: &SynthesizeSpeechInput)
-                         -> Result<SynthesizeSpeechOutput, SynthesizeSpeechError> {
+    fn synthesize_speech(
+        &self,
+        input: &SynthesizeSpeechInput,
+    ) -> Result<SynthesizeSpeechOutput, SynthesizeSpeechError> {
         let request_uri = "/v1/speech";
 
         let mut request = SignedRequest::new("POST", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut result = SynthesizeSpeechOutput::default();
 
                 let mut body: Vec<u8> = Vec::new();
@@ -1116,8 +1090,7 @@ impl<P, D> Polly for PollyClient<P, D>
                     let value = content_type.to_owned();
                     result.content_type = Some(value)
                 };
-                if let Some(request_characters) =
-                    response.headers.get("x-amzn-RequestCharacters") {
+                if let Some(request_characters) = response.headers.get("x-amzn-RequestCharacters") {
                     let value = request_characters.to_owned();
                     result.request_characters = Some(value.parse::<i64>().unwrap())
                 };
@@ -1127,7 +1100,9 @@ impl<P, D> Polly for PollyClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SynthesizeSpeechError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SynthesizeSpeechError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

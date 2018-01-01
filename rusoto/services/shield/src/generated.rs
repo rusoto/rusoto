@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,324 +27,324 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>The details of a DDoS attack.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The details of a DDoS attack.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AttackDetail {
-    #[doc="<p>List of counters that describe the attack for the specified time period.</p>"]
-    #[serde(rename="AttackCounters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of counters that describe the attack for the specified time period.</p>
+    #[serde(rename = "AttackCounters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attack_counters: Option<Vec<SummarizedCounter>>,
-    #[doc="<p>The unique identifier (ID) of the attack.</p>"]
-    #[serde(rename="AttackId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) of the attack.</p>
+    #[serde(rename = "AttackId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attack_id: Option<String>,
-    #[doc="<p>The time the attack ended, in the format 2016-12-16T13:50Z.</p>"]
-    #[serde(rename="EndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the attack ended, in the format 2016-12-16T13:50Z.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>List of mitigation actions taken for the attack.</p>"]
-    #[serde(rename="Mitigations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>List of mitigation actions taken for the attack.</p>
+    #[serde(rename = "Mitigations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mitigations: Option<Vec<Mitigation>>,
-    #[doc="<p>The ARN (Amazon Resource Name) of the resource that was attacked.</p>"]
-    #[serde(rename="ResourceArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN (Amazon Resource Name) of the resource that was attacked.</p>
+    #[serde(rename = "ResourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    #[doc="<p>The time the attack started, in the format 2016-12-16T13:50Z.</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the attack started, in the format 2016-12-16T13:50Z.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>If applicable, additional detail about the resource being attacked, for example, IP address or URL.</p>"]
-    #[serde(rename="SubResources")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If applicable, additional detail about the resource being attacked, for example, IP address or URL.</p>
+    #[serde(rename = "SubResources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sub_resources: Option<Vec<SubResourceSummary>>,
 }
 
-#[doc="<p>Summarizes all DDoS attacks for a specified time period.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Summarizes all DDoS attacks for a specified time period.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AttackSummary {
-    #[doc="<p>The unique identifier (ID) of the attack.</p>"]
-    #[serde(rename="AttackId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) of the attack.</p>
+    #[serde(rename = "AttackId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attack_id: Option<String>,
-    #[doc="<p>The list of attacks for a specified time period.</p>"]
-    #[serde(rename="AttackVectors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of attacks for a specified time period.</p>
+    #[serde(rename = "AttackVectors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attack_vectors: Option<Vec<AttackVectorDescription>>,
-    #[doc="<p>The end time of the attack, in the format 2016-12-16T13:50Z.</p>"]
-    #[serde(rename="EndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The end time of the attack, in the format 2016-12-16T13:50Z.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>The ARN (Amazon Resource Name) of the resource that was attacked.</p>"]
-    #[serde(rename="ResourceArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN (Amazon Resource Name) of the resource that was attacked.</p>
+    #[serde(rename = "ResourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    #[doc="<p>The start time of the attack, in the format 2016-12-16T13:50Z.</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The start time of the attack, in the format 2016-12-16T13:50Z.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
 }
 
-#[doc="<p>Describes the attack.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the attack.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AttackVectorDescription {
-    #[doc="<p>The attack type, for example, SNMP reflection or SYN flood.</p>"]
-    #[serde(rename="VectorType")]
+    /// <p>The attack type, for example, SNMP reflection or SYN flood.</p>
+    #[serde(rename = "VectorType")]
     pub vector_type: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateProtectionRequest {
-    #[doc="<p>Friendly name for the <code>Protection</code> you are creating.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Friendly name for the <code>Protection</code> you are creating.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The ARN (Amazon Resource Name) of the resource to be protected.</p>"]
-    #[serde(rename="ResourceArn")]
+    /// <p>The ARN (Amazon Resource Name) of the resource to be protected.</p>
+    #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateProtectionResponse {
-    #[doc="<p>The unique identifier (ID) for the <a>Protection</a> object that is created.</p>"]
-    #[serde(rename="ProtectionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) for the <a>Protection</a> object that is created.</p>
+    #[serde(rename = "ProtectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub protection_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateSubscriptionRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateSubscriptionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteProtectionRequest {
-    #[doc="<p>The unique identifier (ID) for the <a>Protection</a> object to be deleted.</p>"]
-    #[serde(rename="ProtectionId")]
+    /// <p>The unique identifier (ID) for the <a>Protection</a> object to be deleted.</p>
+    #[serde(rename = "ProtectionId")]
     pub protection_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteProtectionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteSubscriptionRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteSubscriptionResponse;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAttackRequest {
-    #[doc="<p>The unique identifier (ID) for the attack that to be described.</p>"]
-    #[serde(rename="AttackId")]
+    /// <p>The unique identifier (ID) for the attack that to be described.</p>
+    #[serde(rename = "AttackId")]
     pub attack_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeAttackResponse {
-    #[doc="<p>The attack that is described.</p>"]
-    #[serde(rename="Attack")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The attack that is described.</p>
+    #[serde(rename = "Attack")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attack: Option<AttackDetail>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeProtectionRequest {
-    #[doc="<p>The unique identifier (ID) for the <a>Protection</a> object that is described.</p>"]
-    #[serde(rename="ProtectionId")]
+    /// <p>The unique identifier (ID) for the <a>Protection</a> object that is described.</p>
+    #[serde(rename = "ProtectionId")]
     pub protection_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProtectionResponse {
-    #[doc="<p>The <a>Protection</a> object that is described.</p>"]
-    #[serde(rename="Protection")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <a>Protection</a> object that is described.</p>
+    #[serde(rename = "Protection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub protection: Option<Protection>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeSubscriptionRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeSubscriptionResponse {
-    #[doc="<p>The AWS Shield Advanced subscription details for an account.</p>"]
-    #[serde(rename="Subscription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS Shield Advanced subscription details for an account.</p>
+    #[serde(rename = "Subscription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription: Option<Subscription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAttacksRequest {
-    #[doc="<p>The end of the time period for the attacks.</p>"]
-    #[serde(rename="EndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The end of the time period for the attacks.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<TimeRange>,
-    #[doc="<p>The maximum number of <a>AttackSummary</a> objects to be returned. If this is left blank, the first 20 results will be returned.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of <a>AttackSummary</a> objects to be returned. If this is left blank, the first 20 results will be returned.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The <code>ListAttacksRequest.NextMarker</code> value from a previous call to <code>ListAttacksRequest</code>. Pass null if this is the first call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>ListAttacksRequest.NextMarker</code> value from a previous call to <code>ListAttacksRequest</code>. Pass null if this is the first call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The ARN (Amazon Resource Name) of the resource that was attacked. If this is left blank, all applicable resources for this account will be included.</p>"]
-    #[serde(rename="ResourceArns")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN (Amazon Resource Name) of the resource that was attacked. If this is left blank, all applicable resources for this account will be included.</p>
+    #[serde(rename = "ResourceArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arns: Option<Vec<String>>,
-    #[doc="<p>The time period for the attacks.</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time period for the attacks.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<TimeRange>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAttacksResponse {
-    #[doc="<p>The attack information for the specified time range.</p>"]
-    #[serde(rename="AttackSummaries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The attack information for the specified time range.</p>
+    #[serde(rename = "AttackSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attack_summaries: Option<Vec<AttackSummary>>,
-    #[doc="<p>The token returned by a previous call to indicate that there is more data available. If not null, more results are available. Pass this value for the <code>NextMarker</code> parameter in a subsequent call to <code>ListAttacks</code> to retrieve the next set of items.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token returned by a previous call to indicate that there is more data available. If not null, more results are available. Pass this value for the <code>NextMarker</code> parameter in a subsequent call to <code>ListAttacks</code> to retrieve the next set of items.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListProtectionsRequest {
-    #[doc="<p>The maximum number of <a>Protection</a> objects to be returned. If this is left blank the first 20 results will be returned.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of <a>Protection</a> objects to be returned. If this is left blank the first 20 results will be returned.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The <code>ListProtectionsRequest.NextToken</code> value from a previous call to <code>ListProtections</code>. Pass null if this is the first call.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>ListProtectionsRequest.NextToken</code> value from a previous call to <code>ListProtections</code>. Pass null if this is the first call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListProtectionsResponse {
-    #[doc="<p>If you specify a value for <code>MaxResults</code> and you have more Protections than the value of MaxResults, AWS Shield Advanced returns a NextToken value in the response that allows you to list another group of Protections. For the second and subsequent ListProtections requests, specify the value of NextToken from the previous response to get information about another batch of Protections.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If you specify a value for <code>MaxResults</code> and you have more Protections than the value of MaxResults, AWS Shield Advanced returns a NextToken value in the response that allows you to list another group of Protections. For the second and subsequent ListProtections requests, specify the value of NextToken from the previous response to get information about another batch of Protections.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The array of enabled <a>Protection</a> objects.</p>"]
-    #[serde(rename="Protections")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The array of enabled <a>Protection</a> objects.</p>
+    #[serde(rename = "Protections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub protections: Option<Vec<Protection>>,
 }
 
-#[doc="<p>The mitigation applied to a DDoS attack.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The mitigation applied to a DDoS attack.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Mitigation {
-    #[doc="<p>The name of the mitigation taken for this attack.</p>"]
-    #[serde(rename="MitigationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the mitigation taken for this attack.</p>
+    #[serde(rename = "MitigationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mitigation_name: Option<String>,
 }
 
-#[doc="<p>An object that represents a resource that is under DDoS protection.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An object that represents a resource that is under DDoS protection.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Protection {
-    #[doc="<p>The unique identifier (ID) of the protection.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) of the protection.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The friendly name of the protection. For example, <code>My CloudFront distributions</code>.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The friendly name of the protection. For example, <code>My CloudFront distributions</code>.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The ARN (Amazon Resource Name) of the AWS resource that is protected.</p>"]
-    #[serde(rename="ResourceArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN (Amazon Resource Name) of the AWS resource that is protected.</p>
+    #[serde(rename = "ResourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
 }
 
-#[doc="<p>The attack information for the specified SubResource.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The attack information for the specified SubResource.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SubResourceSummary {
-    #[doc="<p>The list of attack types and associated counters.</p>"]
-    #[serde(rename="AttackVectors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of attack types and associated counters.</p>
+    #[serde(rename = "AttackVectors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attack_vectors: Option<Vec<SummarizedAttackVector>>,
-    #[doc="<p>The counters that describe the details of the attack.</p>"]
-    #[serde(rename="Counters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The counters that describe the details of the attack.</p>
+    #[serde(rename = "Counters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub counters: Option<Vec<SummarizedCounter>>,
-    #[doc="<p>The unique identifier (ID) of the <code>SubResource</code>.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) of the <code>SubResource</code>.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The <code>SubResource</code> type.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>SubResource</code> type.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Information about the AWS Shield Advanced subscription for an account.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about the AWS Shield Advanced subscription for an account.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Subscription {
-    #[doc="<p>The start time of the subscription, in the format \"2016-12-16T13:50Z\".</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The start time of the subscription, in the format "2016-12-16T13:50Z".</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>The length, in seconds, of the AWS Shield Advanced subscription for the account.</p>"]
-    #[serde(rename="TimeCommitmentInSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The length, in seconds, of the AWS Shield Advanced subscription for the account.</p>
+    #[serde(rename = "TimeCommitmentInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub time_commitment_in_seconds: Option<i64>,
 }
 
-#[doc="<p>A summary of information about the attack.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A summary of information about the attack.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SummarizedAttackVector {
-    #[doc="<p>The list of counters that describe the details of the attack.</p>"]
-    #[serde(rename="VectorCounters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of counters that describe the details of the attack.</p>
+    #[serde(rename = "VectorCounters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vector_counters: Option<Vec<SummarizedCounter>>,
-    #[doc="<p>The attack type, for example, SNMP reflection or SYN flood.</p>"]
-    #[serde(rename="VectorType")]
+    /// <p>The attack type, for example, SNMP reflection or SYN flood.</p>
+    #[serde(rename = "VectorType")]
     pub vector_type: String,
 }
 
-#[doc="<p>The counter that describes a DDoS attack.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The counter that describes a DDoS attack.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SummarizedCounter {
-    #[doc="<p>The average value of the counter for a specified time period.</p>"]
-    #[serde(rename="Average")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The average value of the counter for a specified time period.</p>
+    #[serde(rename = "Average")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub average: Option<f64>,
-    #[doc="<p>The maximum value of the counter for a specified time period.</p>"]
-    #[serde(rename="Max")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum value of the counter for a specified time period.</p>
+    #[serde(rename = "Max")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max: Option<f64>,
-    #[doc="<p>The number of counters for a specified time period.</p>"]
-    #[serde(rename="N")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of counters for a specified time period.</p>
+    #[serde(rename = "N")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub n: Option<i64>,
-    #[doc="<p>The counter name.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The counter name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The total of counter values for a specified time period.</p>"]
-    #[serde(rename="Sum")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total of counter values for a specified time period.</p>
+    #[serde(rename = "Sum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sum: Option<f64>,
-    #[doc="<p>The unit of the counters.</p>"]
-    #[serde(rename="Unit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unit of the counters.</p>
+    #[serde(rename = "Unit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub unit: Option<String>,
 }
 
-#[doc="<p>The time range.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The time range.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TimeRange {
-    #[doc="<p>The start time, in the format 2016-12-16T13:50Z.</p>"]
-    #[serde(rename="FromInclusive")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The start time, in the format 2016-12-16T13:50Z.</p>
+    #[serde(rename = "FromInclusive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub from_inclusive: Option<f64>,
-    #[doc="<p>The end time, in the format 2016-12-16T15:50Z.</p>"]
-    #[serde(rename="ToExclusive")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The end time, in the format 2016-12-16T15:50Z.</p>
+    #[serde(rename = "ToExclusive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub to_exclusive: Option<f64>,
 }
 
@@ -375,7 +374,6 @@ pub enum CreateProtectionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateProtectionError {
     pub fn from_body(body: &str) -> CreateProtectionError {
@@ -481,7 +479,6 @@ pub enum CreateSubscriptionError {
     Unknown(String),
 }
 
-
 impl CreateSubscriptionError {
     pub fn from_body(body: &str) -> CreateSubscriptionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -569,7 +566,6 @@ pub enum DeleteProtectionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteProtectionError {
     pub fn from_body(body: &str) -> DeleteProtectionError {
@@ -661,7 +657,6 @@ pub enum DeleteSubscriptionError {
     Unknown(String),
 }
 
-
 impl DeleteSubscriptionError {
     pub fn from_body(body: &str) -> DeleteSubscriptionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -752,7 +747,6 @@ pub enum DescribeAttackError {
     Unknown(String),
 }
 
-
 impl DescribeAttackError {
     pub fn from_body(body: &str) -> DescribeAttackError {
         match from_str::<SerdeJsonValue>(body) {
@@ -836,7 +830,6 @@ pub enum DescribeProtectionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeProtectionError {
     pub fn from_body(body: &str) -> DescribeProtectionError {
@@ -923,7 +916,6 @@ pub enum DescribeSubscriptionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeSubscriptionError {
     pub fn from_body(body: &str) -> DescribeSubscriptionError {
@@ -1013,7 +1005,6 @@ pub enum ListAttacksError {
     Unknown(String),
 }
 
-
 impl ListAttacksError {
     pub fn from_body(body: &str) -> ListAttacksError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1102,7 +1093,6 @@ pub enum ListProtectionsError {
     Unknown(String),
 }
 
-
 impl ListProtectionsError {
     pub fn from_body(body: &str) -> ListProtectionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1173,57 +1163,57 @@ impl Error for ListProtectionsError {
 /// Trait representing the capabilities of the AWS Shield API. AWS Shield clients implement this trait.
 pub trait Shield {
     #[doc="<p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, or an Amazon Route 53 hosted zone.</p>"]
-    fn create_protection(&self,
-                         input: &CreateProtectionRequest)
-                         -> Result<CreateProtectionResponse, CreateProtectionError>;
+    fn create_protection(
+        &self,
+        input: &CreateProtectionRequest,
+    ) -> Result<CreateProtectionResponse, CreateProtectionError>;
 
-
-    #[doc="<p>Activates AWS Shield Advanced for an account.</p>"]
+    #[doc = "<p>Activates AWS Shield Advanced for an account.</p>"]
     fn create_subscription(&self) -> Result<CreateSubscriptionResponse, CreateSubscriptionError>;
 
+    #[doc = "<p>Deletes an AWS Shield Advanced <a>Protection</a>.</p>"]
+    fn delete_protection(
+        &self,
+        input: &DeleteProtectionRequest,
+    ) -> Result<DeleteProtectionResponse, DeleteProtectionError>;
 
-    #[doc="<p>Deletes an AWS Shield Advanced <a>Protection</a>.</p>"]
-    fn delete_protection(&self,
-                         input: &DeleteProtectionRequest)
-                         -> Result<DeleteProtectionResponse, DeleteProtectionError>;
-
-
-    #[doc="<p>Removes AWS Shield Advanced from an account.</p>"]
+    #[doc = "<p>Removes AWS Shield Advanced from an account.</p>"]
     fn delete_subscription(&self) -> Result<DeleteSubscriptionResponse, DeleteSubscriptionError>;
 
+    #[doc = "<p>Describes the details of a DDoS attack. </p>"]
+    fn describe_attack(
+        &self,
+        input: &DescribeAttackRequest,
+    ) -> Result<DescribeAttackResponse, DescribeAttackError>;
 
-    #[doc="<p>Describes the details of a DDoS attack. </p>"]
-    fn describe_attack(&self,
-                       input: &DescribeAttackRequest)
-                       -> Result<DescribeAttackResponse, DescribeAttackError>;
+    #[doc = "<p>Lists the details of a <a>Protection</a> object.</p>"]
+    fn describe_protection(
+        &self,
+        input: &DescribeProtectionRequest,
+    ) -> Result<DescribeProtectionResponse, DescribeProtectionError>;
 
-
-    #[doc="<p>Lists the details of a <a>Protection</a> object.</p>"]
-    fn describe_protection(&self,
-                           input: &DescribeProtectionRequest)
-                           -> Result<DescribeProtectionResponse, DescribeProtectionError>;
-
-
-    #[doc="<p>Provides details about the AWS Shield Advanced subscription for an account.</p>"]
-    fn describe_subscription(&self)
-                             -> Result<DescribeSubscriptionResponse, DescribeSubscriptionError>;
-
+    #[doc = "<p>Provides details about the AWS Shield Advanced subscription for an account.</p>"]
+    fn describe_subscription(
+        &self,
+    ) -> Result<DescribeSubscriptionResponse, DescribeSubscriptionError>;
 
     #[doc="<p>Returns all ongoing DDoS attacks or all DDoS attacks during a specified time period.</p>"]
-    fn list_attacks(&self,
-                    input: &ListAttacksRequest)
-                    -> Result<ListAttacksResponse, ListAttacksError>;
+    fn list_attacks(
+        &self,
+        input: &ListAttacksRequest,
+    ) -> Result<ListAttacksResponse, ListAttacksError>;
 
-
-    #[doc="<p>Lists all <a>Protection</a> objects for the account.</p>"]
-    fn list_protections(&self,
-                        input: &ListProtectionsRequest)
-                        -> Result<ListProtectionsResponse, ListProtectionsError>;
+    #[doc = "<p>Lists all <a>Protection</a> objects for the account.</p>"]
+    fn list_protections(
+        &self,
+        input: &ListProtectionsRequest,
+    ) -> Result<ListProtectionsResponse, ListProtectionsError>;
 }
 /// A client for the AWS Shield API.
 pub struct ShieldClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -1231,8 +1221,9 @@ pub struct ShieldClient<P, D>
 }
 
 impl<P, D> ShieldClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         ShieldClient {
@@ -1244,13 +1235,15 @@ impl<P, D> ShieldClient<P, D>
 }
 
 impl<P, D> Shield for ShieldClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, or an Amazon Route 53 hosted zone.</p>"]
-    fn create_protection(&self,
-                         input: &CreateProtectionRequest)
-                         -> Result<CreateProtectionResponse, CreateProtectionError> {
+    fn create_protection(
+        &self,
+        input: &CreateProtectionRequest,
+    ) -> Result<CreateProtectionResponse, CreateProtectionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1266,20 +1259,21 @@ impl<P, D> Shield for ShieldClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateProtectionResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateProtectionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateProtectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateProtectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Activates AWS Shield Advanced for an account.</p>"]
+    #[doc = "<p>Activates AWS Shield Advanced for an account.</p>"]
     fn create_subscription(&self) -> Result<CreateSubscriptionResponse, CreateSubscriptionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
@@ -1295,21 +1289,25 @@ impl<P, D> Shield for ShieldClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateSubscriptionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateSubscriptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateSubscriptionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes an AWS Shield Advanced <a>Protection</a>.</p>"]
-    fn delete_protection(&self,
-                         input: &DeleteProtectionRequest)
-                         -> Result<DeleteProtectionResponse, DeleteProtectionError> {
+    #[doc = "<p>Deletes an AWS Shield Advanced <a>Protection</a>.</p>"]
+    fn delete_protection(
+        &self,
+        input: &DeleteProtectionRequest,
+    ) -> Result<DeleteProtectionResponse, DeleteProtectionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1325,20 +1323,21 @@ impl<P, D> Shield for ShieldClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteProtectionResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteProtectionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteProtectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteProtectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes AWS Shield Advanced from an account.</p>"]
+    #[doc = "<p>Removes AWS Shield Advanced from an account.</p>"]
     fn delete_subscription(&self) -> Result<DeleteSubscriptionResponse, DeleteSubscriptionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
@@ -1354,21 +1353,25 @@ impl<P, D> Shield for ShieldClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteSubscriptionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteSubscriptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteSubscriptionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes the details of a DDoS attack. </p>"]
-    fn describe_attack(&self,
-                       input: &DescribeAttackRequest)
-                       -> Result<DescribeAttackResponse, DescribeAttackError> {
+    #[doc = "<p>Describes the details of a DDoS attack. </p>"]
+    fn describe_attack(
+        &self,
+        input: &DescribeAttackRequest,
+    ) -> Result<DescribeAttackResponse, DescribeAttackError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1384,23 +1387,25 @@ impl<P, D> Shield for ShieldClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAttackResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeAttackResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAttackError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeAttackError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the details of a <a>Protection</a> object.</p>"]
-    fn describe_protection(&self,
-                           input: &DescribeProtectionRequest)
-                           -> Result<DescribeProtectionResponse, DescribeProtectionError> {
+    #[doc = "<p>Lists the details of a <a>Protection</a> object.</p>"]
+    fn describe_protection(
+        &self,
+        input: &DescribeProtectionRequest,
+    ) -> Result<DescribeProtectionResponse, DescribeProtectionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1416,20 +1421,24 @@ impl<P, D> Shield for ShieldClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProtectionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeProtectionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeProtectionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeProtectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Provides details about the AWS Shield Advanced subscription for an account.</p>"]
-    fn describe_subscription(&self)
-                             -> Result<DescribeSubscriptionResponse, DescribeSubscriptionError> {
+    #[doc = "<p>Provides details about the AWS Shield Advanced subscription for an account.</p>"]
+    fn describe_subscription(
+        &self,
+    ) -> Result<DescribeSubscriptionResponse, DescribeSubscriptionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1444,21 +1453,25 @@ impl<P, D> Shield for ShieldClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeSubscriptionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeSubscriptionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeSubscriptionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeSubscriptionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns all ongoing DDoS attacks or all DDoS attacks during a specified time period.</p>"]
-    fn list_attacks(&self,
-                    input: &ListAttacksRequest)
-                    -> Result<ListAttacksResponse, ListAttacksError> {
+    fn list_attacks(
+        &self,
+        input: &ListAttacksRequest,
+    ) -> Result<ListAttacksResponse, ListAttacksError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1474,23 +1487,25 @@ impl<P, D> Shield for ShieldClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAttacksResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListAttacksResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListAttacksError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListAttacksError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all <a>Protection</a> objects for the account.</p>"]
-    fn list_protections(&self,
-                        input: &ListProtectionsRequest)
-                        -> Result<ListProtectionsResponse, ListProtectionsError> {
+    #[doc = "<p>Lists all <a>Protection</a> objects for the account.</p>"]
+    fn list_protections(
+        &self,
+        input: &ListProtectionsRequest,
+    ) -> Result<ListProtectionsResponse, ListProtectionsError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1506,14 +1521,16 @@ impl<P, D> Shield for ShieldClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListProtectionsResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListProtectionsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListProtectionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListProtectionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

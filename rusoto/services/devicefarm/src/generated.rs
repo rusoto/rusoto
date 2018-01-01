@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,2109 +27,2109 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>A container for account-level settings within AWS Device Farm.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A container for account-level settings within AWS Device Farm.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AccountSettings {
-    #[doc="<p>The AWS account number specified in the <code>AccountSettings</code> container.</p>"]
-    #[serde(rename="awsAccountNumber")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account number specified in the <code>AccountSettings</code> container.</p>
+    #[serde(rename = "awsAccountNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_account_number: Option<String>,
-    #[doc="<p>The default number of minutes (at the account level) a test run will execute before it times out. Default value is 60 minutes.</p>"]
-    #[serde(rename="defaultJobTimeoutMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default number of minutes (at the account level) a test run will execute before it times out. Default value is 60 minutes.</p>
+    #[serde(rename = "defaultJobTimeoutMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_job_timeout_minutes: Option<i64>,
-    #[doc="<p>The maximum number of minutes a test run will execute before it times out.</p>"]
-    #[serde(rename="maxJobTimeoutMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of minutes a test run will execute before it times out.</p>
+    #[serde(rename = "maxJobTimeoutMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_job_timeout_minutes: Option<i64>,
-    #[doc="<p>The maximum number of device slots that the AWS account can purchase. Each maximum is expressed as an <code>offering-id:number</code> pair, where the <code>offering-id</code> represents one of the IDs returned by the <code>ListOfferings</code> command.</p>"]
-    #[serde(rename="maxSlots")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of device slots that the AWS account can purchase. Each maximum is expressed as an <code>offering-id:number</code> pair, where the <code>offering-id</code> represents one of the IDs returned by the <code>ListOfferings</code> command.</p>
+    #[serde(rename = "maxSlots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_slots: Option<::std::collections::HashMap<String, i64>>,
-    #[doc="<p>Information about an AWS account's usage of free trial device minutes.</p>"]
-    #[serde(rename="trialMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about an AWS account's usage of free trial device minutes.</p>
+    #[serde(rename = "trialMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub trial_minutes: Option<TrialMinutes>,
-    #[doc="<p>Returns the unmetered devices you have purchased or want to purchase.</p>"]
-    #[serde(rename="unmeteredDevices")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returns the unmetered devices you have purchased or want to purchase.</p>
+    #[serde(rename = "unmeteredDevices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub unmetered_devices: Option<::std::collections::HashMap<String, i64>>,
-    #[doc="<p>Returns the unmetered remote access devices you have purchased or want to purchase.</p>"]
-    #[serde(rename="unmeteredRemoteAccessDevices")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returns the unmetered remote access devices you have purchased or want to purchase.</p>
+    #[serde(rename = "unmeteredRemoteAccessDevices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub unmetered_remote_access_devices: Option<::std::collections::HashMap<String, i64>>,
 }
 
-#[doc="<p>Represents the output of a test. Examples of artifacts include logs and screenshots.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the output of a test. Examples of artifacts include logs and screenshots.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Artifact {
-    #[doc="<p>The artifact's ARN.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The artifact's ARN.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The artifact's file extension.</p>"]
-    #[serde(rename="extension")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The artifact's file extension.</p>
+    #[serde(rename = "extension")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extension: Option<String>,
-    #[doc="<p>The artifact's name.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The artifact's name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The artifact's type.</p> <p>Allowed values include the following:</p> <ul> <li> <p>UNKNOWN: An unknown type.</p> </li> <li> <p>SCREENSHOT: The screenshot type.</p> </li> <li> <p>DEVICE_LOG: The device log type.</p> </li> <li> <p>MESSAGE_LOG: The message log type.</p> </li> <li> <p>RESULT_LOG: The result log type.</p> </li> <li> <p>SERVICE_LOG: The service log type.</p> </li> <li> <p>WEBKIT_LOG: The web kit log type.</p> </li> <li> <p>INSTRUMENTATION_OUTPUT: The instrumentation type.</p> </li> <li> <p>EXERCISER_MONKEY_OUTPUT: For Android, the artifact (log) generated by an Android fuzz test.</p> </li> <li> <p>CALABASH_JSON_OUTPUT: The Calabash JSON output type.</p> </li> <li> <p>CALABASH_PRETTY_OUTPUT: The Calabash pretty output type.</p> </li> <li> <p>CALABASH_STANDARD_OUTPUT: The Calabash standard output type.</p> </li> <li> <p>CALABASH_JAVA_XML_OUTPUT: The Calabash Java XML output type.</p> </li> <li> <p>AUTOMATION_OUTPUT: The automation output type.</p> </li> <li> <p>APPIUM_SERVER_OUTPUT: The Appium server output type.</p> </li> <li> <p>APPIUM_JAVA_OUTPUT: The Appium Java output type.</p> </li> <li> <p>APPIUM_JAVA_XML_OUTPUT: The Appium Java XML output type.</p> </li> <li> <p>APPIUM_PYTHON_OUTPUT: The Appium Python output type.</p> </li> <li> <p>APPIUM_PYTHON_XML_OUTPUT: The Appium Python XML output type.</p> </li> <li> <p>EXPLORER_EVENT_LOG: The Explorer event log output type.</p> </li> <li> <p>EXPLORER_SUMMARY_LOG: The Explorer summary log output type.</p> </li> <li> <p>APPLICATION_CRASH_REPORT: The application crash report output type.</p> </li> <li> <p>XCTEST_LOG: The XCode test output type.</p> </li> </ul>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The artifact's type.</p> <p>Allowed values include the following:</p> <ul> <li> <p>UNKNOWN: An unknown type.</p> </li> <li> <p>SCREENSHOT: The screenshot type.</p> </li> <li> <p>DEVICE_LOG: The device log type.</p> </li> <li> <p>MESSAGE_LOG: The message log type.</p> </li> <li> <p>RESULT_LOG: The result log type.</p> </li> <li> <p>SERVICE_LOG: The service log type.</p> </li> <li> <p>WEBKIT_LOG: The web kit log type.</p> </li> <li> <p>INSTRUMENTATION_OUTPUT: The instrumentation type.</p> </li> <li> <p>EXERCISER_MONKEY_OUTPUT: For Android, the artifact (log) generated by an Android fuzz test.</p> </li> <li> <p>CALABASH_JSON_OUTPUT: The Calabash JSON output type.</p> </li> <li> <p>CALABASH_PRETTY_OUTPUT: The Calabash pretty output type.</p> </li> <li> <p>CALABASH_STANDARD_OUTPUT: The Calabash standard output type.</p> </li> <li> <p>CALABASH_JAVA_XML_OUTPUT: The Calabash Java XML output type.</p> </li> <li> <p>AUTOMATION_OUTPUT: The automation output type.</p> </li> <li> <p>APPIUM_SERVER_OUTPUT: The Appium server output type.</p> </li> <li> <p>APPIUM_JAVA_OUTPUT: The Appium Java output type.</p> </li> <li> <p>APPIUM_JAVA_XML_OUTPUT: The Appium Java XML output type.</p> </li> <li> <p>APPIUM_PYTHON_OUTPUT: The Appium Python output type.</p> </li> <li> <p>APPIUM_PYTHON_XML_OUTPUT: The Appium Python XML output type.</p> </li> <li> <p>EXPLORER_EVENT_LOG: The Explorer event log output type.</p> </li> <li> <p>EXPLORER_SUMMARY_LOG: The Explorer summary log output type.</p> </li> <li> <p>APPLICATION_CRASH_REPORT: The application crash report output type.</p> </li> <li> <p>XCTEST_LOG: The XCode test output type.</p> </li> </ul>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The pre-signed Amazon S3 URL that can be used with a corresponding GET request to download the artifact's file.</p>"]
-    #[serde(rename="url")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The pre-signed Amazon S3 URL that can be used with a corresponding GET request to download the artifact's file.</p>
+    #[serde(rename = "url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
 }
 
-#[doc="<p>Represents the amount of CPU that an app is using on a physical device.</p> <p>Note that this does not represent system-wide CPU usage.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the amount of CPU that an app is using on a physical device.</p> <p>Note that this does not represent system-wide CPU usage.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CPU {
-    #[doc="<p>The CPU's architecture, for example x86 or ARM.</p>"]
-    #[serde(rename="architecture")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The CPU's architecture, for example x86 or ARM.</p>
+    #[serde(rename = "architecture")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub architecture: Option<String>,
-    #[doc="<p>The clock speed of the device's CPU, expressed in hertz (Hz). For example, a 1.2 GHz CPU is expressed as 1200000000.</p>"]
-    #[serde(rename="clock")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The clock speed of the device's CPU, expressed in hertz (Hz). For example, a 1.2 GHz CPU is expressed as 1200000000.</p>
+    #[serde(rename = "clock")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub clock: Option<f64>,
-    #[doc="<p>The CPU's frequency.</p>"]
-    #[serde(rename="frequency")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The CPU's frequency.</p>
+    #[serde(rename = "frequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<String>,
 }
 
-#[doc="<p>Represents entity counters.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents entity counters.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Counters {
-    #[doc="<p>The number of errored entities.</p>"]
-    #[serde(rename="errored")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of errored entities.</p>
+    #[serde(rename = "errored")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub errored: Option<i64>,
-    #[doc="<p>The number of failed entities.</p>"]
-    #[serde(rename="failed")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of failed entities.</p>
+    #[serde(rename = "failed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed: Option<i64>,
-    #[doc="<p>The number of passed entities.</p>"]
-    #[serde(rename="passed")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of passed entities.</p>
+    #[serde(rename = "passed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub passed: Option<i64>,
-    #[doc="<p>The number of skipped entities.</p>"]
-    #[serde(rename="skipped")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of skipped entities.</p>
+    #[serde(rename = "skipped")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub skipped: Option<i64>,
-    #[doc="<p>The number of stopped entities.</p>"]
-    #[serde(rename="stopped")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of stopped entities.</p>
+    #[serde(rename = "stopped")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stopped: Option<i64>,
-    #[doc="<p>The total number of entities.</p>"]
-    #[serde(rename="total")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of entities.</p>
+    #[serde(rename = "total")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub total: Option<i64>,
-    #[doc="<p>The number of warned entities.</p>"]
-    #[serde(rename="warned")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of warned entities.</p>
+    #[serde(rename = "warned")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub warned: Option<i64>,
 }
 
-#[doc="<p>Represents a request to the create device pool operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the create device pool operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDevicePoolRequest {
-    #[doc="<p>The device pool's description.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device pool's description.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The device pool's name.</p>"]
-    #[serde(rename="name")]
+    /// <p>The device pool's name.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The ARN of the project for the device pool.</p>"]
-    #[serde(rename="projectArn")]
+    /// <p>The ARN of the project for the device pool.</p>
+    #[serde(rename = "projectArn")]
     pub project_arn: String,
-    #[doc="<p>The device pool's rules.</p>"]
-    #[serde(rename="rules")]
+    /// <p>The device pool's rules.</p>
+    #[serde(rename = "rules")]
     pub rules: Vec<Rule>,
 }
 
-#[doc="<p>Represents the result of a create device pool request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a create device pool request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateDevicePoolResult {
-    #[doc="<p>The newly created device pool.</p>"]
-    #[serde(rename="devicePool")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The newly created device pool.</p>
+    #[serde(rename = "devicePool")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_pool: Option<DevicePool>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateNetworkProfileRequest {
-    #[doc="<p>The description of the network profile.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the network profile.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>"]
-    #[serde(rename="downlinkBandwidthBits")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>
+    #[serde(rename = "downlinkBandwidthBits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub downlink_bandwidth_bits: Option<i64>,
-    #[doc="<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>"]
-    #[serde(rename="downlinkDelayMs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>
+    #[serde(rename = "downlinkDelayMs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub downlink_delay_ms: Option<i64>,
-    #[doc="<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>"]
-    #[serde(rename="downlinkJitterMs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>
+    #[serde(rename = "downlinkJitterMs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub downlink_jitter_ms: Option<i64>,
-    #[doc="<p>Proportion of received packets that fail to arrive from 0 to 100 percent.</p>"]
-    #[serde(rename="downlinkLossPercent")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Proportion of received packets that fail to arrive from 0 to 100 percent.</p>
+    #[serde(rename = "downlinkLossPercent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub downlink_loss_percent: Option<i64>,
-    #[doc="<p>The name you wish to specify for the new network profile.</p>"]
-    #[serde(rename="name")]
+    /// <p>The name you wish to specify for the new network profile.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The Amazon Resource Name (ARN) of the project for which you want to create a network profile.</p>"]
-    #[serde(rename="projectArn")]
+    /// <p>The Amazon Resource Name (ARN) of the project for which you want to create a network profile.</p>
+    #[serde(rename = "projectArn")]
     pub project_arn: String,
-    #[doc="<p>The type of network profile you wish to create. Valid values are listed below.</p>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of network profile you wish to create. Valid values are listed below.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>"]
-    #[serde(rename="uplinkBandwidthBits")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>
+    #[serde(rename = "uplinkBandwidthBits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub uplink_bandwidth_bits: Option<i64>,
-    #[doc="<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>"]
-    #[serde(rename="uplinkDelayMs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>
+    #[serde(rename = "uplinkDelayMs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub uplink_delay_ms: Option<i64>,
-    #[doc="<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>"]
-    #[serde(rename="uplinkJitterMs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>
+    #[serde(rename = "uplinkJitterMs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub uplink_jitter_ms: Option<i64>,
-    #[doc="<p>Proportion of transmitted packets that fail to arrive from 0 to 100 percent.</p>"]
-    #[serde(rename="uplinkLossPercent")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Proportion of transmitted packets that fail to arrive from 0 to 100 percent.</p>
+    #[serde(rename = "uplinkLossPercent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub uplink_loss_percent: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateNetworkProfileResult {
-    #[doc="<p>The network profile that is returned by the create network profile request.</p>"]
-    #[serde(rename="networkProfile")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The network profile that is returned by the create network profile request.</p>
+    #[serde(rename = "networkProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub network_profile: Option<NetworkProfile>,
 }
 
-#[doc="<p>Represents a request to the create project operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the create project operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateProjectRequest {
-    #[doc="<p>Sets the execution timeout value (in minutes) for a project. All test runs in this project will use the specified execution timeout value unless overridden when scheduling a run.</p>"]
-    #[serde(rename="defaultJobTimeoutMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Sets the execution timeout value (in minutes) for a project. All test runs in this project will use the specified execution timeout value unless overridden when scheduling a run.</p>
+    #[serde(rename = "defaultJobTimeoutMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_job_timeout_minutes: Option<i64>,
-    #[doc="<p>The project's name.</p>"]
-    #[serde(rename="name")]
+    /// <p>The project's name.</p>
+    #[serde(rename = "name")]
     pub name: String,
 }
 
-#[doc="<p>Represents the result of a create project request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a create project request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateProjectResult {
-    #[doc="<p>The newly created project.</p>"]
-    #[serde(rename="project")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The newly created project.</p>
+    #[serde(rename = "project")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub project: Option<Project>,
 }
 
-#[doc="<p>Creates the configuration settings for a remote access session, including the device model and type.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Creates the configuration settings for a remote access session, including the device model and type.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateRemoteAccessSessionConfiguration {
-    #[doc="<p>Returns the billing method for purposes of configuring a remote access session.</p>"]
-    #[serde(rename="billingMethod")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returns the billing method for purposes of configuring a remote access session.</p>
+    #[serde(rename = "billingMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_method: Option<String>,
 }
 
-#[doc="<p>Creates and submits a request to start a remote access session.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Creates and submits a request to start a remote access session.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateRemoteAccessSessionRequest {
-    #[doc="<p>The configuration information for the remote access session request.</p>"]
-    #[serde(rename="configuration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The configuration information for the remote access session request.</p>
+    #[serde(rename = "configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<CreateRemoteAccessSessionConfiguration>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the device for which you want to create a remote access session.</p>"]
-    #[serde(rename="deviceArn")]
+    /// <p>The Amazon Resource Name (ARN) of the device for which you want to create a remote access session.</p>
+    #[serde(rename = "deviceArn")]
     pub device_arn: String,
-    #[doc="<p>The name of the remote access session that you wish to create.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the remote access session that you wish to create.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the project for which you want to create a remote access session.</p>"]
-    #[serde(rename="projectArn")]
+    /// <p>The Amazon Resource Name (ARN) of the project for which you want to create a remote access session.</p>
+    #[serde(rename = "projectArn")]
     pub project_arn: String,
 }
 
-#[doc="<p>Represents the server response from a request to create a remote access session.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the server response from a request to create a remote access session.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateRemoteAccessSessionResult {
-    #[doc="<p>A container that describes the remote access session when the request to create a remote access session is sent.</p>"]
-    #[serde(rename="remoteAccessSession")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A container that describes the remote access session when the request to create a remote access session is sent.</p>
+    #[serde(rename = "remoteAccessSession")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access_session: Option<RemoteAccessSession>,
 }
 
-#[doc="<p>Represents a request to the create upload operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the create upload operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateUploadRequest {
-    #[doc="<p>The upload's content type (for example, \"application/octet-stream\").</p>"]
-    #[serde(rename="contentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The upload's content type (for example, "application/octet-stream").</p>
+    #[serde(rename = "contentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content_type: Option<String>,
-    #[doc="<p>The upload's file name. The name should not contain the '/' character. If uploading an iOS app, the file name needs to end with the <code>.ipa</code> extension. If uploading an Android app, the file name needs to end with the <code>.apk</code> extension. For all others, the file name must end with the <code>.zip</code> file extension.</p>"]
-    #[serde(rename="name")]
+    /// <p>The upload's file name. The name should not contain the '/' character. If uploading an iOS app, the file name needs to end with the <code>.ipa</code> extension. If uploading an Android app, the file name needs to end with the <code>.apk</code> extension. For all others, the file name must end with the <code>.zip</code> file extension.</p>
+    #[serde(rename = "name")]
     pub name: String,
-    #[doc="<p>The ARN of the project for the upload.</p>"]
-    #[serde(rename="projectArn")]
+    /// <p>The ARN of the project for the upload.</p>
+    #[serde(rename = "projectArn")]
     pub project_arn: String,
-    #[doc="<p>The upload's upload type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>ANDROID_APP: An Android upload.</p> </li> <li> <p>IOS_APP: An iOS upload.</p> </li> <li> <p>WEB_APP: A web appliction upload.</p> </li> <li> <p>EXTERNAL_DATA: An external data upload.</p> </li> <li> <p>APPIUM_JAVA_JUNIT_TEST_PACKAGE: An Appium Java JUnit test package upload.</p> </li> <li> <p>APPIUM_JAVA_TESTNG_TEST_PACKAGE: An Appium Java TestNG test package upload.</p> </li> <li> <p>APPIUM_PYTHON_TEST_PACKAGE: An Appium Python test package upload.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT_TEST_PACKAGE: An Appium Java JUnit test package upload.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG_TEST_PACKAGE: An Appium Java TestNG test package upload.</p> </li> <li> <p>APPIUM_WEB_PYTHON_TEST_PACKAGE: An Appium Python test package upload.</p> </li> <li> <p>CALABASH_TEST_PACKAGE: A Calabash test package upload.</p> </li> <li> <p>INSTRUMENTATION_TEST_PACKAGE: An instrumentation upload.</p> </li> <li> <p>UIAUTOMATION_TEST_PACKAGE: A uiautomation test package upload.</p> </li> <li> <p>UIAUTOMATOR_TEST_PACKAGE: A uiautomator test package upload.</p> </li> <li> <p>XCTEST_TEST_PACKAGE: An XCode test package upload.</p> </li> <li> <p>XCTEST_UI_TEST_PACKAGE: An XCode UI test package upload.</p> </li> </ul> <p> <b>Note</b> If you call <code>CreateUpload</code> with <code>WEB_APP</code> specified, AWS Device Farm throws an <code>ArgumentException</code> error.</p>"]
-    #[serde(rename="type")]
+    /// <p>The upload's upload type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>ANDROID_APP: An Android upload.</p> </li> <li> <p>IOS_APP: An iOS upload.</p> </li> <li> <p>WEB_APP: A web appliction upload.</p> </li> <li> <p>EXTERNAL_DATA: An external data upload.</p> </li> <li> <p>APPIUM_JAVA_JUNIT_TEST_PACKAGE: An Appium Java JUnit test package upload.</p> </li> <li> <p>APPIUM_JAVA_TESTNG_TEST_PACKAGE: An Appium Java TestNG test package upload.</p> </li> <li> <p>APPIUM_PYTHON_TEST_PACKAGE: An Appium Python test package upload.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT_TEST_PACKAGE: An Appium Java JUnit test package upload.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG_TEST_PACKAGE: An Appium Java TestNG test package upload.</p> </li> <li> <p>APPIUM_WEB_PYTHON_TEST_PACKAGE: An Appium Python test package upload.</p> </li> <li> <p>CALABASH_TEST_PACKAGE: A Calabash test package upload.</p> </li> <li> <p>INSTRUMENTATION_TEST_PACKAGE: An instrumentation upload.</p> </li> <li> <p>UIAUTOMATION_TEST_PACKAGE: A uiautomation test package upload.</p> </li> <li> <p>UIAUTOMATOR_TEST_PACKAGE: A uiautomator test package upload.</p> </li> <li> <p>XCTEST_TEST_PACKAGE: An XCode test package upload.</p> </li> <li> <p>XCTEST_UI_TEST_PACKAGE: An XCode UI test package upload.</p> </li> </ul> <p> <b>Note</b> If you call <code>CreateUpload</code> with <code>WEB_APP</code> specified, AWS Device Farm throws an <code>ArgumentException</code> error.</p>
+    #[serde(rename = "type")]
     pub type_: String,
 }
 
-#[doc="<p>Represents the result of a create upload request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a create upload request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateUploadResult {
-    #[doc="<p>The newly created upload.</p>"]
-    #[serde(rename="upload")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The newly created upload.</p>
+    #[serde(rename = "upload")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub upload: Option<Upload>,
 }
 
-#[doc="<p>Represents a request to the delete device pool operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the delete device pool operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDevicePoolRequest {
-    #[doc="<p>Represents the Amazon Resource Name (ARN) of the Device Farm device pool you wish to delete.</p>"]
-    #[serde(rename="arn")]
+    /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm device pool you wish to delete.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the result of a delete device pool request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a delete device pool request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteDevicePoolResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteNetworkProfileRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the network profile you want to delete.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Amazon Resource Name (ARN) of the network profile you want to delete.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteNetworkProfileResult;
 
-#[doc="<p>Represents a request to the delete project operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the delete project operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteProjectRequest {
-    #[doc="<p>Represents the Amazon Resource Name (ARN) of the Device Farm project you wish to delete.</p>"]
-    #[serde(rename="arn")]
+    /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm project you wish to delete.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the result of a delete project request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a delete project request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteProjectResult;
 
-#[doc="<p>Represents the request to delete the specified remote access session.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to delete the specified remote access session.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteRemoteAccessSessionRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the sesssion for which you want to delete remote access.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Amazon Resource Name (ARN) of the sesssion for which you want to delete remote access.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>The response from the server when a request is made to delete the remote access session.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The response from the server when a request is made to delete the remote access session.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteRemoteAccessSessionResult;
 
-#[doc="<p>Represents a request to the delete run operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the delete run operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteRunRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) for the run you wish to delete.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Amazon Resource Name (ARN) for the run you wish to delete.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the result of a delete run request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a delete run request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteRunResult;
 
-#[doc="<p>Represents a request to the delete upload operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the delete upload operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteUploadRequest {
-    #[doc="<p>Represents the Amazon Resource Name (ARN) of the Device Farm upload you wish to delete.</p>"]
-    #[serde(rename="arn")]
+    /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm upload you wish to delete.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the result of a delete upload request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a delete upload request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteUploadResult;
 
-#[doc="<p>Represents a device type that an app is tested against.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a device type that an app is tested against.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Device {
-    #[doc="<p>The device's ARN.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device's ARN.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The device's carrier.</p>"]
-    #[serde(rename="carrier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device's carrier.</p>
+    #[serde(rename = "carrier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub carrier: Option<String>,
-    #[doc="<p>Information about the device's CPU.</p>"]
-    #[serde(rename="cpu")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the device's CPU.</p>
+    #[serde(rename = "cpu")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cpu: Option<CPU>,
-    #[doc="<p>The name of the fleet to which this device belongs.</p>"]
-    #[serde(rename="fleetName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the fleet to which this device belongs.</p>
+    #[serde(rename = "fleetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_name: Option<String>,
-    #[doc="<p>The type of fleet to which this device belongs. Possible values for fleet type are PRIVATE and PUBLIC.</p>"]
-    #[serde(rename="fleetType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of fleet to which this device belongs. Possible values for fleet type are PRIVATE and PUBLIC.</p>
+    #[serde(rename = "fleetType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
-    #[doc="<p>The device's form factor.</p> <p>Allowed values include:</p> <ul> <li> <p>PHONE: The phone form factor.</p> </li> <li> <p>TABLET: The tablet form factor.</p> </li> </ul>"]
-    #[serde(rename="formFactor")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device's form factor.</p> <p>Allowed values include:</p> <ul> <li> <p>PHONE: The phone form factor.</p> </li> <li> <p>TABLET: The tablet form factor.</p> </li> </ul>
+    #[serde(rename = "formFactor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub form_factor: Option<String>,
-    #[doc="<p>The device's heap size, expressed in bytes.</p>"]
-    #[serde(rename="heapSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device's heap size, expressed in bytes.</p>
+    #[serde(rename = "heapSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub heap_size: Option<i64>,
-    #[doc="<p>The device's image name.</p>"]
-    #[serde(rename="image")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device's image name.</p>
+    #[serde(rename = "image")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image: Option<String>,
-    #[doc="<p>The device's manufacturer name.</p>"]
-    #[serde(rename="manufacturer")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device's manufacturer name.</p>
+    #[serde(rename = "manufacturer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub manufacturer: Option<String>,
-    #[doc="<p>The device's total memory size, expressed in bytes.</p>"]
-    #[serde(rename="memory")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device's total memory size, expressed in bytes.</p>
+    #[serde(rename = "memory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub memory: Option<i64>,
-    #[doc="<p>The device's model name.</p>"]
-    #[serde(rename="model")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device's model name.</p>
+    #[serde(rename = "model")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub model: Option<String>,
-    #[doc="<p>The device's display name.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device's display name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The device's operating system type.</p>"]
-    #[serde(rename="os")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device's operating system type.</p>
+    #[serde(rename = "os")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub os: Option<String>,
-    #[doc="<p>The device's platform.</p> <p>Allowed values include:</p> <ul> <li> <p>ANDROID: The Android platform.</p> </li> <li> <p>IOS: The iOS platform.</p> </li> </ul>"]
-    #[serde(rename="platform")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device's platform.</p> <p>Allowed values include:</p> <ul> <li> <p>ANDROID: The Android platform.</p> </li> <li> <p>IOS: The iOS platform.</p> </li> </ul>
+    #[serde(rename = "platform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
-    #[doc="<p>The device's radio.</p>"]
-    #[serde(rename="radio")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device's radio.</p>
+    #[serde(rename = "radio")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub radio: Option<String>,
-    #[doc="<p>Specifies whether remote access has been enabled for the specified device.</p>"]
-    #[serde(rename="remoteAccessEnabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether remote access has been enabled for the specified device.</p>
+    #[serde(rename = "remoteAccessEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access_enabled: Option<bool>,
-    #[doc="<p>The resolution of the device.</p>"]
-    #[serde(rename="resolution")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resolution of the device.</p>
+    #[serde(rename = "resolution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resolution: Option<Resolution>,
 }
 
-#[doc="<p>Represents the total (metered or unmetered) minutes used by the resource to run tests. Contains the sum of minutes consumed by all children.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the total (metered or unmetered) minutes used by the resource to run tests. Contains the sum of minutes consumed by all children.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeviceMinutes {
-    #[doc="<p>When specified, represents only the sum of metered minutes used by the resource to run tests.</p>"]
-    #[serde(rename="metered")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When specified, represents only the sum of metered minutes used by the resource to run tests.</p>
+    #[serde(rename = "metered")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metered: Option<f64>,
-    #[doc="<p>When specified, represents the total minutes used by the resource to run tests.</p>"]
-    #[serde(rename="total")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When specified, represents the total minutes used by the resource to run tests.</p>
+    #[serde(rename = "total")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub total: Option<f64>,
-    #[doc="<p>When specified, represents only the sum of unmetered minutes used by the resource to run tests.</p>"]
-    #[serde(rename="unmetered")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When specified, represents only the sum of unmetered minutes used by the resource to run tests.</p>
+    #[serde(rename = "unmetered")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub unmetered: Option<f64>,
 }
 
-#[doc="<p>Represents a collection of device types.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a collection of device types.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DevicePool {
-    #[doc="<p>The device pool's ARN.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device pool's ARN.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The device pool's description.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device pool's description.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The device pool's name.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device pool's name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Information about the device pool's rules.</p>"]
-    #[serde(rename="rules")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the device pool's rules.</p>
+    #[serde(rename = "rules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rules: Option<Vec<Rule>>,
-    #[doc="<p>The device pool's type.</p> <p>Allowed values include:</p> <ul> <li> <p>CURATED: A device pool that is created and managed by AWS Device Farm.</p> </li> <li> <p>PRIVATE: A device pool that is created and managed by the device pool developer.</p> </li> </ul>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device pool's type.</p> <p>Allowed values include:</p> <ul> <li> <p>CURATED: A device pool that is created and managed by AWS Device Farm.</p> </li> <li> <p>PRIVATE: A device pool that is created and managed by the device pool developer.</p> </li> </ul>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Represents a device pool compatibility result.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a device pool compatibility result.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DevicePoolCompatibilityResult {
-    #[doc="<p>Whether the result was compatible with the device pool.</p>"]
-    #[serde(rename="compatible")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether the result was compatible with the device pool.</p>
+    #[serde(rename = "compatible")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compatible: Option<bool>,
-    #[doc="<p>The device (phone or tablet) that you wish to return information about.</p>"]
-    #[serde(rename="device")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device (phone or tablet) that you wish to return information about.</p>
+    #[serde(rename = "device")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device: Option<Device>,
-    #[doc="<p>Information about the compatibility.</p>"]
-    #[serde(rename="incompatibilityMessages")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the compatibility.</p>
+    #[serde(rename = "incompatibilityMessages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub incompatibility_messages: Option<Vec<IncompatibilityMessage>>,
 }
 
-#[doc="<p>Represents configuration information about a test run, such as the execution timeout (in minutes).</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents configuration information about a test run, such as the execution timeout (in minutes).</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ExecutionConfiguration {
-    #[doc="<p>True if account cleanup is enabled at the beginning of the test; otherwise, false.</p>"]
-    #[serde(rename="accountsCleanup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>True if account cleanup is enabled at the beginning of the test; otherwise, false.</p>
+    #[serde(rename = "accountsCleanup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accounts_cleanup: Option<bool>,
-    #[doc="<p>True if app package cleanup is enabled at the beginning of the test; otherwise, false.</p>"]
-    #[serde(rename="appPackagesCleanup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>True if app package cleanup is enabled at the beginning of the test; otherwise, false.</p>
+    #[serde(rename = "appPackagesCleanup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub app_packages_cleanup: Option<bool>,
-    #[doc="<p>The number of minutes a test run will execute before it times out.</p>"]
-    #[serde(rename="jobTimeoutMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of minutes a test run will execute before it times out.</p>
+    #[serde(rename = "jobTimeoutMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job_timeout_minutes: Option<i64>,
 }
 
-#[doc="<p>Represents the request sent to retrieve the account settings.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request sent to retrieve the account settings.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetAccountSettingsRequest;
 
-#[doc="<p>Represents the account settings return values from the <code>GetAccountSettings</code> request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the account settings return values from the <code>GetAccountSettings</code> request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetAccountSettingsResult {
-    #[doc="<p>The account settings.</p>"]
-    #[serde(rename="accountSettings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The account settings.</p>
+    #[serde(rename = "accountSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub account_settings: Option<AccountSettings>,
 }
 
-#[doc="<p>Represents a request to the get device pool compatibility operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the get device pool compatibility operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDevicePoolCompatibilityRequest {
-    #[doc="<p>The ARN of the app that is associated with the specified device pool.</p>"]
-    #[serde(rename="appArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the app that is associated with the specified device pool.</p>
+    #[serde(rename = "appArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub app_arn: Option<String>,
-    #[doc="<p>The device pool's ARN.</p>"]
-    #[serde(rename="devicePoolArn")]
+    /// <p>The device pool's ARN.</p>
+    #[serde(rename = "devicePoolArn")]
     pub device_pool_arn: String,
-    #[doc="<p>Information about the uploaded test to be run against the device pool.</p>"]
-    #[serde(rename="test")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the uploaded test to be run against the device pool.</p>
+    #[serde(rename = "test")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub test: Option<ScheduleRunTest>,
-    #[doc="<p>The test type for the specified device pool.</p> <p>Allowed values include the following:</p> <ul> <li> <p>BUILTIN_FUZZ: The built-in fuzz type.</p> </li> <li> <p>BUILTIN_EXPLORER: For Android, an app explorer that will traverse an Android app, interacting with it and capturing screenshots at the same time.</p> </li> <li> <p>APPIUM_JAVA_JUNIT: The Appium Java JUnit type.</p> </li> <li> <p>APPIUM_JAVA_TESTNG: The Appium Java TestNG type.</p> </li> <li> <p>APPIUM_PYTHON: The Appium Python type.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT: The Appium Java JUnit type for Web apps.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG: The Appium Java TestNG type for Web apps.</p> </li> <li> <p>APPIUM_WEB_PYTHON: The Appium Python type for Web apps.</p> </li> <li> <p>CALABASH: The Calabash type.</p> </li> <li> <p>INSTRUMENTATION: The Instrumentation type.</p> </li> <li> <p>UIAUTOMATION: The uiautomation type.</p> </li> <li> <p>UIAUTOMATOR: The uiautomator type.</p> </li> <li> <p>XCTEST: The XCode test type.</p> </li> <li> <p>XCTEST_UI: The XCode UI test type.</p> </li> </ul>"]
-    #[serde(rename="testType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The test type for the specified device pool.</p> <p>Allowed values include the following:</p> <ul> <li> <p>BUILTIN_FUZZ: The built-in fuzz type.</p> </li> <li> <p>BUILTIN_EXPLORER: For Android, an app explorer that will traverse an Android app, interacting with it and capturing screenshots at the same time.</p> </li> <li> <p>APPIUM_JAVA_JUNIT: The Appium Java JUnit type.</p> </li> <li> <p>APPIUM_JAVA_TESTNG: The Appium Java TestNG type.</p> </li> <li> <p>APPIUM_PYTHON: The Appium Python type.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT: The Appium Java JUnit type for Web apps.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG: The Appium Java TestNG type for Web apps.</p> </li> <li> <p>APPIUM_WEB_PYTHON: The Appium Python type for Web apps.</p> </li> <li> <p>CALABASH: The Calabash type.</p> </li> <li> <p>INSTRUMENTATION: The Instrumentation type.</p> </li> <li> <p>UIAUTOMATION: The uiautomation type.</p> </li> <li> <p>UIAUTOMATOR: The uiautomator type.</p> </li> <li> <p>XCTEST: The XCode test type.</p> </li> <li> <p>XCTEST_UI: The XCode UI test type.</p> </li> </ul>
+    #[serde(rename = "testType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub test_type: Option<String>,
 }
 
-#[doc="<p>Represents the result of describe device pool compatibility request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of describe device pool compatibility request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDevicePoolCompatibilityResult {
-    #[doc="<p>Information about compatible devices.</p>"]
-    #[serde(rename="compatibleDevices")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about compatible devices.</p>
+    #[serde(rename = "compatibleDevices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compatible_devices: Option<Vec<DevicePoolCompatibilityResult>>,
-    #[doc="<p>Information about incompatible devices.</p>"]
-    #[serde(rename="incompatibleDevices")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about incompatible devices.</p>
+    #[serde(rename = "incompatibleDevices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub incompatible_devices: Option<Vec<DevicePoolCompatibilityResult>>,
 }
 
-#[doc="<p>Represents a request to the get device pool operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the get device pool operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDevicePoolRequest {
-    #[doc="<p>The device pool's ARN.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The device pool's ARN.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the result of a get device pool request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a get device pool request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDevicePoolResult {
-    #[doc="<p>An object containing information about the requested device pool.</p>"]
-    #[serde(rename="devicePool")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An object containing information about the requested device pool.</p>
+    #[serde(rename = "devicePool")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_pool: Option<DevicePool>,
 }
 
-#[doc="<p>Represents a request to the get device request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the get device request.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDeviceRequest {
-    #[doc="<p>The device type's ARN.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The device type's ARN.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the result of a get device request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a get device request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDeviceResult {
-    #[doc="<p>An object containing information about the requested device.</p>"]
-    #[serde(rename="device")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An object containing information about the requested device.</p>
+    #[serde(rename = "device")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device: Option<Device>,
 }
 
-#[doc="<p>Represents a request to the get job operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the get job operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetJobRequest {
-    #[doc="<p>The job's ARN.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The job's ARN.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the result of a get job request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a get job request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetJobResult {
-    #[doc="<p>An object containing information about the requested job.</p>"]
-    #[serde(rename="job")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An object containing information about the requested job.</p>
+    #[serde(rename = "job")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job: Option<Job>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetNetworkProfileRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the network profile you want to return information about.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Amazon Resource Name (ARN) of the network profile you want to return information about.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetNetworkProfileResult {
-    #[doc="<p>The network profile.</p>"]
-    #[serde(rename="networkProfile")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The network profile.</p>
+    #[serde(rename = "networkProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub network_profile: Option<NetworkProfile>,
 }
 
-#[doc="<p>Represents the request to retrieve the offering status for the specified customer or account.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to retrieve the offering status for the specified customer or account.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetOfferingStatusRequest {
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Returns the status result for a device offering.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Returns the status result for a device offering.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetOfferingStatusResult {
-    #[doc="<p>When specified, gets the offering status for the current period.</p>"]
-    #[serde(rename="current")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When specified, gets the offering status for the current period.</p>
+    #[serde(rename = "current")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub current: Option<::std::collections::HashMap<String, OfferingStatus>>,
-    #[doc="<p>When specified, gets the offering status for the next period.</p>"]
-    #[serde(rename="nextPeriod")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When specified, gets the offering status for the next period.</p>
+    #[serde(rename = "nextPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_period: Option<::std::collections::HashMap<String, OfferingStatus>>,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents a request to the get project operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the get project operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetProjectRequest {
-    #[doc="<p>The project's ARN.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The project's ARN.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the result of a get project request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a get project request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetProjectResult {
-    #[doc="<p>The project you wish to get information about.</p>"]
-    #[serde(rename="project")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The project you wish to get information about.</p>
+    #[serde(rename = "project")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub project: Option<Project>,
 }
 
-#[doc="<p>Represents the request to get information about the specified remote access session.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to get information about the specified remote access session.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetRemoteAccessSessionRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the remote access session about which you want to get session information.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Amazon Resource Name (ARN) of the remote access session about which you want to get session information.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the response from the server that lists detailed information about the remote access session.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server that lists detailed information about the remote access session.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetRemoteAccessSessionResult {
-    #[doc="<p>A container that lists detailed information about the remote access session.</p>"]
-    #[serde(rename="remoteAccessSession")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A container that lists detailed information about the remote access session.</p>
+    #[serde(rename = "remoteAccessSession")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access_session: Option<RemoteAccessSession>,
 }
 
-#[doc="<p>Represents a request to the get run operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the get run operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetRunRequest {
-    #[doc="<p>The run's ARN.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The run's ARN.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the result of a get run request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a get run request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetRunResult {
-    #[doc="<p>The run you wish to get results from.</p>"]
-    #[serde(rename="run")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The run you wish to get results from.</p>
+    #[serde(rename = "run")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub run: Option<Run>,
 }
 
-#[doc="<p>Represents a request to the get suite operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the get suite operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetSuiteRequest {
-    #[doc="<p>The suite's ARN.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The suite's ARN.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the result of a get suite request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a get suite request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetSuiteResult {
-    #[doc="<p>A collection of one or more tests.</p>"]
-    #[serde(rename="suite")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A collection of one or more tests.</p>
+    #[serde(rename = "suite")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub suite: Option<Suite>,
 }
 
-#[doc="<p>Represents a request to the get test operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the get test operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetTestRequest {
-    #[doc="<p>The test's ARN.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The test's ARN.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the result of a get test request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a get test request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetTestResult {
-    #[doc="<p>A test condition that is evaluated.</p>"]
-    #[serde(rename="test")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A test condition that is evaluated.</p>
+    #[serde(rename = "test")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub test: Option<Test>,
 }
 
-#[doc="<p>Represents a request to the get upload operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the get upload operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetUploadRequest {
-    #[doc="<p>The upload's ARN.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The upload's ARN.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the result of a get upload request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a get upload request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetUploadResult {
-    #[doc="<p>An app or a set of one or more tests to upload or that have been uploaded.</p>"]
-    #[serde(rename="upload")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An app or a set of one or more tests to upload or that have been uploaded.</p>
+    #[serde(rename = "upload")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub upload: Option<Upload>,
 }
 
-#[doc="<p>Represents information about incompatibility.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents information about incompatibility.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct IncompatibilityMessage {
-    #[doc="<p>A message about the incompatibility.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A message about the incompatibility.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>The type of incompatibility.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The ARN.</p> </li> <li> <p>FORM_FACTOR: The form factor (for example, phone or tablet).</p> </li> <li> <p>MANUFACTURER: The manufacturer.</p> </li> <li> <p>PLATFORM: The platform (for example, Android or iOS).</p> </li> <li> <p>REMOTE_ACCESS_ENABLED: Whether the device is enabled for remote access.</p> </li> <li> <p>APPIUM_VERSION: The Appium version for the test.</p> </li> </ul>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of incompatibility.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The ARN.</p> </li> <li> <p>FORM_FACTOR: The form factor (for example, phone or tablet).</p> </li> <li> <p>MANUFACTURER: The manufacturer.</p> </li> <li> <p>PLATFORM: The platform (for example, Android or iOS).</p> </li> <li> <p>REMOTE_ACCESS_ENABLED: Whether the device is enabled for remote access.</p> </li> <li> <p>APPIUM_VERSION: The Appium version for the test.</p> </li> </ul>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Represents the request to install an Android application (in .apk format) or an iOS application (in .ipa format) as part of a remote access session.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to install an Android application (in .apk format) or an iOS application (in .ipa format) as part of a remote access session.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct InstallToRemoteAccessSessionRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the app about which you are requesting information.</p>"]
-    #[serde(rename="appArn")]
+    /// <p>The Amazon Resource Name (ARN) of the app about which you are requesting information.</p>
+    #[serde(rename = "appArn")]
     pub app_arn: String,
-    #[doc="<p>The Amazon Resource Name (ARN) of the remote access session about which you are requesting information.</p>"]
-    #[serde(rename="remoteAccessSessionArn")]
+    /// <p>The Amazon Resource Name (ARN) of the remote access session about which you are requesting information.</p>
+    #[serde(rename = "remoteAccessSessionArn")]
     pub remote_access_session_arn: String,
 }
 
-#[doc="<p>Represents the response from the server after AWS Device Farm makes a request to install to a remote access session.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server after AWS Device Farm makes a request to install to a remote access session.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstallToRemoteAccessSessionResult {
-    #[doc="<p>An app to upload or that has been uploaded.</p>"]
-    #[serde(rename="appUpload")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An app to upload or that has been uploaded.</p>
+    #[serde(rename = "appUpload")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub app_upload: Option<Upload>,
 }
 
-#[doc="<p>Represents a device.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a device.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Job {
-    #[doc="<p>The job's ARN.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job's ARN.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The job's result counters.</p>"]
-    #[serde(rename="counters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job's result counters.</p>
+    #[serde(rename = "counters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub counters: Option<Counters>,
-    #[doc="<p>When the job was created.</p>"]
-    #[serde(rename="created")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When the job was created.</p>
+    #[serde(rename = "created")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<f64>,
-    #[doc="<p>The device (phone or tablet).</p>"]
-    #[serde(rename="device")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device (phone or tablet).</p>
+    #[serde(rename = "device")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device: Option<Device>,
-    #[doc="<p>Represents the total (metered or unmetered) minutes used by the job.</p>"]
-    #[serde(rename="deviceMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Represents the total (metered or unmetered) minutes used by the job.</p>
+    #[serde(rename = "deviceMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_minutes: Option<DeviceMinutes>,
-    #[doc="<p>A message about the job's result.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A message about the job's result.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>The job's name.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job's name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The job's result.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul>"]
-    #[serde(rename="result")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job's result.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul>
+    #[serde(rename = "result")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result: Option<String>,
-    #[doc="<p>The job's start time.</p>"]
-    #[serde(rename="started")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job's start time.</p>
+    #[serde(rename = "started")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub started: Option<f64>,
-    #[doc="<p>The job's status.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending status.</p> </li> <li> <p>PENDING_CONCURRENCY: A pending concurrency status.</p> </li> <li> <p>PENDING_DEVICE: A pending device status.</p> </li> <li> <p>PROCESSING: A processing status.</p> </li> <li> <p>SCHEDULING: A scheduling status.</p> </li> <li> <p>PREPARING: A preparing status.</p> </li> <li> <p>RUNNING: A running status.</p> </li> <li> <p>COMPLETED: A completed status.</p> </li> <li> <p>STOPPING: A stopping status.</p> </li> </ul>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job's status.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending status.</p> </li> <li> <p>PENDING_CONCURRENCY: A pending concurrency status.</p> </li> <li> <p>PENDING_DEVICE: A pending device status.</p> </li> <li> <p>PROCESSING: A processing status.</p> </li> <li> <p>SCHEDULING: A scheduling status.</p> </li> <li> <p>PREPARING: A preparing status.</p> </li> <li> <p>RUNNING: A running status.</p> </li> <li> <p>COMPLETED: A completed status.</p> </li> <li> <p>STOPPING: A stopping status.</p> </li> </ul>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The job's stop time.</p>"]
-    #[serde(rename="stopped")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job's stop time.</p>
+    #[serde(rename = "stopped")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stopped: Option<f64>,
-    #[doc="<p>The job's type.</p> <p>Allowed values include the following:</p> <ul> <li> <p>BUILTIN_FUZZ: The built-in fuzz type.</p> </li> <li> <p>BUILTIN_EXPLORER: For Android, an app explorer that will traverse an Android app, interacting with it and capturing screenshots at the same time.</p> </li> <li> <p>APPIUM_JAVA_JUNIT: The Appium Java JUnit type.</p> </li> <li> <p>APPIUM_JAVA_TESTNG: The Appium Java TestNG type.</p> </li> <li> <p>APPIUM_PYTHON: The Appium Python type.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT: The Appium Java JUnit type for Web apps.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG: The Appium Java TestNG type for Web apps.</p> </li> <li> <p>APPIUM_WEB_PYTHON: The Appium Python type for Web apps.</p> </li> <li> <p>CALABASH: The Calabash type.</p> </li> <li> <p>INSTRUMENTATION: The Instrumentation type.</p> </li> <li> <p>UIAUTOMATION: The uiautomation type.</p> </li> <li> <p>UIAUTOMATOR: The uiautomator type.</p> </li> <li> <p>XCTEST: The XCode test type.</p> </li> <li> <p>XCTEST_UI: The XCode UI test type.</p> </li> </ul>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The job's type.</p> <p>Allowed values include the following:</p> <ul> <li> <p>BUILTIN_FUZZ: The built-in fuzz type.</p> </li> <li> <p>BUILTIN_EXPLORER: For Android, an app explorer that will traverse an Android app, interacting with it and capturing screenshots at the same time.</p> </li> <li> <p>APPIUM_JAVA_JUNIT: The Appium Java JUnit type.</p> </li> <li> <p>APPIUM_JAVA_TESTNG: The Appium Java TestNG type.</p> </li> <li> <p>APPIUM_PYTHON: The Appium Python type.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT: The Appium Java JUnit type for Web apps.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG: The Appium Java TestNG type for Web apps.</p> </li> <li> <p>APPIUM_WEB_PYTHON: The Appium Python type for Web apps.</p> </li> <li> <p>CALABASH: The Calabash type.</p> </li> <li> <p>INSTRUMENTATION: The Instrumentation type.</p> </li> <li> <p>UIAUTOMATION: The uiautomation type.</p> </li> <li> <p>UIAUTOMATOR: The uiautomator type.</p> </li> <li> <p>XCTEST: The XCode test type.</p> </li> <li> <p>XCTEST_UI: The XCode UI test type.</p> </li> </ul>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Represents a request to the list artifacts operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the list artifacts operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListArtifactsRequest {
-    #[doc="<p>The Run, Job, Suite, or Test ARN.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Run, Job, Suite, or Test ARN.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The artifacts' type.</p> <p>Allowed values include:</p> <ul> <li> <p>FILE: The artifacts are files.</p> </li> <li> <p>LOG: The artifacts are logs.</p> </li> <li> <p>SCREENSHOT: The artifacts are screenshots.</p> </li> </ul>"]
-    #[serde(rename="type")]
+    /// <p>The artifacts' type.</p> <p>Allowed values include:</p> <ul> <li> <p>FILE: The artifacts are files.</p> </li> <li> <p>LOG: The artifacts are logs.</p> </li> <li> <p>SCREENSHOT: The artifacts are screenshots.</p> </li> </ul>
+    #[serde(rename = "type")]
     pub type_: String,
 }
 
-#[doc="<p>Represents the result of a list artifacts operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a list artifacts operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListArtifactsResult {
-    #[doc="<p>Information about the artifacts.</p>"]
-    #[serde(rename="artifacts")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the artifacts.</p>
+    #[serde(rename = "artifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub artifacts: Option<Vec<Artifact>>,
-    #[doc="<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the result of a list device pools request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the result of a list device pools request.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDevicePoolsRequest {
-    #[doc="<p>The project ARN.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The project ARN.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The device pools' type.</p> <p>Allowed values include:</p> <ul> <li> <p>CURATED: A device pool that is created and managed by AWS Device Farm.</p> </li> <li> <p>PRIVATE: A device pool that is created and managed by the device pool developer.</p> </li> </ul>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device pools' type.</p> <p>Allowed values include:</p> <ul> <li> <p>CURATED: A device pool that is created and managed by AWS Device Farm.</p> </li> <li> <p>PRIVATE: A device pool that is created and managed by the device pool developer.</p> </li> </ul>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Represents the result of a list device pools request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a list device pools request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDevicePoolsResult {
-    #[doc="<p>Information about the device pools.</p>"]
-    #[serde(rename="devicePools")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the device pools.</p>
+    #[serde(rename = "devicePools")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_pools: Option<Vec<DevicePool>>,
-    #[doc="<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the result of a list devices request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the result of a list devices request.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDevicesRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the project.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the project.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the result of a list devices operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a list devices operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDevicesResult {
-    #[doc="<p>Information about the devices.</p>"]
-    #[serde(rename="devices")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the devices.</p>
+    #[serde(rename = "devices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub devices: Option<Vec<Device>>,
-    #[doc="<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents a request to the list jobs operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the list jobs operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListJobsRequest {
-    #[doc="<p>The jobs' ARNs.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The jobs' ARNs.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the result of a list jobs request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a list jobs request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListJobsResult {
-    #[doc="<p>Information about the jobs.</p>"]
-    #[serde(rename="jobs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the jobs.</p>
+    #[serde(rename = "jobs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub jobs: Option<Vec<Job>>,
-    #[doc="<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListNetworkProfilesRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the project for which you want to list network profiles.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Amazon Resource Name (ARN) of the project for which you want to list network profiles.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The type of network profile you wish to return information about. Valid values are listed below.</p>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of network profile you wish to return information about. Valid values are listed below.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListNetworkProfilesResult {
-    #[doc="<p>A list of the available network profiles.</p>"]
-    #[serde(rename="networkProfiles")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the available network profiles.</p>
+    #[serde(rename = "networkProfiles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub network_profiles: Option<Vec<NetworkProfile>>,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListOfferingPromotionsRequest {
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListOfferingPromotionsResult {
-    #[doc="<p>An identifier to be used in the next call to this operation, to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier to be used in the next call to this operation, to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Information about the offering promotions.</p>"]
-    #[serde(rename="offeringPromotions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the offering promotions.</p>
+    #[serde(rename = "offeringPromotions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub offering_promotions: Option<Vec<OfferingPromotion>>,
 }
 
-#[doc="<p>Represents the request to list the offering transaction history.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to list the offering transaction history.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListOfferingTransactionsRequest {
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Returns the transaction log of the specified offerings.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Returns the transaction log of the specified offerings.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListOfferingTransactionsResult {
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The audit log of subscriptions you have purchased and modified through AWS Device Farm.</p>"]
-    #[serde(rename="offeringTransactions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The audit log of subscriptions you have purchased and modified through AWS Device Farm.</p>
+    #[serde(rename = "offeringTransactions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub offering_transactions: Option<Vec<OfferingTransaction>>,
 }
 
-#[doc="<p>Represents the request to list all offerings.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to list all offerings.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListOfferingsRequest {
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the return values of the list of offerings.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the return values of the list of offerings.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListOfferingsResult {
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A value representing the list offering results.</p>"]
-    #[serde(rename="offerings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A value representing the list offering results.</p>
+    #[serde(rename = "offerings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub offerings: Option<Vec<Offering>>,
 }
 
-#[doc="<p>Represents a request to the list projects operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the list projects operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListProjectsRequest {
-    #[doc="<p>Optional. If no Amazon Resource Name (ARN) is specified, then AWS Device Farm returns a list of all projects for the AWS account. You can also specify a project ARN.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional. If no Amazon Resource Name (ARN) is specified, then AWS Device Farm returns a list of all projects for the AWS account. You can also specify a project ARN.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the result of a list projects request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a list projects request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListProjectsResult {
-    #[doc="<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Information about the projects.</p>"]
-    #[serde(rename="projects")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the projects.</p>
+    #[serde(rename = "projects")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub projects: Option<Vec<Project>>,
 }
 
-#[doc="<p>Represents the request to return information about the remote access session.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to return information about the remote access session.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListRemoteAccessSessionsRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the remote access session about which you are requesting information.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Amazon Resource Name (ARN) of the remote access session about which you are requesting information.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the response from the server after AWS Device Farm makes a request to return information about the remote access session.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server after AWS Device Farm makes a request to return information about the remote access session.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListRemoteAccessSessionsResult {
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A container representing the metadata from the service about each remote access session you are requesting.</p>"]
-    #[serde(rename="remoteAccessSessions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A container representing the metadata from the service about each remote access session you are requesting.</p>
+    #[serde(rename = "remoteAccessSessions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access_sessions: Option<Vec<RemoteAccessSession>>,
 }
 
-#[doc="<p>Represents a request to the list runs operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the list runs operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListRunsRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the project for which you want to list runs.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Amazon Resource Name (ARN) of the project for which you want to list runs.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the result of a list runs request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a list runs request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListRunsResult {
-    #[doc="<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Information about the runs.</p>"]
-    #[serde(rename="runs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the runs.</p>
+    #[serde(rename = "runs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub runs: Option<Vec<Run>>,
 }
 
-#[doc="<p>Represents a request to the list samples operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the list samples operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListSamplesRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the project for which you want to list samples.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Amazon Resource Name (ARN) of the project for which you want to list samples.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the result of a list samples request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a list samples request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListSamplesResult {
-    #[doc="<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Information about the samples.</p>"]
-    #[serde(rename="samples")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the samples.</p>
+    #[serde(rename = "samples")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub samples: Option<Vec<Sample>>,
 }
 
-#[doc="<p>Represents a request to the list suites operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the list suites operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListSuitesRequest {
-    #[doc="<p>The suites' ARNs.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The suites' ARNs.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the result of a list suites request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a list suites request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListSuitesResult {
-    #[doc="<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Information about the suites.</p>"]
-    #[serde(rename="suites")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the suites.</p>
+    #[serde(rename = "suites")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub suites: Option<Vec<Suite>>,
 }
 
-#[doc="<p>Represents a request to the list tests operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the list tests operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTestsRequest {
-    #[doc="<p>The tests' ARNs.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The tests' ARNs.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the result of a list tests request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a list tests request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTestsResult {
-    #[doc="<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Information about the tests.</p>"]
-    #[serde(rename="tests")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the tests.</p>
+    #[serde(rename = "tests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tests: Option<Vec<Test>>,
 }
 
-#[doc="<p>Represents a request to the list unique problems operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the list unique problems operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListUniqueProblemsRequest {
-    #[doc="<p>The unique problems' ARNs.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The unique problems' ARNs.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the result of a list unique problems request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a list unique problems request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListUniqueProblemsResult {
-    #[doc="<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Information about the unique problems.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul>"]
-    #[serde(rename="uniqueProblems")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the unique problems.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul>
+    #[serde(rename = "uniqueProblems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub unique_problems: Option<::std::collections::HashMap<String, Vec<UniqueProblem>>>,
 }
 
-#[doc="<p>Represents a request to the list uploads operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the list uploads operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListUploadsRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the project for which you want to list uploads.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Amazon Resource Name (ARN) of the project for which you want to list uploads.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>Represents the result of a list uploads request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a list uploads request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListUploadsResult {
-    #[doc="<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Information about the uploads.</p>"]
-    #[serde(rename="uploads")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the uploads.</p>
+    #[serde(rename = "uploads")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub uploads: Option<Vec<Upload>>,
 }
 
-#[doc="<p>Represents a latitude and longitude pair, expressed in geographic coordinate system degrees (for example 47.6204, -122.3491).</p> <p>Elevation is currently not supported.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a latitude and longitude pair, expressed in geographic coordinate system degrees (for example 47.6204, -122.3491).</p> <p>Elevation is currently not supported.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct Location {
-    #[doc="<p>The latitude.</p>"]
-    #[serde(rename="latitude")]
+    /// <p>The latitude.</p>
+    #[serde(rename = "latitude")]
     pub latitude: f64,
-    #[doc="<p>The longitude.</p>"]
-    #[serde(rename="longitude")]
+    /// <p>The longitude.</p>
+    #[serde(rename = "longitude")]
     pub longitude: f64,
 }
 
-#[doc="<p>A number representing the monetary amount for an offering or transaction.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A number representing the monetary amount for an offering or transaction.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MonetaryAmount {
-    #[doc="<p>The numerical amount of an offering or transaction.</p>"]
-    #[serde(rename="amount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The numerical amount of an offering or transaction.</p>
+    #[serde(rename = "amount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub amount: Option<f64>,
-    #[doc="<p>The currency code of a monetary amount. For example, <code>USD</code> means \"U.S. dollars.\"</p>"]
-    #[serde(rename="currencyCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The currency code of a monetary amount. For example, <code>USD</code> means "U.S. dollars."</p>
+    #[serde(rename = "currencyCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub currency_code: Option<String>,
 }
 
-#[doc="<p>An array of settings that describes characteristics of a network profile.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An array of settings that describes characteristics of a network profile.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct NetworkProfile {
-    #[doc="<p>The Amazon Resource Name (ARN) of the network profile.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the network profile.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The description of the network profile.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the network profile.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>"]
-    #[serde(rename="downlinkBandwidthBits")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>
+    #[serde(rename = "downlinkBandwidthBits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub downlink_bandwidth_bits: Option<i64>,
-    #[doc="<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>"]
-    #[serde(rename="downlinkDelayMs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>
+    #[serde(rename = "downlinkDelayMs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub downlink_delay_ms: Option<i64>,
-    #[doc="<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>"]
-    #[serde(rename="downlinkJitterMs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>
+    #[serde(rename = "downlinkJitterMs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub downlink_jitter_ms: Option<i64>,
-    #[doc="<p>Proportion of received packets that fail to arrive from 0 to 100 percent.</p>"]
-    #[serde(rename="downlinkLossPercent")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Proportion of received packets that fail to arrive from 0 to 100 percent.</p>
+    #[serde(rename = "downlinkLossPercent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub downlink_loss_percent: Option<i64>,
-    #[doc="<p>The name of the network profile.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the network profile.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The type of network profile. Valid values are listed below.</p>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of network profile. Valid values are listed below.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>"]
-    #[serde(rename="uplinkBandwidthBits")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>
+    #[serde(rename = "uplinkBandwidthBits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub uplink_bandwidth_bits: Option<i64>,
-    #[doc="<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>"]
-    #[serde(rename="uplinkDelayMs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>
+    #[serde(rename = "uplinkDelayMs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub uplink_delay_ms: Option<i64>,
-    #[doc="<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>"]
-    #[serde(rename="uplinkJitterMs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>
+    #[serde(rename = "uplinkJitterMs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub uplink_jitter_ms: Option<i64>,
-    #[doc="<p>Proportion of transmitted packets that fail to arrive from 0 to 100 percent.</p>"]
-    #[serde(rename="uplinkLossPercent")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Proportion of transmitted packets that fail to arrive from 0 to 100 percent.</p>
+    #[serde(rename = "uplinkLossPercent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub uplink_loss_percent: Option<i64>,
 }
 
-#[doc="<p>Represents the metadata of a device offering.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the metadata of a device offering.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Offering {
-    #[doc="<p>A string describing the offering.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string describing the offering.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The ID that corresponds to a device offering.</p>"]
-    #[serde(rename="id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID that corresponds to a device offering.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The platform of the device (e.g., ANDROID or IOS).</p>"]
-    #[serde(rename="platform")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The platform of the device (e.g., ANDROID or IOS).</p>
+    #[serde(rename = "platform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
-    #[doc="<p>Specifies whether there are recurring charges for the offering.</p>"]
-    #[serde(rename="recurringCharges")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies whether there are recurring charges for the offering.</p>
+    #[serde(rename = "recurringCharges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub recurring_charges: Option<Vec<RecurringCharge>>,
-    #[doc="<p>The type of offering (e.g., \"RECURRING\") for a device.</p>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of offering (e.g., "RECURRING") for a device.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Represents information about an offering promotion.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents information about an offering promotion.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct OfferingPromotion {
-    #[doc="<p>A string describing the offering promotion.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string describing the offering promotion.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The ID of the offering promotion.</p>"]
-    #[serde(rename="id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the offering promotion.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
 }
 
-#[doc="<p>The status of the offering.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The status of the offering.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct OfferingStatus {
-    #[doc="<p>The date on which the offering is effective.</p>"]
-    #[serde(rename="effectiveOn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date on which the offering is effective.</p>
+    #[serde(rename = "effectiveOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub effective_on: Option<f64>,
-    #[doc="<p>Represents the metadata of an offering status.</p>"]
-    #[serde(rename="offering")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Represents the metadata of an offering status.</p>
+    #[serde(rename = "offering")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub offering: Option<Offering>,
-    #[doc="<p>The number of available devices in the offering.</p>"]
-    #[serde(rename="quantity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of available devices in the offering.</p>
+    #[serde(rename = "quantity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub quantity: Option<i64>,
-    #[doc="<p>The type specified for the offering status.</p>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type specified for the offering status.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Represents the metadata of an offering transaction.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the metadata of an offering transaction.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct OfferingTransaction {
-    #[doc="<p>The cost of an offering transaction.</p>"]
-    #[serde(rename="cost")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The cost of an offering transaction.</p>
+    #[serde(rename = "cost")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cost: Option<MonetaryAmount>,
-    #[doc="<p>The date on which an offering transaction was created.</p>"]
-    #[serde(rename="createdOn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date on which an offering transaction was created.</p>
+    #[serde(rename = "createdOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_on: Option<f64>,
-    #[doc="<p>The ID that corresponds to a device offering promotion.</p>"]
-    #[serde(rename="offeringPromotionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID that corresponds to a device offering promotion.</p>
+    #[serde(rename = "offeringPromotionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub offering_promotion_id: Option<String>,
-    #[doc="<p>The status of an offering transaction.</p>"]
-    #[serde(rename="offeringStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of an offering transaction.</p>
+    #[serde(rename = "offeringStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub offering_status: Option<OfferingStatus>,
-    #[doc="<p>The transaction ID of the offering transaction.</p>"]
-    #[serde(rename="transactionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The transaction ID of the offering transaction.</p>
+    #[serde(rename = "transactionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub transaction_id: Option<String>,
 }
 
-#[doc="<p>Represents a specific warning or failure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a specific warning or failure.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Problem {
-    #[doc="<p>Information about the associated device.</p>"]
-    #[serde(rename="device")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the associated device.</p>
+    #[serde(rename = "device")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device: Option<Device>,
-    #[doc="<p>Information about the associated job.</p>"]
-    #[serde(rename="job")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the associated job.</p>
+    #[serde(rename = "job")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub job: Option<ProblemDetail>,
-    #[doc="<p>A message about the problem's result.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A message about the problem's result.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>The problem's result.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul>"]
-    #[serde(rename="result")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The problem's result.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul>
+    #[serde(rename = "result")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result: Option<String>,
-    #[doc="<p>Information about the associated run.</p>"]
-    #[serde(rename="run")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the associated run.</p>
+    #[serde(rename = "run")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub run: Option<ProblemDetail>,
-    #[doc="<p>Information about the associated suite.</p>"]
-    #[serde(rename="suite")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the associated suite.</p>
+    #[serde(rename = "suite")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub suite: Option<ProblemDetail>,
-    #[doc="<p>Information about the associated test.</p>"]
-    #[serde(rename="test")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the associated test.</p>
+    #[serde(rename = "test")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub test: Option<ProblemDetail>,
 }
 
-#[doc="<p>Information about a problem detail.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a problem detail.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProblemDetail {
-    #[doc="<p>The problem detail's ARN.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The problem detail's ARN.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The problem detail's name.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The problem detail's name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Represents an operating-system neutral workspace for running and managing tests.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents an operating-system neutral workspace for running and managing tests.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Project {
-    #[doc="<p>The project's ARN.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The project's ARN.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>When the project was created.</p>"]
-    #[serde(rename="created")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When the project was created.</p>
+    #[serde(rename = "created")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<f64>,
-    #[doc="<p>The default number of minutes (at the project level) a test run will execute before it times out. Default value is 60 minutes.</p>"]
-    #[serde(rename="defaultJobTimeoutMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default number of minutes (at the project level) a test run will execute before it times out. Default value is 60 minutes.</p>
+    #[serde(rename = "defaultJobTimeoutMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_job_timeout_minutes: Option<i64>,
-    #[doc="<p>The project's name.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The project's name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Represents a request for a purchase offering.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request for a purchase offering.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PurchaseOfferingRequest {
-    #[doc="<p>The ID of the offering.</p>"]
-    #[serde(rename="offeringId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the offering.</p>
+    #[serde(rename = "offeringId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub offering_id: Option<String>,
-    #[doc="<p>The ID of the offering promotion to be applied to the purchase.</p>"]
-    #[serde(rename="offeringPromotionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the offering promotion to be applied to the purchase.</p>
+    #[serde(rename = "offeringPromotionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub offering_promotion_id: Option<String>,
-    #[doc="<p>The number of device slots you wish to purchase in an offering request.</p>"]
-    #[serde(rename="quantity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of device slots you wish to purchase in an offering request.</p>
+    #[serde(rename = "quantity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub quantity: Option<i64>,
 }
 
-#[doc="<p>The result of the purchase offering (e.g., success or failure).</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The result of the purchase offering (e.g., success or failure).</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PurchaseOfferingResult {
-    #[doc="<p>Represents the offering transaction for the purchase result.</p>"]
-    #[serde(rename="offeringTransaction")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Represents the offering transaction for the purchase result.</p>
+    #[serde(rename = "offeringTransaction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub offering_transaction: Option<OfferingTransaction>,
 }
 
-#[doc="<p>Represents the set of radios and their states on a device. Examples of radios include Wi-Fi, GPS, Bluetooth, and NFC.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the set of radios and their states on a device. Examples of radios include Wi-Fi, GPS, Bluetooth, and NFC.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct Radios {
-    #[doc="<p>True if Bluetooth is enabled at the beginning of the test; otherwise, false.</p>"]
-    #[serde(rename="bluetooth")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>True if Bluetooth is enabled at the beginning of the test; otherwise, false.</p>
+    #[serde(rename = "bluetooth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bluetooth: Option<bool>,
-    #[doc="<p>True if GPS is enabled at the beginning of the test; otherwise, false.</p>"]
-    #[serde(rename="gps")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>True if GPS is enabled at the beginning of the test; otherwise, false.</p>
+    #[serde(rename = "gps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub gps: Option<bool>,
-    #[doc="<p>True if NFC is enabled at the beginning of the test; otherwise, false.</p>"]
-    #[serde(rename="nfc")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>True if NFC is enabled at the beginning of the test; otherwise, false.</p>
+    #[serde(rename = "nfc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub nfc: Option<bool>,
-    #[doc="<p>True if Wi-Fi is enabled at the beginning of the test; otherwise, false.</p>"]
-    #[serde(rename="wifi")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>True if Wi-Fi is enabled at the beginning of the test; otherwise, false.</p>
+    #[serde(rename = "wifi")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub wifi: Option<bool>,
 }
 
-#[doc="<p>Specifies whether charges for devices will be recurring.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Specifies whether charges for devices will be recurring.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RecurringCharge {
-    #[doc="<p>The cost of the recurring charge.</p>"]
-    #[serde(rename="cost")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The cost of the recurring charge.</p>
+    #[serde(rename = "cost")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cost: Option<MonetaryAmount>,
-    #[doc="<p>The frequency in which charges will recur.</p>"]
-    #[serde(rename="frequency")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The frequency in which charges will recur.</p>
+    #[serde(rename = "frequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub frequency: Option<String>,
 }
 
-#[doc="<p>Represents information about the remote access session.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents information about the remote access session.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RemoteAccessSession {
-    #[doc="<p>The Amazon Resource Name (ARN) of the remote access session.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the remote access session.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The billing method of the remote access session. Possible values include <code>METERED</code> or <code>UNMETERED</code>. For more information about metered devices, see <a href=\"http://docs.aws.amazon.com/devicefarm/latest/developerguide/welcome.html#welcome-terminology\">AWS Device Farm terminology</a>.\"</p>"]
-    #[serde(rename="billingMethod")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The billing method of the remote access session. Possible values include <code>METERED</code> or <code>UNMETERED</code>. For more information about metered devices, see <a href="http://docs.aws.amazon.com/devicefarm/latest/developerguide/welcome.html#welcome-terminology">AWS Device Farm terminology</a>."</p>
+    #[serde(rename = "billingMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_method: Option<String>,
-    #[doc="<p>The date and time the remote access session was created.</p>"]
-    #[serde(rename="created")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the remote access session was created.</p>
+    #[serde(rename = "created")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<f64>,
-    #[doc="<p>The device (phone or tablet) used in the remote access session.</p>"]
-    #[serde(rename="device")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device (phone or tablet) used in the remote access session.</p>
+    #[serde(rename = "device")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device: Option<Device>,
-    #[doc="<p>The number of minutes a device is used in a remote access sesssion (including setup and teardown minutes).</p>"]
-    #[serde(rename="deviceMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of minutes a device is used in a remote access sesssion (including setup and teardown minutes).</p>
+    #[serde(rename = "deviceMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_minutes: Option<DeviceMinutes>,
-    #[doc="<p>The endpoint for the remote access sesssion.</p>"]
-    #[serde(rename="endpoint")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The endpoint for the remote access sesssion.</p>
+    #[serde(rename = "endpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint: Option<String>,
-    #[doc="<p>A message about the remote access session.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A message about the remote access session.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>The name of the remote access session.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the remote access session.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The result of the remote access session. Can be any of the following:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul>"]
-    #[serde(rename="result")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The result of the remote access session. Can be any of the following:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul>
+    #[serde(rename = "result")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result: Option<String>,
-    #[doc="<p>The date and time the remote access session was started.</p>"]
-    #[serde(rename="started")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the remote access session was started.</p>
+    #[serde(rename = "started")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub started: Option<f64>,
-    #[doc="<p>The status of the remote access session. Can be any of the following:</p> <ul> <li> <p>PENDING: A pending status.</p> </li> <li> <p>PENDING_CONCURRENCY: A pending concurrency status.</p> </li> <li> <p>PENDING_DEVICE: A pending device status.</p> </li> <li> <p>PROCESSING: A processing status.</p> </li> <li> <p>SCHEDULING: A scheduling status.</p> </li> <li> <p>PREPARING: A preparing status.</p> </li> <li> <p>RUNNING: A running status.</p> </li> <li> <p>COMPLETED: A completed status.</p> </li> <li> <p>STOPPING: A stopping status.</p> </li> </ul>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the remote access session. Can be any of the following:</p> <ul> <li> <p>PENDING: A pending status.</p> </li> <li> <p>PENDING_CONCURRENCY: A pending concurrency status.</p> </li> <li> <p>PENDING_DEVICE: A pending device status.</p> </li> <li> <p>PROCESSING: A processing status.</p> </li> <li> <p>SCHEDULING: A scheduling status.</p> </li> <li> <p>PREPARING: A preparing status.</p> </li> <li> <p>RUNNING: A running status.</p> </li> <li> <p>COMPLETED: A completed status.</p> </li> <li> <p>STOPPING: A stopping status.</p> </li> </ul>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The date and time the remote access session was stopped.</p>"]
-    #[serde(rename="stopped")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the remote access session was stopped.</p>
+    #[serde(rename = "stopped")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stopped: Option<f64>,
 }
 
-#[doc="<p>A request representing an offering renewal.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A request representing an offering renewal.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RenewOfferingRequest {
-    #[doc="<p>The ID of a request to renew an offering.</p>"]
-    #[serde(rename="offeringId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of a request to renew an offering.</p>
+    #[serde(rename = "offeringId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub offering_id: Option<String>,
-    #[doc="<p>The quantity requested in an offering renewal.</p>"]
-    #[serde(rename="quantity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The quantity requested in an offering renewal.</p>
+    #[serde(rename = "quantity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub quantity: Option<i64>,
 }
 
-#[doc="<p>The result of a renewal offering.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The result of a renewal offering.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RenewOfferingResult {
-    #[doc="<p>Represents the status of the offering transaction for the renewal.</p>"]
-    #[serde(rename="offeringTransaction")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Represents the status of the offering transaction for the renewal.</p>
+    #[serde(rename = "offeringTransaction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub offering_transaction: Option<OfferingTransaction>,
 }
 
-#[doc="<p>Represents the screen resolution of a device in height and width, expressed in pixels.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the screen resolution of a device in height and width, expressed in pixels.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Resolution {
-    #[doc="<p>The screen resolution's height, expressed in pixels.</p>"]
-    #[serde(rename="height")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The screen resolution's height, expressed in pixels.</p>
+    #[serde(rename = "height")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub height: Option<i64>,
-    #[doc="<p>The screen resolution's width, expressed in pixels.</p>"]
-    #[serde(rename="width")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The screen resolution's width, expressed in pixels.</p>
+    #[serde(rename = "width")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub width: Option<i64>,
 }
 
-#[doc="<p>Represents a condition for a device pool.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Represents a condition for a device pool.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Rule {
-    #[doc="<p>The rule's stringified attribute. For example, specify the value as <code>\"\\\"abc\\\"\"</code>.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The ARN.</p> </li> <li> <p>FORM_FACTOR: The form factor (for example, phone or tablet).</p> </li> <li> <p>MANUFACTURER: The manufacturer.</p> </li> <li> <p>PLATFORM: The platform (for example, Android or iOS).</p> </li> <li> <p>REMOTE_ACCESS_ENABLED: Whether the device is enabled for remote access.</p> </li> <li> <p>APPIUM_VERSION: The Appium version for the test.</p> </li> </ul>"]
-    #[serde(rename="attribute")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The rule's stringified attribute. For example, specify the value as <code>"\"abc\""</code>.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The ARN.</p> </li> <li> <p>FORM_FACTOR: The form factor (for example, phone or tablet).</p> </li> <li> <p>MANUFACTURER: The manufacturer.</p> </li> <li> <p>PLATFORM: The platform (for example, Android or iOS).</p> </li> <li> <p>REMOTE_ACCESS_ENABLED: Whether the device is enabled for remote access.</p> </li> <li> <p>APPIUM_VERSION: The Appium version for the test.</p> </li> </ul>
+    #[serde(rename = "attribute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute: Option<String>,
-    #[doc="<p>The rule's operator.</p> <ul> <li> <p>EQUALS: The equals operator.</p> </li> <li> <p>GREATER_THAN: The greater-than operator.</p> </li> <li> <p>IN: The in operator.</p> </li> <li> <p>LESS_THAN: The less-than operator.</p> </li> <li> <p>NOT_IN: The not-in operator.</p> </li> <li> <p>CONTAINS: The contains operator.</p> </li> </ul>"]
-    #[serde(rename="operator")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The rule's operator.</p> <ul> <li> <p>EQUALS: The equals operator.</p> </li> <li> <p>GREATER_THAN: The greater-than operator.</p> </li> <li> <p>IN: The in operator.</p> </li> <li> <p>LESS_THAN: The less-than operator.</p> </li> <li> <p>NOT_IN: The not-in operator.</p> </li> <li> <p>CONTAINS: The contains operator.</p> </li> </ul>
+    #[serde(rename = "operator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operator: Option<String>,
-    #[doc="<p>The rule's value.</p>"]
-    #[serde(rename="value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The rule's value.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>Represents an app on a set of devices with a specific test and configuration.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents an app on a set of devices with a specific test and configuration.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Run {
-    #[doc="<p>The run's ARN.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The run's ARN.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>Specifies the billing method for a test run: <code>metered</code> or <code>unmetered</code>. If the parameter is not specified, the default value is <code>metered</code>.</p>"]
-    #[serde(rename="billingMethod")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the billing method for a test run: <code>metered</code> or <code>unmetered</code>. If the parameter is not specified, the default value is <code>metered</code>.</p>
+    #[serde(rename = "billingMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_method: Option<String>,
-    #[doc="<p>The total number of completed jobs.</p>"]
-    #[serde(rename="completedJobs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of completed jobs.</p>
+    #[serde(rename = "completedJobs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub completed_jobs: Option<i64>,
-    #[doc="<p>The run's result counters.</p>"]
-    #[serde(rename="counters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The run's result counters.</p>
+    #[serde(rename = "counters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub counters: Option<Counters>,
-    #[doc="<p>When the run was created.</p>"]
-    #[serde(rename="created")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When the run was created.</p>
+    #[serde(rename = "created")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<f64>,
-    #[doc="<p>Represents the total (metered or unmetered) minutes used by the test run.</p>"]
-    #[serde(rename="deviceMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Represents the total (metered or unmetered) minutes used by the test run.</p>
+    #[serde(rename = "deviceMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_minutes: Option<DeviceMinutes>,
-    #[doc="<p>A message about the run's result.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A message about the run's result.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>The run's name.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The run's name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The network profile being used for a test run.</p>"]
-    #[serde(rename="networkProfile")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The network profile being used for a test run.</p>
+    #[serde(rename = "networkProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub network_profile: Option<NetworkProfile>,
-    #[doc="<p>The run's platform.</p> <p>Allowed values include:</p> <ul> <li> <p>ANDROID: The Android platform.</p> </li> <li> <p>IOS: The iOS platform.</p> </li> </ul>"]
-    #[serde(rename="platform")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The run's platform.</p> <p>Allowed values include:</p> <ul> <li> <p>ANDROID: The Android platform.</p> </li> <li> <p>IOS: The iOS platform.</p> </li> </ul>
+    #[serde(rename = "platform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
-    #[doc="<p>The run's result.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul>"]
-    #[serde(rename="result")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The run's result.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul>
+    #[serde(rename = "result")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result: Option<String>,
-    #[doc="<p>The run's start time.</p>"]
-    #[serde(rename="started")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The run's start time.</p>
+    #[serde(rename = "started")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub started: Option<f64>,
-    #[doc="<p>The run's status.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending status.</p> </li> <li> <p>PENDING_CONCURRENCY: A pending concurrency status.</p> </li> <li> <p>PENDING_DEVICE: A pending device status.</p> </li> <li> <p>PROCESSING: A processing status.</p> </li> <li> <p>SCHEDULING: A scheduling status.</p> </li> <li> <p>PREPARING: A preparing status.</p> </li> <li> <p>RUNNING: A running status.</p> </li> <li> <p>COMPLETED: A completed status.</p> </li> <li> <p>STOPPING: A stopping status.</p> </li> </ul>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The run's status.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending status.</p> </li> <li> <p>PENDING_CONCURRENCY: A pending concurrency status.</p> </li> <li> <p>PENDING_DEVICE: A pending device status.</p> </li> <li> <p>PROCESSING: A processing status.</p> </li> <li> <p>SCHEDULING: A scheduling status.</p> </li> <li> <p>PREPARING: A preparing status.</p> </li> <li> <p>RUNNING: A running status.</p> </li> <li> <p>COMPLETED: A completed status.</p> </li> <li> <p>STOPPING: A stopping status.</p> </li> </ul>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The run's stop time.</p>"]
-    #[serde(rename="stopped")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The run's stop time.</p>
+    #[serde(rename = "stopped")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stopped: Option<f64>,
-    #[doc="<p>The total number of jobs for the run.</p>"]
-    #[serde(rename="totalJobs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of jobs for the run.</p>
+    #[serde(rename = "totalJobs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub total_jobs: Option<i64>,
-    #[doc="<p>The run's type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>BUILTIN_FUZZ: The built-in fuzz type.</p> </li> <li> <p>BUILTIN_EXPLORER: For Android, an app explorer that will traverse an Android app, interacting with it and capturing screenshots at the same time.</p> </li> <li> <p>APPIUM_JAVA_JUNIT: The Appium Java JUnit type.</p> </li> <li> <p>APPIUM_JAVA_TESTNG: The Appium Java TestNG type.</p> </li> <li> <p>APPIUM_PYTHON: The Appium Python type.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT: The Appium Java JUnit type for Web apps.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG: The Appium Java TestNG type for Web apps.</p> </li> <li> <p>APPIUM_WEB_PYTHON: The Appium Python type for Web apps.</p> </li> <li> <p>CALABASH: The Calabash type.</p> </li> <li> <p>INSTRUMENTATION: The Instrumentation type.</p> </li> <li> <p>UIAUTOMATION: The uiautomation type.</p> </li> <li> <p>UIAUTOMATOR: The uiautomator type.</p> </li> <li> <p>XCTEST: The XCode test type.</p> </li> <li> <p>XCTEST_UI: The XCode UI test type.</p> </li> </ul>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The run's type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>BUILTIN_FUZZ: The built-in fuzz type.</p> </li> <li> <p>BUILTIN_EXPLORER: For Android, an app explorer that will traverse an Android app, interacting with it and capturing screenshots at the same time.</p> </li> <li> <p>APPIUM_JAVA_JUNIT: The Appium Java JUnit type.</p> </li> <li> <p>APPIUM_JAVA_TESTNG: The Appium Java TestNG type.</p> </li> <li> <p>APPIUM_PYTHON: The Appium Python type.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT: The Appium Java JUnit type for Web apps.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG: The Appium Java TestNG type for Web apps.</p> </li> <li> <p>APPIUM_WEB_PYTHON: The Appium Python type for Web apps.</p> </li> <li> <p>CALABASH: The Calabash type.</p> </li> <li> <p>INSTRUMENTATION: The Instrumentation type.</p> </li> <li> <p>UIAUTOMATION: The uiautomation type.</p> </li> <li> <p>UIAUTOMATOR: The uiautomator type.</p> </li> <li> <p>XCTEST: The XCode test type.</p> </li> <li> <p>XCTEST_UI: The XCode UI test type.</p> </li> </ul>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Represents a sample of performance data.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a sample of performance data.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Sample {
-    #[doc="<p>The sample's ARN.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The sample's ARN.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The sample's type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>CPU: A CPU sample type. This is expressed as the app processing CPU time (including child processes) as reported by process, as a percentage.</p> </li> <li> <p>MEMORY: A memory usage sample type. This is expressed as the total proportional set size of an app process, in kilobytes.</p> </li> <li> <p>NATIVE_AVG_DRAWTIME</p> </li> <li> <p>NATIVE_FPS</p> </li> <li> <p>NATIVE_FRAMES</p> </li> <li> <p>NATIVE_MAX_DRAWTIME</p> </li> <li> <p>NATIVE_MIN_DRAWTIME</p> </li> <li> <p>OPENGL_AVG_DRAWTIME</p> </li> <li> <p>OPENGL_FPS</p> </li> <li> <p>OPENGL_FRAMES</p> </li> <li> <p>OPENGL_MAX_DRAWTIME</p> </li> <li> <p>OPENGL_MIN_DRAWTIME</p> </li> <li> <p>RX</p> </li> <li> <p>RX_RATE: The total number of bytes per second (TCP and UDP) that are sent, by app process.</p> </li> <li> <p>THREADS: A threads sample type. This is expressed as the total number of threads per app process.</p> </li> <li> <p>TX</p> </li> <li> <p>TX_RATE: The total number of bytes per second (TCP and UDP) that are received, by app process.</p> </li> </ul>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The sample's type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>CPU: A CPU sample type. This is expressed as the app processing CPU time (including child processes) as reported by process, as a percentage.</p> </li> <li> <p>MEMORY: A memory usage sample type. This is expressed as the total proportional set size of an app process, in kilobytes.</p> </li> <li> <p>NATIVE_AVG_DRAWTIME</p> </li> <li> <p>NATIVE_FPS</p> </li> <li> <p>NATIVE_FRAMES</p> </li> <li> <p>NATIVE_MAX_DRAWTIME</p> </li> <li> <p>NATIVE_MIN_DRAWTIME</p> </li> <li> <p>OPENGL_AVG_DRAWTIME</p> </li> <li> <p>OPENGL_FPS</p> </li> <li> <p>OPENGL_FRAMES</p> </li> <li> <p>OPENGL_MAX_DRAWTIME</p> </li> <li> <p>OPENGL_MIN_DRAWTIME</p> </li> <li> <p>RX</p> </li> <li> <p>RX_RATE: The total number of bytes per second (TCP and UDP) that are sent, by app process.</p> </li> <li> <p>THREADS: A threads sample type. This is expressed as the total number of threads per app process.</p> </li> <li> <p>TX</p> </li> <li> <p>TX_RATE: The total number of bytes per second (TCP and UDP) that are received, by app process.</p> </li> </ul>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The pre-signed Amazon S3 URL that can be used with a corresponding GET request to download the sample's file.</p>"]
-    #[serde(rename="url")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The pre-signed Amazon S3 URL that can be used with a corresponding GET request to download the sample's file.</p>
+    #[serde(rename = "url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
 }
 
-#[doc="<p>Represents the settings for a run. Includes things like location, radio states, auxiliary apps, and network profiles.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the settings for a run. Includes things like location, radio states, auxiliary apps, and network profiles.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ScheduleRunConfiguration {
-    #[doc="<p>A list of auxiliary apps for the run.</p>"]
-    #[serde(rename="auxiliaryApps")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of auxiliary apps for the run.</p>
+    #[serde(rename = "auxiliaryApps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auxiliary_apps: Option<Vec<String>>,
-    #[doc="<p>Specifies the billing method for a test run: <code>metered</code> or <code>unmetered</code>. If the parameter is not specified, the default value is <code>metered</code>.</p>"]
-    #[serde(rename="billingMethod")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the billing method for a test run: <code>metered</code> or <code>unmetered</code>. If the parameter is not specified, the default value is <code>metered</code>.</p>
+    #[serde(rename = "billingMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_method: Option<String>,
-    #[doc="<p>The ARN of the extra data for the run. The extra data is a .zip file that AWS Device Farm will extract to external data for Android or the app's sandbox for iOS.</p>"]
-    #[serde(rename="extraDataPackageArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the extra data for the run. The extra data is a .zip file that AWS Device Farm will extract to external data for Android or the app's sandbox for iOS.</p>
+    #[serde(rename = "extraDataPackageArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_data_package_arn: Option<String>,
-    #[doc="<p>Information about the locale that is used for the run.</p>"]
-    #[serde(rename="locale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the locale that is used for the run.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub locale: Option<String>,
-    #[doc="<p>Information about the location that is used for the run.</p>"]
-    #[serde(rename="location")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the location that is used for the run.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<Location>,
-    #[doc="<p>Reserved for internal use.</p>"]
-    #[serde(rename="networkProfileArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Reserved for internal use.</p>
+    #[serde(rename = "networkProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub network_profile_arn: Option<String>,
-    #[doc="<p>Information about the radio states for the run.</p>"]
-    #[serde(rename="radios")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the radio states for the run.</p>
+    #[serde(rename = "radios")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub radios: Option<Radios>,
 }
 
-#[doc="<p>Represents a request to the schedule run operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the schedule run operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ScheduleRunRequest {
-    #[doc="<p>The ARN of the app to schedule a run.</p>"]
-    #[serde(rename="appArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the app to schedule a run.</p>
+    #[serde(rename = "appArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub app_arn: Option<String>,
-    #[doc="<p>Information about the settings for the run to be scheduled.</p>"]
-    #[serde(rename="configuration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the settings for the run to be scheduled.</p>
+    #[serde(rename = "configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<ScheduleRunConfiguration>,
-    #[doc="<p>The ARN of the device pool for the run to be scheduled.</p>"]
-    #[serde(rename="devicePoolArn")]
+    /// <p>The ARN of the device pool for the run to be scheduled.</p>
+    #[serde(rename = "devicePoolArn")]
     pub device_pool_arn: String,
-    #[doc="<p>Specifies configuration information about a test run, such as the execution timeout (in minutes).</p>"]
-    #[serde(rename="executionConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies configuration information about a test run, such as the execution timeout (in minutes).</p>
+    #[serde(rename = "executionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_configuration: Option<ExecutionConfiguration>,
-    #[doc="<p>The name for the run to be scheduled.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name for the run to be scheduled.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The ARN of the project for the run to be scheduled.</p>"]
-    #[serde(rename="projectArn")]
+    /// <p>The ARN of the project for the run to be scheduled.</p>
+    #[serde(rename = "projectArn")]
     pub project_arn: String,
-    #[doc="<p>Information about the test for the run to be scheduled.</p>"]
-    #[serde(rename="test")]
+    /// <p>Information about the test for the run to be scheduled.</p>
+    #[serde(rename = "test")]
     pub test: ScheduleRunTest,
 }
 
-#[doc="<p>Represents the result of a schedule run request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of a schedule run request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ScheduleRunResult {
-    #[doc="<p>Information about the scheduled run.</p>"]
-    #[serde(rename="run")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the scheduled run.</p>
+    #[serde(rename = "run")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub run: Option<Run>,
 }
 
-#[doc="<p>Represents additional test settings.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents additional test settings.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ScheduleRunTest {
-    #[doc="<p>The test's filter.</p>"]
-    #[serde(rename="filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The test's filter.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<String>,
-    #[doc="<p>The test's parameters, such as the following test framework parameters and fixture settings:</p> <p>For Calabash tests:</p> <ul> <li> <p>profile: A cucumber profile, for example, \"my_profile_name\".</p> </li> <li> <p>tags: You can limit execution to features or scenarios that have (or don't have) certain tags, for example, \"@smoke\" or \"@smoke,~@wip\".</p> </li> </ul> <p>For Appium tests (all types):</p> <ul> <li> <p>appium_version: The Appium version. Currently supported values are \"1.4.16\", \"1.6.3\", \"latest\", and \"default\".</p> <ul> <li> <p>“latest” will run the latest Appium version supported by Device Farm (1.6.3).</p> </li> <li> <p>For “default”, Device Farm will choose a compatible version of Appium for the device. The current behavior is to run 1.4.16 on Android devices and iOS 9 and earlier, 1.6.3 for iOS 10 and later.</p> </li> <li> <p>This behavior is subject to change.</p> </li> </ul> </li> </ul> <p>For Fuzz tests (Android only):</p> <ul> <li> <p>event_count: The number of events, between 1 and 10000, that the UI fuzz test should perform.</p> </li> <li> <p>throttle: The time, in ms, between 0 and 1000, that the UI fuzz test should wait between events.</p> </li> <li> <p>seed: A seed to use for randomizing the UI fuzz test. Using the same seed value between tests ensures identical event sequences.</p> </li> </ul> <p>For Explorer tests:</p> <ul> <li> <p>username: A username to use if the Explorer encounters a login form. If not supplied, no username will be inserted.</p> </li> <li> <p>password: A password to use if the Explorer encounters a login form. If not supplied, no password will be inserted.</p> </li> </ul> <p>For Instrumentation:</p> <ul> <li> <p>filter: A test filter string. Examples:</p> <ul> <li> <p>Running a single test case: \"com.android.abc.Test1\"</p> </li> <li> <p>Running a single test: \"com.android.abc.Test1#smoke\"</p> </li> <li> <p>Running multiple tests: \"com.android.abc.Test1,com.android.abc.Test2\"</p> </li> </ul> </li> </ul> <p>For XCTest and XCTestUI:</p> <ul> <li> <p>filter: A test filter string. Examples:</p> <ul> <li> <p>Running a single test class: \"LoginTests\"</p> </li> <li> <p>Running a multiple test classes: \"LoginTests,SmokeTests\"</p> </li> <li> <p>Running a single test: \"LoginTests/testValid\"</p> </li> <li> <p>Running multiple tests: \"LoginTests/testValid,LoginTests/testInvalid\"</p> </li> </ul> </li> </ul> <p>For UIAutomator:</p> <ul> <li> <p>filter: A test filter string. Examples:</p> <ul> <li> <p>Running a single test case: \"com.android.abc.Test1\"</p> </li> <li> <p>Running a single test: \"com.android.abc.Test1#smoke\"</p> </li> <li> <p>Running multiple tests: \"com.android.abc.Test1,com.android.abc.Test2\"</p> </li> </ul> </li> </ul>"]
-    #[serde(rename="parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The test's parameters, such as the following test framework parameters and fixture settings:</p> <p>For Calabash tests:</p> <ul> <li> <p>profile: A cucumber profile, for example, "my_profile_name".</p> </li> <li> <p>tags: You can limit execution to features or scenarios that have (or don't have) certain tags, for example, "@smoke" or "@smoke,~@wip".</p> </li> </ul> <p>For Appium tests (all types):</p> <ul> <li> <p>appium_version: The Appium version. Currently supported values are "1.4.16", "1.6.3", "latest", and "default".</p> <ul> <li> <p>“latest” will run the latest Appium version supported by Device Farm (1.6.3).</p> </li> <li> <p>For “default”, Device Farm will choose a compatible version of Appium for the device. The current behavior is to run 1.4.16 on Android devices and iOS 9 and earlier, 1.6.3 for iOS 10 and later.</p> </li> <li> <p>This behavior is subject to change.</p> </li> </ul> </li> </ul> <p>For Fuzz tests (Android only):</p> <ul> <li> <p>event_count: The number of events, between 1 and 10000, that the UI fuzz test should perform.</p> </li> <li> <p>throttle: The time, in ms, between 0 and 1000, that the UI fuzz test should wait between events.</p> </li> <li> <p>seed: A seed to use for randomizing the UI fuzz test. Using the same seed value between tests ensures identical event sequences.</p> </li> </ul> <p>For Explorer tests:</p> <ul> <li> <p>username: A username to use if the Explorer encounters a login form. If not supplied, no username will be inserted.</p> </li> <li> <p>password: A password to use if the Explorer encounters a login form. If not supplied, no password will be inserted.</p> </li> </ul> <p>For Instrumentation:</p> <ul> <li> <p>filter: A test filter string. Examples:</p> <ul> <li> <p>Running a single test case: "com.android.abc.Test1"</p> </li> <li> <p>Running a single test: "com.android.abc.Test1#smoke"</p> </li> <li> <p>Running multiple tests: "com.android.abc.Test1,com.android.abc.Test2"</p> </li> </ul> </li> </ul> <p>For XCTest and XCTestUI:</p> <ul> <li> <p>filter: A test filter string. Examples:</p> <ul> <li> <p>Running a single test class: "LoginTests"</p> </li> <li> <p>Running a multiple test classes: "LoginTests,SmokeTests"</p> </li> <li> <p>Running a single test: "LoginTests/testValid"</p> </li> <li> <p>Running multiple tests: "LoginTests/testValid,LoginTests/testInvalid"</p> </li> </ul> </li> </ul> <p>For UIAutomator:</p> <ul> <li> <p>filter: A test filter string. Examples:</p> <ul> <li> <p>Running a single test case: "com.android.abc.Test1"</p> </li> <li> <p>Running a single test: "com.android.abc.Test1#smoke"</p> </li> <li> <p>Running multiple tests: "com.android.abc.Test1,com.android.abc.Test2"</p> </li> </ul> </li> </ul>
+    #[serde(rename = "parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The ARN of the uploaded test that will be run.</p>"]
-    #[serde(rename="testPackageArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the uploaded test that will be run.</p>
+    #[serde(rename = "testPackageArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub test_package_arn: Option<String>,
-    #[doc="<p>The test's type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>BUILTIN_FUZZ: The built-in fuzz type.</p> </li> <li> <p>BUILTIN_EXPLORER: For Android, an app explorer that will traverse an Android app, interacting with it and capturing screenshots at the same time.</p> </li> <li> <p>APPIUM_JAVA_JUNIT: The Appium Java JUnit type.</p> </li> <li> <p>APPIUM_JAVA_TESTNG: The Appium Java TestNG type.</p> </li> <li> <p>APPIUM_PYTHON: The Appium Python type.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT: The Appium Java JUnit type for Web apps.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG: The Appium Java TestNG type for Web apps.</p> </li> <li> <p>APPIUM_WEB_PYTHON: The Appium Python type for Web apps.</p> </li> <li> <p>CALABASH: The Calabash type.</p> </li> <li> <p>INSTRUMENTATION: The Instrumentation type.</p> </li> <li> <p>UIAUTOMATION: The uiautomation type.</p> </li> <li> <p>UIAUTOMATOR: The uiautomator type.</p> </li> <li> <p>XCTEST: The XCode test type.</p> </li> <li> <p>XCTEST_UI: The XCode UI test type.</p> </li> </ul>"]
-    #[serde(rename="type")]
+    /// <p>The test's type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>BUILTIN_FUZZ: The built-in fuzz type.</p> </li> <li> <p>BUILTIN_EXPLORER: For Android, an app explorer that will traverse an Android app, interacting with it and capturing screenshots at the same time.</p> </li> <li> <p>APPIUM_JAVA_JUNIT: The Appium Java JUnit type.</p> </li> <li> <p>APPIUM_JAVA_TESTNG: The Appium Java TestNG type.</p> </li> <li> <p>APPIUM_PYTHON: The Appium Python type.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT: The Appium Java JUnit type for Web apps.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG: The Appium Java TestNG type for Web apps.</p> </li> <li> <p>APPIUM_WEB_PYTHON: The Appium Python type for Web apps.</p> </li> <li> <p>CALABASH: The Calabash type.</p> </li> <li> <p>INSTRUMENTATION: The Instrumentation type.</p> </li> <li> <p>UIAUTOMATION: The uiautomation type.</p> </li> <li> <p>UIAUTOMATOR: The uiautomator type.</p> </li> <li> <p>XCTEST: The XCode test type.</p> </li> <li> <p>XCTEST_UI: The XCode UI test type.</p> </li> </ul>
+    #[serde(rename = "type")]
     pub type_: String,
 }
 
-#[doc="<p>Represents the request to stop the remote access session.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to stop the remote access session.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopRemoteAccessSessionRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the remote access session you wish to stop.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Amazon Resource Name (ARN) of the remote access session you wish to stop.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the response from the server that describes the remote access session when AWS Device Farm stops the session.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the response from the server that describes the remote access session when AWS Device Farm stops the session.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopRemoteAccessSessionResult {
-    #[doc="<p>A container representing the metadata from the service about the remote access session you are stopping.</p>"]
-    #[serde(rename="remoteAccessSession")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A container representing the metadata from the service about the remote access session you are stopping.</p>
+    #[serde(rename = "remoteAccessSession")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access_session: Option<RemoteAccessSession>,
 }
 
-#[doc="<p>Represents the request to stop a specific run.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents the request to stop a specific run.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopRunRequest {
-    #[doc="<p>Represents the Amazon Resource Name (ARN) of the Device Farm run you wish to stop.</p>"]
-    #[serde(rename="arn")]
+    /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm run you wish to stop.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
 }
 
-#[doc="<p>Represents the results of your stop run attempt.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the results of your stop run attempt.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopRunResult {
-    #[doc="<p>The run that was stopped.</p>"]
-    #[serde(rename="run")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The run that was stopped.</p>
+    #[serde(rename = "run")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub run: Option<Run>,
 }
 
-#[doc="<p>Represents a collection of one or more tests.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a collection of one or more tests.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Suite {
-    #[doc="<p>The suite's ARN.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The suite's ARN.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The suite's result counters.</p>"]
-    #[serde(rename="counters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The suite's result counters.</p>
+    #[serde(rename = "counters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub counters: Option<Counters>,
-    #[doc="<p>When the suite was created.</p>"]
-    #[serde(rename="created")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When the suite was created.</p>
+    #[serde(rename = "created")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<f64>,
-    #[doc="<p>Represents the total (metered or unmetered) minutes used by the test suite.</p>"]
-    #[serde(rename="deviceMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Represents the total (metered or unmetered) minutes used by the test suite.</p>
+    #[serde(rename = "deviceMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_minutes: Option<DeviceMinutes>,
-    #[doc="<p>A message about the suite's result.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A message about the suite's result.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>The suite's name.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The suite's name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The suite's result.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul>"]
-    #[serde(rename="result")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The suite's result.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul>
+    #[serde(rename = "result")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result: Option<String>,
-    #[doc="<p>The suite's start time.</p>"]
-    #[serde(rename="started")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The suite's start time.</p>
+    #[serde(rename = "started")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub started: Option<f64>,
-    #[doc="<p>The suite's status.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending status.</p> </li> <li> <p>PENDING_CONCURRENCY: A pending concurrency status.</p> </li> <li> <p>PENDING_DEVICE: A pending device status.</p> </li> <li> <p>PROCESSING: A processing status.</p> </li> <li> <p>SCHEDULING: A scheduling status.</p> </li> <li> <p>PREPARING: A preparing status.</p> </li> <li> <p>RUNNING: A running status.</p> </li> <li> <p>COMPLETED: A completed status.</p> </li> <li> <p>STOPPING: A stopping status.</p> </li> </ul>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The suite's status.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending status.</p> </li> <li> <p>PENDING_CONCURRENCY: A pending concurrency status.</p> </li> <li> <p>PENDING_DEVICE: A pending device status.</p> </li> <li> <p>PROCESSING: A processing status.</p> </li> <li> <p>SCHEDULING: A scheduling status.</p> </li> <li> <p>PREPARING: A preparing status.</p> </li> <li> <p>RUNNING: A running status.</p> </li> <li> <p>COMPLETED: A completed status.</p> </li> <li> <p>STOPPING: A stopping status.</p> </li> </ul>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The suite's stop time.</p>"]
-    #[serde(rename="stopped")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The suite's stop time.</p>
+    #[serde(rename = "stopped")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stopped: Option<f64>,
-    #[doc="<p>The suite's type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>BUILTIN_FUZZ: The built-in fuzz type.</p> </li> <li> <p>BUILTIN_EXPLORER: For Android, an app explorer that will traverse an Android app, interacting with it and capturing screenshots at the same time.</p> </li> <li> <p>APPIUM_JAVA_JUNIT: The Appium Java JUnit type.</p> </li> <li> <p>APPIUM_JAVA_TESTNG: The Appium Java TestNG type.</p> </li> <li> <p>APPIUM_PYTHON: The Appium Python type.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT: The Appium Java JUnit type for Web apps.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG: The Appium Java TestNG type for Web apps.</p> </li> <li> <p>APPIUM_WEB_PYTHON: The Appium Python type for Web apps.</p> </li> <li> <p>CALABASH: The Calabash type.</p> </li> <li> <p>INSTRUMENTATION: The Instrumentation type.</p> </li> <li> <p>UIAUTOMATION: The uiautomation type.</p> </li> <li> <p>UIAUTOMATOR: The uiautomator type.</p> </li> <li> <p>XCTEST: The XCode test type.</p> </li> <li> <p>XCTEST_UI: The XCode UI test type.</p> </li> </ul>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The suite's type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>BUILTIN_FUZZ: The built-in fuzz type.</p> </li> <li> <p>BUILTIN_EXPLORER: For Android, an app explorer that will traverse an Android app, interacting with it and capturing screenshots at the same time.</p> </li> <li> <p>APPIUM_JAVA_JUNIT: The Appium Java JUnit type.</p> </li> <li> <p>APPIUM_JAVA_TESTNG: The Appium Java TestNG type.</p> </li> <li> <p>APPIUM_PYTHON: The Appium Python type.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT: The Appium Java JUnit type for Web apps.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG: The Appium Java TestNG type for Web apps.</p> </li> <li> <p>APPIUM_WEB_PYTHON: The Appium Python type for Web apps.</p> </li> <li> <p>CALABASH: The Calabash type.</p> </li> <li> <p>INSTRUMENTATION: The Instrumentation type.</p> </li> <li> <p>UIAUTOMATION: The uiautomation type.</p> </li> <li> <p>UIAUTOMATOR: The uiautomator type.</p> </li> <li> <p>XCTEST: The XCode test type.</p> </li> <li> <p>XCTEST_UI: The XCode UI test type.</p> </li> </ul>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Represents a condition that is evaluated.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a condition that is evaluated.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Test {
-    #[doc="<p>The test's ARN.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The test's ARN.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The test's result counters.</p>"]
-    #[serde(rename="counters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The test's result counters.</p>
+    #[serde(rename = "counters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub counters: Option<Counters>,
-    #[doc="<p>When the test was created.</p>"]
-    #[serde(rename="created")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When the test was created.</p>
+    #[serde(rename = "created")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<f64>,
-    #[doc="<p>Represents the total (metered or unmetered) minutes used by the test.</p>"]
-    #[serde(rename="deviceMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Represents the total (metered or unmetered) minutes used by the test.</p>
+    #[serde(rename = "deviceMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_minutes: Option<DeviceMinutes>,
-    #[doc="<p>A message about the test's result.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A message about the test's result.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>The test's name.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The test's name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The test's result.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul>"]
-    #[serde(rename="result")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The test's result.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul>
+    #[serde(rename = "result")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result: Option<String>,
-    #[doc="<p>The test's start time.</p>"]
-    #[serde(rename="started")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The test's start time.</p>
+    #[serde(rename = "started")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub started: Option<f64>,
-    #[doc="<p>The test's status.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending status.</p> </li> <li> <p>PENDING_CONCURRENCY: A pending concurrency status.</p> </li> <li> <p>PENDING_DEVICE: A pending device status.</p> </li> <li> <p>PROCESSING: A processing status.</p> </li> <li> <p>SCHEDULING: A scheduling status.</p> </li> <li> <p>PREPARING: A preparing status.</p> </li> <li> <p>RUNNING: A running status.</p> </li> <li> <p>COMPLETED: A completed status.</p> </li> <li> <p>STOPPING: A stopping status.</p> </li> </ul>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The test's status.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending status.</p> </li> <li> <p>PENDING_CONCURRENCY: A pending concurrency status.</p> </li> <li> <p>PENDING_DEVICE: A pending device status.</p> </li> <li> <p>PROCESSING: A processing status.</p> </li> <li> <p>SCHEDULING: A scheduling status.</p> </li> <li> <p>PREPARING: A preparing status.</p> </li> <li> <p>RUNNING: A running status.</p> </li> <li> <p>COMPLETED: A completed status.</p> </li> <li> <p>STOPPING: A stopping status.</p> </li> </ul>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The test's stop time.</p>"]
-    #[serde(rename="stopped")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The test's stop time.</p>
+    #[serde(rename = "stopped")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stopped: Option<f64>,
-    #[doc="<p>The test's type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>BUILTIN_FUZZ: The built-in fuzz type.</p> </li> <li> <p>BUILTIN_EXPLORER: For Android, an app explorer that will traverse an Android app, interacting with it and capturing screenshots at the same time.</p> </li> <li> <p>APPIUM_JAVA_JUNIT: The Appium Java JUnit type.</p> </li> <li> <p>APPIUM_JAVA_TESTNG: The Appium Java TestNG type.</p> </li> <li> <p>APPIUM_PYTHON: The Appium Python type.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT: The Appium Java JUnit type for Web apps.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG: The Appium Java TestNG type for Web apps.</p> </li> <li> <p>APPIUM_WEB_PYTHON: The Appium Python type for Web apps.</p> </li> <li> <p>CALABASH: The Calabash type.</p> </li> <li> <p>INSTRUMENTATION: The Instrumentation type.</p> </li> <li> <p>UIAUTOMATION: The uiautomation type.</p> </li> <li> <p>UIAUTOMATOR: The uiautomator type.</p> </li> <li> <p>XCTEST: The XCode test type.</p> </li> <li> <p>XCTEST_UI: The XCode UI test type.</p> </li> </ul>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The test's type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>BUILTIN_FUZZ: The built-in fuzz type.</p> </li> <li> <p>BUILTIN_EXPLORER: For Android, an app explorer that will traverse an Android app, interacting with it and capturing screenshots at the same time.</p> </li> <li> <p>APPIUM_JAVA_JUNIT: The Appium Java JUnit type.</p> </li> <li> <p>APPIUM_JAVA_TESTNG: The Appium Java TestNG type.</p> </li> <li> <p>APPIUM_PYTHON: The Appium Python type.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT: The Appium Java JUnit type for Web apps.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG: The Appium Java TestNG type for Web apps.</p> </li> <li> <p>APPIUM_WEB_PYTHON: The Appium Python type for Web apps.</p> </li> <li> <p>CALABASH: The Calabash type.</p> </li> <li> <p>INSTRUMENTATION: The Instrumentation type.</p> </li> <li> <p>UIAUTOMATION: The uiautomation type.</p> </li> <li> <p>UIAUTOMATOR: The uiautomator type.</p> </li> <li> <p>XCTEST: The XCode test type.</p> </li> <li> <p>XCTEST_UI: The XCode UI test type.</p> </li> </ul>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Represents information about free trial device minutes for an AWS account.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents information about free trial device minutes for an AWS account.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TrialMinutes {
-    #[doc="<p>The number of free trial minutes remaining in the account.</p>"]
-    #[serde(rename="remaining")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of free trial minutes remaining in the account.</p>
+    #[serde(rename = "remaining")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub remaining: Option<f64>,
-    #[doc="<p>The total number of free trial minutes that the account started with.</p>"]
-    #[serde(rename="total")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of free trial minutes that the account started with.</p>
+    #[serde(rename = "total")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub total: Option<f64>,
 }
 
-#[doc="<p>A collection of one or more problems, grouped by their result.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A collection of one or more problems, grouped by their result.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UniqueProblem {
-    #[doc="<p>A message about the unique problems' result.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A message about the unique problems' result.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>Information about the problems.</p>"]
-    #[serde(rename="problems")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the problems.</p>
+    #[serde(rename = "problems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub problems: Option<Vec<Problem>>,
 }
 
-#[doc="<p>Represents a request to the update device pool operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the update device pool operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDevicePoolRequest {
-    #[doc="<p>The Amazon Resourc Name (ARN) of the Device Farm device pool you wish to update.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Amazon Resourc Name (ARN) of the Device Farm device pool you wish to update.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>A description of the device pool you wish to update.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the device pool you wish to update.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A string representing the name of the device pool you wish to update.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string representing the name of the device pool you wish to update.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Represents the rules you wish to modify for the device pool. Updating rules is optional; however, if you choose to update rules for your request, the update will replace the existing rules.</p>"]
-    #[serde(rename="rules")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Represents the rules you wish to modify for the device pool. Updating rules is optional; however, if you choose to update rules for your request, the update will replace the existing rules.</p>
+    #[serde(rename = "rules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rules: Option<Vec<Rule>>,
 }
 
-#[doc="<p>Represents the result of an update device pool request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of an update device pool request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateDevicePoolResult {
-    #[doc="<p>The device pool you just updated.</p>"]
-    #[serde(rename="devicePool")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The device pool you just updated.</p>
+    #[serde(rename = "devicePool")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub device_pool: Option<DevicePool>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateNetworkProfileRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the project that you wish to update network profile settings.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Amazon Resource Name (ARN) of the project that you wish to update network profile settings.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>The descriptoin of the network profile about which you are returning information.</p>"]
-    #[serde(rename="description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The descriptoin of the network profile about which you are returning information.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>"]
-    #[serde(rename="downlinkBandwidthBits")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>
+    #[serde(rename = "downlinkBandwidthBits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub downlink_bandwidth_bits: Option<i64>,
-    #[doc="<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>"]
-    #[serde(rename="downlinkDelayMs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>
+    #[serde(rename = "downlinkDelayMs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub downlink_delay_ms: Option<i64>,
-    #[doc="<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>"]
-    #[serde(rename="downlinkJitterMs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>
+    #[serde(rename = "downlinkJitterMs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub downlink_jitter_ms: Option<i64>,
-    #[doc="<p>Proportion of received packets that fail to arrive from 0 to 100 percent.</p>"]
-    #[serde(rename="downlinkLossPercent")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Proportion of received packets that fail to arrive from 0 to 100 percent.</p>
+    #[serde(rename = "downlinkLossPercent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub downlink_loss_percent: Option<i64>,
-    #[doc="<p>The name of the network profile about which you are returning information.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the network profile about which you are returning information.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The type of network profile you wish to return information about. Valid values are listed below.</p>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of network profile you wish to return information about. Valid values are listed below.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>"]
-    #[serde(rename="uplinkBandwidthBits")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>
+    #[serde(rename = "uplinkBandwidthBits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub uplink_bandwidth_bits: Option<i64>,
-    #[doc="<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>"]
-    #[serde(rename="uplinkDelayMs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>
+    #[serde(rename = "uplinkDelayMs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub uplink_delay_ms: Option<i64>,
-    #[doc="<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>"]
-    #[serde(rename="uplinkJitterMs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>
+    #[serde(rename = "uplinkJitterMs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub uplink_jitter_ms: Option<i64>,
-    #[doc="<p>Proportion of transmitted packets that fail to arrive from 0 to 100 percent.</p>"]
-    #[serde(rename="uplinkLossPercent")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Proportion of transmitted packets that fail to arrive from 0 to 100 percent.</p>
+    #[serde(rename = "uplinkLossPercent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub uplink_loss_percent: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateNetworkProfileResult {
-    #[doc="<p>A list of the available network profiles.</p>"]
-    #[serde(rename="networkProfile")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the available network profiles.</p>
+    #[serde(rename = "networkProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub network_profile: Option<NetworkProfile>,
 }
 
-#[doc="<p>Represents a request to the update project operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a request to the update project operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateProjectRequest {
-    #[doc="<p>The Amazon Resource Name (ARN) of the project whose name you wish to update.</p>"]
-    #[serde(rename="arn")]
+    /// <p>The Amazon Resource Name (ARN) of the project whose name you wish to update.</p>
+    #[serde(rename = "arn")]
     pub arn: String,
-    #[doc="<p>The number of minutes a test run in the project will execute before it times out.</p>"]
-    #[serde(rename="defaultJobTimeoutMinutes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of minutes a test run in the project will execute before it times out.</p>
+    #[serde(rename = "defaultJobTimeoutMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_job_timeout_minutes: Option<i64>,
-    #[doc="<p>A string representing the new name of the project that you are updating.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string representing the new name of the project that you are updating.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Represents the result of an update project request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the result of an update project request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateProjectResult {
-    #[doc="<p>The project you wish to update.</p>"]
-    #[serde(rename="project")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The project you wish to update.</p>
+    #[serde(rename = "project")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub project: Option<Project>,
 }
 
-#[doc="<p>An app or a set of one or more tests to upload or that have been uploaded.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An app or a set of one or more tests to upload or that have been uploaded.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Upload {
-    #[doc="<p>The upload's ARN.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The upload's ARN.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The upload's content type (for example, \"application/octet-stream\").</p>"]
-    #[serde(rename="contentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The upload's content type (for example, "application/octet-stream").</p>
+    #[serde(rename = "contentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content_type: Option<String>,
-    #[doc="<p>When the upload was created.</p>"]
-    #[serde(rename="created")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When the upload was created.</p>
+    #[serde(rename = "created")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<f64>,
-    #[doc="<p>A message about the upload's result.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A message about the upload's result.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>The upload's metadata. For example, for Android, this contains information that is parsed from the manifest and is displayed in the AWS Device Farm console after the associated app is uploaded.</p>"]
-    #[serde(rename="metadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The upload's metadata. For example, for Android, this contains information that is parsed from the manifest and is displayed in the AWS Device Farm console after the associated app is uploaded.</p>
+    #[serde(rename = "metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<String>,
-    #[doc="<p>The upload's file name.</p>"]
-    #[serde(rename="name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The upload's file name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The upload's status.</p> <p>Must be one of the following values:</p> <ul> <li> <p>FAILED: A failed status.</p> </li> <li> <p>INITIALIZED: An initialized status.</p> </li> <li> <p>PROCESSING: A processing status.</p> </li> <li> <p>SUCCEEDED: A succeeded status.</p> </li> </ul>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The upload's status.</p> <p>Must be one of the following values:</p> <ul> <li> <p>FAILED: A failed status.</p> </li> <li> <p>INITIALIZED: An initialized status.</p> </li> <li> <p>PROCESSING: A processing status.</p> </li> <li> <p>SUCCEEDED: A succeeded status.</p> </li> </ul>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The upload's type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>ANDROID_APP: An Android upload.</p> </li> <li> <p>IOS_APP: An iOS upload.</p> </li> <li> <p>WEB_APP: A web appliction upload.</p> </li> <li> <p>EXTERNAL_DATA: An external data upload.</p> </li> <li> <p>APPIUM_JAVA_JUNIT_TEST_PACKAGE: An Appium Java JUnit test package upload.</p> </li> <li> <p>APPIUM_JAVA_TESTNG_TEST_PACKAGE: An Appium Java TestNG test package upload.</p> </li> <li> <p>APPIUM_PYTHON_TEST_PACKAGE: An Appium Python test package upload.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT_TEST_PACKAGE: An Appium Java JUnit test package upload.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG_TEST_PACKAGE: An Appium Java TestNG test package upload.</p> </li> <li> <p>APPIUM_WEB_PYTHON_TEST_PACKAGE: An Appium Python test package upload.</p> </li> <li> <p>CALABASH_TEST_PACKAGE: A Calabash test package upload.</p> </li> <li> <p>INSTRUMENTATION_TEST_PACKAGE: An instrumentation upload.</p> </li> <li> <p>UIAUTOMATION_TEST_PACKAGE: A uiautomation test package upload.</p> </li> <li> <p>UIAUTOMATOR_TEST_PACKAGE: A uiautomator test package upload.</p> </li> <li> <p>XCTEST_TEST_PACKAGE: An XCode test package upload.</p> </li> <li> <p>XCTEST_UI_TEST_PACKAGE: An XCode UI test package upload.</p> </li> </ul>"]
-    #[serde(rename="type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The upload's type.</p> <p>Must be one of the following values:</p> <ul> <li> <p>ANDROID_APP: An Android upload.</p> </li> <li> <p>IOS_APP: An iOS upload.</p> </li> <li> <p>WEB_APP: A web appliction upload.</p> </li> <li> <p>EXTERNAL_DATA: An external data upload.</p> </li> <li> <p>APPIUM_JAVA_JUNIT_TEST_PACKAGE: An Appium Java JUnit test package upload.</p> </li> <li> <p>APPIUM_JAVA_TESTNG_TEST_PACKAGE: An Appium Java TestNG test package upload.</p> </li> <li> <p>APPIUM_PYTHON_TEST_PACKAGE: An Appium Python test package upload.</p> </li> <li> <p>APPIUM_WEB_JAVA_JUNIT_TEST_PACKAGE: An Appium Java JUnit test package upload.</p> </li> <li> <p>APPIUM_WEB_JAVA_TESTNG_TEST_PACKAGE: An Appium Java TestNG test package upload.</p> </li> <li> <p>APPIUM_WEB_PYTHON_TEST_PACKAGE: An Appium Python test package upload.</p> </li> <li> <p>CALABASH_TEST_PACKAGE: A Calabash test package upload.</p> </li> <li> <p>INSTRUMENTATION_TEST_PACKAGE: An instrumentation upload.</p> </li> <li> <p>UIAUTOMATION_TEST_PACKAGE: A uiautomation test package upload.</p> </li> <li> <p>UIAUTOMATOR_TEST_PACKAGE: A uiautomator test package upload.</p> </li> <li> <p>XCTEST_TEST_PACKAGE: An XCode test package upload.</p> </li> <li> <p>XCTEST_UI_TEST_PACKAGE: An XCode UI test package upload.</p> </li> </ul>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The pre-signed Amazon S3 URL that was used to store a file through a corresponding PUT request.</p>"]
-    #[serde(rename="url")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The pre-signed Amazon S3 URL that was used to store a file through a corresponding PUT request.</p>
+    #[serde(rename = "url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
 }
 
@@ -2154,7 +2153,6 @@ pub enum CreateDevicePoolError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateDevicePoolError {
     pub fn from_body(body: &str) -> CreateDevicePoolError {
@@ -2251,7 +2249,6 @@ pub enum CreateNetworkProfileError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateNetworkProfileError {
     pub fn from_body(body: &str) -> CreateNetworkProfileError {
@@ -2351,7 +2348,6 @@ pub enum CreateProjectError {
     Unknown(String),
 }
 
-
 impl CreateProjectError {
     pub fn from_body(body: &str) -> CreateProjectError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2447,7 +2443,6 @@ pub enum CreateRemoteAccessSessionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateRemoteAccessSessionError {
     pub fn from_body(body: &str) -> CreateRemoteAccessSessionError {
@@ -2547,7 +2542,6 @@ pub enum CreateUploadError {
     Unknown(String),
 }
 
-
 impl CreateUploadError {
     pub fn from_body(body: &str) -> CreateUploadError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2639,7 +2633,6 @@ pub enum DeleteDevicePoolError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteDevicePoolError {
     pub fn from_body(body: &str) -> DeleteDevicePoolError {
@@ -2736,7 +2729,6 @@ pub enum DeleteNetworkProfileError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteNetworkProfileError {
     pub fn from_body(body: &str) -> DeleteNetworkProfileError {
@@ -2836,7 +2828,6 @@ pub enum DeleteProjectError {
     Unknown(String),
 }
 
-
 impl DeleteProjectError {
     pub fn from_body(body: &str) -> DeleteProjectError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2932,7 +2923,6 @@ pub enum DeleteRemoteAccessSessionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteRemoteAccessSessionError {
     pub fn from_body(body: &str) -> DeleteRemoteAccessSessionError {
@@ -3032,7 +3022,6 @@ pub enum DeleteRunError {
     Unknown(String),
 }
 
-
 impl DeleteRunError {
     pub fn from_body(body: &str) -> DeleteRunError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3122,7 +3111,6 @@ pub enum DeleteUploadError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteUploadError {
     pub fn from_body(body: &str) -> DeleteUploadError {
@@ -3215,7 +3203,6 @@ pub enum GetAccountSettingsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetAccountSettingsError {
     pub fn from_body(body: &str) -> GetAccountSettingsError {
@@ -3315,7 +3302,6 @@ pub enum GetDeviceError {
     Unknown(String),
 }
 
-
 impl GetDeviceError {
     pub fn from_body(body: &str) -> GetDeviceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3405,7 +3391,6 @@ pub enum GetDevicePoolError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetDevicePoolError {
     pub fn from_body(body: &str) -> GetDevicePoolError {
@@ -3502,7 +3487,6 @@ pub enum GetDevicePoolCompatibilityError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetDevicePoolCompatibilityError {
     pub fn from_body(body: &str) -> GetDevicePoolCompatibilityError {
@@ -3602,7 +3586,6 @@ pub enum GetJobError {
     Unknown(String),
 }
 
-
 impl GetJobError {
     pub fn from_body(body: &str) -> GetJobError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3692,7 +3675,6 @@ pub enum GetNetworkProfileError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetNetworkProfileError {
     pub fn from_body(body: &str) -> GetNetworkProfileError {
@@ -3793,7 +3775,6 @@ pub enum GetOfferingStatusError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetOfferingStatusError {
     pub fn from_body(body: &str) -> GetOfferingStatusError {
@@ -3897,7 +3878,6 @@ pub enum GetProjectError {
     Unknown(String),
 }
 
-
 impl GetProjectError {
     pub fn from_body(body: &str) -> GetProjectError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3987,7 +3967,6 @@ pub enum GetRemoteAccessSessionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetRemoteAccessSessionError {
     pub fn from_body(body: &str) -> GetRemoteAccessSessionError {
@@ -4087,7 +4066,6 @@ pub enum GetRunError {
     Unknown(String),
 }
 
-
 impl GetRunError {
     pub fn from_body(body: &str) -> GetRunError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4177,7 +4155,6 @@ pub enum GetSuiteError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetSuiteError {
     pub fn from_body(body: &str) -> GetSuiteError {
@@ -4269,7 +4246,6 @@ pub enum GetTestError {
     Unknown(String),
 }
 
-
 impl GetTestError {
     pub fn from_body(body: &str) -> GetTestError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4359,7 +4335,6 @@ pub enum GetUploadError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetUploadError {
     pub fn from_body(body: &str) -> GetUploadError {
@@ -4451,7 +4426,6 @@ pub enum InstallToRemoteAccessSessionError {
     Unknown(String),
 }
 
-
 impl InstallToRemoteAccessSessionError {
     pub fn from_body(body: &str) -> InstallToRemoteAccessSessionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4468,11 +4442,17 @@ impl InstallToRemoteAccessSessionError {
                     "ArgumentException" => {
                         InstallToRemoteAccessSessionError::Argument(String::from(error_message))
                     }
-                    "LimitExceededException" => InstallToRemoteAccessSessionError::LimitExceeded(String::from(error_message)),
+                    "LimitExceededException" => InstallToRemoteAccessSessionError::LimitExceeded(
+                        String::from(error_message),
+                    ),
                     "NotFoundException" => {
                         InstallToRemoteAccessSessionError::NotFound(String::from(error_message))
                     }
-                    "ServiceAccountException" => InstallToRemoteAccessSessionError::ServiceAccount(String::from(error_message)),
+                    "ServiceAccountException" => {
+                        InstallToRemoteAccessSessionError::ServiceAccount(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         InstallToRemoteAccessSessionError::Validation(error_message.to_string())
                     }
@@ -4545,7 +4525,6 @@ pub enum ListArtifactsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListArtifactsError {
     pub fn from_body(body: &str) -> ListArtifactsError {
@@ -4643,7 +4622,6 @@ pub enum ListDevicePoolsError {
     Unknown(String),
 }
 
-
 impl ListDevicePoolsError {
     pub fn from_body(body: &str) -> ListDevicePoolsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4740,7 +4718,6 @@ pub enum ListDevicesError {
     Unknown(String),
 }
 
-
 impl ListDevicesError {
     pub fn from_body(body: &str) -> ListDevicesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4833,7 +4810,6 @@ pub enum ListJobsError {
     Unknown(String),
 }
 
-
 impl ListJobsError {
     pub fn from_body(body: &str) -> ListJobsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4923,7 +4899,6 @@ pub enum ListNetworkProfilesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListNetworkProfilesError {
     pub fn from_body(body: &str) -> ListNetworkProfilesError {
@@ -5024,7 +4999,6 @@ pub enum ListOfferingPromotionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListOfferingPromotionsError {
     pub fn from_body(body: &str) -> ListOfferingPromotionsError {
@@ -5130,7 +5104,6 @@ pub enum ListOfferingTransactionsError {
     Unknown(String),
 }
 
-
 impl ListOfferingTransactionsError {
     pub fn from_body(body: &str) -> ListOfferingTransactionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5235,7 +5208,6 @@ pub enum ListOfferingsError {
     Unknown(String),
 }
 
-
 impl ListOfferingsError {
     pub fn from_body(body: &str) -> ListOfferingsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5336,7 +5308,6 @@ pub enum ListProjectsError {
     Unknown(String),
 }
 
-
 impl ListProjectsError {
     pub fn from_body(body: &str) -> ListProjectsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5428,7 +5399,6 @@ pub enum ListRemoteAccessSessionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListRemoteAccessSessionsError {
     pub fn from_body(body: &str) -> ListRemoteAccessSessionsError {
@@ -5528,7 +5498,6 @@ pub enum ListRunsError {
     Unknown(String),
 }
 
-
 impl ListRunsError {
     pub fn from_body(body: &str) -> ListRunsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5618,7 +5587,6 @@ pub enum ListSamplesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListSamplesError {
     pub fn from_body(body: &str) -> ListSamplesError {
@@ -5712,7 +5680,6 @@ pub enum ListSuitesError {
     Unknown(String),
 }
 
-
 impl ListSuitesError {
     pub fn from_body(body: &str) -> ListSuitesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5803,7 +5770,6 @@ pub enum ListTestsError {
     Unknown(String),
 }
 
-
 impl ListTestsError {
     pub fn from_body(body: &str) -> ListTestsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5893,7 +5859,6 @@ pub enum ListUniqueProblemsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListUniqueProblemsError {
     pub fn from_body(body: &str) -> ListUniqueProblemsError {
@@ -5993,7 +5958,6 @@ pub enum ListUploadsError {
     Unknown(String),
 }
 
-
 impl ListUploadsError {
     pub fn from_body(body: &str) -> ListUploadsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6087,7 +6051,6 @@ pub enum PurchaseOfferingError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl PurchaseOfferingError {
     pub fn from_body(body: &str) -> PurchaseOfferingError {
@@ -6191,7 +6154,6 @@ pub enum RenewOfferingError {
     Unknown(String),
 }
 
-
 impl RenewOfferingError {
     pub fn from_body(body: &str) -> RenewOfferingError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6294,7 +6256,6 @@ pub enum ScheduleRunError {
     Unknown(String),
 }
 
-
 impl ScheduleRunError {
     pub fn from_body(body: &str) -> ScheduleRunError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6390,7 +6351,6 @@ pub enum StopRemoteAccessSessionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl StopRemoteAccessSessionError {
     pub fn from_body(body: &str) -> StopRemoteAccessSessionError {
@@ -6490,7 +6450,6 @@ pub enum StopRunError {
     Unknown(String),
 }
 
-
 impl StopRunError {
     pub fn from_body(body: &str) -> StopRunError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6580,7 +6539,6 @@ pub enum UpdateDevicePoolError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateDevicePoolError {
     pub fn from_body(body: &str) -> UpdateDevicePoolError {
@@ -6677,7 +6635,6 @@ pub enum UpdateNetworkProfileError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdateNetworkProfileError {
     pub fn from_body(body: &str) -> UpdateNetworkProfileError {
@@ -6777,7 +6734,6 @@ pub enum UpdateProjectError {
     Unknown(String),
 }
 
-
 impl UpdateProjectError {
     pub fn from_body(body: &str) -> UpdateProjectError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6855,284 +6811,263 @@ impl Error for UpdateProjectError {
 }
 /// Trait representing the capabilities of the AWS Device Farm API. AWS Device Farm clients implement this trait.
 pub trait DeviceFarm {
-    #[doc="<p>Creates a device pool.</p>"]
-    fn create_device_pool(&self,
-                          input: &CreateDevicePoolRequest)
-                          -> Result<CreateDevicePoolResult, CreateDevicePoolError>;
+    #[doc = "<p>Creates a device pool.</p>"]
+    fn create_device_pool(
+        &self,
+        input: &CreateDevicePoolRequest,
+    ) -> Result<CreateDevicePoolResult, CreateDevicePoolError>;
 
+    #[doc = "<p>Creates a network profile.</p>"]
+    fn create_network_profile(
+        &self,
+        input: &CreateNetworkProfileRequest,
+    ) -> Result<CreateNetworkProfileResult, CreateNetworkProfileError>;
 
-    #[doc="<p>Creates a network profile.</p>"]
-    fn create_network_profile(&self,
-                              input: &CreateNetworkProfileRequest)
-                              -> Result<CreateNetworkProfileResult, CreateNetworkProfileError>;
+    #[doc = "<p>Creates a new project.</p>"]
+    fn create_project(
+        &self,
+        input: &CreateProjectRequest,
+    ) -> Result<CreateProjectResult, CreateProjectError>;
 
+    #[doc = "<p>Specifies and starts a remote access session.</p>"]
+    fn create_remote_access_session(
+        &self,
+        input: &CreateRemoteAccessSessionRequest,
+    ) -> Result<CreateRemoteAccessSessionResult, CreateRemoteAccessSessionError>;
 
-    #[doc="<p>Creates a new project.</p>"]
-    fn create_project(&self,
-                      input: &CreateProjectRequest)
-                      -> Result<CreateProjectResult, CreateProjectError>;
-
-
-    #[doc="<p>Specifies and starts a remote access session.</p>"]
-    fn create_remote_access_session
-        (&self,
-         input: &CreateRemoteAccessSessionRequest)
-         -> Result<CreateRemoteAccessSessionResult, CreateRemoteAccessSessionError>;
-
-
-    #[doc="<p>Uploads an app or test scripts.</p>"]
-    fn create_upload(&self,
-                     input: &CreateUploadRequest)
-                     -> Result<CreateUploadResult, CreateUploadError>;
-
+    #[doc = "<p>Uploads an app or test scripts.</p>"]
+    fn create_upload(
+        &self,
+        input: &CreateUploadRequest,
+    ) -> Result<CreateUploadResult, CreateUploadError>;
 
     #[doc="<p>Deletes a device pool given the pool ARN. Does not allow deletion of curated pools owned by the system.</p>"]
-    fn delete_device_pool(&self,
-                          input: &DeleteDevicePoolRequest)
-                          -> Result<DeleteDevicePoolResult, DeleteDevicePoolError>;
+    fn delete_device_pool(
+        &self,
+        input: &DeleteDevicePoolRequest,
+    ) -> Result<DeleteDevicePoolResult, DeleteDevicePoolError>;
 
-
-    #[doc="<p>Deletes a network profile.</p>"]
-    fn delete_network_profile(&self,
-                              input: &DeleteNetworkProfileRequest)
-                              -> Result<DeleteNetworkProfileResult, DeleteNetworkProfileError>;
-
+    #[doc = "<p>Deletes a network profile.</p>"]
+    fn delete_network_profile(
+        &self,
+        input: &DeleteNetworkProfileRequest,
+    ) -> Result<DeleteNetworkProfileResult, DeleteNetworkProfileError>;
 
     #[doc="<p>Deletes an AWS Device Farm project, given the project ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>"]
-    fn delete_project(&self,
-                      input: &DeleteProjectRequest)
-                      -> Result<DeleteProjectResult, DeleteProjectError>;
+    fn delete_project(
+        &self,
+        input: &DeleteProjectRequest,
+    ) -> Result<DeleteProjectResult, DeleteProjectError>;
 
-
-    #[doc="<p>Deletes a completed remote access session and its results.</p>"]
-    fn delete_remote_access_session
-        (&self,
-         input: &DeleteRemoteAccessSessionRequest)
-         -> Result<DeleteRemoteAccessSessionResult, DeleteRemoteAccessSessionError>;
-
+    #[doc = "<p>Deletes a completed remote access session and its results.</p>"]
+    fn delete_remote_access_session(
+        &self,
+        input: &DeleteRemoteAccessSessionRequest,
+    ) -> Result<DeleteRemoteAccessSessionResult, DeleteRemoteAccessSessionError>;
 
     #[doc="<p>Deletes the run, given the run ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>"]
     fn delete_run(&self, input: &DeleteRunRequest) -> Result<DeleteRunResult, DeleteRunError>;
 
-
-    #[doc="<p>Deletes an upload given the upload ARN.</p>"]
-    fn delete_upload(&self,
-                     input: &DeleteUploadRequest)
-                     -> Result<DeleteUploadResult, DeleteUploadError>;
-
+    #[doc = "<p>Deletes an upload given the upload ARN.</p>"]
+    fn delete_upload(
+        &self,
+        input: &DeleteUploadRequest,
+    ) -> Result<DeleteUploadResult, DeleteUploadError>;
 
     #[doc="<p>Returns the number of unmetered iOS and/or unmetered Android devices that have been purchased by the account.</p>"]
     fn get_account_settings(&self) -> Result<GetAccountSettingsResult, GetAccountSettingsError>;
 
-
-    #[doc="<p>Gets information about a unique device type.</p>"]
+    #[doc = "<p>Gets information about a unique device type.</p>"]
     fn get_device(&self, input: &GetDeviceRequest) -> Result<GetDeviceResult, GetDeviceError>;
 
+    #[doc = "<p>Gets information about a device pool.</p>"]
+    fn get_device_pool(
+        &self,
+        input: &GetDevicePoolRequest,
+    ) -> Result<GetDevicePoolResult, GetDevicePoolError>;
 
-    #[doc="<p>Gets information about a device pool.</p>"]
-    fn get_device_pool(&self,
-                       input: &GetDevicePoolRequest)
-                       -> Result<GetDevicePoolResult, GetDevicePoolError>;
+    #[doc = "<p>Gets information about compatibility with a device pool.</p>"]
+    fn get_device_pool_compatibility(
+        &self,
+        input: &GetDevicePoolCompatibilityRequest,
+    ) -> Result<GetDevicePoolCompatibilityResult, GetDevicePoolCompatibilityError>;
 
-
-    #[doc="<p>Gets information about compatibility with a device pool.</p>"]
-    fn get_device_pool_compatibility
-        (&self,
-         input: &GetDevicePoolCompatibilityRequest)
-         -> Result<GetDevicePoolCompatibilityResult, GetDevicePoolCompatibilityError>;
-
-
-    #[doc="<p>Gets information about a job.</p>"]
+    #[doc = "<p>Gets information about a job.</p>"]
     fn get_job(&self, input: &GetJobRequest) -> Result<GetJobResult, GetJobError>;
 
-
-    #[doc="<p>Returns information about a network profile.</p>"]
-    fn get_network_profile(&self,
-                           input: &GetNetworkProfileRequest)
-                           -> Result<GetNetworkProfileResult, GetNetworkProfileError>;
-
+    #[doc = "<p>Returns information about a network profile.</p>"]
+    fn get_network_profile(
+        &self,
+        input: &GetNetworkProfileRequest,
+    ) -> Result<GetNetworkProfileResult, GetNetworkProfileError>;
 
     #[doc="<p>Gets the current status and future status of all offerings purchased by an AWS account. The response indicates how many offerings are currently available and the offerings that will be available in the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-    fn get_offering_status(&self,
-                           input: &GetOfferingStatusRequest)
-                           -> Result<GetOfferingStatusResult, GetOfferingStatusError>;
+    fn get_offering_status(
+        &self,
+        input: &GetOfferingStatusRequest,
+    ) -> Result<GetOfferingStatusResult, GetOfferingStatusError>;
 
-
-    #[doc="<p>Gets information about a project.</p>"]
+    #[doc = "<p>Gets information about a project.</p>"]
     fn get_project(&self, input: &GetProjectRequest) -> Result<GetProjectResult, GetProjectError>;
 
+    #[doc = "<p>Returns a link to a currently running remote access session.</p>"]
+    fn get_remote_access_session(
+        &self,
+        input: &GetRemoteAccessSessionRequest,
+    ) -> Result<GetRemoteAccessSessionResult, GetRemoteAccessSessionError>;
 
-    #[doc="<p>Returns a link to a currently running remote access session.</p>"]
-    fn get_remote_access_session
-        (&self,
-         input: &GetRemoteAccessSessionRequest)
-         -> Result<GetRemoteAccessSessionResult, GetRemoteAccessSessionError>;
-
-
-    #[doc="<p>Gets information about a run.</p>"]
+    #[doc = "<p>Gets information about a run.</p>"]
     fn get_run(&self, input: &GetRunRequest) -> Result<GetRunResult, GetRunError>;
 
-
-    #[doc="<p>Gets information about a suite.</p>"]
+    #[doc = "<p>Gets information about a suite.</p>"]
     fn get_suite(&self, input: &GetSuiteRequest) -> Result<GetSuiteResult, GetSuiteError>;
 
-
-    #[doc="<p>Gets information about a test.</p>"]
+    #[doc = "<p>Gets information about a test.</p>"]
     fn get_test(&self, input: &GetTestRequest) -> Result<GetTestResult, GetTestError>;
 
-
-    #[doc="<p>Gets information about an upload.</p>"]
+    #[doc = "<p>Gets information about an upload.</p>"]
     fn get_upload(&self, input: &GetUploadRequest) -> Result<GetUploadResult, GetUploadError>;
 
-
     #[doc="<p>Installs an application to the device in a remote access session. For Android applications, the file must be in .apk format. For iOS applications, the file must be in .ipa format.</p>"]
-    fn install_to_remote_access_session
-        (&self,
-         input: &InstallToRemoteAccessSessionRequest)
-         -> Result<InstallToRemoteAccessSessionResult, InstallToRemoteAccessSessionError>;
+    fn install_to_remote_access_session(
+        &self,
+        input: &InstallToRemoteAccessSessionRequest,
+    ) -> Result<InstallToRemoteAccessSessionResult, InstallToRemoteAccessSessionError>;
 
+    #[doc = "<p>Gets information about artifacts.</p>"]
+    fn list_artifacts(
+        &self,
+        input: &ListArtifactsRequest,
+    ) -> Result<ListArtifactsResult, ListArtifactsError>;
 
-    #[doc="<p>Gets information about artifacts.</p>"]
-    fn list_artifacts(&self,
-                      input: &ListArtifactsRequest)
-                      -> Result<ListArtifactsResult, ListArtifactsError>;
+    #[doc = "<p>Gets information about device pools.</p>"]
+    fn list_device_pools(
+        &self,
+        input: &ListDevicePoolsRequest,
+    ) -> Result<ListDevicePoolsResult, ListDevicePoolsError>;
 
+    #[doc = "<p>Gets information about unique device types.</p>"]
+    fn list_devices(
+        &self,
+        input: &ListDevicesRequest,
+    ) -> Result<ListDevicesResult, ListDevicesError>;
 
-    #[doc="<p>Gets information about device pools.</p>"]
-    fn list_device_pools(&self,
-                         input: &ListDevicePoolsRequest)
-                         -> Result<ListDevicePoolsResult, ListDevicePoolsError>;
-
-
-    #[doc="<p>Gets information about unique device types.</p>"]
-    fn list_devices(&self,
-                    input: &ListDevicesRequest)
-                    -> Result<ListDevicesResult, ListDevicesError>;
-
-
-    #[doc="<p>Gets information about jobs.</p>"]
+    #[doc = "<p>Gets information about jobs.</p>"]
     fn list_jobs(&self, input: &ListJobsRequest) -> Result<ListJobsResult, ListJobsError>;
 
-
-    #[doc="<p>Returns the list of available network profiles.</p>"]
-    fn list_network_profiles(&self,
-                             input: &ListNetworkProfilesRequest)
-                             -> Result<ListNetworkProfilesResult, ListNetworkProfilesError>;
-
+    #[doc = "<p>Returns the list of available network profiles.</p>"]
+    fn list_network_profiles(
+        &self,
+        input: &ListNetworkProfilesRequest,
+    ) -> Result<ListNetworkProfilesResult, ListNetworkProfilesError>;
 
     #[doc="<p>Returns a list of offering promotions. Each offering promotion record contains the ID and description of the promotion. The API returns a <code>NotEligible</code> error if the caller is not permitted to invoke the operation. Contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-    fn list_offering_promotions
-        (&self,
-         input: &ListOfferingPromotionsRequest)
-         -> Result<ListOfferingPromotionsResult, ListOfferingPromotionsError>;
-
+    fn list_offering_promotions(
+        &self,
+        input: &ListOfferingPromotionsRequest,
+    ) -> Result<ListOfferingPromotionsResult, ListOfferingPromotionsError>;
 
     #[doc="<p>Returns a list of all historical purchases, renewals, and system renewal transactions for an AWS account. The list is paginated and ordered by a descending timestamp (most recent transactions are first). The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-    fn list_offering_transactions
-        (&self,
-         input: &ListOfferingTransactionsRequest)
-         -> Result<ListOfferingTransactionsResult, ListOfferingTransactionsError>;
-
+    fn list_offering_transactions(
+        &self,
+        input: &ListOfferingTransactionsRequest,
+    ) -> Result<ListOfferingTransactionsResult, ListOfferingTransactionsError>;
 
     #[doc="<p>Returns a list of products or offerings that the user can manage through the API. Each offering record indicates the recurring price per unit and the frequency for that offering. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-    fn list_offerings(&self,
-                      input: &ListOfferingsRequest)
-                      -> Result<ListOfferingsResult, ListOfferingsError>;
+    fn list_offerings(
+        &self,
+        input: &ListOfferingsRequest,
+    ) -> Result<ListOfferingsResult, ListOfferingsError>;
 
+    #[doc = "<p>Gets information about projects.</p>"]
+    fn list_projects(
+        &self,
+        input: &ListProjectsRequest,
+    ) -> Result<ListProjectsResult, ListProjectsError>;
 
-    #[doc="<p>Gets information about projects.</p>"]
-    fn list_projects(&self,
-                     input: &ListProjectsRequest)
-                     -> Result<ListProjectsResult, ListProjectsError>;
+    #[doc = "<p>Returns a list of all currently running remote access sessions.</p>"]
+    fn list_remote_access_sessions(
+        &self,
+        input: &ListRemoteAccessSessionsRequest,
+    ) -> Result<ListRemoteAccessSessionsResult, ListRemoteAccessSessionsError>;
 
-
-    #[doc="<p>Returns a list of all currently running remote access sessions.</p>"]
-    fn list_remote_access_sessions
-        (&self,
-         input: &ListRemoteAccessSessionsRequest)
-         -> Result<ListRemoteAccessSessionsResult, ListRemoteAccessSessionsError>;
-
-
-    #[doc="<p>Gets information about runs, given an AWS Device Farm project ARN.</p>"]
+    #[doc = "<p>Gets information about runs, given an AWS Device Farm project ARN.</p>"]
     fn list_runs(&self, input: &ListRunsRequest) -> Result<ListRunsResult, ListRunsError>;
 
+    #[doc = "<p>Gets information about samples, given an AWS Device Farm project ARN</p>"]
+    fn list_samples(
+        &self,
+        input: &ListSamplesRequest,
+    ) -> Result<ListSamplesResult, ListSamplesError>;
 
-    #[doc="<p>Gets information about samples, given an AWS Device Farm project ARN</p>"]
-    fn list_samples(&self,
-                    input: &ListSamplesRequest)
-                    -> Result<ListSamplesResult, ListSamplesError>;
-
-
-    #[doc="<p>Gets information about suites.</p>"]
+    #[doc = "<p>Gets information about suites.</p>"]
     fn list_suites(&self, input: &ListSuitesRequest) -> Result<ListSuitesResult, ListSuitesError>;
 
-
-    #[doc="<p>Gets information about tests.</p>"]
+    #[doc = "<p>Gets information about tests.</p>"]
     fn list_tests(&self, input: &ListTestsRequest) -> Result<ListTestsResult, ListTestsError>;
 
+    #[doc = "<p>Gets information about unique problems.</p>"]
+    fn list_unique_problems(
+        &self,
+        input: &ListUniqueProblemsRequest,
+    ) -> Result<ListUniqueProblemsResult, ListUniqueProblemsError>;
 
-    #[doc="<p>Gets information about unique problems.</p>"]
-    fn list_unique_problems(&self,
-                            input: &ListUniqueProblemsRequest)
-                            -> Result<ListUniqueProblemsResult, ListUniqueProblemsError>;
-
-
-    #[doc="<p>Gets information about uploads, given an AWS Device Farm project ARN.</p>"]
-    fn list_uploads(&self,
-                    input: &ListUploadsRequest)
-                    -> Result<ListUploadsResult, ListUploadsError>;
-
+    #[doc = "<p>Gets information about uploads, given an AWS Device Farm project ARN.</p>"]
+    fn list_uploads(
+        &self,
+        input: &ListUploadsRequest,
+    ) -> Result<ListUploadsResult, ListUploadsError>;
 
     #[doc="<p>Immediately purchases offerings for an AWS account. Offerings renew with the latest total purchased quantity for an offering, unless the renewal was overridden. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-    fn purchase_offering(&self,
-                         input: &PurchaseOfferingRequest)
-                         -> Result<PurchaseOfferingResult, PurchaseOfferingError>;
-
+    fn purchase_offering(
+        &self,
+        input: &PurchaseOfferingRequest,
+    ) -> Result<PurchaseOfferingResult, PurchaseOfferingError>;
 
     #[doc="<p>Explicitly sets the quantity of devices to renew for an offering, starting from the <code>effectiveDate</code> of the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-    fn renew_offering(&self,
-                      input: &RenewOfferingRequest)
-                      -> Result<RenewOfferingResult, RenewOfferingError>;
+    fn renew_offering(
+        &self,
+        input: &RenewOfferingRequest,
+    ) -> Result<RenewOfferingResult, RenewOfferingError>;
 
+    #[doc = "<p>Schedules a run.</p>"]
+    fn schedule_run(
+        &self,
+        input: &ScheduleRunRequest,
+    ) -> Result<ScheduleRunResult, ScheduleRunError>;
 
-    #[doc="<p>Schedules a run.</p>"]
-    fn schedule_run(&self,
-                    input: &ScheduleRunRequest)
-                    -> Result<ScheduleRunResult, ScheduleRunError>;
-
-
-    #[doc="<p>Ends a specified remote access session.</p>"]
-    fn stop_remote_access_session
-        (&self,
-         input: &StopRemoteAccessSessionRequest)
-         -> Result<StopRemoteAccessSessionResult, StopRemoteAccessSessionError>;
-
+    #[doc = "<p>Ends a specified remote access session.</p>"]
+    fn stop_remote_access_session(
+        &self,
+        input: &StopRemoteAccessSessionRequest,
+    ) -> Result<StopRemoteAccessSessionResult, StopRemoteAccessSessionError>;
 
     #[doc="<p>Initiates a stop request for the current test run. AWS Device Farm will immediately stop the run on devices where tests have not started executing, and you will not be billed for these devices. On devices where tests have started executing, Setup Suite and Teardown Suite tests will run to completion before stopping execution on those devices. You will be billed for Setup, Teardown, and any tests that were in progress or already completed.</p>"]
     fn stop_run(&self, input: &StopRunRequest) -> Result<StopRunResult, StopRunError>;
 
-
     #[doc="<p>Modifies the name, description, and rules in a device pool given the attributes and the pool ARN. Rule updates are all-or-nothing, meaning they can only be updated as a whole (or not at all).</p>"]
-    fn update_device_pool(&self,
-                          input: &UpdateDevicePoolRequest)
-                          -> Result<UpdateDevicePoolResult, UpdateDevicePoolError>;
+    fn update_device_pool(
+        &self,
+        input: &UpdateDevicePoolRequest,
+    ) -> Result<UpdateDevicePoolResult, UpdateDevicePoolError>;
 
+    #[doc = "<p>Updates the network profile with specific settings.</p>"]
+    fn update_network_profile(
+        &self,
+        input: &UpdateNetworkProfileRequest,
+    ) -> Result<UpdateNetworkProfileResult, UpdateNetworkProfileError>;
 
-    #[doc="<p>Updates the network profile with specific settings.</p>"]
-    fn update_network_profile(&self,
-                              input: &UpdateNetworkProfileRequest)
-                              -> Result<UpdateNetworkProfileResult, UpdateNetworkProfileError>;
-
-
-    #[doc="<p>Modifies the specified project name, given the project ARN and a new name.</p>"]
-    fn update_project(&self,
-                      input: &UpdateProjectRequest)
-                      -> Result<UpdateProjectResult, UpdateProjectError>;
+    #[doc = "<p>Modifies the specified project name, given the project ARN and a new name.</p>"]
+    fn update_project(
+        &self,
+        input: &UpdateProjectRequest,
+    ) -> Result<UpdateProjectResult, UpdateProjectError>;
 }
 /// A client for the AWS Device Farm API.
 pub struct DeviceFarmClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -7140,8 +7075,9 @@ pub struct DeviceFarmClient<P, D>
 }
 
 impl<P, D> DeviceFarmClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         DeviceFarmClient {
@@ -7153,13 +7089,15 @@ impl<P, D> DeviceFarmClient<P, D>
 }
 
 impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
-    #[doc="<p>Creates a device pool.</p>"]
-    fn create_device_pool(&self,
-                          input: &CreateDevicePoolRequest)
-                          -> Result<CreateDevicePoolResult, CreateDevicePoolError> {
+    #[doc = "<p>Creates a device pool.</p>"]
+    fn create_device_pool(
+        &self,
+        input: &CreateDevicePoolRequest,
+    ) -> Result<CreateDevicePoolResult, CreateDevicePoolError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7175,23 +7113,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateDevicePoolResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateDevicePoolResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateDevicePoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateDevicePoolError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a network profile.</p>"]
-    fn create_network_profile(&self,
-                              input: &CreateNetworkProfileRequest)
-                              -> Result<CreateNetworkProfileResult, CreateNetworkProfileError> {
+    #[doc = "<p>Creates a network profile.</p>"]
+    fn create_network_profile(
+        &self,
+        input: &CreateNetworkProfileRequest,
+    ) -> Result<CreateNetworkProfileResult, CreateNetworkProfileError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7207,21 +7147,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateNetworkProfileResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateNetworkProfileResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateNetworkProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateNetworkProfileError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new project.</p>"]
-    fn create_project(&self,
-                      input: &CreateProjectRequest)
-                      -> Result<CreateProjectResult, CreateProjectError> {
+    #[doc = "<p>Creates a new project.</p>"]
+    fn create_project(
+        &self,
+        input: &CreateProjectRequest,
+    ) -> Result<CreateProjectResult, CreateProjectError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7237,29 +7181,32 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateProjectResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateProjectResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateProjectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Specifies and starts a remote access session.</p>"]
-    fn create_remote_access_session
-        (&self,
-         input: &CreateRemoteAccessSessionRequest)
-         -> Result<CreateRemoteAccessSessionResult, CreateRemoteAccessSessionError> {
+    #[doc = "<p>Specifies and starts a remote access session.</p>"]
+    fn create_remote_access_session(
+        &self,
+        input: &CreateRemoteAccessSessionRequest,
+    ) -> Result<CreateRemoteAccessSessionResult, CreateRemoteAccessSessionError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "DeviceFarm_20150623.CreateRemoteAccessSession");
+        request.add_header(
+            "x-amz-target",
+            "DeviceFarm_20150623.CreateRemoteAccessSession",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7271,22 +7218,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateRemoteAccessSessionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateRemoteAccessSessionResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateRemoteAccessSessionError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(CreateRemoteAccessSessionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Uploads an app or test scripts.</p>"]
-    fn create_upload(&self,
-                     input: &CreateUploadRequest)
-                     -> Result<CreateUploadResult, CreateUploadError> {
+    #[doc = "<p>Uploads an app or test scripts.</p>"]
+    fn create_upload(
+        &self,
+        input: &CreateUploadRequest,
+    ) -> Result<CreateUploadResult, CreateUploadError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7302,23 +7252,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateUploadResult>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateUploadResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateUploadError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a device pool given the pool ARN. Does not allow deletion of curated pools owned by the system.</p>"]
-    fn delete_device_pool(&self,
-                          input: &DeleteDevicePoolRequest)
-                          -> Result<DeleteDevicePoolResult, DeleteDevicePoolError> {
+    fn delete_device_pool(
+        &self,
+        input: &DeleteDevicePoolRequest,
+    ) -> Result<DeleteDevicePoolResult, DeleteDevicePoolError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7334,23 +7286,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteDevicePoolResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteDevicePoolResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteDevicePoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteDevicePoolError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a network profile.</p>"]
-    fn delete_network_profile(&self,
-                              input: &DeleteNetworkProfileRequest)
-                              -> Result<DeleteNetworkProfileResult, DeleteNetworkProfileError> {
+    #[doc = "<p>Deletes a network profile.</p>"]
+    fn delete_network_profile(
+        &self,
+        input: &DeleteNetworkProfileRequest,
+    ) -> Result<DeleteNetworkProfileResult, DeleteNetworkProfileError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7366,21 +7320,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteNetworkProfileResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteNetworkProfileResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteNetworkProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteNetworkProfileError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes an AWS Device Farm project, given the project ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>"]
-    fn delete_project(&self,
-                      input: &DeleteProjectRequest)
-                      -> Result<DeleteProjectResult, DeleteProjectError> {
+    fn delete_project(
+        &self,
+        input: &DeleteProjectRequest,
+    ) -> Result<DeleteProjectResult, DeleteProjectError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7396,29 +7354,32 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteProjectResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteProjectResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteProjectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a completed remote access session and its results.</p>"]
-    fn delete_remote_access_session
-        (&self,
-         input: &DeleteRemoteAccessSessionRequest)
-         -> Result<DeleteRemoteAccessSessionResult, DeleteRemoteAccessSessionError> {
+    #[doc = "<p>Deletes a completed remote access session and its results.</p>"]
+    fn delete_remote_access_session(
+        &self,
+        input: &DeleteRemoteAccessSessionRequest,
+    ) -> Result<DeleteRemoteAccessSessionResult, DeleteRemoteAccessSessionError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "DeviceFarm_20150623.DeleteRemoteAccessSession");
+        request.add_header(
+            "x-amz-target",
+            "DeviceFarm_20150623.DeleteRemoteAccessSession",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7430,17 +7391,19 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteRemoteAccessSessionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteRemoteAccessSessionResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteRemoteAccessSessionError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DeleteRemoteAccessSessionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes the run, given the run ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>"]
     fn delete_run(&self, input: &DeleteRunRequest) -> Result<DeleteRunResult, DeleteRunError> {
@@ -7459,22 +7422,27 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteRunResult>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<DeleteRunResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteRunError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes an upload given the upload ARN.</p>"]
-    fn delete_upload(&self,
-                     input: &DeleteUploadRequest)
-                     -> Result<DeleteUploadResult, DeleteUploadError> {
+    #[doc = "<p>Deletes an upload given the upload ARN.</p>"]
+    fn delete_upload(
+        &self,
+        input: &DeleteUploadRequest,
+    ) -> Result<DeleteUploadResult, DeleteUploadError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7490,18 +7458,19 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteUploadResult>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteUploadResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteUploadError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns the number of unmetered iOS and/or unmetered Android devices that have been purchased by the account.</p>"]
     fn get_account_settings(&self) -> Result<GetAccountSettingsResult, GetAccountSettingsError> {
@@ -7519,20 +7488,21 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetAccountSettingsResult>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetAccountSettingsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetAccountSettingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetAccountSettingsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about a unique device type.</p>"]
+    #[doc = "<p>Gets information about a unique device type.</p>"]
     fn get_device(&self, input: &GetDeviceRequest) -> Result<GetDeviceResult, GetDeviceError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
@@ -7549,22 +7519,27 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDeviceResult>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<GetDeviceResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDeviceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDeviceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about a device pool.</p>"]
-    fn get_device_pool(&self,
-                       input: &GetDevicePoolRequest)
-                       -> Result<GetDevicePoolResult, GetDevicePoolError> {
+    #[doc = "<p>Gets information about a device pool.</p>"]
+    fn get_device_pool(
+        &self,
+        input: &GetDevicePoolRequest,
+    ) -> Result<GetDevicePoolResult, GetDevicePoolError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7580,29 +7555,32 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDevicePoolResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetDevicePoolResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDevicePoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDevicePoolError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about compatibility with a device pool.</p>"]
-    fn get_device_pool_compatibility
-        (&self,
-         input: &GetDevicePoolCompatibilityRequest)
-         -> Result<GetDevicePoolCompatibilityResult, GetDevicePoolCompatibilityError> {
+    #[doc = "<p>Gets information about compatibility with a device pool.</p>"]
+    fn get_device_pool_compatibility(
+        &self,
+        input: &GetDevicePoolCompatibilityRequest,
+    ) -> Result<GetDevicePoolCompatibilityResult, GetDevicePoolCompatibilityError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "DeviceFarm_20150623.GetDevicePoolCompatibility");
+        request.add_header(
+            "x-amz-target",
+            "DeviceFarm_20150623.GetDevicePoolCompatibility",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7614,19 +7592,21 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDevicePoolCompatibilityResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetDevicePoolCompatibilityResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDevicePoolCompatibilityError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(GetDevicePoolCompatibilityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about a job.</p>"]
+    #[doc = "<p>Gets information about a job.</p>"]
     fn get_job(&self, input: &GetJobRequest) -> Result<GetJobResult, GetJobError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
@@ -7643,22 +7623,26 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetJobResult>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<GetJobResult>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetJobError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns information about a network profile.</p>"]
-    fn get_network_profile(&self,
-                           input: &GetNetworkProfileRequest)
-                           -> Result<GetNetworkProfileResult, GetNetworkProfileError> {
+    #[doc = "<p>Returns information about a network profile.</p>"]
+    fn get_network_profile(
+        &self,
+        input: &GetNetworkProfileRequest,
+    ) -> Result<GetNetworkProfileResult, GetNetworkProfileError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7674,23 +7658,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetNetworkProfileResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetNetworkProfileResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetNetworkProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetNetworkProfileError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Gets the current status and future status of all offerings purchased by an AWS account. The response indicates how many offerings are currently available and the offerings that will be available in the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-    fn get_offering_status(&self,
-                           input: &GetOfferingStatusRequest)
-                           -> Result<GetOfferingStatusResult, GetOfferingStatusError> {
+    fn get_offering_status(
+        &self,
+        input: &GetOfferingStatusRequest,
+    ) -> Result<GetOfferingStatusResult, GetOfferingStatusError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7706,20 +7692,21 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetOfferingStatusResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetOfferingStatusResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetOfferingStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetOfferingStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about a project.</p>"]
+    #[doc = "<p>Gets information about a project.</p>"]
     fn get_project(&self, input: &GetProjectRequest) -> Result<GetProjectResult, GetProjectError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
@@ -7736,24 +7723,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetProjectResult>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetProjectResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetProjectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns a link to a currently running remote access session.</p>"]
-    fn get_remote_access_session
-        (&self,
-         input: &GetRemoteAccessSessionRequest)
-         -> Result<GetRemoteAccessSessionResult, GetRemoteAccessSessionError> {
+    #[doc = "<p>Returns a link to a currently running remote access session.</p>"]
+    fn get_remote_access_session(
+        &self,
+        input: &GetRemoteAccessSessionRequest,
+    ) -> Result<GetRemoteAccessSessionResult, GetRemoteAccessSessionError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7769,18 +7757,21 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetRemoteAccessSessionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetRemoteAccessSessionResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetRemoteAccessSessionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetRemoteAccessSessionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about a run.</p>"]
+    #[doc = "<p>Gets information about a run.</p>"]
     fn get_run(&self, input: &GetRunRequest) -> Result<GetRunResult, GetRunError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
@@ -7797,19 +7788,22 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetRunResult>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<GetRunResult>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetRunError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about a suite.</p>"]
+    #[doc = "<p>Gets information about a suite.</p>"]
     fn get_suite(&self, input: &GetSuiteRequest) -> Result<GetSuiteResult, GetSuiteError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
@@ -7826,19 +7820,22 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetSuiteResult>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<GetSuiteResult>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetSuiteError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetSuiteError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about a test.</p>"]
+    #[doc = "<p>Gets information about a test.</p>"]
     fn get_test(&self, input: &GetTestRequest) -> Result<GetTestResult, GetTestError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
@@ -7855,19 +7852,22 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetTestResult>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<GetTestResult>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetTestError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetTestError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about an upload.</p>"]
+    #[doc = "<p>Gets information about an upload.</p>"]
     fn get_upload(&self, input: &GetUploadRequest) -> Result<GetUploadResult, GetUploadError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
@@ -7884,28 +7884,34 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetUploadResult>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<GetUploadResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetUploadError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Installs an application to the device in a remote access session. For Android applications, the file must be in .apk format. For iOS applications, the file must be in .ipa format.</p>"]
-    fn install_to_remote_access_session
-        (&self,
-         input: &InstallToRemoteAccessSessionRequest)
-         -> Result<InstallToRemoteAccessSessionResult, InstallToRemoteAccessSessionError> {
+    fn install_to_remote_access_session(
+        &self,
+        input: &InstallToRemoteAccessSessionRequest,
+    ) -> Result<InstallToRemoteAccessSessionResult, InstallToRemoteAccessSessionError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "DeviceFarm_20150623.InstallToRemoteAccessSession");
+        request.add_header(
+            "x-amz-target",
+            "DeviceFarm_20150623.InstallToRemoteAccessSession",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -7917,22 +7923,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<InstallToRemoteAccessSessionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<InstallToRemoteAccessSessionResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(InstallToRemoteAccessSessionError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(InstallToRemoteAccessSessionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about artifacts.</p>"]
-    fn list_artifacts(&self,
-                      input: &ListArtifactsRequest)
-                      -> Result<ListArtifactsResult, ListArtifactsError> {
+    #[doc = "<p>Gets information about artifacts.</p>"]
+    fn list_artifacts(
+        &self,
+        input: &ListArtifactsRequest,
+    ) -> Result<ListArtifactsResult, ListArtifactsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7948,23 +7957,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListArtifactsResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListArtifactsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListArtifactsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListArtifactsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about device pools.</p>"]
-    fn list_device_pools(&self,
-                         input: &ListDevicePoolsRequest)
-                         -> Result<ListDevicePoolsResult, ListDevicePoolsError> {
+    #[doc = "<p>Gets information about device pools.</p>"]
+    fn list_device_pools(
+        &self,
+        input: &ListDevicePoolsRequest,
+    ) -> Result<ListDevicePoolsResult, ListDevicePoolsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -7980,23 +7991,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListDevicePoolsResult>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListDevicePoolsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDevicePoolsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListDevicePoolsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about unique device types.</p>"]
-    fn list_devices(&self,
-                    input: &ListDevicesRequest)
-                    -> Result<ListDevicesResult, ListDevicesError> {
+    #[doc = "<p>Gets information about unique device types.</p>"]
+    fn list_devices(
+        &self,
+        input: &ListDevicesRequest,
+    ) -> Result<ListDevicesResult, ListDevicesError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8012,20 +8025,21 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListDevicesResult>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListDevicesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDevicesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListDevicesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about jobs.</p>"]
+    #[doc = "<p>Gets information about jobs.</p>"]
     fn list_jobs(&self, input: &ListJobsRequest) -> Result<ListJobsResult, ListJobsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
@@ -8042,22 +8056,26 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListJobsResult>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<ListJobsResult>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListJobsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListJobsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns the list of available network profiles.</p>"]
-    fn list_network_profiles(&self,
-                             input: &ListNetworkProfilesRequest)
-                             -> Result<ListNetworkProfilesResult, ListNetworkProfilesError> {
+    #[doc = "<p>Returns the list of available network profiles.</p>"]
+    fn list_network_profiles(
+        &self,
+        input: &ListNetworkProfilesRequest,
+    ) -> Result<ListNetworkProfilesResult, ListNetworkProfilesError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8073,22 +8091,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListNetworkProfilesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListNetworkProfilesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListNetworkProfilesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListNetworkProfilesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a list of offering promotions. Each offering promotion record contains the ID and description of the promotion. The API returns a <code>NotEligible</code> error if the caller is not permitted to invoke the operation. Contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-    fn list_offering_promotions
-        (&self,
-         input: &ListOfferingPromotionsRequest)
-         -> Result<ListOfferingPromotionsResult, ListOfferingPromotionsError> {
+    fn list_offering_promotions(
+        &self,
+        input: &ListOfferingPromotionsRequest,
+    ) -> Result<ListOfferingPromotionsResult, ListOfferingPromotionsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8104,27 +8125,32 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListOfferingPromotionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListOfferingPromotionsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListOfferingPromotionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListOfferingPromotionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a list of all historical purchases, renewals, and system renewal transactions for an AWS account. The list is paginated and ordered by a descending timestamp (most recent transactions are first). The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-    fn list_offering_transactions
-        (&self,
-         input: &ListOfferingTransactionsRequest)
-         -> Result<ListOfferingTransactionsResult, ListOfferingTransactionsError> {
+    fn list_offering_transactions(
+        &self,
+        input: &ListOfferingTransactionsRequest,
+    ) -> Result<ListOfferingTransactionsResult, ListOfferingTransactionsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "DeviceFarm_20150623.ListOfferingTransactions");
+        request.add_header(
+            "x-amz-target",
+            "DeviceFarm_20150623.ListOfferingTransactions",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8136,22 +8162,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListOfferingTransactionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListOfferingTransactionsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListOfferingTransactionsError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(ListOfferingTransactionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a list of products or offerings that the user can manage through the API. Each offering record indicates the recurring price per unit and the frequency for that offering. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-    fn list_offerings(&self,
-                      input: &ListOfferingsRequest)
-                      -> Result<ListOfferingsResult, ListOfferingsError> {
+    fn list_offerings(
+        &self,
+        input: &ListOfferingsRequest,
+    ) -> Result<ListOfferingsResult, ListOfferingsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8167,23 +8196,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListOfferingsResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListOfferingsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListOfferingsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListOfferingsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about projects.</p>"]
-    fn list_projects(&self,
-                     input: &ListProjectsRequest)
-                     -> Result<ListProjectsResult, ListProjectsError> {
+    #[doc = "<p>Gets information about projects.</p>"]
+    fn list_projects(
+        &self,
+        input: &ListProjectsRequest,
+    ) -> Result<ListProjectsResult, ListProjectsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8199,29 +8230,32 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListProjectsResult>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListProjectsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListProjectsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListProjectsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns a list of all currently running remote access sessions.</p>"]
-    fn list_remote_access_sessions
-        (&self,
-         input: &ListRemoteAccessSessionsRequest)
-         -> Result<ListRemoteAccessSessionsResult, ListRemoteAccessSessionsError> {
+    #[doc = "<p>Returns a list of all currently running remote access sessions.</p>"]
+    fn list_remote_access_sessions(
+        &self,
+        input: &ListRemoteAccessSessionsRequest,
+    ) -> Result<ListRemoteAccessSessionsResult, ListRemoteAccessSessionsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "DeviceFarm_20150623.ListRemoteAccessSessions");
+        request.add_header(
+            "x-amz-target",
+            "DeviceFarm_20150623.ListRemoteAccessSessions",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8233,19 +8267,21 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListRemoteAccessSessionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListRemoteAccessSessionsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListRemoteAccessSessionsError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(ListRemoteAccessSessionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about runs, given an AWS Device Farm project ARN.</p>"]
+    #[doc = "<p>Gets information about runs, given an AWS Device Farm project ARN.</p>"]
     fn list_runs(&self, input: &ListRunsRequest) -> Result<ListRunsResult, ListRunsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
@@ -8262,22 +8298,26 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListRunsResult>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<ListRunsResult>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListRunsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListRunsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about samples, given an AWS Device Farm project ARN</p>"]
-    fn list_samples(&self,
-                    input: &ListSamplesRequest)
-                    -> Result<ListSamplesResult, ListSamplesError> {
+    #[doc = "<p>Gets information about samples, given an AWS Device Farm project ARN</p>"]
+    fn list_samples(
+        &self,
+        input: &ListSamplesRequest,
+    ) -> Result<ListSamplesResult, ListSamplesError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8293,20 +8333,21 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListSamplesResult>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListSamplesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListSamplesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListSamplesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about suites.</p>"]
+    #[doc = "<p>Gets information about suites.</p>"]
     fn list_suites(&self, input: &ListSuitesRequest) -> Result<ListSuitesResult, ListSuitesError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
@@ -8323,20 +8364,21 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListSuitesResult>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListSuitesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListSuitesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListSuitesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about tests.</p>"]
+    #[doc = "<p>Gets information about tests.</p>"]
     fn list_tests(&self, input: &ListTestsRequest) -> Result<ListTestsResult, ListTestsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
@@ -8353,22 +8395,27 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTestsResult>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<ListTestsResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTestsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTestsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about unique problems.</p>"]
-    fn list_unique_problems(&self,
-                            input: &ListUniqueProblemsRequest)
-                            -> Result<ListUniqueProblemsResult, ListUniqueProblemsError> {
+    #[doc = "<p>Gets information about unique problems.</p>"]
+    fn list_unique_problems(
+        &self,
+        input: &ListUniqueProblemsRequest,
+    ) -> Result<ListUniqueProblemsResult, ListUniqueProblemsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8384,23 +8431,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListUniqueProblemsResult>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListUniqueProblemsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListUniqueProblemsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListUniqueProblemsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets information about uploads, given an AWS Device Farm project ARN.</p>"]
-    fn list_uploads(&self,
-                    input: &ListUploadsRequest)
-                    -> Result<ListUploadsResult, ListUploadsError> {
+    #[doc = "<p>Gets information about uploads, given an AWS Device Farm project ARN.</p>"]
+    fn list_uploads(
+        &self,
+        input: &ListUploadsRequest,
+    ) -> Result<ListUploadsResult, ListUploadsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8416,23 +8465,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListUploadsResult>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListUploadsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListUploadsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListUploadsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Immediately purchases offerings for an AWS account. Offerings renew with the latest total purchased quantity for an offering, unless the renewal was overridden. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-    fn purchase_offering(&self,
-                         input: &PurchaseOfferingRequest)
-                         -> Result<PurchaseOfferingResult, PurchaseOfferingError> {
+    fn purchase_offering(
+        &self,
+        input: &PurchaseOfferingRequest,
+    ) -> Result<PurchaseOfferingResult, PurchaseOfferingError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8448,23 +8499,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PurchaseOfferingResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<PurchaseOfferingResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PurchaseOfferingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PurchaseOfferingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Explicitly sets the quantity of devices to renew for an offering, starting from the <code>effectiveDate</code> of the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>"]
-    fn renew_offering(&self,
-                      input: &RenewOfferingRequest)
-                      -> Result<RenewOfferingResult, RenewOfferingError> {
+    fn renew_offering(
+        &self,
+        input: &RenewOfferingRequest,
+    ) -> Result<RenewOfferingResult, RenewOfferingError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8480,23 +8533,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RenewOfferingResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<RenewOfferingResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RenewOfferingError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RenewOfferingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Schedules a run.</p>"]
-    fn schedule_run(&self,
-                    input: &ScheduleRunRequest)
-                    -> Result<ScheduleRunResult, ScheduleRunError> {
+    #[doc = "<p>Schedules a run.</p>"]
+    fn schedule_run(
+        &self,
+        input: &ScheduleRunRequest,
+    ) -> Result<ScheduleRunResult, ScheduleRunError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8512,29 +8567,32 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ScheduleRunResult>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ScheduleRunResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ScheduleRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ScheduleRunError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Ends a specified remote access session.</p>"]
-    fn stop_remote_access_session
-        (&self,
-         input: &StopRemoteAccessSessionRequest)
-         -> Result<StopRemoteAccessSessionResult, StopRemoteAccessSessionError> {
+    #[doc = "<p>Ends a specified remote access session.</p>"]
+    fn stop_remote_access_session(
+        &self,
+        input: &StopRemoteAccessSessionRequest,
+    ) -> Result<StopRemoteAccessSessionResult, StopRemoteAccessSessionError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "DeviceFarm_20150623.StopRemoteAccessSession");
+        request.add_header(
+            "x-amz-target",
+            "DeviceFarm_20150623.StopRemoteAccessSession",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -8546,17 +8604,19 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopRemoteAccessSessionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StopRemoteAccessSessionResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopRemoteAccessSessionError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(StopRemoteAccessSessionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Initiates a stop request for the current test run. AWS Device Farm will immediately stop the run on devices where tests have not started executing, and you will not be billed for these devices. On devices where tests have started executing, Setup Suite and Teardown Suite tests will run to completion before stopping execution on those devices. You will be billed for Setup, Teardown, and any tests that were in progress or already completed.</p>"]
     fn stop_run(&self, input: &StopRunRequest) -> Result<StopRunResult, StopRunError> {
@@ -8575,22 +8635,26 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopRunResult>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+                Ok(
+                    serde_json::from_str::<StopRunResult>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopRunError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StopRunError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Modifies the name, description, and rules in a device pool given the attributes and the pool ARN. Rule updates are all-or-nothing, meaning they can only be updated as a whole (or not at all).</p>"]
-    fn update_device_pool(&self,
-                          input: &UpdateDevicePoolRequest)
-                          -> Result<UpdateDevicePoolResult, UpdateDevicePoolError> {
+    fn update_device_pool(
+        &self,
+        input: &UpdateDevicePoolRequest,
+    ) -> Result<UpdateDevicePoolResult, UpdateDevicePoolError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8606,23 +8670,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateDevicePoolResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateDevicePoolResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateDevicePoolError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateDevicePoolError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates the network profile with specific settings.</p>"]
-    fn update_network_profile(&self,
-                              input: &UpdateNetworkProfileRequest)
-                              -> Result<UpdateNetworkProfileResult, UpdateNetworkProfileError> {
+    #[doc = "<p>Updates the network profile with specific settings.</p>"]
+    fn update_network_profile(
+        &self,
+        input: &UpdateNetworkProfileRequest,
+    ) -> Result<UpdateNetworkProfileResult, UpdateNetworkProfileError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8638,21 +8704,25 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateNetworkProfileResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateNetworkProfileResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateNetworkProfileError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateNetworkProfileError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Modifies the specified project name, given the project ARN and a new name.</p>"]
-    fn update_project(&self,
-                      input: &UpdateProjectRequest)
-                      -> Result<UpdateProjectResult, UpdateProjectError> {
+    #[doc = "<p>Modifies the specified project name, given the project ARN and a new name.</p>"]
+    fn update_project(
+        &self,
+        input: &UpdateProjectRequest,
+    ) -> Result<UpdateProjectResult, UpdateProjectError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -8668,14 +8738,16 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateProjectResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateProjectResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateProjectError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateProjectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

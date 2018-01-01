@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,172 +27,172 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Details of the common errors that all actions return.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Details of the common errors that all actions return.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct FailureInfo {
-    #[doc="<p>The code of the common error. Valid values include <code>InternalServiceException</code>, <code>InvalidParameterException</code>, and any valid error code returned by the AWS service that hosts the resource that you want to tag.</p>"]
-    #[serde(rename="ErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The code of the common error. Valid values include <code>InternalServiceException</code>, <code>InvalidParameterException</code>, and any valid error code returned by the AWS service that hosts the resource that you want to tag.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    #[doc="<p>The message of the common error.</p>"]
-    #[serde(rename="ErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The message of the common error.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="<p>The HTTP status code of the common error.</p>"]
-    #[serde(rename="StatusCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The HTTP status code of the common error.</p>
+    #[serde(rename = "StatusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetResourcesInput {
-    #[doc="<p>A string that indicates that additional data is available. Leave this value empty for your initial request. If the response includes a <code>PaginationToken</code>, use that string for this value to request an additional page of data.</p>"]
-    #[serde(rename="PaginationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string that indicates that additional data is available. Leave this value empty for your initial request. If the response includes a <code>PaginationToken</code>, use that string for this value to request an additional page of data.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
-    #[doc="<p>The constraints on the resources that you want returned. The format of each resource type is <code>service[:resourceType]</code>. For example, specifying a resource type of <code>ec2</code> returns all tagged Amazon EC2 resources (which includes tagged EC2 instances). Specifying a resource type of <code>ec2:instance</code> returns only EC2 instances. </p> <p>The string for each service name and resource type is the same as that embedded in a resource's Amazon Resource Name (ARN). Consult the <i>AWS General Reference</i> for the following:</p> <ul> <li> <p>For a list of service name strings, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces\">AWS Service Namespaces</a>.</p> </li> <li> <p>For resource type strings, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arns-syntax\">Example ARNs</a>.</p> </li> <li> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p> </li> </ul>"]
-    #[serde(rename="ResourceTypeFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The constraints on the resources that you want returned. The format of each resource type is <code>service[:resourceType]</code>. For example, specifying a resource type of <code>ec2</code> returns all tagged Amazon EC2 resources (which includes tagged EC2 instances). Specifying a resource type of <code>ec2:instance</code> returns only EC2 instances. </p> <p>The string for each service name and resource type is the same as that embedded in a resource's Amazon Resource Name (ARN). Consult the <i>AWS General Reference</i> for the following:</p> <ul> <li> <p>For a list of service name strings, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces">AWS Service Namespaces</a>.</p> </li> <li> <p>For resource type strings, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arns-syntax">Example ARNs</a>.</p> </li> <li> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p> </li> </ul>
+    #[serde(rename = "ResourceTypeFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type_filters: Option<Vec<String>>,
-    #[doc="<p>A limit that restricts the number of resources returned by GetResources in paginated output. You can set ResourcesPerPage to a minimum of 1 item and the maximum of 50 items. </p>"]
-    #[serde(rename="ResourcesPerPage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A limit that restricts the number of resources returned by GetResources in paginated output. You can set ResourcesPerPage to a minimum of 1 item and the maximum of 50 items. </p>
+    #[serde(rename = "ResourcesPerPage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resources_per_page: Option<i64>,
-    #[doc="<p>A list of tags (keys and values). A request can include up to 50 keys, and each key can include up to 20 values.</p> <p>If you specify multiple filters connected by an AND operator in a single request, the response returns only those resources that are associated with every specified filter.</p> <p>If you specify multiple filters connected by an OR operator in a single request, the response returns all resources that are associated with at least one or possibly more of the specified filters.</p>"]
-    #[serde(rename="TagFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of tags (keys and values). A request can include up to 50 keys, and each key can include up to 20 values.</p> <p>If you specify multiple filters connected by an AND operator in a single request, the response returns only those resources that are associated with every specified filter.</p> <p>If you specify multiple filters connected by an OR operator in a single request, the response returns all resources that are associated with at least one or possibly more of the specified filters.</p>
+    #[serde(rename = "TagFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_filters: Option<Vec<TagFilter>>,
-    #[doc="<p>A limit that restricts the number of tags (key and value pairs) returned by GetResources in paginated output. A resource with no tags is counted as having one tag (one key and value pair).</p> <p> <code>GetResources</code> does not split a resource and its associated tags across pages. If the specified <code>TagsPerPage</code> would cause such a break, a <code>PaginationToken</code> is returned in place of the affected resource and its tags. Use that token in another request to get the remaining data. For example, if you specify a <code>TagsPerPage</code> of <code>100</code> and the account has 22 resources with 10 tags each (meaning that each resource has 10 key and value pairs), the output will consist of 3 pages, with the first page displaying the first 10 resources, each with its 10 tags, the second page displaying the next 10 resources each with its 10 tags, and the third page displaying the remaining 2 resources, each with its 10 tags.</p> <p/> <p>You can set <code>TagsPerPage</code> to a minimum of 100 items and the maximum of 500 items.</p>"]
-    #[serde(rename="TagsPerPage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A limit that restricts the number of tags (key and value pairs) returned by GetResources in paginated output. A resource with no tags is counted as having one tag (one key and value pair).</p> <p> <code>GetResources</code> does not split a resource and its associated tags across pages. If the specified <code>TagsPerPage</code> would cause such a break, a <code>PaginationToken</code> is returned in place of the affected resource and its tags. Use that token in another request to get the remaining data. For example, if you specify a <code>TagsPerPage</code> of <code>100</code> and the account has 22 resources with 10 tags each (meaning that each resource has 10 key and value pairs), the output will consist of 3 pages, with the first page displaying the first 10 resources, each with its 10 tags, the second page displaying the next 10 resources each with its 10 tags, and the third page displaying the remaining 2 resources, each with its 10 tags.</p> <p/> <p>You can set <code>TagsPerPage</code> to a minimum of 100 items and the maximum of 500 items.</p>
+    #[serde(rename = "TagsPerPage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags_per_page: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetResourcesOutput {
-    #[doc="<p>A string that indicates that the response contains more data than can be returned in a single response. To receive additional data, specify this string for the <code>PaginationToken</code> value in a subsequent request.</p>"]
-    #[serde(rename="PaginationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string that indicates that the response contains more data than can be returned in a single response. To receive additional data, specify this string for the <code>PaginationToken</code> value in a subsequent request.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
-    #[doc="<p>A list of resource ARNs and the tags (keys and values) associated with each.</p>"]
-    #[serde(rename="ResourceTagMappingList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of resource ARNs and the tags (keys and values) associated with each.</p>
+    #[serde(rename = "ResourceTagMappingList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_tag_mapping_list: Option<Vec<ResourceTagMapping>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetTagKeysInput {
-    #[doc="<p>A string that indicates that additional data is available. Leave this value empty for your initial request. If the response includes a PaginationToken, use that string for this value to request an additional page of data.</p>"]
-    #[serde(rename="PaginationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string that indicates that additional data is available. Leave this value empty for your initial request. If the response includes a PaginationToken, use that string for this value to request an additional page of data.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetTagKeysOutput {
-    #[doc="<p>A string that indicates that the response contains more data than can be returned in a single response. To receive additional data, specify this string for the <code>PaginationToken</code> value in a subsequent request.</p>"]
-    #[serde(rename="PaginationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string that indicates that the response contains more data than can be returned in a single response. To receive additional data, specify this string for the <code>PaginationToken</code> value in a subsequent request.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
-    #[doc="<p>A list of all tag keys in the AWS account.</p>"]
-    #[serde(rename="TagKeys")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of all tag keys in the AWS account.</p>
+    #[serde(rename = "TagKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_keys: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetTagValuesInput {
-    #[doc="<p>The key for which you want to list all existing values in the specified region for the AWS account.</p>"]
-    #[serde(rename="Key")]
+    /// <p>The key for which you want to list all existing values in the specified region for the AWS account.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>A string that indicates that additional data is available. Leave this value empty for your initial request. If the response includes a PaginationToken, use that string for this value to request an additional page of data.</p>"]
-    #[serde(rename="PaginationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string that indicates that additional data is available. Leave this value empty for your initial request. If the response includes a PaginationToken, use that string for this value to request an additional page of data.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetTagValuesOutput {
-    #[doc="<p>A string that indicates that the response contains more data than can be returned in a single response. To receive additional data, specify this string for the <code>PaginationToken</code> value in a subsequent request.</p>"]
-    #[serde(rename="PaginationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A string that indicates that the response contains more data than can be returned in a single response. To receive additional data, specify this string for the <code>PaginationToken</code> value in a subsequent request.</p>
+    #[serde(rename = "PaginationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
-    #[doc="<p>A list of all tag values for the specified key in the AWS account.</p>"]
-    #[serde(rename="TagValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of all tag values for the specified key in the AWS account.</p>
+    #[serde(rename = "TagValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_values: Option<Vec<String>>,
 }
 
-#[doc="<p>A list of resource ARNs and the tags (keys and values) that are associated with each.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A list of resource ARNs and the tags (keys and values) that are associated with each.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourceTagMapping {
-    #[doc="<p>An array of resource ARN(s).</p>"]
-    #[serde(rename="ResourceARN")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of resource ARN(s).</p>
+    #[serde(rename = "ResourceARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    #[doc="<p>The tags that have been applied to one or more AWS resources.</p>"]
-    #[serde(rename="Tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tags that have been applied to one or more AWS resources.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-#[doc="<p>The metadata that you apply to AWS resources to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-basics\">Tag Basics</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The metadata that you apply to AWS resources to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-basics">Tag Basics</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Tag {
-    #[doc="<p>One part of a key-value pair that make up a tag. A key is a general label that acts like a category for more specific tag values.</p>"]
-    #[serde(rename="Key")]
+    /// <p>One part of a key-value pair that make up a tag. A key is a general label that acts like a category for more specific tag values.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>The optional part of a key-value pair that make up a tag. A value acts as a descriptor within a tag category (key).</p>"]
-    #[serde(rename="Value")]
+    /// <p>The optional part of a key-value pair that make up a tag. A value acts as a descriptor within a tag category (key).</p>
+    #[serde(rename = "Value")]
     pub value: String,
 }
 
-#[doc="<p>A list of tags (keys and values) that are used to specify the associated resources.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A list of tags (keys and values) that are used to specify the associated resources.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TagFilter {
-    #[doc="<p>One part of a key-value pair that make up a tag. A key is a general label that acts like a category for more specific tag values.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One part of a key-value pair that make up a tag. A key is a general label that acts like a category for more specific tag values.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The optional part of a key-value pair that make up a tag. A value acts as a descriptor within a tag category (key).</p>"]
-    #[serde(rename="Values")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The optional part of a key-value pair that make up a tag. A value acts as a descriptor within a tag category (key).</p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TagResourcesInput {
-    #[doc="<p>A list of ARNs. An ARN (Amazon Resource Name) uniquely identifies a resource. You can specify a minimum of 1 and a maximum of 20 ARNs (resources) to tag. An ARN can be set to a maximum of 1600 characters. For more information, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    #[serde(rename="ResourceARNList")]
+    /// <p>A list of ARNs. An ARN (Amazon Resource Name) uniquely identifies a resource. You can specify a minimum of 1 and a maximum of 20 ARNs (resources) to tag. An ARN can be set to a maximum of 1600 characters. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
+    #[serde(rename = "ResourceARNList")]
     pub resource_arn_list: Vec<String>,
-    #[doc="<p>The tags that you want to add to the specified resources. A tag consists of a key and a value that you define.</p>"]
-    #[serde(rename="Tags")]
+    /// <p>The tags that you want to add to the specified resources. A tag consists of a key and a value that you define.</p>
+    #[serde(rename = "Tags")]
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TagResourcesOutput {
-    #[doc="<p>Details of resources that could not be tagged. An error code, status code, and error message are returned for each failed item.</p>"]
-    #[serde(rename="FailedResourcesMap")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Details of resources that could not be tagged. An error code, status code, and error message are returned for each failed item.</p>
+    #[serde(rename = "FailedResourcesMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_resources_map: Option<::std::collections::HashMap<String, FailureInfo>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UntagResourcesInput {
-    #[doc="<p>A list of ARNs. An ARN (Amazon Resource Name) uniquely identifies a resource. You can specify a minimum of 1 and a maximum of 20 ARNs (resources) to untag. An ARN can be set to a maximum of 1600 characters. For more information, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    #[serde(rename="ResourceARNList")]
+    /// <p>A list of ARNs. An ARN (Amazon Resource Name) uniquely identifies a resource. You can specify a minimum of 1 and a maximum of 20 ARNs (resources) to untag. An ARN can be set to a maximum of 1600 characters. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
+    #[serde(rename = "ResourceARNList")]
     pub resource_arn_list: Vec<String>,
-    #[doc="<p>A list of the tag keys that you want to remove from the specified resources.</p>"]
-    #[serde(rename="TagKeys")]
+    /// <p>A list of the tag keys that you want to remove from the specified resources.</p>
+    #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UntagResourcesOutput {
-    #[doc="<p>Details of resources that could not be untagged. An error code, status code, and error message are returned for each failed item.</p>"]
-    #[serde(rename="FailedResourcesMap")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Details of resources that could not be untagged. An error code, status code, and error message are returned for each failed item.</p>
+    #[serde(rename = "FailedResourcesMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_resources_map: Option<::std::collections::HashMap<String, FailureInfo>>,
 }
 
@@ -217,7 +216,6 @@ pub enum GetResourcesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetResourcesError {
     pub fn from_body(body: &str) -> GetResourcesError {
@@ -315,7 +313,6 @@ pub enum GetTagKeysError {
     Unknown(String),
 }
 
-
 impl GetTagKeysError {
     pub fn from_body(body: &str) -> GetTagKeysError {
         match from_str::<SerdeJsonValue>(body) {
@@ -407,7 +404,6 @@ pub enum GetTagValuesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetTagValuesError {
     pub fn from_body(body: &str) -> GetTagValuesError {
@@ -503,7 +499,6 @@ pub enum TagResourcesError {
     Unknown(String),
 }
 
-
 impl TagResourcesError {
     pub fn from_body(body: &str) -> TagResourcesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -594,7 +589,6 @@ pub enum UntagResourcesError {
     Unknown(String),
 }
 
-
 impl UntagResourcesError {
     pub fn from_body(body: &str) -> UntagResourcesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -669,36 +663,37 @@ impl Error for UntagResourcesError {
 /// Trait representing the capabilities of the AWS Resource Groups Tagging API API. AWS Resource Groups Tagging API clients implement this trait.
 pub trait ResourceGroupsTaggingApi {
     #[doc="<p>Returns all the tagged resources that are associated with the specified tags (keys and values) located in the specified region for the AWS account. The tags and the resource types that you specify in the request are known as <i>filters</i>. The response includes all tags that are associated with the requested resources. If no filter is provided, this action returns a paginated resource list with the associated tags.</p>"]
-    fn get_resources(&self,
-                     input: &GetResourcesInput)
-                     -> Result<GetResourcesOutput, GetResourcesError>;
+    fn get_resources(
+        &self,
+        input: &GetResourcesInput,
+    ) -> Result<GetResourcesOutput, GetResourcesError>;
 
-
-    #[doc="<p>Returns all tag keys in the specified region for the AWS account.</p>"]
+    #[doc = "<p>Returns all tag keys in the specified region for the AWS account.</p>"]
     fn get_tag_keys(&self, input: &GetTagKeysInput) -> Result<GetTagKeysOutput, GetTagKeysError>;
 
-
     #[doc="<p>Returns all tag values for the specified key in the specified region for the AWS account.</p>"]
-    fn get_tag_values(&self,
-                      input: &GetTagValuesInput)
-                      -> Result<GetTagValuesOutput, GetTagValuesError>;
-
+    fn get_tag_values(
+        &self,
+        input: &GetTagValuesInput,
+    ) -> Result<GetTagValuesOutput, GetTagValuesError>;
 
     #[doc="<p>Applies one or more tags to the specified resources. Note the following:</p> <ul> <li> <p>Not all resources can have tags. For a list of resources that support tagging, see <a href=\"http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/supported-resources.html\">Supported Resources</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>Each resource can have up to 50 tags. For other limits, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-restrictions\">Tag Restrictions</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> <li> <p>To add tags to a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for adding tags. For more information, see <a href=\"http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html\">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> </ul>"]
-    fn tag_resources(&self,
-                     input: &TagResourcesInput)
-                     -> Result<TagResourcesOutput, TagResourcesError>;
-
+    fn tag_resources(
+        &self,
+        input: &TagResourcesInput,
+    ) -> Result<TagResourcesOutput, TagResourcesError>;
 
     #[doc="<p>Removes the specified tags from the specified resources. When you specify a tag key, the action removes both that key and its associated value. The operation succeeds even if you attempt to remove tags from a resource that were already removed. Note the following:</p> <ul> <li> <p>To remove tags from a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for removing tags. For more information, see <a href=\"http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html\">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> </ul>"]
-    fn untag_resources(&self,
-                       input: &UntagResourcesInput)
-                       -> Result<UntagResourcesOutput, UntagResourcesError>;
+    fn untag_resources(
+        &self,
+        input: &UntagResourcesInput,
+    ) -> Result<UntagResourcesOutput, UntagResourcesError>;
 }
 /// A client for the AWS Resource Groups Tagging API API.
 pub struct ResourceGroupsTaggingApiClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -706,8 +701,9 @@ pub struct ResourceGroupsTaggingApiClient<P, D>
 }
 
 impl<P, D> ResourceGroupsTaggingApiClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         ResourceGroupsTaggingApiClient {
@@ -719,18 +715,22 @@ impl<P, D> ResourceGroupsTaggingApiClient<P, D>
 }
 
 impl<P, D> ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Returns all the tagged resources that are associated with the specified tags (keys and values) located in the specified region for the AWS account. The tags and the resource types that you specify in the request are known as <i>filters</i>. The response includes all tags that are associated with the requested resources. If no filter is provided, this action returns a paginated resource list with the associated tags.</p>"]
-    fn get_resources(&self,
-                     input: &GetResourcesInput)
-                     -> Result<GetResourcesOutput, GetResourcesError> {
+    fn get_resources(
+        &self,
+        input: &GetResourcesInput,
+    ) -> Result<GetResourcesOutput, GetResourcesError> {
         let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "ResourceGroupsTaggingAPI_20170126.GetResources");
+        request.add_header(
+            "x-amz-target",
+            "ResourceGroupsTaggingAPI_20170126.GetResources",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -742,26 +742,29 @@ impl<P, D> ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetResourcesOutput>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetResourcesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetResourcesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetResourcesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns all tag keys in the specified region for the AWS account.</p>"]
+    #[doc = "<p>Returns all tag keys in the specified region for the AWS account.</p>"]
     fn get_tag_keys(&self, input: &GetTagKeysInput) -> Result<GetTagKeysOutput, GetTagKeysError> {
         let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "ResourceGroupsTaggingAPI_20170126.GetTagKeys");
+        request.add_header(
+            "x-amz-target",
+            "ResourceGroupsTaggingAPI_20170126.GetTagKeys",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -773,28 +776,32 @@ impl<P, D> ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetTagKeysOutput>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetTagKeysOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetTagKeysError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetTagKeysError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns all tag values for the specified key in the specified region for the AWS account.</p>"]
-    fn get_tag_values(&self,
-                      input: &GetTagValuesInput)
-                      -> Result<GetTagValuesOutput, GetTagValuesError> {
+    fn get_tag_values(
+        &self,
+        input: &GetTagValuesInput,
+    ) -> Result<GetTagValuesOutput, GetTagValuesError> {
         let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "ResourceGroupsTaggingAPI_20170126.GetTagValues");
+        request.add_header(
+            "x-amz-target",
+            "ResourceGroupsTaggingAPI_20170126.GetTagValues",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -806,28 +813,32 @@ impl<P, D> ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetTagValuesOutput>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetTagValuesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetTagValuesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetTagValuesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Applies one or more tags to the specified resources. Note the following:</p> <ul> <li> <p>Not all resources can have tags. For a list of resources that support tagging, see <a href=\"http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/supported-resources.html\">Supported Resources</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>Each resource can have up to 50 tags. For other limits, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-restrictions\">Tag Restrictions</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> <li> <p>To add tags to a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for adding tags. For more information, see <a href=\"http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html\">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> </ul>"]
-    fn tag_resources(&self,
-                     input: &TagResourcesInput)
-                     -> Result<TagResourcesOutput, TagResourcesError> {
+    fn tag_resources(
+        &self,
+        input: &TagResourcesInput,
+    ) -> Result<TagResourcesOutput, TagResourcesError> {
         let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "ResourceGroupsTaggingAPI_20170126.TagResources");
+        request.add_header(
+            "x-amz-target",
+            "ResourceGroupsTaggingAPI_20170126.TagResources",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -839,28 +850,32 @@ impl<P, D> ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TagResourcesOutput>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<TagResourcesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(TagResourcesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(TagResourcesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes the specified tags from the specified resources. When you specify a tag key, the action removes both that key and its associated value. The operation succeeds even if you attempt to remove tags from a resource that were already removed. Note the following:</p> <ul> <li> <p>To remove tags from a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for removing tags. For more information, see <a href=\"http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html\">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> </ul>"]
-    fn untag_resources(&self,
-                       input: &UntagResourcesInput)
-                       -> Result<UntagResourcesOutput, UntagResourcesError> {
+    fn untag_resources(
+        &self,
+        input: &UntagResourcesInput,
+    ) -> Result<UntagResourcesOutput, UntagResourcesError> {
         let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "ResourceGroupsTaggingAPI_20170126.UntagResources");
+        request.add_header(
+            "x-amz-target",
+            "ResourceGroupsTaggingAPI_20170126.UntagResources",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -872,14 +887,16 @@ impl<P, D> ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UntagResourcesOutput>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UntagResourcesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UntagResourcesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UntagResourcesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

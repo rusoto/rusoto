@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,903 +27,901 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CancelExportTaskRequest {
-    #[doc="<p>The ID of the export task.</p>"]
-    #[serde(rename="taskId")]
+    /// <p>The ID of the export task.</p>
+    #[serde(rename = "taskId")]
     pub task_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateExportTaskRequest {
-    #[doc="<p>The name of S3 bucket for the exported log data. The bucket must be in the same AWS region.</p>"]
-    #[serde(rename="destination")]
+    /// <p>The name of S3 bucket for the exported log data. The bucket must be in the same AWS region.</p>
+    #[serde(rename = "destination")]
     pub destination: String,
-    #[doc="<p>The prefix used as the start of the key for every object exported. If you don't specify a value, the default is <code>exportedlogs</code>.</p>"]
-    #[serde(rename="destinationPrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The prefix used as the start of the key for every object exported. If you don't specify a value, the default is <code>exportedlogs</code>.</p>
+    #[serde(rename = "destinationPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_prefix: Option<String>,
-    #[doc="<p>The start time of the range for the request, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp earlier than this time are not exported.</p>"]
-    #[serde(rename="from")]
+    /// <p>The start time of the range for the request, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp earlier than this time are not exported.</p>
+    #[serde(rename = "from")]
     pub from: i64,
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[doc="<p>Export only log streams that match the provided prefix. If you don't specify a value, no prefix filter is applied.</p>"]
-    #[serde(rename="logStreamNamePrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Export only log streams that match the provided prefix. If you don't specify a value, no prefix filter is applied.</p>
+    #[serde(rename = "logStreamNamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_stream_name_prefix: Option<String>,
-    #[doc="<p>The name of the export task.</p>"]
-    #[serde(rename="taskName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the export task.</p>
+    #[serde(rename = "taskName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_name: Option<String>,
-    #[doc="<p>The end time of the range for the request, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not exported.</p>"]
-    #[serde(rename="to")]
+    /// <p>The end time of the range for the request, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not exported.</p>
+    #[serde(rename = "to")]
     pub to: i64,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateExportTaskResponse {
-    #[doc="<p>The ID of the export task.</p>"]
-    #[serde(rename="taskId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the export task.</p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateLogGroupRequest {
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[doc="<p>The key-value pairs to use for the tags.</p>"]
-    #[serde(rename="tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The key-value pairs to use for the tags.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateLogStreamRequest {
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[doc="<p>The name of the log stream.</p>"]
-    #[serde(rename="logStreamName")]
+    /// <p>The name of the log stream.</p>
+    #[serde(rename = "logStreamName")]
     pub log_stream_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDestinationRequest {
-    #[doc="<p>The name of the destination.</p>"]
-    #[serde(rename="destinationName")]
+    /// <p>The name of the destination.</p>
+    #[serde(rename = "destinationName")]
     pub destination_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteLogGroupRequest {
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteLogStreamRequest {
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[doc="<p>The name of the log stream.</p>"]
-    #[serde(rename="logStreamName")]
+    /// <p>The name of the log stream.</p>
+    #[serde(rename = "logStreamName")]
     pub log_stream_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteMetricFilterRequest {
-    #[doc="<p>The name of the metric filter.</p>"]
-    #[serde(rename="filterName")]
+    /// <p>The name of the metric filter.</p>
+    #[serde(rename = "filterName")]
     pub filter_name: String,
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteRetentionPolicyRequest {
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteSubscriptionFilterRequest {
-    #[doc="<p>The name of the subscription filter.</p>"]
-    #[serde(rename="filterName")]
+    /// <p>The name of the subscription filter.</p>
+    #[serde(rename = "filterName")]
     pub filter_name: String,
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeDestinationsRequest {
-    #[doc="<p>The prefix to match. If you don't specify a value, no prefix filter is applied.</p>"]
-    #[serde(rename="DestinationNamePrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The prefix to match. If you don't specify a value, no prefix filter is applied.</p>
+    #[serde(rename = "DestinationNamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_name_prefix: Option<String>,
-    #[doc="<p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>"]
-    #[serde(rename="limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeDestinationsResponse {
-    #[doc="<p>The destinations.</p>"]
-    #[serde(rename="destinations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The destinations.</p>
+    #[serde(rename = "destinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destinations: Option<Vec<Destination>>,
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeExportTasksRequest {
-    #[doc="<p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>"]
-    #[serde(rename="limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The status code of the export task. Specifying a status code filters the results to zero or more export tasks.</p>"]
-    #[serde(rename="statusCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status code of the export task. Specifying a status code filters the results to zero or more export tasks.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<String>,
-    #[doc="<p>The ID of the export task. Specifying a task ID filters the results to zero or one export tasks.</p>"]
-    #[serde(rename="taskId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the export task. Specifying a task ID filters the results to zero or one export tasks.</p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeExportTasksResponse {
-    #[doc="<p>The export tasks.</p>"]
-    #[serde(rename="exportTasks")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The export tasks.</p>
+    #[serde(rename = "exportTasks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub export_tasks: Option<Vec<ExportTask>>,
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeLogGroupsRequest {
-    #[doc="<p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>"]
-    #[serde(rename="limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The prefix to match.</p>"]
-    #[serde(rename="logGroupNamePrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The prefix to match.</p>
+    #[serde(rename = "logGroupNamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_group_name_prefix: Option<String>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeLogGroupsResponse {
-    #[doc="<p>The log groups.</p>"]
-    #[serde(rename="logGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The log groups.</p>
+    #[serde(rename = "logGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_groups: Option<Vec<LogGroup>>,
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeLogStreamsRequest {
-    #[doc="<p>If the value is true, results are returned in descending order. If the value is to false, results are returned in ascending order. The default value is false.</p>"]
-    #[serde(rename="descending")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the value is true, results are returned in descending order. If the value is to false, results are returned in ascending order. The default value is false.</p>
+    #[serde(rename = "descending")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub descending: Option<bool>,
-    #[doc="<p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>"]
-    #[serde(rename="limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[doc="<p>The prefix to match.</p> <p>You cannot specify this parameter if <code>orderBy</code> is <code>LastEventTime</code>.</p>"]
-    #[serde(rename="logStreamNamePrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The prefix to match.</p> <p>You cannot specify this parameter if <code>orderBy</code> is <code>LastEventTime</code>.</p>
+    #[serde(rename = "logStreamNamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_stream_name_prefix: Option<String>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>If the value is <code>LogStreamName</code>, the results are ordered by log stream name. If the value is <code>LastEventTime</code>, the results are ordered by the event time. The default value is <code>LogStreamName</code>.</p> <p>If you order the results by event time, you cannot specify the <code>logStreamNamePrefix</code> parameter.</p> <p>lastEventTimestamp represents the time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. lastEventTimeStamp updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but may take longer in some rare situations.</p>"]
-    #[serde(rename="orderBy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the value is <code>LogStreamName</code>, the results are ordered by log stream name. If the value is <code>LastEventTime</code>, the results are ordered by the event time. The default value is <code>LogStreamName</code>.</p> <p>If you order the results by event time, you cannot specify the <code>logStreamNamePrefix</code> parameter.</p> <p>lastEventTimestamp represents the time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. lastEventTimeStamp updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but may take longer in some rare situations.</p>
+    #[serde(rename = "orderBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub order_by: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeLogStreamsResponse {
-    #[doc="<p>The log streams.</p>"]
-    #[serde(rename="logStreams")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The log streams.</p>
+    #[serde(rename = "logStreams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_streams: Option<Vec<LogStream>>,
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeMetricFiltersRequest {
-    #[doc="<p>The prefix to match.</p>"]
-    #[serde(rename="filterNamePrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The prefix to match.</p>
+    #[serde(rename = "filterNamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_name_prefix: Option<String>,
-    #[doc="<p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>"]
-    #[serde(rename="limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_group_name: Option<String>,
-    #[doc="<p>The name of the CloudWatch metric.</p>"]
-    #[serde(rename="metricName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the CloudWatch metric.</p>
+    #[serde(rename = "metricName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_name: Option<String>,
-    #[doc="<p>The namespace of the CloudWatch metric.</p>"]
-    #[serde(rename="metricNamespace")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The namespace of the CloudWatch metric.</p>
+    #[serde(rename = "metricNamespace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_namespace: Option<String>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeMetricFiltersResponse {
-    #[doc="<p>The metric filters.</p>"]
-    #[serde(rename="metricFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The metric filters.</p>
+    #[serde(rename = "metricFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_filters: Option<Vec<MetricFilter>>,
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeSubscriptionFiltersRequest {
-    #[doc="<p>The prefix to match. If you don't specify a value, no prefix filter is applied.</p>"]
-    #[serde(rename="filterNamePrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The prefix to match. If you don't specify a value, no prefix filter is applied.</p>
+    #[serde(rename = "filterNamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_name_prefix: Option<String>,
-    #[doc="<p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>"]
-    #[serde(rename="limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeSubscriptionFiltersResponse {
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The subscription filters.</p>"]
-    #[serde(rename="subscriptionFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The subscription filters.</p>
+    #[serde(rename = "subscriptionFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_filters: Option<Vec<SubscriptionFilter>>,
 }
 
-#[doc="<p>Represents a cross-account destination that receives subscription log events.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a cross-account destination that receives subscription log events.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Destination {
-    #[doc="<p>An IAM policy document that governs which AWS accounts can create subscription filters against this destination.</p>"]
-    #[serde(rename="accessPolicy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An IAM policy document that governs which AWS accounts can create subscription filters against this destination.</p>
+    #[serde(rename = "accessPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub access_policy: Option<String>,
-    #[doc="<p>The ARN of this destination.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of this destination.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The creation time of the destination, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    #[serde(rename="creationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The creation time of the destination, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "creationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<i64>,
-    #[doc="<p>The name of the destination.</p>"]
-    #[serde(rename="destinationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the destination.</p>
+    #[serde(rename = "destinationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_name: Option<String>,
-    #[doc="<p>A role for impersonation, used when delivering log events to the target.</p>"]
-    #[serde(rename="roleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A role for impersonation, used when delivering log events to the target.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the physical target where the log events will be delivered (for example, a Kinesis stream).</p>"]
-    #[serde(rename="targetArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the physical target where the log events will be delivered (for example, a Kinesis stream).</p>
+    #[serde(rename = "targetArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arn: Option<String>,
 }
 
-#[doc="<p>Represents an export task.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents an export task.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ExportTask {
-    #[doc="<p>The name of Amazon S3 bucket to which the log data was exported.</p>"]
-    #[serde(rename="destination")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of Amazon S3 bucket to which the log data was exported.</p>
+    #[serde(rename = "destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destination: Option<String>,
-    #[doc="<p>The prefix that was used as the start of Amazon S3 key for every object exported.</p>"]
-    #[serde(rename="destinationPrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The prefix that was used as the start of Amazon S3 key for every object exported.</p>
+    #[serde(rename = "destinationPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_prefix: Option<String>,
-    #[doc="<p>Execution info about the export task.</p>"]
-    #[serde(rename="executionInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Execution info about the export task.</p>
+    #[serde(rename = "executionInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_info: Option<ExportTaskExecutionInfo>,
-    #[doc="<p>The start time, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp prior to this time are not exported.</p>"]
-    #[serde(rename="from")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The start time, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp prior to this time are not exported.</p>
+    #[serde(rename = "from")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub from: Option<i64>,
-    #[doc="<p>The name of the log group from which logs data was exported.</p>"]
-    #[serde(rename="logGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the log group from which logs data was exported.</p>
+    #[serde(rename = "logGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_group_name: Option<String>,
-    #[doc="<p>The status of the export task.</p>"]
-    #[serde(rename="status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the export task.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<ExportTaskStatus>,
-    #[doc="<p>The ID of the export task.</p>"]
-    #[serde(rename="taskId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the export task.</p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,
-    #[doc="<p>The name of the export task.</p>"]
-    #[serde(rename="taskName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the export task.</p>
+    #[serde(rename = "taskName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_name: Option<String>,
-    #[doc="<p>The end time, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not exported.</p>"]
-    #[serde(rename="to")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The end time, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not exported.</p>
+    #[serde(rename = "to")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub to: Option<i64>,
 }
 
-#[doc="<p>Represents the status of an export task.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the status of an export task.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ExportTaskExecutionInfo {
-    #[doc="<p>The completion time of the export task, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    #[serde(rename="completionTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The completion time of the export task, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "completionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_time: Option<i64>,
-    #[doc="<p>The creation time of the export task, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    #[serde(rename="creationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The creation time of the export task, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "creationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<i64>,
 }
 
-#[doc="<p>Represents the status of an export task.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the status of an export task.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ExportTaskStatus {
-    #[doc="<p>The status code of the export task.</p>"]
-    #[serde(rename="code")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status code of the export task.</p>
+    #[serde(rename = "code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
-    #[doc="<p>The status message related to the status code.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status message related to the status code.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct FilterLogEventsRequest {
-    #[doc="<p>The end of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not returned.</p>"]
-    #[serde(rename="endTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The end of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not returned.</p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<i64>,
-    #[doc="<p>The filter pattern to use. If not provided, all the events are matched.</p>"]
-    #[serde(rename="filterPattern")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The filter pattern to use. If not provided, all the events are matched.</p>
+    #[serde(rename = "filterPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_pattern: Option<String>,
-    #[doc="<p>If the value is true, the operation makes a best effort to provide responses that contain events from multiple log streams within the log group interleaved in a single response. If the value is false all the matched log events in the first log stream are searched first, then those in the next log stream, and so on. The default is false.</p>"]
-    #[serde(rename="interleaved")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the value is true, the operation makes a best effort to provide responses that contain events from multiple log streams within the log group interleaved in a single response. If the value is false all the matched log events in the first log stream are searched first, then those in the next log stream, and so on. The default is false.</p>
+    #[serde(rename = "interleaved")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub interleaved: Option<bool>,
-    #[doc="<p>The maximum number of events to return. The default is 10,000 events.</p>"]
-    #[serde(rename="limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of events to return. The default is 10,000 events.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[doc="<p>Optional list of log stream names.</p>"]
-    #[serde(rename="logStreamNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional list of log stream names.</p>
+    #[serde(rename = "logStreamNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_stream_names: Option<Vec<String>>,
-    #[doc="<p>The token for the next set of events to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of events to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The start of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp prior to this time are not returned.</p>"]
-    #[serde(rename="startTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The start of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp prior to this time are not returned.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct FilterLogEventsResponse {
-    #[doc="<p>The matched events.</p>"]
-    #[serde(rename="events")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The matched events.</p>
+    #[serde(rename = "events")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub events: Option<Vec<FilteredLogEvent>>,
-    #[doc="<p>The token to use when requesting the next set of items. The token expires after 24 hours.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. The token expires after 24 hours.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Indicates which log streams have been searched and whether each has been searched completely.</p>"]
-    #[serde(rename="searchedLogStreams")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates which log streams have been searched and whether each has been searched completely.</p>
+    #[serde(rename = "searchedLogStreams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub searched_log_streams: Option<Vec<SearchedLogStream>>,
 }
 
-#[doc="<p>Represents a matched event.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a matched event.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct FilteredLogEvent {
-    #[doc="<p>The ID of the event.</p>"]
-    #[serde(rename="eventId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the event.</p>
+    #[serde(rename = "eventId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_id: Option<String>,
-    #[doc="<p>The time the event was ingested, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    #[serde(rename="ingestionTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the event was ingested, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "ingestionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ingestion_time: Option<i64>,
-    #[doc="<p>The name of the log stream this event belongs to.</p>"]
-    #[serde(rename="logStreamName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the log stream this event belongs to.</p>
+    #[serde(rename = "logStreamName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_stream_name: Option<String>,
-    #[doc="<p>The data contained in the log event.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The data contained in the log event.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>The time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    #[serde(rename="timestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "timestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetLogEventsRequest {
-    #[doc="<p>The end of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not included.</p>"]
-    #[serde(rename="endTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The end of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not included.</p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<i64>,
-    #[doc="<p>The maximum number of log events returned. If you don't specify a value, the maximum is as many log events as can fit in a response size of 1MB, up to 10,000 log events.</p>"]
-    #[serde(rename="limit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of log events returned. If you don't specify a value, the maximum is as many log events as can fit in a response size of 1MB, up to 10,000 log events.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[doc="<p>The name of the log stream.</p>"]
-    #[serde(rename="logStreamName")]
+    /// <p>The name of the log stream.</p>
+    #[serde(rename = "logStreamName")]
     pub log_stream_name: String,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>If the value is true, the earliest log events are returned first. If the value is false, the latest log events are returned first. The default value is false.</p>"]
-    #[serde(rename="startFromHead")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the value is true, the earliest log events are returned first. If the value is false, the latest log events are returned first. The default value is false.</p>
+    #[serde(rename = "startFromHead")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_from_head: Option<bool>,
-    #[doc="<p>The start of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp earlier than this time are not included.</p>"]
-    #[serde(rename="startTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The start of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp earlier than this time are not included.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetLogEventsResponse {
-    #[doc="<p>The events.</p>"]
-    #[serde(rename="events")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The events.</p>
+    #[serde(rename = "events")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub events: Option<Vec<OutputLogEvent>>,
-    #[doc="<p>The token for the next set of items in the backward direction. The token expires after 24 hours.</p>"]
-    #[serde(rename="nextBackwardToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items in the backward direction. The token expires after 24 hours.</p>
+    #[serde(rename = "nextBackwardToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_backward_token: Option<String>,
-    #[doc="<p>The token for the next set of items in the forward direction. The token expires after 24 hours.</p>"]
-    #[serde(rename="nextForwardToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items in the forward direction. The token expires after 24 hours.</p>
+    #[serde(rename = "nextForwardToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_forward_token: Option<String>,
 }
 
-#[doc="<p>Represents a log event, which is a record of activity that was recorded by the application or resource being monitored.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Represents a log event, which is a record of activity that was recorded by the application or resource being monitored.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct InputLogEvent {
-    #[doc="<p>The raw event message.</p>"]
-    #[serde(rename="message")]
+    /// <p>The raw event message.</p>
+    #[serde(rename = "message")]
     pub message: String,
-    #[doc="<p>The time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    #[serde(rename="timestamp")]
+    /// <p>The time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "timestamp")]
     pub timestamp: i64,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTagsLogGroupRequest {
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTagsLogGroupResponse {
-    #[doc="<p>The tags.</p>"]
-    #[serde(rename="tags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tags.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[doc="<p>Represents a log group.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a log group.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LogGroup {
-    #[doc="<p>The Amazon Resource Name (ARN) of the log group.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the log group.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The creation time of the log group, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    #[serde(rename="creationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The creation time of the log group, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "creationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<i64>,
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_group_name: Option<String>,
-    #[doc="<p>The number of metric filters.</p>"]
-    #[serde(rename="metricFilterCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of metric filters.</p>
+    #[serde(rename = "metricFilterCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_filter_count: Option<i64>,
-    #[serde(rename="retentionInDays")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "retentionInDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_in_days: Option<i64>,
-    #[doc="<p>The number of bytes stored.</p>"]
-    #[serde(rename="storedBytes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of bytes stored.</p>
+    #[serde(rename = "storedBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stored_bytes: Option<i64>,
 }
 
-#[doc="<p>Represents a log stream, which is a sequence of log events from a single emitter of logs.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a log stream, which is a sequence of log events from a single emitter of logs.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LogStream {
-    #[doc="<p>The Amazon Resource Name (ARN) of the log stream.</p>"]
-    #[serde(rename="arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the log stream.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The creation time of the stream, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    #[serde(rename="creationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The creation time of the stream, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "creationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<i64>,
-    #[doc="<p>The time of the first event, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    #[serde(rename="firstEventTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time of the first event, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "firstEventTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub first_event_timestamp: Option<i64>,
-    #[doc="<p> the time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. lastEventTime updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but may take longer in some rare situations.</p>"]
-    #[serde(rename="lastEventTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> the time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. lastEventTime updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but may take longer in some rare situations.</p>
+    #[serde(rename = "lastEventTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_event_timestamp: Option<i64>,
-    #[doc="<p>The ingestion time, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    #[serde(rename="lastIngestionTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ingestion time, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "lastIngestionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_ingestion_time: Option<i64>,
-    #[doc="<p>The name of the log stream.</p>"]
-    #[serde(rename="logStreamName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the log stream.</p>
+    #[serde(rename = "logStreamName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_stream_name: Option<String>,
-    #[doc="<p>The number of bytes stored.</p>"]
-    #[serde(rename="storedBytes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of bytes stored.</p>
+    #[serde(rename = "storedBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stored_bytes: Option<i64>,
-    #[doc="<p>The sequence token.</p>"]
-    #[serde(rename="uploadSequenceToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The sequence token.</p>
+    #[serde(rename = "uploadSequenceToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub upload_sequence_token: Option<String>,
 }
 
-#[doc="<p>Metric filters express how CloudWatch Logs would extract metric observations from ingested log events and transform them into metric data in a CloudWatch metric.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Metric filters express how CloudWatch Logs would extract metric observations from ingested log events and transform them into metric data in a CloudWatch metric.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MetricFilter {
-    #[doc="<p>The creation time of the metric filter, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    #[serde(rename="creationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The creation time of the metric filter, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "creationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<i64>,
-    #[doc="<p>The name of the metric filter.</p>"]
-    #[serde(rename="filterName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the metric filter.</p>
+    #[serde(rename = "filterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_name: Option<String>,
-    #[serde(rename="filterPattern")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "filterPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_pattern: Option<String>,
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_group_name: Option<String>,
-    #[doc="<p>The metric transformations.</p>"]
-    #[serde(rename="metricTransformations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The metric transformations.</p>
+    #[serde(rename = "metricTransformations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_transformations: Option<Vec<MetricTransformation>>,
 }
 
-#[doc="<p>Represents a matched event.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a matched event.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MetricFilterMatchRecord {
-    #[doc="<p>The raw event data.</p>"]
-    #[serde(rename="eventMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The raw event data.</p>
+    #[serde(rename = "eventMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_message: Option<String>,
-    #[doc="<p>The event number.</p>"]
-    #[serde(rename="eventNumber")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The event number.</p>
+    #[serde(rename = "eventNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub event_number: Option<i64>,
-    #[doc="<p>The values extracted from the event data by the filter.</p>"]
-    #[serde(rename="extractedValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The values extracted from the event data by the filter.</p>
+    #[serde(rename = "extractedValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extracted_values: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[doc="<p>Indicates how to transform ingested log events into metric data in a CloudWatch metric.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Indicates how to transform ingested log events into metric data in a CloudWatch metric.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MetricTransformation {
-    #[doc="<p>(Optional) The value to emit when a filter pattern does not match a log event. This value can be null.</p>"]
-    #[serde(rename="defaultValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) The value to emit when a filter pattern does not match a log event. This value can be null.</p>
+    #[serde(rename = "defaultValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_value: Option<f64>,
-    #[doc="<p>The name of the CloudWatch metric.</p>"]
-    #[serde(rename="metricName")]
+    /// <p>The name of the CloudWatch metric.</p>
+    #[serde(rename = "metricName")]
     pub metric_name: String,
-    #[doc="<p>The namespace of the CloudWatch metric.</p>"]
-    #[serde(rename="metricNamespace")]
+    /// <p>The namespace of the CloudWatch metric.</p>
+    #[serde(rename = "metricNamespace")]
     pub metric_namespace: String,
-    #[doc="<p>The value to publish to the CloudWatch metric when a filter pattern matches a log event.</p>"]
-    #[serde(rename="metricValue")]
+    /// <p>The value to publish to the CloudWatch metric when a filter pattern matches a log event.</p>
+    #[serde(rename = "metricValue")]
     pub metric_value: String,
 }
 
-#[doc="<p>Represents a log event.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a log event.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct OutputLogEvent {
-    #[doc="<p>The time the event was ingested, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    #[serde(rename="ingestionTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the event was ingested, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "ingestionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ingestion_time: Option<i64>,
-    #[doc="<p>The data contained in the log event.</p>"]
-    #[serde(rename="message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The data contained in the log event.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[doc="<p>The time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    #[serde(rename="timestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "timestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutDestinationPolicyRequest {
-    #[doc="<p>An IAM policy document that authorizes cross-account users to deliver their log events to the associated destination.</p>"]
-    #[serde(rename="accessPolicy")]
+    /// <p>An IAM policy document that authorizes cross-account users to deliver their log events to the associated destination.</p>
+    #[serde(rename = "accessPolicy")]
     pub access_policy: String,
-    #[doc="<p>A name for an existing destination.</p>"]
-    #[serde(rename="destinationName")]
+    /// <p>A name for an existing destination.</p>
+    #[serde(rename = "destinationName")]
     pub destination_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutDestinationRequest {
-    #[doc="<p>A name for the destination.</p>"]
-    #[serde(rename="destinationName")]
+    /// <p>A name for the destination.</p>
+    #[serde(rename = "destinationName")]
     pub destination_name: String,
-    #[doc="<p>The ARN of an IAM role that grants CloudWatch Logs permissions to call Amazon Kinesis PutRecord on the destination stream.</p>"]
-    #[serde(rename="roleArn")]
+    /// <p>The ARN of an IAM role that grants CloudWatch Logs permissions to call Amazon Kinesis PutRecord on the destination stream.</p>
+    #[serde(rename = "roleArn")]
     pub role_arn: String,
-    #[doc="<p>The ARN of an Amazon Kinesis stream to deliver matching log events to.</p>"]
-    #[serde(rename="targetArn")]
+    /// <p>The ARN of an Amazon Kinesis stream to deliver matching log events to.</p>
+    #[serde(rename = "targetArn")]
     pub target_arn: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutDestinationResponse {
-    #[doc="<p>The destination.</p>"]
-    #[serde(rename="destination")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The destination.</p>
+    #[serde(rename = "destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destination: Option<Destination>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutLogEventsRequest {
-    #[doc="<p>The log events.</p>"]
-    #[serde(rename="logEvents")]
+    /// <p>The log events.</p>
+    #[serde(rename = "logEvents")]
     pub log_events: Vec<InputLogEvent>,
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[doc="<p>The name of the log stream.</p>"]
-    #[serde(rename="logStreamName")]
+    /// <p>The name of the log stream.</p>
+    #[serde(rename = "logStreamName")]
     pub log_stream_name: String,
-    #[doc="<p>The sequence token.</p>"]
-    #[serde(rename="sequenceToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The sequence token.</p>
+    #[serde(rename = "sequenceToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sequence_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutLogEventsResponse {
-    #[doc="<p>The next sequence token.</p>"]
-    #[serde(rename="nextSequenceToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The next sequence token.</p>
+    #[serde(rename = "nextSequenceToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_sequence_token: Option<String>,
-    #[doc="<p>The rejected events.</p>"]
-    #[serde(rename="rejectedLogEventsInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The rejected events.</p>
+    #[serde(rename = "rejectedLogEventsInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rejected_log_events_info: Option<RejectedLogEventsInfo>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutMetricFilterRequest {
-    #[doc="<p>A name for the metric filter.</p>"]
-    #[serde(rename="filterName")]
+    /// <p>A name for the metric filter.</p>
+    #[serde(rename = "filterName")]
     pub filter_name: String,
-    #[doc="<p>A filter pattern for extracting metric data out of ingested log events.</p>"]
-    #[serde(rename="filterPattern")]
+    /// <p>A filter pattern for extracting metric data out of ingested log events.</p>
+    #[serde(rename = "filterPattern")]
     pub filter_pattern: String,
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[doc="<p>A collection of information needed to define how metric data gets emitted.</p>"]
-    #[serde(rename="metricTransformations")]
+    /// <p>A collection of information needed to define how metric data gets emitted.</p>
+    #[serde(rename = "metricTransformations")]
     pub metric_transformations: Vec<MetricTransformation>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutRetentionPolicyRequest {
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[serde(rename="retentionInDays")]
-    pub retention_in_days: i64,
+    #[serde(rename = "retentionInDays")] pub retention_in_days: i64,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutSubscriptionFilterRequest {
-    #[doc="<p>The ARN of the destination to deliver matching log events to. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination (specified using an ARN) belonging to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function belonging to the same account as the subscription filter, for same-account delivery.</p> </li> </ul>"]
-    #[serde(rename="destinationArn")]
+    /// <p>The ARN of the destination to deliver matching log events to. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination (specified using an ARN) belonging to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function belonging to the same account as the subscription filter, for same-account delivery.</p> </li> </ul>
+    #[serde(rename = "destinationArn")]
     pub destination_arn: String,
-    #[doc="<p>The method used to distribute log data to the destination, when the destination is an Amazon Kinesis stream. By default, log data is grouped by log stream. For a more even distribution, you can group log data randomly.</p>"]
-    #[serde(rename="distribution")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The method used to distribute log data to the destination, when the destination is an Amazon Kinesis stream. By default, log data is grouped by log stream. For a more even distribution, you can group log data randomly.</p>
+    #[serde(rename = "distribution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution: Option<String>,
-    #[doc="<p>A name for the subscription filter. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call will fail because you cannot associate a second filter with a log group. To find the name of the filter currently associated with a log group, use <a>DescribeSubscriptionFilters</a>.</p>"]
-    #[serde(rename="filterName")]
+    /// <p>A name for the subscription filter. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call will fail because you cannot associate a second filter with a log group. To find the name of the filter currently associated with a log group, use <a>DescribeSubscriptionFilters</a>.</p>
+    #[serde(rename = "filterName")]
     pub filter_name: String,
-    #[doc="<p>A filter pattern for subscribing to a filtered stream of log events.</p>"]
-    #[serde(rename="filterPattern")]
+    /// <p>A filter pattern for subscribing to a filtered stream of log events.</p>
+    #[serde(rename = "filterPattern")]
     pub filter_pattern: String,
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[doc="<p>The ARN of an IAM role that grants CloudWatch Logs permissions to deliver ingested log events to the destination stream. You don't need to provide the ARN when you are working with a logical destination for cross-account delivery.</p>"]
-    #[serde(rename="roleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of an IAM role that grants CloudWatch Logs permissions to deliver ingested log events to the destination stream. You don't need to provide the ARN when you are working with a logical destination for cross-account delivery.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
 
-#[doc="<p>Represents the rejected events.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the rejected events.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RejectedLogEventsInfo {
-    #[doc="<p>The expired log events.</p>"]
-    #[serde(rename="expiredLogEventEndIndex")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The expired log events.</p>
+    #[serde(rename = "expiredLogEventEndIndex")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expired_log_event_end_index: Option<i64>,
-    #[doc="<p>The log events that are too new.</p>"]
-    #[serde(rename="tooNewLogEventStartIndex")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The log events that are too new.</p>
+    #[serde(rename = "tooNewLogEventStartIndex")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub too_new_log_event_start_index: Option<i64>,
-    #[doc="<p>The log events that are too old.</p>"]
-    #[serde(rename="tooOldLogEventEndIndex")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The log events that are too old.</p>
+    #[serde(rename = "tooOldLogEventEndIndex")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub too_old_log_event_end_index: Option<i64>,
 }
 
-#[doc="<p>Represents the search status of a log stream.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents the search status of a log stream.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SearchedLogStream {
-    #[doc="<p>The name of the log stream.</p>"]
-    #[serde(rename="logStreamName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the log stream.</p>
+    #[serde(rename = "logStreamName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_stream_name: Option<String>,
-    #[doc="<p>Indicates whether all the events in this log stream were searched.</p>"]
-    #[serde(rename="searchedCompletely")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether all the events in this log stream were searched.</p>
+    #[serde(rename = "searchedCompletely")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub searched_completely: Option<bool>,
 }
 
-#[doc="<p>Represents a subscription filter.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents a subscription filter.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SubscriptionFilter {
-    #[doc="<p>The creation time of the subscription filter, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    #[serde(rename="creationTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The creation time of the subscription filter, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "creationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<i64>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the destination.</p>"]
-    #[serde(rename="destinationArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the destination.</p>
+    #[serde(rename = "destinationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_arn: Option<String>,
-    #[doc="<p>The method used to distribute log data to the destination, when the destination is an Amazon Kinesis stream.</p>"]
-    #[serde(rename="distribution")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The method used to distribute log data to the destination, when the destination is an Amazon Kinesis stream.</p>
+    #[serde(rename = "distribution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution: Option<String>,
-    #[doc="<p>The name of the subscription filter.</p>"]
-    #[serde(rename="filterName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the subscription filter.</p>
+    #[serde(rename = "filterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_name: Option<String>,
-    #[serde(rename="filterPattern")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "filterPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_pattern: Option<String>,
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_group_name: Option<String>,
-    #[doc="<p/>"]
-    #[serde(rename="roleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p/>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TagLogGroupRequest {
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[doc="<p>The key-value pairs to use for the tags.</p>"]
-    #[serde(rename="tags")]
+    /// <p>The key-value pairs to use for the tags.</p>
+    #[serde(rename = "tags")]
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct TestMetricFilterRequest {
-    #[serde(rename="filterPattern")]
-    pub filter_pattern: String,
-    #[doc="<p>The log event messages to test.</p>"]
-    #[serde(rename="logEventMessages")]
+    #[serde(rename = "filterPattern")] pub filter_pattern: String,
+    /// <p>The log event messages to test.</p>
+    #[serde(rename = "logEventMessages")]
     pub log_event_messages: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct TestMetricFilterResponse {
-    #[doc="<p>The matched events.</p>"]
-    #[serde(rename="matches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The matched events.</p>
+    #[serde(rename = "matches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub matches: Option<Vec<MetricFilterMatchRecord>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UntagLogGroupRequest {
-    #[doc="<p>The name of the log group.</p>"]
-    #[serde(rename="logGroupName")]
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    #[doc="<p>The tag keys. The corresponding tags are removed from the log group.</p>"]
-    #[serde(rename="tags")]
+    /// <p>The tag keys. The corresponding tags are removed from the log group.</p>
+    #[serde(rename = "tags")]
     pub tags: Vec<String>,
 }
 
@@ -948,7 +945,6 @@ pub enum CancelExportTaskError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CancelExportTaskError {
     pub fn from_body(body: &str) -> CancelExportTaskError {
@@ -1049,7 +1045,6 @@ pub enum CreateExportTaskError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateExportTaskError {
     pub fn from_body(body: &str) -> CreateExportTaskError {
@@ -1157,7 +1152,6 @@ pub enum CreateLogGroupError {
     Unknown(String),
 }
 
-
 impl CreateLogGroupError {
     pub fn from_body(body: &str) -> CreateLogGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1258,7 +1252,6 @@ pub enum CreateLogStreamError {
     Unknown(String),
 }
 
-
 impl CreateLogStreamError {
     pub fn from_body(body: &str) -> CreateLogStreamError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1354,7 +1347,6 @@ pub enum DeleteDestinationError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteDestinationError {
     pub fn from_body(body: &str) -> DeleteDestinationError {
@@ -1454,7 +1446,6 @@ pub enum DeleteLogGroupError {
     Unknown(String),
 }
 
-
 impl DeleteLogGroupError {
     pub fn from_body(body: &str) -> DeleteLogGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1551,7 +1542,6 @@ pub enum DeleteLogStreamError {
     Unknown(String),
 }
 
-
 impl DeleteLogStreamError {
     pub fn from_body(body: &str) -> DeleteLogStreamError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1647,7 +1637,6 @@ pub enum DeleteMetricFilterError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteMetricFilterError {
     pub fn from_body(body: &str) -> DeleteMetricFilterError {
@@ -1747,7 +1736,6 @@ pub enum DeleteRetentionPolicyError {
     Unknown(String),
 }
 
-
 impl DeleteRetentionPolicyError {
     pub fn from_body(body: &str) -> DeleteRetentionPolicyError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1846,7 +1834,6 @@ pub enum DeleteSubscriptionFilterError {
     Unknown(String),
 }
 
-
 impl DeleteSubscriptionFilterError {
     pub fn from_body(body: &str) -> DeleteSubscriptionFilterError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1869,7 +1856,11 @@ impl DeleteSubscriptionFilterError {
                     "ResourceNotFoundException" => {
                         DeleteSubscriptionFilterError::ResourceNotFound(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => DeleteSubscriptionFilterError::ServiceUnavailable(String::from(error_message)),
+                    "ServiceUnavailableException" => {
+                        DeleteSubscriptionFilterError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteSubscriptionFilterError::Validation(error_message.to_string())
                     }
@@ -1938,7 +1929,6 @@ pub enum DescribeDestinationsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeDestinationsError {
     pub fn from_body(body: &str) -> DescribeDestinationsError {
@@ -2026,7 +2016,6 @@ pub enum DescribeExportTasksError {
     Unknown(String),
 }
 
-
 impl DescribeExportTasksError {
     pub fn from_body(body: &str) -> DescribeExportTasksError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2112,7 +2101,6 @@ pub enum DescribeLogGroupsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeLogGroupsError {
     pub fn from_body(body: &str) -> DescribeLogGroupsError {
@@ -2201,7 +2189,6 @@ pub enum DescribeLogStreamsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeLogStreamsError {
     pub fn from_body(body: &str) -> DescribeLogStreamsError {
@@ -2295,7 +2282,6 @@ pub enum DescribeMetricFiltersError {
     Unknown(String),
 }
 
-
 impl DescribeMetricFiltersError {
     pub fn from_body(body: &str) -> DescribeMetricFiltersError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2388,7 +2374,6 @@ pub enum DescribeSubscriptionFiltersError {
     Unknown(String),
 }
 
-
 impl DescribeSubscriptionFiltersError {
     pub fn from_body(body: &str) -> DescribeSubscriptionFiltersError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2402,9 +2387,21 @@ impl DescribeSubscriptionFiltersError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterException" => DescribeSubscriptionFiltersError::InvalidParameter(String::from(error_message)),
-                    "ResourceNotFoundException" => DescribeSubscriptionFiltersError::ResourceNotFound(String::from(error_message)),
-                    "ServiceUnavailableException" => DescribeSubscriptionFiltersError::ServiceUnavailable(String::from(error_message)),
+                    "InvalidParameterException" => {
+                        DescribeSubscriptionFiltersError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeSubscriptionFiltersError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceUnavailableException" => {
+                        DescribeSubscriptionFiltersError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeSubscriptionFiltersError::Validation(error_message.to_string())
                     }
@@ -2474,7 +2471,6 @@ pub enum FilterLogEventsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl FilterLogEventsError {
     pub fn from_body(body: &str) -> FilterLogEventsError {
@@ -2566,7 +2562,6 @@ pub enum GetLogEventsError {
     Unknown(String),
 }
 
-
 impl GetLogEventsError {
     pub fn from_body(body: &str) -> GetLogEventsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2655,7 +2650,6 @@ pub enum ListTagsLogGroupError {
     Unknown(String),
 }
 
-
 impl ListTagsLogGroupError {
     pub fn from_body(body: &str) -> ListTagsLogGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2741,7 +2735,6 @@ pub enum PutDestinationError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl PutDestinationError {
     pub fn from_body(body: &str) -> PutDestinationError {
@@ -2832,7 +2825,6 @@ pub enum PutDestinationPolicyError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl PutDestinationPolicyError {
     pub fn from_body(body: &str) -> PutDestinationPolicyError {
@@ -2929,7 +2921,6 @@ pub enum PutLogEventsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl PutLogEventsError {
     pub fn from_body(body: &str) -> PutLogEventsError {
@@ -3033,7 +3024,6 @@ pub enum PutMetricFilterError {
     Unknown(String),
 }
 
-
 impl PutMetricFilterError {
     pub fn from_body(body: &str) -> PutMetricFilterError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3133,7 +3123,6 @@ pub enum PutRetentionPolicyError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl PutRetentionPolicyError {
     pub fn from_body(body: &str) -> PutRetentionPolicyError {
@@ -3235,7 +3224,6 @@ pub enum PutSubscriptionFilterError {
     Unknown(String),
 }
 
-
 impl PutSubscriptionFilterError {
     pub fn from_body(body: &str) -> PutSubscriptionFilterError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3334,7 +3322,6 @@ pub enum TagLogGroupError {
     Unknown(String),
 }
 
-
 impl TagLogGroupError {
     pub fn from_body(body: &str) -> TagLogGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3419,7 +3406,6 @@ pub enum TestMetricFilterError {
     Unknown(String),
 }
 
-
 impl TestMetricFilterError {
     pub fn from_body(body: &str) -> TestMetricFilterError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3502,7 +3488,6 @@ pub enum UntagLogGroupError {
     Unknown(String),
 }
 
-
 impl UntagLogGroupError {
     pub fn from_body(body: &str) -> UntagLogGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3569,170 +3554,160 @@ impl Error for UntagLogGroupError {
 /// Trait representing the capabilities of the Amazon CloudWatch Logs API. Amazon CloudWatch Logs clients implement this trait.
 pub trait CloudWatchLogs {
     #[doc="<p>Cancels the specified export task.</p> <p>The task must be in the <code>PENDING</code> or <code>RUNNING</code> state.</p>"]
-    fn cancel_export_task(&self,
-                          input: &CancelExportTaskRequest)
-                          -> Result<(), CancelExportTaskError>;
-
+    fn cancel_export_task(
+        &self,
+        input: &CancelExportTaskRequest,
+    ) -> Result<(), CancelExportTaskError>;
 
     #[doc="<p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix that will be used as the Amazon S3 key prefix for all exported objects.</p>"]
-    fn create_export_task(&self,
-                          input: &CreateExportTaskRequest)
-                          -> Result<CreateExportTaskResponse, CreateExportTaskError>;
-
+    fn create_export_task(
+        &self,
+        input: &CreateExportTaskRequest,
+    ) -> Result<CreateExportTaskResponse, CreateExportTaskError>;
 
     #[doc="<p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).</p> </li> </ul>"]
     fn create_log_group(&self, input: &CreateLogGroupRequest) -> Result<(), CreateLogGroupError>;
 
-
     #[doc="<p>Creates a log stream for the specified log group.</p> <p>There is no limit on the number of log streams that you can create for a log group.</p> <p>You must use the following guidelines when naming a log stream:</p> <ul> <li> <p>Log stream names must be unique within the log group.</p> </li> <li> <p>Log stream names can be between 1 and 512 characters long.</p> </li> <li> <p>The ':' (colon) and '*' (asterisk) characters are not allowed.</p> </li> </ul>"]
-    fn create_log_stream(&self,
-                         input: &CreateLogStreamRequest)
-                         -> Result<(), CreateLogStreamError>;
-
+    fn create_log_stream(&self, input: &CreateLogStreamRequest)
+        -> Result<(), CreateLogStreamError>;
 
     #[doc="<p>Deletes the specified destination, and eventually disables all the subscription filters that publish to it. This operation does not delete the physical resource encapsulated by the destination.</p>"]
-    fn delete_destination(&self,
-                          input: &DeleteDestinationRequest)
-                          -> Result<(), DeleteDestinationError>;
-
+    fn delete_destination(
+        &self,
+        input: &DeleteDestinationRequest,
+    ) -> Result<(), DeleteDestinationError>;
 
     #[doc="<p>Deletes the specified log group and permanently deletes all the archived log events associated with the log group.</p>"]
     fn delete_log_group(&self, input: &DeleteLogGroupRequest) -> Result<(), DeleteLogGroupError>;
 
-
     #[doc="<p>Deletes the specified log stream and permanently deletes all the archived log events associated with the log stream.</p>"]
-    fn delete_log_stream(&self,
-                         input: &DeleteLogStreamRequest)
-                         -> Result<(), DeleteLogStreamError>;
+    fn delete_log_stream(&self, input: &DeleteLogStreamRequest)
+        -> Result<(), DeleteLogStreamError>;
 
-
-    #[doc="<p>Deletes the specified metric filter.</p>"]
-    fn delete_metric_filter(&self,
-                            input: &DeleteMetricFilterRequest)
-                            -> Result<(), DeleteMetricFilterError>;
-
+    #[doc = "<p>Deletes the specified metric filter.</p>"]
+    fn delete_metric_filter(
+        &self,
+        input: &DeleteMetricFilterRequest,
+    ) -> Result<(), DeleteMetricFilterError>;
 
     #[doc="<p>Deletes the specified retention policy.</p> <p>Log events do not expire if they belong to log groups without a retention policy.</p>"]
-    fn delete_retention_policy(&self,
-                               input: &DeleteRetentionPolicyRequest)
-                               -> Result<(), DeleteRetentionPolicyError>;
+    fn delete_retention_policy(
+        &self,
+        input: &DeleteRetentionPolicyRequest,
+    ) -> Result<(), DeleteRetentionPolicyError>;
 
+    #[doc = "<p>Deletes the specified subscription filter.</p>"]
+    fn delete_subscription_filter(
+        &self,
+        input: &DeleteSubscriptionFilterRequest,
+    ) -> Result<(), DeleteSubscriptionFilterError>;
 
-    #[doc="<p>Deletes the specified subscription filter.</p>"]
-    fn delete_subscription_filter(&self,
-                                  input: &DeleteSubscriptionFilterRequest)
-                                  -> Result<(), DeleteSubscriptionFilterError>;
-
-
-    #[doc="<p>Lists all your destinations. The results are ASCII-sorted by destination name.</p>"]
-    fn describe_destinations(&self,
-                             input: &DescribeDestinationsRequest)
-                             -> Result<DescribeDestinationsResponse, DescribeDestinationsError>;
-
+    #[doc = "<p>Lists all your destinations. The results are ASCII-sorted by destination name.</p>"]
+    fn describe_destinations(
+        &self,
+        input: &DescribeDestinationsRequest,
+    ) -> Result<DescribeDestinationsResponse, DescribeDestinationsError>;
 
     #[doc="<p>Lists the specified export tasks. You can list all your export tasks or filter the results based on task ID or task status.</p>"]
-    fn describe_export_tasks(&self,
-                             input: &DescribeExportTasksRequest)
-                             -> Result<DescribeExportTasksResponse, DescribeExportTasksError>;
-
+    fn describe_export_tasks(
+        &self,
+        input: &DescribeExportTasksRequest,
+    ) -> Result<DescribeExportTasksResponse, DescribeExportTasksError>;
 
     #[doc="<p>Lists the specified log groups. You can list all your log groups or filter the results by prefix. The results are ASCII-sorted by log group name.</p>"]
-    fn describe_log_groups(&self,
-                           input: &DescribeLogGroupsRequest)
-                           -> Result<DescribeLogGroupsResponse, DescribeLogGroupsError>;
-
+    fn describe_log_groups(
+        &self,
+        input: &DescribeLogGroupsRequest,
+    ) -> Result<DescribeLogGroupsResponse, DescribeLogGroupsError>;
 
     #[doc="<p>Lists the log streams for the specified log group. You can list all the log streams or filter the results by prefix. You can also control how the results are ordered.</p> <p>This operation has a limit of five transactions per second, after which transactions are throttled.</p>"]
-    fn describe_log_streams(&self,
-                            input: &DescribeLogStreamsRequest)
-                            -> Result<DescribeLogStreamsResponse, DescribeLogStreamsError>;
-
+    fn describe_log_streams(
+        &self,
+        input: &DescribeLogStreamsRequest,
+    ) -> Result<DescribeLogStreamsResponse, DescribeLogStreamsError>;
 
     #[doc="<p>Lists the specified metric filters. You can list all the metric filters or filter the results by log name, prefix, metric name, and metric namespace. The results are ASCII-sorted by filter name.</p>"]
-    fn describe_metric_filters
-        (&self,
-         input: &DescribeMetricFiltersRequest)
-         -> Result<DescribeMetricFiltersResponse, DescribeMetricFiltersError>;
-
+    fn describe_metric_filters(
+        &self,
+        input: &DescribeMetricFiltersRequest,
+    ) -> Result<DescribeMetricFiltersResponse, DescribeMetricFiltersError>;
 
     #[doc="<p>Lists the subscription filters for the specified log group. You can list all the subscription filters or filter the results by prefix. The results are ASCII-sorted by filter name.</p>"]
-    fn describe_subscription_filters
-        (&self,
-         input: &DescribeSubscriptionFiltersRequest)
-         -> Result<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError>;
-
+    fn describe_subscription_filters(
+        &self,
+        input: &DescribeSubscriptionFiltersRequest,
+    ) -> Result<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError>;
 
     #[doc="<p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>"]
-    fn filter_log_events(&self,
-                         input: &FilterLogEventsRequest)
-                         -> Result<FilterLogEventsResponse, FilterLogEventsError>;
-
+    fn filter_log_events(
+        &self,
+        input: &FilterLogEventsRequest,
+    ) -> Result<FilterLogEventsResponse, FilterLogEventsError>;
 
     #[doc="<p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). If the results include tokens, there are more log events available. You can get additional log events by specifying one of the tokens in a subsequent call.</p>"]
-    fn get_log_events(&self,
-                      input: &GetLogEventsRequest)
-                      -> Result<GetLogEventsResponse, GetLogEventsError>;
-
+    fn get_log_events(
+        &self,
+        input: &GetLogEventsRequest,
+    ) -> Result<GetLogEventsResponse, GetLogEventsError>;
 
     #[doc="<p>Lists the tags for the specified log group.</p> <p>To add tags, use <a>TagLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p>"]
-    fn list_tags_log_group(&self,
-                           input: &ListTagsLogGroupRequest)
-                           -> Result<ListTagsLogGroupResponse, ListTagsLogGroupError>;
-
+    fn list_tags_log_group(
+        &self,
+        input: &ListTagsLogGroupRequest,
+    ) -> Result<ListTagsLogGroupResponse, ListTagsLogGroupError>;
 
     #[doc="<p>Creates or updates a destination. A destination encapsulates a physical resource (such as a Kinesis stream) and enables you to subscribe to a real-time stream of log events of a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Amazon Kinesis stream belonging to the same account as the destination.</p> <p>A destination controls what is written to its Amazon Kinesis stream through an access policy. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>"]
-    fn put_destination(&self,
-                       input: &PutDestinationRequest)
-                       -> Result<PutDestinationResponse, PutDestinationError>;
-
+    fn put_destination(
+        &self,
+        input: &PutDestinationRequest,
+    ) -> Result<PutDestinationResponse, PutDestinationError>;
 
     #[doc="<p>Creates or updates an access policy associated with an existing destination. An access policy is an <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies_overview.html\">IAM policy document</a> that is used to authorize claims to register a subscription filter against a given destination.</p>"]
-    fn put_destination_policy(&self,
-                              input: &PutDestinationPolicyRequest)
-                              -> Result<(), PutDestinationPolicyError>;
-
+    fn put_destination_policy(
+        &self,
+        input: &PutDestinationPolicyRequest,
+    ) -> Result<(), PutDestinationPolicyError>;
 
     #[doc="<p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp (the time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC).</p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul>"]
-    fn put_log_events(&self,
-                      input: &PutLogEventsRequest)
-                      -> Result<PutLogEventsResponse, PutLogEventsError>;
-
+    fn put_log_events(
+        &self,
+        input: &PutLogEventsRequest,
+    ) -> Result<PutLogEventsResponse, PutLogEventsError>;
 
     #[doc="<p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a>PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>"]
-    fn put_metric_filter(&self,
-                         input: &PutMetricFilterRequest)
-                         -> Result<(), PutMetricFilterError>;
-
+    fn put_metric_filter(&self, input: &PutMetricFilterRequest)
+        -> Result<(), PutMetricFilterError>;
 
     #[doc="<p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days you want to retain log events in the specified log group.</p>"]
-    fn put_retention_policy(&self,
-                            input: &PutRetentionPolicyRequest)
-                            -> Result<(), PutRetentionPolicyError>;
-
+    fn put_retention_policy(
+        &self,
+        input: &PutRetentionPolicyRequest,
+    ) -> Result<(), PutRetentionPolicyError>;
 
     #[doc="<p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call will fail because you cannot associate a second filter with a log group.</p>"]
-    fn put_subscription_filter(&self,
-                               input: &PutSubscriptionFilterRequest)
-                               -> Result<(), PutSubscriptionFilterError>;
-
+    fn put_subscription_filter(
+        &self,
+        input: &PutSubscriptionFilterRequest,
+    ) -> Result<(), PutSubscriptionFilterError>;
 
     #[doc="<p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html\">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>"]
     fn tag_log_group(&self, input: &TagLogGroupRequest) -> Result<(), TagLogGroupError>;
 
-
     #[doc="<p>Tests the filter pattern of a metric filter against a sample of log event messages. You can use this operation to validate the correctness of a metric filter pattern.</p>"]
-    fn test_metric_filter(&self,
-                          input: &TestMetricFilterRequest)
-                          -> Result<TestMetricFilterResponse, TestMetricFilterError>;
-
+    fn test_metric_filter(
+        &self,
+        input: &TestMetricFilterRequest,
+    ) -> Result<TestMetricFilterResponse, TestMetricFilterError>;
 
     #[doc="<p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To add tags, use <a>UntagLogGroup</a>.</p>"]
     fn untag_log_group(&self, input: &UntagLogGroupRequest) -> Result<(), UntagLogGroupError>;
 }
 /// A client for the Amazon CloudWatch Logs API.
 pub struct CloudWatchLogsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -3740,8 +3715,9 @@ pub struct CloudWatchLogsClient<P, D>
 }
 
 impl<P, D> CloudWatchLogsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         CloudWatchLogsClient {
@@ -3753,13 +3729,15 @@ impl<P, D> CloudWatchLogsClient<P, D>
 }
 
 impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Cancels the specified export task.</p> <p>The task must be in the <code>PENDING</code> or <code>RUNNING</code> state.</p>"]
-    fn cancel_export_task(&self,
-                          input: &CancelExportTaskRequest)
-                          -> Result<(), CancelExportTaskError> {
+    fn cancel_export_task(
+        &self,
+        input: &CancelExportTaskRequest,
+    ) -> Result<(), CancelExportTaskError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3776,16 +3754,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CancelExportTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CancelExportTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix that will be used as the Amazon S3 key prefix for all exported objects.</p>"]
-    fn create_export_task(&self,
-                          input: &CreateExportTaskRequest)
-                          -> Result<CreateExportTaskResponse, CreateExportTaskError> {
+    fn create_export_task(
+        &self,
+        input: &CreateExportTaskRequest,
+    ) -> Result<CreateExportTaskResponse, CreateExportTaskError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3801,18 +3781,19 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateExportTaskResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateExportTaskResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateExportTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateExportTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).</p> </li> </ul>"]
     fn create_log_group(&self, input: &CreateLogGroupRequest) -> Result<(), CreateLogGroupError> {
@@ -3832,16 +3813,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateLogGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a log stream for the specified log group.</p> <p>There is no limit on the number of log streams that you can create for a log group.</p> <p>You must use the following guidelines when naming a log stream:</p> <ul> <li> <p>Log stream names must be unique within the log group.</p> </li> <li> <p>Log stream names can be between 1 and 512 characters long.</p> </li> <li> <p>The ':' (colon) and '*' (asterisk) characters are not allowed.</p> </li> </ul>"]
-    fn create_log_stream(&self,
-                         input: &CreateLogStreamRequest)
-                         -> Result<(), CreateLogStreamError> {
+    fn create_log_stream(
+        &self,
+        input: &CreateLogStreamRequest,
+    ) -> Result<(), CreateLogStreamError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3858,16 +3841,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateLogStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateLogStreamError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the specified destination, and eventually disables all the subscription filters that publish to it. This operation does not delete the physical resource encapsulated by the destination.</p>"]
-    fn delete_destination(&self,
-                          input: &DeleteDestinationRequest)
-                          -> Result<(), DeleteDestinationError> {
+    fn delete_destination(
+        &self,
+        input: &DeleteDestinationRequest,
+    ) -> Result<(), DeleteDestinationError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3884,11 +3869,12 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteDestinationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteDestinationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes the specified log group and permanently deletes all the archived log events associated with the log group.</p>"]
     fn delete_log_group(&self, input: &DeleteLogGroupRequest) -> Result<(), DeleteLogGroupError> {
@@ -3908,16 +3894,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteLogGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the specified log stream and permanently deletes all the archived log events associated with the log stream.</p>"]
-    fn delete_log_stream(&self,
-                         input: &DeleteLogStreamRequest)
-                         -> Result<(), DeleteLogStreamError> {
+    fn delete_log_stream(
+        &self,
+        input: &DeleteLogStreamRequest,
+    ) -> Result<(), DeleteLogStreamError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3934,16 +3922,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteLogStreamError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteLogStreamError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the specified metric filter.</p>"]
-    fn delete_metric_filter(&self,
-                            input: &DeleteMetricFilterRequest)
-                            -> Result<(), DeleteMetricFilterError> {
+    #[doc = "<p>Deletes the specified metric filter.</p>"]
+    fn delete_metric_filter(
+        &self,
+        input: &DeleteMetricFilterRequest,
+    ) -> Result<(), DeleteMetricFilterError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3960,16 +3950,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteMetricFilterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteMetricFilterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the specified retention policy.</p> <p>Log events do not expire if they belong to log groups without a retention policy.</p>"]
-    fn delete_retention_policy(&self,
-                               input: &DeleteRetentionPolicyRequest)
-                               -> Result<(), DeleteRetentionPolicyError> {
+    fn delete_retention_policy(
+        &self,
+        input: &DeleteRetentionPolicyRequest,
+    ) -> Result<(), DeleteRetentionPolicyError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3986,16 +3978,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteRetentionPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteRetentionPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the specified subscription filter.</p>"]
-    fn delete_subscription_filter(&self,
-                                  input: &DeleteSubscriptionFilterRequest)
-                                  -> Result<(), DeleteSubscriptionFilterError> {
+    #[doc = "<p>Deletes the specified subscription filter.</p>"]
+    fn delete_subscription_filter(
+        &self,
+        input: &DeleteSubscriptionFilterRequest,
+    ) -> Result<(), DeleteSubscriptionFilterError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4012,17 +4006,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteSubscriptionFilterError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DeleteSubscriptionFilterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all your destinations. The results are ASCII-sorted by destination name.</p>"]
-    fn describe_destinations(&self,
-                             input: &DescribeDestinationsRequest)
-                             -> Result<DescribeDestinationsResponse, DescribeDestinationsError> {
+    #[doc = "<p>Lists all your destinations. The results are ASCII-sorted by destination name.</p>"]
+    fn describe_destinations(
+        &self,
+        input: &DescribeDestinationsRequest,
+    ) -> Result<DescribeDestinationsResponse, DescribeDestinationsError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4038,21 +4033,25 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeDestinationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeDestinationsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeDestinationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeDestinationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the specified export tasks. You can list all your export tasks or filter the results based on task ID or task status.</p>"]
-    fn describe_export_tasks(&self,
-                             input: &DescribeExportTasksRequest)
-                             -> Result<DescribeExportTasksResponse, DescribeExportTasksError> {
+    fn describe_export_tasks(
+        &self,
+        input: &DescribeExportTasksRequest,
+    ) -> Result<DescribeExportTasksResponse, DescribeExportTasksError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4068,21 +4067,25 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeExportTasksResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeExportTasksResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeExportTasksError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeExportTasksError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the specified log groups. You can list all your log groups or filter the results by prefix. The results are ASCII-sorted by log group name.</p>"]
-    fn describe_log_groups(&self,
-                           input: &DescribeLogGroupsRequest)
-                           -> Result<DescribeLogGroupsResponse, DescribeLogGroupsError> {
+    fn describe_log_groups(
+        &self,
+        input: &DescribeLogGroupsRequest,
+    ) -> Result<DescribeLogGroupsResponse, DescribeLogGroupsError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4098,21 +4101,25 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeLogGroupsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeLogGroupsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeLogGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeLogGroupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the log streams for the specified log group. You can list all the log streams or filter the results by prefix. You can also control how the results are ordered.</p> <p>This operation has a limit of five transactions per second, after which transactions are throttled.</p>"]
-    fn describe_log_streams(&self,
-                            input: &DescribeLogStreamsRequest)
-                            -> Result<DescribeLogStreamsResponse, DescribeLogStreamsError> {
+    fn describe_log_streams(
+        &self,
+        input: &DescribeLogStreamsRequest,
+    ) -> Result<DescribeLogStreamsResponse, DescribeLogStreamsError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4128,22 +4135,25 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeLogStreamsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeLogStreamsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeLogStreamsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeLogStreamsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the specified metric filters. You can list all the metric filters or filter the results by log name, prefix, metric name, and metric namespace. The results are ASCII-sorted by filter name.</p>"]
-    fn describe_metric_filters
-        (&self,
-         input: &DescribeMetricFiltersRequest)
-         -> Result<DescribeMetricFiltersResponse, DescribeMetricFiltersError> {
+    fn describe_metric_filters(
+        &self,
+        input: &DescribeMetricFiltersRequest,
+    ) -> Result<DescribeMetricFiltersResponse, DescribeMetricFiltersError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4159,22 +4169,25 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeMetricFiltersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeMetricFiltersResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeMetricFiltersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeMetricFiltersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the subscription filters for the specified log group. You can list all the subscription filters or filter the results by prefix. The results are ASCII-sorted by filter name.</p>"]
-    fn describe_subscription_filters
-        (&self,
-         input: &DescribeSubscriptionFiltersRequest)
-         -> Result<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError> {
+    fn describe_subscription_filters(
+        &self,
+        input: &DescribeSubscriptionFiltersRequest,
+    ) -> Result<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4190,22 +4203,25 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeSubscriptionFiltersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeSubscriptionFiltersResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeSubscriptionFiltersError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(DescribeSubscriptionFiltersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>"]
-    fn filter_log_events(&self,
-                         input: &FilterLogEventsRequest)
-                         -> Result<FilterLogEventsResponse, FilterLogEventsError> {
+    fn filter_log_events(
+        &self,
+        input: &FilterLogEventsRequest,
+    ) -> Result<FilterLogEventsResponse, FilterLogEventsError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4221,23 +4237,25 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<FilterLogEventsResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<FilterLogEventsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(FilterLogEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(FilterLogEventsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). If the results include tokens, there are more log events available. You can get additional log events by specifying one of the tokens in a subsequent call.</p>"]
-    fn get_log_events(&self,
-                      input: &GetLogEventsRequest)
-                      -> Result<GetLogEventsResponse, GetLogEventsError> {
+    fn get_log_events(
+        &self,
+        input: &GetLogEventsRequest,
+    ) -> Result<GetLogEventsResponse, GetLogEventsError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4253,23 +4271,25 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetLogEventsResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetLogEventsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetLogEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetLogEventsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the tags for the specified log group.</p> <p>To add tags, use <a>TagLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p>"]
-    fn list_tags_log_group(&self,
-                           input: &ListTagsLogGroupRequest)
-                           -> Result<ListTagsLogGroupResponse, ListTagsLogGroupError> {
+    fn list_tags_log_group(
+        &self,
+        input: &ListTagsLogGroupRequest,
+    ) -> Result<ListTagsLogGroupResponse, ListTagsLogGroupError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4285,23 +4305,25 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagsLogGroupResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListTagsLogGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTagsLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTagsLogGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates or updates a destination. A destination encapsulates a physical resource (such as a Kinesis stream) and enables you to subscribe to a real-time stream of log events of a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Amazon Kinesis stream belonging to the same account as the destination.</p> <p>A destination controls what is written to its Amazon Kinesis stream through an access policy. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>"]
-    fn put_destination(&self,
-                       input: &PutDestinationRequest)
-                       -> Result<PutDestinationResponse, PutDestinationError> {
+    fn put_destination(
+        &self,
+        input: &PutDestinationRequest,
+    ) -> Result<PutDestinationResponse, PutDestinationError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4317,23 +4339,25 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutDestinationResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<PutDestinationResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutDestinationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutDestinationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates or updates an access policy associated with an existing destination. An access policy is an <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies_overview.html\">IAM policy document</a> that is used to authorize claims to register a subscription filter against a given destination.</p>"]
-    fn put_destination_policy(&self,
-                              input: &PutDestinationPolicyRequest)
-                              -> Result<(), PutDestinationPolicyError> {
+    fn put_destination_policy(
+        &self,
+        input: &PutDestinationPolicyRequest,
+    ) -> Result<(), PutDestinationPolicyError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4350,16 +4374,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutDestinationPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutDestinationPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp (the time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC).</p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul>"]
-    fn put_log_events(&self,
-                      input: &PutLogEventsRequest)
-                      -> Result<PutLogEventsResponse, PutLogEventsError> {
+    fn put_log_events(
+        &self,
+        input: &PutLogEventsRequest,
+    ) -> Result<PutLogEventsResponse, PutLogEventsError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4375,23 +4401,25 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutLogEventsResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<PutLogEventsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutLogEventsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutLogEventsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates or updates a metric filter and associates it with the specified log group. Metric filters allow you to configure rules to extract metric data from log events ingested through <a>PutLogEvents</a>.</p> <p>The maximum number of metric filters that can be associated with a log group is 100.</p>"]
-    fn put_metric_filter(&self,
-                         input: &PutMetricFilterRequest)
-                         -> Result<(), PutMetricFilterError> {
+    fn put_metric_filter(
+        &self,
+        input: &PutMetricFilterRequest,
+    ) -> Result<(), PutMetricFilterError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4408,16 +4436,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutMetricFilterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutMetricFilterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days you want to retain log events in the specified log group.</p>"]
-    fn put_retention_policy(&self,
-                            input: &PutRetentionPolicyRequest)
-                            -> Result<(), PutRetentionPolicyError> {
+    fn put_retention_policy(
+        &self,
+        input: &PutRetentionPolicyRequest,
+    ) -> Result<(), PutRetentionPolicyError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4434,16 +4464,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutRetentionPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutRetentionPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call will fail because you cannot associate a second filter with a log group.</p>"]
-    fn put_subscription_filter(&self,
-                               input: &PutSubscriptionFilterRequest)
-                               -> Result<(), PutSubscriptionFilterError> {
+    fn put_subscription_filter(
+        &self,
+        input: &PutSubscriptionFilterRequest,
+    ) -> Result<(), PutSubscriptionFilterError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4460,11 +4492,12 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutSubscriptionFilterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutSubscriptionFilterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html\">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>"]
     fn tag_log_group(&self, input: &TagLogGroupRequest) -> Result<(), TagLogGroupError> {
@@ -4484,16 +4517,18 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(TagLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(TagLogGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Tests the filter pattern of a metric filter against a sample of log event messages. You can use this operation to validate the correctness of a metric filter pattern.</p>"]
-    fn test_metric_filter(&self,
-                          input: &TestMetricFilterRequest)
-                          -> Result<TestMetricFilterResponse, TestMetricFilterError> {
+    fn test_metric_filter(
+        &self,
+        input: &TestMetricFilterRequest,
+    ) -> Result<TestMetricFilterResponse, TestMetricFilterError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4509,18 +4544,19 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TestMetricFilterResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<TestMetricFilterResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(TestMetricFilterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(TestMetricFilterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To add tags, use <a>UntagLogGroup</a>.</p>"]
     fn untag_log_group(&self, input: &UntagLogGroupRequest) -> Result<(), UntagLogGroupError> {
@@ -4540,7 +4576,9 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UntagLogGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UntagLogGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

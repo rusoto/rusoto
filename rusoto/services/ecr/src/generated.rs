@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,672 +27,669 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>An object representing authorization data for an Amazon ECR registry.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An object representing authorization data for an Amazon ECR registry.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AuthorizationData {
-    #[doc="<p>A base64-encoded string that contains authorization data for the specified Amazon ECR registry. When the string is decoded, it is presented in the format <code>user:password</code> for private registry authentication using <code>docker login</code>.</p>"]
-    #[serde(rename="authorizationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A base64-encoded string that contains authorization data for the specified Amazon ECR registry. When the string is decoded, it is presented in the format <code>user:password</code> for private registry authentication using <code>docker login</code>.</p>
+    #[serde(rename = "authorizationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_token: Option<String>,
-    #[doc="<p>The Unix time in seconds and milliseconds when the authorization token expires. Authorization tokens are valid for 12 hours.</p>"]
-    #[serde(rename="expiresAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Unix time in seconds and milliseconds when the authorization token expires. Authorization tokens are valid for 12 hours.</p>
+    #[serde(rename = "expiresAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_at: Option<f64>,
-    #[doc="<p>The registry URL to use for this authorization token in a <code>docker login</code> command. The Amazon ECR registry URL format is <code>https://aws_account_id.dkr.ecr.region.amazonaws.com</code>. For example, <code>https://012345678910.dkr.ecr.us-east-1.amazonaws.com</code>.. </p>"]
-    #[serde(rename="proxyEndpoint")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The registry URL to use for this authorization token in a <code>docker login</code> command. The Amazon ECR registry URL format is <code>https://aws_account_id.dkr.ecr.region.amazonaws.com</code>. For example, <code>https://012345678910.dkr.ecr.us-east-1.amazonaws.com</code>.. </p>
+    #[serde(rename = "proxyEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub proxy_endpoint: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchCheckLayerAvailabilityRequest {
-    #[doc="<p>The digests of the image layers to check.</p>"]
-    #[serde(rename="layerDigests")]
+    /// <p>The digests of the image layers to check.</p>
+    #[serde(rename = "layerDigests")]
     pub layer_digests: Vec<String>,
-    #[doc="<p>The AWS account ID associated with the registry that contains the image layers to check. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that contains the image layers to check. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The name of the repository that is associated with the image layers to check.</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>The name of the repository that is associated with the image layers to check.</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchCheckLayerAvailabilityResponse {
-    #[doc="<p>Any failures associated with the call.</p>"]
-    #[serde(rename="failures")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Any failures associated with the call.</p>
+    #[serde(rename = "failures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failures: Option<Vec<LayerFailure>>,
-    #[doc="<p>A list of image layer objects corresponding to the image layer references in the request.</p>"]
-    #[serde(rename="layers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of image layer objects corresponding to the image layer references in the request.</p>
+    #[serde(rename = "layers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub layers: Option<Vec<Layer>>,
 }
 
-#[doc="<p>Deletes specified images within a specified repository. Images are specified with either the <code>imageTag</code> or <code>imageDigest</code>.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Deletes specified images within a specified repository. Images are specified with either the <code>imageTag</code> or <code>imageDigest</code>.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchDeleteImageRequest {
-    #[doc="<p>A list of image ID references that correspond to images to delete. The format of the <code>imageIds</code> reference is <code>imageTag=tag</code> or <code>imageDigest=digest</code>.</p>"]
-    #[serde(rename="imageIds")]
+    /// <p>A list of image ID references that correspond to images to delete. The format of the <code>imageIds</code> reference is <code>imageTag=tag</code> or <code>imageDigest=digest</code>.</p>
+    #[serde(rename = "imageIds")]
     pub image_ids: Vec<ImageIdentifier>,
-    #[doc="<p>The AWS account ID associated with the registry that contains the image to delete. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that contains the image to delete. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The repository that contains the image to delete.</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>The repository that contains the image to delete.</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchDeleteImageResponse {
-    #[doc="<p>Any failures associated with the call.</p>"]
-    #[serde(rename="failures")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Any failures associated with the call.</p>
+    #[serde(rename = "failures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failures: Option<Vec<ImageFailure>>,
-    #[doc="<p>The image IDs of the deleted images.</p>"]
-    #[serde(rename="imageIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The image IDs of the deleted images.</p>
+    #[serde(rename = "imageIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_ids: Option<Vec<ImageIdentifier>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchGetImageRequest {
-    #[doc="<p>The accepted media types for the request.</p> <p>Valid values: <code>application/vnd.docker.distribution.manifest.v1+json</code> | <code>application/vnd.docker.distribution.manifest.v2+json</code> | <code>application/vnd.oci.image.manifest.v1+json</code> </p>"]
-    #[serde(rename="acceptedMediaTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The accepted media types for the request.</p> <p>Valid values: <code>application/vnd.docker.distribution.manifest.v1+json</code> | <code>application/vnd.docker.distribution.manifest.v2+json</code> | <code>application/vnd.oci.image.manifest.v1+json</code> </p>
+    #[serde(rename = "acceptedMediaTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accepted_media_types: Option<Vec<String>>,
-    #[doc="<p>A list of image ID references that correspond to images to describe. The format of the <code>imageIds</code> reference is <code>imageTag=tag</code> or <code>imageDigest=digest</code>.</p>"]
-    #[serde(rename="imageIds")]
+    /// <p>A list of image ID references that correspond to images to describe. The format of the <code>imageIds</code> reference is <code>imageTag=tag</code> or <code>imageDigest=digest</code>.</p>
+    #[serde(rename = "imageIds")]
     pub image_ids: Vec<ImageIdentifier>,
-    #[doc="<p>The AWS account ID associated with the registry that contains the images to describe. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that contains the images to describe. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The repository that contains the images to describe.</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>The repository that contains the images to describe.</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchGetImageResponse {
-    #[doc="<p>Any failures associated with the call.</p>"]
-    #[serde(rename="failures")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Any failures associated with the call.</p>
+    #[serde(rename = "failures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failures: Option<Vec<ImageFailure>>,
-    #[doc="<p>A list of image objects corresponding to the image references in the request.</p>"]
-    #[serde(rename="images")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of image objects corresponding to the image references in the request.</p>
+    #[serde(rename = "images")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub images: Option<Vec<Image>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CompleteLayerUploadRequest {
-    #[doc="<p>The <code>sha256</code> digest of the image layer.</p>"]
-    #[serde(rename="layerDigests")]
+    /// <p>The <code>sha256</code> digest of the image layer.</p>
+    #[serde(rename = "layerDigests")]
     pub layer_digests: Vec<String>,
-    #[doc="<p>The AWS account ID associated with the registry to which to upload layers. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry to which to upload layers. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The name of the repository to associate with the image layer.</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>The name of the repository to associate with the image layer.</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
-    #[doc="<p>The upload ID from a previous <a>InitiateLayerUpload</a> operation to associate with the image layer.</p>"]
-    #[serde(rename="uploadId")]
+    /// <p>The upload ID from a previous <a>InitiateLayerUpload</a> operation to associate with the image layer.</p>
+    #[serde(rename = "uploadId")]
     pub upload_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CompleteLayerUploadResponse {
-    #[doc="<p>The <code>sha256</code> digest of the image layer.</p>"]
-    #[serde(rename="layerDigest")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>sha256</code> digest of the image layer.</p>
+    #[serde(rename = "layerDigest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub layer_digest: Option<String>,
-    #[doc="<p>The registry ID associated with the request.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The registry ID associated with the request.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The repository name associated with the request.</p>"]
-    #[serde(rename="repositoryName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The repository name associated with the request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
-    #[doc="<p>The upload ID associated with the layer.</p>"]
-    #[serde(rename="uploadId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The upload ID associated with the layer.</p>
+    #[serde(rename = "uploadId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub upload_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateRepositoryRequest {
-    #[doc="<p>The name to use for the repository. The repository name may be specified on its own (such as <code>nginx-web-app</code>) or it can be prepended with a namespace to group the repository into a category (such as <code>project-a/nginx-web-app</code>).</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>The name to use for the repository. The repository name may be specified on its own (such as <code>nginx-web-app</code>) or it can be prepended with a namespace to group the repository into a category (such as <code>project-a/nginx-web-app</code>).</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateRepositoryResponse {
-    #[doc="<p>The repository that was created.</p>"]
-    #[serde(rename="repository")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The repository that was created.</p>
+    #[serde(rename = "repository")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository: Option<Repository>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteRepositoryPolicyRequest {
-    #[doc="<p>The AWS account ID associated with the registry that contains the repository policy to delete. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that contains the repository policy to delete. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The name of the repository that is associated with the repository policy to delete.</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>The name of the repository that is associated with the repository policy to delete.</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteRepositoryPolicyResponse {
-    #[doc="<p>The JSON repository policy that was deleted from the repository.</p>"]
-    #[serde(rename="policyText")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON repository policy that was deleted from the repository.</p>
+    #[serde(rename = "policyText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_text: Option<String>,
-    #[doc="<p>The registry ID associated with the request.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The registry ID associated with the request.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The repository name associated with the request.</p>"]
-    #[serde(rename="repositoryName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The repository name associated with the request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteRepositoryRequest {
-    #[doc="<p>Force the deletion of the repository if it contains images.</p>"]
-    #[serde(rename="force")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Force the deletion of the repository if it contains images.</p>
+    #[serde(rename = "force")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub force: Option<bool>,
-    #[doc="<p>The AWS account ID associated with the registry that contains the repository to delete. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that contains the repository to delete. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The name of the repository to delete.</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>The name of the repository to delete.</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteRepositoryResponse {
-    #[doc="<p>The repository that was deleted.</p>"]
-    #[serde(rename="repository")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The repository that was deleted.</p>
+    #[serde(rename = "repository")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository: Option<Repository>,
 }
 
-#[doc="<p>An object representing a filter on a <a>DescribeImages</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>An object representing a filter on a <a>DescribeImages</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeImagesFilter {
-    #[doc="<p>The tag status with which to filter your <a>DescribeImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>"]
-    #[serde(rename="tagStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tag status with which to filter your <a>DescribeImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>
+    #[serde(rename = "tagStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeImagesRequest {
-    #[doc="<p>The filter key and value with which to filter your <code>DescribeImages</code> results.</p>"]
-    #[serde(rename="filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The filter key and value with which to filter your <code>DescribeImages</code> results.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<DescribeImagesFilter>,
-    #[doc="<p>The list of image IDs for the requested repository.</p>"]
-    #[serde(rename="imageIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of image IDs for the requested repository.</p>
+    #[serde(rename = "imageIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_ids: Option<Vec<ImageIdentifier>>,
-    #[doc="<p>The maximum number of repository results returned by <code>DescribeImages</code> in paginated output. When this parameter is used, <code>DescribeImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of repository results returned by <code>DescribeImages</code> in paginated output. When this parameter is used, <code>DescribeImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeImages</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeImages</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The AWS account ID associated with the registry that contains the repository in which to describe images. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that contains the repository in which to describe images. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>A list of repositories to describe. If this parameter is omitted, then all repositories in a registry are described.</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>A list of repositories to describe. If this parameter is omitted, then all repositories in a registry are described.</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeImagesResponse {
-    #[doc="<p>A list of <a>ImageDetail</a> objects that contain data about the image.</p>"]
-    #[serde(rename="imageDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of <a>ImageDetail</a> objects that contain data about the image.</p>
+    #[serde(rename = "imageDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_details: Option<Vec<ImageDetail>>,
-    #[doc="<p>The <code>nextToken</code> value to include in a future <code>DescribeImages</code> request. When the results of a <code>DescribeImages</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>nextToken</code> value to include in a future <code>DescribeImages</code> request. When the results of a <code>DescribeImages</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeRepositoriesRequest {
-    #[doc="<p>The maximum number of repository results returned by <code>DescribeRepositories</code> in paginated output. When this parameter is used, <code>DescribeRepositories</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeRepositories</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeRepositories</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of repository results returned by <code>DescribeRepositories</code> in paginated output. When this parameter is used, <code>DescribeRepositories</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeRepositories</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeRepositories</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeRepositories</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeRepositories</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The AWS account ID associated with the registry that contains the repositories to be described. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that contains the repositories to be described. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>A list of repositories to describe. If this parameter is omitted, then all repositories in a registry are described.</p>"]
-    #[serde(rename="repositoryNames")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of repositories to describe. If this parameter is omitted, then all repositories in a registry are described.</p>
+    #[serde(rename = "repositoryNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_names: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeRepositoriesResponse {
-    #[doc="<p>The <code>nextToken</code> value to include in a future <code>DescribeRepositories</code> request. When the results of a <code>DescribeRepositories</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>nextToken</code> value to include in a future <code>DescribeRepositories</code> request. When the results of a <code>DescribeRepositories</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of repository objects corresponding to valid repositories.</p>"]
-    #[serde(rename="repositories")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of repository objects corresponding to valid repositories.</p>
+    #[serde(rename = "repositories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repositories: Option<Vec<Repository>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetAuthorizationTokenRequest {
-    #[doc="<p>A list of AWS account IDs that are associated with the registries for which to get authorization tokens. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of AWS account IDs that are associated with the registries for which to get authorization tokens. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_ids: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetAuthorizationTokenResponse {
-    #[doc="<p>A list of authorization token data objects that correspond to the <code>registryIds</code> values in the request.</p>"]
-    #[serde(rename="authorizationData")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of authorization token data objects that correspond to the <code>registryIds</code> values in the request.</p>
+    #[serde(rename = "authorizationData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_data: Option<Vec<AuthorizationData>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDownloadUrlForLayerRequest {
-    #[doc="<p>The digest of the image layer to download.</p>"]
-    #[serde(rename="layerDigest")]
+    /// <p>The digest of the image layer to download.</p>
+    #[serde(rename = "layerDigest")]
     pub layer_digest: String,
-    #[doc="<p>The AWS account ID associated with the registry that contains the image layer to download. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that contains the image layer to download. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The name of the repository that is associated with the image layer to download.</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>The name of the repository that is associated with the image layer to download.</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDownloadUrlForLayerResponse {
-    #[doc="<p>The pre-signed Amazon S3 download URL for the requested layer.</p>"]
-    #[serde(rename="downloadUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The pre-signed Amazon S3 download URL for the requested layer.</p>
+    #[serde(rename = "downloadUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub download_url: Option<String>,
-    #[doc="<p>The digest of the image layer to download.</p>"]
-    #[serde(rename="layerDigest")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The digest of the image layer to download.</p>
+    #[serde(rename = "layerDigest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub layer_digest: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetRepositoryPolicyRequest {
-    #[doc="<p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The name of the repository whose policy you want to retrieve.</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>The name of the repository whose policy you want to retrieve.</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetRepositoryPolicyResponse {
-    #[doc="<p>The JSON repository policy text associated with the repository.</p>"]
-    #[serde(rename="policyText")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON repository policy text associated with the repository.</p>
+    #[serde(rename = "policyText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_text: Option<String>,
-    #[doc="<p>The registry ID associated with the request.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The registry ID associated with the request.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The repository name associated with the request.</p>"]
-    #[serde(rename="repositoryName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The repository name associated with the request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
 }
 
-#[doc="<p>An object representing an Amazon ECR image.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An object representing an Amazon ECR image.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Image {
-    #[doc="<p>An object containing the image tag and image digest associated with an image.</p>"]
-    #[serde(rename="imageId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An object containing the image tag and image digest associated with an image.</p>
+    #[serde(rename = "imageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_id: Option<ImageIdentifier>,
-    #[doc="<p>The image manifest associated with the image.</p>"]
-    #[serde(rename="imageManifest")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The image manifest associated with the image.</p>
+    #[serde(rename = "imageManifest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_manifest: Option<String>,
-    #[doc="<p>The AWS account ID associated with the registry containing the image.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry containing the image.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The name of the repository associated with the image.</p>"]
-    #[serde(rename="repositoryName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the repository associated with the image.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
 }
 
-#[doc="<p>An object that describes an image returned by a <a>DescribeImages</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An object that describes an image returned by a <a>DescribeImages</a> operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ImageDetail {
-    #[doc="<p>The <code>sha256</code> digest of the image manifest.</p>"]
-    #[serde(rename="imageDigest")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>sha256</code> digest of the image manifest.</p>
+    #[serde(rename = "imageDigest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_digest: Option<String>,
-    #[doc="<p>The date and time, expressed in standard JavaScript date format, at which the current image was pushed to the repository. </p>"]
-    #[serde(rename="imagePushedAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time, expressed in standard JavaScript date format, at which the current image was pushed to the repository. </p>
+    #[serde(rename = "imagePushedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_pushed_at: Option<f64>,
-    #[doc="<p>The size, in bytes, of the image in the repository.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note>"]
-    #[serde(rename="imageSizeInBytes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The size, in bytes, of the image in the repository.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note>
+    #[serde(rename = "imageSizeInBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_size_in_bytes: Option<i64>,
-    #[doc="<p>The list of tags associated with this image.</p>"]
-    #[serde(rename="imageTags")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of tags associated with this image.</p>
+    #[serde(rename = "imageTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_tags: Option<Vec<String>>,
-    #[doc="<p>The AWS account ID associated with the registry to which this image belongs.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry to which this image belongs.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The name of the repository to which this image belongs.</p>"]
-    #[serde(rename="repositoryName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the repository to which this image belongs.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
 }
 
-#[doc="<p>An object representing an Amazon ECR image failure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An object representing an Amazon ECR image failure.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ImageFailure {
-    #[doc="<p>The code associated with the failure.</p>"]
-    #[serde(rename="failureCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The code associated with the failure.</p>
+    #[serde(rename = "failureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_code: Option<String>,
-    #[doc="<p>The reason for the failure.</p>"]
-    #[serde(rename="failureReason")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The reason for the failure.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
-    #[doc="<p>The image ID associated with the failure.</p>"]
-    #[serde(rename="imageId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The image ID associated with the failure.</p>
+    #[serde(rename = "imageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_id: Option<ImageIdentifier>,
 }
 
-#[doc="<p>An object with identifying information for an Amazon ECR image.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>An object with identifying information for an Amazon ECR image.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ImageIdentifier {
-    #[doc="<p>The <code>sha256</code> digest of the image manifest.</p>"]
-    #[serde(rename="imageDigest")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>sha256</code> digest of the image manifest.</p>
+    #[serde(rename = "imageDigest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_digest: Option<String>,
-    #[doc="<p>The tag used for the image.</p>"]
-    #[serde(rename="imageTag")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tag used for the image.</p>
+    #[serde(rename = "imageTag")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_tag: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct InitiateLayerUploadRequest {
-    #[doc="<p>The AWS account ID associated with the registry that you intend to upload layers to. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that you intend to upload layers to. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The name of the repository that you intend to upload layers to.</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>The name of the repository that you intend to upload layers to.</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InitiateLayerUploadResponse {
-    #[doc="<p>The size, in bytes, that Amazon ECR expects future layer part uploads to be.</p>"]
-    #[serde(rename="partSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The size, in bytes, that Amazon ECR expects future layer part uploads to be.</p>
+    #[serde(rename = "partSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub part_size: Option<i64>,
-    #[doc="<p>The upload ID for the layer upload. This parameter is passed to further <a>UploadLayerPart</a> and <a>CompleteLayerUpload</a> operations.</p>"]
-    #[serde(rename="uploadId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The upload ID for the layer upload. This parameter is passed to further <a>UploadLayerPart</a> and <a>CompleteLayerUpload</a> operations.</p>
+    #[serde(rename = "uploadId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub upload_id: Option<String>,
 }
 
-#[doc="<p>An object representing an Amazon ECR image layer.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An object representing an Amazon ECR image layer.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Layer {
-    #[doc="<p>The availability status of the image layer.</p>"]
-    #[serde(rename="layerAvailability")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The availability status of the image layer.</p>
+    #[serde(rename = "layerAvailability")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub layer_availability: Option<String>,
-    #[doc="<p>The <code>sha256</code> digest of the image layer.</p>"]
-    #[serde(rename="layerDigest")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>sha256</code> digest of the image layer.</p>
+    #[serde(rename = "layerDigest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub layer_digest: Option<String>,
-    #[doc="<p>The size, in bytes, of the image layer.</p>"]
-    #[serde(rename="layerSize")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The size, in bytes, of the image layer.</p>
+    #[serde(rename = "layerSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub layer_size: Option<i64>,
-    #[doc="<p>The media type of the layer, such as <code>application/vnd.docker.image.rootfs.diff.tar.gzip</code> or <code>application/vnd.oci.image.layer.v1.tar+gzip</code>.</p>"]
-    #[serde(rename="mediaType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The media type of the layer, such as <code>application/vnd.docker.image.rootfs.diff.tar.gzip</code> or <code>application/vnd.oci.image.layer.v1.tar+gzip</code>.</p>
+    #[serde(rename = "mediaType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub media_type: Option<String>,
 }
 
-#[doc="<p>An object representing an Amazon ECR image layer failure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An object representing an Amazon ECR image layer failure.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct LayerFailure {
-    #[doc="<p>The failure code associated with the failure.</p>"]
-    #[serde(rename="failureCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The failure code associated with the failure.</p>
+    #[serde(rename = "failureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_code: Option<String>,
-    #[doc="<p>The reason for the failure.</p>"]
-    #[serde(rename="failureReason")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The reason for the failure.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
-    #[doc="<p>The layer digest associated with the failure.</p>"]
-    #[serde(rename="layerDigest")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The layer digest associated with the failure.</p>
+    #[serde(rename = "layerDigest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub layer_digest: Option<String>,
 }
 
-#[doc="<p>An object representing a filter on a <a>ListImages</a> operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>An object representing a filter on a <a>ListImages</a> operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListImagesFilter {
-    #[doc="<p>The tag status with which to filter your <a>ListImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>"]
-    #[serde(rename="tagStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tag status with which to filter your <a>ListImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>
+    #[serde(rename = "tagStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListImagesRequest {
-    #[doc="<p>The filter key and value with which to filter your <code>ListImages</code> results.</p>"]
-    #[serde(rename="filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The filter key and value with which to filter your <code>ListImages</code> results.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<ListImagesFilter>,
-    #[doc="<p>The maximum number of image results returned by <code>ListImages</code> in paginated output. When this parameter is used, <code>ListImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>"]
-    #[serde(rename="maxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of image results returned by <code>ListImages</code> in paginated output. When this parameter is used, <code>ListImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>ListImages</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListImages</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The AWS account ID associated with the registry that contains the repository to list images in. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that contains the repository to list images in. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The repository whose image IDs are to be listed.</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>The repository whose image IDs are to be listed.</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListImagesResponse {
-    #[doc="<p>The list of image IDs for the requested repository.</p>"]
-    #[serde(rename="imageIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of image IDs for the requested repository.</p>
+    #[serde(rename = "imageIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_ids: Option<Vec<ImageIdentifier>>,
-    #[doc="<p>The <code>nextToken</code> value to include in a future <code>ListImages</code> request. When the results of a <code>ListImages</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
-    #[serde(rename="nextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListImages</code> request. When the results of a <code>ListImages</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutImageRequest {
-    #[doc="<p>The image manifest corresponding to the image to be uploaded.</p>"]
-    #[serde(rename="imageManifest")]
+    /// <p>The image manifest corresponding to the image to be uploaded.</p>
+    #[serde(rename = "imageManifest")]
     pub image_manifest: String,
-    #[doc="<p>The tag to associate with the image. This parameter is required for images that use the Docker Image Manifest V2 Schema 2 or OCI formats.</p>"]
-    #[serde(rename="imageTag")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The tag to associate with the image. This parameter is required for images that use the Docker Image Manifest V2 Schema 2 or OCI formats.</p>
+    #[serde(rename = "imageTag")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_tag: Option<String>,
-    #[doc="<p>The AWS account ID associated with the registry that contains the repository in which to put the image. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that contains the repository in which to put the image. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The name of the repository in which to put the image.</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>The name of the repository in which to put the image.</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutImageResponse {
-    #[doc="<p>Details of the image uploaded.</p>"]
-    #[serde(rename="image")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Details of the image uploaded.</p>
+    #[serde(rename = "image")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image: Option<Image>,
 }
 
-#[doc="<p>An object representing a repository.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An object representing a repository.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Repository {
-    #[doc="<p>The date and time, in JavaScript date/time format, when the repository was created.</p>"]
-    #[serde(rename="createdAt")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time, in JavaScript date/time format, when the repository was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
-    #[doc="<p>The AWS account ID associated with the registry that contains the repository.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that contains the repository.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) that identifies the repository. The ARN contains the <code>arn:aws:ecr</code> namespace, followed by the region of the repository, the AWS account ID of the repository owner, the repository namespace, and then the repository name. For example, <code>arn:aws:ecr:region:012345678910:repository/test</code>.</p>"]
-    #[serde(rename="repositoryArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) that identifies the repository. The ARN contains the <code>arn:aws:ecr</code> namespace, followed by the region of the repository, the AWS account ID of the repository owner, the repository namespace, and then the repository name. For example, <code>arn:aws:ecr:region:012345678910:repository/test</code>.</p>
+    #[serde(rename = "repositoryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_arn: Option<String>,
-    #[doc="<p>The name of the repository.</p>"]
-    #[serde(rename="repositoryName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the repository.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
-    #[doc="<p>The URI for the repository. You can use this URI for Docker <code>push</code> and <code>pull</code> operations.</p>"]
-    #[serde(rename="repositoryUri")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The URI for the repository. You can use this URI for Docker <code>push</code> and <code>pull</code> operations.</p>
+    #[serde(rename = "repositoryUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_uri: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SetRepositoryPolicyRequest {
-    #[doc="<p>If the policy you are attempting to set on a repository policy would prevent you from setting another policy in the future, you must force the <a>SetRepositoryPolicy</a> operation. This is intended to prevent accidental repository lock outs.</p>"]
-    #[serde(rename="force")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the policy you are attempting to set on a repository policy would prevent you from setting another policy in the future, you must force the <a>SetRepositoryPolicy</a> operation. This is intended to prevent accidental repository lock outs.</p>
+    #[serde(rename = "force")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub force: Option<bool>,
-    #[doc="<p>The JSON repository policy text to apply to the repository.</p>"]
-    #[serde(rename="policyText")]
+    /// <p>The JSON repository policy text to apply to the repository.</p>
+    #[serde(rename = "policyText")]
     pub policy_text: String,
-    #[doc="<p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The name of the repository to receive the policy.</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>The name of the repository to receive the policy.</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SetRepositoryPolicyResponse {
-    #[doc="<p>The JSON repository policy text applied to the repository.</p>"]
-    #[serde(rename="policyText")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The JSON repository policy text applied to the repository.</p>
+    #[serde(rename = "policyText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_text: Option<String>,
-    #[doc="<p>The registry ID associated with the request.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The registry ID associated with the request.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The repository name associated with the request.</p>"]
-    #[serde(rename="repositoryName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The repository name associated with the request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UploadLayerPartRequest {
-    #[doc="<p>The base64-encoded layer part payload.</p>"]
-    #[serde(rename="layerPartBlob")]
-    #[serde(
-                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
-                            default,
-                        )]
+    /// <p>The base64-encoded layer part payload.</p>
+    #[serde(rename = "layerPartBlob")]
+    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
     pub layer_part_blob: Vec<u8>,
-    #[doc="<p>The integer value of the first byte of the layer part.</p>"]
-    #[serde(rename="partFirstByte")]
+    /// <p>The integer value of the first byte of the layer part.</p>
+    #[serde(rename = "partFirstByte")]
     pub part_first_byte: i64,
-    #[doc="<p>The integer value of the last byte of the layer part.</p>"]
-    #[serde(rename="partLastByte")]
+    /// <p>The integer value of the last byte of the layer part.</p>
+    #[serde(rename = "partLastByte")]
     pub part_last_byte: i64,
-    #[doc="<p>The AWS account ID associated with the registry that you are uploading layer parts to. If you do not specify a registry, the default registry is assumed.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS account ID associated with the registry that you are uploading layer parts to. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The name of the repository that you are uploading layer parts to.</p>"]
-    #[serde(rename="repositoryName")]
+    /// <p>The name of the repository that you are uploading layer parts to.</p>
+    #[serde(rename = "repositoryName")]
     pub repository_name: String,
-    #[doc="<p>The upload ID from a previous <a>InitiateLayerUpload</a> operation to associate with the layer part upload.</p>"]
-    #[serde(rename="uploadId")]
+    /// <p>The upload ID from a previous <a>InitiateLayerUpload</a> operation to associate with the layer part upload.</p>
+    #[serde(rename = "uploadId")]
     pub upload_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UploadLayerPartResponse {
-    #[doc="<p>The integer value of the last byte received in the request.</p>"]
-    #[serde(rename="lastByteReceived")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The integer value of the last byte received in the request.</p>
+    #[serde(rename = "lastByteReceived")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_byte_received: Option<i64>,
-    #[doc="<p>The registry ID associated with the request.</p>"]
-    #[serde(rename="registryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The registry ID associated with the request.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    #[doc="<p>The repository name associated with the request.</p>"]
-    #[serde(rename="repositoryName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The repository name associated with the request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
-    #[doc="<p>The upload ID associated with the request.</p>"]
-    #[serde(rename="uploadId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The upload ID associated with the request.</p>
+    #[serde(rename = "uploadId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub upload_id: Option<String>,
 }
 
@@ -716,7 +712,6 @@ pub enum BatchCheckLayerAvailabilityError {
     Unknown(String),
 }
 
-
 impl BatchCheckLayerAvailabilityError {
     pub fn from_body(body: &str) -> BatchCheckLayerAvailabilityError {
         match from_str::<SerdeJsonValue>(body) {
@@ -730,8 +725,16 @@ impl BatchCheckLayerAvailabilityError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidParameterException" => BatchCheckLayerAvailabilityError::InvalidParameter(String::from(error_message)),
-                    "RepositoryNotFoundException" => BatchCheckLayerAvailabilityError::RepositoryNotFound(String::from(error_message)),
+                    "InvalidParameterException" => {
+                        BatchCheckLayerAvailabilityError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryNotFoundException" => {
+                        BatchCheckLayerAvailabilityError::RepositoryNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ServerException" => {
                         BatchCheckLayerAvailabilityError::Server(String::from(error_message))
                     }
@@ -804,7 +807,6 @@ pub enum BatchDeleteImageError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl BatchDeleteImageError {
     pub fn from_body(body: &str) -> BatchDeleteImageError {
@@ -893,7 +895,6 @@ pub enum BatchGetImageError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl BatchGetImageError {
     pub fn from_body(body: &str) -> BatchGetImageError {
@@ -992,7 +993,6 @@ pub enum CompleteLayerUploadError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CompleteLayerUploadError {
     pub fn from_body(body: &str) -> CompleteLayerUploadError {
@@ -1108,7 +1108,6 @@ pub enum CreateRepositoryError {
     Unknown(String),
 }
 
-
 impl CreateRepositoryError {
     pub fn from_body(body: &str) -> CreateRepositoryError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1202,7 +1201,6 @@ pub enum DeleteRepositoryError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteRepositoryError {
     pub fn from_body(body: &str) -> DeleteRepositoryError {
@@ -1298,7 +1296,6 @@ pub enum DeleteRepositoryPolicyError {
     Unknown(String),
 }
 
-
 impl DeleteRepositoryPolicyError {
     pub fn from_body(body: &str) -> DeleteRepositoryPolicyError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1318,7 +1315,11 @@ impl DeleteRepositoryPolicyError {
                     "RepositoryNotFoundException" => {
                         DeleteRepositoryPolicyError::RepositoryNotFound(String::from(error_message))
                     }
-                    "RepositoryPolicyNotFoundException" => DeleteRepositoryPolicyError::RepositoryPolicyNotFound(String::from(error_message)),
+                    "RepositoryPolicyNotFoundException" => {
+                        DeleteRepositoryPolicyError::RepositoryPolicyNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ServerException" => {
                         DeleteRepositoryPolicyError::Server(String::from(error_message))
                     }
@@ -1394,7 +1395,6 @@ pub enum DescribeImagesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeImagesError {
     pub fn from_body(body: &str) -> DescribeImagesError {
@@ -1488,7 +1488,6 @@ pub enum DescribeRepositoriesError {
     Unknown(String),
 }
 
-
 impl DescribeRepositoriesError {
     pub fn from_body(body: &str) -> DescribeRepositoriesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1578,7 +1577,6 @@ pub enum GetAuthorizationTokenError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetAuthorizationTokenError {
     pub fn from_body(body: &str) -> GetAuthorizationTokenError {
@@ -1671,7 +1669,6 @@ pub enum GetDownloadUrlForLayerError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetDownloadUrlForLayerError {
     pub fn from_body(body: &str) -> GetDownloadUrlForLayerError {
@@ -1775,7 +1772,6 @@ pub enum GetRepositoryPolicyError {
     Unknown(String),
 }
 
-
 impl GetRepositoryPolicyError {
     pub fn from_body(body: &str) -> GetRepositoryPolicyError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1795,7 +1791,11 @@ impl GetRepositoryPolicyError {
                     "RepositoryNotFoundException" => {
                         GetRepositoryPolicyError::RepositoryNotFound(String::from(error_message))
                     }
-                    "RepositoryPolicyNotFoundException" => GetRepositoryPolicyError::RepositoryPolicyNotFound(String::from(error_message)),
+                    "RepositoryPolicyNotFoundException" => {
+                        GetRepositoryPolicyError::RepositoryPolicyNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ServerException" => {
                         GetRepositoryPolicyError::Server(String::from(error_message))
                     }
@@ -1869,7 +1869,6 @@ pub enum InitiateLayerUploadError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl InitiateLayerUploadError {
     pub fn from_body(body: &str) -> InitiateLayerUploadError {
@@ -1963,7 +1962,6 @@ pub enum ListImagesError {
     Unknown(String),
 }
 
-
 impl ListImagesError {
     pub fn from_body(body: &str) -> ListImagesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2055,7 +2053,6 @@ pub enum PutImageError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl PutImageError {
     pub fn from_body(body: &str) -> PutImageError {
@@ -2155,7 +2152,6 @@ pub enum SetRepositoryPolicyError {
     Unknown(String),
 }
 
-
 impl SetRepositoryPolicyError {
     pub fn from_body(body: &str) -> SetRepositoryPolicyError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2254,7 +2250,6 @@ pub enum UploadLayerPartError {
     Unknown(String),
 }
 
-
 impl UploadLayerPartError {
     pub fn from_body(body: &str) -> UploadLayerPartError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2339,112 +2334,107 @@ impl Error for UploadLayerPartError {
 /// Trait representing the capabilities of the Amazon ECR API. Amazon ECR clients implement this trait.
 pub trait Ecr {
     #[doc="<p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-    fn batch_check_layer_availability
-        (&self,
-         input: &BatchCheckLayerAvailabilityRequest)
-         -> Result<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError>;
-
+    fn batch_check_layer_availability(
+        &self,
+        input: &BatchCheckLayerAvailabilityRequest,
+    ) -> Result<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError>;
 
     #[doc="<p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>"]
-    fn batch_delete_image(&self,
-                          input: &BatchDeleteImageRequest)
-                          -> Result<BatchDeleteImageResponse, BatchDeleteImageError>;
-
+    fn batch_delete_image(
+        &self,
+        input: &BatchDeleteImageRequest,
+    ) -> Result<BatchDeleteImageResponse, BatchDeleteImageError>;
 
     #[doc="<p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>"]
-    fn batch_get_image(&self,
-                       input: &BatchGetImageRequest)
-                       -> Result<BatchGetImageResponse, BatchGetImageError>;
-
+    fn batch_get_image(
+        &self,
+        input: &BatchGetImageRequest,
+    ) -> Result<BatchGetImageResponse, BatchGetImageError>;
 
     #[doc="<p>Inform Amazon ECR that the image layer upload for a specified registry, repository name, and upload ID, has completed. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-    fn complete_layer_upload(&self,
-                             input: &CompleteLayerUploadRequest)
-                             -> Result<CompleteLayerUploadResponse, CompleteLayerUploadError>;
+    fn complete_layer_upload(
+        &self,
+        input: &CompleteLayerUploadRequest,
+    ) -> Result<CompleteLayerUploadResponse, CompleteLayerUploadError>;
 
-
-    #[doc="<p>Creates an image repository.</p>"]
-    fn create_repository(&self,
-                         input: &CreateRepositoryRequest)
-                         -> Result<CreateRepositoryResponse, CreateRepositoryError>;
-
+    #[doc = "<p>Creates an image repository.</p>"]
+    fn create_repository(
+        &self,
+        input: &CreateRepositoryRequest,
+    ) -> Result<CreateRepositoryResponse, CreateRepositoryError>;
 
     #[doc="<p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>"]
-    fn delete_repository(&self,
-                         input: &DeleteRepositoryRequest)
-                         -> Result<DeleteRepositoryResponse, DeleteRepositoryError>;
+    fn delete_repository(
+        &self,
+        input: &DeleteRepositoryRequest,
+    ) -> Result<DeleteRepositoryResponse, DeleteRepositoryError>;
 
-
-    #[doc="<p>Deletes the repository policy from a specified repository.</p>"]
-    fn delete_repository_policy
-        (&self,
-         input: &DeleteRepositoryPolicyRequest)
-         -> Result<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError>;
-
+    #[doc = "<p>Deletes the repository policy from a specified repository.</p>"]
+    fn delete_repository_policy(
+        &self,
+        input: &DeleteRepositoryPolicyRequest,
+    ) -> Result<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError>;
 
     #[doc="<p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note>"]
-    fn describe_images(&self,
-                       input: &DescribeImagesRequest)
-                       -> Result<DescribeImagesResponse, DescribeImagesError>;
+    fn describe_images(
+        &self,
+        input: &DescribeImagesRequest,
+    ) -> Result<DescribeImagesResponse, DescribeImagesError>;
 
-
-    #[doc="<p>Describes image repositories in a registry.</p>"]
-    fn describe_repositories(&self,
-                             input: &DescribeRepositoriesRequest)
-                             -> Result<DescribeRepositoriesResponse, DescribeRepositoriesError>;
-
+    #[doc = "<p>Describes image repositories in a registry.</p>"]
+    fn describe_repositories(
+        &self,
+        input: &DescribeRepositoriesRequest,
+    ) -> Result<DescribeRepositoriesResponse, DescribeRepositoriesError>;
 
     #[doc="<p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>"]
-    fn get_authorization_token
-        (&self,
-         input: &GetAuthorizationTokenRequest)
-         -> Result<GetAuthorizationTokenResponse, GetAuthorizationTokenError>;
-
+    fn get_authorization_token(
+        &self,
+        input: &GetAuthorizationTokenRequest,
+    ) -> Result<GetAuthorizationTokenResponse, GetAuthorizationTokenError>;
 
     #[doc="<p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-    fn get_download_url_for_layer
-        (&self,
-         input: &GetDownloadUrlForLayerRequest)
-         -> Result<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError>;
+    fn get_download_url_for_layer(
+        &self,
+        input: &GetDownloadUrlForLayerRequest,
+    ) -> Result<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError>;
 
-
-    #[doc="<p>Retrieves the repository policy for a specified repository.</p>"]
-    fn get_repository_policy(&self,
-                             input: &GetRepositoryPolicyRequest)
-                             -> Result<GetRepositoryPolicyResponse, GetRepositoryPolicyError>;
-
+    #[doc = "<p>Retrieves the repository policy for a specified repository.</p>"]
+    fn get_repository_policy(
+        &self,
+        input: &GetRepositoryPolicyRequest,
+    ) -> Result<GetRepositoryPolicyResponse, GetRepositoryPolicyError>;
 
     #[doc="<p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-    fn initiate_layer_upload(&self,
-                             input: &InitiateLayerUploadRequest)
-                             -> Result<InitiateLayerUploadResponse, InitiateLayerUploadError>;
-
+    fn initiate_layer_upload(
+        &self,
+        input: &InitiateLayerUploadRequest,
+    ) -> Result<InitiateLayerUploadResponse, InitiateLayerUploadError>;
 
     #[doc="<p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>"]
-    fn list_images(&self,
-                   input: &ListImagesRequest)
-                   -> Result<ListImagesResponse, ListImagesError>;
-
+    fn list_images(&self, input: &ListImagesRequest)
+        -> Result<ListImagesResponse, ListImagesError>;
 
     #[doc="<p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
     fn put_image(&self, input: &PutImageRequest) -> Result<PutImageResponse, PutImageError>;
 
-
     #[doc="<p>Applies a repository policy on a specified repository to control access permissions.</p>"]
-    fn set_repository_policy(&self,
-                             input: &SetRepositoryPolicyRequest)
-                             -> Result<SetRepositoryPolicyResponse, SetRepositoryPolicyError>;
-
+    fn set_repository_policy(
+        &self,
+        input: &SetRepositoryPolicyRequest,
+    ) -> Result<SetRepositoryPolicyResponse, SetRepositoryPolicyError>;
 
     #[doc="<p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-    fn upload_layer_part(&self,
-                         input: &UploadLayerPartRequest)
-                         -> Result<UploadLayerPartResponse, UploadLayerPartError>;
+    fn upload_layer_part(
+        &self,
+        input: &UploadLayerPartRequest,
+    ) -> Result<UploadLayerPartResponse, UploadLayerPartError>;
 }
 /// A client for the Amazon ECR API.
 pub struct EcrClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -2452,8 +2442,9 @@ pub struct EcrClient<P, D>
 }
 
 impl<P, D> EcrClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         EcrClient {
@@ -2465,19 +2456,22 @@ impl<P, D> EcrClient<P, D>
 }
 
 impl<P, D> Ecr for EcrClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-    fn batch_check_layer_availability
-        (&self,
-         input: &BatchCheckLayerAvailabilityRequest)
-         -> Result<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError> {
+    fn batch_check_layer_availability(
+        &self,
+        input: &BatchCheckLayerAvailabilityRequest,
+    ) -> Result<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.BatchCheckLayerAvailability");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.BatchCheckLayerAvailability",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2489,27 +2483,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchCheckLayerAvailabilityResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<BatchCheckLayerAvailabilityResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchCheckLayerAvailabilityError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(BatchCheckLayerAvailabilityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>"]
-    fn batch_delete_image(&self,
-                          input: &BatchDeleteImageRequest)
-                          -> Result<BatchDeleteImageResponse, BatchDeleteImageError> {
+    fn batch_delete_image(
+        &self,
+        input: &BatchDeleteImageRequest,
+    ) -> Result<BatchDeleteImageResponse, BatchDeleteImageError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.BatchDeleteImage");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.BatchDeleteImage",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2521,28 +2520,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchDeleteImageResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<BatchDeleteImageResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchDeleteImageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(BatchDeleteImageError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>"]
-    fn batch_get_image(&self,
-                       input: &BatchGetImageRequest)
-                       -> Result<BatchGetImageResponse, BatchGetImageError> {
+    fn batch_get_image(
+        &self,
+        input: &BatchGetImageRequest,
+    ) -> Result<BatchGetImageResponse, BatchGetImageError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.BatchGetImage");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.BatchGetImage",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2554,28 +2557,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetImageResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<BatchGetImageResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchGetImageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(BatchGetImageError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Inform Amazon ECR that the image layer upload for a specified registry, repository name, and upload ID, has completed. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-    fn complete_layer_upload(&self,
-                             input: &CompleteLayerUploadRequest)
-                             -> Result<CompleteLayerUploadResponse, CompleteLayerUploadError> {
+    fn complete_layer_upload(
+        &self,
+        input: &CompleteLayerUploadRequest,
+    ) -> Result<CompleteLayerUploadResponse, CompleteLayerUploadError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.CompleteLayerUpload");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.CompleteLayerUpload",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2587,26 +2594,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CompleteLayerUploadResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CompleteLayerUploadResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CompleteLayerUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CompleteLayerUploadError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates an image repository.</p>"]
-    fn create_repository(&self,
-                         input: &CreateRepositoryRequest)
-                         -> Result<CreateRepositoryResponse, CreateRepositoryError> {
+    #[doc = "<p>Creates an image repository.</p>"]
+    fn create_repository(
+        &self,
+        input: &CreateRepositoryRequest,
+    ) -> Result<CreateRepositoryResponse, CreateRepositoryError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.CreateRepository");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.CreateRepository",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2618,28 +2631,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateRepositoryResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateRepositoryResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateRepositoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateRepositoryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>"]
-    fn delete_repository(&self,
-                         input: &DeleteRepositoryRequest)
-                         -> Result<DeleteRepositoryResponse, DeleteRepositoryError> {
+    fn delete_repository(
+        &self,
+        input: &DeleteRepositoryRequest,
+    ) -> Result<DeleteRepositoryResponse, DeleteRepositoryError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.DeleteRepository");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.DeleteRepository",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2651,29 +2668,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteRepositoryResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteRepositoryResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteRepositoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteRepositoryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes the repository policy from a specified repository.</p>"]
-    fn delete_repository_policy
-        (&self,
-         input: &DeleteRepositoryPolicyRequest)
-         -> Result<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError> {
+    #[doc = "<p>Deletes the repository policy from a specified repository.</p>"]
+    fn delete_repository_policy(
+        &self,
+        input: &DeleteRepositoryPolicyRequest,
+    ) -> Result<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.DeleteRepositoryPolicy");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.DeleteRepositoryPolicy",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2685,26 +2705,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteRepositoryPolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteRepositoryPolicyResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteRepositoryPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteRepositoryPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note>"]
-    fn describe_images(&self,
-                       input: &DescribeImagesRequest)
-                       -> Result<DescribeImagesResponse, DescribeImagesError> {
+    fn describe_images(
+        &self,
+        input: &DescribeImagesRequest,
+    ) -> Result<DescribeImagesResponse, DescribeImagesError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.DescribeImages");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.DescribeImages",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2716,28 +2742,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeImagesResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeImagesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeImagesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeImagesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes image repositories in a registry.</p>"]
-    fn describe_repositories(&self,
-                             input: &DescribeRepositoriesRequest)
-                             -> Result<DescribeRepositoriesResponse, DescribeRepositoriesError> {
+    #[doc = "<p>Describes image repositories in a registry.</p>"]
+    fn describe_repositories(
+        &self,
+        input: &DescribeRepositoriesRequest,
+    ) -> Result<DescribeRepositoriesResponse, DescribeRepositoriesError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.DescribeRepositories");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.DescribeRepositories",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2749,27 +2779,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeRepositoriesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeRepositoriesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeRepositoriesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeRepositoriesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>"]
-    fn get_authorization_token
-        (&self,
-         input: &GetAuthorizationTokenRequest)
-         -> Result<GetAuthorizationTokenResponse, GetAuthorizationTokenError> {
+    fn get_authorization_token(
+        &self,
+        input: &GetAuthorizationTokenRequest,
+    ) -> Result<GetAuthorizationTokenResponse, GetAuthorizationTokenError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.GetAuthorizationToken");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.GetAuthorizationToken",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2781,27 +2816,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetAuthorizationTokenResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetAuthorizationTokenResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetAuthorizationTokenError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetAuthorizationTokenError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-    fn get_download_url_for_layer
-        (&self,
-         input: &GetDownloadUrlForLayerRequest)
-         -> Result<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError> {
+    fn get_download_url_for_layer(
+        &self,
+        input: &GetDownloadUrlForLayerRequest,
+    ) -> Result<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.GetDownloadUrlForLayer");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.GetDownloadUrlForLayer",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2813,26 +2853,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDownloadUrlForLayerResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetDownloadUrlForLayerResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDownloadUrlForLayerError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDownloadUrlForLayerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves the repository policy for a specified repository.</p>"]
-    fn get_repository_policy(&self,
-                             input: &GetRepositoryPolicyRequest)
-                             -> Result<GetRepositoryPolicyResponse, GetRepositoryPolicyError> {
+    #[doc = "<p>Retrieves the repository policy for a specified repository.</p>"]
+    fn get_repository_policy(
+        &self,
+        input: &GetRepositoryPolicyRequest,
+    ) -> Result<GetRepositoryPolicyResponse, GetRepositoryPolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.GetRepositoryPolicy");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.GetRepositoryPolicy",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2844,26 +2890,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetRepositoryPolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetRepositoryPolicyResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetRepositoryPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetRepositoryPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-    fn initiate_layer_upload(&self,
-                             input: &InitiateLayerUploadRequest)
-                             -> Result<InitiateLayerUploadResponse, InitiateLayerUploadError> {
+    fn initiate_layer_upload(
+        &self,
+        input: &InitiateLayerUploadRequest,
+    ) -> Result<InitiateLayerUploadResponse, InitiateLayerUploadError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.InitiateLayerUpload");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.InitiateLayerUpload",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2875,26 +2927,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<InitiateLayerUploadResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<InitiateLayerUploadResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(InitiateLayerUploadError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(InitiateLayerUploadError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>"]
-    fn list_images(&self,
-                   input: &ListImagesRequest)
-                   -> Result<ListImagesResponse, ListImagesError> {
+    fn list_images(
+        &self,
+        input: &ListImagesRequest,
+    ) -> Result<ListImagesResponse, ListImagesError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.ListImages");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.ListImages",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2906,26 +2964,29 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListImagesResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListImagesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListImagesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListImagesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
     fn put_image(&self, input: &PutImageRequest) -> Result<PutImageResponse, PutImageError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.PutImage");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.PutImage",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2937,28 +2998,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutImageResponse>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<PutImageResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutImageError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutImageError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Applies a repository policy on a specified repository to control access permissions.</p>"]
-    fn set_repository_policy(&self,
-                             input: &SetRepositoryPolicyRequest)
-                             -> Result<SetRepositoryPolicyResponse, SetRepositoryPolicyError> {
+    fn set_repository_policy(
+        &self,
+        input: &SetRepositoryPolicyRequest,
+    ) -> Result<SetRepositoryPolicyResponse, SetRepositoryPolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.SetRepositoryPolicy");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.SetRepositoryPolicy",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2970,26 +3035,32 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SetRepositoryPolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<SetRepositoryPolicyResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SetRepositoryPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SetRepositoryPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
-    fn upload_layer_part(&self,
-                         input: &UploadLayerPartRequest)
-                         -> Result<UploadLayerPartResponse, UploadLayerPartError> {
+    fn upload_layer_part(
+        &self,
+        input: &UploadLayerPartRequest,
+    ) -> Result<UploadLayerPartResponse, UploadLayerPartError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonEC2ContainerRegistry_V20150921.UploadLayerPart");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.UploadLayerPart",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3001,14 +3072,16 @@ impl<P, D> Ecr for EcrClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UploadLayerPartResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UploadLayerPartResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UploadLayerPartError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UploadLayerPartError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

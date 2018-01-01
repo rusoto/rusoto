@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,456 +27,456 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchGetNamedQueryInput {
-    #[doc="<p>An array of query IDs.</p>"]
-    #[serde(rename="NamedQueryIds")]
+    /// <p>An array of query IDs.</p>
+    #[serde(rename = "NamedQueryIds")]
     pub named_query_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchGetNamedQueryOutput {
-    #[doc="<p>Information about the named query IDs submitted.</p>"]
-    #[serde(rename="NamedQueries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the named query IDs submitted.</p>
+    #[serde(rename = "NamedQueries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub named_queries: Option<Vec<NamedQuery>>,
-    #[doc="<p>Information about provided query IDs.</p>"]
-    #[serde(rename="UnprocessedNamedQueryIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about provided query IDs.</p>
+    #[serde(rename = "UnprocessedNamedQueryIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_named_query_ids: Option<Vec<UnprocessedNamedQueryId>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchGetQueryExecutionInput {
-    #[doc="<p>An array of query execution IDs.</p>"]
-    #[serde(rename="QueryExecutionIds")]
+    /// <p>An array of query execution IDs.</p>
+    #[serde(rename = "QueryExecutionIds")]
     pub query_execution_ids: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchGetQueryExecutionOutput {
-    #[doc="<p>Information about a query execution.</p>"]
-    #[serde(rename="QueryExecutions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about a query execution.</p>
+    #[serde(rename = "QueryExecutions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub query_executions: Option<Vec<QueryExecution>>,
-    #[doc="<p>Information about the query executions that failed to run.</p>"]
-    #[serde(rename="UnprocessedQueryExecutionIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the query executions that failed to run.</p>
+    #[serde(rename = "UnprocessedQueryExecutionIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_query_execution_ids: Option<Vec<UnprocessedQueryExecutionId>>,
 }
 
-#[doc="<p>Information about the columns in a query execution result.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about the columns in a query execution result.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ColumnInfo {
-    #[doc="<p>Indicates whether values in the column are case-sensitive.</p>"]
-    #[serde(rename="CaseSensitive")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether values in the column are case-sensitive.</p>
+    #[serde(rename = "CaseSensitive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub case_sensitive: Option<bool>,
-    #[doc="<p>The catalog to which the query results belong.</p>"]
-    #[serde(rename="CatalogName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The catalog to which the query results belong.</p>
+    #[serde(rename = "CatalogName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_name: Option<String>,
-    #[doc="<p>A column label.</p>"]
-    #[serde(rename="Label")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A column label.</p>
+    #[serde(rename = "Label")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
-    #[doc="<p>The name of the column.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the column.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>Indicates the column's nullable status.</p>"]
-    #[serde(rename="Nullable")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates the column's nullable status.</p>
+    #[serde(rename = "Nullable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub nullable: Option<String>,
-    #[doc="<p>For <code>DECIMAL</code> data types, specifies the total number of digits, up to 38. For performance reasons, we recommend up to 18 digits.</p>"]
-    #[serde(rename="Precision")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For <code>DECIMAL</code> data types, specifies the total number of digits, up to 38. For performance reasons, we recommend up to 18 digits.</p>
+    #[serde(rename = "Precision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub precision: Option<i64>,
-    #[doc="<p>For <code>DECIMAL</code> data types, specifies the total number of digits in the fractional part of the value. Defaults to 0.</p>"]
-    #[serde(rename="Scale")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For <code>DECIMAL</code> data types, specifies the total number of digits in the fractional part of the value. Defaults to 0.</p>
+    #[serde(rename = "Scale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub scale: Option<i64>,
-    #[doc="<p>The schema name (database name) to which the query results belong.</p>"]
-    #[serde(rename="SchemaName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The schema name (database name) to which the query results belong.</p>
+    #[serde(rename = "SchemaName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_name: Option<String>,
-    #[doc="<p>The table name for the query results.</p>"]
-    #[serde(rename="TableName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The table name for the query results.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name: Option<String>,
-    #[doc="<p>The data type of the column.</p>"]
-    #[serde(rename="Type")]
+    /// <p>The data type of the column.</p>
+    #[serde(rename = "Type")]
     pub type_: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateNamedQueryInput {
-    #[doc="<p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>CreateNamedQuery</code> request is received, the same response is returned and another query is not created. If a parameter has changed, for example, the <code>QueryString</code>, an error is returned.</p> <important> <p>This token is listed as not required because AWS SDKs (for example the AWS SDK for Java) auto-generate the token for users. If you are not using the AWS SDK or the AWS CLI, you must provide this token or the action will fail.</p> </important>"]
-    #[serde(rename="ClientRequestToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>CreateNamedQuery</code> request is received, the same response is returned and another query is not created. If a parameter has changed, for example, the <code>QueryString</code>, an error is returned.</p> <important> <p>This token is listed as not required because AWS SDKs (for example the AWS SDK for Java) auto-generate the token for users. If you are not using the AWS SDK or the AWS CLI, you must provide this token or the action will fail.</p> </important>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    #[doc="<p>The database to which the query belongs.</p>"]
-    #[serde(rename="Database")]
+    /// <p>The database to which the query belongs.</p>
+    #[serde(rename = "Database")]
     pub database: String,
-    #[doc="<p>A brief explanation of the query.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A brief explanation of the query.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The plain language name for the query.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The plain language name for the query.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The text of the query itself. In other words, all query statements.</p>"]
-    #[serde(rename="QueryString")]
+    /// <p>The text of the query itself. In other words, all query statements.</p>
+    #[serde(rename = "QueryString")]
     pub query_string: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateNamedQueryOutput {
-    #[doc="<p>The unique ID of the query.</p>"]
-    #[serde(rename="NamedQueryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique ID of the query.</p>
+    #[serde(rename = "NamedQueryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub named_query_id: Option<String>,
 }
 
-#[doc="<p>A piece of data (a field in the table).</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A piece of data (a field in the table).</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Datum {
-    #[doc="<p>The value of the datum.</p>"]
-    #[serde(rename="VarCharValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value of the datum.</p>
+    #[serde(rename = "VarCharValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub var_char_value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteNamedQueryInput {
-    #[doc="<p>The unique ID of the query to delete.</p>"]
-    #[serde(rename="NamedQueryId")]
+    /// <p>The unique ID of the query to delete.</p>
+    #[serde(rename = "NamedQueryId")]
     pub named_query_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteNamedQueryOutput;
 
-#[doc="<p>If query results are encrypted in Amazon S3, indicates the Amazon S3 encryption option used.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>If query results are encrypted in Amazon S3, indicates the Amazon S3 encryption option used.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct EncryptionConfiguration {
-    #[doc="<p>Indicates whether Amazon S3 server-side encryption with Amazon S3-managed keys (<code>SSE-S3</code>), server-side encryption with KMS-managed keys (<code>SSE-KMS</code>), or client-side encryption with KMS-managed keys (CSE-KMS) is used.</p>"]
-    #[serde(rename="EncryptionOption")]
+    /// <p>Indicates whether Amazon S3 server-side encryption with Amazon S3-managed keys (<code>SSE-S3</code>), server-side encryption with KMS-managed keys (<code>SSE-KMS</code>), or client-side encryption with KMS-managed keys (CSE-KMS) is used.</p>
+    #[serde(rename = "EncryptionOption")]
     pub encryption_option: String,
-    #[doc="<p>For <code>SSE-KMS</code> and <code>CSE-KMS</code>, this is the KMS key ARN or ID.</p>"]
-    #[serde(rename="KmsKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>For <code>SSE-KMS</code> and <code>CSE-KMS</code>, this is the KMS key ARN or ID.</p>
+    #[serde(rename = "KmsKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetNamedQueryInput {
-    #[doc="<p>The unique ID of the query. Use <a>ListNamedQueries</a> to get query IDs.</p>"]
-    #[serde(rename="NamedQueryId")]
+    /// <p>The unique ID of the query. Use <a>ListNamedQueries</a> to get query IDs.</p>
+    #[serde(rename = "NamedQueryId")]
     pub named_query_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetNamedQueryOutput {
-    #[doc="<p>Information about the query.</p>"]
-    #[serde(rename="NamedQuery")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the query.</p>
+    #[serde(rename = "NamedQuery")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub named_query: Option<NamedQuery>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetQueryExecutionInput {
-    #[doc="<p>The unique ID of the query execution.</p>"]
-    #[serde(rename="QueryExecutionId")]
+    /// <p>The unique ID of the query execution.</p>
+    #[serde(rename = "QueryExecutionId")]
     pub query_execution_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetQueryExecutionOutput {
-    #[doc="<p>Information about the query execution.</p>"]
-    #[serde(rename="QueryExecution")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the query execution.</p>
+    #[serde(rename = "QueryExecution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub query_execution: Option<QueryExecution>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetQueryResultsInput {
-    #[doc="<p>The maximum number of results (rows) to return in this request.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of results (rows) to return in this request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token that specifies where to start pagination if a previous request was truncated.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token that specifies where to start pagination if a previous request was truncated.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The unique ID of the query execution.</p>"]
-    #[serde(rename="QueryExecutionId")]
+    /// <p>The unique ID of the query execution.</p>
+    #[serde(rename = "QueryExecutionId")]
     pub query_execution_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetQueryResultsOutput {
-    #[doc="<p>A token to be used by the next request if this request is truncated.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token to be used by the next request if this request is truncated.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The results of the query execution.</p>"]
-    #[serde(rename="ResultSet")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The results of the query execution.</p>
+    #[serde(rename = "ResultSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result_set: Option<ResultSet>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListNamedQueriesInput {
-    #[doc="<p>The maximum number of queries to return in this request.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of queries to return in this request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token that specifies where to start pagination if a previous request was truncated.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token that specifies where to start pagination if a previous request was truncated.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListNamedQueriesOutput {
-    #[doc="<p>The list of unique query IDs.</p>"]
-    #[serde(rename="NamedQueryIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of unique query IDs.</p>
+    #[serde(rename = "NamedQueryIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub named_query_ids: Option<Vec<String>>,
-    #[doc="<p>A token to be used by the next request if this request is truncated.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token to be used by the next request if this request is truncated.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListQueryExecutionsInput {
-    #[doc="<p>The maximum number of query executions to return in this request.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of query executions to return in this request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token that specifies where to start pagination if a previous request was truncated.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token that specifies where to start pagination if a previous request was truncated.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListQueryExecutionsOutput {
-    #[doc="<p>A token to be used by the next request if this request is truncated.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token to be used by the next request if this request is truncated.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The unique IDs of each query execution as an array of strings.</p>"]
-    #[serde(rename="QueryExecutionIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique IDs of each query execution as an array of strings.</p>
+    #[serde(rename = "QueryExecutionIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub query_execution_ids: Option<Vec<String>>,
 }
 
-#[doc="<p>A query, where <code>QueryString</code> is the SQL query statements that comprise the query.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A query, where <code>QueryString</code> is the SQL query statements that comprise the query.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct NamedQuery {
-    #[doc="<p>The database to which the query belongs.</p>"]
-    #[serde(rename="Database")]
+    /// <p>The database to which the query belongs.</p>
+    #[serde(rename = "Database")]
     pub database: String,
-    #[doc="<p>A brief description of the query.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A brief description of the query.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The plain-language name of the query.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The plain-language name of the query.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The unique identifier of the query.</p>"]
-    #[serde(rename="NamedQueryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier of the query.</p>
+    #[serde(rename = "NamedQueryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub named_query_id: Option<String>,
-    #[doc="<p>The SQL query statements that comprise the query.</p>"]
-    #[serde(rename="QueryString")]
+    /// <p>The SQL query statements that comprise the query.</p>
+    #[serde(rename = "QueryString")]
     pub query_string: String,
 }
 
-#[doc="<p>Information about a single instance of a query execution.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a single instance of a query execution.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct QueryExecution {
-    #[doc="<p>The SQL query statements which the query execution ran.</p>"]
-    #[serde(rename="Query")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SQL query statements which the query execution ran.</p>
+    #[serde(rename = "Query")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub query: Option<String>,
-    #[doc="<p>The database in which the query execution occurred.</p>"]
-    #[serde(rename="QueryExecutionContext")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The database in which the query execution occurred.</p>
+    #[serde(rename = "QueryExecutionContext")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub query_execution_context: Option<QueryExecutionContext>,
-    #[doc="<p>The unique identifier for each query execution.</p>"]
-    #[serde(rename="QueryExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier for each query execution.</p>
+    #[serde(rename = "QueryExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub query_execution_id: Option<String>,
-    #[doc="<p>The location in Amazon S3 where query results were stored and the encryption option, if any, used for query results.</p>"]
-    #[serde(rename="ResultConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The location in Amazon S3 where query results were stored and the encryption option, if any, used for query results.</p>
+    #[serde(rename = "ResultConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result_configuration: Option<ResultConfiguration>,
-    #[doc="<p>The amount of data scanned during the query execution and the amount of time that it took to execute.</p>"]
-    #[serde(rename="Statistics")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The amount of data scanned during the query execution and the amount of time that it took to execute.</p>
+    #[serde(rename = "Statistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub statistics: Option<QueryExecutionStatistics>,
-    #[doc="<p>The completion date, current state, submission time, and state change reason (if applicable) for the query execution.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The completion date, current state, submission time, and state change reason (if applicable) for the query execution.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<QueryExecutionStatus>,
 }
 
-#[doc="<p>The database in which the query execution occurs.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The database in which the query execution occurs.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct QueryExecutionContext {
-    #[doc="<p>The name of the database.</p>"]
-    #[serde(rename="Database")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the database.</p>
+    #[serde(rename = "Database")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub database: Option<String>,
 }
 
-#[doc="<p>The amount of data scanned during the query execution and the amount of time that it took to execute.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The amount of data scanned during the query execution and the amount of time that it took to execute.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct QueryExecutionStatistics {
-    #[doc="<p>The number of bytes in the data that was queried.</p>"]
-    #[serde(rename="DataScannedInBytes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of bytes in the data that was queried.</p>
+    #[serde(rename = "DataScannedInBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub data_scanned_in_bytes: Option<i64>,
-    #[doc="<p>The number of milliseconds that the query took to execute.</p>"]
-    #[serde(rename="EngineExecutionTimeInMillis")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of milliseconds that the query took to execute.</p>
+    #[serde(rename = "EngineExecutionTimeInMillis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_execution_time_in_millis: Option<i64>,
 }
 
-#[doc="<p>The completion date, current state, submission time, and state change reason (if applicable) for the query execution.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The completion date, current state, submission time, and state change reason (if applicable) for the query execution.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct QueryExecutionStatus {
-    #[doc="<p>The date and time that the query completed.</p>"]
-    #[serde(rename="CompletionDateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time that the query completed.</p>
+    #[serde(rename = "CompletionDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_date_time: Option<f64>,
-    #[doc="<p>The state of query execution. <code>SUBMITTED</code> indicates that the query is queued for execution. <code>RUNNING</code> indicates that the query is scanning data and returning results. <code>SUCCEEDED</code> indicates that the query completed without error. <code>FAILED</code> indicates that the query experienced an error and did not complete processing. <code>CANCELLED</code> indicates that user input interrupted query execution.</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The state of query execution. <code>SUBMITTED</code> indicates that the query is queued for execution. <code>RUNNING</code> indicates that the query is scanning data and returning results. <code>SUCCEEDED</code> indicates that the query completed without error. <code>FAILED</code> indicates that the query experienced an error and did not complete processing. <code>CANCELLED</code> indicates that user input interrupted query execution.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    #[doc="<p>Further detail about the status of the query.</p>"]
-    #[serde(rename="StateChangeReason")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Further detail about the status of the query.</p>
+    #[serde(rename = "StateChangeReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state_change_reason: Option<String>,
-    #[doc="<p>The date and time that the query was submitted.</p>"]
-    #[serde(rename="SubmissionDateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time that the query was submitted.</p>
+    #[serde(rename = "SubmissionDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub submission_date_time: Option<f64>,
 }
 
-#[doc="<p>The location in Amazon S3 where query results are stored and the encryption option, if any, used for query results.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The location in Amazon S3 where query results are stored and the encryption option, if any, used for query results.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ResultConfiguration {
-    #[doc="<p>If query results are encrypted in S3, indicates the S3 encryption option used (for example, <code>SSE-KMS</code> or <code>CSE-KMS</code> and key information.</p>"]
-    #[serde(rename="EncryptionConfiguration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If query results are encrypted in S3, indicates the S3 encryption option used (for example, <code>SSE-KMS</code> or <code>CSE-KMS</code> and key information.</p>
+    #[serde(rename = "EncryptionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_configuration: Option<EncryptionConfiguration>,
-    #[doc="<p>The location in S3 where query results are stored.</p>"]
-    #[serde(rename="OutputLocation")]
+    /// <p>The location in S3 where query results are stored.</p>
+    #[serde(rename = "OutputLocation")]
     pub output_location: String,
 }
 
-#[doc="<p>The metadata and rows that comprise a query result set. The metadata describes the column structure and data types.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The metadata and rows that comprise a query result set. The metadata describes the column structure and data types.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResultSet {
-    #[doc="<p>The metadata that describes the column structure and data types of a table of query results.</p>"]
-    #[serde(rename="ResultSetMetadata")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The metadata that describes the column structure and data types of a table of query results.</p>
+    #[serde(rename = "ResultSetMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result_set_metadata: Option<ResultSetMetadata>,
-    #[doc="<p>The rows in the table.</p>"]
-    #[serde(rename="Rows")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The rows in the table.</p>
+    #[serde(rename = "Rows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<Row>>,
 }
 
-#[doc="<p>The metadata that describes the column structure and data types of a table of query results.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The metadata that describes the column structure and data types of a table of query results.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResultSetMetadata {
-    #[doc="<p>Information about the columns in a query execution result.</p>"]
-    #[serde(rename="ColumnInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the columns in a query execution result.</p>
+    #[serde(rename = "ColumnInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub column_info: Option<Vec<ColumnInfo>>,
 }
 
-#[doc="<p>The rows that comprise a query result table.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The rows that comprise a query result table.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Row {
-    #[doc="<p>The data that populates a row in a query result table.</p>"]
-    #[serde(rename="Data")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The data that populates a row in a query result table.</p>
+    #[serde(rename = "Data")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<Vec<Datum>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartQueryExecutionInput {
-    #[doc="<p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>StartQueryExecution</code> request is received, the same response is returned and another query is not created. If a parameter has changed, for example, the <code>QueryString</code>, an error is returned.</p> <important> <p>This token is listed as not required because AWS SDKs (for example the AWS SDK for Java) auto-generate the token for users. If you are not using the AWS SDK or the AWS CLI, you must provide this token or the action will fail.</p> </important>"]
-    #[serde(rename="ClientRequestToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>StartQueryExecution</code> request is received, the same response is returned and another query is not created. If a parameter has changed, for example, the <code>QueryString</code>, an error is returned.</p> <important> <p>This token is listed as not required because AWS SDKs (for example the AWS SDK for Java) auto-generate the token for users. If you are not using the AWS SDK or the AWS CLI, you must provide this token or the action will fail.</p> </important>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    #[doc="<p>The database within which the query executes.</p>"]
-    #[serde(rename="QueryExecutionContext")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The database within which the query executes.</p>
+    #[serde(rename = "QueryExecutionContext")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub query_execution_context: Option<QueryExecutionContext>,
-    #[doc="<p>The SQL query statements to be executed.</p>"]
-    #[serde(rename="QueryString")]
+    /// <p>The SQL query statements to be executed.</p>
+    #[serde(rename = "QueryString")]
     pub query_string: String,
-    #[doc="<p>Specifies information about where and how to save the results of the query execution.</p>"]
-    #[serde(rename="ResultConfiguration")]
+    /// <p>Specifies information about where and how to save the results of the query execution.</p>
+    #[serde(rename = "ResultConfiguration")]
     pub result_configuration: ResultConfiguration,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartQueryExecutionOutput {
-    #[doc="<p>The unique ID of the query that ran as a result of this request.</p>"]
-    #[serde(rename="QueryExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique ID of the query that ran as a result of this request.</p>
+    #[serde(rename = "QueryExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub query_execution_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopQueryExecutionInput {
-    #[doc="<p>The unique ID of the query execution to stop.</p>"]
-    #[serde(rename="QueryExecutionId")]
+    /// <p>The unique ID of the query execution to stop.</p>
+    #[serde(rename = "QueryExecutionId")]
     pub query_execution_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopQueryExecutionOutput;
 
-#[doc="<p>Information about a named query ID that could not be processed.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a named query ID that could not be processed.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UnprocessedNamedQueryId {
-    #[doc="<p>The error code returned when the processing request for the named query failed, if applicable.</p>"]
-    #[serde(rename="ErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code returned when the processing request for the named query failed, if applicable.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    #[doc="<p>The error message returned when the processing request for the named query failed, if applicable.</p>"]
-    #[serde(rename="ErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error message returned when the processing request for the named query failed, if applicable.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="<p>The unique identifier of the named query.</p>"]
-    #[serde(rename="NamedQueryId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier of the named query.</p>
+    #[serde(rename = "NamedQueryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub named_query_id: Option<String>,
 }
 
-#[doc="<p>Describes a query execution that failed to process.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a query execution that failed to process.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UnprocessedQueryExecutionId {
-    #[doc="<p>The error code returned when the query execution failed to process, if applicable.</p>"]
-    #[serde(rename="ErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error code returned when the query execution failed to process, if applicable.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    #[doc="<p>The error message returned when the query execution failed to process, if applicable.</p>"]
-    #[serde(rename="ErrorMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error message returned when the query execution failed to process, if applicable.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    #[doc="<p>The unique identifier of the query execution.</p>"]
-    #[serde(rename="QueryExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier of the query execution.</p>
+    #[serde(rename = "QueryExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub query_execution_id: Option<String>,
 }
 
@@ -497,7 +496,6 @@ pub enum BatchGetNamedQueryError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl BatchGetNamedQueryError {
     pub fn from_body(body: &str) -> BatchGetNamedQueryError {
@@ -585,7 +583,6 @@ pub enum BatchGetQueryExecutionError {
     Unknown(String),
 }
 
-
 impl BatchGetQueryExecutionError {
     pub fn from_body(body: &str) -> BatchGetQueryExecutionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -672,7 +669,6 @@ pub enum CreateNamedQueryError {
     Unknown(String),
 }
 
-
 impl CreateNamedQueryError {
     pub fn from_body(body: &str) -> CreateNamedQueryError {
         match from_str::<SerdeJsonValue>(body) {
@@ -756,7 +752,6 @@ pub enum DeleteNamedQueryError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteNamedQueryError {
     pub fn from_body(body: &str) -> DeleteNamedQueryError {
@@ -842,7 +837,6 @@ pub enum GetNamedQueryError {
     Unknown(String),
 }
 
-
 impl GetNamedQueryError {
     pub fn from_body(body: &str) -> GetNamedQueryError {
         match from_str::<SerdeJsonValue>(body) {
@@ -926,7 +920,6 @@ pub enum GetQueryExecutionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetQueryExecutionError {
     pub fn from_body(body: &str) -> GetQueryExecutionError {
@@ -1014,7 +1007,6 @@ pub enum GetQueryResultsError {
     Unknown(String),
 }
 
-
 impl GetQueryResultsError {
     pub fn from_body(body: &str) -> GetQueryResultsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1099,7 +1091,6 @@ pub enum ListNamedQueriesError {
     Unknown(String),
 }
 
-
 impl ListNamedQueriesError {
     pub fn from_body(body: &str) -> ListNamedQueriesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1183,7 +1174,6 @@ pub enum ListQueryExecutionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListQueryExecutionsError {
     pub fn from_body(body: &str) -> ListQueryExecutionsError {
@@ -1272,7 +1262,6 @@ pub enum StartQueryExecutionError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl StartQueryExecutionError {
     pub fn from_body(body: &str) -> StartQueryExecutionError {
@@ -1364,7 +1353,6 @@ pub enum StopQueryExecutionError {
     Unknown(String),
 }
 
-
 impl StopQueryExecutionError {
     pub fn from_body(body: &str) -> StopQueryExecutionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1437,75 +1425,76 @@ impl Error for StopQueryExecutionError {
 /// Trait representing the capabilities of the Amazon Athena API. Amazon Athena clients implement this trait.
 pub trait Athena {
     #[doc="<p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Use <a>ListNamedQueries</a> to get the list of named query IDs. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries are different from executed queries. Use <a>BatchGetQueryExecution</a> to get details about each unique query execution, and <a>ListQueryExecutions</a> to get a list of query execution IDs.</p>"]
-    fn batch_get_named_query(&self,
-                             input: &BatchGetNamedQueryInput)
-                             -> Result<BatchGetNamedQueryOutput, BatchGetNamedQueryError>;
-
+    fn batch_get_named_query(
+        &self,
+        input: &BatchGetNamedQueryInput,
+    ) -> Result<BatchGetNamedQueryOutput, BatchGetNamedQueryError>;
 
     #[doc="<p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. To get a list of query execution IDs, use <a>ListQueryExecutions</a>. Query executions are different from named (saved) queries. Use <a>BatchGetNamedQuery</a> to get details about named queries.</p>"]
-    fn batch_get_query_execution
-        (&self,
-         input: &BatchGetQueryExecutionInput)
-         -> Result<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError>;
-
+    fn batch_get_query_execution(
+        &self,
+        input: &BatchGetQueryExecutionInput,
+    ) -> Result<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError>;
 
     #[doc="<p>Creates a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
-    fn create_named_query(&self,
-                          input: &CreateNamedQueryInput)
-                          -> Result<CreateNamedQueryOutput, CreateNamedQueryError>;
-
+    fn create_named_query(
+        &self,
+        input: &CreateNamedQueryInput,
+    ) -> Result<CreateNamedQueryOutput, CreateNamedQueryError>;
 
     #[doc="<p>Deletes a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
-    fn delete_named_query(&self,
-                          input: &DeleteNamedQueryInput)
-                          -> Result<DeleteNamedQueryOutput, DeleteNamedQueryError>;
+    fn delete_named_query(
+        &self,
+        input: &DeleteNamedQueryInput,
+    ) -> Result<DeleteNamedQueryOutput, DeleteNamedQueryError>;
 
-
-    #[doc="<p>Returns information about a single query.</p>"]
-    fn get_named_query(&self,
-                       input: &GetNamedQueryInput)
-                       -> Result<GetNamedQueryOutput, GetNamedQueryError>;
-
+    #[doc = "<p>Returns information about a single query.</p>"]
+    fn get_named_query(
+        &self,
+        input: &GetNamedQueryInput,
+    ) -> Result<GetNamedQueryOutput, GetNamedQueryError>;
 
     #[doc="<p>Returns information about a single execution of a query. Each time a query executes, information about the query execution is saved with a unique ID.</p>"]
-    fn get_query_execution(&self,
-                           input: &GetQueryExecutionInput)
-                           -> Result<GetQueryExecutionOutput, GetQueryExecutionError>;
-
+    fn get_query_execution(
+        &self,
+        input: &GetQueryExecutionInput,
+    ) -> Result<GetQueryExecutionOutput, GetQueryExecutionError>;
 
     #[doc="<p>Returns the results of a single query execution specified by <code>QueryExecutionId</code>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>"]
-    fn get_query_results(&self,
-                         input: &GetQueryResultsInput)
-                         -> Result<GetQueryResultsOutput, GetQueryResultsError>;
-
+    fn get_query_results(
+        &self,
+        input: &GetQueryResultsInput,
+    ) -> Result<GetQueryResultsOutput, GetQueryResultsError>;
 
     #[doc="<p>Provides a list of all available query IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
-    fn list_named_queries(&self,
-                          input: &ListNamedQueriesInput)
-                          -> Result<ListNamedQueriesOutput, ListNamedQueriesError>;
-
+    fn list_named_queries(
+        &self,
+        input: &ListNamedQueriesInput,
+    ) -> Result<ListNamedQueriesOutput, ListNamedQueriesError>;
 
     #[doc="<p>Provides a list of all available query execution IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
-    fn list_query_executions(&self,
-                             input: &ListQueryExecutionsInput)
-                             -> Result<ListQueryExecutionsOutput, ListQueryExecutionsError>;
-
+    fn list_query_executions(
+        &self,
+        input: &ListQueryExecutionsInput,
+    ) -> Result<ListQueryExecutionsOutput, ListQueryExecutionsError>;
 
     #[doc="<p>Runs (executes) the SQL query statements contained in the <code>Query</code> string.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
-    fn start_query_execution(&self,
-                             input: &StartQueryExecutionInput)
-                             -> Result<StartQueryExecutionOutput, StartQueryExecutionError>;
-
+    fn start_query_execution(
+        &self,
+        input: &StartQueryExecutionInput,
+    ) -> Result<StartQueryExecutionOutput, StartQueryExecutionError>;
 
     #[doc="<p>Stops a query execution.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
-    fn stop_query_execution(&self,
-                            input: &StopQueryExecutionInput)
-                            -> Result<StopQueryExecutionOutput, StopQueryExecutionError>;
+    fn stop_query_execution(
+        &self,
+        input: &StopQueryExecutionInput,
+    ) -> Result<StopQueryExecutionOutput, StopQueryExecutionError>;
 }
 /// A client for the Amazon Athena API.
 pub struct AthenaClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -1513,8 +1502,9 @@ pub struct AthenaClient<P, D>
 }
 
 impl<P, D> AthenaClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         AthenaClient {
@@ -1526,13 +1516,15 @@ impl<P, D> AthenaClient<P, D>
 }
 
 impl<P, D> Athena for AthenaClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Use <a>ListNamedQueries</a> to get the list of named query IDs. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries are different from executed queries. Use <a>BatchGetQueryExecution</a> to get details about each unique query execution, and <a>ListQueryExecutions</a> to get a list of query execution IDs.</p>"]
-    fn batch_get_named_query(&self,
-                             input: &BatchGetNamedQueryInput)
-                             -> Result<BatchGetNamedQueryOutput, BatchGetNamedQueryError> {
+    fn batch_get_named_query(
+        &self,
+        input: &BatchGetNamedQueryInput,
+    ) -> Result<BatchGetNamedQueryOutput, BatchGetNamedQueryError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1548,24 +1540,25 @@ impl<P, D> Athena for AthenaClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetNamedQueryOutput>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<BatchGetNamedQueryOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchGetNamedQueryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(BatchGetNamedQueryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. To get a list of query execution IDs, use <a>ListQueryExecutions</a>. Query executions are different from named (saved) queries. Use <a>BatchGetNamedQuery</a> to get details about named queries.</p>"]
-    fn batch_get_query_execution
-        (&self,
-         input: &BatchGetQueryExecutionInput)
-         -> Result<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError> {
+    fn batch_get_query_execution(
+        &self,
+        input: &BatchGetQueryExecutionInput,
+    ) -> Result<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1581,21 +1574,25 @@ impl<P, D> Athena for AthenaClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetQueryExecutionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<BatchGetQueryExecutionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(BatchGetQueryExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(BatchGetQueryExecutionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
-    fn create_named_query(&self,
-                          input: &CreateNamedQueryInput)
-                          -> Result<CreateNamedQueryOutput, CreateNamedQueryError> {
+    fn create_named_query(
+        &self,
+        input: &CreateNamedQueryInput,
+    ) -> Result<CreateNamedQueryOutput, CreateNamedQueryError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1611,23 +1608,25 @@ impl<P, D> Athena for AthenaClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateNamedQueryOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateNamedQueryOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateNamedQueryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateNamedQueryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
-    fn delete_named_query(&self,
-                          input: &DeleteNamedQueryInput)
-                          -> Result<DeleteNamedQueryOutput, DeleteNamedQueryError> {
+    fn delete_named_query(
+        &self,
+        input: &DeleteNamedQueryInput,
+    ) -> Result<DeleteNamedQueryOutput, DeleteNamedQueryError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1643,23 +1642,25 @@ impl<P, D> Athena for AthenaClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteNamedQueryOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteNamedQueryOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteNamedQueryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteNamedQueryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns information about a single query.</p>"]
-    fn get_named_query(&self,
-                       input: &GetNamedQueryInput)
-                       -> Result<GetNamedQueryOutput, GetNamedQueryError> {
+    #[doc = "<p>Returns information about a single query.</p>"]
+    fn get_named_query(
+        &self,
+        input: &GetNamedQueryInput,
+    ) -> Result<GetNamedQueryOutput, GetNamedQueryError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1675,23 +1676,25 @@ impl<P, D> Athena for AthenaClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetNamedQueryOutput>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetNamedQueryOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetNamedQueryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetNamedQueryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns information about a single execution of a query. Each time a query executes, information about the query execution is saved with a unique ID.</p>"]
-    fn get_query_execution(&self,
-                           input: &GetQueryExecutionInput)
-                           -> Result<GetQueryExecutionOutput, GetQueryExecutionError> {
+    fn get_query_execution(
+        &self,
+        input: &GetQueryExecutionInput,
+    ) -> Result<GetQueryExecutionOutput, GetQueryExecutionError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1707,23 +1710,25 @@ impl<P, D> Athena for AthenaClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetQueryExecutionOutput>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetQueryExecutionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetQueryExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetQueryExecutionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns the results of a single query execution specified by <code>QueryExecutionId</code>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>"]
-    fn get_query_results(&self,
-                         input: &GetQueryResultsInput)
-                         -> Result<GetQueryResultsOutput, GetQueryResultsError> {
+    fn get_query_results(
+        &self,
+        input: &GetQueryResultsInput,
+    ) -> Result<GetQueryResultsOutput, GetQueryResultsError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1739,23 +1744,25 @@ impl<P, D> Athena for AthenaClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetQueryResultsOutput>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetQueryResultsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetQueryResultsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetQueryResultsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Provides a list of all available query IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
-    fn list_named_queries(&self,
-                          input: &ListNamedQueriesInput)
-                          -> Result<ListNamedQueriesOutput, ListNamedQueriesError> {
+    fn list_named_queries(
+        &self,
+        input: &ListNamedQueriesInput,
+    ) -> Result<ListNamedQueriesOutput, ListNamedQueriesError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1771,23 +1778,25 @@ impl<P, D> Athena for AthenaClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListNamedQueriesOutput>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListNamedQueriesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListNamedQueriesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListNamedQueriesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Provides a list of all available query execution IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
-    fn list_query_executions(&self,
-                             input: &ListQueryExecutionsInput)
-                             -> Result<ListQueryExecutionsOutput, ListQueryExecutionsError> {
+    fn list_query_executions(
+        &self,
+        input: &ListQueryExecutionsInput,
+    ) -> Result<ListQueryExecutionsOutput, ListQueryExecutionsError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1803,21 +1812,25 @@ impl<P, D> Athena for AthenaClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListQueryExecutionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListQueryExecutionsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListQueryExecutionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListQueryExecutionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Runs (executes) the SQL query statements contained in the <code>Query</code> string.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
-    fn start_query_execution(&self,
-                             input: &StartQueryExecutionInput)
-                             -> Result<StartQueryExecutionOutput, StartQueryExecutionError> {
+    fn start_query_execution(
+        &self,
+        input: &StartQueryExecutionInput,
+    ) -> Result<StartQueryExecutionOutput, StartQueryExecutionError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1833,21 +1846,25 @@ impl<P, D> Athena for AthenaClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartQueryExecutionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StartQueryExecutionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartQueryExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StartQueryExecutionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Stops a query execution.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>"]
-    fn stop_query_execution(&self,
-                            input: &StopQueryExecutionInput)
-                            -> Result<StopQueryExecutionOutput, StopQueryExecutionError> {
+    fn stop_query_execution(
+        &self,
+        input: &StopQueryExecutionInput,
+    ) -> Result<StopQueryExecutionOutput, StopQueryExecutionError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1863,14 +1880,16 @@ impl<P, D> Athena for AthenaClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopQueryExecutionOutput>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<StopQueryExecutionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopQueryExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(StopQueryExecutionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

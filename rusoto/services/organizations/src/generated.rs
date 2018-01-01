@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,1027 +27,1027 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AcceptHandshakeRequest {
-    #[doc="<p>The unique identifier (ID) of the handshake that you want to accept.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for handshake ID string requires \"h-\" followed by from 8 to 32 lower-case letters or digits.</p>"]
-    #[serde(rename="HandshakeId")]
+    /// <p>The unique identifier (ID) of the handshake that you want to accept.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for handshake ID string requires "h-" followed by from 8 to 32 lower-case letters or digits.</p>
+    #[serde(rename = "HandshakeId")]
     pub handshake_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AcceptHandshakeResponse {
-    #[doc="<p>A structure that contains details about the accepted handshake.</p>"]
-    #[serde(rename="Handshake")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains details about the accepted handshake.</p>
+    #[serde(rename = "Handshake")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handshake: Option<Handshake>,
 }
 
-#[doc="<p>Contains information about an AWS account that is a member of an organization.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about an AWS account that is a member of an organization.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Account {
-    #[doc="<p>The Amazon Resource Name (ARN) of the account.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the account.</p> <p>For more information about ARNs in Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The email address associated with the AWS account.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for this parameter is a string of characters that represents a standard Internet email address.</p>"]
-    #[serde(rename="Email")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email address associated with the AWS account.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for this parameter is a string of characters that represents a standard Internet email address.</p>
+    #[serde(rename = "Email")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
-    #[doc="<p>The unique identifier (ID) of the account.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an account ID string requires exactly 12 digits.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) of the account.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an account ID string requires exactly 12 digits.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The method by which the account joined the organization.</p>"]
-    #[serde(rename="JoinedMethod")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The method by which the account joined the organization.</p>
+    #[serde(rename = "JoinedMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub joined_method: Option<String>,
-    #[doc="<p>The date the account became a part of the organization.</p>"]
-    #[serde(rename="JoinedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the account became a part of the organization.</p>
+    #[serde(rename = "JoinedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub joined_timestamp: Option<f64>,
-    #[doc="<p>The friendly name of the account.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The friendly name of the account.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The status of the account in the organization.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the account in the organization.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AttachPolicyRequest {
-    #[doc="<p>The unique identifier (ID) of the policy that you want to attach to the target. You can get the ID for the policy by calling the <a>ListPolicies</a> operation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a policy ID string requires \"p-\" followed by from 8 to 128 lower-case letters or digits.</p>"]
-    #[serde(rename="PolicyId")]
+    /// <p>The unique identifier (ID) of the policy that you want to attach to the target. You can get the ID for the policy by calling the <a>ListPolicies</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a policy ID string requires "p-" followed by from 8 to 128 lower-case letters or digits.</p>
+    #[serde(rename = "PolicyId")]
     pub policy_id: String,
-    #[doc="<p>The unique identifier (ID) of the root, OU, or account that you want to attach the policy to. You can get the ID by calling the <a>ListRoots</a>, <a>ListOrganizationalUnitsForParent</a>, or <a>ListAccounts</a> operations.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a target ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
-    #[serde(rename="TargetId")]
+    /// <p>The unique identifier (ID) of the root, OU, or account that you want to attach the policy to. You can get the ID by calling the <a>ListRoots</a>, <a>ListOrganizationalUnitsForParent</a>, or <a>ListAccounts</a> operations.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a target ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with "r-" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>
+    #[serde(rename = "TargetId")]
     pub target_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CancelHandshakeRequest {
-    #[doc="<p>The unique identifier (ID) of the handshake that you want to cancel. You can get the ID from the <a>ListHandshakesForOrganization</a> operation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for handshake ID string requires \"h-\" followed by from 8 to 32 lower-case letters or digits.</p>"]
-    #[serde(rename="HandshakeId")]
+    /// <p>The unique identifier (ID) of the handshake that you want to cancel. You can get the ID from the <a>ListHandshakesForOrganization</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for handshake ID string requires "h-" followed by from 8 to 32 lower-case letters or digits.</p>
+    #[serde(rename = "HandshakeId")]
     pub handshake_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CancelHandshakeResponse {
-    #[doc="<p>A structure that contains details about the handshake that you canceled.</p>"]
-    #[serde(rename="Handshake")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains details about the handshake that you canceled.</p>
+    #[serde(rename = "Handshake")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handshake: Option<Handshake>,
 }
 
-#[doc="<p>Contains a list of child entities, either OUs or accounts.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains a list of child entities, either OUs or accounts.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Child {
-    #[doc="<p>The unique identifier (ID) of this child entity.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a child ID string requires one of the following:</p> <ul> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) of this child entity.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a child ID string requires one of the following:</p> <ul> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The type of this child entity.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of this child entity.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateAccountRequest {
-    #[doc="<p>The friendly name of the member account.</p>"]
-    #[serde(rename="AccountName")]
+    /// <p>The friendly name of the member account.</p>
+    #[serde(rename = "AccountName")]
     pub account_name: String,
-    #[doc="<p>The email address of the owner to assign to the new member account. This email address must not already be associated with another AWS account.</p>"]
-    #[serde(rename="Email")]
+    /// <p>The email address of the owner to assign to the new member account. This email address must not already be associated with another AWS account.</p>
+    #[serde(rename = "Email")]
     pub email: String,
-    #[doc="<p>If set to <code>ALLOW</code>, the new account enables IAM users to access account billing information <i>if</i> they have the required permissions. If set to <code>DENY</code>, then only the root user of the new account can access account billing information. For more information, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html#ControllingAccessWebsite-Activate\">Activating Access to the Billing and Cost Management Console</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> <p>If you do not specify this parameter, the value defaults to ALLOW, and IAM users and roles with the required permissions can access billing information for the new account.</p>"]
-    #[serde(rename="IamUserAccessToBilling")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If set to <code>ALLOW</code>, the new account enables IAM users to access account billing information <i>if</i> they have the required permissions. If set to <code>DENY</code>, then only the root user of the new account can access account billing information. For more information, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html#ControllingAccessWebsite-Activate">Activating Access to the Billing and Cost Management Console</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> <p>If you do not specify this parameter, the value defaults to ALLOW, and IAM users and roles with the required permissions can access billing information for the new account.</p>
+    #[serde(rename = "IamUserAccessToBilling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_user_access_to_billing: Option<String>,
-    #[doc="<p>(Optional)</p> <p>The name of an IAM role that Organizations automatically preconfigures in the new member account. This role trusts the master account, allowing users in the master account to assume the role, as permitted by the master account administrator. The role has administrator permissions in the new member account.</p> <p>If you do not specify this parameter, the role name defaults to <code>OrganizationAccountAccessRole</code>.</p> <p>For more information about how to use this role to access the member account, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html#orgs_manage_accounts_create-cross-account-role\">Accessing and Administering the Member Accounts in Your Organization</a> in the <i>AWS Organizations User Guide</i>, and steps 2 and 3 in <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html\">Tutorial: Delegate Access Across AWS Accounts Using IAM Roles</a> in the <i>IAM User Guide</i>.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of characters that can consist of uppercase letters, lowercase letters, digits with no spaces, and any of the following characters: =,.@-</p>"]
-    #[serde(rename="RoleName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional)</p> <p>The name of an IAM role that Organizations automatically preconfigures in the new member account. This role trusts the master account, allowing users in the master account to assume the role, as permitted by the master account administrator. The role has administrator permissions in the new member account.</p> <p>If you do not specify this parameter, the role name defaults to <code>OrganizationAccountAccessRole</code>.</p> <p>For more information about how to use this role to access the member account, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html#orgs_manage_accounts_create-cross-account-role">Accessing and Administering the Member Accounts in Your Organization</a> in the <i>AWS Organizations User Guide</i>, and steps 2 and 3 in <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html">Tutorial: Delegate Access Across AWS Accounts Using IAM Roles</a> in the <i>IAM User Guide</i>.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter is a string of characters that can consist of uppercase letters, lowercase letters, digits with no spaces, and any of the following characters: =,.@-</p>
+    #[serde(rename = "RoleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateAccountResponse {
-    #[doc="<p>A structure that contains details about the request to create an account. This response structure might not be fully populated when you first receive it because account creation is an asynchronous process. You can pass the returned CreateAccountStatus ID as a parameter to <code> <a>DescribeCreateAccountStatus</a> </code> to get status about the progress of the request at later times. </p>"]
-    #[serde(rename="CreateAccountStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains details about the request to create an account. This response structure might not be fully populated when you first receive it because account creation is an asynchronous process. You can pass the returned CreateAccountStatus ID as a parameter to <code> <a>DescribeCreateAccountStatus</a> </code> to get status about the progress of the request at later times. </p>
+    #[serde(rename = "CreateAccountStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_account_status: Option<CreateAccountStatus>,
 }
 
-#[doc="<p>Contains the status about a <a>CreateAccount</a> request to create an AWS account in an organization.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains the status about a <a>CreateAccount</a> request to create an AWS account in an organization.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateAccountStatus {
-    #[doc="<p>If the account was created successfully, the unique identifier (ID) of the new account.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an account ID string requires exactly 12 digits.</p>"]
-    #[serde(rename="AccountId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the account was created successfully, the unique identifier (ID) of the new account.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an account ID string requires exactly 12 digits.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
-    #[doc="<p>The account name given to the account when it was created.</p>"]
-    #[serde(rename="AccountName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The account name given to the account when it was created.</p>
+    #[serde(rename = "AccountName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub account_name: Option<String>,
-    #[doc="<p>The date and time that the account was created and the request completed.</p>"]
-    #[serde(rename="CompletedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time that the account was created and the request completed.</p>
+    #[serde(rename = "CompletedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub completed_timestamp: Option<f64>,
-    #[doc="<p>If the request failed, a description of the reason for the failure.</p> <ul> <li> <p>ACCOUNT_LIMIT_EXCEEDED: The account could not be created because you have reached the limit on the number of accounts in your organization.</p> </li> <li> <p>EMAIL_ALREADY_EXISTS: The account could not be created because another AWS account with that email address already exists.</p> </li> <li> <p>INVALID_ADDRESS: The account could not be created because the address you provided is not valid.</p> </li> <li> <p>INVALID_EMAIL: The account could not be created because the email address you provided is not valid.</p> </li> <li> <p>INTERNAL_FAILURE: The account could not be created because of an internal failure. Try again later. If the problem persists, contact Customer Support.</p> </li> </ul>"]
-    #[serde(rename="FailureReason")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the request failed, a description of the reason for the failure.</p> <ul> <li> <p>ACCOUNT_LIMIT_EXCEEDED: The account could not be created because you have reached the limit on the number of accounts in your organization.</p> </li> <li> <p>EMAIL_ALREADY_EXISTS: The account could not be created because another AWS account with that email address already exists.</p> </li> <li> <p>INVALID_ADDRESS: The account could not be created because the address you provided is not valid.</p> </li> <li> <p>INVALID_EMAIL: The account could not be created because the email address you provided is not valid.</p> </li> <li> <p>INTERNAL_FAILURE: The account could not be created because of an internal failure. Try again later. If the problem persists, contact Customer Support.</p> </li> </ul>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
-    #[doc="<p>The unique identifier (ID) that references this request. You get this value from the response of the initial <a>CreateAccount</a> request to create the account.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an create account request ID string requires \"car-\" followed by from 8 to 32 lower-case letters or digits.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) that references this request. You get this value from the response of the initial <a>CreateAccount</a> request to create the account.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an create account request ID string requires "car-" followed by from 8 to 32 lower-case letters or digits.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The date and time that the request was made for the account creation.</p>"]
-    #[serde(rename="RequestedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time that the request was made for the account creation.</p>
+    #[serde(rename = "RequestedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub requested_timestamp: Option<f64>,
-    #[doc="<p>The status of the request.</p>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the request.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateOrganizationRequest {
-    #[doc="<p>Specifies the feature set supported by the new organization. Each feature set supports different levels of functionality.</p> <ul> <li> <p> <i>CONSOLIDATED_BILLING</i>: All member accounts have their bills consolidated to and paid by the master account. For more information, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_getting-started_concepts.html#feature-set-cb-only\">Consolidated Billing</a> in the <i>AWS Organizations User Guide</i>.</p> </li> <li> <p> <i>ALL</i>: In addition to all the features supported by the consolidated billing feature set, the master account can also apply any type of policy to any member account in the organization. For more information, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_getting-started_concepts.html#feature-set-all\">All features</a> in the <i>AWS Organizations User Guide</i>.</p> </li> </ul>"]
-    #[serde(rename="FeatureSet")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the feature set supported by the new organization. Each feature set supports different levels of functionality.</p> <ul> <li> <p> <i>CONSOLIDATED_BILLING</i>: All member accounts have their bills consolidated to and paid by the master account. For more information, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_getting-started_concepts.html#feature-set-cb-only">Consolidated Billing</a> in the <i>AWS Organizations User Guide</i>.</p> </li> <li> <p> <i>ALL</i>: In addition to all the features supported by the consolidated billing feature set, the master account can also apply any type of policy to any member account in the organization. For more information, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_getting-started_concepts.html#feature-set-all">All features</a> in the <i>AWS Organizations User Guide</i>.</p> </li> </ul>
+    #[serde(rename = "FeatureSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub feature_set: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateOrganizationResponse {
-    #[doc="<p>A structure that contains details about the newly created organization.</p>"]
-    #[serde(rename="Organization")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains details about the newly created organization.</p>
+    #[serde(rename = "Organization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub organization: Option<Organization>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateOrganizationalUnitRequest {
-    #[doc="<p>The friendly name to assign to the new OU.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The friendly name to assign to the new OU.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The unique identifier (ID) of the parent root or OU in which you want to create the new OU.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
-    #[serde(rename="ParentId")]
+    /// <p>The unique identifier (ID) of the parent root or OU in which you want to create the new OU.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with "r-" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>
+    #[serde(rename = "ParentId")]
     pub parent_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateOrganizationalUnitResponse {
-    #[doc="<p>A structure that contains details about the newly created OU.</p>"]
-    #[serde(rename="OrganizationalUnit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains details about the newly created OU.</p>
+    #[serde(rename = "OrganizationalUnit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub organizational_unit: Option<OrganizationalUnit>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePolicyRequest {
-    #[doc="<p>The policy content to add to the new policy. For example, if you create a <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scp.html\">service control policy</a> (SCP), this string must be JSON text that specifies the permissions that admins in attached accounts can delegate to their users, groups, and roles. For more information about the SCP syntax, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_scp-syntax.html\">Service Control Policy Syntax</a> in the <i>AWS Organizations User Guide</i>.</p>"]
-    #[serde(rename="Content")]
+    /// <p>The policy content to add to the new policy. For example, if you create a <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scp.html">service control policy</a> (SCP), this string must be JSON text that specifies the permissions that admins in attached accounts can delegate to their users, groups, and roles. For more information about the SCP syntax, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_scp-syntax.html">Service Control Policy Syntax</a> in the <i>AWS Organizations User Guide</i>.</p>
+    #[serde(rename = "Content")]
     pub content: String,
-    #[doc="<p>An optional description to assign to the policy.</p>"]
-    #[serde(rename="Description")]
+    /// <p>An optional description to assign to the policy.</p>
+    #[serde(rename = "Description")]
     pub description: String,
-    #[doc="<p>The friendly name to assign to the policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The friendly name to assign to the policy.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The type of policy to create.</p> <note> <p>In the current release, the only type of policy that you can create is a service control policy (SCP).</p> </note>"]
-    #[serde(rename="Type")]
+    /// <p>The type of policy to create.</p> <note> <p>In the current release, the only type of policy that you can create is a service control policy (SCP).</p> </note>
+    #[serde(rename = "Type")]
     pub type_: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreatePolicyResponse {
-    #[doc="<p>A structure that contains details about the newly created policy.</p>"]
-    #[serde(rename="Policy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains details about the newly created policy.</p>
+    #[serde(rename = "Policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<Policy>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeclineHandshakeRequest {
-    #[doc="<p>The unique identifier (ID) of the handshake that you want to decline. You can get the ID from the <a>ListHandshakesForAccount</a> operation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for handshake ID string requires \"h-\" followed by from 8 to 32 lower-case letters or digits.</p>"]
-    #[serde(rename="HandshakeId")]
+    /// <p>The unique identifier (ID) of the handshake that you want to decline. You can get the ID from the <a>ListHandshakesForAccount</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for handshake ID string requires "h-" followed by from 8 to 32 lower-case letters or digits.</p>
+    #[serde(rename = "HandshakeId")]
     pub handshake_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeclineHandshakeResponse {
-    #[doc="<p>A structure that contains details about the declined handshake. The state is updated to show the value <code>DECLINED</code>.</p>"]
-    #[serde(rename="Handshake")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains details about the declined handshake. The state is updated to show the value <code>DECLINED</code>.</p>
+    #[serde(rename = "Handshake")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handshake: Option<Handshake>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteOrganizationalUnitRequest {
-    #[doc="<p>The unique identifier (ID) of the organizational unit that you want to delete. You can get the ID from the <a>ListOrganizationalUnitsForParent</a> operation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an organizational unit ID string requires \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p>"]
-    #[serde(rename="OrganizationalUnitId")]
+    /// <p>The unique identifier (ID) of the organizational unit that you want to delete. You can get the ID from the <a>ListOrganizationalUnitsForParent</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an organizational unit ID string requires "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p>
+    #[serde(rename = "OrganizationalUnitId")]
     pub organizational_unit_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeletePolicyRequest {
-    #[doc="<p>The unique identifier (ID) of the policy that you want to delete. You can get the ID from the <a>ListPolicies</a> or <a>ListPoliciesForTarget</a> operations.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a policy ID string requires \"p-\" followed by from 8 to 128 lower-case letters or digits.</p>"]
-    #[serde(rename="PolicyId")]
+    /// <p>The unique identifier (ID) of the policy that you want to delete. You can get the ID from the <a>ListPolicies</a> or <a>ListPoliciesForTarget</a> operations.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a policy ID string requires "p-" followed by from 8 to 128 lower-case letters or digits.</p>
+    #[serde(rename = "PolicyId")]
     pub policy_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAccountRequest {
-    #[doc="<p>The unique identifier (ID) of the AWS account that you want information about. You can get the ID from the <a>ListAccounts</a> or <a>ListAccountsForParent</a> operations.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an account ID string requires exactly 12 digits.</p>"]
-    #[serde(rename="AccountId")]
+    /// <p>The unique identifier (ID) of the AWS account that you want information about. You can get the ID from the <a>ListAccounts</a> or <a>ListAccountsForParent</a> operations.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an account ID string requires exactly 12 digits.</p>
+    #[serde(rename = "AccountId")]
     pub account_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeAccountResponse {
-    #[doc="<p>A structure that contains information about the requested account.</p>"]
-    #[serde(rename="Account")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains information about the requested account.</p>
+    #[serde(rename = "Account")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub account: Option<Account>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeCreateAccountStatusRequest {
-    #[doc="<p>Specifies the <code>operationId</code> that uniquely identifies the request. You can get the ID from the response to an earlier <a>CreateAccount</a> request, or from the <a>ListCreateAccountStatus</a> operation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an create account request ID string requires \"car-\" followed by from 8 to 32 lower-case letters or digits.</p>"]
-    #[serde(rename="CreateAccountRequestId")]
+    /// <p>Specifies the <code>operationId</code> that uniquely identifies the request. You can get the ID from the response to an earlier <a>CreateAccount</a> request, or from the <a>ListCreateAccountStatus</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an create account request ID string requires "car-" followed by from 8 to 32 lower-case letters or digits.</p>
+    #[serde(rename = "CreateAccountRequestId")]
     pub create_account_request_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeCreateAccountStatusResponse {
-    #[doc="<p>A structure that contains the current status of an account creation request.</p>"]
-    #[serde(rename="CreateAccountStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains the current status of an account creation request.</p>
+    #[serde(rename = "CreateAccountStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_account_status: Option<CreateAccountStatus>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeHandshakeRequest {
-    #[doc="<p>The unique identifier (ID) of the handshake that you want information about. You can get the ID from the original call to <a>InviteAccountToOrganization</a>, or from a call to <a>ListHandshakesForAccount</a> or <a>ListHandshakesForOrganization</a>.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for handshake ID string requires \"h-\" followed by from 8 to 32 lower-case letters or digits.</p>"]
-    #[serde(rename="HandshakeId")]
+    /// <p>The unique identifier (ID) of the handshake that you want information about. You can get the ID from the original call to <a>InviteAccountToOrganization</a>, or from a call to <a>ListHandshakesForAccount</a> or <a>ListHandshakesForOrganization</a>.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for handshake ID string requires "h-" followed by from 8 to 32 lower-case letters or digits.</p>
+    #[serde(rename = "HandshakeId")]
     pub handshake_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeHandshakeResponse {
-    #[doc="<p>A structure that contains information about the specified handshake.</p>"]
-    #[serde(rename="Handshake")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains information about the specified handshake.</p>
+    #[serde(rename = "Handshake")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handshake: Option<Handshake>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeOrganizationResponse {
-    #[doc="<p>A structure that contains information about the organization.</p>"]
-    #[serde(rename="Organization")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains information about the organization.</p>
+    #[serde(rename = "Organization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub organization: Option<Organization>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeOrganizationalUnitRequest {
-    #[doc="<p>The unique identifier (ID) of the organizational unit that you want details about. You can get the ID from the <a>ListOrganizationalUnitsForParent</a> operation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an organizational unit ID string requires \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p>"]
-    #[serde(rename="OrganizationalUnitId")]
+    /// <p>The unique identifier (ID) of the organizational unit that you want details about. You can get the ID from the <a>ListOrganizationalUnitsForParent</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an organizational unit ID string requires "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p>
+    #[serde(rename = "OrganizationalUnitId")]
     pub organizational_unit_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeOrganizationalUnitResponse {
-    #[doc="<p>A structure that contains details about the specified OU.</p>"]
-    #[serde(rename="OrganizationalUnit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains details about the specified OU.</p>
+    #[serde(rename = "OrganizationalUnit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub organizational_unit: Option<OrganizationalUnit>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribePolicyRequest {
-    #[doc="<p>The unique identifier (ID) of the policy that you want details about. You can get the ID from the <a>ListPolicies</a> or <a>ListPoliciesForTarget</a> operations.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a policy ID string requires \"p-\" followed by from 8 to 128 lower-case letters or digits.</p>"]
-    #[serde(rename="PolicyId")]
+    /// <p>The unique identifier (ID) of the policy that you want details about. You can get the ID from the <a>ListPolicies</a> or <a>ListPoliciesForTarget</a> operations.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a policy ID string requires "p-" followed by from 8 to 128 lower-case letters or digits.</p>
+    #[serde(rename = "PolicyId")]
     pub policy_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribePolicyResponse {
-    #[doc="<p>A structure that contains details about the specified policy.</p>"]
-    #[serde(rename="Policy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains details about the specified policy.</p>
+    #[serde(rename = "Policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<Policy>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DetachPolicyRequest {
-    #[doc="<p>The unique identifier (ID) of the policy you want to detach. You can get the ID from the <a>ListPolicies</a> or <a>ListPoliciesForTarget</a> operations.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a policy ID string requires \"p-\" followed by from 8 to 128 lower-case letters or digits.</p>"]
-    #[serde(rename="PolicyId")]
+    /// <p>The unique identifier (ID) of the policy you want to detach. You can get the ID from the <a>ListPolicies</a> or <a>ListPoliciesForTarget</a> operations.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a policy ID string requires "p-" followed by from 8 to 128 lower-case letters or digits.</p>
+    #[serde(rename = "PolicyId")]
     pub policy_id: String,
-    #[doc="<p>The unique identifier (ID) of the root, OU, or account from which you want to detach the policy. You can get the ID from the <a>ListRoots</a>, <a>ListOrganizationalUnitsForParent</a>, or <a>ListAccounts</a> operations.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a target ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
-    #[serde(rename="TargetId")]
+    /// <p>The unique identifier (ID) of the root, OU, or account from which you want to detach the policy. You can get the ID from the <a>ListRoots</a>, <a>ListOrganizationalUnitsForParent</a>, or <a>ListAccounts</a> operations.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a target ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with "r-" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>
+    #[serde(rename = "TargetId")]
     pub target_id: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DisablePolicyTypeRequest {
-    #[doc="<p>The policy type that you want to disable in this root.</p>"]
-    #[serde(rename="PolicyType")]
+    /// <p>The policy type that you want to disable in this root.</p>
+    #[serde(rename = "PolicyType")]
     pub policy_type: String,
-    #[doc="<p>The unique identifier (ID) of the root in which you want to disable a policy type. You can get the ID from the <a>ListPolicies</a> operation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a root ID string requires \"r-\" followed by from 4 to 32 lower-case letters or digits.</p>"]
-    #[serde(rename="RootId")]
+    /// <p>The unique identifier (ID) of the root in which you want to disable a policy type. You can get the ID from the <a>ListPolicies</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a root ID string requires "r-" followed by from 4 to 32 lower-case letters or digits.</p>
+    #[serde(rename = "RootId")]
     pub root_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisablePolicyTypeResponse {
-    #[doc="<p>A structure that shows the root with the updated list of enabled policy types.</p>"]
-    #[serde(rename="Root")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that shows the root with the updated list of enabled policy types.</p>
+    #[serde(rename = "Root")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub root: Option<Root>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct EnableAllFeaturesRequest;
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EnableAllFeaturesResponse {
-    #[doc="<p>A structure that contains details about the handshake created to support this request to enable all features in the organization.</p>"]
-    #[serde(rename="Handshake")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains details about the handshake created to support this request to enable all features in the organization.</p>
+    #[serde(rename = "Handshake")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handshake: Option<Handshake>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct EnablePolicyTypeRequest {
-    #[doc="<p>The policy type that you want to enable.</p>"]
-    #[serde(rename="PolicyType")]
+    /// <p>The policy type that you want to enable.</p>
+    #[serde(rename = "PolicyType")]
     pub policy_type: String,
-    #[doc="<p>The unique identifier (ID) of the root in which you want to enable a policy type. You can get the ID from the <a>ListRoots</a> operation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a root ID string requires \"r-\" followed by from 4 to 32 lower-case letters or digits.</p>"]
-    #[serde(rename="RootId")]
+    /// <p>The unique identifier (ID) of the root in which you want to enable a policy type. You can get the ID from the <a>ListRoots</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a root ID string requires "r-" followed by from 4 to 32 lower-case letters or digits.</p>
+    #[serde(rename = "RootId")]
     pub root_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EnablePolicyTypeResponse {
-    #[doc="<p>A structure that shows the root with the updated list of enabled policy types.</p>"]
-    #[serde(rename="Root")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that shows the root with the updated list of enabled policy types.</p>
+    #[serde(rename = "Root")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub root: Option<Root>,
 }
 
-#[doc="<p>Contains information that must be exchanged to securely establish a relationship between two accounts (an <i>originator</i> and a <i>recipient</i>). For example, when a master account (the originator) invites another account (the recipient) to join its organization, the two accounts exchange information as a series of handshake requests and responses.</p> <p> <b>Note:</b> Handshakes that are CANCELED, ACCEPTED, or DECLINED show up in lists for only 30 days after entering that state After that they are deleted.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information that must be exchanged to securely establish a relationship between two accounts (an <i>originator</i> and a <i>recipient</i>). For example, when a master account (the originator) invites another account (the recipient) to join its organization, the two accounts exchange information as a series of handshake requests and responses.</p> <p> <b>Note:</b> Handshakes that are CANCELED, ACCEPTED, or DECLINED show up in lists for only 30 days after entering that state After that they are deleted.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Handshake {
-    #[doc="<p>The type of handshake, indicating what action occurs when the recipient accepts the handshake.</p>"]
-    #[serde(rename="Action")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of handshake, indicating what action occurs when the recipient accepts the handshake.</p>
+    #[serde(rename = "Action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of a handshake.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of a handshake.</p> <p>For more information about ARNs in Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The date and time that the handshake expires. If the recipient of the handshake request fails to respond before the specified date and time, the handshake becomes inactive and is no longer valid.</p>"]
-    #[serde(rename="ExpirationTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time that the handshake expires. If the recipient of the handshake request fails to respond before the specified date and time, the handshake becomes inactive and is no longer valid.</p>
+    #[serde(rename = "ExpirationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expiration_timestamp: Option<f64>,
-    #[doc="<p>The unique identifier (ID) of a handshake. The originating account creates the ID when it initiates the handshake.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for handshake ID string requires \"h-\" followed by from 8 to 32 lower-case letters or digits.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) of a handshake. The originating account creates the ID when it initiates the handshake.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for handshake ID string requires "h-" followed by from 8 to 32 lower-case letters or digits.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>Information about the two accounts that are participating in the handshake.</p>"]
-    #[serde(rename="Parties")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the two accounts that are participating in the handshake.</p>
+    #[serde(rename = "Parties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parties: Option<Vec<HandshakeParty>>,
-    #[doc="<p>The date and time that the handshake request was made.</p>"]
-    #[serde(rename="RequestedTimestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time that the handshake request was made.</p>
+    #[serde(rename = "RequestedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub requested_timestamp: Option<f64>,
-    #[doc="<p>Additional information that is needed to process the handshake.</p>"]
-    #[serde(rename="Resources")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Additional information that is needed to process the handshake.</p>
+    #[serde(rename = "Resources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resources: Option<Vec<HandshakeResource>>,
-    #[doc="<p>The current state of the handshake. Use the state to trace the flow of the handshake through the process from its creation to its acceptance. The meaning of each of the valid values is as follows:</p> <ul> <li> <p> <b>REQUESTED</b>: This handshake was sent to multiple recipients (applicable to only some handshake types) and not all recipients have responded yet. The request stays in this state until all recipients respond.</p> </li> <li> <p> <b>OPEN</b>: This handshake was sent to multiple recipients (applicable to only some policy types) and all recipients have responded, allowing the originator to complete the handshake action.</p> </li> <li> <p> <b>CANCELED</b>: This handshake is no longer active because it was canceled by the originating account.</p> </li> <li> <p> <b>ACCEPTED</b>: This handshake is complete because it has been accepted by the recipient.</p> </li> <li> <p> <b>DECLINED</b>: This handshake is no longer active because it was declined by the recipient account.</p> </li> <li> <p> <b>EXPIRED</b>: This handshake is no longer active because the originator did not receive a response of any kind from the recipient before the expiration time (15 days).</p> </li> </ul>"]
-    #[serde(rename="State")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The current state of the handshake. Use the state to trace the flow of the handshake through the process from its creation to its acceptance. The meaning of each of the valid values is as follows:</p> <ul> <li> <p> <b>REQUESTED</b>: This handshake was sent to multiple recipients (applicable to only some handshake types) and not all recipients have responded yet. The request stays in this state until all recipients respond.</p> </li> <li> <p> <b>OPEN</b>: This handshake was sent to multiple recipients (applicable to only some policy types) and all recipients have responded, allowing the originator to complete the handshake action.</p> </li> <li> <p> <b>CANCELED</b>: This handshake is no longer active because it was canceled by the originating account.</p> </li> <li> <p> <b>ACCEPTED</b>: This handshake is complete because it has been accepted by the recipient.</p> </li> <li> <p> <b>DECLINED</b>: This handshake is no longer active because it was declined by the recipient account.</p> </li> <li> <p> <b>EXPIRED</b>: This handshake is no longer active because the originator did not receive a response of any kind from the recipient before the expiration time (15 days).</p> </li> </ul>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
 }
 
-#[doc="<p>Specifies the criteria that are used to select the handshakes for the operation.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Specifies the criteria that are used to select the handshakes for the operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct HandshakeFilter {
-    #[doc="<p>Specifies the type of handshake action.</p> <p>If you specify <code>ActionType</code>, you cannot also specify <code>ParentHandshakeId</code>.</p>"]
-    #[serde(rename="ActionType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the type of handshake action.</p> <p>If you specify <code>ActionType</code>, you cannot also specify <code>ParentHandshakeId</code>.</p>
+    #[serde(rename = "ActionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub action_type: Option<String>,
-    #[doc="<p>Specifies the parent handshake. Only used for handshake types that are a child of another type.</p> <p>If you specify <code>ParentHandshakeId</code>, you cannot also specify <code>ActionType</code>.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for handshake ID string requires \"h-\" followed by from 8 to 32 lower-case letters or digits.</p>"]
-    #[serde(rename="ParentHandshakeId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the parent handshake. Only used for handshake types that are a child of another type.</p> <p>If you specify <code>ParentHandshakeId</code>, you cannot also specify <code>ActionType</code>.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for handshake ID string requires "h-" followed by from 8 to 32 lower-case letters or digits.</p>
+    #[serde(rename = "ParentHandshakeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_handshake_id: Option<String>,
 }
 
-#[doc="<p>Identifies a participant in a handshake.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Identifies a participant in a handshake.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct HandshakeParty {
-    #[doc="<p>The unique identifier (ID) for the party.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for handshake ID string requires \"h-\" followed by from 8 to 32 lower-case letters or digits.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) for the party.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for handshake ID string requires "h-" followed by from 8 to 32 lower-case letters or digits.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The type of party.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of party.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Contains additional data that is needed to process a handshake.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains additional data that is needed to process a handshake.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct HandshakeResource {
-    #[doc="<p>When needed, contains an additional array of <code>HandshakeResource</code> objects.</p>"]
-    #[serde(rename="Resources")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>When needed, contains an additional array of <code>HandshakeResource</code> objects.</p>
+    #[serde(rename = "Resources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resources: Option<Vec<HandshakeResource>>,
-    #[doc="<p>The type of information being passed, specifying how the value is to be interpreted by the other party:</p> <ul> <li> <p> <code>ACCOUNT</code> - Specifies an AWS account ID number.</p> </li> <li> <p> <code>ORGANIZATION</code> - Specifies an organization ID number.</p> </li> <li> <p> <code>EMAIL</code> - Specifies the email address that is associated with the account that receives the handshake. </p> </li> <li> <p> <code>OWNER_EMAIL</code> - Specifies the email address associated with the master account. Included as information about an organization. </p> </li> <li> <p> <code>OWNER_NAME</code> - Specifies the name associated with the master account. Included as information about an organization. </p> </li> <li> <p> <code>NOTES</code> - Additional text provided by the handshake initiator and intended for the recipient to read.</p> </li> </ul>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of information being passed, specifying how the value is to be interpreted by the other party:</p> <ul> <li> <p> <code>ACCOUNT</code> - Specifies an AWS account ID number.</p> </li> <li> <p> <code>ORGANIZATION</code> - Specifies an organization ID number.</p> </li> <li> <p> <code>EMAIL</code> - Specifies the email address that is associated with the account that receives the handshake. </p> </li> <li> <p> <code>OWNER_EMAIL</code> - Specifies the email address associated with the master account. Included as information about an organization. </p> </li> <li> <p> <code>OWNER_NAME</code> - Specifies the name associated with the master account. Included as information about an organization. </p> </li> <li> <p> <code>NOTES</code> - Additional text provided by the handshake initiator and intended for the recipient to read.</p> </li> </ul>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The information that is passed to the other party in the handshake. The format of the value string must match the requirements of the specified type.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The information that is passed to the other party in the handshake. The format of the value string must match the requirements of the specified type.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct InviteAccountToOrganizationRequest {
-    #[doc="<p>Additional information that you want to include in the generated email to the recipient account owner.</p>"]
-    #[serde(rename="Notes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Additional information that you want to include in the generated email to the recipient account owner.</p>
+    #[serde(rename = "Notes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notes: Option<String>,
-    #[doc="<p>The identifier (ID) of the AWS account that you want to invite to join your organization. This is a JSON object that contains the following elements: </p> <p> <code>{ \"Type\": \"ACCOUNT\", \"Id\": \"&lt;<i> <b>account id number</b> </i>&gt;\" }</code> </p> <p>If you use the AWS CLI, you can submit this as a single string, similar to the following example:</p> <p> <code>--target id=123456789012,type=ACCOUNT</code> </p> <p>If you specify <code>\"Type\": \"ACCOUNT\"</code>, then you must provide the AWS account ID number as the <code>Id</code>. If you specify <code>\"Type\": \"EMAIL\"</code>, then you must specify the email address that is associated with the account.</p> <p> <code>--target id=bill@example.com,type=EMAIL</code> </p>"]
-    #[serde(rename="Target")]
+    /// <p>The identifier (ID) of the AWS account that you want to invite to join your organization. This is a JSON object that contains the following elements: </p> <p> <code>{ "Type": "ACCOUNT", "Id": "&lt;<i> <b>account id number</b> </i>&gt;" }</code> </p> <p>If you use the AWS CLI, you can submit this as a single string, similar to the following example:</p> <p> <code>--target id=123456789012,type=ACCOUNT</code> </p> <p>If you specify <code>"Type": "ACCOUNT"</code>, then you must provide the AWS account ID number as the <code>Id</code>. If you specify <code>"Type": "EMAIL"</code>, then you must specify the email address that is associated with the account.</p> <p> <code>--target id=bill@example.com,type=EMAIL</code> </p>
+    #[serde(rename = "Target")]
     pub target: HandshakeParty,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InviteAccountToOrganizationResponse {
-    #[doc="<p>A structure that contains details about the handshake that is created to support this invitation request.</p>"]
-    #[serde(rename="Handshake")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains details about the handshake that is created to support this invitation request.</p>
+    #[serde(rename = "Handshake")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handshake: Option<Handshake>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAccountsForParentRequest {
-    #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The unique identifier (ID) for the parent root or organization unit (OU) whose accounts you want to list.</p>"]
-    #[serde(rename="ParentId")]
+    /// <p>The unique identifier (ID) for the parent root or organization unit (OU) whose accounts you want to list.</p>
+    #[serde(rename = "ParentId")]
     pub parent_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAccountsForParentResponse {
-    #[doc="<p>A list of the accounts in the specified root or OU.</p>"]
-    #[serde(rename="Accounts")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the accounts in the specified root or OU.</p>
+    #[serde(rename = "Accounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accounts: Option<Vec<Account>>,
-    #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAccountsRequest {
-    #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAccountsResponse {
-    #[doc="<p>A list of objects in the organization.</p>"]
-    #[serde(rename="Accounts")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of objects in the organization.</p>
+    #[serde(rename = "Accounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accounts: Option<Vec<Account>>,
-    #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListChildrenRequest {
-    #[doc="<p>Filters the output to include only the specified child type.</p>"]
-    #[serde(rename="ChildType")]
+    /// <p>Filters the output to include only the specified child type.</p>
+    #[serde(rename = "ChildType")]
     pub child_type: String,
-    #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The unique identifier (ID) for the parent root or OU whose children you want to list.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
-    #[serde(rename="ParentId")]
+    /// <p>The unique identifier (ID) for the parent root or OU whose children you want to list.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with "r-" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>
+    #[serde(rename = "ParentId")]
     pub parent_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListChildrenResponse {
-    #[doc="<p>The list of children of the specified parent container.</p>"]
-    #[serde(rename="Children")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of children of the specified parent container.</p>
+    #[serde(rename = "Children")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub children: Option<Vec<Child>>,
-    #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListCreateAccountStatusRequest {
-    #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of one or more states that you want included in the response. If this parameter is not present, then all requests are included in the response.</p>"]
-    #[serde(rename="States")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of one or more states that you want included in the response. If this parameter is not present, then all requests are included in the response.</p>
+    #[serde(rename = "States")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub states: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListCreateAccountStatusResponse {
-    #[doc="<p>A list of objects with details about the requests. Certain elements, such as the accountId number, are present in the output only after the account has been successfully created.</p>"]
-    #[serde(rename="CreateAccountStatuses")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of objects with details about the requests. Certain elements, such as the accountId number, are present in the output only after the account has been successfully created.</p>
+    #[serde(rename = "CreateAccountStatuses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub create_account_statuses: Option<Vec<CreateAccountStatus>>,
-    #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListHandshakesForAccountRequest {
-    #[doc="<p>Filters the handshakes that you want included in the response. The default is all types. Use the <code>ActionType</code> element to limit the output to only a specified type, such as <code>INVITE</code>, <code>ENABLE-FULL-CONTROL</code>, or <code>APPROVE-FULL-CONTROL</code>. Alternatively, for the <code>ENABLE-FULL-CONTROL</code> handshake that generates a separate child handshake for each member account, you can specify <code>ParentHandshakeId</code> to see only the handshakes that were generated by that parent request.</p>"]
-    #[serde(rename="Filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters the handshakes that you want included in the response. The default is all types. Use the <code>ActionType</code> element to limit the output to only a specified type, such as <code>INVITE</code>, <code>ENABLE-FULL-CONTROL</code>, or <code>APPROVE-FULL-CONTROL</code>. Alternatively, for the <code>ENABLE-FULL-CONTROL</code> handshake that generates a separate child handshake for each member account, you can specify <code>ParentHandshakeId</code> to see only the handshakes that were generated by that parent request.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<HandshakeFilter>,
-    #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListHandshakesForAccountResponse {
-    #[doc="<p>A list of <a>Handshake</a> objects with details about each of the handshakes that is associated with the specified account.</p>"]
-    #[serde(rename="Handshakes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of <a>Handshake</a> objects with details about each of the handshakes that is associated with the specified account.</p>
+    #[serde(rename = "Handshakes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handshakes: Option<Vec<Handshake>>,
-    #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListHandshakesForOrganizationRequest {
-    #[doc="<p>A filter of the handshakes that you want included in the response. The default is all types. Use the <code>ActionType</code> element to limit the output to only a specified type, such as <code>INVITE</code>, <code>ENABLE-ALL-FEATURES</code>, or <code>APPROVE-ALL-FEATURES</code>. Alternatively, for the <code>ENABLE-ALL-FEATURES</code> handshake that generates a separate child handshake for each member account, you can specify the <code>ParentHandshakeId</code> to see only the handshakes that were generated by that parent request.</p>"]
-    #[serde(rename="Filter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A filter of the handshakes that you want included in the response. The default is all types. Use the <code>ActionType</code> element to limit the output to only a specified type, such as <code>INVITE</code>, <code>ENABLE-ALL-FEATURES</code>, or <code>APPROVE-ALL-FEATURES</code>. Alternatively, for the <code>ENABLE-ALL-FEATURES</code> handshake that generates a separate child handshake for each member account, you can specify the <code>ParentHandshakeId</code> to see only the handshakes that were generated by that parent request.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<HandshakeFilter>,
-    #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListHandshakesForOrganizationResponse {
-    #[doc="<p>A list of <a>Handshake</a> objects with details about each of the handshakes that are associated with an organization.</p>"]
-    #[serde(rename="Handshakes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of <a>Handshake</a> objects with details about each of the handshakes that are associated with an organization.</p>
+    #[serde(rename = "Handshakes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handshakes: Option<Vec<Handshake>>,
-    #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListOrganizationalUnitsForParentRequest {
-    #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The unique identifier (ID) of the root or OU whose child OUs you want to list.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
-    #[serde(rename="ParentId")]
+    /// <p>The unique identifier (ID) of the root or OU whose child OUs you want to list.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with "r-" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>
+    #[serde(rename = "ParentId")]
     pub parent_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListOrganizationalUnitsForParentResponse {
-    #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of the OUs in the specified root or parent OU.</p>"]
-    #[serde(rename="OrganizationalUnits")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of the OUs in the specified root or parent OU.</p>
+    #[serde(rename = "OrganizationalUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub organizational_units: Option<Vec<OrganizationalUnit>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListParentsRequest {
-    #[doc="<p>The unique identifier (ID) of the OU or account whose parent containers you want to list. Do not specify a root.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a child ID string requires one of the following:</p> <ul> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
-    #[serde(rename="ChildId")]
+    /// <p>The unique identifier (ID) of the OU or account whose parent containers you want to list. Do not specify a root.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a child ID string requires one of the following:</p> <ul> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>
+    #[serde(rename = "ChildId")]
     pub child_id: String,
-    #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListParentsResponse {
-    #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of parents for the specified child account or OU.</p>"]
-    #[serde(rename="Parents")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of parents for the specified child account or OU.</p>
+    #[serde(rename = "Parents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parents: Option<Vec<Parent>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPoliciesForTargetRequest {
-    #[doc="<p>The type of policy that you want to include in the returned list.</p>"]
-    #[serde(rename="Filter")]
+    /// <p>The type of policy that you want to include in the returned list.</p>
+    #[serde(rename = "Filter")]
     pub filter: String,
-    #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The unique identifier (ID) of the root, organizational unit, or account whose policies you want to list.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a target ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
-    #[serde(rename="TargetId")]
+    /// <p>The unique identifier (ID) of the root, organizational unit, or account whose policies you want to list.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a target ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with "r-" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>
+    #[serde(rename = "TargetId")]
     pub target_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPoliciesForTargetResponse {
-    #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The list of policies that match the criteria in the request.</p>"]
-    #[serde(rename="Policies")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of policies that match the criteria in the request.</p>
+    #[serde(rename = "Policies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policies: Option<Vec<PolicySummary>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPoliciesRequest {
-    #[doc="<p>Specifies the type of policy that you want to include in the response.</p>"]
-    #[serde(rename="Filter")]
+    /// <p>Specifies the type of policy that you want to include in the response.</p>
+    #[serde(rename = "Filter")]
     pub filter: String,
-    #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPoliciesResponse {
-    #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of policies that match the filter criteria in the request. The output list does not include the policy contents. To see the content for a policy, see <a>DescribePolicy</a>.</p>"]
-    #[serde(rename="Policies")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of policies that match the filter criteria in the request. The output list does not include the policy contents. To see the content for a policy, see <a>DescribePolicy</a>.</p>
+    #[serde(rename = "Policies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policies: Option<Vec<PolicySummary>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListRootsRequest {
-    #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListRootsResponse {
-    #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of roots that are defined in an organization.</p>"]
-    #[serde(rename="Roots")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of roots that are defined in an organization.</p>
+    #[serde(rename = "Roots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub roots: Option<Vec<Root>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTargetsForPolicyRequest {
-    #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The unique identifier (ID) of the policy for which you want to know its attachments.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a policy ID string requires \"p-\" followed by from 8 to 128 lower-case letters or digits.</p>"]
-    #[serde(rename="PolicyId")]
+    /// <p>The unique identifier (ID) of the policy for which you want to know its attachments.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a policy ID string requires "p-" followed by from 8 to 128 lower-case letters or digits.</p>
+    #[serde(rename = "PolicyId")]
     pub policy_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTargetsForPolicyResponse {
-    #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of structures, each of which contains details about one of the entities to which the specified policy is attached.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of structures, each of which contains details about one of the entities to which the specified policy is attached.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<PolicyTargetSummary>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct MoveAccountRequest {
-    #[doc="<p>The unique identifier (ID) of the account that you want to move.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an account ID string requires exactly 12 digits.</p>"]
-    #[serde(rename="AccountId")]
+    /// <p>The unique identifier (ID) of the account that you want to move.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an account ID string requires exactly 12 digits.</p>
+    #[serde(rename = "AccountId")]
     pub account_id: String,
-    #[doc="<p>The unique identifier (ID) of the root or organizational unit that you want to move the account to.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
-    #[serde(rename="DestinationParentId")]
+    /// <p>The unique identifier (ID) of the root or organizational unit that you want to move the account to.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with "r-" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>
+    #[serde(rename = "DestinationParentId")]
     pub destination_parent_id: String,
-    #[doc="<p>The unique identifier (ID) of the root or organizational unit that you want to move the account from.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
-    #[serde(rename="SourceParentId")]
+    /// <p>The unique identifier (ID) of the root or organizational unit that you want to move the account from.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with "r-" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>
+    #[serde(rename = "SourceParentId")]
     pub source_parent_id: String,
 }
 
-#[doc="<p>Contains details about an organization. An organization is a collection of accounts that are centrally managed together using consolidated billing, organized hierarchically with organizational units (OUs), and controlled with policies .</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains details about an organization. An organization is a collection of accounts that are centrally managed together using consolidated billing, organized hierarchically with organizational units (OUs), and controlled with policies .</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Organization {
-    #[doc="<p>The Amazon Resource Name (ARN) of an organization.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of an organization.</p> <p>For more information about ARNs in Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>A list of policy types that are enabled for this organization. For example, if your organization has all features enabled, then service control policies (SCPs) are included in the list.</p>"]
-    #[serde(rename="AvailablePolicyTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of policy types that are enabled for this organization. For example, if your organization has all features enabled, then service control policies (SCPs) are included in the list.</p>
+    #[serde(rename = "AvailablePolicyTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub available_policy_types: Option<Vec<PolicyTypeSummary>>,
-    #[doc="<p>Specifies the functionality that currently is available to the organization. If set to \"ALL\", then all features are enabled and policies can be applied to accounts in the organization. If set to \"CONSOLIDATED_BILLING\", then only consolidated billing functionality is available. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/orgs_manage_org_support-all-features.html\">Enabling All Features in Your Organization</a> in the <i>AWS Organizations User Guide</i>.</p>"]
-    #[serde(rename="FeatureSet")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specifies the functionality that currently is available to the organization. If set to "ALL", then all features are enabled and policies can be applied to accounts in the organization. If set to "CONSOLIDATED_BILLING", then only consolidated billing functionality is available. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/orgs_manage_org_support-all-features.html">Enabling All Features in Your Organization</a> in the <i>AWS Organizations User Guide</i>.</p>
+    #[serde(rename = "FeatureSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub feature_set: Option<String>,
-    #[doc="<p>The unique identifier (ID) of an organization.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an organization ID string requires \"o-\" followed by from 10 to 32 lower-case letters or digits.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) of an organization.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an organization ID string requires "o-" followed by from 10 to 32 lower-case letters or digits.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the account that is designated as the master account for the organization.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
-    #[serde(rename="MasterAccountArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the account that is designated as the master account for the organization.</p> <p>For more information about ARNs in Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
+    #[serde(rename = "MasterAccountArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub master_account_arn: Option<String>,
-    #[doc="<p>The email address that is associated with the AWS account that is designated as the master account for the organization.</p>"]
-    #[serde(rename="MasterAccountEmail")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The email address that is associated with the AWS account that is designated as the master account for the organization.</p>
+    #[serde(rename = "MasterAccountEmail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub master_account_email: Option<String>,
-    #[doc="<p>The unique identifier (ID) of the master account of an organization.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an account ID string requires exactly 12 digits.</p>"]
-    #[serde(rename="MasterAccountId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) of the master account of an organization.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an account ID string requires exactly 12 digits.</p>
+    #[serde(rename = "MasterAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub master_account_id: Option<String>,
 }
 
-#[doc="<p>Contains details about an organizational unit (OU). An OU is a container of AWS accounts within a root of an organization. Policies that are attached to an OU apply to all accounts contained in that OU and in any child OUs.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains details about an organizational unit (OU). An OU is a container of AWS accounts within a root of an organization. Policies that are attached to an OU apply to all accounts contained in that OU and in any child OUs.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct OrganizationalUnit {
-    #[doc="<p>The Amazon Resource Name (ARN) of this OU.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of this OU.</p> <p>For more information about ARNs in Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The unique identifier (ID) associated with this OU.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an organizational unit ID string requires \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) associated with this OU.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an organizational unit ID string requires "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The friendly name of this OU.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The friendly name of this OU.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Contains information about either a root or an organizational unit (OU) that can contain OUs or accounts in an organization.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about either a root or an organizational unit (OU) that can contain OUs or accounts in an organization.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Parent {
-    #[doc="<p>The unique identifier (ID) of the parent entity.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) of the parent entity.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with "r-" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The type of the parent entity.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the parent entity.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Contains rules to be applied to the affected accounts. Policies can be attached directly to accounts, or to roots and OUs to affect all accounts in those hierarchies.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains rules to be applied to the affected accounts. Policies can be attached directly to accounts, or to roots and OUs to affect all accounts in those hierarchies.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Policy {
-    #[doc="<p>The text content of the policy.</p>"]
-    #[serde(rename="Content")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The text content of the policy.</p>
+    #[serde(rename = "Content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
-    #[doc="<p>A structure that contains additional details about the policy.</p>"]
-    #[serde(rename="PolicySummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains additional details about the policy.</p>
+    #[serde(rename = "PolicySummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_summary: Option<PolicySummary>,
 }
 
-#[doc="<p>Contains information about a policy, but does not include the content. To see the content of a policy, see <a>DescribePolicy</a>.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about a policy, but does not include the content. To see the content of a policy, see <a>DescribePolicy</a>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PolicySummary {
-    #[doc="<p>The Amazon Resource Name (ARN) of the policy.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the policy.</p> <p>For more information about ARNs in Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>A boolean value that indicates whether the specified policy is an AWS managed policy. If true, then you can attach the policy to roots, OUs, or accounts, but you cannot edit it.</p>"]
-    #[serde(rename="AwsManaged")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A boolean value that indicates whether the specified policy is an AWS managed policy. If true, then you can attach the policy to roots, OUs, or accounts, but you cannot edit it.</p>
+    #[serde(rename = "AwsManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_managed: Option<bool>,
-    #[doc="<p>The description of the policy.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the policy.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The unique identifier (ID) of the policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a policy ID string requires \"p-\" followed by from 8 to 128 lower-case letters or digits.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) of the policy.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a policy ID string requires "p-" followed by from 8 to 128 lower-case letters or digits.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The friendly name of the policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The friendly name of the policy.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The type of policy.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of policy.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Contains information about a root, OU, or account that a policy is attached to.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about a root, OU, or account that a policy is attached to.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PolicyTargetSummary {
-    #[doc="<p>The Amazon Resource Name (ARN) of the policy target.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the policy target.</p> <p>For more information about ARNs in Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The friendly name of the policy target.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The friendly name of the policy target.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The unique identifier (ID) of the policy target.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a target ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
-    #[serde(rename="TargetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) of the policy target.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a target ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with "r-" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>
+    #[serde(rename = "TargetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_id: Option<String>,
-    #[doc="<p>The type of the policy target.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of the policy target.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Contains information about a policy type and its status in the associated root.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains information about a policy type and its status in the associated root.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PolicyTypeSummary {
-    #[doc="<p>The status of the policy type as it relates to the associated root. To attach a policy of the specified type to a root or to an OU or account in that root, it must be available in the organization and enabled for that root.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the policy type as it relates to the associated root. To attach a policy of the specified type to a root or to an OU or account in that root, it must be available in the organization and enabled for that root.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The name of the policy type.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the policy type.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RemoveAccountFromOrganizationRequest {
-    #[doc="<p>The unique identifier (ID) of the member account that you want to remove from the organization.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an account ID string requires exactly 12 digits.</p>"]
-    #[serde(rename="AccountId")]
+    /// <p>The unique identifier (ID) of the member account that you want to remove from the organization.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an account ID string requires exactly 12 digits.</p>
+    #[serde(rename = "AccountId")]
     pub account_id: String,
 }
 
-#[doc="<p>Contains details about a root. A root is a top-level parent node in the hierarchy of an organization that can contain organizational units (OUs) and accounts. Every root contains every AWS account in the organization. Each root enables the accounts to be organized in a different way and to have different policy types enabled for use in that root.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Contains details about a root. A root is a top-level parent node in the hierarchy of an organization that can contain organizational units (OUs) and accounts. Every root contains every AWS account in the organization. Each root enables the accounts to be organized in a different way and to have different policy types enabled for use in that root.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Root {
-    #[doc="<p>The Amazon Resource Name (ARN) of the root.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
-    #[serde(rename="Arn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Resource Name (ARN) of the root.</p> <p>For more information about ARNs in Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    #[doc="<p>The unique identifier (ID) for the root.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a root ID string requires \"r-\" followed by from 4 to 32 lower-case letters or digits.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique identifier (ID) for the root.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a root ID string requires "r-" followed by from 4 to 32 lower-case letters or digits.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The friendly name of the root.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The friendly name of the root.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The types of policies that are currently enabled for the root and therefore can be attached to the root or to its OUs or accounts.</p>"]
-    #[serde(rename="PolicyTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The types of policies that are currently enabled for the root and therefore can be attached to the root or to its OUs or accounts.</p>
+    #[serde(rename = "PolicyTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_types: Option<Vec<PolicyTypeSummary>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateOrganizationalUnitRequest {
-    #[doc="<p>The new name that you want to assign to the OU.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new name that you want to assign to the OU.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The unique identifier (ID) of the OU that you want to rename. You can get the ID from the <a>ListOrganizationalUnitsForParent</a> operation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an organizational unit ID string requires \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p>"]
-    #[serde(rename="OrganizationalUnitId")]
+    /// <p>The unique identifier (ID) of the OU that you want to rename. You can get the ID from the <a>ListOrganizationalUnitsForParent</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an organizational unit ID string requires "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p>
+    #[serde(rename = "OrganizationalUnitId")]
     pub organizational_unit_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateOrganizationalUnitResponse {
-    #[doc="<p>A structure that contains the details about the specified OU, including its new name.</p>"]
-    #[serde(rename="OrganizationalUnit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains the details about the specified OU, including its new name.</p>
+    #[serde(rename = "OrganizationalUnit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub organizational_unit: Option<OrganizationalUnit>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdatePolicyRequest {
-    #[doc="<p>If provided, the new content for the policy. The text must be correctly formatted JSON that complies with the syntax for the policy's type. For more information, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_scp-syntax.html\">Service Control Policy Syntax</a> in the <i>AWS Organizations User Guide</i>.</p>"]
-    #[serde(rename="Content")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If provided, the new content for the policy. The text must be correctly formatted JSON that complies with the syntax for the policy's type. For more information, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_scp-syntax.html">Service Control Policy Syntax</a> in the <i>AWS Organizations User Guide</i>.</p>
+    #[serde(rename = "Content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
-    #[doc="<p>If provided, the new description for the policy.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If provided, the new description for the policy.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>If provided, the new name for the policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If provided, the new name for the policy.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The unique identifier (ID) of the policy that you want to update.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a policy ID string requires \"p-\" followed by from 8 to 128 lower-case letters or digits.</p>"]
-    #[serde(rename="PolicyId")]
+    /// <p>The unique identifier (ID) of the policy that you want to update.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a policy ID string requires "p-" followed by from 8 to 128 lower-case letters or digits.</p>
+    #[serde(rename = "PolicyId")]
     pub policy_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdatePolicyResponse {
-    #[doc="<p>A structure that contains details about the updated policy, showing the requested changes.</p>"]
-    #[serde(rename="Policy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure that contains details about the updated policy, showing the requested changes.</p>
+    #[serde(rename = "Policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<Policy>,
 }
 
@@ -1085,7 +1084,6 @@ pub enum AcceptHandshakeError {
     Unknown(String),
 }
 
-
 impl AcceptHandshakeError {
     pub fn from_body(body: &str) -> AcceptHandshakeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1111,11 +1109,19 @@ impl AcceptHandshakeError {
                     "HandshakeAlreadyInStateException" => {
                         AcceptHandshakeError::HandshakeAlreadyInState(String::from(error_message))
                     }
-                    "HandshakeConstraintViolationException" => AcceptHandshakeError::HandshakeConstraintViolation(String::from(error_message)),
+                    "HandshakeConstraintViolationException" => {
+                        AcceptHandshakeError::HandshakeConstraintViolation(String::from(
+                            error_message,
+                        ))
+                    }
                     "HandshakeNotFoundException" => {
                         AcceptHandshakeError::HandshakeNotFound(String::from(error_message))
                     }
-                    "InvalidHandshakeTransitionException" => AcceptHandshakeError::InvalidHandshakeTransition(String::from(error_message)),
+                    "InvalidHandshakeTransitionException" => {
+                        AcceptHandshakeError::InvalidHandshakeTransition(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidInputException" => {
                         AcceptHandshakeError::InvalidInput(String::from(error_message))
                     }
@@ -1215,7 +1221,6 @@ pub enum AttachPolicyError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AttachPolicyError {
     pub fn from_body(body: &str) -> AttachPolicyError {
@@ -1347,7 +1352,6 @@ pub enum CancelHandshakeError {
     Unknown(String),
 }
 
-
 impl CancelHandshakeError {
     pub fn from_body(body: &str) -> CancelHandshakeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1373,7 +1377,11 @@ impl CancelHandshakeError {
                     "HandshakeNotFoundException" => {
                         CancelHandshakeError::HandshakeNotFound(String::from(error_message))
                     }
-                    "InvalidHandshakeTransitionException" => CancelHandshakeError::InvalidHandshakeTransition(String::from(error_message)),
+                    "InvalidHandshakeTransitionException" => {
+                        CancelHandshakeError::InvalidHandshakeTransition(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidInputException" => {
                         CancelHandshakeError::InvalidInput(String::from(error_message))
                     }
@@ -1465,7 +1473,6 @@ pub enum CreateAccountError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateAccountError {
     pub fn from_body(body: &str) -> CreateAccountError {
@@ -1582,7 +1589,6 @@ pub enum CreateOrganizationError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateOrganizationError {
     pub fn from_body(body: &str) -> CreateOrganizationError {
@@ -1704,7 +1710,6 @@ pub enum CreateOrganizationalUnitError {
     Unknown(String),
 }
 
-
 impl CreateOrganizationalUnitError {
     pub fn from_body(body: &str) -> CreateOrganizationalUnitError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1718,13 +1723,29 @@ impl CreateOrganizationalUnitError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => CreateOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        CreateOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         CreateOrganizationalUnitError::AccessDenied(String::from(error_message))
                     }
-                    "ConcurrentModificationException" => CreateOrganizationalUnitError::ConcurrentModification(String::from(error_message)),
-                    "ConstraintViolationException" => CreateOrganizationalUnitError::ConstraintViolation(String::from(error_message)),
-                    "DuplicateOrganizationalUnitException" => CreateOrganizationalUnitError::DuplicateOrganizationalUnit(String::from(error_message)),
+                    "ConcurrentModificationException" => {
+                        CreateOrganizationalUnitError::ConcurrentModification(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ConstraintViolationException" => {
+                        CreateOrganizationalUnitError::ConstraintViolation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DuplicateOrganizationalUnitException" => {
+                        CreateOrganizationalUnitError::DuplicateOrganizationalUnit(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidInputException" => {
                         CreateOrganizationalUnitError::InvalidInput(String::from(error_message))
                     }
@@ -1827,7 +1848,6 @@ pub enum CreatePolicyError {
     Unknown(String),
 }
 
-
 impl CreatePolicyError {
     pub fn from_body(body: &str) -> CreatePolicyError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1862,7 +1882,11 @@ impl CreatePolicyError {
                     "MalformedPolicyDocumentException" => {
                         CreatePolicyError::MalformedPolicyDocument(String::from(error_message))
                     }
-                    "PolicyTypeNotAvailableForOrganizationException" => CreatePolicyError::PolicyTypeNotAvailableForOrganization(String::from(error_message)),
+                    "PolicyTypeNotAvailableForOrganizationException" => {
+                        CreatePolicyError::PolicyTypeNotAvailableForOrganization(String::from(
+                            error_message,
+                        ))
+                    }
                     "ServiceException" => CreatePolicyError::Service(String::from(error_message)),
                     "TooManyRequestsException" => {
                         CreatePolicyError::TooManyRequests(String::from(error_message))
@@ -1952,7 +1976,6 @@ pub enum DeclineHandshakeError {
     Unknown(String),
 }
 
-
 impl DeclineHandshakeError {
     pub fn from_body(body: &str) -> DeclineHandshakeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1978,7 +2001,11 @@ impl DeclineHandshakeError {
                     "HandshakeNotFoundException" => {
                         DeclineHandshakeError::HandshakeNotFound(String::from(error_message))
                     }
-                    "InvalidHandshakeTransitionException" => DeclineHandshakeError::InvalidHandshakeTransition(String::from(error_message)),
+                    "InvalidHandshakeTransitionException" => {
+                        DeclineHandshakeError::InvalidHandshakeTransition(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidInputException" => {
                         DeclineHandshakeError::InvalidInput(String::from(error_message))
                     }
@@ -2069,7 +2096,6 @@ pub enum DeleteOrganizationError {
     Unknown(String),
 }
 
-
 impl DeleteOrganizationError {
     pub fn from_body(body: &str) -> DeleteOrganizationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2083,7 +2109,11 @@ impl DeleteOrganizationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => DeleteOrganizationError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        DeleteOrganizationError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         DeleteOrganizationError::AccessDenied(String::from(error_message))
                     }
@@ -2186,7 +2216,6 @@ pub enum DeleteOrganizationalUnitError {
     Unknown(String),
 }
 
-
 impl DeleteOrganizationalUnitError {
     pub fn from_body(body: &str) -> DeleteOrganizationalUnitError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2200,16 +2229,32 @@ impl DeleteOrganizationalUnitError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => DeleteOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        DeleteOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         DeleteOrganizationalUnitError::AccessDenied(String::from(error_message))
                     }
-                    "ConcurrentModificationException" => DeleteOrganizationalUnitError::ConcurrentModification(String::from(error_message)),
+                    "ConcurrentModificationException" => {
+                        DeleteOrganizationalUnitError::ConcurrentModification(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidInputException" => {
                         DeleteOrganizationalUnitError::InvalidInput(String::from(error_message))
                     }
-                    "OrganizationalUnitNotEmptyException" => DeleteOrganizationalUnitError::OrganizationalUnitNotEmpty(String::from(error_message)),
-                    "OrganizationalUnitNotFoundException" => DeleteOrganizationalUnitError::OrganizationalUnitNotFound(String::from(error_message)),
+                    "OrganizationalUnitNotEmptyException" => {
+                        DeleteOrganizationalUnitError::OrganizationalUnitNotEmpty(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OrganizationalUnitNotFoundException" => {
+                        DeleteOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ServiceException" => {
                         DeleteOrganizationalUnitError::Service(String::from(error_message))
                     }
@@ -2300,7 +2345,6 @@ pub enum DeletePolicyError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeletePolicyError {
     pub fn from_body(body: &str) -> DeletePolicyError {
@@ -2416,7 +2460,6 @@ pub enum DescribeAccountError {
     Unknown(String),
 }
 
-
 impl DescribeAccountError {
     pub fn from_body(body: &str) -> DescribeAccountError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2525,7 +2568,6 @@ pub enum DescribeCreateAccountStatusError {
     Unknown(String),
 }
 
-
 impl DescribeCreateAccountStatusError {
     pub fn from_body(body: &str) -> DescribeCreateAccountStatusError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2539,18 +2581,30 @@ impl DescribeCreateAccountStatusError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => DescribeCreateAccountStatusError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        DescribeCreateAccountStatusError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         DescribeCreateAccountStatusError::AccessDenied(String::from(error_message))
                     }
-                    "CreateAccountStatusNotFoundException" => DescribeCreateAccountStatusError::CreateAccountStatusNotFound(String::from(error_message)),
+                    "CreateAccountStatusNotFoundException" => {
+                        DescribeCreateAccountStatusError::CreateAccountStatusNotFound(
+                            String::from(error_message),
+                        )
+                    }
                     "InvalidInputException" => {
                         DescribeCreateAccountStatusError::InvalidInput(String::from(error_message))
                     }
                     "ServiceException" => {
                         DescribeCreateAccountStatusError::Service(String::from(error_message))
                     }
-                    "TooManyRequestsException" => DescribeCreateAccountStatusError::TooManyRequests(String::from(error_message)),
+                    "TooManyRequestsException" => {
+                        DescribeCreateAccountStatusError::TooManyRequests(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeCreateAccountStatusError::Validation(error_message.to_string())
                     }
@@ -2629,7 +2683,6 @@ pub enum DescribeHandshakeError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeHandshakeError {
     pub fn from_body(body: &str) -> DescribeHandshakeError {
@@ -2739,7 +2792,6 @@ pub enum DescribeOrganizationError {
     Unknown(String),
 }
 
-
 impl DescribeOrganizationError {
     pub fn from_body(body: &str) -> DescribeOrganizationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2753,11 +2805,19 @@ impl DescribeOrganizationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => DescribeOrganizationError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        DescribeOrganizationError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         DescribeOrganizationError::AccessDenied(String::from(error_message))
                     }
-                    "ConcurrentModificationException" => DescribeOrganizationError::ConcurrentModification(String::from(error_message)),
+                    "ConcurrentModificationException" => {
+                        DescribeOrganizationError::ConcurrentModification(String::from(
+                            error_message,
+                        ))
+                    }
                     "ServiceException" => {
                         DescribeOrganizationError::Service(String::from(error_message))
                     }
@@ -2842,7 +2902,6 @@ pub enum DescribeOrganizationalUnitError {
     Unknown(String),
 }
 
-
 impl DescribeOrganizationalUnitError {
     pub fn from_body(body: &str) -> DescribeOrganizationalUnitError {
         match from_str::<SerdeJsonValue>(body) {
@@ -2856,18 +2915,30 @@ impl DescribeOrganizationalUnitError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => DescribeOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        DescribeOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         DescribeOrganizationalUnitError::AccessDenied(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         DescribeOrganizationalUnitError::InvalidInput(String::from(error_message))
                     }
-                    "OrganizationalUnitNotFoundException" => DescribeOrganizationalUnitError::OrganizationalUnitNotFound(String::from(error_message)),
+                    "OrganizationalUnitNotFoundException" => {
+                        DescribeOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ServiceException" => {
                         DescribeOrganizationalUnitError::Service(String::from(error_message))
                     }
-                    "TooManyRequestsException" => DescribeOrganizationalUnitError::TooManyRequests(String::from(error_message)),
+                    "TooManyRequestsException" => {
+                        DescribeOrganizationalUnitError::TooManyRequests(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeOrganizationalUnitError::Validation(error_message.to_string())
                     }
@@ -2946,7 +3017,6 @@ pub enum DescribePolicyError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribePolicyError {
     pub fn from_body(body: &str) -> DescribePolicyError {
@@ -3061,7 +3131,6 @@ pub enum DetachPolicyError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DetachPolicyError {
     pub fn from_body(body: &str) -> DetachPolicyError {
@@ -3191,7 +3260,6 @@ pub enum DisablePolicyTypeError {
     Unknown(String),
 }
 
-
 impl DisablePolicyTypeError {
     pub fn from_body(body: &str) -> DisablePolicyTypeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3205,7 +3273,11 @@ impl DisablePolicyTypeError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => DisablePolicyTypeError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        DisablePolicyTypeError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         DisablePolicyTypeError::AccessDenied(String::from(error_message))
                     }
@@ -3314,7 +3386,6 @@ pub enum EnableAllFeaturesError {
     Unknown(String),
 }
 
-
 impl EnableAllFeaturesError {
     pub fn from_body(body: &str) -> EnableAllFeaturesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3328,14 +3399,22 @@ impl EnableAllFeaturesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => EnableAllFeaturesError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        EnableAllFeaturesError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         EnableAllFeaturesError::AccessDenied(String::from(error_message))
                     }
                     "ConcurrentModificationException" => {
                         EnableAllFeaturesError::ConcurrentModification(String::from(error_message))
                     }
-                    "HandshakeConstraintViolationException" => EnableAllFeaturesError::HandshakeConstraintViolation(String::from(error_message)),
+                    "HandshakeConstraintViolationException" => {
+                        EnableAllFeaturesError::HandshakeConstraintViolation(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidInputException" => {
                         EnableAllFeaturesError::InvalidInput(String::from(error_message))
                     }
@@ -3433,7 +3512,6 @@ pub enum EnablePolicyTypeError {
     Unknown(String),
 }
 
-
 impl EnablePolicyTypeError {
     pub fn from_body(body: &str) -> EnablePolicyTypeError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3465,7 +3543,11 @@ impl EnablePolicyTypeError {
                     "PolicyTypeAlreadyEnabledException" => {
                         EnablePolicyTypeError::PolicyTypeAlreadyEnabled(String::from(error_message))
                     }
-                    "PolicyTypeNotAvailableForOrganizationException" => EnablePolicyTypeError::PolicyTypeNotAvailableForOrganization(String::from(error_message)),
+                    "PolicyTypeNotAvailableForOrganizationException" => {
+                        EnablePolicyTypeError::PolicyTypeNotAvailableForOrganization(String::from(
+                            error_message,
+                        ))
+                    }
                     "RootNotFoundException" => {
                         EnablePolicyTypeError::RootNotFound(String::from(error_message))
                     }
@@ -3562,7 +3644,6 @@ pub enum InviteAccountToOrganizationError {
     Unknown(String),
 }
 
-
 impl InviteAccountToOrganizationError {
     pub fn from_body(body: &str) -> InviteAccountToOrganizationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3576,21 +3657,45 @@ impl InviteAccountToOrganizationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => InviteAccountToOrganizationError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        InviteAccountToOrganizationError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         InviteAccountToOrganizationError::AccessDenied(String::from(error_message))
                     }
-                    "ConcurrentModificationException" => InviteAccountToOrganizationError::ConcurrentModification(String::from(error_message)),
-                    "DuplicateHandshakeException" => InviteAccountToOrganizationError::DuplicateHandshake(String::from(error_message)),
-                    "FinalizingOrganizationException" => InviteAccountToOrganizationError::FinalizingOrganization(String::from(error_message)),
-                    "HandshakeConstraintViolationException" => InviteAccountToOrganizationError::HandshakeConstraintViolation(String::from(error_message)),
+                    "ConcurrentModificationException" => {
+                        InviteAccountToOrganizationError::ConcurrentModification(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DuplicateHandshakeException" => {
+                        InviteAccountToOrganizationError::DuplicateHandshake(String::from(
+                            error_message,
+                        ))
+                    }
+                    "FinalizingOrganizationException" => {
+                        InviteAccountToOrganizationError::FinalizingOrganization(String::from(
+                            error_message,
+                        ))
+                    }
+                    "HandshakeConstraintViolationException" => {
+                        InviteAccountToOrganizationError::HandshakeConstraintViolation(
+                            String::from(error_message),
+                        )
+                    }
                     "InvalidInputException" => {
                         InviteAccountToOrganizationError::InvalidInput(String::from(error_message))
                     }
                     "ServiceException" => {
                         InviteAccountToOrganizationError::Service(String::from(error_message))
                     }
-                    "TooManyRequestsException" => InviteAccountToOrganizationError::TooManyRequests(String::from(error_message)),
+                    "TooManyRequestsException" => {
+                        InviteAccountToOrganizationError::TooManyRequests(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         InviteAccountToOrganizationError::Validation(error_message.to_string())
                     }
@@ -3679,7 +3784,6 @@ pub enum LeaveOrganizationError {
     Unknown(String),
 }
 
-
 impl LeaveOrganizationError {
     pub fn from_body(body: &str) -> LeaveOrganizationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3693,7 +3797,11 @@ impl LeaveOrganizationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => LeaveOrganizationError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        LeaveOrganizationError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         LeaveOrganizationError::AccessDenied(String::from(error_message))
                     }
@@ -3709,7 +3817,11 @@ impl LeaveOrganizationError {
                     "InvalidInputException" => {
                         LeaveOrganizationError::InvalidInput(String::from(error_message))
                     }
-                    "MasterCannotLeaveOrganizationException" => LeaveOrganizationError::MasterCannotLeaveOrganization(String::from(error_message)),
+                    "MasterCannotLeaveOrganizationException" => {
+                        LeaveOrganizationError::MasterCannotLeaveOrganization(String::from(
+                            error_message,
+                        ))
+                    }
                     "ServiceException" => {
                         LeaveOrganizationError::Service(String::from(error_message))
                     }
@@ -3795,7 +3907,6 @@ pub enum ListAccountsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListAccountsError {
     pub fn from_body(body: &str) -> ListAccountsError {
@@ -3899,7 +4010,6 @@ pub enum ListAccountsForParentError {
     Unknown(String),
 }
 
-
 impl ListAccountsForParentError {
     pub fn from_body(body: &str) -> ListAccountsForParentError {
         match from_str::<SerdeJsonValue>(body) {
@@ -3913,7 +4023,11 @@ impl ListAccountsForParentError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => ListAccountsForParentError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        ListAccountsForParentError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         ListAccountsForParentError::AccessDenied(String::from(error_message))
                     }
@@ -4007,7 +4121,6 @@ pub enum ListChildrenError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListChildrenError {
     pub fn from_body(body: &str) -> ListChildrenError {
@@ -4113,7 +4226,6 @@ pub enum ListCreateAccountStatusError {
     Unknown(String),
 }
 
-
 impl ListCreateAccountStatusError {
     pub fn from_body(body: &str) -> ListCreateAccountStatusError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4127,7 +4239,11 @@ impl ListCreateAccountStatusError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => ListCreateAccountStatusError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        ListCreateAccountStatusError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         ListCreateAccountStatusError::AccessDenied(String::from(error_message))
                     }
@@ -4216,7 +4332,6 @@ pub enum ListHandshakesForAccountError {
     Unknown(String),
 }
 
-
 impl ListHandshakesForAccountError {
     pub fn from_body(body: &str) -> ListHandshakesForAccountError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4233,7 +4348,11 @@ impl ListHandshakesForAccountError {
                     "AccessDeniedException" => {
                         ListHandshakesForAccountError::AccessDenied(String::from(error_message))
                     }
-                    "ConcurrentModificationException" => ListHandshakesForAccountError::ConcurrentModification(String::from(error_message)),
+                    "ConcurrentModificationException" => {
+                        ListHandshakesForAccountError::ConcurrentModification(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidInputException" => {
                         ListHandshakesForAccountError::InvalidInput(String::from(error_message))
                     }
@@ -4321,7 +4440,6 @@ pub enum ListHandshakesForOrganizationError {
     Unknown(String),
 }
 
-
 impl ListHandshakesForOrganizationError {
     pub fn from_body(body: &str) -> ListHandshakesForOrganizationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4335,14 +4453,30 @@ impl ListHandshakesForOrganizationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => ListHandshakesForOrganizationError::AWSOrganizationsNotInUse(String::from(error_message)),
-                    "AccessDeniedException" => ListHandshakesForOrganizationError::AccessDenied(String::from(error_message)),
-                    "ConcurrentModificationException" => ListHandshakesForOrganizationError::ConcurrentModification(String::from(error_message)),
-                    "InvalidInputException" => ListHandshakesForOrganizationError::InvalidInput(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        ListHandshakesForOrganizationError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
+                    "AccessDeniedException" => ListHandshakesForOrganizationError::AccessDenied(
+                        String::from(error_message),
+                    ),
+                    "ConcurrentModificationException" => {
+                        ListHandshakesForOrganizationError::ConcurrentModification(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInputException" => ListHandshakesForOrganizationError::InvalidInput(
+                        String::from(error_message),
+                    ),
                     "ServiceException" => {
                         ListHandshakesForOrganizationError::Service(String::from(error_message))
                     }
-                    "TooManyRequestsException" => ListHandshakesForOrganizationError::TooManyRequests(String::from(error_message)),
+                    "TooManyRequestsException" => {
+                        ListHandshakesForOrganizationError::TooManyRequests(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ListHandshakesForOrganizationError::Validation(error_message.to_string())
                     }
@@ -4422,7 +4556,6 @@ pub enum ListOrganizationalUnitsForParentError {
     Unknown(String),
 }
 
-
 impl ListOrganizationalUnitsForParentError {
     pub fn from_body(body: &str) -> ListOrganizationalUnitsForParentError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4436,14 +4569,34 @@ impl ListOrganizationalUnitsForParentError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => ListOrganizationalUnitsForParentError::AWSOrganizationsNotInUse(String::from(error_message)),
-                    "AccessDeniedException" => ListOrganizationalUnitsForParentError::AccessDenied(String::from(error_message)),
-                    "InvalidInputException" => ListOrganizationalUnitsForParentError::InvalidInput(String::from(error_message)),
-                    "ParentNotFoundException" => ListOrganizationalUnitsForParentError::ParentNotFound(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        ListOrganizationalUnitsForParentError::AWSOrganizationsNotInUse(
+                            String::from(error_message),
+                        )
+                    }
+                    "AccessDeniedException" => {
+                        ListOrganizationalUnitsForParentError::AccessDenied(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInputException" => {
+                        ListOrganizationalUnitsForParentError::InvalidInput(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ParentNotFoundException" => {
+                        ListOrganizationalUnitsForParentError::ParentNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ServiceException" => {
                         ListOrganizationalUnitsForParentError::Service(String::from(error_message))
                     }
-                    "TooManyRequestsException" => ListOrganizationalUnitsForParentError::TooManyRequests(String::from(error_message)),
+                    "TooManyRequestsException" => {
+                        ListOrganizationalUnitsForParentError::TooManyRequests(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ListOrganizationalUnitsForParentError::Validation(error_message.to_string())
                     }
@@ -4522,7 +4675,6 @@ pub enum ListParentsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListParentsError {
     pub fn from_body(body: &str) -> ListParentsError {
@@ -4628,7 +4780,6 @@ pub enum ListPoliciesError {
     Unknown(String),
 }
 
-
 impl ListPoliciesError {
     pub fn from_body(body: &str) -> ListPoliciesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4731,7 +4882,6 @@ pub enum ListPoliciesForTargetError {
     Unknown(String),
 }
 
-
 impl ListPoliciesForTargetError {
     pub fn from_body(body: &str) -> ListPoliciesForTargetError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4745,7 +4895,11 @@ impl ListPoliciesForTargetError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => ListPoliciesForTargetError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        ListPoliciesForTargetError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         ListPoliciesForTargetError::AccessDenied(String::from(error_message))
                     }
@@ -4837,7 +4991,6 @@ pub enum ListRootsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListRootsError {
     pub fn from_body(body: &str) -> ListRootsError {
@@ -4939,7 +5092,6 @@ pub enum ListTargetsForPolicyError {
     Unknown(String),
 }
 
-
 impl ListTargetsForPolicyError {
     pub fn from_body(body: &str) -> ListTargetsForPolicyError {
         match from_str::<SerdeJsonValue>(body) {
@@ -4953,7 +5105,11 @@ impl ListTargetsForPolicyError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => ListTargetsForPolicyError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        ListTargetsForPolicyError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         ListTargetsForPolicyError::AccessDenied(String::from(error_message))
                     }
@@ -5055,7 +5211,6 @@ pub enum MoveAccountError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl MoveAccountError {
     pub fn from_body(body: &str) -> MoveAccountError {
@@ -5185,7 +5340,6 @@ pub enum RemoveAccountFromOrganizationError {
     Unknown(String),
 }
 
-
 impl RemoveAccountFromOrganizationError {
     pub fn from_body(body: &str) -> RemoveAccountFromOrganizationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5199,17 +5353,45 @@ impl RemoveAccountFromOrganizationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => RemoveAccountFromOrganizationError::AWSOrganizationsNotInUse(String::from(error_message)),
-                    "AccessDeniedException" => RemoveAccountFromOrganizationError::AccessDenied(String::from(error_message)),
-                    "AccountNotFoundException" => RemoveAccountFromOrganizationError::AccountNotFound(String::from(error_message)),
-                    "ConcurrentModificationException" => RemoveAccountFromOrganizationError::ConcurrentModification(String::from(error_message)),
-                    "ConstraintViolationException" => RemoveAccountFromOrganizationError::ConstraintViolation(String::from(error_message)),
-                    "InvalidInputException" => RemoveAccountFromOrganizationError::InvalidInput(String::from(error_message)),
-                    "MasterCannotLeaveOrganizationException" => RemoveAccountFromOrganizationError::MasterCannotLeaveOrganization(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        RemoveAccountFromOrganizationError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
+                    "AccessDeniedException" => RemoveAccountFromOrganizationError::AccessDenied(
+                        String::from(error_message),
+                    ),
+                    "AccountNotFoundException" => {
+                        RemoveAccountFromOrganizationError::AccountNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ConcurrentModificationException" => {
+                        RemoveAccountFromOrganizationError::ConcurrentModification(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ConstraintViolationException" => {
+                        RemoveAccountFromOrganizationError::ConstraintViolation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInputException" => RemoveAccountFromOrganizationError::InvalidInput(
+                        String::from(error_message),
+                    ),
+                    "MasterCannotLeaveOrganizationException" => {
+                        RemoveAccountFromOrganizationError::MasterCannotLeaveOrganization(
+                            String::from(error_message),
+                        )
+                    }
                     "ServiceException" => {
                         RemoveAccountFromOrganizationError::Service(String::from(error_message))
                     }
-                    "TooManyRequestsException" => RemoveAccountFromOrganizationError::TooManyRequests(String::from(error_message)),
+                    "TooManyRequestsException" => {
+                        RemoveAccountFromOrganizationError::TooManyRequests(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         RemoveAccountFromOrganizationError::Validation(error_message.to_string())
                     }
@@ -5296,7 +5478,6 @@ pub enum UpdateOrganizationalUnitError {
     Unknown(String),
 }
 
-
 impl UpdateOrganizationalUnitError {
     pub fn from_body(body: &str) -> UpdateOrganizationalUnitError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5310,16 +5491,32 @@ impl UpdateOrganizationalUnitError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AWSOrganizationsNotInUseException" => UpdateOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(error_message)),
+                    "AWSOrganizationsNotInUseException" => {
+                        UpdateOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "AccessDeniedException" => {
                         UpdateOrganizationalUnitError::AccessDenied(String::from(error_message))
                     }
-                    "ConcurrentModificationException" => UpdateOrganizationalUnitError::ConcurrentModification(String::from(error_message)),
-                    "DuplicateOrganizationalUnitException" => UpdateOrganizationalUnitError::DuplicateOrganizationalUnit(String::from(error_message)),
+                    "ConcurrentModificationException" => {
+                        UpdateOrganizationalUnitError::ConcurrentModification(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DuplicateOrganizationalUnitException" => {
+                        UpdateOrganizationalUnitError::DuplicateOrganizationalUnit(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidInputException" => {
                         UpdateOrganizationalUnitError::InvalidInput(String::from(error_message))
                     }
-                    "OrganizationalUnitNotFoundException" => UpdateOrganizationalUnitError::OrganizationalUnitNotFound(String::from(error_message)),
+                    "OrganizationalUnitNotFoundException" => {
+                        UpdateOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ServiceException" => {
                         UpdateOrganizationalUnitError::Service(String::from(error_message))
                     }
@@ -5414,7 +5611,6 @@ pub enum UpdatePolicyError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdatePolicyError {
     pub fn from_body(body: &str) -> UpdatePolicyError {
@@ -5516,237 +5712,219 @@ impl Error for UpdatePolicyError {
 /// Trait representing the capabilities of the Organizations API. Organizations clients implement this trait.
 pub trait Organizations {
     #[doc="<p>Sends a response to the originator of a handshake agreeing to the action proposed by the handshake request. </p> <p>This operation can be called only by the following principals when they also have the relevant IAM permissions:</p> <ul> <li> <p> <b>Invitation to join</b> or <b>Approve all features request</b> handshakes: only a principal from the member account. </p> </li> <li> <p> <b>Enable all features final confirmation</b> handshake: only a principal from the master account.</p> <p>For more information about invitations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_invites.html\">Inviting an AWS Account to Join Your Organization</a> in the <i>AWS Organizations User Guide</i>. For more information about requests to enable all features in the organization, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_org_support-all-features.html\">Enabling All Features in Your Organization</a> in the <i>AWS Organizations User Guide</i>.</p> </li> </ul> <p>After you accept a handshake, it continues to appear in the results of relevant APIs for only 30 days. After that it is deleted.</p>"]
-    fn accept_handshake(&self,
-                        input: &AcceptHandshakeRequest)
-                        -> Result<AcceptHandshakeResponse, AcceptHandshakeError>;
-
+    fn accept_handshake(
+        &self,
+        input: &AcceptHandshakeRequest,
+    ) -> Result<AcceptHandshakeResponse, AcceptHandshakeError>;
 
     #[doc="<p>Attaches a policy to a root, an organizational unit, or an individual account. How the policy affects accounts depends on the type of policy:</p> <ul> <li> <p> <b>Service control policy (SCP)</b> - An SCP specifies what permissions can be delegated to users in affected member accounts. The scope of influence for a policy depends on what you attach the policy to:</p> <ul> <li> <p>If you attach an SCP to a root, it affects all accounts in the organization.</p> </li> <li> <p>If you attach an SCP to an OU, it affects all accounts in that OU and in any child OUs.</p> </li> <li> <p>If you attach the policy directly to an account, then it affects only that account.</p> </li> </ul> <p>SCPs essentially are permission \"filters\". When you attach one SCP to a higher level root or OU, and you also attach a different SCP to a child OU or to an account, the child policy can further restrict only the permissions that pass through the parent filter and are available to the child. An SCP that is attached to a child cannot grant a permission that is not already granted by the parent. For example, imagine that the parent SCP allows permissions A, B, C, D, and E. The child SCP allows C, D, E, F, and G. The result is that the accounts affected by the child SCP are allowed to use only C, D, and E. They cannot use A or B because they were filtered out by the child OU. They also cannot use F and G because they were filtered out by the parent OU. They cannot be granted back by the child SCP; child SCPs can only filter the permissions they receive from the parent SCP.</p> <p>AWS Organizations attaches a default SCP named <code>\"FullAWSAccess</code> to every root, OU, and account. This default SCP allows all services and actions, enabling any new child OU or account to inherit the permissions of the parent root or OU. If you detach the default policy, you must replace it with a policy that specifies the permissions that you want to allow in that OU or account.</p> <p>For more information about how Organizations policies permissions work, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scp.html\">Using Service Control Policies</a> in the <i>AWS Organizations User Guide</i>.</p> </li> </ul> <p>This operation can be called only from the organization's master account.</p>"]
     fn attach_policy(&self, input: &AttachPolicyRequest) -> Result<(), AttachPolicyError>;
 
-
     #[doc="<p>Cancels a handshake. Canceling a handshake sets the handshake state to <code>CANCELED</code>. </p> <p>This operation can be called only from the account that originated the handshake. The recipient of the handshake can't cancel it, but can use <a>DeclineHandshake</a> instead. After a handshake is canceled, the recipient can no longer respond to that handshake.</p> <p>After you cancel a handshake, it continues to appear in the results of relevant APIs for only 30 days. After that it is deleted.</p>"]
-    fn cancel_handshake(&self,
-                        input: &CancelHandshakeRequest)
-                        -> Result<CancelHandshakeResponse, CancelHandshakeError>;
-
+    fn cancel_handshake(
+        &self,
+        input: &CancelHandshakeRequest,
+    ) -> Result<CancelHandshakeResponse, CancelHandshakeError>;
 
     #[doc="<p>Creates an AWS account that is automatically a member of the organization whose credentials made the request. This is an asynchronous request that AWS performs in the background. If you want to check the status of the request later, you need the <code>OperationId</code> response element from this operation to provide as a parameter to the <a>DescribeCreateAccountStatus</a> operation.</p> <p>AWS Organizations preconfigures the new member account with a role (named <code>OrganizationAccountAccessRole</code> by default) that grants administrator permissions to the new account. Principals in the master account can assume the role. AWS Organizations clones the company name and address information for the new account from the organization's master account.</p> <p>For more information about creating accounts, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html\">Creating an AWS Account in Your Organization</a> in the <i>AWS Organizations User Guide</i>.</p> <important> <p>You cannot remove accounts that are created with this operation from an organization. That also means that you cannot delete an organization that contains an account that is created with this operation.</p> </important> <note> <p>When you create a member account with this operation, you can choose whether to create the account with the <b>IAM User and Role Access to Billing Information</b> switch enabled. If you enable it, IAM users and roles that have appropriate permissions can view billing information for the account. If you disable this, then only the account root user can access billing information. For information about how to disable this for an account, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html\">Granting Access to Your Billing Information and Tools</a>.</p> </note> <p>This operation can be called only from the organization's master account.</p>"]
-    fn create_account(&self,
-                      input: &CreateAccountRequest)
-                      -> Result<CreateAccountResponse, CreateAccountError>;
-
+    fn create_account(
+        &self,
+        input: &CreateAccountRequest,
+    ) -> Result<CreateAccountResponse, CreateAccountError>;
 
     #[doc="<p>Creates an AWS organization. The account whose user is calling the CreateOrganization operation automatically becomes the <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/orgs_getting-started_concepts.html#account\">master account</a> of the new organization.</p> <p>This operation must be called using credentials from the account that is to become the new organization's master account. The principal must also have the relevant IAM permissions.</p> <p>By default (or if you set the <code>FeatureSet</code> parameter to <code>ALL</code>), the new organization is created with all features enabled and service control policies automatically enabled in the root. If you instead choose to create the organization supporting only the consolidated billing features by setting the <code>FeatureSet</code> parameter to <code>CONSOLIDATED_BILLING\"</code>, then no policy types are enabled by default and you cannot use organization policies.</p>"]
-    fn create_organization(&self,
-                           input: &CreateOrganizationRequest)
-                           -> Result<CreateOrganizationResponse, CreateOrganizationError>;
-
+    fn create_organization(
+        &self,
+        input: &CreateOrganizationRequest,
+    ) -> Result<CreateOrganizationResponse, CreateOrganizationError>;
 
     #[doc="<p>Creates an organizational unit (OU) within a root or parent OU. An OU is a container for accounts that enables you to organize your accounts to apply policies according to your business requirements. The number of levels deep that you can nest OUs is dependent upon the policy types enabled for that root. For service control policies, the limit is five. </p> <p>For more information about OUs, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous.html\">Managing Organizational Units</a> in the <i>AWS Organizations User Guide</i>.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn create_organizational_unit
-        (&self,
-         input: &CreateOrganizationalUnitRequest)
-         -> Result<CreateOrganizationalUnitResponse, CreateOrganizationalUnitError>;
-
+    fn create_organizational_unit(
+        &self,
+        input: &CreateOrganizationalUnitRequest,
+    ) -> Result<CreateOrganizationalUnitResponse, CreateOrganizationalUnitError>;
 
     #[doc="<p>Creates a policy of a specified type that you can attach to a root, an organizational unit (OU), or an individual AWS account.</p> <p>For more information about policies and their use, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies.html\">Managing Organization Policies</a>.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn create_policy(&self,
-                     input: &CreatePolicyRequest)
-                     -> Result<CreatePolicyResponse, CreatePolicyError>;
-
+    fn create_policy(
+        &self,
+        input: &CreatePolicyRequest,
+    ) -> Result<CreatePolicyResponse, CreatePolicyError>;
 
     #[doc="<p>Declines a handshake request. This sets the handshake state to <code>DECLINED</code> and effectively deactivates the request.</p> <p>This operation can be called only from the account that received the handshake. The originator of the handshake can use <a>CancelHandshake</a> instead. The originator can't reactivate a declined request, but can re-initiate the process with a new handshake request.</p> <p>After you decline a handshake, it continues to appear in the results of relevant APIs for only 30 days. After that it is deleted.</p>"]
-    fn decline_handshake(&self,
-                         input: &DeclineHandshakeRequest)
-                         -> Result<DeclineHandshakeResponse, DeclineHandshakeError>;
-
+    fn decline_handshake(
+        &self,
+        input: &DeclineHandshakeRequest,
+    ) -> Result<DeclineHandshakeResponse, DeclineHandshakeError>;
 
     #[doc="<p>Deletes the organization. You can delete an organization only by using credentials from the master account. The organization must be empty of member accounts, OUs, and policies.</p> <important> <p>If you create any accounts using Organizations operations or the Organizations console, you can't remove those accounts from the organization, which means that you can't delete the organization.</p> </important>"]
     fn delete_organization(&self) -> Result<(), DeleteOrganizationError>;
 
-
     #[doc="<p>Deletes an organizational unit from a root or another OU. You must first remove all accounts and child OUs from the OU that you want to delete.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn delete_organizational_unit(&self,
-                                  input: &DeleteOrganizationalUnitRequest)
-                                  -> Result<(), DeleteOrganizationalUnitError>;
-
+    fn delete_organizational_unit(
+        &self,
+        input: &DeleteOrganizationalUnitRequest,
+    ) -> Result<(), DeleteOrganizationalUnitError>;
 
     #[doc="<p>Deletes the specified policy from your organization. Before you perform this operation, you must first detach the policy from all OUs, roots, and accounts.</p> <p>This operation can be called only from the organization's master account.</p>"]
     fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError>;
 
-
     #[doc="<p>Retrieves Organizations-related information about the specified account.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn describe_account(&self,
-                        input: &DescribeAccountRequest)
-                        -> Result<DescribeAccountResponse, DescribeAccountError>;
-
+    fn describe_account(
+        &self,
+        input: &DescribeAccountRequest,
+    ) -> Result<DescribeAccountResponse, DescribeAccountError>;
 
     #[doc="<p>Retrieves the current status of an asynchronous request to create an account.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn describe_create_account_status
-        (&self,
-         input: &DescribeCreateAccountStatusRequest)
-         -> Result<DescribeCreateAccountStatusResponse, DescribeCreateAccountStatusError>;
-
+    fn describe_create_account_status(
+        &self,
+        input: &DescribeCreateAccountStatusRequest,
+    ) -> Result<DescribeCreateAccountStatusResponse, DescribeCreateAccountStatusError>;
 
     #[doc="<p>Retrieves information about a previously requested handshake. The handshake ID comes from the response to the original <a>InviteAccountToOrganization</a> operation that generated the handshake.</p> <p>You can access handshakes that are ACCEPTED, DECLINED, or CANCELED for only 30 days after they change to that state. They are then deleted and no longer accessible.</p> <p>This operation can be called from any account in the organization.</p>"]
-    fn describe_handshake(&self,
-                          input: &DescribeHandshakeRequest)
-                          -> Result<DescribeHandshakeResponse, DescribeHandshakeError>;
-
+    fn describe_handshake(
+        &self,
+        input: &DescribeHandshakeRequest,
+    ) -> Result<DescribeHandshakeResponse, DescribeHandshakeError>;
 
     #[doc="<p>Retrieves information about the organization that the user's account belongs to.</p> <p>This operation can be called from any account in the organization.</p>"]
-    fn describe_organization(&self)
-                             -> Result<DescribeOrganizationResponse, DescribeOrganizationError>;
-
+    fn describe_organization(
+        &self,
+    ) -> Result<DescribeOrganizationResponse, DescribeOrganizationError>;
 
     #[doc="<p>Retrieves information about an organizational unit (OU).</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn describe_organizational_unit
-        (&self,
-         input: &DescribeOrganizationalUnitRequest)
-         -> Result<DescribeOrganizationalUnitResponse, DescribeOrganizationalUnitError>;
-
+    fn describe_organizational_unit(
+        &self,
+        input: &DescribeOrganizationalUnitRequest,
+    ) -> Result<DescribeOrganizationalUnitResponse, DescribeOrganizationalUnitError>;
 
     #[doc="<p>Retrieves information about a policy.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn describe_policy(&self,
-                       input: &DescribePolicyRequest)
-                       -> Result<DescribePolicyResponse, DescribePolicyError>;
-
+    fn describe_policy(
+        &self,
+        input: &DescribePolicyRequest,
+    ) -> Result<DescribePolicyResponse, DescribePolicyError>;
 
     #[doc="<p>Detaches a policy from a target root, organizational unit, or account. If the policy being detached is a service control policy (SCP), the changes to permissions for IAM users and roles in affected accounts are immediate.</p> <p> <b>Note:</b> Every root, OU, and account must have at least one SCP attached. If you want to replace the default <code>FullAWSAccess</code> policy with one that limits the permissions that can be delegated, then you must attach the replacement policy before you can remove the default one. This is the authorization strategy of <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_about-scps.html#orgs_policies_whitelist\">whitelisting</a>. If you instead attach a second SCP and leave the <code>FullAWSAccess</code> SCP still attached, and specify <code>\"Effect\": \"Deny\"</code> in the second SCP to override the <code>\"Effect\": \"Allow\"</code> in the <code>FullAWSAccess</code> policy (or any other attached SCP), then you are using the authorization strategy of <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_about-scps.html#orgs_policies_blacklist\">blacklisting</a>. </p> <p>This operation can be called only from the organization's master account.</p>"]
     fn detach_policy(&self, input: &DetachPolicyRequest) -> Result<(), DetachPolicyError>;
 
-
     #[doc="<p>Disables an organizational control policy type in a root. A poicy of a certain type can be attached to entities in a root only if that type is enabled in the root. After you perform this operation, you no longer can attach policies of the specified type to that root or to any OU or account in that root. You can undo this by using the <a>EnablePolicyType</a> operation.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn disable_policy_type(&self,
-                           input: &DisablePolicyTypeRequest)
-                           -> Result<DisablePolicyTypeResponse, DisablePolicyTypeError>;
-
+    fn disable_policy_type(
+        &self,
+        input: &DisablePolicyTypeRequest,
+    ) -> Result<DisablePolicyTypeResponse, DisablePolicyTypeError>;
 
     #[doc="<p>Enables all features in an organization. This enables the use of organization policies that can restrict the services and actions that can be called in each account. Until you enable all features, you have access only to consolidated billing, and you can't use any of the advanced account administration features that AWS Organizations supports. For more information, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_org_support-all-features.html\">Enabling All Features in Your Organization</a> in the <i>AWS Organizations User Guide</i>.</p> <important> <p>This operation is required only for organizations that were created explicitly with only the consolidated billing features enabled, or that were migrated from a Consolidated Billing account family to Organizations. Calling this operation sends a handshake to every invited account in the organization. The feature set change can be finalized and the additional features enabled only after all administrators in the invited accounts approve the change by accepting the handshake.</p> </important> <p>After all invited member accounts accept the handshake, you finalize the feature set change by accepting the handshake that contains <code>\"Action\": \"ENABLE_ALL_FEATURES\"</code>. This completes the change.</p> <p>After you enable all features in your organization, the master account in the organization can apply policies on all member accounts. These policies can restrict what users and even administrators in those accounts can do. The master account can apply policies that prevent accounts from leaving the organization. Ensure that your account administrators are aware of this.</p> <p>This operation can be called only from the organization's master account. </p>"]
     fn enable_all_features(&self) -> Result<EnableAllFeaturesResponse, EnableAllFeaturesError>;
 
-
     #[doc="<p>Enables a policy type in a root. After you enable a policy type in a root, you can attach policies of that type to the root, any OU, or account in that root. You can undo this by using the <a>DisablePolicyType</a> operation.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn enable_policy_type(&self,
-                          input: &EnablePolicyTypeRequest)
-                          -> Result<EnablePolicyTypeResponse, EnablePolicyTypeError>;
-
+    fn enable_policy_type(
+        &self,
+        input: &EnablePolicyTypeRequest,
+    ) -> Result<EnablePolicyTypeResponse, EnablePolicyTypeError>;
 
     #[doc="<p>Sends an invitation to another account to join your organization as a member account. Organizations sends email on your behalf to the email address that is associated with the other account's owner. The invitation is implemented as a <a>Handshake</a> whose details are in the response.</p> <important> <p>You can invite AWS accounts only from the same reseller as the master account. For example, if your organization's master account was created by Amazon Internet Services Pvt. Ltd (AISPL), an AWS reseller in India, then you can only invite other AISPL accounts to your organization. You can't combine accounts from AISPL and AWS. For more information, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/useconsolidatedbilliing-India.html\">Consolidated Billing in India</a>.</p> </important> <p>This operation can be called only from the organization's master account.</p>"]
-    fn invite_account_to_organization
-        (&self,
-         input: &InviteAccountToOrganizationRequest)
-         -> Result<InviteAccountToOrganizationResponse, InviteAccountToOrganizationError>;
-
+    fn invite_account_to_organization(
+        &self,
+        input: &InviteAccountToOrganizationRequest,
+    ) -> Result<InviteAccountToOrganizationResponse, InviteAccountToOrganizationError>;
 
     #[doc="<p>Removes a member account from its parent organization. This version of the operation is performed by the account that wants to leave. To remove a member account as a user in the master account, use <a>RemoveAccountFromOrganization</a> instead.</p> <p>This operation can be called only from a member account in the organization.</p> <important> <ul> <li> <p>The master account in an organization with all features enabled can set service control policies (SCPs) that can restrict what administrators of member accounts can do, including preventing them from successfully calling <code>LeaveOrganization</code> and leaving the organization. </p> </li> <li> <p>If you created the account using the AWS Organizations console, the Organizations API, or the Organizations CLI commands, then you cannot remove the account.</p> </li> <li> <p>You can leave an organization only after you enable IAM user access to billing in your account. For more information, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html#ControllingAccessWebsite-Activate\">Activating Access to the Billing and Cost Management Console</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> </li> </ul> </important>"]
     fn leave_organization(&self) -> Result<(), LeaveOrganizationError>;
 
-
     #[doc="<p>Lists all the accounts in the organization. To request only the accounts in a root or OU, use the <a>ListAccountsForParent</a> operation instead.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn list_accounts(&self,
-                     input: &ListAccountsRequest)
-                     -> Result<ListAccountsResponse, ListAccountsError>;
-
+    fn list_accounts(
+        &self,
+        input: &ListAccountsRequest,
+    ) -> Result<ListAccountsResponse, ListAccountsError>;
 
     #[doc="<p>Lists the accounts in an organization that are contained by the specified target root or organizational unit (OU). If you specify the root, you get a list of all the accounts that are not in any OU. If you specify an OU, you get a list of all the accounts in only that OU, and not in any child OUs. To get a list of all accounts in the organization, use the <a>ListAccounts</a> operation.</p>"]
-    fn list_accounts_for_parent
-        (&self,
-         input: &ListAccountsForParentRequest)
-         -> Result<ListAccountsForParentResponse, ListAccountsForParentError>;
-
+    fn list_accounts_for_parent(
+        &self,
+        input: &ListAccountsForParentRequest,
+    ) -> Result<ListAccountsForParentResponse, ListAccountsForParentError>;
 
     #[doc="<p>Lists all of the OUs or accounts that are contained in the specified parent OU or root. This operation, along with <a>ListParents</a> enables you to traverse the tree structure that makes up this root.</p>"]
-    fn list_children(&self,
-                     input: &ListChildrenRequest)
-                     -> Result<ListChildrenResponse, ListChildrenError>;
-
+    fn list_children(
+        &self,
+        input: &ListChildrenRequest,
+    ) -> Result<ListChildrenResponse, ListChildrenError>;
 
     #[doc="<p>Lists the account creation requests that match the specified status that is currently being tracked for the organization.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn list_create_account_status
-        (&self,
-         input: &ListCreateAccountStatusRequest)
-         -> Result<ListCreateAccountStatusResponse, ListCreateAccountStatusError>;
-
+    fn list_create_account_status(
+        &self,
+        input: &ListCreateAccountStatusRequest,
+    ) -> Result<ListCreateAccountStatusResponse, ListCreateAccountStatusError>;
 
     #[doc="<p>Lists the current handshakes that are associated with the account of the requesting user.</p> <p>Handshakes that are ACCEPTED, DECLINED, or CANCELED appear in the results of this API for only 30 days after changing to that state. After that they are deleted and no longer accessible.</p> <p>This operation can be called from any account in the organization.</p>"]
-    fn list_handshakes_for_account
-        (&self,
-         input: &ListHandshakesForAccountRequest)
-         -> Result<ListHandshakesForAccountResponse, ListHandshakesForAccountError>;
-
+    fn list_handshakes_for_account(
+        &self,
+        input: &ListHandshakesForAccountRequest,
+    ) -> Result<ListHandshakesForAccountResponse, ListHandshakesForAccountError>;
 
     #[doc="<p>Lists the handshakes that are associated with the organization that the requesting user is part of. The <code>ListHandshakesForOrganization</code> operation returns a list of handshake structures. Each structure contains details and status about a handshake.</p> <p>Handshakes that are ACCEPTED, DECLINED, or CANCELED appear in the results of this API for only 30 days after changing to that state. After that they are deleted and no longer accessible.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn list_handshakes_for_organization
-        (&self,
-         input: &ListHandshakesForOrganizationRequest)
-         -> Result<ListHandshakesForOrganizationResponse, ListHandshakesForOrganizationError>;
-
+    fn list_handshakes_for_organization(
+        &self,
+        input: &ListHandshakesForOrganizationRequest,
+    ) -> Result<ListHandshakesForOrganizationResponse, ListHandshakesForOrganizationError>;
 
     #[doc="<p>Lists the organizational units (OUs) in a parent organizational unit or root.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn list_organizational_units_for_parent
-        (&self,
-         input: &ListOrganizationalUnitsForParentRequest)
-         -> Result<ListOrganizationalUnitsForParentResponse, ListOrganizationalUnitsForParentError>;
-
+    fn list_organizational_units_for_parent(
+        &self,
+        input: &ListOrganizationalUnitsForParentRequest,
+    ) -> Result<ListOrganizationalUnitsForParentResponse, ListOrganizationalUnitsForParentError>;
 
     #[doc="<p>Lists the root or organizational units (OUs) that serve as the immediate parent of the specified child OU or account. This operation, along with <a>ListChildren</a> enables you to traverse the tree structure that makes up this root.</p> <p>This operation can be called only from the organization's master account.</p> <note> <p>In the current release, a child can have only a single parent. </p> </note>"]
-    fn list_parents(&self,
-                    input: &ListParentsRequest)
-                    -> Result<ListParentsResponse, ListParentsError>;
-
+    fn list_parents(
+        &self,
+        input: &ListParentsRequest,
+    ) -> Result<ListParentsResponse, ListParentsError>;
 
     #[doc="<p>Retrieves the list of all policies in an organization of a specified type.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn list_policies(&self,
-                     input: &ListPoliciesRequest)
-                     -> Result<ListPoliciesResponse, ListPoliciesError>;
-
+    fn list_policies(
+        &self,
+        input: &ListPoliciesRequest,
+    ) -> Result<ListPoliciesResponse, ListPoliciesError>;
 
     #[doc="<p>Lists the policies that are directly attached to the specified target root, organizational unit (OU), or account. You must specify the policy type that you want included in the returned list.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn list_policies_for_target
-        (&self,
-         input: &ListPoliciesForTargetRequest)
-         -> Result<ListPoliciesForTargetResponse, ListPoliciesForTargetError>;
-
+    fn list_policies_for_target(
+        &self,
+        input: &ListPoliciesForTargetRequest,
+    ) -> Result<ListPoliciesForTargetResponse, ListPoliciesForTargetError>;
 
     #[doc="<p>Lists the roots that are defined in the current organization.</p> <p>This operation can be called only from the organization's master account.</p>"]
     fn list_roots(&self, input: &ListRootsRequest) -> Result<ListRootsResponse, ListRootsError>;
 
-
     #[doc="<p>Lists all the roots, OUs, and accounts to which the specified policy is attached.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn list_targets_for_policy
-        (&self,
-         input: &ListTargetsForPolicyRequest)
-         -> Result<ListTargetsForPolicyResponse, ListTargetsForPolicyError>;
-
+    fn list_targets_for_policy(
+        &self,
+        input: &ListTargetsForPolicyRequest,
+    ) -> Result<ListTargetsForPolicyResponse, ListTargetsForPolicyError>;
 
     #[doc="<p>Moves an account from its current source parent root or OU to the specified destination parent root or OU.</p> <p>This operation can be called only from the organization's master account.</p>"]
     fn move_account(&self, input: &MoveAccountRequest) -> Result<(), MoveAccountError>;
 
-
     #[doc="<p>Removes the specified account from the organization.</p> <p>The removed account becomes a stand-alone account that is not a member of any organization. It is no longer subject to any policies and is responsible for its own bill payments. The organization's master account is no longer charged for any expenses accrued by the member account after it is removed from the organization.</p> <p>This operation can be called only from the organization's master account. Member accounts can remove themselves with <a>LeaveOrganization</a> instead.</p> <important> <ul> <li> <p>You can remove only accounts that were created outside your organization and invited to join. If you created the account using the AWS Organizations console, the Organizations API, or the Organizations CLI commands, then you cannot remove the account.</p> </li> <li> <p>You can remove a member account only after you enable IAM user access to billing in the member account. For more information, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html#ControllingAccessWebsite-Activate\">Activating Access to the Billing and Cost Management Console</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> </li> </ul> </important>"]
-    fn remove_account_from_organization(&self,
-                                        input: &RemoveAccountFromOrganizationRequest)
-                                        -> Result<(), RemoveAccountFromOrganizationError>;
-
+    fn remove_account_from_organization(
+        &self,
+        input: &RemoveAccountFromOrganizationRequest,
+    ) -> Result<(), RemoveAccountFromOrganizationError>;
 
     #[doc="<p>Renames the specified organizational unit (OU). The ID and ARN do not change. The child OUs and accounts remain in place, and any attached policies of the OU remain attached. </p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn update_organizational_unit
-        (&self,
-         input: &UpdateOrganizationalUnitRequest)
-         -> Result<UpdateOrganizationalUnitResponse, UpdateOrganizationalUnitError>;
-
+    fn update_organizational_unit(
+        &self,
+        input: &UpdateOrganizationalUnitRequest,
+    ) -> Result<UpdateOrganizationalUnitResponse, UpdateOrganizationalUnitError>;
 
     #[doc="<p>Updates an existing policy with a new name, description, or content. If any parameter is not supplied, that value remains unchanged. Note that you cannot change a policy's type.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn update_policy(&self,
-                     input: &UpdatePolicyRequest)
-                     -> Result<UpdatePolicyResponse, UpdatePolicyError>;
+    fn update_policy(
+        &self,
+        input: &UpdatePolicyRequest,
+    ) -> Result<UpdatePolicyResponse, UpdatePolicyError>;
 }
 /// A client for the Organizations API.
 pub struct OrganizationsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -5754,8 +5932,9 @@ pub struct OrganizationsClient<P, D>
 }
 
 impl<P, D> OrganizationsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         OrganizationsClient {
@@ -5767,13 +5946,15 @@ impl<P, D> OrganizationsClient<P, D>
 }
 
 impl<P, D> Organizations for OrganizationsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Sends a response to the originator of a handshake agreeing to the action proposed by the handshake request. </p> <p>This operation can be called only by the following principals when they also have the relevant IAM permissions:</p> <ul> <li> <p> <b>Invitation to join</b> or <b>Approve all features request</b> handshakes: only a principal from the member account. </p> </li> <li> <p> <b>Enable all features final confirmation</b> handshake: only a principal from the master account.</p> <p>For more information about invitations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_invites.html\">Inviting an AWS Account to Join Your Organization</a> in the <i>AWS Organizations User Guide</i>. For more information about requests to enable all features in the organization, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_org_support-all-features.html\">Enabling All Features in Your Organization</a> in the <i>AWS Organizations User Guide</i>.</p> </li> </ul> <p>After you accept a handshake, it continues to appear in the results of relevant APIs for only 30 days. After that it is deleted.</p>"]
-    fn accept_handshake(&self,
-                        input: &AcceptHandshakeRequest)
-                        -> Result<AcceptHandshakeResponse, AcceptHandshakeError> {
+    fn accept_handshake(
+        &self,
+        input: &AcceptHandshakeRequest,
+    ) -> Result<AcceptHandshakeResponse, AcceptHandshakeError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5789,18 +5970,19 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AcceptHandshakeResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<AcceptHandshakeResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AcceptHandshakeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AcceptHandshakeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Attaches a policy to a root, an organizational unit, or an individual account. How the policy affects accounts depends on the type of policy:</p> <ul> <li> <p> <b>Service control policy (SCP)</b> - An SCP specifies what permissions can be delegated to users in affected member accounts. The scope of influence for a policy depends on what you attach the policy to:</p> <ul> <li> <p>If you attach an SCP to a root, it affects all accounts in the organization.</p> </li> <li> <p>If you attach an SCP to an OU, it affects all accounts in that OU and in any child OUs.</p> </li> <li> <p>If you attach the policy directly to an account, then it affects only that account.</p> </li> </ul> <p>SCPs essentially are permission \"filters\". When you attach one SCP to a higher level root or OU, and you also attach a different SCP to a child OU or to an account, the child policy can further restrict only the permissions that pass through the parent filter and are available to the child. An SCP that is attached to a child cannot grant a permission that is not already granted by the parent. For example, imagine that the parent SCP allows permissions A, B, C, D, and E. The child SCP allows C, D, E, F, and G. The result is that the accounts affected by the child SCP are allowed to use only C, D, and E. They cannot use A or B because they were filtered out by the child OU. They also cannot use F and G because they were filtered out by the parent OU. They cannot be granted back by the child SCP; child SCPs can only filter the permissions they receive from the parent SCP.</p> <p>AWS Organizations attaches a default SCP named <code>\"FullAWSAccess</code> to every root, OU, and account. This default SCP allows all services and actions, enabling any new child OU or account to inherit the permissions of the parent root or OU. If you detach the default policy, you must replace it with a policy that specifies the permissions that you want to allow in that OU or account.</p> <p>For more information about how Organizations policies permissions work, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scp.html\">Using Service Control Policies</a> in the <i>AWS Organizations User Guide</i>.</p> </li> </ul> <p>This operation can be called only from the organization's master account.</p>"]
     fn attach_policy(&self, input: &AttachPolicyRequest) -> Result<(), AttachPolicyError> {
@@ -5820,16 +6002,18 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AttachPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AttachPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Cancels a handshake. Canceling a handshake sets the handshake state to <code>CANCELED</code>. </p> <p>This operation can be called only from the account that originated the handshake. The recipient of the handshake can't cancel it, but can use <a>DeclineHandshake</a> instead. After a handshake is canceled, the recipient can no longer respond to that handshake.</p> <p>After you cancel a handshake, it continues to appear in the results of relevant APIs for only 30 days. After that it is deleted.</p>"]
-    fn cancel_handshake(&self,
-                        input: &CancelHandshakeRequest)
-                        -> Result<CancelHandshakeResponse, CancelHandshakeError> {
+    fn cancel_handshake(
+        &self,
+        input: &CancelHandshakeRequest,
+    ) -> Result<CancelHandshakeResponse, CancelHandshakeError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5845,23 +6029,25 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CancelHandshakeResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CancelHandshakeResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CancelHandshakeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CancelHandshakeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates an AWS account that is automatically a member of the organization whose credentials made the request. This is an asynchronous request that AWS performs in the background. If you want to check the status of the request later, you need the <code>OperationId</code> response element from this operation to provide as a parameter to the <a>DescribeCreateAccountStatus</a> operation.</p> <p>AWS Organizations preconfigures the new member account with a role (named <code>OrganizationAccountAccessRole</code> by default) that grants administrator permissions to the new account. Principals in the master account can assume the role. AWS Organizations clones the company name and address information for the new account from the organization's master account.</p> <p>For more information about creating accounts, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html\">Creating an AWS Account in Your Organization</a> in the <i>AWS Organizations User Guide</i>.</p> <important> <p>You cannot remove accounts that are created with this operation from an organization. That also means that you cannot delete an organization that contains an account that is created with this operation.</p> </important> <note> <p>When you create a member account with this operation, you can choose whether to create the account with the <b>IAM User and Role Access to Billing Information</b> switch enabled. If you enable it, IAM users and roles that have appropriate permissions can view billing information for the account. If you disable this, then only the account root user can access billing information. For information about how to disable this for an account, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html\">Granting Access to Your Billing Information and Tools</a>.</p> </note> <p>This operation can be called only from the organization's master account.</p>"]
-    fn create_account(&self,
-                      input: &CreateAccountRequest)
-                      -> Result<CreateAccountResponse, CreateAccountError> {
+    fn create_account(
+        &self,
+        input: &CreateAccountRequest,
+    ) -> Result<CreateAccountResponse, CreateAccountError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5877,28 +6063,32 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateAccountResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateAccountResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateAccountError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateAccountError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates an AWS organization. The account whose user is calling the CreateOrganization operation automatically becomes the <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/orgs_getting-started_concepts.html#account\">master account</a> of the new organization.</p> <p>This operation must be called using credentials from the account that is to become the new organization's master account. The principal must also have the relevant IAM permissions.</p> <p>By default (or if you set the <code>FeatureSet</code> parameter to <code>ALL</code>), the new organization is created with all features enabled and service control policies automatically enabled in the root. If you instead choose to create the organization supporting only the consolidated billing features by setting the <code>FeatureSet</code> parameter to <code>CONSOLIDATED_BILLING\"</code>, then no policy types are enabled by default and you cannot use organization policies.</p>"]
-    fn create_organization(&self,
-                           input: &CreateOrganizationRequest)
-                           -> Result<CreateOrganizationResponse, CreateOrganizationError> {
+    fn create_organization(
+        &self,
+        input: &CreateOrganizationRequest,
+    ) -> Result<CreateOrganizationResponse, CreateOrganizationError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.CreateOrganization");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.CreateOrganization",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -5910,27 +6100,32 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateOrganizationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateOrganizationResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateOrganizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateOrganizationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates an organizational unit (OU) within a root or parent OU. An OU is a container for accounts that enables you to organize your accounts to apply policies according to your business requirements. The number of levels deep that you can nest OUs is dependent upon the policy types enabled for that root. For service control policies, the limit is five. </p> <p>For more information about OUs, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous.html\">Managing Organizational Units</a> in the <i>AWS Organizations User Guide</i>.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn create_organizational_unit
-        (&self,
-         input: &CreateOrganizationalUnitRequest)
-         -> Result<CreateOrganizationalUnitResponse, CreateOrganizationalUnitError> {
+    fn create_organizational_unit(
+        &self,
+        input: &CreateOrganizationalUnitRequest,
+    ) -> Result<CreateOrganizationalUnitResponse, CreateOrganizationalUnitError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.CreateOrganizationalUnit");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.CreateOrganizationalUnit",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -5942,22 +6137,25 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateOrganizationalUnitResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateOrganizationalUnitResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateOrganizationalUnitError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(CreateOrganizationalUnitError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a policy of a specified type that you can attach to a root, an organizational unit (OU), or an individual AWS account.</p> <p>For more information about policies and their use, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies.html\">Managing Organization Policies</a>.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn create_policy(&self,
-                     input: &CreatePolicyRequest)
-                     -> Result<CreatePolicyResponse, CreatePolicyError> {
+    fn create_policy(
+        &self,
+        input: &CreatePolicyRequest,
+    ) -> Result<CreatePolicyResponse, CreatePolicyError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5973,23 +6171,25 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreatePolicyResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreatePolicyResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreatePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreatePolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Declines a handshake request. This sets the handshake state to <code>DECLINED</code> and effectively deactivates the request.</p> <p>This operation can be called only from the account that received the handshake. The originator of the handshake can use <a>CancelHandshake</a> instead. The originator can't reactivate a declined request, but can re-initiate the process with a new handshake request.</p> <p>After you decline a handshake, it continues to appear in the results of relevant APIs for only 30 days. After that it is deleted.</p>"]
-    fn decline_handshake(&self,
-                         input: &DeclineHandshakeRequest)
-                         -> Result<DeclineHandshakeResponse, DeclineHandshakeError> {
+    fn decline_handshake(
+        &self,
+        input: &DeclineHandshakeRequest,
+    ) -> Result<DeclineHandshakeResponse, DeclineHandshakeError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6005,26 +6205,29 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeclineHandshakeResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeclineHandshakeResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeclineHandshakeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeclineHandshakeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes the organization. You can delete an organization only by using credentials from the master account. The organization must be empty of member accounts, OUs, and policies.</p> <important> <p>If you create any accounts using Organizations operations or the Organizations console, you can't remove those accounts from the organization, which means that you can't delete the organization.</p> </important>"]
     fn delete_organization(&self) -> Result<(), DeleteOrganizationError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.DeleteOrganization");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.DeleteOrganization",
+        );
         request.set_payload(Some(b"{}".to_vec()));
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
@@ -6036,21 +6239,25 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteOrganizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteOrganizationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes an organizational unit from a root or another OU. You must first remove all accounts and child OUs from the OU that you want to delete.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn delete_organizational_unit(&self,
-                                  input: &DeleteOrganizationalUnitRequest)
-                                  -> Result<(), DeleteOrganizationalUnitError> {
+    fn delete_organizational_unit(
+        &self,
+        input: &DeleteOrganizationalUnitRequest,
+    ) -> Result<(), DeleteOrganizationalUnitError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.DeleteOrganizationalUnit");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.DeleteOrganizationalUnit",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6063,12 +6270,12 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteOrganizationalUnitError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DeleteOrganizationalUnitError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes the specified policy from your organization. Before you perform this operation, you must first detach the policy from all OUs, roots, and accounts.</p> <p>This operation can be called only from the organization's master account.</p>"]
     fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError> {
@@ -6088,16 +6295,18 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeletePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeletePolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves Organizations-related information about the specified account.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn describe_account(&self,
-                        input: &DescribeAccountRequest)
-                        -> Result<DescribeAccountResponse, DescribeAccountError> {
+    fn describe_account(
+        &self,
+        input: &DescribeAccountRequest,
+    ) -> Result<DescribeAccountResponse, DescribeAccountError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6113,29 +6322,32 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAccountResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeAccountResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAccountError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeAccountError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves the current status of an asynchronous request to create an account.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn describe_create_account_status
-        (&self,
-         input: &DescribeCreateAccountStatusRequest)
-         -> Result<DescribeCreateAccountStatusResponse, DescribeCreateAccountStatusError> {
+    fn describe_create_account_status(
+        &self,
+        input: &DescribeCreateAccountStatusRequest,
+    ) -> Result<DescribeCreateAccountStatusResponse, DescribeCreateAccountStatusError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.DescribeCreateAccountStatus");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.DescribeCreateAccountStatus",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6147,27 +6359,32 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeCreateAccountStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeCreateAccountStatusResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeCreateAccountStatusError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(DescribeCreateAccountStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves information about a previously requested handshake. The handshake ID comes from the response to the original <a>InviteAccountToOrganization</a> operation that generated the handshake.</p> <p>You can access handshakes that are ACCEPTED, DECLINED, or CANCELED for only 30 days after they change to that state. They are then deleted and no longer accessible.</p> <p>This operation can be called from any account in the organization.</p>"]
-    fn describe_handshake(&self,
-                          input: &DescribeHandshakeRequest)
-                          -> Result<DescribeHandshakeResponse, DescribeHandshakeError> {
+    fn describe_handshake(
+        &self,
+        input: &DescribeHandshakeRequest,
+    ) -> Result<DescribeHandshakeResponse, DescribeHandshakeError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.DescribeHandshake");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.DescribeHandshake",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6179,25 +6396,31 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeHandshakeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeHandshakeResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeHandshakeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeHandshakeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves information about the organization that the user's account belongs to.</p> <p>This operation can be called from any account in the organization.</p>"]
-    fn describe_organization(&self)
-                             -> Result<DescribeOrganizationResponse, DescribeOrganizationError> {
+    fn describe_organization(
+        &self,
+    ) -> Result<DescribeOrganizationResponse, DescribeOrganizationError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.DescribeOrganization");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.DescribeOrganization",
+        );
         request.set_payload(Some(b"{}".to_vec()));
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
@@ -6208,27 +6431,32 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeOrganizationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeOrganizationResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeOrganizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeOrganizationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves information about an organizational unit (OU).</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn describe_organizational_unit
-        (&self,
-         input: &DescribeOrganizationalUnitRequest)
-         -> Result<DescribeOrganizationalUnitResponse, DescribeOrganizationalUnitError> {
+    fn describe_organizational_unit(
+        &self,
+        input: &DescribeOrganizationalUnitRequest,
+    ) -> Result<DescribeOrganizationalUnitResponse, DescribeOrganizationalUnitError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.DescribeOrganizationalUnit");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.DescribeOrganizationalUnit",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6240,22 +6468,25 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeOrganizationalUnitResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeOrganizationalUnitResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeOrganizationalUnitError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(DescribeOrganizationalUnitError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves information about a policy.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn describe_policy(&self,
-                       input: &DescribePolicyRequest)
-                       -> Result<DescribePolicyResponse, DescribePolicyError> {
+    fn describe_policy(
+        &self,
+        input: &DescribePolicyRequest,
+    ) -> Result<DescribePolicyResponse, DescribePolicyError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6271,18 +6502,19 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribePolicyResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribePolicyResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribePolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Detaches a policy from a target root, organizational unit, or account. If the policy being detached is a service control policy (SCP), the changes to permissions for IAM users and roles in affected accounts are immediate.</p> <p> <b>Note:</b> Every root, OU, and account must have at least one SCP attached. If you want to replace the default <code>FullAWSAccess</code> policy with one that limits the permissions that can be delegated, then you must attach the replacement policy before you can remove the default one. This is the authorization strategy of <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_about-scps.html#orgs_policies_whitelist\">whitelisting</a>. If you instead attach a second SCP and leave the <code>FullAWSAccess</code> SCP still attached, and specify <code>\"Effect\": \"Deny\"</code> in the second SCP to override the <code>\"Effect\": \"Allow\"</code> in the <code>FullAWSAccess</code> policy (or any other attached SCP), then you are using the authorization strategy of <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_about-scps.html#orgs_policies_blacklist\">blacklisting</a>. </p> <p>This operation can be called only from the organization's master account.</p>"]
     fn detach_policy(&self, input: &DetachPolicyRequest) -> Result<(), DetachPolicyError> {
@@ -6302,21 +6534,25 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DetachPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DetachPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Disables an organizational control policy type in a root. A poicy of a certain type can be attached to entities in a root only if that type is enabled in the root. After you perform this operation, you no longer can attach policies of the specified type to that root or to any OU or account in that root. You can undo this by using the <a>EnablePolicyType</a> operation.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn disable_policy_type(&self,
-                           input: &DisablePolicyTypeRequest)
-                           -> Result<DisablePolicyTypeResponse, DisablePolicyTypeError> {
+    fn disable_policy_type(
+        &self,
+        input: &DisablePolicyTypeRequest,
+    ) -> Result<DisablePolicyTypeResponse, DisablePolicyTypeError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.DisablePolicyType");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.DisablePolicyType",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6328,24 +6564,29 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisablePolicyTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DisablePolicyTypeResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DisablePolicyTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DisablePolicyTypeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Enables all features in an organization. This enables the use of organization policies that can restrict the services and actions that can be called in each account. Until you enable all features, you have access only to consolidated billing, and you can't use any of the advanced account administration features that AWS Organizations supports. For more information, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_org_support-all-features.html\">Enabling All Features in Your Organization</a> in the <i>AWS Organizations User Guide</i>.</p> <important> <p>This operation is required only for organizations that were created explicitly with only the consolidated billing features enabled, or that were migrated from a Consolidated Billing account family to Organizations. Calling this operation sends a handshake to every invited account in the organization. The feature set change can be finalized and the additional features enabled only after all administrators in the invited accounts approve the change by accepting the handshake.</p> </important> <p>After all invited member accounts accept the handshake, you finalize the feature set change by accepting the handshake that contains <code>\"Action\": \"ENABLE_ALL_FEATURES\"</code>. This completes the change.</p> <p>After you enable all features in your organization, the master account in the organization can apply policies on all member accounts. These policies can restrict what users and even administrators in those accounts can do. The master account can apply policies that prevent accounts from leaving the organization. Ensure that your account administrators are aware of this.</p> <p>This operation can be called only from the organization's master account. </p>"]
     fn enable_all_features(&self) -> Result<EnableAllFeaturesResponse, EnableAllFeaturesError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.EnableAllFeatures");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.EnableAllFeatures",
+        );
         request.set_payload(Some(b"{}".to_vec()));
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
@@ -6356,21 +6597,25 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<EnableAllFeaturesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<EnableAllFeaturesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(EnableAllFeaturesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(EnableAllFeaturesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Enables a policy type in a root. After you enable a policy type in a root, you can attach policies of that type to the root, any OU, or account in that root. You can undo this by using the <a>DisablePolicyType</a> operation.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn enable_policy_type(&self,
-                          input: &EnablePolicyTypeRequest)
-                          -> Result<EnablePolicyTypeResponse, EnablePolicyTypeError> {
+    fn enable_policy_type(
+        &self,
+        input: &EnablePolicyTypeRequest,
+    ) -> Result<EnablePolicyTypeResponse, EnablePolicyTypeError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6386,29 +6631,32 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<EnablePolicyTypeResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<EnablePolicyTypeResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(EnablePolicyTypeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(EnablePolicyTypeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Sends an invitation to another account to join your organization as a member account. Organizations sends email on your behalf to the email address that is associated with the other account's owner. The invitation is implemented as a <a>Handshake</a> whose details are in the response.</p> <important> <p>You can invite AWS accounts only from the same reseller as the master account. For example, if your organization's master account was created by Amazon Internet Services Pvt. Ltd (AISPL), an AWS reseller in India, then you can only invite other AISPL accounts to your organization. You can't combine accounts from AISPL and AWS. For more information, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/useconsolidatedbilliing-India.html\">Consolidated Billing in India</a>.</p> </important> <p>This operation can be called only from the organization's master account.</p>"]
-    fn invite_account_to_organization
-        (&self,
-         input: &InviteAccountToOrganizationRequest)
-         -> Result<InviteAccountToOrganizationResponse, InviteAccountToOrganizationError> {
+    fn invite_account_to_organization(
+        &self,
+        input: &InviteAccountToOrganizationRequest,
+    ) -> Result<InviteAccountToOrganizationResponse, InviteAccountToOrganizationError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.InviteAccountToOrganization");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.InviteAccountToOrganization",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6420,25 +6668,29 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<InviteAccountToOrganizationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<InviteAccountToOrganizationResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(InviteAccountToOrganizationError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(InviteAccountToOrganizationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Removes a member account from its parent organization. This version of the operation is performed by the account that wants to leave. To remove a member account as a user in the master account, use <a>RemoveAccountFromOrganization</a> instead.</p> <p>This operation can be called only from a member account in the organization.</p> <important> <ul> <li> <p>The master account in an organization with all features enabled can set service control policies (SCPs) that can restrict what administrators of member accounts can do, including preventing them from successfully calling <code>LeaveOrganization</code> and leaving the organization. </p> </li> <li> <p>If you created the account using the AWS Organizations console, the Organizations API, or the Organizations CLI commands, then you cannot remove the account.</p> </li> <li> <p>You can leave an organization only after you enable IAM user access to billing in your account. For more information, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html#ControllingAccessWebsite-Activate\">Activating Access to the Billing and Cost Management Console</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> </li> </ul> </important>"]
     fn leave_organization(&self) -> Result<(), LeaveOrganizationError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.LeaveOrganization");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.LeaveOrganization",
+        );
         request.set_payload(Some(b"{}".to_vec()));
 
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
@@ -6450,16 +6702,18 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(LeaveOrganizationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(LeaveOrganizationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists all the accounts in the organization. To request only the accounts in a root or OU, use the <a>ListAccountsForParent</a> operation instead.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn list_accounts(&self,
-                     input: &ListAccountsRequest)
-                     -> Result<ListAccountsResponse, ListAccountsError> {
+    fn list_accounts(
+        &self,
+        input: &ListAccountsRequest,
+    ) -> Result<ListAccountsResponse, ListAccountsError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6475,29 +6729,32 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAccountsResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListAccountsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListAccountsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListAccountsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the accounts in an organization that are contained by the specified target root or organizational unit (OU). If you specify the root, you get a list of all the accounts that are not in any OU. If you specify an OU, you get a list of all the accounts in only that OU, and not in any child OUs. To get a list of all accounts in the organization, use the <a>ListAccounts</a> operation.</p>"]
-    fn list_accounts_for_parent
-        (&self,
-         input: &ListAccountsForParentRequest)
-         -> Result<ListAccountsForParentResponse, ListAccountsForParentError> {
+    fn list_accounts_for_parent(
+        &self,
+        input: &ListAccountsForParentRequest,
+    ) -> Result<ListAccountsForParentResponse, ListAccountsForParentError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.ListAccountsForParent");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.ListAccountsForParent",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6509,21 +6766,25 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAccountsForParentResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListAccountsForParentResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListAccountsForParentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListAccountsForParentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists all of the OUs or accounts that are contained in the specified parent OU or root. This operation, along with <a>ListParents</a> enables you to traverse the tree structure that makes up this root.</p>"]
-    fn list_children(&self,
-                     input: &ListChildrenRequest)
-                     -> Result<ListChildrenResponse, ListChildrenError> {
+    fn list_children(
+        &self,
+        input: &ListChildrenRequest,
+    ) -> Result<ListChildrenResponse, ListChildrenError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6539,29 +6800,32 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListChildrenResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListChildrenResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListChildrenError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListChildrenError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Lists the account creation requests that match the specified status that is currently being tracked for the organization.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn list_create_account_status
-        (&self,
-         input: &ListCreateAccountStatusRequest)
-         -> Result<ListCreateAccountStatusResponse, ListCreateAccountStatusError> {
+    fn list_create_account_status(
+        &self,
+        input: &ListCreateAccountStatusRequest,
+    ) -> Result<ListCreateAccountStatusResponse, ListCreateAccountStatusError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.ListCreateAccountStatus");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.ListCreateAccountStatus",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6573,28 +6837,32 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListCreateAccountStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListCreateAccountStatusResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListCreateAccountStatusError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(ListCreateAccountStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Lists the current handshakes that are associated with the account of the requesting user.</p> <p>Handshakes that are ACCEPTED, DECLINED, or CANCELED appear in the results of this API for only 30 days after changing to that state. After that they are deleted and no longer accessible.</p> <p>This operation can be called from any account in the organization.</p>"]
-    fn list_handshakes_for_account
-        (&self,
-         input: &ListHandshakesForAccountRequest)
-         -> Result<ListHandshakesForAccountResponse, ListHandshakesForAccountError> {
+    fn list_handshakes_for_account(
+        &self,
+        input: &ListHandshakesForAccountRequest,
+    ) -> Result<ListHandshakesForAccountResponse, ListHandshakesForAccountError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.ListHandshakesForAccount");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.ListHandshakesForAccount",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6606,28 +6874,32 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListHandshakesForAccountResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListHandshakesForAccountResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListHandshakesForAccountError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(ListHandshakesForAccountError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Lists the handshakes that are associated with the organization that the requesting user is part of. The <code>ListHandshakesForOrganization</code> operation returns a list of handshake structures. Each structure contains details and status about a handshake.</p> <p>Handshakes that are ACCEPTED, DECLINED, or CANCELED appear in the results of this API for only 30 days after changing to that state. After that they are deleted and no longer accessible.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn list_handshakes_for_organization
-        (&self,
-         input: &ListHandshakesForOrganizationRequest)
-         -> Result<ListHandshakesForOrganizationResponse, ListHandshakesForOrganizationError> {
+    fn list_handshakes_for_organization(
+        &self,
+        input: &ListHandshakesForOrganizationRequest,
+    ) -> Result<ListHandshakesForOrganizationResponse, ListHandshakesForOrganizationError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.ListHandshakesForOrganization");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.ListHandshakesForOrganization",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6639,28 +6911,35 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListHandshakesForOrganizationResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<ListHandshakesForOrganizationResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListHandshakesForOrganizationError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(ListHandshakesForOrganizationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Lists the organizational units (OUs) in a parent organizational unit or root.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn list_organizational_units_for_parent
-        (&self,
-         input: &ListOrganizationalUnitsForParentRequest)
-         -> Result<ListOrganizationalUnitsForParentResponse, ListOrganizationalUnitsForParentError> {
+    fn list_organizational_units_for_parent(
+        &self,
+        input: &ListOrganizationalUnitsForParentRequest,
+    ) -> Result<ListOrganizationalUnitsForParentResponse, ListOrganizationalUnitsForParentError>
+    {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.ListOrganizationalUnitsForParent");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.ListOrganizationalUnitsForParent",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6672,21 +6951,27 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListOrganizationalUnitsForParentResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<ListOrganizationalUnitsForParentResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListOrganizationalUnitsForParentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListOrganizationalUnitsForParentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the root or organizational units (OUs) that serve as the immediate parent of the specified child OU or account. This operation, along with <a>ListChildren</a> enables you to traverse the tree structure that makes up this root.</p> <p>This operation can be called only from the organization's master account.</p> <note> <p>In the current release, a child can have only a single parent. </p> </note>"]
-    fn list_parents(&self,
-                    input: &ListParentsRequest)
-                    -> Result<ListParentsResponse, ListParentsError> {
+    fn list_parents(
+        &self,
+        input: &ListParentsRequest,
+    ) -> Result<ListParentsResponse, ListParentsError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6702,23 +6987,25 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListParentsResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListParentsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListParentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListParentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the list of all policies in an organization of a specified type.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn list_policies(&self,
-                     input: &ListPoliciesRequest)
-                     -> Result<ListPoliciesResponse, ListPoliciesError> {
+    fn list_policies(
+        &self,
+        input: &ListPoliciesRequest,
+    ) -> Result<ListPoliciesResponse, ListPoliciesError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6734,29 +7021,32 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListPoliciesResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListPoliciesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListPoliciesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists the policies that are directly attached to the specified target root, organizational unit (OU), or account. You must specify the policy type that you want included in the returned list.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn list_policies_for_target
-        (&self,
-         input: &ListPoliciesForTargetRequest)
-         -> Result<ListPoliciesForTargetResponse, ListPoliciesForTargetError> {
+    fn list_policies_for_target(
+        &self,
+        input: &ListPoliciesForTargetRequest,
+    ) -> Result<ListPoliciesForTargetResponse, ListPoliciesForTargetError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.ListPoliciesForTarget");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.ListPoliciesForTarget",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6768,16 +7058,19 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListPoliciesForTargetResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListPoliciesForTargetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListPoliciesForTargetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListPoliciesForTargetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Lists the roots that are defined in the current organization.</p> <p>This operation can be called only from the organization's master account.</p>"]
     fn list_roots(&self, input: &ListRootsRequest) -> Result<ListRootsResponse, ListRootsError> {
@@ -6796,29 +7089,32 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListRootsResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListRootsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListRootsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListRootsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists all the roots, OUs, and accounts to which the specified policy is attached.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn list_targets_for_policy
-        (&self,
-         input: &ListTargetsForPolicyRequest)
-         -> Result<ListTargetsForPolicyResponse, ListTargetsForPolicyError> {
+    fn list_targets_for_policy(
+        &self,
+        input: &ListTargetsForPolicyRequest,
+    ) -> Result<ListTargetsForPolicyResponse, ListTargetsForPolicyError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.ListTargetsForPolicy");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.ListTargetsForPolicy",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6830,16 +7126,19 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTargetsForPolicyResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListTargetsForPolicyResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTargetsForPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTargetsForPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Moves an account from its current source parent root or OU to the specified destination parent root or OU.</p> <p>This operation can be called only from the organization's master account.</p>"]
     fn move_account(&self, input: &MoveAccountRequest) -> Result<(), MoveAccountError> {
@@ -6859,21 +7158,25 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(MoveAccountError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(MoveAccountError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes the specified account from the organization.</p> <p>The removed account becomes a stand-alone account that is not a member of any organization. It is no longer subject to any policies and is responsible for its own bill payments. The organization's master account is no longer charged for any expenses accrued by the member account after it is removed from the organization.</p> <p>This operation can be called only from the organization's master account. Member accounts can remove themselves with <a>LeaveOrganization</a> instead.</p> <important> <ul> <li> <p>You can remove only accounts that were created outside your organization and invited to join. If you created the account using the AWS Organizations console, the Organizations API, or the Organizations CLI commands, then you cannot remove the account.</p> </li> <li> <p>You can remove a member account only after you enable IAM user access to billing in the member account. For more information, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html#ControllingAccessWebsite-Activate\">Activating Access to the Billing and Cost Management Console</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> </li> </ul> </important>"]
-    fn remove_account_from_organization(&self,
-                                        input: &RemoveAccountFromOrganizationRequest)
-                                        -> Result<(), RemoveAccountFromOrganizationError> {
+    fn remove_account_from_organization(
+        &self,
+        input: &RemoveAccountFromOrganizationRequest,
+    ) -> Result<(), RemoveAccountFromOrganizationError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.RemoveAccountFromOrganization");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.RemoveAccountFromOrganization",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6886,23 +7189,25 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RemoveAccountFromOrganizationError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(RemoveAccountFromOrganizationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Renames the specified organizational unit (OU). The ID and ARN do not change. The child OUs and accounts remain in place, and any attached policies of the OU remain attached. </p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn update_organizational_unit
-        (&self,
-         input: &UpdateOrganizationalUnitRequest)
-         -> Result<UpdateOrganizationalUnitResponse, UpdateOrganizationalUnitError> {
+    fn update_organizational_unit(
+        &self,
+        input: &UpdateOrganizationalUnitRequest,
+    ) -> Result<UpdateOrganizationalUnitResponse, UpdateOrganizationalUnitError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AWSOrganizationsV20161128.UpdateOrganizationalUnit");
+        request.add_header(
+            "x-amz-target",
+            "AWSOrganizationsV20161128.UpdateOrganizationalUnit",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -6914,22 +7219,25 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateOrganizationalUnitResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateOrganizationalUnitResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateOrganizationalUnitError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(UpdateOrganizationalUnitError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates an existing policy with a new name, description, or content. If any parameter is not supplied, that value remains unchanged. Note that you cannot change a policy's type.</p> <p>This operation can be called only from the organization's master account.</p>"]
-    fn update_policy(&self,
-                     input: &UpdatePolicyRequest)
-                     -> Result<UpdatePolicyResponse, UpdatePolicyError> {
+    fn update_policy(
+        &self,
+        input: &UpdatePolicyRequest,
+    ) -> Result<UpdatePolicyResponse, UpdatePolicyError> {
         let mut request = SignedRequest::new("POST", "organizations", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -6945,14 +7253,16 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdatePolicyResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdatePolicyResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdatePolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdatePolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

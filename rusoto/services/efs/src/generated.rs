@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -29,306 +28,306 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateFileSystemRequest {
-    #[doc="<p>String of up to 64 ASCII characters. Amazon EFS uses this to ensure idempotent creation.</p>"]
-    #[serde(rename="CreationToken")]
+    /// <p>String of up to 64 ASCII characters. Amazon EFS uses this to ensure idempotent creation.</p>
+    #[serde(rename = "CreationToken")]
     pub creation_token: String,
-    #[doc="<p>A boolean value that, if true, creates an encrypted file system. When creating an encrypted file system, you have the option of specifying a <a>CreateFileSystemRequest$KmsKeyId</a> for an existing AWS Key Management Service (AWS KMS) customer master key (CMK). If you don't specify a CMK, then the default CMK for Amazon EFS, <code>/aws/elasticfilesystem</code>, is used to protect the encrypted file system. </p>"]
-    #[serde(rename="Encrypted")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A boolean value that, if true, creates an encrypted file system. When creating an encrypted file system, you have the option of specifying a <a>CreateFileSystemRequest$KmsKeyId</a> for an existing AWS Key Management Service (AWS KMS) customer master key (CMK). If you don't specify a CMK, then the default CMK for Amazon EFS, <code>/aws/elasticfilesystem</code>, is used to protect the encrypted file system. </p>
+    #[serde(rename = "Encrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub encrypted: Option<bool>,
-    #[doc="<p>The id of the AWS KMS CMK that will be used to protect the encrypted file system. This parameter is only required if you want to use a non-default CMK. If this parameter is not specified, the default CMK for Amazon EFS is used. This id can be in one of the following formats:</p> <ul> <li> <p>Key ID - A unique identifier of the key. For example, <code>1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p> </li> <li> <p>ARN - An Amazon Resource Name for the key. For example, <code>arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p> </li> <li> <p>Key alias - A previously created display name for a key. For example, <code>alias/projectKey1</code>.</p> </li> <li> <p>Key alias ARN - An Amazon Resource Name for a key alias. For example, <code>arn:aws:kms:us-west-2:444455556666:alias/projectKey1</code>.</p> </li> </ul> <p>Note that if the KmsKeyId is specified, the <a>CreateFileSystemRequest$Encrypted</a> parameter must be set to true.</p>"]
-    #[serde(rename="KmsKeyId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The id of the AWS KMS CMK that will be used to protect the encrypted file system. This parameter is only required if you want to use a non-default CMK. If this parameter is not specified, the default CMK for Amazon EFS is used. This id can be in one of the following formats:</p> <ul> <li> <p>Key ID - A unique identifier of the key. For example, <code>1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p> </li> <li> <p>ARN - An Amazon Resource Name for the key. For example, <code>arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p> </li> <li> <p>Key alias - A previously created display name for a key. For example, <code>alias/projectKey1</code>.</p> </li> <li> <p>Key alias ARN - An Amazon Resource Name for a key alias. For example, <code>arn:aws:kms:us-west-2:444455556666:alias/projectKey1</code>.</p> </li> </ul> <p>Note that if the KmsKeyId is specified, the <a>CreateFileSystemRequest$Encrypted</a> parameter must be set to true.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    #[doc="<p>The <code>PerformanceMode</code> of the file system. We recommend <code>generalPurpose</code> performance mode for most file systems. File systems using the <code>maxIO</code> performance mode can scale to higher levels of aggregate throughput and operations per second with a tradeoff of slightly higher latencies for most file operations. This can't be changed after the file system has been created.</p>"]
-    #[serde(rename="PerformanceMode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The <code>PerformanceMode</code> of the file system. We recommend <code>generalPurpose</code> performance mode for most file systems. File systems using the <code>maxIO</code> performance mode can scale to higher levels of aggregate throughput and operations per second with a tradeoff of slightly higher latencies for most file operations. This can't be changed after the file system has been created.</p>
+    #[serde(rename = "PerformanceMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub performance_mode: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateMountTargetRequest {
-    #[doc="<p>ID of the file system for which to create the mount target.</p>"]
-    #[serde(rename="FileSystemId")]
+    /// <p>ID of the file system for which to create the mount target.</p>
+    #[serde(rename = "FileSystemId")]
     pub file_system_id: String,
-    #[doc="<p>Valid IPv4 address within the address range of the specified subnet.</p>"]
-    #[serde(rename="IpAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Valid IPv4 address within the address range of the specified subnet.</p>
+    #[serde(rename = "IpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    #[doc="<p>Up to five VPC security group IDs, of the form <code>sg-xxxxxxxx</code>. These must be for the same VPC as subnet specified.</p>"]
-    #[serde(rename="SecurityGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Up to five VPC security group IDs, of the form <code>sg-xxxxxxxx</code>. These must be for the same VPC as subnet specified.</p>
+    #[serde(rename = "SecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub security_groups: Option<Vec<String>>,
-    #[doc="<p>ID of the subnet to add the mount target in.</p>"]
-    #[serde(rename="SubnetId")]
+    /// <p>ID of the subnet to add the mount target in.</p>
+    #[serde(rename = "SubnetId")]
     pub subnet_id: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateTagsRequest {
-    #[doc="<p>ID of the file system whose tags you want to modify (String). This operation modifies the tags only, not the file system.</p>"]
-    #[serde(rename="FileSystemId")]
+    /// <p>ID of the file system whose tags you want to modify (String). This operation modifies the tags only, not the file system.</p>
+    #[serde(rename = "FileSystemId")]
     pub file_system_id: String,
-    #[doc="<p>Array of <code>Tag</code> objects to add. Each <code>Tag</code> object is a key-value pair. </p>"]
-    #[serde(rename="Tags")]
+    /// <p>Array of <code>Tag</code> objects to add. Each <code>Tag</code> object is a key-value pair. </p>
+    #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteFileSystemRequest {
-    #[doc="<p>ID of the file system you want to delete.</p>"]
-    #[serde(rename="FileSystemId")]
+    /// <p>ID of the file system you want to delete.</p>
+    #[serde(rename = "FileSystemId")]
     pub file_system_id: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteMountTargetRequest {
-    #[doc="<p>ID of the mount target to delete (String).</p>"]
-    #[serde(rename="MountTargetId")]
+    /// <p>ID of the mount target to delete (String).</p>
+    #[serde(rename = "MountTargetId")]
     pub mount_target_id: String,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteTagsRequest {
-    #[doc="<p>ID of the file system whose tags you want to delete (String).</p>"]
-    #[serde(rename="FileSystemId")]
+    /// <p>ID of the file system whose tags you want to delete (String).</p>
+    #[serde(rename = "FileSystemId")]
     pub file_system_id: String,
-    #[doc="<p>List of tag keys to delete.</p>"]
-    #[serde(rename="TagKeys")]
+    /// <p>List of tag keys to delete.</p>
+    #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeFileSystemsRequest {
-    #[doc="<p>(Optional) Restricts the list to the file system with this creation token (String). You specify a creation token when you create an Amazon EFS file system.</p>"]
-    #[serde(rename="CreationToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Restricts the list to the file system with this creation token (String). You specify a creation token when you create an Amazon EFS file system.</p>
+    #[serde(rename = "CreationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_token: Option<String>,
-    #[doc="<p>(Optional) ID of the file system whose description you want to retrieve (String).</p>"]
-    #[serde(rename="FileSystemId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) ID of the file system whose description you want to retrieve (String).</p>
+    #[serde(rename = "FileSystemId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file_system_id: Option<String>,
-    #[doc="<p>(Optional) Opaque pagination token returned from a previous <code>DescribeFileSystems</code> operation (String). If present, specifies to continue the list from where the returning call had left off. </p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Opaque pagination token returned from a previous <code>DescribeFileSystems</code> operation (String). If present, specifies to continue the list from where the returning call had left off. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>(Optional) Specifies the maximum number of file systems to return in the response (integer). This parameter value must be greater than 0. The number of items that Amazon EFS returns is the minimum of the <code>MaxItems</code> parameter specified in the request and the service's internal maximum number of items per page. </p>"]
-    #[serde(rename="MaxItems")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Specifies the maximum number of file systems to return in the response (integer). This parameter value must be greater than 0. The number of items that Amazon EFS returns is the minimum of the <code>MaxItems</code> parameter specified in the request and the service's internal maximum number of items per page. </p>
+    #[serde(rename = "MaxItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_items: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeFileSystemsResponse {
-    #[doc="<p>Array of file system descriptions.</p>"]
-    #[serde(rename="FileSystems")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Array of file system descriptions.</p>
+    #[serde(rename = "FileSystems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file_systems: Option<Vec<FileSystemDescription>>,
-    #[doc="<p>Present if provided by caller in the request (String).</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Present if provided by caller in the request (String).</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>Present if there are more file systems than returned in the response (String). You can use the <code>NextMarker</code> in the subsequent request to fetch the descriptions.</p>"]
-    #[serde(rename="NextMarker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Present if there are more file systems than returned in the response (String). You can use the <code>NextMarker</code> in the subsequent request to fetch the descriptions.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeMountTargetSecurityGroupsRequest {
-    #[doc="<p>ID of the mount target whose security groups you want to retrieve.</p>"]
-    #[serde(rename="MountTargetId")]
+    /// <p>ID of the mount target whose security groups you want to retrieve.</p>
+    #[serde(rename = "MountTargetId")]
     pub mount_target_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeMountTargetSecurityGroupsResponse {
-    #[doc="<p>Array of security groups.</p>"]
-    #[serde(rename="SecurityGroups")]
+    /// <p>Array of security groups.</p>
+    #[serde(rename = "SecurityGroups")]
     pub security_groups: Vec<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeMountTargetsRequest {
-    #[doc="<p>(Optional) ID of the file system whose mount targets you want to list (String). It must be included in your request if <code>MountTargetId</code> is not included.</p>"]
-    #[serde(rename="FileSystemId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) ID of the file system whose mount targets you want to list (String). It must be included in your request if <code>MountTargetId</code> is not included.</p>
+    #[serde(rename = "FileSystemId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file_system_id: Option<String>,
-    #[doc="<p>(Optional) Opaque pagination token returned from a previous <code>DescribeMountTargets</code> operation (String). If present, it specifies to continue the list from where the previous returning call left off.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Opaque pagination token returned from a previous <code>DescribeMountTargets</code> operation (String). If present, it specifies to continue the list from where the previous returning call left off.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>(Optional) Maximum number of mount targets to return in the response. It must be an integer with a value greater than zero.</p>"]
-    #[serde(rename="MaxItems")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Maximum number of mount targets to return in the response. It must be an integer with a value greater than zero.</p>
+    #[serde(rename = "MaxItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_items: Option<i64>,
-    #[doc="<p>(Optional) ID of the mount target that you want to have described (String). It must be included in your request if <code>FileSystemId</code> is not included.</p>"]
-    #[serde(rename="MountTargetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) ID of the mount target that you want to have described (String). It must be included in your request if <code>FileSystemId</code> is not included.</p>
+    #[serde(rename = "MountTargetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mount_target_id: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeMountTargetsResponse {
-    #[doc="<p>If the request included the <code>Marker</code>, the response returns that value in this field.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the request included the <code>Marker</code>, the response returns that value in this field.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>Returns the file system's mount targets as an array of <code>MountTargetDescription</code> objects.</p>"]
-    #[serde(rename="MountTargets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returns the file system's mount targets as an array of <code>MountTargetDescription</code> objects.</p>
+    #[serde(rename = "MountTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mount_targets: Option<Vec<MountTargetDescription>>,
-    #[doc="<p>If a value is present, there are more mount targets to return. In a subsequent request, you can provide <code>Marker</code> in your request with this value to retrieve the next set of mount targets.</p>"]
-    #[serde(rename="NextMarker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a value is present, there are more mount targets to return. In a subsequent request, you can provide <code>Marker</code> in your request with this value to retrieve the next set of mount targets.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeTagsRequest {
-    #[doc="<p>ID of the file system whose tag set you want to retrieve.</p>"]
-    #[serde(rename="FileSystemId")]
+    /// <p>ID of the file system whose tag set you want to retrieve.</p>
+    #[serde(rename = "FileSystemId")]
     pub file_system_id: String,
-    #[doc="<p>(Optional) Opaque pagination token returned from a previous <code>DescribeTags</code> operation (String). If present, it specifies to continue the list from where the previous call left off.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Opaque pagination token returned from a previous <code>DescribeTags</code> operation (String). If present, it specifies to continue the list from where the previous call left off.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>(Optional) Maximum number of file system tags to return in the response. It must be an integer with a value greater than zero.</p>"]
-    #[serde(rename="MaxItems")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Maximum number of file system tags to return in the response. It must be an integer with a value greater than zero.</p>
+    #[serde(rename = "MaxItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_items: Option<i64>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeTagsResponse {
-    #[doc="<p>If the request included a <code>Marker</code>, the response returns that value in this field.</p>"]
-    #[serde(rename="Marker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If the request included a <code>Marker</code>, the response returns that value in this field.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    #[doc="<p>If a value is present, there are more tags to return. In a subsequent request, you can provide the value of <code>NextMarker</code> as the value of the <code>Marker</code> parameter in your next request to retrieve the next set of tags.</p>"]
-    #[serde(rename="NextMarker")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a value is present, there are more tags to return. In a subsequent request, you can provide the value of <code>NextMarker</code> as the value of the <code>Marker</code> parameter in your next request to retrieve the next set of tags.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
-    #[doc="<p>Returns tags associated with the file system as an array of <code>Tag</code> objects. </p>"]
-    #[serde(rename="Tags")]
+    /// <p>Returns tags associated with the file system as an array of <code>Tag</code> objects. </p>
+    #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
 
-#[doc="<p>Description of the file system.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Description of the file system.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct FileSystemDescription {
-    #[doc="<p>Time that the file system was created, in seconds (since 1970-01-01T00:00:00Z).</p>"]
-    #[serde(rename="CreationTime")]
+    /// <p>Time that the file system was created, in seconds (since 1970-01-01T00:00:00Z).</p>
+    #[serde(rename = "CreationTime")]
     pub creation_time: f64,
-    #[doc="<p>Opaque string specified in the request.</p>"]
-    #[serde(rename="CreationToken")]
+    /// <p>Opaque string specified in the request.</p>
+    #[serde(rename = "CreationToken")]
     pub creation_token: String,
-    #[doc="<p>A boolean value that, if true, indicates that the file system is encrypted.</p>"]
-    #[serde(rename="Encrypted")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A boolean value that, if true, indicates that the file system is encrypted.</p>
+    #[serde(rename = "Encrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub encrypted: Option<bool>,
-    #[doc="<p>ID of the file system, assigned by Amazon EFS.</p>"]
-    #[serde(rename="FileSystemId")]
+    /// <p>ID of the file system, assigned by Amazon EFS.</p>
+    #[serde(rename = "FileSystemId")]
     pub file_system_id: String,
-    #[doc="<p>The id of an AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the encrypted file system.</p>"]
-    #[serde(rename="KmsKeyId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The id of an AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the encrypted file system.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    #[doc="<p>Lifecycle phase of the file system.</p>"]
-    #[serde(rename="LifeCycleState")]
+    /// <p>Lifecycle phase of the file system.</p>
+    #[serde(rename = "LifeCycleState")]
     pub life_cycle_state: String,
-    #[doc="<p>You can add tags to a file system, including a <code>Name</code> tag. For more information, see <a>CreateTags</a>. If the file system has a <code>Name</code> tag, Amazon EFS returns the value in this field. </p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>You can add tags to a file system, including a <code>Name</code> tag. For more information, see <a>CreateTags</a>. If the file system has a <code>Name</code> tag, Amazon EFS returns the value in this field. </p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Current number of mount targets that the file system has. For more information, see <a>CreateMountTarget</a>.</p>"]
-    #[serde(rename="NumberOfMountTargets")]
+    /// <p>Current number of mount targets that the file system has. For more information, see <a>CreateMountTarget</a>.</p>
+    #[serde(rename = "NumberOfMountTargets")]
     pub number_of_mount_targets: i64,
-    #[doc="<p>AWS account that created the file system. If the file system was created by an IAM user, the parent account to which the user belongs is the owner.</p>"]
-    #[serde(rename="OwnerId")]
+    /// <p>AWS account that created the file system. If the file system was created by an IAM user, the parent account to which the user belongs is the owner.</p>
+    #[serde(rename = "OwnerId")]
     pub owner_id: String,
-    #[doc="<p>The <code>PerformanceMode</code> of the file system.</p>"]
-    #[serde(rename="PerformanceMode")]
+    /// <p>The <code>PerformanceMode</code> of the file system.</p>
+    #[serde(rename = "PerformanceMode")]
     pub performance_mode: String,
-    #[doc="<p>Latest known metered size (in bytes) of data stored in the file system, in bytes, in its <code>Value</code> field, and the time at which that size was determined in its <code>Timestamp</code> field. The <code>Timestamp</code> value is the integer number of seconds since 1970-01-01T00:00:00Z. Note that the value does not represent the size of a consistent snapshot of the file system, but it is eventually consistent when there are no writes to the file system. That is, the value will represent actual size only if the file system is not modified for a period longer than a couple of hours. Otherwise, the value is not the exact size the file system was at any instant in time. </p>"]
-    #[serde(rename="SizeInBytes")]
+    /// <p>Latest known metered size (in bytes) of data stored in the file system, in bytes, in its <code>Value</code> field, and the time at which that size was determined in its <code>Timestamp</code> field. The <code>Timestamp</code> value is the integer number of seconds since 1970-01-01T00:00:00Z. Note that the value does not represent the size of a consistent snapshot of the file system, but it is eventually consistent when there are no writes to the file system. That is, the value will represent actual size only if the file system is not modified for a period longer than a couple of hours. Otherwise, the value is not the exact size the file system was at any instant in time. </p>
+    #[serde(rename = "SizeInBytes")]
     pub size_in_bytes: FileSystemSize,
 }
 
-#[doc="<p>Latest known metered size (in bytes) of data stored in the file system, in its <code>Value</code> field, and the time at which that size was determined in its <code>Timestamp</code> field. Note that the value does not represent the size of a consistent snapshot of the file system, but it is eventually consistent when there are no writes to the file system. That is, the value will represent the actual size only if the file system is not modified for a period longer than a couple of hours. Otherwise, the value is not necessarily the exact size the file system was at any instant in time.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Latest known metered size (in bytes) of data stored in the file system, in its <code>Value</code> field, and the time at which that size was determined in its <code>Timestamp</code> field. Note that the value does not represent the size of a consistent snapshot of the file system, but it is eventually consistent when there are no writes to the file system. That is, the value will represent the actual size only if the file system is not modified for a period longer than a couple of hours. Otherwise, the value is not necessarily the exact size the file system was at any instant in time.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct FileSystemSize {
-    #[doc="<p>Time at which the size of data, returned in the <code>Value</code> field, was determined. The value is the integer number of seconds since 1970-01-01T00:00:00Z.</p>"]
-    #[serde(rename="Timestamp")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Time at which the size of data, returned in the <code>Value</code> field, was determined. The value is the integer number of seconds since 1970-01-01T00:00:00Z.</p>
+    #[serde(rename = "Timestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<f64>,
-    #[doc="<p>Latest known metered size (in bytes) of data stored in the file system.</p>"]
-    #[serde(rename="Value")]
+    /// <p>Latest known metered size (in bytes) of data stored in the file system.</p>
+    #[serde(rename = "Value")]
     pub value: i64,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyMountTargetSecurityGroupsRequest {
-    #[doc="<p>ID of the mount target whose security groups you want to modify.</p>"]
-    #[serde(rename="MountTargetId")]
+    /// <p>ID of the mount target whose security groups you want to modify.</p>
+    #[serde(rename = "MountTargetId")]
     pub mount_target_id: String,
-    #[doc="<p>Array of up to five VPC security group IDs.</p>"]
-    #[serde(rename="SecurityGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Array of up to five VPC security group IDs.</p>
+    #[serde(rename = "SecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub security_groups: Option<Vec<String>>,
 }
 
-#[doc="<p>Provides a description of a mount target.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Provides a description of a mount target.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MountTargetDescription {
-    #[doc="<p>ID of the file system for which the mount target is intended.</p>"]
-    #[serde(rename="FileSystemId")]
+    /// <p>ID of the file system for which the mount target is intended.</p>
+    #[serde(rename = "FileSystemId")]
     pub file_system_id: String,
-    #[doc="<p>Address at which the file system may be mounted via the mount target.</p>"]
-    #[serde(rename="IpAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Address at which the file system may be mounted via the mount target.</p>
+    #[serde(rename = "IpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    #[doc="<p>Lifecycle state of the mount target.</p>"]
-    #[serde(rename="LifeCycleState")]
+    /// <p>Lifecycle state of the mount target.</p>
+    #[serde(rename = "LifeCycleState")]
     pub life_cycle_state: String,
-    #[doc="<p>System-assigned mount target ID.</p>"]
-    #[serde(rename="MountTargetId")]
+    /// <p>System-assigned mount target ID.</p>
+    #[serde(rename = "MountTargetId")]
     pub mount_target_id: String,
-    #[doc="<p>ID of the network interface that Amazon EFS created when it created the mount target.</p>"]
-    #[serde(rename="NetworkInterfaceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>ID of the network interface that Amazon EFS created when it created the mount target.</p>
+    #[serde(rename = "NetworkInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub network_interface_id: Option<String>,
-    #[doc="<p>AWS account ID that owns the resource.</p>"]
-    #[serde(rename="OwnerId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>AWS account ID that owns the resource.</p>
+    #[serde(rename = "OwnerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_id: Option<String>,
-    #[doc="<p>ID of the mount target's subnet.</p>"]
-    #[serde(rename="SubnetId")]
+    /// <p>ID of the mount target's subnet.</p>
+    #[serde(rename = "SubnetId")]
     pub subnet_id: String,
 }
 
-#[doc="<p>A tag is a key-value pair. Allowed characters: letters, whitespace, and numbers, representable in UTF-8, and the following characters:<code> + - = . _ : /</code> </p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A tag is a key-value pair. Allowed characters: letters, whitespace, and numbers, representable in UTF-8, and the following characters:<code> + - = . _ : /</code> </p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
-    #[doc="<p>Tag key (String). The key can't start with <code>aws:</code>.</p>"]
-    #[serde(rename="Key")]
+    /// <p>Tag key (String). The key can't start with <code>aws:</code>.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>Value of the tag key.</p>"]
-    #[serde(rename="Value")]
+    /// <p>Value of the tag key.</p>
+    #[serde(rename = "Value")]
     pub value: String,
 }
 
@@ -352,7 +351,6 @@ pub enum CreateFileSystemError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateFileSystemError {
     pub fn from_body(body: &str) -> CreateFileSystemError {
@@ -464,7 +462,6 @@ pub enum CreateMountTargetError {
     Unknown(String),
 }
 
-
 impl CreateMountTargetError {
     pub fn from_body(body: &str) -> CreateMountTargetError {
         match from_str::<SerdeJsonValue>(body) {
@@ -482,7 +479,11 @@ impl CreateMountTargetError {
                     "FileSystemNotFound" => {
                         CreateMountTargetError::FileSystemNotFound(String::from(error_message))
                     }
-                    "IncorrectFileSystemLifeCycleState" => CreateMountTargetError::IncorrectFileSystemLifeCycleState(String::from(error_message)),
+                    "IncorrectFileSystemLifeCycleState" => {
+                        CreateMountTargetError::IncorrectFileSystemLifeCycleState(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalServerError" => {
                         CreateMountTargetError::InternalServerError(String::from(error_message))
                     }
@@ -492,18 +493,30 @@ impl CreateMountTargetError {
                     "MountTargetConflict" => {
                         CreateMountTargetError::MountTargetConflict(String::from(error_message))
                     }
-                    "NetworkInterfaceLimitExceeded" => CreateMountTargetError::NetworkInterfaceLimitExceeded(String::from(error_message)),
+                    "NetworkInterfaceLimitExceeded" => {
+                        CreateMountTargetError::NetworkInterfaceLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "NoFreeAddressesInSubnet" => {
                         CreateMountTargetError::NoFreeAddressesInSubnet(String::from(error_message))
                     }
-                    "SecurityGroupLimitExceeded" => CreateMountTargetError::SecurityGroupLimitExceeded(String::from(error_message)),
+                    "SecurityGroupLimitExceeded" => {
+                        CreateMountTargetError::SecurityGroupLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "SecurityGroupNotFound" => {
                         CreateMountTargetError::SecurityGroupNotFound(String::from(error_message))
                     }
                     "SubnetNotFound" => {
                         CreateMountTargetError::SubnetNotFound(String::from(error_message))
                     }
-                    "UnsupportedAvailabilityZone" => CreateMountTargetError::UnsupportedAvailabilityZone(String::from(error_message)),
+                    "UnsupportedAvailabilityZone" => {
+                        CreateMountTargetError::UnsupportedAvailabilityZone(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateMountTargetError::Validation(error_message.to_string())
                     }
@@ -582,7 +595,6 @@ pub enum CreateTagsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateTagsError {
     pub fn from_body(body: &str) -> CreateTagsError {
@@ -671,7 +683,6 @@ pub enum DeleteFileSystemError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteFileSystemError {
     pub fn from_body(body: &str) -> DeleteFileSystemError {
@@ -767,7 +778,6 @@ pub enum DeleteMountTargetError {
     Unknown(String),
 }
 
-
 impl DeleteMountTargetError {
     pub fn from_body(body: &str) -> DeleteMountTargetError {
         match from_str::<SerdeJsonValue>(body) {
@@ -862,7 +872,6 @@ pub enum DeleteTagsError {
     Unknown(String),
 }
 
-
 impl DeleteTagsError {
     pub fn from_body(body: &str) -> DeleteTagsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -948,7 +957,6 @@ pub enum DescribeFileSystemsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeFileSystemsError {
     pub fn from_body(body: &str) -> DescribeFileSystemsError {
@@ -1044,7 +1052,6 @@ pub enum DescribeMountTargetSecurityGroupsError {
     Unknown(String),
 }
 
-
 impl DescribeMountTargetSecurityGroupsError {
     pub fn from_body(body: &str) -> DescribeMountTargetSecurityGroupsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1058,14 +1065,27 @@ impl DescribeMountTargetSecurityGroupsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "BadRequest" => DescribeMountTargetSecurityGroupsError::BadRequest(String::from(error_message)),
-                    "IncorrectMountTargetState" => DescribeMountTargetSecurityGroupsError::IncorrectMountTargetState(String::from(error_message)),
-                    "InternalServerError" => DescribeMountTargetSecurityGroupsError::InternalServerError(String::from(error_message)),
-                    "MountTargetNotFound" => DescribeMountTargetSecurityGroupsError::MountTargetNotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        DescribeMountTargetSecurityGroupsError::Validation(error_message
-                                                                               .to_string())
+                    "BadRequest" => DescribeMountTargetSecurityGroupsError::BadRequest(
+                        String::from(error_message),
+                    ),
+                    "IncorrectMountTargetState" => {
+                        DescribeMountTargetSecurityGroupsError::IncorrectMountTargetState(
+                            String::from(error_message),
+                        )
                     }
+                    "InternalServerError" => {
+                        DescribeMountTargetSecurityGroupsError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "MountTargetNotFound" => {
+                        DescribeMountTargetSecurityGroupsError::MountTargetNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => DescribeMountTargetSecurityGroupsError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DescribeMountTargetSecurityGroupsError::Unknown(String::from(body)),
                 }
             }
@@ -1135,7 +1155,6 @@ pub enum DescribeMountTargetsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeMountTargetsError {
     pub fn from_body(body: &str) -> DescribeMountTargetsError {
@@ -1233,7 +1252,6 @@ pub enum DescribeTagsError {
     Unknown(String),
 }
 
-
 impl DescribeTagsError {
     pub fn from_body(body: &str) -> DescribeTagsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1328,7 +1346,6 @@ pub enum ModifyMountTargetSecurityGroupsError {
     Unknown(String),
 }
 
-
 impl ModifyMountTargetSecurityGroupsError {
     pub fn from_body(body: &str) -> ModifyMountTargetSecurityGroupsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -1342,12 +1359,34 @@ impl ModifyMountTargetSecurityGroupsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "BadRequest" => ModifyMountTargetSecurityGroupsError::BadRequest(String::from(error_message)),
-                    "IncorrectMountTargetState" => ModifyMountTargetSecurityGroupsError::IncorrectMountTargetState(String::from(error_message)),
-                    "InternalServerError" => ModifyMountTargetSecurityGroupsError::InternalServerError(String::from(error_message)),
-                    "MountTargetNotFound" => ModifyMountTargetSecurityGroupsError::MountTargetNotFound(String::from(error_message)),
-                    "SecurityGroupLimitExceeded" => ModifyMountTargetSecurityGroupsError::SecurityGroupLimitExceeded(String::from(error_message)),
-                    "SecurityGroupNotFound" => ModifyMountTargetSecurityGroupsError::SecurityGroupNotFound(String::from(error_message)),
+                    "BadRequest" => ModifyMountTargetSecurityGroupsError::BadRequest(
+                        String::from(error_message),
+                    ),
+                    "IncorrectMountTargetState" => {
+                        ModifyMountTargetSecurityGroupsError::IncorrectMountTargetState(
+                            String::from(error_message),
+                        )
+                    }
+                    "InternalServerError" => {
+                        ModifyMountTargetSecurityGroupsError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "MountTargetNotFound" => {
+                        ModifyMountTargetSecurityGroupsError::MountTargetNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "SecurityGroupLimitExceeded" => {
+                        ModifyMountTargetSecurityGroupsError::SecurityGroupLimitExceeded(
+                            String::from(error_message),
+                        )
+                    }
+                    "SecurityGroupNotFound" => {
+                        ModifyMountTargetSecurityGroupsError::SecurityGroupNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ModifyMountTargetSecurityGroupsError::Validation(error_message.to_string())
                     }
@@ -1405,73 +1444,70 @@ impl Error for ModifyMountTargetSecurityGroupsError {
 /// Trait representing the capabilities of the EFS API. EFS clients implement this trait.
 pub trait Efs {
     #[doc="<p>Creates a new, empty file system. The operation requires a creation token in the request that Amazon EFS uses to ensure idempotent creation (calling the operation with same creation token has no effect). If a file system does not currently exist that is owned by the caller's AWS account with the specified creation token, this operation does the following:</p> <ul> <li> <p>Creates a new, empty file system. The file system will have an Amazon EFS assigned ID, and an initial lifecycle state <code>creating</code>.</p> </li> <li> <p>Returns with the description of the created file system.</p> </li> </ul> <p>Otherwise, this operation returns a <code>FileSystemAlreadyExists</code> error with the ID of the existing file system.</p> <note> <p>For basic use cases, you can use a randomly generated UUID for the creation token.</p> </note> <p> The idempotent operation allows you to retry a <code>CreateFileSystem</code> call without risk of creating an extra file system. This can happen when an initial call fails in a way that leaves it uncertain whether or not a file system was actually created. An example might be that a transport level timeout occurred or your connection was reset. As long as you use the same creation token, if the initial call had succeeded in creating a file system, the client can learn of its existence from the <code>FileSystemAlreadyExists</code> error.</p> <note> <p>The <code>CreateFileSystem</code> call returns while the file system's lifecycle state is still <code>creating</code>. You can check the file system creation status by calling the <a>DescribeFileSystems</a> operation, which among other things returns the file system state.</p> </note> <p>This operation also takes an optional <code>PerformanceMode</code> parameter that you choose for your file system. We recommend <code>generalPurpose</code> performance mode for most file systems. File systems using the <code>maxIO</code> performance mode can scale to higher levels of aggregate throughput and operations per second with a tradeoff of slightly higher latencies for most file operations. The performance mode can't be changed after the file system has been created. For more information, see <a href=\"http://docs.aws.amazon.com/efs/latest/ug/performance.html#performancemodes.html\">Amazon EFS: Performance Modes</a>.</p> <p>After the file system is fully created, Amazon EFS sets its lifecycle state to <code>available</code>, at which point you can create one or more mount targets for the file system in your VPC. For more information, see <a>CreateMountTarget</a>. You mount your Amazon EFS file system on an EC2 instances in your VPC via the mount target. For more information, see <a href=\"http://docs.aws.amazon.com/efs/latest/ug/how-it-works.html\">Amazon EFS: How it Works</a>. </p> <p> This operation requires permissions for the <code>elasticfilesystem:CreateFileSystem</code> action. </p>"]
-    fn create_file_system(&self,
-                          input: &CreateFileSystemRequest)
-                          -> Result<FileSystemDescription, CreateFileSystemError>;
-
+    fn create_file_system(
+        &self,
+        input: &CreateFileSystemRequest,
+    ) -> Result<FileSystemDescription, CreateFileSystemError>;
 
     #[doc="<p>Creates a mount target for a file system. You can then mount the file system on EC2 instances via the mount target.</p> <p>You can create one mount target in each Availability Zone in your VPC. All EC2 instances in a VPC within a given Availability Zone share a single mount target for a given file system. If you have multiple subnets in an Availability Zone, you create a mount target in one of the subnets. EC2 instances do not need to be in the same subnet as the mount target in order to access their file system. For more information, see <a href=\"http://docs.aws.amazon.com/efs/latest/ug/how-it-works.html\">Amazon EFS: How it Works</a>. </p> <p>In the request, you also specify a file system ID for which you are creating the mount target and the file system's lifecycle state must be <code>available</code>. For more information, see <a>DescribeFileSystems</a>.</p> <p>In the request, you also provide a subnet ID, which determines the following:</p> <ul> <li> <p>VPC in which Amazon EFS creates the mount target</p> </li> <li> <p>Availability Zone in which Amazon EFS creates the mount target</p> </li> <li> <p>IP address range from which Amazon EFS selects the IP address of the mount target (if you don't specify an IP address in the request)</p> </li> </ul> <p>After creating the mount target, Amazon EFS returns a response that includes, a <code>MountTargetId</code> and an <code>IpAddress</code>. You use this IP address when mounting the file system in an EC2 instance. You can also use the mount target's DNS name when mounting the file system. The EC2 instance on which you mount the file system via the mount target can resolve the mount target's DNS name to its IP address. For more information, see <a href=\"http://docs.aws.amazon.com/efs/latest/ug/how-it-works.html#how-it-works-implementation\">How it Works: Implementation Overview</a>. </p> <p>Note that you can create mount targets for a file system in only one VPC, and there can be only one mount target per Availability Zone. That is, if the file system already has one or more mount targets created for it, the subnet specified in the request to add another mount target must meet the following requirements:</p> <ul> <li> <p>Must belong to the same VPC as the subnets of the existing mount targets</p> </li> <li> <p>Must not be in the same Availability Zone as any of the subnets of the existing mount targets</p> </li> </ul> <p>If the request satisfies the requirements, Amazon EFS does the following:</p> <ul> <li> <p>Creates a new mount target in the specified subnet.</p> </li> <li> <p>Also creates a new network interface in the subnet as follows:</p> <ul> <li> <p>If the request provides an <code>IpAddress</code>, Amazon EFS assigns that IP address to the network interface. Otherwise, Amazon EFS assigns a free address in the subnet (in the same way that the Amazon EC2 <code>CreateNetworkInterface</code> call does when a request does not specify a primary private IP address).</p> </li> <li> <p>If the request provides <code>SecurityGroups</code>, this network interface is associated with those security groups. Otherwise, it belongs to the default security group for the subnet's VPC.</p> </li> <li> <p>Assigns the description <code>Mount target <i>fsmt-id</i> for file system <i>fs-id</i> </code> where <code> <i>fsmt-id</i> </code> is the mount target ID, and <code> <i>fs-id</i> </code> is the <code>FileSystemId</code>.</p> </li> <li> <p>Sets the <code>requesterManaged</code> property of the network interface to <code>true</code>, and the <code>requesterId</code> value to <code>EFS</code>.</p> </li> </ul> <p>Each Amazon EFS mount target has one corresponding requester-managed EC2 network interface. After the network interface is created, Amazon EFS sets the <code>NetworkInterfaceId</code> field in the mount target's description to the network interface ID, and the <code>IpAddress</code> field to its address. If network interface creation fails, the entire <code>CreateMountTarget</code> operation fails.</p> </li> </ul> <note> <p>The <code>CreateMountTarget</code> call returns only after creating the network interface, but while the mount target state is still <code>creating</code>, you can check the mount target creation status by calling the <a>DescribeMountTargets</a> operation, which among other things returns the mount target state.</p> </note> <p>We recommend you create a mount target in each of the Availability Zones. There are cost considerations for using a file system in an Availability Zone through a mount target created in another Availability Zone. For more information, see <a href=\"http://aws.amazon.com/efs/\">Amazon EFS</a>. In addition, by always using a mount target local to the instance's Availability Zone, you eliminate a partial failure scenario. If the Availability Zone in which your mount target is created goes down, then you won't be able to access your file system through that mount target. </p> <p>This operation requires permissions for the following action on the file system:</p> <ul> <li> <p> <code>elasticfilesystem:CreateMountTarget</code> </p> </li> </ul> <p>This operation also requires permissions for the following Amazon EC2 actions:</p> <ul> <li> <p> <code>ec2:DescribeSubnets</code> </p> </li> <li> <p> <code>ec2:DescribeNetworkInterfaces</code> </p> </li> <li> <p> <code>ec2:CreateNetworkInterface</code> </p> </li> </ul>"]
-    fn create_mount_target(&self,
-                           input: &CreateMountTargetRequest)
-                           -> Result<MountTargetDescription, CreateMountTargetError>;
-
+    fn create_mount_target(
+        &self,
+        input: &CreateMountTargetRequest,
+    ) -> Result<MountTargetDescription, CreateMountTargetError>;
 
     #[doc="<p>Creates or overwrites tags associated with a file system. Each tag is a key-value pair. If a tag key specified in the request already exists on the file system, this operation overwrites its value with the value provided in the request. If you add the <code>Name</code> tag to your file system, Amazon EFS returns it in the response to the <a>DescribeFileSystems</a> operation. </p> <p>This operation requires permission for the <code>elasticfilesystem:CreateTags</code> action.</p>"]
     fn create_tags(&self, input: &CreateTagsRequest) -> Result<(), CreateTagsError>;
 
-
     #[doc="<p>Deletes a file system, permanently severing access to its contents. Upon return, the file system no longer exists and you can't access any contents of the deleted file system.</p> <p> You can't delete a file system that is in use. That is, if the file system has any mount targets, you must first delete them. For more information, see <a>DescribeMountTargets</a> and <a>DeleteMountTarget</a>. </p> <note> <p>The <code>DeleteFileSystem</code> call returns while the file system state is still <code>deleting</code>. You can check the file system deletion status by calling the <a>DescribeFileSystems</a> operation, which returns a list of file systems in your account. If you pass file system ID or creation token for the deleted file system, the <a>DescribeFileSystems</a> returns a <code>404 FileSystemNotFound</code> error.</p> </note> <p>This operation requires permissions for the <code>elasticfilesystem:DeleteFileSystem</code> action.</p>"]
-    fn delete_file_system(&self,
-                          input: &DeleteFileSystemRequest)
-                          -> Result<(), DeleteFileSystemError>;
-
+    fn delete_file_system(
+        &self,
+        input: &DeleteFileSystemRequest,
+    ) -> Result<(), DeleteFileSystemError>;
 
     #[doc="<p>Deletes the specified mount target.</p> <p>This operation forcibly breaks any mounts of the file system via the mount target that is being deleted, which might disrupt instances or applications using those mounts. To avoid applications getting cut off abruptly, you might consider unmounting any mounts of the mount target, if feasible. The operation also deletes the associated network interface. Uncommitted writes may be lost, but breaking a mount target using this operation does not corrupt the file system itself. The file system you created remains. You can mount an EC2 instance in your VPC via another mount target.</p> <p>This operation requires permissions for the following action on the file system:</p> <ul> <li> <p> <code>elasticfilesystem:DeleteMountTarget</code> </p> </li> </ul> <note> <p>The <code>DeleteMountTarget</code> call returns while the mount target state is still <code>deleting</code>. You can check the mount target deletion by calling the <a>DescribeMountTargets</a> operation, which returns a list of mount target descriptions for the given file system. </p> </note> <p>The operation also requires permissions for the following Amazon EC2 action on the mount target's network interface:</p> <ul> <li> <p> <code>ec2:DeleteNetworkInterface</code> </p> </li> </ul>"]
-    fn delete_mount_target(&self,
-                           input: &DeleteMountTargetRequest)
-                           -> Result<(), DeleteMountTargetError>;
-
+    fn delete_mount_target(
+        &self,
+        input: &DeleteMountTargetRequest,
+    ) -> Result<(), DeleteMountTargetError>;
 
     #[doc="<p>Deletes the specified tags from a file system. If the <code>DeleteTags</code> request includes a tag key that does not exist, Amazon EFS ignores it and doesn't cause an error. For more information about tags and related restrictions, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Tag Restrictions</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DeleteTags</code> action.</p>"]
     fn delete_tags(&self, input: &DeleteTagsRequest) -> Result<(), DeleteTagsError>;
 
-
     #[doc="<p>Returns the description of a specific Amazon EFS file system if either the file system <code>CreationToken</code> or the <code>FileSystemId</code> is provided. Otherwise, it returns descriptions of all file systems owned by the caller's AWS account in the AWS Region of the endpoint that you're calling.</p> <p> When retrieving all file system descriptions, you can optionally specify the <code>MaxItems</code> parameter to limit the number of descriptions in a response. If more file system descriptions remain, Amazon EFS returns a <code>NextMarker</code>, an opaque token, in the response. In this case, you should send a subsequent request with the <code>Marker</code> request parameter set to the value of <code>NextMarker</code>. </p> <p>To retrieve a list of your file system descriptions, this operation is used in an iterative process, where <code>DescribeFileSystems</code> is called first without the <code>Marker</code> and then the operation continues to call it with the <code>Marker</code> parameter set to the value of the <code>NextMarker</code> from the previous response until the response has no <code>NextMarker</code>. </p> <p>The implementation may return fewer than <code>MaxItems</code> file system descriptions while still including a <code>NextMarker</code> value. </p> <p> The order of file systems returned in the response of one <code>DescribeFileSystems</code> call and the order of file systems returned across the responses of a multi-call iteration is unspecified. </p> <p> This operation requires permissions for the <code>elasticfilesystem:DescribeFileSystems</code> action. </p>"]
-    fn describe_file_systems(&self,
-                             input: &DescribeFileSystemsRequest)
-                             -> Result<DescribeFileSystemsResponse, DescribeFileSystemsError>;
-
+    fn describe_file_systems(
+        &self,
+        input: &DescribeFileSystemsRequest,
+    ) -> Result<DescribeFileSystemsResponse, DescribeFileSystemsError>;
 
     #[doc="<p>Returns the security groups currently in effect for a mount target. This operation requires that the network interface of the mount target has been created and the lifecycle state of the mount target is not <code>deleted</code>.</p> <p>This operation requires permissions for the following actions:</p> <ul> <li> <p> <code>elasticfilesystem:DescribeMountTargetSecurityGroups</code> action on the mount target's file system. </p> </li> <li> <p> <code>ec2:DescribeNetworkInterfaceAttribute</code> action on the mount target's network interface. </p> </li> </ul>"]
-    fn describe_mount_target_security_groups
-        (&self,
-         input: &DescribeMountTargetSecurityGroupsRequest)
-         -> Result<DescribeMountTargetSecurityGroupsResponse,
-                   DescribeMountTargetSecurityGroupsError>;
-
+    fn describe_mount_target_security_groups(
+        &self,
+        input: &DescribeMountTargetSecurityGroupsRequest,
+    ) -> Result<DescribeMountTargetSecurityGroupsResponse, DescribeMountTargetSecurityGroupsError>;
 
     #[doc="<p>Returns the descriptions of all the current mount targets, or a specific mount target, for a file system. When requesting all of the current mount targets, the order of mount targets returned in the response is unspecified.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeMountTargets</code> action, on either the file system ID that you specify in <code>FileSystemId</code>, or on the file system of the mount target that you specify in <code>MountTargetId</code>.</p>"]
-    fn describe_mount_targets
-        (&self,
-         input: &DescribeMountTargetsRequest)
-         -> Result<DescribeMountTargetsResponse, DescribeMountTargetsError>;
-
+    fn describe_mount_targets(
+        &self,
+        input: &DescribeMountTargetsRequest,
+    ) -> Result<DescribeMountTargetsResponse, DescribeMountTargetsError>;
 
     #[doc="<p>Returns the tags associated with a file system. The order of tags returned in the response of one <code>DescribeTags</code> call and the order of tags returned across the responses of a multi-call iteration (when using pagination) is unspecified. </p> <p> This operation requires permissions for the <code>elasticfilesystem:DescribeTags</code> action. </p>"]
-    fn describe_tags(&self,
-                     input: &DescribeTagsRequest)
-                     -> Result<DescribeTagsResponse, DescribeTagsError>;
-
+    fn describe_tags(
+        &self,
+        input: &DescribeTagsRequest,
+    ) -> Result<DescribeTagsResponse, DescribeTagsError>;
 
     #[doc="<p>Modifies the set of security groups in effect for a mount target.</p> <p>When you create a mount target, Amazon EFS also creates a new network interface. For more information, see <a>CreateMountTarget</a>. This operation replaces the security groups in effect for the network interface associated with a mount target, with the <code>SecurityGroups</code> provided in the request. This operation requires that the network interface of the mount target has been created and the lifecycle state of the mount target is not <code>deleted</code>. </p> <p>The operation requires permissions for the following actions:</p> <ul> <li> <p> <code>elasticfilesystem:ModifyMountTargetSecurityGroups</code> action on the mount target's file system. </p> </li> <li> <p> <code>ec2:ModifyNetworkInterfaceAttribute</code> action on the mount target's network interface. </p> </li> </ul>"]
-    fn modify_mount_target_security_groups(&self,
-                                           input: &ModifyMountTargetSecurityGroupsRequest)
-                                           -> Result<(), ModifyMountTargetSecurityGroupsError>;
+    fn modify_mount_target_security_groups(
+        &self,
+        input: &ModifyMountTargetSecurityGroupsRequest,
+    ) -> Result<(), ModifyMountTargetSecurityGroupsError>;
 }
 /// A client for the EFS API.
 pub struct EfsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -1479,8 +1515,9 @@ pub struct EfsClient<P, D>
 }
 
 impl<P, D> EfsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         EfsClient {
@@ -1492,31 +1529,29 @@ impl<P, D> EfsClient<P, D>
 }
 
 impl<P, D> Efs for EfsClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Creates a new, empty file system. The operation requires a creation token in the request that Amazon EFS uses to ensure idempotent creation (calling the operation with same creation token has no effect). If a file system does not currently exist that is owned by the caller's AWS account with the specified creation token, this operation does the following:</p> <ul> <li> <p>Creates a new, empty file system. The file system will have an Amazon EFS assigned ID, and an initial lifecycle state <code>creating</code>.</p> </li> <li> <p>Returns with the description of the created file system.</p> </li> </ul> <p>Otherwise, this operation returns a <code>FileSystemAlreadyExists</code> error with the ID of the existing file system.</p> <note> <p>For basic use cases, you can use a randomly generated UUID for the creation token.</p> </note> <p> The idempotent operation allows you to retry a <code>CreateFileSystem</code> call without risk of creating an extra file system. This can happen when an initial call fails in a way that leaves it uncertain whether or not a file system was actually created. An example might be that a transport level timeout occurred or your connection was reset. As long as you use the same creation token, if the initial call had succeeded in creating a file system, the client can learn of its existence from the <code>FileSystemAlreadyExists</code> error.</p> <note> <p>The <code>CreateFileSystem</code> call returns while the file system's lifecycle state is still <code>creating</code>. You can check the file system creation status by calling the <a>DescribeFileSystems</a> operation, which among other things returns the file system state.</p> </note> <p>This operation also takes an optional <code>PerformanceMode</code> parameter that you choose for your file system. We recommend <code>generalPurpose</code> performance mode for most file systems. File systems using the <code>maxIO</code> performance mode can scale to higher levels of aggregate throughput and operations per second with a tradeoff of slightly higher latencies for most file operations. The performance mode can't be changed after the file system has been created. For more information, see <a href=\"http://docs.aws.amazon.com/efs/latest/ug/performance.html#performancemodes.html\">Amazon EFS: Performance Modes</a>.</p> <p>After the file system is fully created, Amazon EFS sets its lifecycle state to <code>available</code>, at which point you can create one or more mount targets for the file system in your VPC. For more information, see <a>CreateMountTarget</a>. You mount your Amazon EFS file system on an EC2 instances in your VPC via the mount target. For more information, see <a href=\"http://docs.aws.amazon.com/efs/latest/ug/how-it-works.html\">Amazon EFS: How it Works</a>. </p> <p> This operation requires permissions for the <code>elasticfilesystem:CreateFileSystem</code> action. </p>"]
-    fn create_file_system(&self,
-                          input: &CreateFileSystemRequest)
-                          -> Result<FileSystemDescription, CreateFileSystemError> {
+    fn create_file_system(
+        &self,
+        input: &CreateFileSystemRequest,
+    ) -> Result<FileSystemDescription, CreateFileSystemError> {
         let request_uri = "/2015-02-01/file-systems";
 
         let mut request =
             SignedRequest::new("POST", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -1528,41 +1563,37 @@ impl<P, D> Efs for EfsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<FileSystemDescription>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateFileSystemError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateFileSystemError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a mount target for a file system. You can then mount the file system on EC2 instances via the mount target.</p> <p>You can create one mount target in each Availability Zone in your VPC. All EC2 instances in a VPC within a given Availability Zone share a single mount target for a given file system. If you have multiple subnets in an Availability Zone, you create a mount target in one of the subnets. EC2 instances do not need to be in the same subnet as the mount target in order to access their file system. For more information, see <a href=\"http://docs.aws.amazon.com/efs/latest/ug/how-it-works.html\">Amazon EFS: How it Works</a>. </p> <p>In the request, you also specify a file system ID for which you are creating the mount target and the file system's lifecycle state must be <code>available</code>. For more information, see <a>DescribeFileSystems</a>.</p> <p>In the request, you also provide a subnet ID, which determines the following:</p> <ul> <li> <p>VPC in which Amazon EFS creates the mount target</p> </li> <li> <p>Availability Zone in which Amazon EFS creates the mount target</p> </li> <li> <p>IP address range from which Amazon EFS selects the IP address of the mount target (if you don't specify an IP address in the request)</p> </li> </ul> <p>After creating the mount target, Amazon EFS returns a response that includes, a <code>MountTargetId</code> and an <code>IpAddress</code>. You use this IP address when mounting the file system in an EC2 instance. You can also use the mount target's DNS name when mounting the file system. The EC2 instance on which you mount the file system via the mount target can resolve the mount target's DNS name to its IP address. For more information, see <a href=\"http://docs.aws.amazon.com/efs/latest/ug/how-it-works.html#how-it-works-implementation\">How it Works: Implementation Overview</a>. </p> <p>Note that you can create mount targets for a file system in only one VPC, and there can be only one mount target per Availability Zone. That is, if the file system already has one or more mount targets created for it, the subnet specified in the request to add another mount target must meet the following requirements:</p> <ul> <li> <p>Must belong to the same VPC as the subnets of the existing mount targets</p> </li> <li> <p>Must not be in the same Availability Zone as any of the subnets of the existing mount targets</p> </li> </ul> <p>If the request satisfies the requirements, Amazon EFS does the following:</p> <ul> <li> <p>Creates a new mount target in the specified subnet.</p> </li> <li> <p>Also creates a new network interface in the subnet as follows:</p> <ul> <li> <p>If the request provides an <code>IpAddress</code>, Amazon EFS assigns that IP address to the network interface. Otherwise, Amazon EFS assigns a free address in the subnet (in the same way that the Amazon EC2 <code>CreateNetworkInterface</code> call does when a request does not specify a primary private IP address).</p> </li> <li> <p>If the request provides <code>SecurityGroups</code>, this network interface is associated with those security groups. Otherwise, it belongs to the default security group for the subnet's VPC.</p> </li> <li> <p>Assigns the description <code>Mount target <i>fsmt-id</i> for file system <i>fs-id</i> </code> where <code> <i>fsmt-id</i> </code> is the mount target ID, and <code> <i>fs-id</i> </code> is the <code>FileSystemId</code>.</p> </li> <li> <p>Sets the <code>requesterManaged</code> property of the network interface to <code>true</code>, and the <code>requesterId</code> value to <code>EFS</code>.</p> </li> </ul> <p>Each Amazon EFS mount target has one corresponding requester-managed EC2 network interface. After the network interface is created, Amazon EFS sets the <code>NetworkInterfaceId</code> field in the mount target's description to the network interface ID, and the <code>IpAddress</code> field to its address. If network interface creation fails, the entire <code>CreateMountTarget</code> operation fails.</p> </li> </ul> <note> <p>The <code>CreateMountTarget</code> call returns only after creating the network interface, but while the mount target state is still <code>creating</code>, you can check the mount target creation status by calling the <a>DescribeMountTargets</a> operation, which among other things returns the mount target state.</p> </note> <p>We recommend you create a mount target in each of the Availability Zones. There are cost considerations for using a file system in an Availability Zone through a mount target created in another Availability Zone. For more information, see <a href=\"http://aws.amazon.com/efs/\">Amazon EFS</a>. In addition, by always using a mount target local to the instance's Availability Zone, you eliminate a partial failure scenario. If the Availability Zone in which your mount target is created goes down, then you won't be able to access your file system through that mount target. </p> <p>This operation requires permissions for the following action on the file system:</p> <ul> <li> <p> <code>elasticfilesystem:CreateMountTarget</code> </p> </li> </ul> <p>This operation also requires permissions for the following Amazon EC2 actions:</p> <ul> <li> <p> <code>ec2:DescribeSubnets</code> </p> </li> <li> <p> <code>ec2:DescribeNetworkInterfaces</code> </p> </li> <li> <p> <code>ec2:CreateNetworkInterface</code> </p> </li> </ul>"]
-    fn create_mount_target(&self,
-                           input: &CreateMountTargetRequest)
-                           -> Result<MountTargetDescription, CreateMountTargetError> {
+    fn create_mount_target(
+        &self,
+        input: &CreateMountTargetRequest,
+    ) -> Result<MountTargetDescription, CreateMountTargetError> {
         let request_uri = "/2015-02-01/mount-targets";
 
         let mut request =
             SignedRequest::new("POST", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -1574,34 +1605,32 @@ impl<P, D> Efs for EfsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<MountTargetDescription>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateMountTargetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateMountTargetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Creates or overwrites tags associated with a file system. Each tag is a key-value pair. If a tag key specified in the request already exists on the file system, this operation overwrites its value with the value provided in the request. If you add the <code>Name</code> tag to your file system, Amazon EFS returns it in the response to the <a>DescribeFileSystems</a> operation. </p> <p>This operation requires permission for the <code>elasticfilesystem:CreateTags</code> action.</p>"]
     fn create_tags(&self, input: &CreateTagsRequest) -> Result<(), CreateTagsError> {
-        let request_uri = format!("/2015-02-01/create-tags/{file_system_id}",
-                                  file_system_id = input.file_system_id);
+        let request_uri = format!(
+            "/2015-02-01/create-tags/{file_system_id}",
+            file_system_id = input.file_system_id
+        );
 
         let mut request =
             SignedRequest::new("POST", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-
-
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -1609,33 +1638,31 @@ impl<P, D> Efs for EfsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes a file system, permanently severing access to its contents. Upon return, the file system no longer exists and you can't access any contents of the deleted file system.</p> <p> You can't delete a file system that is in use. That is, if the file system has any mount targets, you must first delete them. For more information, see <a>DescribeMountTargets</a> and <a>DeleteMountTarget</a>. </p> <note> <p>The <code>DeleteFileSystem</code> call returns while the file system state is still <code>deleting</code>. You can check the file system deletion status by calling the <a>DescribeFileSystems</a> operation, which returns a list of file systems in your account. If you pass file system ID or creation token for the deleted file system, the <a>DescribeFileSystems</a> returns a <code>404 FileSystemNotFound</code> error.</p> </note> <p>This operation requires permissions for the <code>elasticfilesystem:DeleteFileSystem</code> action.</p>"]
-    fn delete_file_system(&self,
-                          input: &DeleteFileSystemRequest)
-                          -> Result<(), DeleteFileSystemError> {
-        let request_uri = format!("/2015-02-01/file-systems/{file_system_id}",
-                                  file_system_id = input.file_system_id);
+    fn delete_file_system(
+        &self,
+        input: &DeleteFileSystemRequest,
+    ) -> Result<(), DeleteFileSystemError> {
+        let request_uri = format!(
+            "/2015-02-01/file-systems/{file_system_id}",
+            file_system_id = input.file_system_id
+        );
 
         let mut request =
             SignedRequest::new("DELETE", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -1644,33 +1671,31 @@ impl<P, D> Efs for EfsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteFileSystemError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteFileSystemError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes the specified mount target.</p> <p>This operation forcibly breaks any mounts of the file system via the mount target that is being deleted, which might disrupt instances or applications using those mounts. To avoid applications getting cut off abruptly, you might consider unmounting any mounts of the mount target, if feasible. The operation also deletes the associated network interface. Uncommitted writes may be lost, but breaking a mount target using this operation does not corrupt the file system itself. The file system you created remains. You can mount an EC2 instance in your VPC via another mount target.</p> <p>This operation requires permissions for the following action on the file system:</p> <ul> <li> <p> <code>elasticfilesystem:DeleteMountTarget</code> </p> </li> </ul> <note> <p>The <code>DeleteMountTarget</code> call returns while the mount target state is still <code>deleting</code>. You can check the mount target deletion by calling the <a>DescribeMountTargets</a> operation, which returns a list of mount target descriptions for the given file system. </p> </note> <p>The operation also requires permissions for the following Amazon EC2 action on the mount target's network interface:</p> <ul> <li> <p> <code>ec2:DeleteNetworkInterface</code> </p> </li> </ul>"]
-    fn delete_mount_target(&self,
-                           input: &DeleteMountTargetRequest)
-                           -> Result<(), DeleteMountTargetError> {
-        let request_uri = format!("/2015-02-01/mount-targets/{mount_target_id}",
-                                  mount_target_id = input.mount_target_id);
+    fn delete_mount_target(
+        &self,
+        input: &DeleteMountTargetRequest,
+    ) -> Result<(), DeleteMountTargetError> {
+        let request_uri = format!(
+            "/2015-02-01/mount-targets/{mount_target_id}",
+            mount_target_id = input.mount_target_id
+        );
 
         let mut request =
             SignedRequest::new("DELETE", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -1679,32 +1704,31 @@ impl<P, D> Efs for EfsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteMountTargetError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteMountTargetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Deletes the specified tags from a file system. If the <code>DeleteTags</code> request includes a tag key that does not exist, Amazon EFS ignores it and doesn't cause an error. For more information about tags and related restrictions, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Tag Restrictions</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DeleteTags</code> action.</p>"]
     fn delete_tags(&self, input: &DeleteTagsRequest) -> Result<(), DeleteTagsError> {
-        let request_uri = format!("/2015-02-01/delete-tags/{file_system_id}",
-                                  file_system_id = input.file_system_id);
+        let request_uri = format!(
+            "/2015-02-01/delete-tags/{file_system_id}",
+            file_system_id = input.file_system_id
+        );
 
         let mut request =
             SignedRequest::new("POST", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -1713,30 +1737,28 @@ impl<P, D> Efs for EfsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns the description of a specific Amazon EFS file system if either the file system <code>CreationToken</code> or the <code>FileSystemId</code> is provided. Otherwise, it returns descriptions of all file systems owned by the caller's AWS account in the AWS Region of the endpoint that you're calling.</p> <p> When retrieving all file system descriptions, you can optionally specify the <code>MaxItems</code> parameter to limit the number of descriptions in a response. If more file system descriptions remain, Amazon EFS returns a <code>NextMarker</code>, an opaque token, in the response. In this case, you should send a subsequent request with the <code>Marker</code> request parameter set to the value of <code>NextMarker</code>. </p> <p>To retrieve a list of your file system descriptions, this operation is used in an iterative process, where <code>DescribeFileSystems</code> is called first without the <code>Marker</code> and then the operation continues to call it with the <code>Marker</code> parameter set to the value of the <code>NextMarker</code> from the previous response until the response has no <code>NextMarker</code>. </p> <p>The implementation may return fewer than <code>MaxItems</code> file system descriptions while still including a <code>NextMarker</code> value. </p> <p> The order of file systems returned in the response of one <code>DescribeFileSystems</code> call and the order of file systems returned across the responses of a multi-call iteration is unspecified. </p> <p> This operation requires permissions for the <code>elasticfilesystem:DescribeFileSystems</code> action. </p>"]
-    fn describe_file_systems(&self,
-                             input: &DescribeFileSystemsRequest)
-                             -> Result<DescribeFileSystemsResponse, DescribeFileSystemsError> {
+    fn describe_file_systems(
+        &self,
+        input: &DescribeFileSystemsRequest,
+    ) -> Result<DescribeFileSystemsResponse, DescribeFileSystemsError> {
         let request_uri = "/2015-02-01/file-systems";
 
         let mut request =
             SignedRequest::new("GET", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.creation_token {
@@ -1758,7 +1780,6 @@ impl<P, D> Efs for EfsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -1770,43 +1791,38 @@ impl<P, D> Efs for EfsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DescribeFileSystemsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeFileSystemsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeFileSystemsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns the security groups currently in effect for a mount target. This operation requires that the network interface of the mount target has been created and the lifecycle state of the mount target is not <code>deleted</code>.</p> <p>This operation requires permissions for the following actions:</p> <ul> <li> <p> <code>elasticfilesystem:DescribeMountTargetSecurityGroups</code> action on the mount target's file system. </p> </li> <li> <p> <code>ec2:DescribeNetworkInterfaceAttribute</code> action on the mount target's network interface. </p> </li> </ul>"]
-    fn describe_mount_target_security_groups
-        (&self,
-         input: &DescribeMountTargetSecurityGroupsRequest)
-         -> Result<DescribeMountTargetSecurityGroupsResponse,
-                   DescribeMountTargetSecurityGroupsError> {
-        let request_uri = format!("/2015-02-01/mount-targets/{mount_target_id}/security-groups",
-                                  mount_target_id = input.mount_target_id);
+    fn describe_mount_target_security_groups(
+        &self,
+        input: &DescribeMountTargetSecurityGroupsRequest,
+    ) -> Result<DescribeMountTargetSecurityGroupsResponse, DescribeMountTargetSecurityGroupsError>
+    {
+        let request_uri = format!(
+            "/2015-02-01/mount-targets/{mount_target_id}/security-groups",
+            mount_target_id = input.mount_target_id
+        );
 
         let mut request =
             SignedRequest::new("GET", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -1816,36 +1832,32 @@ impl<P, D> Efs for EfsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<DescribeMountTargetSecurityGroupsResponse>(&body)
-                        .unwrap();
-
-
+                let result = serde_json::from_slice::<DescribeMountTargetSecurityGroupsResponse>(
+                    &body,
+                ).unwrap();
 
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeMountTargetSecurityGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeMountTargetSecurityGroupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns the descriptions of all the current mount targets, or a specific mount target, for a file system. When requesting all of the current mount targets, the order of mount targets returned in the response is unspecified.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeMountTargets</code> action, on either the file system ID that you specify in <code>FileSystemId</code>, or on the file system of the mount target that you specify in <code>MountTargetId</code>.</p>"]
-    fn describe_mount_targets
-        (&self,
-         input: &DescribeMountTargetsRequest)
-         -> Result<DescribeMountTargetsResponse, DescribeMountTargetsError> {
+    fn describe_mount_targets(
+        &self,
+        input: &DescribeMountTargetsRequest,
+    ) -> Result<DescribeMountTargetsResponse, DescribeMountTargetsError> {
         let request_uri = "/2015-02-01/mount-targets";
 
         let mut request =
             SignedRequest::new("GET", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.file_system_id {
@@ -1867,7 +1879,6 @@ impl<P, D> Efs for EfsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -1879,32 +1890,31 @@ impl<P, D> Efs for EfsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DescribeMountTargetsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeMountTargetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeMountTargetsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns the tags associated with a file system. The order of tags returned in the response of one <code>DescribeTags</code> call and the order of tags returned across the responses of a multi-call iteration (when using pagination) is unspecified. </p> <p> This operation requires permissions for the <code>elasticfilesystem:DescribeTags</code> action. </p>"]
-    fn describe_tags(&self,
-                     input: &DescribeTagsRequest)
-                     -> Result<DescribeTagsResponse, DescribeTagsError> {
-        let request_uri = format!("/2015-02-01/tags/{file_system_id}/",
-                                  file_system_id = input.file_system_id);
+    fn describe_tags(
+        &self,
+        input: &DescribeTagsRequest,
+    ) -> Result<DescribeTagsResponse, DescribeTagsError> {
+        let request_uri = format!(
+            "/2015-02-01/tags/{file_system_id}/",
+            file_system_id = input.file_system_id
+        );
 
         let mut request =
             SignedRequest::new("GET", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-
-
 
         let mut params = Params::new();
         if let Some(ref x) = input.marker {
@@ -1920,7 +1930,6 @@ impl<P, D> Efs for EfsClient<P, D>
 
         match response.status {
             StatusCode::Ok => {
-
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
 
@@ -1932,35 +1941,34 @@ impl<P, D> Efs for EfsClient<P, D>
                 debug!("Response status: {}", response.status);
                 let result = serde_json::from_slice::<DescribeTagsResponse>(&body).unwrap();
 
-
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Modifies the set of security groups in effect for a mount target.</p> <p>When you create a mount target, Amazon EFS also creates a new network interface. For more information, see <a>CreateMountTarget</a>. This operation replaces the security groups in effect for the network interface associated with a mount target, with the <code>SecurityGroups</code> provided in the request. This operation requires that the network interface of the mount target has been created and the lifecycle state of the mount target is not <code>deleted</code>. </p> <p>The operation requires permissions for the following actions:</p> <ul> <li> <p> <code>elasticfilesystem:ModifyMountTargetSecurityGroups</code> action on the mount target's file system. </p> </li> <li> <p> <code>ec2:ModifyNetworkInterfaceAttribute</code> action on the mount target's network interface. </p> </li> </ul>"]
-    fn modify_mount_target_security_groups(&self,
-                                           input: &ModifyMountTargetSecurityGroupsRequest)
-                                           -> Result<(), ModifyMountTargetSecurityGroupsError> {
-        let request_uri = format!("/2015-02-01/mount-targets/{mount_target_id}/security-groups",
-                                  mount_target_id = input.mount_target_id);
+    fn modify_mount_target_security_groups(
+        &self,
+        input: &ModifyMountTargetSecurityGroupsRequest,
+    ) -> Result<(), ModifyMountTargetSecurityGroupsError> {
+        let request_uri = format!(
+            "/2015-02-01/mount-targets/{mount_target_id}/security-groups",
+            mount_target_id = input.mount_target_id
+        );
 
         let mut request =
             SignedRequest::new("PUT", "elasticfilesystem", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
-
-
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -1969,14 +1977,14 @@ impl<P, D> Efs for EfsClient<P, D>
             StatusCode::NoContent => {
                 let result = ();
 
-
                 Ok(result)
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ModifyMountTargetSecurityGroupsError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+                Err(ModifyMountTargetSecurityGroupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }

@@ -1,4 +1,3 @@
-
 // =================================================================
 //
 //                           * WARNING *
@@ -28,5262 +27,5259 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>An activation registers one or more on-premises servers or virtual machines (VMs) with AWS so that you can configure those servers or VMs using Run Command. A server or VM that has been registered with AWS is called a managed instance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An activation registers one or more on-premises servers or virtual machines (VMs) with AWS so that you can configure those servers or VMs using Run Command. A server or VM that has been registered with AWS is called a managed instance.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Activation {
-    #[doc="<p>The ID created by Systems Manager when you submitted the activation.</p>"]
-    #[serde(rename="ActivationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID created by Systems Manager when you submitted the activation.</p>
+    #[serde(rename = "ActivationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub activation_id: Option<String>,
-    #[doc="<p>The date the activation was created.</p>"]
-    #[serde(rename="CreatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the activation was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A name for the managed instance when it is created.</p>"]
-    #[serde(rename="DefaultInstanceName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A name for the managed instance when it is created.</p>
+    #[serde(rename = "DefaultInstanceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_instance_name: Option<String>,
-    #[doc="<p>A user defined description of the activation.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A user defined description of the activation.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The date when this activation can no longer be used to register managed instances.</p>"]
-    #[serde(rename="ExpirationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date when this activation can no longer be used to register managed instances.</p>
+    #[serde(rename = "ExpirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expiration_date: Option<f64>,
-    #[doc="<p>Whether or not the activation is expired.</p>"]
-    #[serde(rename="Expired")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether or not the activation is expired.</p>
+    #[serde(rename = "Expired")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expired: Option<bool>,
-    #[doc="<p>The Amazon Identity and Access Management (IAM) role to assign to the managed instance.</p>"]
-    #[serde(rename="IamRole")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Identity and Access Management (IAM) role to assign to the managed instance.</p>
+    #[serde(rename = "IamRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role: Option<String>,
-    #[doc="<p>The maximum number of managed instances that can be registered using this activation.</p>"]
-    #[serde(rename="RegistrationLimit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of managed instances that can be registered using this activation.</p>
+    #[serde(rename = "RegistrationLimit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registration_limit: Option<i64>,
-    #[doc="<p>The number of managed instances already registered with this activation.</p>"]
-    #[serde(rename="RegistrationsCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of managed instances already registered with this activation.</p>
+    #[serde(rename = "RegistrationsCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registrations_count: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AddTagsToResourceRequest {
-    #[doc="<p>The resource ID you want to tag.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The resource ID you want to tag.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    #[doc="<p>Specifies the type of resource you are tagging.</p>"]
-    #[serde(rename="ResourceType")]
+    /// <p>Specifies the type of resource you are tagging.</p>
+    #[serde(rename = "ResourceType")]
     pub resource_type: String,
-    #[doc="<p> One or more tags. The value parameter is required, but if you don't want the tag to have a value, specify the parameter with no value, and we set the value to an empty string. </p>"]
-    #[serde(rename="Tags")]
+    /// <p> One or more tags. The value parameter is required, but if you don't want the tag to have a value, specify the parameter with no value, and we set the value to an empty string. </p>
+    #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddTagsToResourceResult;
 
-#[doc="<p>Describes an association of a Systems Manager document and an instance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes an association of a Systems Manager document and an instance.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Association {
-    #[doc="<p>The ID created by the system when you create an association. An association is a binding between a document and a set of targets with a schedule.</p>"]
-    #[serde(rename="AssociationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID created by the system when you create an association. An association is a binding between a document and a set of targets with a schedule.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_id: Option<String>,
-    #[doc="<p>The association name.</p>"]
-    #[serde(rename="AssociationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The association name.</p>
+    #[serde(rename = "AssociationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_name: Option<String>,
-    #[doc="<p>The association version.</p>"]
-    #[serde(rename="AssociationVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The association version.</p>
+    #[serde(rename = "AssociationVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_version: Option<String>,
-    #[doc="<p>The version of the document used in the association.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the document used in the association.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The ID of the instance.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>The date on which the association was last run.</p>"]
-    #[serde(rename="LastExecutionDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date on which the association was last run.</p>
+    #[serde(rename = "LastExecutionDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_execution_date: Option<f64>,
-    #[doc="<p>The name of the SSM document.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the SSM document.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Information about the association.</p>"]
-    #[serde(rename="Overview")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the association.</p>
+    #[serde(rename = "Overview")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub overview: Option<AssociationOverview>,
-    #[doc="<p>A cron expression that specifies a schedule when the association runs.</p>"]
-    #[serde(rename="ScheduleExpression")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A cron expression that specifies a schedule when the association runs.</p>
+    #[serde(rename = "ScheduleExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
-    #[doc="<p>The instances targeted by the request to create an association. </p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The instances targeted by the request to create an association. </p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
 }
 
-#[doc="<p>Describes the parameters for a document.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the parameters for a document.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociationDescription {
-    #[doc="<p>The association ID.</p>"]
-    #[serde(rename="AssociationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The association ID.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_id: Option<String>,
-    #[doc="<p>The association name.</p>"]
-    #[serde(rename="AssociationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The association name.</p>
+    #[serde(rename = "AssociationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_name: Option<String>,
-    #[doc="<p>The association version.</p>"]
-    #[serde(rename="AssociationVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The association version.</p>
+    #[serde(rename = "AssociationVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_version: Option<String>,
-    #[doc="<p>The date when the association was made.</p>"]
-    #[serde(rename="Date")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date when the association was made.</p>
+    #[serde(rename = "Date")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub date: Option<f64>,
-    #[doc="<p>The document version.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document version.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The ID of the instance.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>The date on which the association was last run.</p>"]
-    #[serde(rename="LastExecutionDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date on which the association was last run.</p>
+    #[serde(rename = "LastExecutionDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_execution_date: Option<f64>,
-    #[doc="<p>The last date on which the association was successfully run.</p>"]
-    #[serde(rename="LastSuccessfulExecutionDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last date on which the association was successfully run.</p>
+    #[serde(rename = "LastSuccessfulExecutionDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_successful_execution_date: Option<f64>,
-    #[doc="<p>The date when the association was last updated.</p>"]
-    #[serde(rename="LastUpdateAssociationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date when the association was last updated.</p>
+    #[serde(rename = "LastUpdateAssociationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_association_date: Option<f64>,
-    #[doc="<p>The name of the SSM document.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the SSM document.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>An Amazon S3 bucket where you want to store the output details of the request.</p>"]
-    #[serde(rename="OutputLocation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An Amazon S3 bucket where you want to store the output details of the request.</p>
+    #[serde(rename = "OutputLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_location: Option<InstanceAssociationOutputLocation>,
-    #[doc="<p>Information about the association.</p>"]
-    #[serde(rename="Overview")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the association.</p>
+    #[serde(rename = "Overview")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub overview: Option<AssociationOverview>,
-    #[doc="<p>A description of the parameters for a document. </p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the parameters for a document. </p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>A cron expression that specifies a schedule when the association runs.</p>"]
-    #[serde(rename="ScheduleExpression")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A cron expression that specifies a schedule when the association runs.</p>
+    #[serde(rename = "ScheduleExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
-    #[doc="<p>The association status.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The association status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<AssociationStatus>,
-    #[doc="<p>The instances targeted by the request. </p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The instances targeted by the request. </p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
 }
 
-#[doc="<p>Describes a filter.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Describes a filter.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociationFilter {
-    #[doc="<p>The name of the filter.</p>"]
-    #[serde(rename="key")]
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "key")]
     pub key: String,
-    #[doc="<p>The filter value.</p>"]
-    #[serde(rename="value")]
+    /// <p>The filter value.</p>
+    #[serde(rename = "value")]
     pub value: String,
 }
 
-#[doc="<p>Information about the association.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about the association.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociationOverview {
-    #[doc="<p>Returns the number of targets for the association status. For example, if you created an association with two instances, and one of them was successful, this would return the count of instances by status.</p>"]
-    #[serde(rename="AssociationStatusAggregatedCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returns the number of targets for the association status. For example, if you created an association with two instances, and one of them was successful, this would return the count of instances by status.</p>
+    #[serde(rename = "AssociationStatusAggregatedCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_status_aggregated_count: Option<::std::collections::HashMap<String, i64>>,
-    #[doc="<p>A detailed status of the association.</p>"]
-    #[serde(rename="DetailedStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A detailed status of the association.</p>
+    #[serde(rename = "DetailedStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub detailed_status: Option<String>,
-    #[doc="<p>The status of the association. Status can be: Pending, Success, or Failed.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the association. Status can be: Pending, Success, or Failed.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>Describes an association status.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes an association status.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct AssociationStatus {
-    #[doc="<p>A user-defined string.</p>"]
-    #[serde(rename="AdditionalInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A user-defined string.</p>
+    #[serde(rename = "AdditionalInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_info: Option<String>,
-    #[doc="<p>The date when the status changed.</p>"]
-    #[serde(rename="Date")]
+    /// <p>The date when the status changed.</p>
+    #[serde(rename = "Date")]
     pub date: f64,
-    #[doc="<p>The reason for the status.</p>"]
-    #[serde(rename="Message")]
+    /// <p>The reason for the status.</p>
+    #[serde(rename = "Message")]
     pub message: String,
-    #[doc="<p>The status.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The status.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[doc="<p>Information about the association version.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about the association version.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociationVersionInfo {
-    #[doc="<p>The ID created by the system when the association was created.</p>"]
-    #[serde(rename="AssociationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID created by the system when the association was created.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_id: Option<String>,
-    #[doc="<p>The name specified for the association version when the association version was created.</p>"]
-    #[serde(rename="AssociationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name specified for the association version when the association version was created.</p>
+    #[serde(rename = "AssociationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_name: Option<String>,
-    #[doc="<p>The association version.</p>"]
-    #[serde(rename="AssociationVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The association version.</p>
+    #[serde(rename = "AssociationVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_version: Option<String>,
-    #[doc="<p>The date the association version was created.</p>"]
-    #[serde(rename="CreatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the association version was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>The version of an SSM document used when the association version was created.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of an SSM document used when the association version was created.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The name specified when the association was created.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name specified when the association was created.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The location in Amazon S3 specified for the association when the association version was created.</p>"]
-    #[serde(rename="OutputLocation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The location in Amazon S3 specified for the association when the association version was created.</p>
+    #[serde(rename = "OutputLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_location: Option<InstanceAssociationOutputLocation>,
-    #[doc="<p>Parameters specified when the association version was created.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Parameters specified when the association version was created.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>The cron or rate schedule specified for the association when the association version was created.</p>"]
-    #[serde(rename="ScheduleExpression")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The cron or rate schedule specified for the association when the association version was created.</p>
+    #[serde(rename = "ScheduleExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
-    #[doc="<p>The targets specified for the association when the association version was created. </p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The targets specified for the association when the association version was created. </p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
 }
 
-#[doc="<p>Detailed information about the current state of an individual Automation execution.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Detailed information about the current state of an individual Automation execution.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AutomationExecution {
-    #[doc="<p>The execution ID.</p>"]
-    #[serde(rename="AutomationExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The execution ID.</p>
+    #[serde(rename = "AutomationExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_id: Option<String>,
-    #[doc="<p>The execution status of the Automation.</p>"]
-    #[serde(rename="AutomationExecutionStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The execution status of the Automation.</p>
+    #[serde(rename = "AutomationExecutionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_status: Option<String>,
-    #[doc="<p>The name of the Automation document used during the execution.</p>"]
-    #[serde(rename="DocumentName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Automation document used during the execution.</p>
+    #[serde(rename = "DocumentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_name: Option<String>,
-    #[doc="<p>The version of the document to use during execution.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the document to use during execution.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The time the execution finished.</p>"]
-    #[serde(rename="ExecutionEndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the execution finished.</p>
+    #[serde(rename = "ExecutionEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_end_time: Option<f64>,
-    #[doc="<p>The time the execution started.</p>"]
-    #[serde(rename="ExecutionStartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the execution started.</p>
+    #[serde(rename = "ExecutionStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_start_time: Option<f64>,
-    #[doc="<p>A message describing why an execution has failed, if the status is set to Failed.</p>"]
-    #[serde(rename="FailureMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A message describing why an execution has failed, if the status is set to Failed.</p>
+    #[serde(rename = "FailureMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_message: Option<String>,
-    #[doc="<p>The list of execution outputs as defined in the automation document.</p>"]
-    #[serde(rename="Outputs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of execution outputs as defined in the automation document.</p>
+    #[serde(rename = "Outputs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub outputs: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>The key-value map of execution parameters, which were supplied when calling StartAutomationExecution.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The key-value map of execution parameters, which were supplied when calling StartAutomationExecution.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>A list of details about the current state of all steps that comprise an execution. An Automation document contains a list of steps that are executed in order.</p>"]
-    #[serde(rename="StepExecutions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of details about the current state of all steps that comprise an execution. An Automation document contains a list of steps that are executed in order.</p>
+    #[serde(rename = "StepExecutions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub step_executions: Option<Vec<StepExecution>>,
 }
 
-#[doc="<p>A filter used to match specific automation executions. This is used to limit the scope of Automation execution information returned.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>A filter used to match specific automation executions. This is used to limit the scope of Automation execution information returned.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AutomationExecutionFilter {
-    #[doc="<p>The aspect of the Automation execution information that should be limited.</p>"]
-    #[serde(rename="Key")]
+    /// <p>The aspect of the Automation execution information that should be limited.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>The values used to limit the execution information associated with the filter's key.</p>"]
-    #[serde(rename="Values")]
+    /// <p>The values used to limit the execution information associated with the filter's key.</p>
+    #[serde(rename = "Values")]
     pub values: Vec<String>,
 }
 
-#[doc="<p>Details about a specific Automation execution.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Details about a specific Automation execution.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct AutomationExecutionMetadata {
-    #[doc="<p>The execution ID.</p>"]
-    #[serde(rename="AutomationExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The execution ID.</p>
+    #[serde(rename = "AutomationExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_id: Option<String>,
-    #[doc="<p>The status of the execution. Valid values include: Running, Succeeded, Failed, Timed out, or Cancelled.</p>"]
-    #[serde(rename="AutomationExecutionStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the execution. Valid values include: Running, Succeeded, Failed, Timed out, or Cancelled.</p>
+    #[serde(rename = "AutomationExecutionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_status: Option<String>,
-    #[doc="<p>The name of the Automation document used during execution.</p>"]
-    #[serde(rename="DocumentName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Automation document used during execution.</p>
+    #[serde(rename = "DocumentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_name: Option<String>,
-    #[doc="<p>The document version used during the execution.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document version used during the execution.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The IAM role ARN of the user who executed the Automation.</p>"]
-    #[serde(rename="ExecutedBy")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IAM role ARN of the user who executed the Automation.</p>
+    #[serde(rename = "ExecutedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub executed_by: Option<String>,
-    #[doc="<p>The time the execution finished. This is not populated if the execution is still in progress.</p>"]
-    #[serde(rename="ExecutionEndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the execution finished. This is not populated if the execution is still in progress.</p>
+    #[serde(rename = "ExecutionEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_end_time: Option<f64>,
-    #[doc="<p>The time the execution started.&gt;</p>"]
-    #[serde(rename="ExecutionStartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the execution started.&gt;</p>
+    #[serde(rename = "ExecutionStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_start_time: Option<f64>,
-    #[doc="<p>An Amazon S3 bucket where execution information is stored.</p>"]
-    #[serde(rename="LogFile")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An Amazon S3 bucket where execution information is stored.</p>
+    #[serde(rename = "LogFile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub log_file: Option<String>,
-    #[doc="<p>The list of execution outputs as defined in the Automation document.</p>"]
-    #[serde(rename="Outputs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of execution outputs as defined in the Automation document.</p>
+    #[serde(rename = "Outputs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub outputs: Option<::std::collections::HashMap<String, Vec<String>>>,
 }
 
-#[doc="<p/>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p/>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CancelCommandRequest {
-    #[doc="<p>The ID of the command you want to cancel.</p>"]
-    #[serde(rename="CommandId")]
+    /// <p>The ID of the command you want to cancel.</p>
+    #[serde(rename = "CommandId")]
     pub command_id: String,
-    #[doc="<p>(Optional) A list of instance IDs on which you want to cancel the command. If not provided, the command is canceled on every instance on which it was requested.</p>"]
-    #[serde(rename="InstanceIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) A list of instance IDs on which you want to cancel the command. If not provided, the command is canceled on every instance on which it was requested.</p>
+    #[serde(rename = "InstanceIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
 }
 
-#[doc="<p>Whether or not the command was successfully canceled. There is no guarantee that a request can be canceled.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Whether or not the command was successfully canceled. There is no guarantee that a request can be canceled.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CancelCommandResult;
 
-#[doc="<p>Describes a command request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a command request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Command {
-    #[doc="<p>A unique identifier for this command.</p>"]
-    #[serde(rename="CommandId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A unique identifier for this command.</p>
+    #[serde(rename = "CommandId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub command_id: Option<String>,
-    #[doc="<p>User-specified information about the command, such as a brief description of what the command should do.</p>"]
-    #[serde(rename="Comment")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-specified information about the command, such as a brief description of what the command should do.</p>
+    #[serde(rename = "Comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
-    #[doc="<p>The number of targets for which the command invocation reached a terminal state. Terminal states include the following: Success, Failed, Execution Timed Out, Delivery Timed Out, Canceled, Terminated, or Undeliverable.</p>"]
-    #[serde(rename="CompletedCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of targets for which the command invocation reached a terminal state. Terminal states include the following: Success, Failed, Execution Timed Out, Delivery Timed Out, Canceled, Terminated, or Undeliverable.</p>
+    #[serde(rename = "CompletedCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub completed_count: Option<i64>,
-    #[doc="<p>The name of the document requested for execution.</p>"]
-    #[serde(rename="DocumentName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the document requested for execution.</p>
+    #[serde(rename = "DocumentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_name: Option<String>,
-    #[doc="<p>The number of targets for which the status is Failed or Execution Timed Out.</p>"]
-    #[serde(rename="ErrorCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of targets for which the status is Failed or Execution Timed Out.</p>
+    #[serde(rename = "ErrorCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_count: Option<i64>,
-    #[doc="<p>If this time is reached and the command has not already started executing, it will not execute. Calculated based on the ExpiresAfter user input provided as part of the SendCommand API.</p>"]
-    #[serde(rename="ExpiresAfter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If this time is reached and the command has not already started executing, it will not execute. Calculated based on the ExpiresAfter user input provided as part of the SendCommand API.</p>
+    #[serde(rename = "ExpiresAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_after: Option<f64>,
-    #[doc="<p>The instance IDs against which this command was requested.</p>"]
-    #[serde(rename="InstanceIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The instance IDs against which this command was requested.</p>
+    #[serde(rename = "InstanceIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
-    #[doc="<p>The maximum number of instances that are allowed to execute the command at the same time. You can specify a number of instances, such as 10, or a percentage of instances, such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
-    #[serde(rename="MaxConcurrency")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of instances that are allowed to execute the command at the same time. You can specify a number of instances, such as 10, or a percentage of instances, such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html">Executing a Command Using Systems Manager Run Command</a>.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrency: Option<String>,
-    #[doc="<p>The maximum number of errors allowed before the system stops sending the command to additional targets. You can specify a number of errors, such as 10, or a percentage or errors, such as 10%. The default value is 50. For more information about how to use MaxErrors, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
-    #[serde(rename="MaxErrors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of errors allowed before the system stops sending the command to additional targets. You can specify a number of errors, such as 10, or a percentage or errors, such as 10%. The default value is 50. For more information about how to use MaxErrors, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html">Executing a Command Using Systems Manager Run Command</a>.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_errors: Option<String>,
-    #[doc="<p>Configurations for sending notifications about command status changes. </p>"]
-    #[serde(rename="NotificationConfig")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Configurations for sending notifications about command status changes. </p>
+    #[serde(rename = "NotificationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_config: Option<NotificationConfig>,
-    #[doc="<p>The S3 bucket where the responses to the command executions should be stored. This was requested when issuing the command.</p>"]
-    #[serde(rename="OutputS3BucketName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The S3 bucket where the responses to the command executions should be stored. This was requested when issuing the command.</p>
+    #[serde(rename = "OutputS3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_bucket_name: Option<String>,
-    #[doc="<p>The S3 directory path inside the bucket where the responses to the command executions should be stored. This was requested when issuing the command.</p>"]
-    #[serde(rename="OutputS3KeyPrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The S3 directory path inside the bucket where the responses to the command executions should be stored. This was requested when issuing the command.</p>
+    #[serde(rename = "OutputS3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_key_prefix: Option<String>,
-    #[doc="<p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>"]
-    #[serde(rename="OutputS3Region")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>
+    #[serde(rename = "OutputS3Region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_region: Option<String>,
-    #[doc="<p>The parameter values to be inserted in the document when executing the command.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameter values to be inserted in the document when executing the command.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>The date and time the command was requested.</p>"]
-    #[serde(rename="RequestedDateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the command was requested.</p>
+    #[serde(rename = "RequestedDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub requested_date_time: Option<f64>,
-    #[doc="<p>The IAM service role that Run Command uses to act on your behalf when sending notifications about command status changes. </p>"]
-    #[serde(rename="ServiceRole")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IAM service role that Run Command uses to act on your behalf when sending notifications about command status changes. </p>
+    #[serde(rename = "ServiceRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role: Option<String>,
-    #[doc="<p>The status of the command.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the command.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>A detailed status of the command execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html\">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to any instances.</p> </li> <li> <p>In Progress: The command has been sent to at least one instance but has not reached a final state on all instances.</p> </li> <li> <p>Success: The command successfully executed on all invocations. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The value of MaxErrors or more command invocations shows a status of Delivery Timed Out. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The value of MaxErrors or more command invocations shows a status of Execution Timed Out. This is a terminal state.</p> </li> <li> <p>Failed: The value of MaxErrors or more command invocations shows a status of Failed. This is a terminal state.</p> </li> <li> <p>Incomplete: The command was attempted on all instances and one or more invocations does not have a value of Success but not enough invocations failed for the status to be Failed. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Rate Exceeded: The number of instances targeted by the command exceeded the account limit for pending invocations. The system has canceled the command before executing it on any instance. This is a terminal state.</p> </li> </ul>"]
-    #[serde(rename="StatusDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A detailed status of the command execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to any instances.</p> </li> <li> <p>In Progress: The command has been sent to at least one instance but has not reached a final state on all instances.</p> </li> <li> <p>Success: The command successfully executed on all invocations. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The value of MaxErrors or more command invocations shows a status of Delivery Timed Out. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The value of MaxErrors or more command invocations shows a status of Execution Timed Out. This is a terminal state.</p> </li> <li> <p>Failed: The value of MaxErrors or more command invocations shows a status of Failed. This is a terminal state.</p> </li> <li> <p>Incomplete: The command was attempted on all instances and one or more invocations does not have a value of Success but not enough invocations failed for the status to be Failed. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Rate Exceeded: The number of instances targeted by the command exceeded the account limit for pending invocations. The system has canceled the command before executing it on any instance. This is a terminal state.</p> </li> </ul>
+    #[serde(rename = "StatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
-    #[doc="<p>The number of targets for the command.</p>"]
-    #[serde(rename="TargetCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of targets for the command.</p>
+    #[serde(rename = "TargetCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_count: Option<i64>,
-    #[doc="<p>An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
 }
 
-#[doc="<p>Describes a command filter.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Describes a command filter.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CommandFilter {
-    #[doc="<p>The name of the filter.</p>"]
-    #[serde(rename="key")]
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "key")]
     pub key: String,
-    #[doc="<p>The filter value. </p>"]
-    #[serde(rename="value")]
+    /// <p>The filter value. </p>
+    #[serde(rename = "value")]
     pub value: String,
 }
 
-#[doc="<p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. A command invocation returns status and detail information about a command you executed. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. A command invocation returns status and detail information about a command you executed. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CommandInvocation {
-    #[doc="<p>The command against which this invocation was requested.</p>"]
-    #[serde(rename="CommandId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The command against which this invocation was requested.</p>
+    #[serde(rename = "CommandId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub command_id: Option<String>,
-    #[serde(rename="CommandPlugins")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(rename = "CommandPlugins")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub command_plugins: Option<Vec<CommandPlugin>>,
-    #[doc="<p>User-specified information about the command, such as a brief description of what the command should do.</p>"]
-    #[serde(rename="Comment")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-specified information about the command, such as a brief description of what the command should do.</p>
+    #[serde(rename = "Comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
-    #[doc="<p>The document name that was requested for execution.</p>"]
-    #[serde(rename="DocumentName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document name that was requested for execution.</p>
+    #[serde(rename = "DocumentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_name: Option<String>,
-    #[doc="<p>The instance ID in which this invocation was requested.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The instance ID in which this invocation was requested.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>The name of the invocation target. For Amazon EC2 instances this is the value for the aws:Name tag. For on-premises instances, this is the name of the instance.</p>"]
-    #[serde(rename="InstanceName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the invocation target. For Amazon EC2 instances this is the value for the aws:Name tag. For on-premises instances, this is the name of the instance.</p>
+    #[serde(rename = "InstanceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_name: Option<String>,
-    #[doc="<p>Configurations for sending notifications about command status changes on a per instance basis.</p>"]
-    #[serde(rename="NotificationConfig")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Configurations for sending notifications about command status changes on a per instance basis.</p>
+    #[serde(rename = "NotificationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_config: Option<NotificationConfig>,
-    #[doc="<p>The time and date the request was sent to this instance.</p>"]
-    #[serde(rename="RequestedDateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time and date the request was sent to this instance.</p>
+    #[serde(rename = "RequestedDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub requested_date_time: Option<f64>,
-    #[doc="<p>The IAM service role that Run Command uses to act on your behalf when sending notifications about command status changes on a per instance basis.</p>"]
-    #[serde(rename="ServiceRole")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IAM service role that Run Command uses to act on your behalf when sending notifications about command status changes on a per instance basis.</p>
+    #[serde(rename = "ServiceRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role: Option<String>,
-    #[doc="<p>The URL to the plugin's StdErr file in Amazon S3, if the Amazon S3 bucket was defined for the parent command. For an invocation, StandardErrorUrl is populated if there is just one plugin defined for the command, and the Amazon S3 bucket was defined for the command.</p>"]
-    #[serde(rename="StandardErrorUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The URL to the plugin's StdErr file in Amazon S3, if the Amazon S3 bucket was defined for the parent command. For an invocation, StandardErrorUrl is populated if there is just one plugin defined for the command, and the Amazon S3 bucket was defined for the command.</p>
+    #[serde(rename = "StandardErrorUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_error_url: Option<String>,
-    #[doc="<p>The URL to the plugin's StdOut file in Amazon S3, if the Amazon S3 bucket was defined for the parent command. For an invocation, StandardOutputUrl is populated if there is just one plugin defined for the command, and the Amazon S3 bucket was defined for the command.</p>"]
-    #[serde(rename="StandardOutputUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The URL to the plugin's StdOut file in Amazon S3, if the Amazon S3 bucket was defined for the parent command. For an invocation, StandardOutputUrl is populated if there is just one plugin defined for the command, and the Amazon S3 bucket was defined for the command.</p>
+    #[serde(rename = "StandardOutputUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_output_url: Option<String>,
-    #[doc="<p>Whether or not the invocation succeeded, failed, or is pending.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether or not the invocation succeeded, failed, or is pending.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>A detailed status of the command execution for each invocation (each instance targeted by the command). StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html\">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit and don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>"]
-    #[serde(rename="StatusDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A detailed status of the command execution for each invocation (each instance targeted by the command). StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit and don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>
+    #[serde(rename = "StatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
-    #[doc="<p> Gets the trace output sent by the agent. </p>"]
-    #[serde(rename="TraceOutput")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p> Gets the trace output sent by the agent. </p>
+    #[serde(rename = "TraceOutput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub trace_output: Option<String>,
 }
 
-#[doc="<p>Describes plugin details.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes plugin details.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CommandPlugin {
-    #[doc="<p>The name of the plugin. Must be one of the following: aws:updateAgent, aws:domainjoin, aws:applications, aws:runPowerShellScript, aws:psmodule, aws:cloudWatch, aws:runShellScript, or aws:updateSSMAgent. </p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the plugin. Must be one of the following: aws:updateAgent, aws:domainjoin, aws:applications, aws:runPowerShellScript, aws:psmodule, aws:cloudWatch, aws:runShellScript, or aws:updateSSMAgent. </p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Output of the plugin execution.</p>"]
-    #[serde(rename="Output")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Output of the plugin execution.</p>
+    #[serde(rename = "Output")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<String>,
-    #[doc="<p>The S3 bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p> test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript </p> <p>test_folder is the name of the Amazon S3 bucket;</p> <p> ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;</p> <p>i-1234567876543 is the instance ID;</p> <p>awsrunShellScript is the name of the plugin.</p>"]
-    #[serde(rename="OutputS3BucketName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The S3 bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p> test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript </p> <p>test_folder is the name of the Amazon S3 bucket;</p> <p> ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;</p> <p>i-1234567876543 is the instance ID;</p> <p>awsrunShellScript is the name of the plugin.</p>
+    #[serde(rename = "OutputS3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_bucket_name: Option<String>,
-    #[doc="<p>The S3 directory path inside the bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p> test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript </p> <p>test_folder is the name of the Amazon S3 bucket;</p> <p> ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;</p> <p>i-1234567876543 is the instance ID;</p> <p>awsrunShellScript is the name of the plugin.</p>"]
-    #[serde(rename="OutputS3KeyPrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The S3 directory path inside the bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p> test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript </p> <p>test_folder is the name of the Amazon S3 bucket;</p> <p> ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;</p> <p>i-1234567876543 is the instance ID;</p> <p>awsrunShellScript is the name of the plugin.</p>
+    #[serde(rename = "OutputS3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_key_prefix: Option<String>,
-    #[doc="<p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>"]
-    #[serde(rename="OutputS3Region")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>
+    #[serde(rename = "OutputS3Region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_region: Option<String>,
-    #[doc="<p>A numeric response code generated after executing the plugin. </p>"]
-    #[serde(rename="ResponseCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A numeric response code generated after executing the plugin. </p>
+    #[serde(rename = "ResponseCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub response_code: Option<i64>,
-    #[doc="<p>The time the plugin stopped executing. Could stop prematurely if, for example, a cancel command was sent. </p>"]
-    #[serde(rename="ResponseFinishDateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the plugin stopped executing. Could stop prematurely if, for example, a cancel command was sent. </p>
+    #[serde(rename = "ResponseFinishDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub response_finish_date_time: Option<f64>,
-    #[doc="<p>The time the plugin started executing. </p>"]
-    #[serde(rename="ResponseStartDateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the plugin started executing. </p>
+    #[serde(rename = "ResponseStartDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub response_start_date_time: Option<f64>,
-    #[doc="<p>The URL for the complete text written by the plugin to stderr. If execution is not yet complete, then this string is empty.</p>"]
-    #[serde(rename="StandardErrorUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The URL for the complete text written by the plugin to stderr. If execution is not yet complete, then this string is empty.</p>
+    #[serde(rename = "StandardErrorUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_error_url: Option<String>,
-    #[doc="<p>The URL for the complete text written by the plugin to stdout in Amazon S3. If the Amazon S3 bucket for the command was not specified, then this string is empty.</p>"]
-    #[serde(rename="StandardOutputUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The URL for the complete text written by the plugin to stdout in Amazon S3. If the Amazon S3 bucket for the command was not specified, then this string is empty.</p>
+    #[serde(rename = "StandardOutputUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_output_url: Option<String>,
-    #[doc="<p>The status of this plugin. You can execute a document with multiple plugins.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of this plugin. You can execute a document with multiple plugins.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>A detailed status of the plugin execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html\">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist, or it might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit, and they don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>"]
-    #[serde(rename="StatusDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A detailed status of the plugin execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist, or it might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit, and they don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>
+    #[serde(rename = "StatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
 }
 
-#[doc="<p>A summary of the call execution that includes an execution ID, the type of execution (for example, <code>Command</code>), and the date/time of the execution using a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A summary of the call execution that includes an execution ID, the type of execution (for example, <code>Command</code>), and the date/time of the execution using a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ComplianceExecutionSummary {
-    #[doc="<p>An ID created by the system when <code>PutComplianceItems</code> was called. For example, <code>CommandID</code> is a valid execution ID. You can use this ID in subsequent calls.</p>"]
-    #[serde(rename="ExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An ID created by the system when <code>PutComplianceItems</code> was called. For example, <code>CommandID</code> is a valid execution ID. You can use this ID in subsequent calls.</p>
+    #[serde(rename = "ExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_id: Option<String>,
-    #[doc="<p>The time the execution ran as a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>"]
-    #[serde(rename="ExecutionTime")]
+    /// <p>The time the execution ran as a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>
+    #[serde(rename = "ExecutionTime")]
     pub execution_time: f64,
-    #[doc="<p>The type of execution. For example, <code>Command</code> is a valid execution type.</p>"]
-    #[serde(rename="ExecutionType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of execution. For example, <code>Command</code> is a valid execution type.</p>
+    #[serde(rename = "ExecutionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_type: Option<String>,
 }
 
-#[doc="<p>Information about the compliance as defined by the resource type. For example, for a patch resource type, <code>Items</code> includes information about the PatchSeverity, Classification, etc.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about the compliance as defined by the resource type. For example, for a patch resource type, <code>Items</code> includes information about the PatchSeverity, Classification, etc.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ComplianceItem {
-    #[doc="<p>The compliance type. For example, Association (for a State Manager association), Patch, or Custom:<code>string</code> are all valid compliance types.</p>"]
-    #[serde(rename="ComplianceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The compliance type. For example, Association (for a State Manager association), Patch, or Custom:<code>string</code> are all valid compliance types.</p>
+    #[serde(rename = "ComplianceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_type: Option<String>,
-    #[doc="<p>A \"Key\": \"Value\" tag combination for the compliance item.</p>"]
-    #[serde(rename="Details")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A "Key": "Value" tag combination for the compliance item.</p>
+    #[serde(rename = "Details")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub details: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>A summary for the compliance item. The summary includes an execution ID, the execution type (for example, command), and the execution time.</p>"]
-    #[serde(rename="ExecutionSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A summary for the compliance item. The summary includes an execution ID, the execution type (for example, command), and the execution time.</p>
+    #[serde(rename = "ExecutionSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_summary: Option<ComplianceExecutionSummary>,
-    #[doc="<p>An ID for the compliance item. For example, if the compliance item is a Windows patch, the ID could be the number of the KB article. Here's an example: KB4010320.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An ID for the compliance item. For example, if the compliance item is a Windows patch, the ID could be the number of the KB article. Here's an example: KB4010320.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>An ID for the resource. For a managed instance, this is the instance ID.</p>"]
-    #[serde(rename="ResourceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An ID for the resource. For a managed instance, this is the instance ID.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
-    #[doc="<p>The type of resource. <code>ManagedInstance</code> is currently the only supported resource type.</p>"]
-    #[serde(rename="ResourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of resource. <code>ManagedInstance</code> is currently the only supported resource type.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
-    #[doc="<p>The severity of the compliance status. Severity can be one of the following: Critical, High, Medium, Low, Informational, Unspecified.</p>"]
-    #[serde(rename="Severity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The severity of the compliance status. Severity can be one of the following: Critical, High, Medium, Low, Informational, Unspecified.</p>
+    #[serde(rename = "Severity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub severity: Option<String>,
-    #[doc="<p>The status of the compliance item. An item is either COMPLIANT or NON_COMPLIANT.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the compliance item. An item is either COMPLIANT or NON_COMPLIANT.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>A title for the compliance item. For example, if the compliance item is a Windows patch, the title could be the title of the KB article for the patch. Here's an example: Security Update for Active Directory Federation Services.</p>"]
-    #[serde(rename="Title")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A title for the compliance item. For example, if the compliance item is a Windows patch, the title could be the title of the KB article for the patch. Here's an example: Security Update for Active Directory Federation Services.</p>
+    #[serde(rename = "Title")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
 }
 
-#[doc="<p>Information about a compliance item.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Information about a compliance item.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ComplianceItemEntry {
-    #[doc="<p>A \"Key\": \"Value\" tag combination for the compliance item.</p>"]
-    #[serde(rename="Details")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A "Key": "Value" tag combination for the compliance item.</p>
+    #[serde(rename = "Details")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub details: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The compliance item ID. For example, if the compliance item is a Windows patch, the ID could be the number of the KB article.</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The compliance item ID. For example, if the compliance item is a Windows patch, the ID could be the number of the KB article.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The severity of the compliance status. Severity can be one of the following: Critical, High, Medium, Low, Informational, Unspecified.</p>"]
-    #[serde(rename="Severity")]
+    /// <p>The severity of the compliance status. Severity can be one of the following: Critical, High, Medium, Low, Informational, Unspecified.</p>
+    #[serde(rename = "Severity")]
     pub severity: String,
-    #[doc="<p>The status of the compliance item. An item is either COMPLIANT or NON_COMPLIANT.</p>"]
-    #[serde(rename="Status")]
+    /// <p>The status of the compliance item. An item is either COMPLIANT or NON_COMPLIANT.</p>
+    #[serde(rename = "Status")]
     pub status: String,
-    #[doc="<p>The title of the compliance item. For example, if the compliance item is a Windows patch, the title could be the title of the KB article for the patch. Here's an example: Security Update for Active Directory Federation Services. </p>"]
-    #[serde(rename="Title")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The title of the compliance item. For example, if the compliance item is a Windows patch, the title could be the title of the KB article for the patch. Here's an example: Security Update for Active Directory Federation Services. </p>
+    #[serde(rename = "Title")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
 }
 
-#[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ComplianceStringFilter {
-    #[doc="<p>The name of the filter.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The type of comparison that should be performed for the value: Equal, NotEqual, BeginWith, LessThan, or GreaterThan.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of comparison that should be performed for the value: Equal, NotEqual, BeginWith, LessThan, or GreaterThan.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The value for which to search.</p>"]
-    #[serde(rename="Values")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value for which to search.</p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
-#[doc="<p>A summary of compliance information by compliance type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A summary of compliance information by compliance type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ComplianceSummaryItem {
-    #[doc="<p>The type of compliance item. For example, the compliance type can be Association, Patch, or Custom:string.</p>"]
-    #[serde(rename="ComplianceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of compliance item. For example, the compliance type can be Association, Patch, or Custom:string.</p>
+    #[serde(rename = "ComplianceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_type: Option<String>,
-    #[doc="<p>A list of COMPLIANT items for the specified compliance type.</p>"]
-    #[serde(rename="CompliantSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of COMPLIANT items for the specified compliance type.</p>
+    #[serde(rename = "CompliantSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliant_summary: Option<CompliantSummary>,
-    #[doc="<p>A list of NON_COMPLIANT items for the specified compliance type.</p>"]
-    #[serde(rename="NonCompliantSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of NON_COMPLIANT items for the specified compliance type.</p>
+    #[serde(rename = "NonCompliantSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub non_compliant_summary: Option<NonCompliantSummary>,
 }
 
-#[doc="<p>A summary of resources that are compliant. The summary is organized according to the resource count for each compliance type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A summary of resources that are compliant. The summary is organized according to the resource count for each compliance type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CompliantSummary {
-    #[doc="<p>The total number of resources that are compliant.</p>"]
-    #[serde(rename="CompliantCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of resources that are compliant.</p>
+    #[serde(rename = "CompliantCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliant_count: Option<i64>,
-    #[doc="<p>A summary of the compliance severity by compliance type.</p>"]
-    #[serde(rename="SeveritySummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A summary of the compliance severity by compliance type.</p>
+    #[serde(rename = "SeveritySummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub severity_summary: Option<SeveritySummary>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateActivationRequest {
-    #[doc="<p>The name of the registered, managed instance as it will appear in the Amazon EC2 console or when you use the AWS command line tools to list EC2 resources.</p>"]
-    #[serde(rename="DefaultInstanceName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the registered, managed instance as it will appear in the Amazon EC2 console or when you use the AWS command line tools to list EC2 resources.</p>
+    #[serde(rename = "DefaultInstanceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_instance_name: Option<String>,
-    #[doc="<p>A userdefined description of the resource that you want to register with Amazon EC2. </p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A userdefined description of the resource that you want to register with Amazon EC2. </p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The date by which this activation request should expire. The default value is 24 hours.</p>"]
-    #[serde(rename="ExpirationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date by which this activation request should expire. The default value is 24 hours.</p>
+    #[serde(rename = "ExpirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expiration_date: Option<f64>,
-    #[doc="<p>The Amazon Identity and Access Management (IAM) role that you want to assign to the managed instance. </p>"]
-    #[serde(rename="IamRole")]
+    /// <p>The Amazon Identity and Access Management (IAM) role that you want to assign to the managed instance. </p>
+    #[serde(rename = "IamRole")]
     pub iam_role: String,
-    #[doc="<p>Specify the maximum number of managed instances you want to register. The default value is 1 instance.</p>"]
-    #[serde(rename="RegistrationLimit")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specify the maximum number of managed instances you want to register. The default value is 1 instance.</p>
+    #[serde(rename = "RegistrationLimit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registration_limit: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateActivationResult {
-    #[doc="<p>The code the system generates when it processes the activation. The activation code functions like a password to validate the activation ID. </p>"]
-    #[serde(rename="ActivationCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The code the system generates when it processes the activation. The activation code functions like a password to validate the activation ID. </p>
+    #[serde(rename = "ActivationCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub activation_code: Option<String>,
-    #[doc="<p>The ID number generated by the system when it processed the activation. The activation ID functions like a user name.</p>"]
-    #[serde(rename="ActivationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID number generated by the system when it processed the activation. The activation ID functions like a user name.</p>
+    #[serde(rename = "ActivationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub activation_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateAssociationBatchRequest {
-    #[doc="<p>One or more associations.</p>"]
-    #[serde(rename="Entries")]
+    /// <p>One or more associations.</p>
+    #[serde(rename = "Entries")]
     pub entries: Vec<CreateAssociationBatchRequestEntry>,
 }
 
-#[doc="<p>Describes the association of a Systems Manager document and an instance.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Describes the association of a Systems Manager document and an instance.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CreateAssociationBatchRequestEntry {
-    #[doc="<p>Specify a descriptive name for the association.</p>"]
-    #[serde(rename="AssociationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specify a descriptive name for the association.</p>
+    #[serde(rename = "AssociationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_name: Option<String>,
-    #[doc="<p>The document version.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document version.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The ID of the instance. </p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the instance. </p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>The name of the configuration document. </p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the configuration document. </p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>An Amazon S3 bucket where you want to store the results of this request.</p>"]
-    #[serde(rename="OutputLocation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An Amazon S3 bucket where you want to store the results of this request.</p>
+    #[serde(rename = "OutputLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_location: Option<InstanceAssociationOutputLocation>,
-    #[doc="<p>A description of the parameters for a document. </p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the parameters for a document. </p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>A cron expression that specifies a schedule when the association runs.</p>"]
-    #[serde(rename="ScheduleExpression")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A cron expression that specifies a schedule when the association runs.</p>
+    #[serde(rename = "ScheduleExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
-    #[doc="<p>The instances targeted by the request.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The instances targeted by the request.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateAssociationBatchResult {
-    #[doc="<p>Information about the associations that failed.</p>"]
-    #[serde(rename="Failed")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the associations that failed.</p>
+    #[serde(rename = "Failed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed: Option<Vec<FailedCreateAssociation>>,
-    #[doc="<p>Information about the associations that succeeded.</p>"]
-    #[serde(rename="Successful")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the associations that succeeded.</p>
+    #[serde(rename = "Successful")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub successful: Option<Vec<AssociationDescription>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateAssociationRequest {
-    #[doc="<p>Specify a descriptive name for the association.</p>"]
-    #[serde(rename="AssociationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specify a descriptive name for the association.</p>
+    #[serde(rename = "AssociationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_name: Option<String>,
-    #[doc="<p>The document version you want to associate with the target(s). Can be a specific version or the default version.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document version you want to associate with the target(s). Can be a specific version or the default version.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The instance ID.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The instance ID.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>The name of the Systems Manager document.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the Systems Manager document.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>An Amazon S3 bucket where you want to store the output details of the request.</p>"]
-    #[serde(rename="OutputLocation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An Amazon S3 bucket where you want to store the output details of the request.</p>
+    #[serde(rename = "OutputLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_location: Option<InstanceAssociationOutputLocation>,
-    #[doc="<p>The parameters for the documents runtime configuration. </p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters for the documents runtime configuration. </p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>A cron expression when the association will be applied to the target(s).</p>"]
-    #[serde(rename="ScheduleExpression")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A cron expression when the association will be applied to the target(s).</p>
+    #[serde(rename = "ScheduleExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
-    #[doc="<p>The targets (either instances or tags) for the association.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The targets (either instances or tags) for the association.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateAssociationResult {
-    #[doc="<p>Information about the association.</p>"]
-    #[serde(rename="AssociationDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the association.</p>
+    #[serde(rename = "AssociationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_description: Option<AssociationDescription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDocumentRequest {
-    #[doc="<p>A valid JSON string.</p>"]
-    #[serde(rename="Content")]
+    /// <p>A valid JSON string.</p>
+    #[serde(rename = "Content")]
     pub content: String,
-    #[doc="<p>The type of document to create. Valid document types include: Policy, Automation, and Command.</p>"]
-    #[serde(rename="DocumentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of document to create. Valid document types include: Policy, Automation, and Command.</p>
+    #[serde(rename = "DocumentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_type: Option<String>,
-    #[doc="<p>A name for the Systems Manager document.</p>"]
-    #[serde(rename="Name")]
+    /// <p>A name for the Systems Manager document.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateDocumentResult {
-    #[doc="<p>Information about the Systems Manager document.</p>"]
-    #[serde(rename="DocumentDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the Systems Manager document.</p>
+    #[serde(rename = "DocumentDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_description: Option<DocumentDescription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateMaintenanceWindowRequest {
-    #[doc="<p>Enables a Maintenance Window task to execute on managed instances, even if you have not registered those instances as targets. If enabled, then you must specify the unregistered instances (by instance ID) when you register a task with the Maintenance Window </p> <p>If you don't enable this option, then you must specify previously-registered targets when you register a task with the Maintenance Window. </p>"]
-    #[serde(rename="AllowUnassociatedTargets")]
+    /// <p>Enables a Maintenance Window task to execute on managed instances, even if you have not registered those instances as targets. If enabled, then you must specify the unregistered instances (by instance ID) when you register a task with the Maintenance Window </p> <p>If you don't enable this option, then you must specify previously-registered targets when you register a task with the Maintenance Window. </p>
+    #[serde(rename = "AllowUnassociatedTargets")]
     pub allow_unassociated_targets: bool,
-    #[doc="<p>User-provided idempotency token.</p>"]
-    #[serde(rename="ClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-provided idempotency token.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    #[doc="<p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>"]
-    #[serde(rename="Cutoff")]
+    /// <p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>
+    #[serde(rename = "Cutoff")]
     pub cutoff: i64,
-    #[doc="<p>An optional description for the Maintenance Window. We recommend specifying a description to help you organize your Maintenance Windows. </p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional description for the Maintenance Window. We recommend specifying a description to help you organize your Maintenance Windows. </p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The duration of the Maintenance Window in hours.</p>"]
-    #[serde(rename="Duration")]
+    /// <p>The duration of the Maintenance Window in hours.</p>
+    #[serde(rename = "Duration")]
     pub duration: i64,
-    #[doc="<p>The name of the Maintenance Window.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the Maintenance Window.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>"]
-    #[serde(rename="Schedule")]
+    /// <p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>
+    #[serde(rename = "Schedule")]
     pub schedule: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateMaintenanceWindowResult {
-    #[doc="<p>The ID of the created Maintenance Window.</p>"]
-    #[serde(rename="WindowId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the created Maintenance Window.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePatchBaselineRequest {
-    #[doc="<p>A set of rules used to include patches in the baseline.</p>"]
-    #[serde(rename="ApprovalRules")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A set of rules used to include patches in the baseline.</p>
+    #[serde(rename = "ApprovalRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approval_rules: Option<PatchRuleGroup>,
-    #[doc="<p>A list of explicitly approved patches for the baseline.</p>"]
-    #[serde(rename="ApprovedPatches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of explicitly approved patches for the baseline.</p>
+    #[serde(rename = "ApprovedPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches: Option<Vec<String>>,
-    #[doc="<p>Defines the compliance level for approved patches. This means that if an approved patch is reported as missing, this is the severity of the compliance violation. Valid compliance severity levels include the following: CRITICAL, HIGH, MEDIUM, LOW, INFORMATIONAL, UNSPECIFIED. The default value is UNSPECIFIED.</p>"]
-    #[serde(rename="ApprovedPatchesComplianceLevel")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Defines the compliance level for approved patches. This means that if an approved patch is reported as missing, this is the severity of the compliance violation. Valid compliance severity levels include the following: CRITICAL, HIGH, MEDIUM, LOW, INFORMATIONAL, UNSPECIFIED. The default value is UNSPECIFIED.</p>
+    #[serde(rename = "ApprovedPatchesComplianceLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches_compliance_level: Option<String>,
-    #[doc="<p>User-provided idempotency token.</p>"]
-    #[serde(rename="ClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-provided idempotency token.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    #[doc="<p>A description of the patch baseline.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the patch baseline.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A set of global filters used to exclude patches from the baseline.</p>"]
-    #[serde(rename="GlobalFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A set of global filters used to exclude patches from the baseline.</p>
+    #[serde(rename = "GlobalFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub global_filters: Option<PatchFilterGroup>,
-    #[doc="<p>The name of the patch baseline.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the patch baseline.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>Defines the operating system the patch baseline applies to. Supported operating systems include WINDOWS, AMAZON_LINUX, UBUNTU and REDHAT_ENTERPRISE_LINUX. The Default value is WINDOWS.</p>"]
-    #[serde(rename="OperatingSystem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Defines the operating system the patch baseline applies to. Supported operating systems include WINDOWS, AMAZON_LINUX, UBUNTU and REDHAT_ENTERPRISE_LINUX. The Default value is WINDOWS.</p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
-    #[doc="<p>A list of explicitly rejected patches for the baseline.</p>"]
-    #[serde(rename="RejectedPatches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of explicitly rejected patches for the baseline.</p>
+    #[serde(rename = "RejectedPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rejected_patches: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreatePatchBaselineResult {
-    #[doc="<p>The ID of the created patch baseline.</p>"]
-    #[serde(rename="BaselineId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the created patch baseline.</p>
+    #[serde(rename = "BaselineId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub baseline_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateResourceDataSyncRequest {
-    #[doc="<p>Amazon S3 configuration details for the sync.</p>"]
-    #[serde(rename="S3Destination")]
+    /// <p>Amazon S3 configuration details for the sync.</p>
+    #[serde(rename = "S3Destination")]
     pub s3_destination: ResourceDataSyncS3Destination,
-    #[doc="<p>A name for the configuration.</p>"]
-    #[serde(rename="SyncName")]
+    /// <p>A name for the configuration.</p>
+    #[serde(rename = "SyncName")]
     pub sync_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateResourceDataSyncResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteActivationRequest {
-    #[doc="<p>The ID of the activation that you want to delete.</p>"]
-    #[serde(rename="ActivationId")]
+    /// <p>The ID of the activation that you want to delete.</p>
+    #[serde(rename = "ActivationId")]
     pub activation_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteActivationResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteAssociationRequest {
-    #[doc="<p>The association ID that you want to delete.</p>"]
-    #[serde(rename="AssociationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The association ID that you want to delete.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_id: Option<String>,
-    #[doc="<p>The ID of the instance.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>The name of the Systems Manager document.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Systems Manager document.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteAssociationResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDocumentRequest {
-    #[doc="<p>The name of the document.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the document.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteDocumentResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteMaintenanceWindowRequest {
-    #[doc="<p>The ID of the Maintenance Window to delete.</p>"]
-    #[serde(rename="WindowId")]
+    /// <p>The ID of the Maintenance Window to delete.</p>
+    #[serde(rename = "WindowId")]
     pub window_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteMaintenanceWindowResult {
-    #[doc="<p>The ID of the deleted Maintenance Window.</p>"]
-    #[serde(rename="WindowId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the deleted Maintenance Window.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteParameterRequest {
-    #[doc="<p>The name of the parameter to delete.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the parameter to delete.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteParameterResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteParametersRequest {
-    #[doc="<p>The names of the parameters to delete.</p>"]
-    #[serde(rename="Names")]
+    /// <p>The names of the parameters to delete.</p>
+    #[serde(rename = "Names")]
     pub names: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteParametersResult {
-    #[doc="<p>The names of the deleted parameters.</p>"]
-    #[serde(rename="DeletedParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The names of the deleted parameters.</p>
+    #[serde(rename = "DeletedParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deleted_parameters: Option<Vec<String>>,
-    #[doc="<p>The names of parameters that weren't deleted because the parameters are not valid.</p>"]
-    #[serde(rename="InvalidParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The names of parameters that weren't deleted because the parameters are not valid.</p>
+    #[serde(rename = "InvalidParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub invalid_parameters: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeletePatchBaselineRequest {
-    #[doc="<p>The ID of the patch baseline to delete.</p>"]
-    #[serde(rename="BaselineId")]
+    /// <p>The ID of the patch baseline to delete.</p>
+    #[serde(rename = "BaselineId")]
     pub baseline_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeletePatchBaselineResult {
-    #[doc="<p>The ID of the deleted patch baseline.</p>"]
-    #[serde(rename="BaselineId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the deleted patch baseline.</p>
+    #[serde(rename = "BaselineId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub baseline_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteResourceDataSyncRequest {
-    #[doc="<p>The name of the configuration to delete.</p>"]
-    #[serde(rename="SyncName")]
+    /// <p>The name of the configuration to delete.</p>
+    #[serde(rename = "SyncName")]
     pub sync_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteResourceDataSyncResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeregisterManagedInstanceRequest {
-    #[doc="<p>The ID assigned to the managed instance when you registered it using the activation process. </p>"]
-    #[serde(rename="InstanceId")]
+    /// <p>The ID assigned to the managed instance when you registered it using the activation process. </p>
+    #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeregisterManagedInstanceResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeregisterPatchBaselineForPatchGroupRequest {
-    #[doc="<p>The ID of the patch baseline to deregister the patch group from.</p>"]
-    #[serde(rename="BaselineId")]
+    /// <p>The ID of the patch baseline to deregister the patch group from.</p>
+    #[serde(rename = "BaselineId")]
     pub baseline_id: String,
-    #[doc="<p>The name of the patch group that should be deregistered from the patch baseline.</p>"]
-    #[serde(rename="PatchGroup")]
+    /// <p>The name of the patch group that should be deregistered from the patch baseline.</p>
+    #[serde(rename = "PatchGroup")]
     pub patch_group: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeregisterPatchBaselineForPatchGroupResult {
-    #[doc="<p>The ID of the patch baseline the patch group was deregistered from.</p>"]
-    #[serde(rename="BaselineId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the patch baseline the patch group was deregistered from.</p>
+    #[serde(rename = "BaselineId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub baseline_id: Option<String>,
-    #[doc="<p>The name of the patch group deregistered from the patch baseline.</p>"]
-    #[serde(rename="PatchGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the patch group deregistered from the patch baseline.</p>
+    #[serde(rename = "PatchGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_group: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeregisterTargetFromMaintenanceWindowRequest {
-    #[doc="<p>The system checks if the target is being referenced by a task. If the target is being referenced, the system returns an error and does not deregister the target from the Maintenance Window.</p>"]
-    #[serde(rename="Safe")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The system checks if the target is being referenced by a task. If the target is being referenced, the system returns an error and does not deregister the target from the Maintenance Window.</p>
+    #[serde(rename = "Safe")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub safe: Option<bool>,
-    #[doc="<p>The ID of the Maintenance Window the target should be removed from.</p>"]
-    #[serde(rename="WindowId")]
+    /// <p>The ID of the Maintenance Window the target should be removed from.</p>
+    #[serde(rename = "WindowId")]
     pub window_id: String,
-    #[doc="<p>The ID of the target definition to remove.</p>"]
-    #[serde(rename="WindowTargetId")]
+    /// <p>The ID of the target definition to remove.</p>
+    #[serde(rename = "WindowTargetId")]
     pub window_target_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeregisterTargetFromMaintenanceWindowResult {
-    #[doc="<p>The ID of the Maintenance Window the target was removed from.</p>"]
-    #[serde(rename="WindowId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Maintenance Window the target was removed from.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
-    #[doc="<p>The ID of the removed target definition.</p>"]
-    #[serde(rename="WindowTargetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the removed target definition.</p>
+    #[serde(rename = "WindowTargetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_target_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeregisterTaskFromMaintenanceWindowRequest {
-    #[doc="<p>The ID of the Maintenance Window the task should be removed from.</p>"]
-    #[serde(rename="WindowId")]
+    /// <p>The ID of the Maintenance Window the task should be removed from.</p>
+    #[serde(rename = "WindowId")]
     pub window_id: String,
-    #[doc="<p>The ID of the task to remove from the Maintenance Window.</p>"]
-    #[serde(rename="WindowTaskId")]
+    /// <p>The ID of the task to remove from the Maintenance Window.</p>
+    #[serde(rename = "WindowTaskId")]
     pub window_task_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeregisterTaskFromMaintenanceWindowResult {
-    #[doc="<p>The ID of the Maintenance Window the task was removed from.</p>"]
-    #[serde(rename="WindowId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Maintenance Window the task was removed from.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
-    #[doc="<p>The ID of the task removed from the Maintenance Window.</p>"]
-    #[serde(rename="WindowTaskId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the task removed from the Maintenance Window.</p>
+    #[serde(rename = "WindowTaskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_task_id: Option<String>,
 }
 
-#[doc="<p>Filter for the DescribeActivation API.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Filter for the DescribeActivation API.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeActivationsFilter {
-    #[doc="<p>The name of the filter.</p>"]
-    #[serde(rename="FilterKey")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "FilterKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_key: Option<String>,
-    #[doc="<p>The filter values.</p>"]
-    #[serde(rename="FilterValues")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The filter values.</p>
+    #[serde(rename = "FilterValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_values: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeActivationsRequest {
-    #[doc="<p>A filter to view information about your activations.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A filter to view information about your activations.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<DescribeActivationsFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A token to start the list. Use this token to get the next set of results. </p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token to start the list. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeActivationsResult {
-    #[doc="<p>A list of activations for your AWS account.</p>"]
-    #[serde(rename="ActivationList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of activations for your AWS account.</p>
+    #[serde(rename = "ActivationList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub activation_list: Option<Vec<Activation>>,
-    #[doc="<p>The token for the next set of items to return. Use this token to get the next set of results. </p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAssociationRequest {
-    #[doc="<p>The association ID for which you want information.</p>"]
-    #[serde(rename="AssociationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The association ID for which you want information.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_id: Option<String>,
-    #[doc="<p>Specify the association version to retrieve. To view the latest version, either specify <code>$LATEST</code> for this parameter, or omit this parameter. To view a list of all associations for an instance, use ListInstanceAssociations. To get a list of versions for a specific association, use ListAssociationVersions. </p>"]
-    #[serde(rename="AssociationVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Specify the association version to retrieve. To view the latest version, either specify <code>$LATEST</code> for this parameter, or omit this parameter. To view a list of all associations for an instance, use ListInstanceAssociations. To get a list of versions for a specific association, use ListAssociationVersions. </p>
+    #[serde(rename = "AssociationVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_version: Option<String>,
-    #[doc="<p>The instance ID.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The instance ID.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>The name of the SSM document.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the SSM document.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeAssociationResult {
-    #[doc="<p>Information about the association.</p>"]
-    #[serde(rename="AssociationDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the association.</p>
+    #[serde(rename = "AssociationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_description: Option<AssociationDescription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAutomationExecutionsRequest {
-    #[doc="<p>Filters used to limit the scope of executions that are requested.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters used to limit the scope of executions that are requested.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<AutomationExecutionFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeAutomationExecutionsResult {
-    #[doc="<p>The list of details about each automation execution which has occurred which matches the filter specification, if any.</p>"]
-    #[serde(rename="AutomationExecutionMetadataList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of details about each automation execution which has occurred which matches the filter specification, if any.</p>
+    #[serde(rename = "AutomationExecutionMetadataList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_metadata_list: Option<Vec<AutomationExecutionMetadata>>,
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAvailablePatchesRequest {
-    #[doc="<p>Filters used to scope down the returned patches.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters used to scope down the returned patches.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<PatchOrchestratorFilter>>,
-    #[doc="<p>The maximum number of patches to return (per page).</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of patches to return (per page).</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeAvailablePatchesResult {
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>An array of patches. Each entry in the array is a patch structure.</p>"]
-    #[serde(rename="Patches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of patches. Each entry in the array is a patch structure.</p>
+    #[serde(rename = "Patches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub patches: Option<Vec<Patch>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeDocumentPermissionRequest {
-    #[doc="<p>The name of the document for which you are the owner.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the document for which you are the owner.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The permission type for the document. The permission type can be <i>Share</i>.</p>"]
-    #[serde(rename="PermissionType")]
+    /// <p>The permission type for the document. The permission type can be <i>Share</i>.</p>
+    #[serde(rename = "PermissionType")]
     pub permission_type: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeDocumentPermissionResponse {
-    #[doc="<p>The account IDs that have permission to use this document. The ID can be either an AWS account or <i>All</i>.</p>"]
-    #[serde(rename="AccountIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The account IDs that have permission to use this document. The ID can be either an AWS account or <i>All</i>.</p>
+    #[serde(rename = "AccountIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeDocumentRequest {
-    #[doc="<p>The document version for which you want information. Can be a specific version or the default version.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document version for which you want information. Can be a specific version or the default version.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The name of the SSM document.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the SSM document.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeDocumentResult {
-    #[doc="<p>Information about the SSM document.</p>"]
-    #[serde(rename="Document")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the SSM document.</p>
+    #[serde(rename = "Document")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document: Option<DocumentDescription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEffectiveInstanceAssociationsRequest {
-    #[doc="<p>The instance ID for which you want to view all associations.</p>"]
-    #[serde(rename="InstanceId")]
+    /// <p>The instance ID for which you want to view all associations.</p>
+    #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEffectiveInstanceAssociationsResult {
-    #[doc="<p>The associations for the requested instance.</p>"]
-    #[serde(rename="Associations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The associations for the requested instance.</p>
+    #[serde(rename = "Associations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub associations: Option<Vec<InstanceAssociation>>,
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEffectivePatchesForPatchBaselineRequest {
-    #[doc="<p>The ID of the patch baseline to retrieve the effective patches for.</p>"]
-    #[serde(rename="BaselineId")]
+    /// <p>The ID of the patch baseline to retrieve the effective patches for.</p>
+    #[serde(rename = "BaselineId")]
     pub baseline_id: String,
-    #[doc="<p>The maximum number of patches to return (per page).</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of patches to return (per page).</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEffectivePatchesForPatchBaselineResult {
-    #[doc="<p>An array of patches and patch status.</p>"]
-    #[serde(rename="EffectivePatches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of patches and patch status.</p>
+    #[serde(rename = "EffectivePatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub effective_patches: Option<Vec<EffectivePatch>>,
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeInstanceAssociationsStatusRequest {
-    #[doc="<p>The instance IDs for which you want association status information.</p>"]
-    #[serde(rename="InstanceId")]
+    /// <p>The instance IDs for which you want association status information.</p>
+    #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeInstanceAssociationsStatusResult {
-    #[doc="<p>Status information about the association.</p>"]
-    #[serde(rename="InstanceAssociationStatusInfos")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Status information about the association.</p>
+    #[serde(rename = "InstanceAssociationStatusInfos")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_association_status_infos: Option<Vec<InstanceAssociationStatusInfo>>,
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeInstanceInformationRequest {
-    #[doc="<p>One or more filters. Use a filter to return a more specific list of instances.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more filters. Use a filter to return a more specific list of instances.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<InstanceInformationStringFilter>>,
-    #[doc="<p>One or more filters. Use a filter to return a more specific list of instances.</p>"]
-    #[serde(rename="InstanceInformationFilterList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more filters. Use a filter to return a more specific list of instances.</p>
+    #[serde(rename = "InstanceInformationFilterList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_information_filter_list: Option<Vec<InstanceInformationFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results. </p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeInstanceInformationResult {
-    #[doc="<p>The instance information list.</p>"]
-    #[serde(rename="InstanceInformationList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The instance information list.</p>
+    #[serde(rename = "InstanceInformationList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_information_list: Option<Vec<InstanceInformation>>,
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty. </p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeInstancePatchStatesForPatchGroupRequest {
-    #[doc="<p>Each entry in the array is a structure containing:</p> <p>Key (string between 1 and 200 characters)</p> <p> Values (array containing a single string)</p> <p> Type (string \"Equal\", \"NotEqual\", \"LessThan\", \"GreaterThan\")</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Each entry in the array is a structure containing:</p> <p>Key (string between 1 and 200 characters)</p> <p> Values (array containing a single string)</p> <p> Type (string "Equal", "NotEqual", "LessThan", "GreaterThan")</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<InstancePatchStateFilter>>,
-    #[doc="<p>The maximum number of patches to return (per page).</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of patches to return (per page).</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The name of the patch group for which the patch state information should be retrieved.</p>"]
-    #[serde(rename="PatchGroup")]
+    /// <p>The name of the patch group for which the patch state information should be retrieved.</p>
+    #[serde(rename = "PatchGroup")]
     pub patch_group: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeInstancePatchStatesForPatchGroupResult {
-    #[doc="<p>The high-level patch state for the requested instances. </p>"]
-    #[serde(rename="InstancePatchStates")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The high-level patch state for the requested instances. </p>
+    #[serde(rename = "InstancePatchStates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_patch_states: Option<Vec<InstancePatchState>>,
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeInstancePatchStatesRequest {
-    #[doc="<p>The ID of the instance whose patch state information should be retrieved.</p>"]
-    #[serde(rename="InstanceIds")]
+    /// <p>The ID of the instance whose patch state information should be retrieved.</p>
+    #[serde(rename = "InstanceIds")]
     pub instance_ids: Vec<String>,
-    #[doc="<p>The maximum number of instances to return (per page).</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of instances to return (per page).</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeInstancePatchStatesResult {
-    #[doc="<p>The high-level patch state for the requested instances.</p>"]
-    #[serde(rename="InstancePatchStates")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The high-level patch state for the requested instances.</p>
+    #[serde(rename = "InstancePatchStates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_patch_states: Option<Vec<InstancePatchState>>,
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeInstancePatchesRequest {
-    #[doc="<p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string between 1 and 256 characters)</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string between 1 and 256 characters)</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<PatchOrchestratorFilter>>,
-    #[doc="<p>The ID of the instance whose patch state information should be retrieved.</p>"]
-    #[serde(rename="InstanceId")]
+    /// <p>The ID of the instance whose patch state information should be retrieved.</p>
+    #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    #[doc="<p>The maximum number of patches to return (per page).</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of patches to return (per page).</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeInstancePatchesResult {
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Each entry in the array is a structure containing:</p> <p>Title (string)</p> <p>KBId (string)</p> <p>Classification (string)</p> <p>Severity (string)</p> <p>State (string: \"INSTALLED\", \"INSTALLED OTHER\", \"MISSING\", \"NOT APPLICABLE\", \"FAILED\")</p> <p>InstalledTime (DateTime)</p> <p>InstalledBy (string)</p>"]
-    #[serde(rename="Patches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Each entry in the array is a structure containing:</p> <p>Title (string)</p> <p>KBId (string)</p> <p>Classification (string)</p> <p>Severity (string)</p> <p>State (string: "INSTALLED", "INSTALLED OTHER", "MISSING", "NOT APPLICABLE", "FAILED")</p> <p>InstalledTime (DateTime)</p> <p>InstalledBy (string)</p>
+    #[serde(rename = "Patches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub patches: Option<Vec<PatchComplianceData>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeMaintenanceWindowExecutionTaskInvocationsRequest {
-    #[doc="<p>Optional filters used to scope down the returned task invocations. The supported filter key is STATUS with the corresponding values PENDING, IN_PROGRESS, SUCCESS, FAILED, TIMED_OUT, CANCELLING, and CANCELLED.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional filters used to scope down the returned task invocations. The supported filter key is STATUS with the corresponding values PENDING, IN_PROGRESS, SUCCESS, FAILED, TIMED_OUT, CANCELLING, and CANCELLED.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<MaintenanceWindowFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The ID of the specific task in the Maintenance Window task that should be retrieved.</p>"]
-    #[serde(rename="TaskId")]
+    /// <p>The ID of the specific task in the Maintenance Window task that should be retrieved.</p>
+    #[serde(rename = "TaskId")]
     pub task_id: String,
-    #[doc="<p>The ID of the Maintenance Window execution the task is part of.</p>"]
-    #[serde(rename="WindowExecutionId")]
+    /// <p>The ID of the Maintenance Window execution the task is part of.</p>
+    #[serde(rename = "WindowExecutionId")]
     pub window_execution_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeMaintenanceWindowExecutionTaskInvocationsResult {
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Information about the task invocation results per invocation.</p>"]
-    #[serde(rename="WindowExecutionTaskInvocationIdentities")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the task invocation results per invocation.</p>
+    #[serde(rename = "WindowExecutionTaskInvocationIdentities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_task_invocation_identities:
         Option<Vec<MaintenanceWindowExecutionTaskInvocationIdentity>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeMaintenanceWindowExecutionTasksRequest {
-    #[doc="<p>Optional filters used to scope down the returned tasks. The supported filter key is STATUS with the corresponding values PENDING, IN_PROGRESS, SUCCESS, FAILED, TIMED_OUT, CANCELLING, and CANCELLED. </p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional filters used to scope down the returned tasks. The supported filter key is STATUS with the corresponding values PENDING, IN_PROGRESS, SUCCESS, FAILED, TIMED_OUT, CANCELLING, and CANCELLED. </p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<MaintenanceWindowFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The ID of the Maintenance Window execution whose task executions should be retrieved.</p>"]
-    #[serde(rename="WindowExecutionId")]
+    /// <p>The ID of the Maintenance Window execution whose task executions should be retrieved.</p>
+    #[serde(rename = "WindowExecutionId")]
     pub window_execution_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeMaintenanceWindowExecutionTasksResult {
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Information about the task executions.</p>"]
-    #[serde(rename="WindowExecutionTaskIdentities")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the task executions.</p>
+    #[serde(rename = "WindowExecutionTaskIdentities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_task_identities: Option<Vec<MaintenanceWindowExecutionTaskIdentity>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeMaintenanceWindowExecutionsRequest {
-    #[doc="<p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string is between 1 and 256 characters)</p> <p>The supported Keys are ExecutedBefore and ExecutedAfter with the value being a date/time string such as 2016-11-04T05:00:00Z.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string is between 1 and 256 characters)</p> <p>The supported Keys are ExecutedBefore and ExecutedAfter with the value being a date/time string such as 2016-11-04T05:00:00Z.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<MaintenanceWindowFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The ID of the Maintenance Window whose executions should be retrieved.</p>"]
-    #[serde(rename="WindowId")]
+    /// <p>The ID of the Maintenance Window whose executions should be retrieved.</p>
+    #[serde(rename = "WindowId")]
     pub window_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeMaintenanceWindowExecutionsResult {
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Information about the Maintenance Windows execution.</p>"]
-    #[serde(rename="WindowExecutions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the Maintenance Windows execution.</p>
+    #[serde(rename = "WindowExecutions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_executions: Option<Vec<MaintenanceWindowExecution>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeMaintenanceWindowTargetsRequest {
-    #[doc="<p>Optional filters that can be used to narrow down the scope of the returned window targets. The supported filter keys are Type, WindowTargetId and OwnerInformation.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional filters that can be used to narrow down the scope of the returned window targets. The supported filter keys are Type, WindowTargetId and OwnerInformation.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<MaintenanceWindowFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The ID of the Maintenance Window whose targets should be retrieved.</p>"]
-    #[serde(rename="WindowId")]
+    /// <p>The ID of the Maintenance Window whose targets should be retrieved.</p>
+    #[serde(rename = "WindowId")]
     pub window_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeMaintenanceWindowTargetsResult {
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Information about the targets in the Maintenance Window.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the targets in the Maintenance Window.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<MaintenanceWindowTarget>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeMaintenanceWindowTasksRequest {
-    #[doc="<p>Optional filters used to narrow down the scope of the returned tasks. The supported filter keys are WindowTaskId, TaskArn, Priority, and TaskType.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional filters used to narrow down the scope of the returned tasks. The supported filter keys are WindowTaskId, TaskArn, Priority, and TaskType.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<MaintenanceWindowFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The ID of the Maintenance Window whose tasks should be retrieved.</p>"]
-    #[serde(rename="WindowId")]
+    /// <p>The ID of the Maintenance Window whose tasks should be retrieved.</p>
+    #[serde(rename = "WindowId")]
     pub window_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeMaintenanceWindowTasksResult {
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Information about the tasks in the Maintenance Window.</p>"]
-    #[serde(rename="Tasks")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the tasks in the Maintenance Window.</p>
+    #[serde(rename = "Tasks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tasks: Option<Vec<MaintenanceWindowTask>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeMaintenanceWindowsRequest {
-    #[doc="<p>Optional filters used to narrow down the scope of the returned Maintenance Windows. Supported filter keys are Name and Enabled.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Optional filters used to narrow down the scope of the returned Maintenance Windows. Supported filter keys are Name and Enabled.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<MaintenanceWindowFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeMaintenanceWindowsResult {
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Information about the Maintenance Windows.</p>"]
-    #[serde(rename="WindowIdentities")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the Maintenance Windows.</p>
+    #[serde(rename = "WindowIdentities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_identities: Option<Vec<MaintenanceWindowIdentity>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeParametersRequest {
-    #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<ParametersFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Filters to limit the request results.</p>"]
-    #[serde(rename="ParameterFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters to limit the request results.</p>
+    #[serde(rename = "ParameterFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_filters: Option<Vec<ParameterStringFilter>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeParametersResult {
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Parameters returned by the request.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Parameters returned by the request.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Vec<ParameterMetadata>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribePatchBaselinesRequest {
-    #[doc="<p>Each element in the array is a structure containing: </p> <p>Key: (string, \"NAME_PREFIX\" or \"OWNER\")</p> <p>Value: (array of strings, exactly 1 entry, between 1 and 255 characters)</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Each element in the array is a structure containing: </p> <p>Key: (string, "NAME_PREFIX" or "OWNER")</p> <p>Value: (array of strings, exactly 1 entry, between 1 and 255 characters)</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<PatchOrchestratorFilter>>,
-    #[doc="<p>The maximum number of patch baselines to return (per page).</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of patch baselines to return (per page).</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribePatchBaselinesResult {
-    #[doc="<p>An array of PatchBaselineIdentity elements.</p>"]
-    #[serde(rename="BaselineIdentities")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An array of PatchBaselineIdentity elements.</p>
+    #[serde(rename = "BaselineIdentities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub baseline_identities: Option<Vec<PatchBaselineIdentity>>,
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribePatchGroupStateRequest {
-    #[doc="<p>The name of the patch group whose patch snapshot should be retrieved.</p>"]
-    #[serde(rename="PatchGroup")]
+    /// <p>The name of the patch group whose patch snapshot should be retrieved.</p>
+    #[serde(rename = "PatchGroup")]
     pub patch_group: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribePatchGroupStateResult {
-    #[doc="<p>The number of instances in the patch group.</p>"]
-    #[serde(rename="Instances")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of instances in the patch group.</p>
+    #[serde(rename = "Instances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instances: Option<i64>,
-    #[doc="<p>The number of instances with patches from the patch baseline that failed to install.</p>"]
-    #[serde(rename="InstancesWithFailedPatches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of instances with patches from the patch baseline that failed to install.</p>
+    #[serde(rename = "InstancesWithFailedPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instances_with_failed_patches: Option<i64>,
-    #[doc="<p>The number of instances with patches installed that aren't defined in the patch baseline.</p>"]
-    #[serde(rename="InstancesWithInstalledOtherPatches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of instances with patches installed that aren't defined in the patch baseline.</p>
+    #[serde(rename = "InstancesWithInstalledOtherPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instances_with_installed_other_patches: Option<i64>,
-    #[doc="<p>The number of instances with installed patches.</p>"]
-    #[serde(rename="InstancesWithInstalledPatches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of instances with installed patches.</p>
+    #[serde(rename = "InstancesWithInstalledPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instances_with_installed_patches: Option<i64>,
-    #[doc="<p>The number of instances with missing patches from the patch baseline.</p>"]
-    #[serde(rename="InstancesWithMissingPatches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of instances with missing patches from the patch baseline.</p>
+    #[serde(rename = "InstancesWithMissingPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instances_with_missing_patches: Option<i64>,
-    #[doc="<p>The number of instances with patches that aren't applicable.</p>"]
-    #[serde(rename="InstancesWithNotApplicablePatches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of instances with patches that aren't applicable.</p>
+    #[serde(rename = "InstancesWithNotApplicablePatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instances_with_not_applicable_patches: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribePatchGroupsRequest {
-    #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<PatchOrchestratorFilter>>,
-    #[doc="<p>The maximum number of patch groups to return (per page).</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of patch groups to return (per page).</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribePatchGroupsResult {
-    #[doc="<p>Each entry in the array contains:</p> <p>PatchGroup: string (between 1 and 256 characters, Regex: ^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$)</p> <p>PatchBaselineIdentity: A PatchBaselineIdentity element. </p>"]
-    #[serde(rename="Mappings")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Each entry in the array contains:</p> <p>PatchGroup: string (between 1 and 256 characters, Regex: ^([\p{L}\p{Z}\p{N}_.:/=+\-@]*)$)</p> <p>PatchBaselineIdentity: A PatchBaselineIdentity element. </p>
+    #[serde(rename = "Mappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mappings: Option<Vec<PatchGroupPatchBaselineMapping>>,
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[doc="<p>A default version of a document.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A default version of a document.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentDefaultVersionDescription {
-    #[doc="<p>The default version of the document.</p>"]
-    #[serde(rename="DefaultVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default version of the document.</p>
+    #[serde(rename = "DefaultVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_version: Option<String>,
-    #[doc="<p>The name of the document.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the document.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>Describes an SSM document. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes an SSM document. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentDescription {
-    #[doc="<p>The date when the document was created.</p>"]
-    #[serde(rename="CreatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date when the document was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>The default version.</p>"]
-    #[serde(rename="DefaultVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The default version.</p>
+    #[serde(rename = "DefaultVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_version: Option<String>,
-    #[doc="<p>A description of the document. </p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the document. </p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The type of document. </p>"]
-    #[serde(rename="DocumentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of document. </p>
+    #[serde(rename = "DocumentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_type: Option<String>,
-    #[doc="<p>The document version.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document version.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The Sha256 or Sha1 hash created by the system when the document was created. </p> <note> <p>Sha1 hashes have been deprecated.</p> </note>"]
-    #[serde(rename="Hash")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Sha256 or Sha1 hash created by the system when the document was created. </p> <note> <p>Sha1 hashes have been deprecated.</p> </note>
+    #[serde(rename = "Hash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hash: Option<String>,
-    #[doc="<p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note>"]
-    #[serde(rename="HashType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note>
+    #[serde(rename = "HashType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hash_type: Option<String>,
-    #[doc="<p>The latest version of the document.</p>"]
-    #[serde(rename="LatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The latest version of the document.</p>
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    #[doc="<p>The name of the SSM document.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the SSM document.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The AWS user account of the person who created the document.</p>"]
-    #[serde(rename="Owner")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS user account of the person who created the document.</p>
+    #[serde(rename = "Owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    #[doc="<p>A description of the parameters for a document.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the parameters for a document.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Vec<DocumentParameter>>,
-    #[doc="<p>The list of OS platforms compatible with this SSM document. </p>"]
-    #[serde(rename="PlatformTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of OS platforms compatible with this SSM document. </p>
+    #[serde(rename = "PlatformTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub platform_types: Option<Vec<String>>,
-    #[doc="<p>The schema version.</p>"]
-    #[serde(rename="SchemaVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The schema version.</p>
+    #[serde(rename = "SchemaVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_version: Option<String>,
-    #[doc="<p>The SHA1 hash of the document, which you can use for verification purposes.</p>"]
-    #[serde(rename="Sha1")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SHA1 hash of the document, which you can use for verification purposes.</p>
+    #[serde(rename = "Sha1")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sha_1: Option<String>,
-    #[doc="<p>The status of the SSM document.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the SSM document.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>Describes a filter.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Describes a filter.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DocumentFilter {
-    #[doc="<p>The name of the filter.</p>"]
-    #[serde(rename="key")]
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "key")]
     pub key: String,
-    #[doc="<p>The value of the filter.</p>"]
-    #[serde(rename="value")]
+    /// <p>The value of the filter.</p>
+    #[serde(rename = "value")]
     pub value: String,
 }
 
-#[doc="<p>Describes the name of an SSM document.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the name of an SSM document.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentIdentifier {
-    #[doc="<p>The document type.</p>"]
-    #[serde(rename="DocumentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document type.</p>
+    #[serde(rename = "DocumentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_type: Option<String>,
-    #[doc="<p>The document version.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document version.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The name of the SSM document.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the SSM document.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The AWS user account of the person who created the document.</p>"]
-    #[serde(rename="Owner")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS user account of the person who created the document.</p>
+    #[serde(rename = "Owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    #[doc="<p>The operating system platform. </p>"]
-    #[serde(rename="PlatformTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The operating system platform. </p>
+    #[serde(rename = "PlatformTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub platform_types: Option<Vec<String>>,
-    #[doc="<p>The schema version.</p>"]
-    #[serde(rename="SchemaVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The schema version.</p>
+    #[serde(rename = "SchemaVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_version: Option<String>,
 }
 
-#[doc="<p>Parameters specified in a System Manager document that execute on the server when the command is run. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Parameters specified in a System Manager document that execute on the server when the command is run. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentParameter {
-    #[doc="<p>If specified, the default values for the parameters. Parameters without a default value are required. Parameters with a default value are optional.</p>"]
-    #[serde(rename="DefaultValue")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If specified, the default values for the parameters. Parameters without a default value are required. Parameters with a default value are optional.</p>
+    #[serde(rename = "DefaultValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_value: Option<String>,
-    #[doc="<p>A description of what the parameter does, how to use it, the default value, and whether or not the parameter is optional.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of what the parameter does, how to use it, the default value, and whether or not the parameter is optional.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The name of the parameter.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the parameter.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The type of parameter. The type can be either String or StringList.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of parameter. The type can be either String or StringList.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>Version information about the document.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Version information about the document.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentVersionInfo {
-    #[doc="<p>The date the document was created.</p>"]
-    #[serde(rename="CreatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the document was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>The document version.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document version.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>An identifier for the default version of the document.</p>"]
-    #[serde(rename="IsDefaultVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An identifier for the default version of the document.</p>
+    #[serde(rename = "IsDefaultVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default_version: Option<bool>,
-    #[doc="<p>The document name.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>The EffectivePatch structure defines metadata about a patch along with the approval state of the patch in a particular patch baseline. The approval state includes information about whether the patch is currently approved, due to be approved by a rule, explicitly approved, or explicitly rejected and the date the patch was or will be approved.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The EffectivePatch structure defines metadata about a patch along with the approval state of the patch in a particular patch baseline. The approval state includes information about whether the patch is currently approved, due to be approved by a rule, explicitly approved, or explicitly rejected and the date the patch was or will be approved.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct EffectivePatch {
-    #[doc="<p>Provides metadata for a patch, including information such as the KB ID, severity, classification and a URL for where more information can be obtained about the patch.</p>"]
-    #[serde(rename="Patch")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Provides metadata for a patch, including information such as the KB ID, severity, classification and a URL for where more information can be obtained about the patch.</p>
+    #[serde(rename = "Patch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub patch: Option<Patch>,
-    #[doc="<p>The status of the patch in a patch baseline. This includes information about whether the patch is currently approved, due to be approved by a rule, explicitly approved, or explicitly rejected and the date the patch was or will be approved.</p>"]
-    #[serde(rename="PatchStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the patch in a patch baseline. This includes information about whether the patch is currently approved, due to be approved by a rule, explicitly approved, or explicitly rejected and the date the patch was or will be approved.</p>
+    #[serde(rename = "PatchStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_status: Option<PatchStatus>,
 }
 
-#[doc="<p>Describes a failed association.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a failed association.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct FailedCreateAssociation {
-    #[doc="<p>The association.</p>"]
-    #[serde(rename="Entry")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The association.</p>
+    #[serde(rename = "Entry")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub entry: Option<CreateAssociationBatchRequestEntry>,
-    #[doc="<p>The source of the failure.</p>"]
-    #[serde(rename="Fault")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The source of the failure.</p>
+    #[serde(rename = "Fault")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fault: Option<String>,
-    #[doc="<p>A description of the failure.</p>"]
-    #[serde(rename="Message")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the failure.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
 }
 
-#[doc="<p>Information about an Automation failure.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about an Automation failure.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct FailureDetails {
-    #[doc="<p>Detailed information about the Automation step failure.</p>"]
-    #[serde(rename="Details")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Detailed information about the Automation step failure.</p>
+    #[serde(rename = "Details")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub details: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>The stage of the Automation execution when the failure occurred. The stages include the following: InputValidation, PreVerification, Invocation, PostVerification.</p>"]
-    #[serde(rename="FailureStage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The stage of the Automation execution when the failure occurred. The stages include the following: InputValidation, PreVerification, Invocation, PostVerification.</p>
+    #[serde(rename = "FailureStage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_stage: Option<String>,
-    #[doc="<p>The type of Automation failure. Failure types include the following: Action, Permission, Throttling, Verification, Internal.</p>"]
-    #[serde(rename="FailureType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of Automation failure. Failure types include the following: Action, Permission, Throttling, Verification, Internal.</p>
+    #[serde(rename = "FailureType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_type: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetAutomationExecutionRequest {
-    #[doc="<p>The unique identifier for an existing automation execution to examine. The execution ID is returned by StartAutomationExecution when the execution of an Automation document is initiated.</p>"]
-    #[serde(rename="AutomationExecutionId")]
+    /// <p>The unique identifier for an existing automation execution to examine. The execution ID is returned by StartAutomationExecution when the execution of an Automation document is initiated.</p>
+    #[serde(rename = "AutomationExecutionId")]
     pub automation_execution_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetAutomationExecutionResult {
-    #[doc="<p>Detailed information about the current state of an automation execution.</p>"]
-    #[serde(rename="AutomationExecution")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Detailed information about the current state of an automation execution.</p>
+    #[serde(rename = "AutomationExecution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution: Option<AutomationExecution>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetCommandInvocationRequest {
-    #[doc="<p>(Required) The parent command ID of the invocation plugin.</p>"]
-    #[serde(rename="CommandId")]
+    /// <p>(Required) The parent command ID of the invocation plugin.</p>
+    #[serde(rename = "CommandId")]
     pub command_id: String,
-    #[doc="<p>(Required) The ID of the managed instance targeted by the command. A managed instance can be an Amazon EC2 instance or an instance in your hybrid environment that is configured for Systems Manager.</p>"]
-    #[serde(rename="InstanceId")]
+    /// <p>(Required) The ID of the managed instance targeted by the command. A managed instance can be an Amazon EC2 instance or an instance in your hybrid environment that is configured for Systems Manager.</p>
+    #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    #[doc="<p>(Optional) The name of the plugin for which you want detailed results. If the document contains only one plugin, the name can be omitted and the details will be returned.</p>"]
-    #[serde(rename="PluginName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) The name of the plugin for which you want detailed results. If the document contains only one plugin, the name can be omitted and the details will be returned.</p>
+    #[serde(rename = "PluginName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub plugin_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetCommandInvocationResult {
-    #[doc="<p>The parent command ID of the invocation plugin.</p>"]
-    #[serde(rename="CommandId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parent command ID of the invocation plugin.</p>
+    #[serde(rename = "CommandId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub command_id: Option<String>,
-    #[doc="<p>The comment text for the command.</p>"]
-    #[serde(rename="Comment")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The comment text for the command.</p>
+    #[serde(rename = "Comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
-    #[doc="<p>The name of the document that was executed. For example, AWS-RunShellScript.</p>"]
-    #[serde(rename="DocumentName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the document that was executed. For example, AWS-RunShellScript.</p>
+    #[serde(rename = "DocumentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_name: Option<String>,
-    #[doc="<p>Duration since ExecutionStartDateTime.</p>"]
-    #[serde(rename="ExecutionElapsedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Duration since ExecutionStartDateTime.</p>
+    #[serde(rename = "ExecutionElapsedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_elapsed_time: Option<String>,
-    #[doc="<p>The date and time the plugin was finished executing. Date and time are written in ISO 8601 format. For example, June 7, 2017 is represented as 2017-06-7. The following sample AWS CLI command uses the <code>InvokedAfter</code> filter.</p> <p> <code>aws ssm list-commands --filters key=InvokedAfter,value=2017-06-07T00:00:00Z</code> </p> <p>If the plugin has not started to execute, the string is empty.</p>"]
-    #[serde(rename="ExecutionEndDateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the plugin was finished executing. Date and time are written in ISO 8601 format. For example, June 7, 2017 is represented as 2017-06-7. The following sample AWS CLI command uses the <code>InvokedAfter</code> filter.</p> <p> <code>aws ssm list-commands --filters key=InvokedAfter,value=2017-06-07T00:00:00Z</code> </p> <p>If the plugin has not started to execute, the string is empty.</p>
+    #[serde(rename = "ExecutionEndDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_end_date_time: Option<String>,
-    #[doc="<p>The date and time the plugin started executing. Date and time are written in ISO 8601 format. For example, June 7, 2017 is represented as 2017-06-7. The following sample AWS CLI command uses the <code>InvokedBefore</code> filter.</p> <p> <code>aws ssm list-commands --filters key=InvokedBefore,value=2017-06-07T00:00:00Z</code> </p> <p>If the plugin has not started to execute, the string is empty.</p>"]
-    #[serde(rename="ExecutionStartDateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the plugin started executing. Date and time are written in ISO 8601 format. For example, June 7, 2017 is represented as 2017-06-7. The following sample AWS CLI command uses the <code>InvokedBefore</code> filter.</p> <p> <code>aws ssm list-commands --filters key=InvokedBefore,value=2017-06-07T00:00:00Z</code> </p> <p>If the plugin has not started to execute, the string is empty.</p>
+    #[serde(rename = "ExecutionStartDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_start_date_time: Option<String>,
-    #[doc="<p>The ID of the managed instance targeted by the command. A managed instance can be an Amazon EC2 instance or an instance in your hybrid environment that is configured for Systems Manager.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the managed instance targeted by the command. A managed instance can be an Amazon EC2 instance or an instance in your hybrid environment that is configured for Systems Manager.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>The name of the plugin for which you want detailed results. For example, aws:RunShellScript is a plugin.</p>"]
-    #[serde(rename="PluginName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the plugin for which you want detailed results. For example, aws:RunShellScript is a plugin.</p>
+    #[serde(rename = "PluginName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub plugin_name: Option<String>,
-    #[doc="<p>The error level response code for the plugin script. If the response code is -1, then the command has not started executing on the instance, or it was not received by the instance.</p>"]
-    #[serde(rename="ResponseCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The error level response code for the plugin script. If the response code is -1, then the command has not started executing on the instance, or it was not received by the instance.</p>
+    #[serde(rename = "ResponseCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub response_code: Option<i64>,
-    #[doc="<p>The first 8,000 characters written by the plugin to stderr. If the command has not finished executing, then this string is empty.</p>"]
-    #[serde(rename="StandardErrorContent")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The first 8,000 characters written by the plugin to stderr. If the command has not finished executing, then this string is empty.</p>
+    #[serde(rename = "StandardErrorContent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_error_content: Option<String>,
-    #[doc="<p>The URL for the complete text written by the plugin to stderr. If the command has not finished executing, then this string is empty.</p>"]
-    #[serde(rename="StandardErrorUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The URL for the complete text written by the plugin to stderr. If the command has not finished executing, then this string is empty.</p>
+    #[serde(rename = "StandardErrorUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_error_url: Option<String>,
-    #[doc="<p>The first 24,000 characters written by the plugin to stdout. If the command has not finished executing, if ExecutionStatus is neither Succeeded nor Failed, then this string is empty.</p>"]
-    #[serde(rename="StandardOutputContent")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The first 24,000 characters written by the plugin to stdout. If the command has not finished executing, if ExecutionStatus is neither Succeeded nor Failed, then this string is empty.</p>
+    #[serde(rename = "StandardOutputContent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_output_content: Option<String>,
-    #[doc="<p>The URL for the complete text written by the plugin to stdout in Amazon S3. If an Amazon S3 bucket was not specified, then this string is empty.</p>"]
-    #[serde(rename="StandardOutputUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The URL for the complete text written by the plugin to stdout in Amazon S3. If an Amazon S3 bucket was not specified, then this string is empty.</p>
+    #[serde(rename = "StandardOutputUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_output_url: Option<String>,
-    #[doc="<p>The status of the parent command for this invocation. This status can be different than StatusDetails.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the parent command for this invocation. This status can be different than StatusDetails.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>A detailed status of the command execution for an invocation. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html\">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Delayed: The system attempted to send the command to the target, but the target was not available. The instance might not be available because of network issues, the instance was stopped, etc. The system will try to deliver the command again.</p> </li> <li> <p>Success: The command or plugin was executed successfully. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The command started to execute on the instance, but the execution was not complete before the timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command wasn't executed successfully on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit and don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>"]
-    #[serde(rename="StatusDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A detailed status of the command execution for an invocation. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Delayed: The system attempted to send the command to the target, but the target was not available. The instance might not be available because of network issues, the instance was stopped, etc. The system will try to deliver the command again.</p> </li> <li> <p>Success: The command or plugin was executed successfully. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The command started to execute on the instance, but the execution was not complete before the timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command wasn't executed successfully on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit and don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>
+    #[serde(rename = "StatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDefaultPatchBaselineRequest {
-    #[doc="<p>Returns the default patch baseline for the specified operating system.</p>"]
-    #[serde(rename="OperatingSystem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returns the default patch baseline for the specified operating system.</p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDefaultPatchBaselineResult {
-    #[doc="<p>The ID of the default patch baseline.</p>"]
-    #[serde(rename="BaselineId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the default patch baseline.</p>
+    #[serde(rename = "BaselineId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub baseline_id: Option<String>,
-    #[doc="<p>The operating system for the returned patch baseline. </p>"]
-    #[serde(rename="OperatingSystem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The operating system for the returned patch baseline. </p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDeployablePatchSnapshotForInstanceRequest {
-    #[doc="<p>The ID of the instance for which the appropriate patch snapshot should be retrieved.</p>"]
-    #[serde(rename="InstanceId")]
+    /// <p>The ID of the instance for which the appropriate patch snapshot should be retrieved.</p>
+    #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    #[doc="<p>The user-defined snapshot ID.</p>"]
-    #[serde(rename="SnapshotId")]
+    /// <p>The user-defined snapshot ID.</p>
+    #[serde(rename = "SnapshotId")]
     pub snapshot_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDeployablePatchSnapshotForInstanceResult {
-    #[doc="<p>The ID of the instance.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>Returns the specific operating system (for example Windows Server 2012 or Amazon Linux 2015.09) on the instance for the specified patch snapshot.</p>"]
-    #[serde(rename="Product")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returns the specific operating system (for example Windows Server 2012 or Amazon Linux 2015.09) on the instance for the specified patch snapshot.</p>
+    #[serde(rename = "Product")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product: Option<String>,
-    #[doc="<p>A pre-signed Amazon S3 URL that can be used to download the patch snapshot.</p>"]
-    #[serde(rename="SnapshotDownloadUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A pre-signed Amazon S3 URL that can be used to download the patch snapshot.</p>
+    #[serde(rename = "SnapshotDownloadUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub snapshot_download_url: Option<String>,
-    #[doc="<p>The user-defined snapshot ID.</p>"]
-    #[serde(rename="SnapshotId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The user-defined snapshot ID.</p>
+    #[serde(rename = "SnapshotId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub snapshot_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDocumentRequest {
-    #[doc="<p>The document version for which you want information.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document version for which you want information.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The name of the SSM document.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the SSM document.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDocumentResult {
-    #[doc="<p>The contents of the SSM document.</p>"]
-    #[serde(rename="Content")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The contents of the SSM document.</p>
+    #[serde(rename = "Content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
-    #[doc="<p>The document type.</p>"]
-    #[serde(rename="DocumentType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document type.</p>
+    #[serde(rename = "DocumentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_type: Option<String>,
-    #[doc="<p>The document version.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document version.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The name of the SSM document.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the SSM document.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetInventoryRequest {
-    #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<InventoryFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The list of inventory item types to return.</p>"]
-    #[serde(rename="ResultAttributes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The list of inventory item types to return.</p>
+    #[serde(rename = "ResultAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result_attributes: Option<Vec<ResultAttribute>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetInventoryResult {
-    #[doc="<p>Collection of inventory entities such as a collection of instance inventory. </p>"]
-    #[serde(rename="Entities")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Collection of inventory entities such as a collection of instance inventory. </p>
+    #[serde(rename = "Entities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub entities: Option<Vec<InventoryResultEntity>>,
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetInventorySchemaRequest {
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Returns the sub-type schema for a specified inventory type.</p>"]
-    #[serde(rename="SubType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returns the sub-type schema for a specified inventory type.</p>
+    #[serde(rename = "SubType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sub_type: Option<bool>,
-    #[doc="<p>The type of inventory item to return.</p>"]
-    #[serde(rename="TypeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of inventory item to return.</p>
+    #[serde(rename = "TypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetInventorySchemaResult {
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Inventory schemas returned by the request.</p>"]
-    #[serde(rename="Schemas")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Inventory schemas returned by the request.</p>
+    #[serde(rename = "Schemas")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schemas: Option<Vec<InventoryItemSchema>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetMaintenanceWindowExecutionRequest {
-    #[doc="<p>The ID of the Maintenance Window execution that includes the task.</p>"]
-    #[serde(rename="WindowExecutionId")]
+    /// <p>The ID of the Maintenance Window execution that includes the task.</p>
+    #[serde(rename = "WindowExecutionId")]
     pub window_execution_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetMaintenanceWindowExecutionResult {
-    #[doc="<p>The time the Maintenance Window finished executing.</p>"]
-    #[serde(rename="EndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the Maintenance Window finished executing.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>The time the Maintenance Window started executing.</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the Maintenance Window started executing.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>The status of the Maintenance Window execution.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the Maintenance Window execution.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The details explaining the Status. Only available for certain status values.</p>"]
-    #[serde(rename="StatusDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The details explaining the Status. Only available for certain status values.</p>
+    #[serde(rename = "StatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
-    #[doc="<p>The ID of the task executions from the Maintenance Window execution.</p>"]
-    #[serde(rename="TaskIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the task executions from the Maintenance Window execution.</p>
+    #[serde(rename = "TaskIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_ids: Option<Vec<String>>,
-    #[doc="<p>The ID of the Maintenance Window execution.</p>"]
-    #[serde(rename="WindowExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Maintenance Window execution.</p>
+    #[serde(rename = "WindowExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetMaintenanceWindowExecutionTaskInvocationRequest {
-    #[doc="<p>The invocation ID to retrieve.</p>"]
-    #[serde(rename="InvocationId")]
+    /// <p>The invocation ID to retrieve.</p>
+    #[serde(rename = "InvocationId")]
     pub invocation_id: String,
-    #[doc="<p>The ID of the specific task in the Maintenance Window task that should be retrieved. </p>"]
-    #[serde(rename="TaskId")]
+    /// <p>The ID of the specific task in the Maintenance Window task that should be retrieved. </p>
+    #[serde(rename = "TaskId")]
     pub task_id: String,
-    #[doc="<p>The ID of the Maintenance Window execution for which the task is a part.</p>"]
-    #[serde(rename="WindowExecutionId")]
+    /// <p>The ID of the Maintenance Window execution for which the task is a part.</p>
+    #[serde(rename = "WindowExecutionId")]
     pub window_execution_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
-    #[doc="<p>The time that the task finished executing on the target.</p>"]
-    #[serde(rename="EndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time that the task finished executing on the target.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>The execution ID.</p>"]
-    #[serde(rename="ExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The execution ID.</p>
+    #[serde(rename = "ExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_id: Option<String>,
-    #[doc="<p>The invocation ID.</p>"]
-    #[serde(rename="InvocationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The invocation ID.</p>
+    #[serde(rename = "InvocationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub invocation_id: Option<String>,
-    #[doc="<p>User-provided value to be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window. </p>"]
-    #[serde(rename="OwnerInformation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-provided value to be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window. </p>
+    #[serde(rename = "OwnerInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_information: Option<String>,
-    #[doc="<p>The parameters used at the time that the task executed.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters used at the time that the task executed.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<String>,
-    #[doc="<p>The time that the task started executing on the target.</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time that the task started executing on the target.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>The task status for an invocation.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The task status for an invocation.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The details explaining the status. Details are only available for certain status values.</p>"]
-    #[serde(rename="StatusDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The details explaining the status. Details are only available for certain status values.</p>
+    #[serde(rename = "StatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
-    #[doc="<p>The task execution ID.</p>"]
-    #[serde(rename="TaskExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The task execution ID.</p>
+    #[serde(rename = "TaskExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_execution_id: Option<String>,
-    #[doc="<p>Retrieves the task type for a Maintenance Window. Task types include the following: LAMBDA, STEP_FUNCTION, AUTOMATION, RUN_COMMAND.</p>"]
-    #[serde(rename="TaskType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Retrieves the task type for a Maintenance Window. Task types include the following: LAMBDA, STEP_FUNCTION, AUTOMATION, RUN_COMMAND.</p>
+    #[serde(rename = "TaskType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_type: Option<String>,
-    #[doc="<p>The Maintenance Window execution ID.</p>"]
-    #[serde(rename="WindowExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Maintenance Window execution ID.</p>
+    #[serde(rename = "WindowExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_id: Option<String>,
-    #[doc="<p>The Maintenance Window target ID.</p>"]
-    #[serde(rename="WindowTargetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Maintenance Window target ID.</p>
+    #[serde(rename = "WindowTargetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_target_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetMaintenanceWindowExecutionTaskRequest {
-    #[doc="<p>The ID of the specific task execution in the Maintenance Window task that should be retrieved.</p>"]
-    #[serde(rename="TaskId")]
+    /// <p>The ID of the specific task execution in the Maintenance Window task that should be retrieved.</p>
+    #[serde(rename = "TaskId")]
     pub task_id: String,
-    #[doc="<p>The ID of the Maintenance Window execution that includes the task.</p>"]
-    #[serde(rename="WindowExecutionId")]
+    /// <p>The ID of the Maintenance Window execution that includes the task.</p>
+    #[serde(rename = "WindowExecutionId")]
     pub window_execution_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetMaintenanceWindowExecutionTaskResult {
-    #[doc="<p>The time the task execution completed.</p>"]
-    #[serde(rename="EndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the task execution completed.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>The defined maximum number of task executions that could be run in parallel.</p>"]
-    #[serde(rename="MaxConcurrency")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The defined maximum number of task executions that could be run in parallel.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrency: Option<String>,
-    #[doc="<p>The defined maximum number of task execution errors allowed before scheduling of the task execution would have been stopped.</p>"]
-    #[serde(rename="MaxErrors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The defined maximum number of task execution errors allowed before scheduling of the task execution would have been stopped.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_errors: Option<String>,
-    #[doc="<p>The priority of the task.</p>"]
-    #[serde(rename="Priority")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The priority of the task.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    #[doc="<p>The role that was assumed when executing the task.</p>"]
-    #[serde(rename="ServiceRole")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The role that was assumed when executing the task.</p>
+    #[serde(rename = "ServiceRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role: Option<String>,
-    #[doc="<p>The time the task execution started.</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the task execution started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>The status of the task.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the task.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The details explaining the Status. Only available for certain status values.</p>"]
-    #[serde(rename="StatusDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The details explaining the Status. Only available for certain status values.</p>
+    #[serde(rename = "StatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
-    #[doc="<p>The ARN of the executed task.</p>"]
-    #[serde(rename="TaskArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the executed task.</p>
+    #[serde(rename = "TaskArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
-    #[doc="<p>The ID of the specific task execution in the Maintenance Window task that was retrieved.</p>"]
-    #[serde(rename="TaskExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the specific task execution in the Maintenance Window task that was retrieved.</p>
+    #[serde(rename = "TaskExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_execution_id: Option<String>,
-    #[doc="<p>The parameters passed to the task when it was executed. The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>"]
-    #[serde(rename="TaskParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub task_parameters:
-        Option<Vec<::std::collections::HashMap<String,
-                                               MaintenanceWindowTaskParameterValueExpression>>>,
-    #[doc="<p>The type of task executed.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters passed to the task when it was executed. The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>
+    #[serde(rename = "TaskParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_parameters: Option<
+        Vec<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
+    >,
+    /// <p>The type of task executed.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The ID of the Maintenance Window execution that includes the task.</p>"]
-    #[serde(rename="WindowExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Maintenance Window execution that includes the task.</p>
+    #[serde(rename = "WindowExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetMaintenanceWindowRequest {
-    #[doc="<p>The ID of the desired Maintenance Window.</p>"]
-    #[serde(rename="WindowId")]
+    /// <p>The ID of the desired Maintenance Window.</p>
+    #[serde(rename = "WindowId")]
     pub window_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetMaintenanceWindowResult {
-    #[doc="<p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>"]
-    #[serde(rename="AllowUnassociatedTargets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>
+    #[serde(rename = "AllowUnassociatedTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_unassociated_targets: Option<bool>,
-    #[doc="<p>The date the Maintenance Window was created.</p>"]
-    #[serde(rename="CreatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the Maintenance Window was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>"]
-    #[serde(rename="Cutoff")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>
+    #[serde(rename = "Cutoff")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cutoff: Option<i64>,
-    #[doc="<p>The description of the Maintenance Window.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the Maintenance Window.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The duration of the Maintenance Window in hours.</p>"]
-    #[serde(rename="Duration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The duration of the Maintenance Window in hours.</p>
+    #[serde(rename = "Duration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<i64>,
-    #[doc="<p>Whether the Maintenance Windows is enabled.</p>"]
-    #[serde(rename="Enabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether the Maintenance Windows is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    #[doc="<p>The date the Maintenance Window was last modified.</p>"]
-    #[serde(rename="ModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the Maintenance Window was last modified.</p>
+    #[serde(rename = "ModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub modified_date: Option<f64>,
-    #[doc="<p>The name of the Maintenance Window.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Maintenance Window.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>"]
-    #[serde(rename="Schedule")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>
+    #[serde(rename = "Schedule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    #[doc="<p>The ID of the created Maintenance Window.</p>"]
-    #[serde(rename="WindowId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the created Maintenance Window.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetMaintenanceWindowTaskRequest {
-    #[doc="<p>The Maintenance Window ID that includes the task to retrieve.</p>"]
-    #[serde(rename="WindowId")]
+    /// <p>The Maintenance Window ID that includes the task to retrieve.</p>
+    #[serde(rename = "WindowId")]
     pub window_id: String,
-    #[doc="<p>The Maintenance Window task ID to retrieve.</p>"]
-    #[serde(rename="WindowTaskId")]
+    /// <p>The Maintenance Window task ID to retrieve.</p>
+    #[serde(rename = "WindowTaskId")]
     pub window_task_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetMaintenanceWindowTaskResult {
-    #[doc="<p>The retrieved task description.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The retrieved task description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The location in Amazon S3 where the task results are logged.</p>"]
-    #[serde(rename="LoggingInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The location in Amazon S3 where the task results are logged.</p>
+    #[serde(rename = "LoggingInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
-    #[doc="<p>The maximum number of targets allowed to run this task in parallel.</p>"]
-    #[serde(rename="MaxConcurrency")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of targets allowed to run this task in parallel.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrency: Option<String>,
-    #[doc="<p>The maximum number of errors allowed before the task stops being scheduled.</p>"]
-    #[serde(rename="MaxErrors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of errors allowed before the task stops being scheduled.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_errors: Option<String>,
-    #[doc="<p>The retrieved task name.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The retrieved task name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The priority of the task when it executes. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>"]
-    #[serde(rename="Priority")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The priority of the task when it executes. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    #[doc="<p>The IAM service role to assume during task execution.</p>"]
-    #[serde(rename="ServiceRoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IAM service role to assume during task execution.</p>
+    #[serde(rename = "ServiceRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    #[doc="<p>The targets where the task should execute.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The targets where the task should execute.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    #[doc="<p>The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the SSM Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTION tasks, the value is the state machine ARN.</p>"]
-    #[serde(rename="TaskArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the SSM Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTION tasks, the value is the state machine ARN.</p>
+    #[serde(rename = "TaskArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
-    #[doc="<p>The parameters to pass to the task when it executes.</p>"]
-    #[serde(rename="TaskInvocationParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters to pass to the task when it executes.</p>
+    #[serde(rename = "TaskInvocationParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
-    #[doc="<p>The parameters to pass to the task when it executes.</p>"]
-    #[serde(rename="TaskParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters to pass to the task when it executes.</p>
+    #[serde(rename = "TaskParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
         Option<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
-    #[doc="<p>The type of task to execute.</p>"]
-    #[serde(rename="TaskType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of task to execute.</p>
+    #[serde(rename = "TaskType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_type: Option<String>,
-    #[doc="<p>The retrieved Maintenance Window ID.</p>"]
-    #[serde(rename="WindowId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The retrieved Maintenance Window ID.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
-    #[doc="<p>The retrieved Maintenance Window task ID.</p>"]
-    #[serde(rename="WindowTaskId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The retrieved Maintenance Window task ID.</p>
+    #[serde(rename = "WindowTaskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_task_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetParameterHistoryRequest {
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The name of a parameter you want to query.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of a parameter you want to query.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Return decrypted values for secure string parameters. This flag is ignored for String and StringList parameter types.</p>"]
-    #[serde(rename="WithDecryption")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Return decrypted values for secure string parameters. This flag is ignored for String and StringList parameter types.</p>
+    #[serde(rename = "WithDecryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub with_decryption: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetParameterHistoryResult {
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of parameters returned by the request.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of parameters returned by the request.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Vec<ParameterHistory>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetParameterRequest {
-    #[doc="<p>The name of the parameter you want to query.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the parameter you want to query.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>Return decrypted values for secure string parameters. This flag is ignored for String and StringList parameter types.</p>"]
-    #[serde(rename="WithDecryption")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Return decrypted values for secure string parameters. This flag is ignored for String and StringList parameter types.</p>
+    #[serde(rename = "WithDecryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub with_decryption: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetParameterResult {
-    #[doc="<p>Information about a parameter.</p>"]
-    #[serde(rename="Parameter")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about a parameter.</p>
+    #[serde(rename = "Parameter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter: Option<Parameter>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetParametersByPathRequest {
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A token to start the list. Use this token to get the next set of results. </p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token to start the list. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>Filters to limit the request results.</p>"]
-    #[serde(rename="ParameterFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Filters to limit the request results.</p>
+    #[serde(rename = "ParameterFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_filters: Option<Vec<ParameterStringFilter>>,
-    #[doc="<p>The hierarchy for the parameter. Hierarchies start with a forward slash (/) and end with the parameter name. A hierarchy can have a maximum of five levels. Examples: /Environment/Test/DBString003</p> <p>/Finance/Prod/IAD/OS/WinServ2016/license15</p>"]
-    #[serde(rename="Path")]
+    /// <p>The hierarchy for the parameter. Hierarchies start with a forward slash (/) and end with the parameter name. A hierarchy can have a maximum of five levels. Examples: /Environment/Test/DBString003</p> <p>/Finance/Prod/IAD/OS/WinServ2016/license15</p>
+    #[serde(rename = "Path")]
     pub path: String,
-    #[doc="<p>Retrieve all parameters within a hierarchy.</p>"]
-    #[serde(rename="Recursive")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Retrieve all parameters within a hierarchy.</p>
+    #[serde(rename = "Recursive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub recursive: Option<bool>,
-    #[doc="<p>Retrieve all parameters in a hierarchy with their value decrypted.</p>"]
-    #[serde(rename="WithDecryption")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Retrieve all parameters in a hierarchy with their value decrypted.</p>
+    #[serde(rename = "WithDecryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub with_decryption: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetParametersByPathResult {
-    #[doc="<p>The token for the next set of items to return. Use this token to get the next set of results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of parameters found in the specified hierarchy.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of parameters found in the specified hierarchy.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Vec<Parameter>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetParametersRequest {
-    #[doc="<p>Names of the parameters for which you want to query information.</p>"]
-    #[serde(rename="Names")]
+    /// <p>Names of the parameters for which you want to query information.</p>
+    #[serde(rename = "Names")]
     pub names: Vec<String>,
-    #[doc="<p>Return decrypted secure string value. Return decrypted values for secure string parameters. This flag is ignored for String and StringList parameter types.</p>"]
-    #[serde(rename="WithDecryption")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Return decrypted secure string value. Return decrypted values for secure string parameters. This flag is ignored for String and StringList parameter types.</p>
+    #[serde(rename = "WithDecryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub with_decryption: Option<bool>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetParametersResult {
-    #[doc="<p>A list of parameters that are not formatted correctly or do not run when executed.</p>"]
-    #[serde(rename="InvalidParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of parameters that are not formatted correctly or do not run when executed.</p>
+    #[serde(rename = "InvalidParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub invalid_parameters: Option<Vec<String>>,
-    #[doc="<p>A list of details for a parameter.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of details for a parameter.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Vec<Parameter>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetPatchBaselineForPatchGroupRequest {
-    #[doc="<p>Returns he operating system rule specified for patch groups using the patch baseline.</p>"]
-    #[serde(rename="OperatingSystem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returns he operating system rule specified for patch groups using the patch baseline.</p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
-    #[doc="<p>The name of the patch group whose patch baseline should be retrieved.</p>"]
-    #[serde(rename="PatchGroup")]
+    /// <p>The name of the patch group whose patch baseline should be retrieved.</p>
+    #[serde(rename = "PatchGroup")]
     pub patch_group: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetPatchBaselineForPatchGroupResult {
-    #[doc="<p>The ID of the patch baseline that should be used for the patch group.</p>"]
-    #[serde(rename="BaselineId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the patch baseline that should be used for the patch group.</p>
+    #[serde(rename = "BaselineId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub baseline_id: Option<String>,
-    #[doc="<p>The operating system rule specified for patch groups using the patch baseline.</p>"]
-    #[serde(rename="OperatingSystem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The operating system rule specified for patch groups using the patch baseline.</p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
-    #[doc="<p>The name of the patch group.</p>"]
-    #[serde(rename="PatchGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the patch group.</p>
+    #[serde(rename = "PatchGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_group: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetPatchBaselineRequest {
-    #[doc="<p>The ID of the patch baseline to retrieve.</p>"]
-    #[serde(rename="BaselineId")]
+    /// <p>The ID of the patch baseline to retrieve.</p>
+    #[serde(rename = "BaselineId")]
     pub baseline_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetPatchBaselineResult {
-    #[doc="<p>A set of rules used to include patches in the baseline.</p>"]
-    #[serde(rename="ApprovalRules")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A set of rules used to include patches in the baseline.</p>
+    #[serde(rename = "ApprovalRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approval_rules: Option<PatchRuleGroup>,
-    #[doc="<p>A list of explicitly approved patches for the baseline.</p>"]
-    #[serde(rename="ApprovedPatches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of explicitly approved patches for the baseline.</p>
+    #[serde(rename = "ApprovedPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches: Option<Vec<String>>,
-    #[doc="<p>Returns the specified compliance severity level for approved patches in the patch baseline.</p>"]
-    #[serde(rename="ApprovedPatchesComplianceLevel")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returns the specified compliance severity level for approved patches in the patch baseline.</p>
+    #[serde(rename = "ApprovedPatchesComplianceLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches_compliance_level: Option<String>,
-    #[doc="<p>The ID of the retrieved patch baseline.</p>"]
-    #[serde(rename="BaselineId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the retrieved patch baseline.</p>
+    #[serde(rename = "BaselineId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub baseline_id: Option<String>,
-    #[doc="<p>The date the patch baseline was created.</p>"]
-    #[serde(rename="CreatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the patch baseline was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the patch baseline.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the patch baseline.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A set of global filters used to exclude patches from the baseline.</p>"]
-    #[serde(rename="GlobalFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A set of global filters used to exclude patches from the baseline.</p>
+    #[serde(rename = "GlobalFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub global_filters: Option<PatchFilterGroup>,
-    #[doc="<p>The date the patch baseline was last modified.</p>"]
-    #[serde(rename="ModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the patch baseline was last modified.</p>
+    #[serde(rename = "ModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub modified_date: Option<f64>,
-    #[doc="<p>The name of the patch baseline.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the patch baseline.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Returns the operating system specified for the patch baseline.</p>"]
-    #[serde(rename="OperatingSystem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returns the operating system specified for the patch baseline.</p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
-    #[doc="<p>Patch groups included in the patch baseline.</p>"]
-    #[serde(rename="PatchGroups")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Patch groups included in the patch baseline.</p>
+    #[serde(rename = "PatchGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_groups: Option<Vec<String>>,
-    #[doc="<p>A list of explicitly rejected patches for the baseline.</p>"]
-    #[serde(rename="RejectedPatches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of explicitly rejected patches for the baseline.</p>
+    #[serde(rename = "RejectedPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rejected_patches: Option<Vec<String>>,
 }
 
-#[doc="<p>Status information about the aggregated associations.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Status information about the aggregated associations.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceAggregatedAssociationOverview {
-    #[doc="<p>Detailed status information about the aggregated associations.</p>"]
-    #[serde(rename="DetailedStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Detailed status information about the aggregated associations.</p>
+    #[serde(rename = "DetailedStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub detailed_status: Option<String>,
-    #[doc="<p>The number of associations for the instance(s).</p>"]
-    #[serde(rename="InstanceAssociationStatusAggregatedCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of associations for the instance(s).</p>
+    #[serde(rename = "InstanceAssociationStatusAggregatedCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_association_status_aggregated_count:
         Option<::std::collections::HashMap<String, i64>>,
 }
 
-#[doc="<p>One or more association documents on the instance. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>One or more association documents on the instance. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceAssociation {
-    #[doc="<p>The association ID.</p>"]
-    #[serde(rename="AssociationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The association ID.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_id: Option<String>,
-    #[doc="<p>Version information for the association on the instance.</p>"]
-    #[serde(rename="AssociationVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Version information for the association on the instance.</p>
+    #[serde(rename = "AssociationVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_version: Option<String>,
-    #[doc="<p>The content of the association document for the instance(s).</p>"]
-    #[serde(rename="Content")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The content of the association document for the instance(s).</p>
+    #[serde(rename = "Content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
-    #[doc="<p>The instance ID.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The instance ID.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
 }
 
-#[doc="<p>An Amazon S3 bucket where you want to store the results of this request.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>An Amazon S3 bucket where you want to store the results of this request.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct InstanceAssociationOutputLocation {
-    #[doc="<p>An Amazon S3 bucket where you want to store the results of this request.</p>"]
-    #[serde(rename="S3Location")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An Amazon S3 bucket where you want to store the results of this request.</p>
+    #[serde(rename = "S3Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_location: Option<S3OutputLocation>,
 }
 
-#[doc="<p>The URL of Amazon S3 bucket where you want to store the results of this request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The URL of Amazon S3 bucket where you want to store the results of this request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceAssociationOutputUrl {
-    #[doc="<p>The URL of Amazon S3 bucket where you want to store the results of this request.</p>"]
-    #[serde(rename="S3OutputUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The URL of Amazon S3 bucket where you want to store the results of this request.</p>
+    #[serde(rename = "S3OutputUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_output_url: Option<S3OutputUrl>,
 }
 
-#[doc="<p>Status information about the instance association.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Status information about the instance association.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceAssociationStatusInfo {
-    #[doc="<p>The association ID.</p>"]
-    #[serde(rename="AssociationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The association ID.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_id: Option<String>,
-    #[doc="<p>The name of the association applied to the instance.</p>"]
-    #[serde(rename="AssociationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the association applied to the instance.</p>
+    #[serde(rename = "AssociationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_name: Option<String>,
-    #[doc="<p>The version of the association applied to the instance.</p>"]
-    #[serde(rename="AssociationVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the association applied to the instance.</p>
+    #[serde(rename = "AssociationVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_version: Option<String>,
-    #[doc="<p>Detailed status information about the instance association.</p>"]
-    #[serde(rename="DetailedStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Detailed status information about the instance association.</p>
+    #[serde(rename = "DetailedStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub detailed_status: Option<String>,
-    #[doc="<p>The association document verions.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The association document verions.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>An error code returned by the request to create the association.</p>"]
-    #[serde(rename="ErrorCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An error code returned by the request to create the association.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    #[doc="<p>The date the instance association executed. </p>"]
-    #[serde(rename="ExecutionDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the instance association executed. </p>
+    #[serde(rename = "ExecutionDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_date: Option<f64>,
-    #[doc="<p>Summary information about association execution.</p>"]
-    #[serde(rename="ExecutionSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Summary information about association execution.</p>
+    #[serde(rename = "ExecutionSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_summary: Option<String>,
-    #[doc="<p>The instance ID where the association was created.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The instance ID where the association was created.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>The name of the association.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the association.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>A URL for an Amazon S3 bucket where you want to store the results of this request.</p>"]
-    #[serde(rename="OutputUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A URL for an Amazon S3 bucket where you want to store the results of this request.</p>
+    #[serde(rename = "OutputUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_url: Option<InstanceAssociationOutputUrl>,
-    #[doc="<p>Status information about the instance association.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Status information about the instance association.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>Describes a filter for a specific list of instances. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes a filter for a specific list of instances. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceInformation {
-    #[doc="<p>The activation ID created by Systems Manager when the server or VM was registered.</p>"]
-    #[serde(rename="ActivationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The activation ID created by Systems Manager when the server or VM was registered.</p>
+    #[serde(rename = "ActivationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub activation_id: Option<String>,
-    #[doc="<p>The version of the SSM Agent running on your Linux instance. </p>"]
-    #[serde(rename="AgentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the SSM Agent running on your Linux instance. </p>
+    #[serde(rename = "AgentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_version: Option<String>,
-    #[doc="<p>Information about the association.</p>"]
-    #[serde(rename="AssociationOverview")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the association.</p>
+    #[serde(rename = "AssociationOverview")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_overview: Option<InstanceAggregatedAssociationOverview>,
-    #[doc="<p>The status of the association.</p>"]
-    #[serde(rename="AssociationStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the association.</p>
+    #[serde(rename = "AssociationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_status: Option<String>,
-    #[doc="<p>The fully qualified host name of the managed instance.</p>"]
-    #[serde(rename="ComputerName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The fully qualified host name of the managed instance.</p>
+    #[serde(rename = "ComputerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub computer_name: Option<String>,
-    #[doc="<p>The IP address of the managed instance.</p>"]
-    #[serde(rename="IPAddress")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IP address of the managed instance.</p>
+    #[serde(rename = "IPAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    #[doc="<p>The Amazon Identity and Access Management (IAM) role assigned to EC2 instances or managed instances. </p>"]
-    #[serde(rename="IamRole")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon Identity and Access Management (IAM) role assigned to EC2 instances or managed instances. </p>
+    #[serde(rename = "IamRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role: Option<String>,
-    #[doc="<p>The instance ID. </p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The instance ID. </p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>Indicates whether latest version of the SSM Agent is running on your instance. </p>"]
-    #[serde(rename="IsLatestVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Indicates whether latest version of the SSM Agent is running on your instance. </p>
+    #[serde(rename = "IsLatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub is_latest_version: Option<bool>,
-    #[doc="<p>The date the association was last executed.</p>"]
-    #[serde(rename="LastAssociationExecutionDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the association was last executed.</p>
+    #[serde(rename = "LastAssociationExecutionDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_association_execution_date: Option<f64>,
-    #[doc="<p>The date and time when agent last pinged Systems Manager service. </p>"]
-    #[serde(rename="LastPingDateTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time when agent last pinged Systems Manager service. </p>
+    #[serde(rename = "LastPingDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_ping_date_time: Option<f64>,
-    #[doc="<p>The last date the association was successfully run.</p>"]
-    #[serde(rename="LastSuccessfulAssociationExecutionDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last date the association was successfully run.</p>
+    #[serde(rename = "LastSuccessfulAssociationExecutionDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_successful_association_execution_date: Option<f64>,
-    #[doc="<p>The name of the managed instance.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the managed instance.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>Connection status of the SSM Agent. </p>"]
-    #[serde(rename="PingStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Connection status of the SSM Agent. </p>
+    #[serde(rename = "PingStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ping_status: Option<String>,
-    #[doc="<p>The name of the operating system platform running on your instance. </p>"]
-    #[serde(rename="PlatformName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the operating system platform running on your instance. </p>
+    #[serde(rename = "PlatformName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub platform_name: Option<String>,
-    #[doc="<p>The operating system platform type. </p>"]
-    #[serde(rename="PlatformType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The operating system platform type. </p>
+    #[serde(rename = "PlatformType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub platform_type: Option<String>,
-    #[doc="<p>The version of the OS platform running on your instance. </p>"]
-    #[serde(rename="PlatformVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the OS platform running on your instance. </p>
+    #[serde(rename = "PlatformVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub platform_version: Option<String>,
-    #[doc="<p>The date the server or VM was registered with AWS as a managed instance.</p>"]
-    #[serde(rename="RegistrationDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the server or VM was registered with AWS as a managed instance.</p>
+    #[serde(rename = "RegistrationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub registration_date: Option<f64>,
-    #[doc="<p>The type of instance. Instances are either EC2 instances or managed instances. </p>"]
-    #[serde(rename="ResourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of instance. Instances are either EC2 instances or managed instances. </p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
 }
 
-#[doc="<p>Describes a filter for a specific list of instances. </p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Describes a filter for a specific list of instances. </p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct InstanceInformationFilter {
-    #[doc="<p>The name of the filter. </p>"]
-    #[serde(rename="key")]
+    /// <p>The name of the filter. </p>
+    #[serde(rename = "key")]
     pub key: String,
-    #[doc="<p>The filter values.</p>"]
-    #[serde(rename="valueSet")]
+    /// <p>The filter values.</p>
+    #[serde(rename = "valueSet")]
     pub value_set: Vec<String>,
 }
 
-#[doc="<p>The filters to describe or get information about your managed instances.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The filters to describe or get information about your managed instances.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct InstanceInformationStringFilter {
-    #[doc="<p>The filter key name to describe your instances. For example:</p> <p>\"InstanceIds\"|\"AgentVersion\"|\"PingStatus\"|\"PlatformTypes\"|\"ActivationIds\"|\"IamRole\"|\"ResourceType\"|\"AssociationStatus\"|\"Tag Key\"</p>"]
-    #[serde(rename="Key")]
+    /// <p>The filter key name to describe your instances. For example:</p> <p>"InstanceIds"|"AgentVersion"|"PingStatus"|"PlatformTypes"|"ActivationIds"|"IamRole"|"ResourceType"|"AssociationStatus"|"Tag Key"</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>The filter values.</p>"]
-    #[serde(rename="Values")]
+    /// <p>The filter values.</p>
+    #[serde(rename = "Values")]
     pub values: Vec<String>,
 }
 
-#[doc="<p>Defines the high-level patch compliance state for a managed instance, providing information about the number of installed, missing, not applicable, and failed patches along with metadata about the operation when this information was gathered for the instance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Defines the high-level patch compliance state for a managed instance, providing information about the number of installed, missing, not applicable, and failed patches along with metadata about the operation when this information was gathered for the instance.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstancePatchState {
-    #[doc="<p>The ID of the patch baseline used to patch the instance.</p>"]
-    #[serde(rename="BaselineId")]
+    /// <p>The ID of the patch baseline used to patch the instance.</p>
+    #[serde(rename = "BaselineId")]
     pub baseline_id: String,
-    #[doc="<p>The number of patches from the patch baseline that were attempted to be installed during the last patching operation, but failed to install.</p>"]
-    #[serde(rename="FailedCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of patches from the patch baseline that were attempted to be installed during the last patching operation, but failed to install.</p>
+    #[serde(rename = "FailedCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_count: Option<i64>,
-    #[doc="<p>The number of patches from the patch baseline that are installed on the instance.</p>"]
-    #[serde(rename="InstalledCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of patches from the patch baseline that are installed on the instance.</p>
+    #[serde(rename = "InstalledCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub installed_count: Option<i64>,
-    #[doc="<p>The number of patches not specified in the patch baseline that are installed on the instance.</p>"]
-    #[serde(rename="InstalledOtherCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of patches not specified in the patch baseline that are installed on the instance.</p>
+    #[serde(rename = "InstalledOtherCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub installed_other_count: Option<i64>,
-    #[doc="<p>The ID of the managed instance the high-level patch compliance information was collected for.</p>"]
-    #[serde(rename="InstanceId")]
+    /// <p>The ID of the managed instance the high-level patch compliance information was collected for.</p>
+    #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    #[doc="<p>The number of patches from the patch baseline that are applicable for the instance but aren't currently installed.</p>"]
-    #[serde(rename="MissingCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of patches from the patch baseline that are applicable for the instance but aren't currently installed.</p>
+    #[serde(rename = "MissingCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub missing_count: Option<i64>,
-    #[doc="<p>The number of patches from the patch baseline that aren't applicable for the instance and hence aren't installed on the instance.</p>"]
-    #[serde(rename="NotApplicableCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of patches from the patch baseline that aren't applicable for the instance and hence aren't installed on the instance.</p>
+    #[serde(rename = "NotApplicableCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub not_applicable_count: Option<i64>,
-    #[doc="<p>The type of patching operation that was performed: SCAN (assess patch compliance state) or INSTALL (install missing patches).</p>"]
-    #[serde(rename="Operation")]
+    /// <p>The type of patching operation that was performed: SCAN (assess patch compliance state) or INSTALL (install missing patches).</p>
+    #[serde(rename = "Operation")]
     pub operation: String,
-    #[doc="<p>The time the most recent patching operation completed on the instance.</p>"]
-    #[serde(rename="OperationEndTime")]
+    /// <p>The time the most recent patching operation completed on the instance.</p>
+    #[serde(rename = "OperationEndTime")]
     pub operation_end_time: f64,
-    #[doc="<p>The time the most recent patching operation was started on the instance.</p>"]
-    #[serde(rename="OperationStartTime")]
+    /// <p>The time the most recent patching operation was started on the instance.</p>
+    #[serde(rename = "OperationStartTime")]
     pub operation_start_time: f64,
-    #[doc="<p>Placeholder information, this field will always be empty in the current release of the service.</p>"]
-    #[serde(rename="OwnerInformation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Placeholder information, this field will always be empty in the current release of the service.</p>
+    #[serde(rename = "OwnerInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_information: Option<String>,
-    #[doc="<p>The name of the patch group the managed instance belongs to.</p>"]
-    #[serde(rename="PatchGroup")]
+    /// <p>The name of the patch group the managed instance belongs to.</p>
+    #[serde(rename = "PatchGroup")]
     pub patch_group: String,
-    #[doc="<p>The ID of the patch baseline snapshot used during the patching operation when this compliance data was collected.</p>"]
-    #[serde(rename="SnapshotId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the patch baseline snapshot used during the patching operation when this compliance data was collected.</p>
+    #[serde(rename = "SnapshotId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub snapshot_id: Option<String>,
 }
 
-#[doc="<p>Defines a filter used in DescribeInstancePatchStatesForPatchGroup used to scope down the information returned by the API.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Defines a filter used in DescribeInstancePatchStatesForPatchGroup used to scope down the information returned by the API.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct InstancePatchStateFilter {
-    #[doc="<p>The key for the filter. Supported values are FailedCount, InstalledCount, InstalledOtherCount, MissingCount and NotApplicableCount.</p>"]
-    #[serde(rename="Key")]
+    /// <p>The key for the filter. Supported values are FailedCount, InstalledCount, InstalledOtherCount, MissingCount and NotApplicableCount.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>The type of comparison that should be performed for the value: Equal, NotEqual, LessThan or GreaterThan.</p>"]
-    #[serde(rename="Type")]
+    /// <p>The type of comparison that should be performed for the value: Equal, NotEqual, LessThan or GreaterThan.</p>
+    #[serde(rename = "Type")]
     pub type_: String,
-    #[doc="<p>The value for the filter, must be an integer greater than or equal to 0.</p>"]
-    #[serde(rename="Values")]
+    /// <p>The value for the filter, must be an integer greater than or equal to 0.</p>
+    #[serde(rename = "Values")]
     pub values: Vec<String>,
 }
 
-#[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct InventoryFilter {
-    #[doc="<p>The name of the filter key.</p>"]
-    #[serde(rename="Key")]
+    /// <p>The name of the filter key.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>The type of filter. Valid values include the following: \"Equal\"|\"NotEqual\"|\"BeginWith\"|\"LessThan\"|\"GreaterThan\"</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of filter. Valid values include the following: "Equal"|"NotEqual"|"BeginWith"|"LessThan"|"GreaterThan"</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>Inventory filter values. Example: inventory filter where instance IDs are specified as values Key=AWS:InstanceInformation.InstanceId,Values= i-a12b3c4d5e6g, i-1a2b3c4d5e6,Type=Equal </p>"]
-    #[serde(rename="Values")]
+    /// <p>Inventory filter values. Example: inventory filter where instance IDs are specified as values Key=AWS:InstanceInformation.InstanceId,Values= i-a12b3c4d5e6g, i-1a2b3c4d5e6,Type=Equal </p>
+    #[serde(rename = "Values")]
     pub values: Vec<String>,
 }
 
-#[doc="<p>Information collected from managed instances based on your inventory policy document</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Information collected from managed instances based on your inventory policy document</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct InventoryItem {
-    #[doc="<p>The time the inventory information was collected.</p>"]
-    #[serde(rename="CaptureTime")]
+    /// <p>The time the inventory information was collected.</p>
+    #[serde(rename = "CaptureTime")]
     pub capture_time: String,
-    #[doc="<p>The inventory data of the inventory type.</p>"]
-    #[serde(rename="Content")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The inventory data of the inventory type.</p>
+    #[serde(rename = "Content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<Vec<::std::collections::HashMap<String, String>>>,
-    #[doc="<p>MD5 hash of the inventory item type contents. The content hash is used to determine whether to update inventory information. The PutInventory API does not update the inventory item type contents if the MD5 hash has not changed since last update. </p>"]
-    #[serde(rename="ContentHash")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>MD5 hash of the inventory item type contents. The content hash is used to determine whether to update inventory information. The PutInventory API does not update the inventory item type contents if the MD5 hash has not changed since last update. </p>
+    #[serde(rename = "ContentHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content_hash: Option<String>,
-    #[doc="<p>A map of associated properties for a specified inventory type. For example, with this attribute, you can specify the <code>ExecutionId</code>, <code>ExecutionType</code>, <code>ComplianceType</code> properties of the <code>AWS:ComplianceItem</code> type.</p>"]
-    #[serde(rename="Context")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A map of associated properties for a specified inventory type. For example, with this attribute, you can specify the <code>ExecutionId</code>, <code>ExecutionType</code>, <code>ComplianceType</code> properties of the <code>AWS:ComplianceItem</code> type.</p>
+    #[serde(rename = "Context")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub context: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>The schema version for the inventory item.</p>"]
-    #[serde(rename="SchemaVersion")]
+    /// <p>The schema version for the inventory item.</p>
+    #[serde(rename = "SchemaVersion")]
     pub schema_version: String,
-    #[doc="<p>The name of the inventory type. Default inventory item type names start with AWS. Custom inventory type names will start with Custom. Default inventory item types include the following: AWS:AWSComponent, AWS:Application, AWS:InstanceInformation, AWS:Network, and AWS:WindowsUpdate.</p>"]
-    #[serde(rename="TypeName")]
+    /// <p>The name of the inventory type. Default inventory item type names start with AWS. Custom inventory type names will start with Custom. Default inventory item types include the following: AWS:AWSComponent, AWS:Application, AWS:InstanceInformation, AWS:Network, and AWS:WindowsUpdate.</p>
+    #[serde(rename = "TypeName")]
     pub type_name: String,
 }
 
-#[doc="<p>Attributes are the entries within the inventory item content. It contains name and value.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Attributes are the entries within the inventory item content. It contains name and value.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InventoryItemAttribute {
-    #[doc="<p>The data type of the inventory item attribute. </p>"]
-    #[serde(rename="DataType")]
+    /// <p>The data type of the inventory item attribute. </p>
+    #[serde(rename = "DataType")]
     pub data_type: String,
-    #[doc="<p>Name of the inventory item attribute.</p>"]
-    #[serde(rename="Name")]
+    /// <p>Name of the inventory item attribute.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[doc="<p>The inventory item schema definition. Users can use this to compose inventory query filters.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The inventory item schema definition. Users can use this to compose inventory query filters.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InventoryItemSchema {
-    #[doc="<p>The schema attributes for inventory. This contains data type and attribute name.</p>"]
-    #[serde(rename="Attributes")]
+    /// <p>The schema attributes for inventory. This contains data type and attribute name.</p>
+    #[serde(rename = "Attributes")]
     pub attributes: Vec<InventoryItemAttribute>,
-    #[doc="<p>The name of the inventory type. Default inventory item type names start with AWS. Custom inventory type names will start with Custom. Default inventory item types include the following: AWS:AWSComponent, AWS:Application, AWS:InstanceInformation, AWS:Network, and AWS:WindowsUpdate.</p>"]
-    #[serde(rename="TypeName")]
+    /// <p>The name of the inventory type. Default inventory item type names start with AWS. Custom inventory type names will start with Custom. Default inventory item types include the following: AWS:AWSComponent, AWS:Application, AWS:InstanceInformation, AWS:Network, and AWS:WindowsUpdate.</p>
+    #[serde(rename = "TypeName")]
     pub type_name: String,
-    #[doc="<p>The schema version for the inventory item.</p>"]
-    #[serde(rename="Version")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The schema version for the inventory item.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-#[doc="<p>Inventory query results.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Inventory query results.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InventoryResultEntity {
-    #[doc="<p>The data section in the inventory result entity json.</p>"]
-    #[serde(rename="Data")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The data section in the inventory result entity json.</p>
+    #[serde(rename = "Data")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<::std::collections::HashMap<String, InventoryResultItem>>,
-    #[doc="<p>ID of the inventory result entity. For example, for managed instance inventory the result will be the managed instance ID. For EC2 instance inventory, the result will be the instance ID. </p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>ID of the inventory result entity. For example, for managed instance inventory the result will be the managed instance ID. For EC2 instance inventory, the result will be the instance ID. </p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
 }
 
-#[doc="<p>The inventory result item.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The inventory result item.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct InventoryResultItem {
-    #[doc="<p>The time inventory item data was captured.</p>"]
-    #[serde(rename="CaptureTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time inventory item data was captured.</p>
+    #[serde(rename = "CaptureTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub capture_time: Option<String>,
-    #[doc="<p>Contains all the inventory data of the item type. Results include attribute names and values. </p>"]
-    #[serde(rename="Content")]
+    /// <p>Contains all the inventory data of the item type. Results include attribute names and values. </p>
+    #[serde(rename = "Content")]
     pub content: Vec<::std::collections::HashMap<String, String>>,
-    #[doc="<p>MD5 hash of the inventory item type contents. The content hash is used to determine whether to update inventory information. The PutInventory API does not update the inventory item type contents if the MD5 hash has not changed since last update. </p>"]
-    #[serde(rename="ContentHash")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>MD5 hash of the inventory item type contents. The content hash is used to determine whether to update inventory information. The PutInventory API does not update the inventory item type contents if the MD5 hash has not changed since last update. </p>
+    #[serde(rename = "ContentHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content_hash: Option<String>,
-    #[doc="<p>The schema version for the inventory result item/</p>"]
-    #[serde(rename="SchemaVersion")]
+    /// <p>The schema version for the inventory result item/</p>
+    #[serde(rename = "SchemaVersion")]
     pub schema_version: String,
-    #[doc="<p>The name of the inventory result item type.</p>"]
-    #[serde(rename="TypeName")]
+    /// <p>The name of the inventory result item type.</p>
+    #[serde(rename = "TypeName")]
     pub type_name: String,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAssociationVersionsRequest {
-    #[doc="<p>The association ID for which you want to view all versions.</p>"]
-    #[serde(rename="AssociationId")]
+    /// <p>The association ID for which you want to view all versions.</p>
+    #[serde(rename = "AssociationId")]
     pub association_id: String,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A token to start the list. Use this token to get the next set of results. </p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token to start the list. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAssociationVersionsResult {
-    #[doc="<p>Information about all versions of the association for the specified association ID.</p>"]
-    #[serde(rename="AssociationVersions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about all versions of the association for the specified association ID.</p>
+    #[serde(rename = "AssociationVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_versions: Option<Vec<AssociationVersionInfo>>,
-    #[doc="<p>The token for the next set of items to return. Use this token to get the next set of results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAssociationsRequest {
-    #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
-    #[serde(rename="AssociationFilterList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+    #[serde(rename = "AssociationFilterList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_filter_list: Option<Vec<AssociationFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAssociationsResult {
-    #[doc="<p>The associations.</p>"]
-    #[serde(rename="Associations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The associations.</p>
+    #[serde(rename = "Associations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub associations: Option<Vec<Association>>,
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListCommandInvocationsRequest {
-    #[doc="<p>(Optional) The invocations for a specific command ID.</p>"]
-    #[serde(rename="CommandId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) The invocations for a specific command ID.</p>
+    #[serde(rename = "CommandId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub command_id: Option<String>,
-    #[doc="<p>(Optional) If set this returns the response of the command executions and any command output. By default this is set to False. </p>"]
-    #[serde(rename="Details")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) If set this returns the response of the command executions and any command output. By default this is set to False. </p>
+    #[serde(rename = "Details")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub details: Option<bool>,
-    #[doc="<p>(Optional) One or more filters. Use a filter to return a more specific list of results.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) One or more filters. Use a filter to return a more specific list of results.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<CommandFilter>>,
-    #[doc="<p>(Optional) The command execution details for a specific instance ID.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) The command execution details for a specific instance ID.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>(Optional) The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListCommandInvocationsResult {
-    #[doc="<p>(Optional) A list of all invocations. </p>"]
-    #[serde(rename="CommandInvocations")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) A list of all invocations. </p>
+    #[serde(rename = "CommandInvocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub command_invocations: Option<Vec<CommandInvocation>>,
-    #[doc="<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListCommandsRequest {
-    #[doc="<p>(Optional) If provided, lists only the specified command.</p>"]
-    #[serde(rename="CommandId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) If provided, lists only the specified command.</p>
+    #[serde(rename = "CommandId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub command_id: Option<String>,
-    #[doc="<p>(Optional) One or more filters. Use a filter to return a more specific list of results. </p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) One or more filters. Use a filter to return a more specific list of results. </p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<CommandFilter>>,
-    #[doc="<p>(Optional) Lists commands issued against this instance ID.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Lists commands issued against this instance ID.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>(Optional) The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListCommandsResult {
-    #[doc="<p>(Optional) The list of commands requested by the user. </p>"]
-    #[serde(rename="Commands")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) The list of commands requested by the user. </p>
+    #[serde(rename = "Commands")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub commands: Option<Vec<Command>>,
-    #[doc="<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListComplianceItemsRequest {
-    #[doc="<p>One or more compliance filters. Use a filter to return a more specific list of results.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more compliance filters. Use a filter to return a more specific list of results.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<ComplianceStringFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A token to start the list. Use this token to get the next set of results. </p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token to start the list. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The ID for the resources from which to get compliance information. Currently, you can only specify one resource ID.</p>"]
-    #[serde(rename="ResourceIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID for the resources from which to get compliance information. Currently, you can only specify one resource ID.</p>
+    #[serde(rename = "ResourceIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_ids: Option<Vec<String>>,
-    #[doc="<p>The type of resource from which to get compliance information. Currently, the only supported resource type is <code>ManagedInstance</code>.</p>"]
-    #[serde(rename="ResourceTypes")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of resource from which to get compliance information. Currently, the only supported resource type is <code>ManagedInstance</code>.</p>
+    #[serde(rename = "ResourceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListComplianceItemsResult {
-    #[doc="<p>A list of compliance information for the specified resource ID. </p>"]
-    #[serde(rename="ComplianceItems")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of compliance information for the specified resource ID. </p>
+    #[serde(rename = "ComplianceItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_items: Option<Vec<ComplianceItem>>,
-    #[doc="<p>The token for the next set of items to return. Use this token to get the next set of results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListComplianceSummariesRequest {
-    #[doc="<p>One or more compliance or inventory filters. Use a filter to return a more specific list of results.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more compliance or inventory filters. Use a filter to return a more specific list of results.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<ComplianceStringFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. Currently, you can specify null or 50. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. Currently, you can specify null or 50. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A token to start the list. Use this token to get the next set of results. </p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token to start the list. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListComplianceSummariesResult {
-    #[doc="<p>A list of compliant and non-compliant summary counts based on compliance types. For example, this call returns State Manager associations, patches, or custom compliance types according to the filter criteria that you specified.</p>"]
-    #[serde(rename="ComplianceSummaryItems")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of compliant and non-compliant summary counts based on compliance types. For example, this call returns State Manager associations, patches, or custom compliance types according to the filter criteria that you specified.</p>
+    #[serde(rename = "ComplianceSummaryItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_summary_items: Option<Vec<ComplianceSummaryItem>>,
-    #[doc="<p>The token for the next set of items to return. Use this token to get the next set of results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDocumentVersionsRequest {
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The name of the document about which you want version information.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the document about which you want version information.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDocumentVersionsResult {
-    #[doc="<p>The document versions.</p>"]
-    #[serde(rename="DocumentVersions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document versions.</p>
+    #[serde(rename = "DocumentVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_versions: Option<Vec<DocumentVersionInfo>>,
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDocumentsRequest {
-    #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
-    #[serde(rename="DocumentFilterList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+    #[serde(rename = "DocumentFilterList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_filter_list: Option<Vec<DocumentFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDocumentsResult {
-    #[doc="<p>The names of the SSM documents.</p>"]
-    #[serde(rename="DocumentIdentifiers")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The names of the SSM documents.</p>
+    #[serde(rename = "DocumentIdentifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_identifiers: Option<Vec<DocumentIdentifier>>,
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListInventoryEntriesRequest {
-    #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<InventoryFilter>>,
-    #[doc="<p>The instance ID for which you want inventory information.</p>"]
-    #[serde(rename="InstanceId")]
+    /// <p>The instance ID for which you want inventory information.</p>
+    #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The type of inventory item for which you want information.</p>"]
-    #[serde(rename="TypeName")]
+    /// <p>The type of inventory item for which you want information.</p>
+    #[serde(rename = "TypeName")]
     pub type_name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListInventoryEntriesResult {
-    #[doc="<p>The time that inventory information was collected for the instance(s).</p>"]
-    #[serde(rename="CaptureTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time that inventory information was collected for the instance(s).</p>
+    #[serde(rename = "CaptureTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub capture_time: Option<String>,
-    #[doc="<p>A list of inventory items on the instance(s).</p>"]
-    #[serde(rename="Entries")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of inventory items on the instance(s).</p>
+    #[serde(rename = "Entries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub entries: Option<Vec<::std::collections::HashMap<String, String>>>,
-    #[doc="<p>The instance ID targeted by the request to query inventory information.</p>"]
-    #[serde(rename="InstanceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The instance ID targeted by the request to query inventory information.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>The inventory schema version used by the instance(s).</p>"]
-    #[serde(rename="SchemaVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The inventory schema version used by the instance(s).</p>
+    #[serde(rename = "SchemaVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_version: Option<String>,
-    #[doc="<p>The type of inventory item returned by the request.</p>"]
-    #[serde(rename="TypeName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of inventory item returned by the request.</p>
+    #[serde(rename = "TypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_name: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListResourceComplianceSummariesRequest {
-    #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
-    #[serde(rename="Filters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<ComplianceStringFilter>>,
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A token to start the list. Use this token to get the next set of results. </p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token to start the list. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListResourceComplianceSummariesResult {
-    #[doc="<p>The token for the next set of items to return. Use this token to get the next set of results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A summary count for specified or targeted managed instances. Summary count includes information about compliant and non-compliant State Manager associations, patch status, or custom items according to the filter criteria that you specify. </p>"]
-    #[serde(rename="ResourceComplianceSummaryItems")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A summary count for specified or targeted managed instances. Summary count includes information about compliant and non-compliant State Manager associations, patch status, or custom items according to the filter criteria that you specify. </p>
+    #[serde(rename = "ResourceComplianceSummaryItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_compliance_summary_items: Option<Vec<ResourceComplianceSummaryItem>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListResourceDataSyncRequest {
-    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    #[serde(rename="MaxResults")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    #[doc="<p>A token to start the list. Use this token to get the next set of results. </p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A token to start the list. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListResourceDataSyncResult {
-    #[doc="<p>The token for the next set of items to return. Use this token to get the next set of results.</p>"]
-    #[serde(rename="NextToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[doc="<p>A list of your current Resource Data Sync configurations and their statuses.</p>"]
-    #[serde(rename="ResourceDataSyncItems")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of your current Resource Data Sync configurations and their statuses.</p>
+    #[serde(rename = "ResourceDataSyncItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_data_sync_items: Option<Vec<ResourceDataSyncItem>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTagsForResourceRequest {
-    #[doc="<p>The resource ID for which you want to see a list of tags.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The resource ID for which you want to see a list of tags.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    #[doc="<p>Returns a list of tags for a specific resource type.</p>"]
-    #[serde(rename="ResourceType")]
+    /// <p>Returns a list of tags for a specific resource type.</p>
+    #[serde(rename = "ResourceType")]
     pub resource_type: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTagsForResourceResult {
-    #[doc="<p>A list of tags.</p>"]
-    #[serde(rename="TagList")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of tags.</p>
+    #[serde(rename = "TagList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_list: Option<Vec<Tag>>,
 }
 
-#[doc="<p>Information about an Amazon S3 bucket to write instance-level logs to.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about an Amazon S3 bucket to write instance-level logs to.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct LoggingInfo {
-    #[doc="<p>The name of an Amazon S3 bucket where execution logs are stored .</p>"]
-    #[serde(rename="S3BucketName")]
+    /// <p>The name of an Amazon S3 bucket where execution logs are stored .</p>
+    #[serde(rename = "S3BucketName")]
     pub s3_bucket_name: String,
-    #[doc="<p>(Optional) The Amazon S3 bucket subfolder. </p>"]
-    #[serde(rename="S3KeyPrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) The Amazon S3 bucket subfolder. </p>
+    #[serde(rename = "S3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_key_prefix: Option<String>,
-    #[doc="<p>The region where the Amazon S3 bucket is located.</p>"]
-    #[serde(rename="S3Region")]
+    /// <p>The region where the Amazon S3 bucket is located.</p>
+    #[serde(rename = "S3Region")]
     pub s3_region: String,
 }
 
-#[doc="<p>The parameters for an AUTOMATION task type.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The parameters for an AUTOMATION task type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MaintenanceWindowAutomationParameters {
-    #[doc="<p>The version of an Automation document to use during task execution.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of an Automation document to use during task execution.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The parameters for the AUTOMATION task.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters for the AUTOMATION task.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
 }
 
-#[doc="<p>Describes the information about an execution of a Maintenance Window. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the information about an execution of a Maintenance Window. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MaintenanceWindowExecution {
-    #[doc="<p>The time the execution finished.</p>"]
-    #[serde(rename="EndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the execution finished.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>The time the execution started.</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the execution started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>The status of the execution.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the execution.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The details explaining the Status. Only available for certain status values.</p>"]
-    #[serde(rename="StatusDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The details explaining the Status. Only available for certain status values.</p>
+    #[serde(rename = "StatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
-    #[doc="<p>The ID of the Maintenance Window execution.</p>"]
-    #[serde(rename="WindowExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Maintenance Window execution.</p>
+    #[serde(rename = "WindowExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_id: Option<String>,
-    #[doc="<p>The ID of the Maintenance Window.</p>"]
-    #[serde(rename="WindowId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Maintenance Window.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
 }
 
-#[doc="<p>Information about a task execution performed as part of a Maintenance Window execution.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a task execution performed as part of a Maintenance Window execution.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MaintenanceWindowExecutionTaskIdentity {
-    #[doc="<p>The time the task execution finished.</p>"]
-    #[serde(rename="EndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the task execution finished.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>The time the task execution started.</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the task execution started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>The status of the task execution.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the task execution.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The details explaining the status of the task execution. Only available for certain status values.</p>"]
-    #[serde(rename="StatusDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The details explaining the status of the task execution. Only available for certain status values.</p>
+    #[serde(rename = "StatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
-    #[doc="<p>The ARN of the executed task.</p>"]
-    #[serde(rename="TaskArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ARN of the executed task.</p>
+    #[serde(rename = "TaskArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
-    #[doc="<p>The ID of the specific task execution in the Maintenance Window execution.</p>"]
-    #[serde(rename="TaskExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the specific task execution in the Maintenance Window execution.</p>
+    #[serde(rename = "TaskExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_execution_id: Option<String>,
-    #[doc="<p>The type of executed task.</p>"]
-    #[serde(rename="TaskType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of executed task.</p>
+    #[serde(rename = "TaskType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_type: Option<String>,
-    #[doc="<p>The ID of the Maintenance Window execution that ran the task.</p>"]
-    #[serde(rename="WindowExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Maintenance Window execution that ran the task.</p>
+    #[serde(rename = "WindowExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_id: Option<String>,
 }
 
-#[doc="<p>Describes the information about a task invocation for a particular target as part of a task execution performed as part of a Maintenance Window execution.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Describes the information about a task invocation for a particular target as part of a task execution performed as part of a Maintenance Window execution.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
-    #[doc="<p>The time the invocation finished.</p>"]
-    #[serde(rename="EndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the invocation finished.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    #[doc="<p>The ID of the action performed in the service that actually handled the task invocation. If the task type is RUN_COMMAND, this value is the command ID.</p>"]
-    #[serde(rename="ExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the action performed in the service that actually handled the task invocation. If the task type is RUN_COMMAND, this value is the command ID.</p>
+    #[serde(rename = "ExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_id: Option<String>,
-    #[doc="<p>The ID of the task invocation.</p>"]
-    #[serde(rename="InvocationId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the task invocation.</p>
+    #[serde(rename = "InvocationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub invocation_id: Option<String>,
-    #[doc="<p>User-provided value that was specified when the target was registered with the Maintenance Window. This was also included in any CloudWatch events raised during the task invocation.</p>"]
-    #[serde(rename="OwnerInformation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-provided value that was specified when the target was registered with the Maintenance Window. This was also included in any CloudWatch events raised during the task invocation.</p>
+    #[serde(rename = "OwnerInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_information: Option<String>,
-    #[doc="<p>The parameters that were provided for the invocation when it was executed.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters that were provided for the invocation when it was executed.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<String>,
-    #[doc="<p>The time the invocation started.</p>"]
-    #[serde(rename="StartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The time the invocation started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    #[doc="<p>The status of the task invocation.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status of the task invocation.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[doc="<p>The details explaining the status of the task invocation. Only available for certain Status values. </p>"]
-    #[serde(rename="StatusDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The details explaining the status of the task invocation. Only available for certain Status values. </p>
+    #[serde(rename = "StatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
-    #[doc="<p>The ID of the specific task execution in the Maintenance Window execution.</p>"]
-    #[serde(rename="TaskExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the specific task execution in the Maintenance Window execution.</p>
+    #[serde(rename = "TaskExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_execution_id: Option<String>,
-    #[doc="<p>The task type.</p>"]
-    #[serde(rename="TaskType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The task type.</p>
+    #[serde(rename = "TaskType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_type: Option<String>,
-    #[doc="<p>The ID of the Maintenance Window execution that ran the task.</p>"]
-    #[serde(rename="WindowExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Maintenance Window execution that ran the task.</p>
+    #[serde(rename = "WindowExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_execution_id: Option<String>,
-    #[doc="<p>The ID of the target definition in this Maintenance Window the invocation was performed for.</p>"]
-    #[serde(rename="WindowTargetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the target definition in this Maintenance Window the invocation was performed for.</p>
+    #[serde(rename = "WindowTargetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_target_id: Option<String>,
 }
 
-#[doc="<p>Filter used in the request.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Filter used in the request.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct MaintenanceWindowFilter {
-    #[doc="<p>The name of the filter.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The filter values.</p>"]
-    #[serde(rename="Values")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The filter values.</p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
-#[doc="<p>Information about the Maintenance Window.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about the Maintenance Window.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MaintenanceWindowIdentity {
-    #[doc="<p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>"]
-    #[serde(rename="Cutoff")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>
+    #[serde(rename = "Cutoff")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cutoff: Option<i64>,
-    #[doc="<p>A description of the Maintenance Window.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the Maintenance Window.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The duration of the Maintenance Window in hours.</p>"]
-    #[serde(rename="Duration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The duration of the Maintenance Window in hours.</p>
+    #[serde(rename = "Duration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<i64>,
-    #[doc="<p>Whether the Maintenance Window is enabled.</p>"]
-    #[serde(rename="Enabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether the Maintenance Window is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    #[doc="<p>The name of the Maintenance Window.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Maintenance Window.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The ID of the Maintenance Window.</p>"]
-    #[serde(rename="WindowId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Maintenance Window.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
 }
 
-#[doc="<p>The parameters for a LAMBDA task type.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The parameters for a LAMBDA task type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MaintenanceWindowLambdaParameters {
-    #[doc="<p>Pass client-specific information to the Lambda function that you are invoking. You can then process the client information in your Lambda function as you choose through the context variable.</p>"]
-    #[serde(rename="ClientContext")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Pass client-specific information to the Lambda function that you are invoking. You can then process the client information in your Lambda function as you choose through the context variable.</p>
+    #[serde(rename = "ClientContext")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_context: Option<String>,
-    #[doc="<p>JSON to provide to your Lambda function as input.</p>"]
-    #[serde(rename="Payload")]
-    #[serde(
-                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
-                            default,
-                        )]
+    /// <p>JSON to provide to your Lambda function as input.</p>
+    #[serde(rename = "Payload")]
+    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
     pub payload: Option<Vec<u8>>,
-    #[doc="<p>(Optional) Specify a Lambda function version or alias name. If you specify a function version, the action uses the qualified function ARN to invoke a specific Lambda function. If you specify an alias name, the action uses the alias ARN to invoke the Lambda function version to which the alias points.</p>"]
-    #[serde(rename="Qualifier")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) Specify a Lambda function version or alias name. If you specify a function version, the action uses the qualified function ARN to invoke a specific Lambda function. If you specify an alias name, the action uses the alias ARN to invoke the Lambda function version to which the alias points.</p>
+    #[serde(rename = "Qualifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub qualifier: Option<String>,
 }
 
-#[doc="<p>The parameters for a RUN_COMMAND task type.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The parameters for a RUN_COMMAND task type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MaintenanceWindowRunCommandParameters {
-    #[doc="<p>Information about the command(s) to execute.</p>"]
-    #[serde(rename="Comment")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the command(s) to execute.</p>
+    #[serde(rename = "Comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
-    #[doc="<p>The SHA-256 or SHA-1 hash created by the system when the document was created. SHA-1 hashes have been deprecated.</p>"]
-    #[serde(rename="DocumentHash")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The SHA-256 or SHA-1 hash created by the system when the document was created. SHA-1 hashes have been deprecated.</p>
+    #[serde(rename = "DocumentHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_hash: Option<String>,
-    #[doc="<p>SHA-256 or SHA-1. SHA-1 hashes have been deprecated.</p>"]
-    #[serde(rename="DocumentHashType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>SHA-256 or SHA-1. SHA-1 hashes have been deprecated.</p>
+    #[serde(rename = "DocumentHashType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_hash_type: Option<String>,
-    #[doc="<p>Configurations for sending notifications about command status changes on a per-instance basis.</p>"]
-    #[serde(rename="NotificationConfig")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Configurations for sending notifications about command status changes on a per-instance basis.</p>
+    #[serde(rename = "NotificationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_config: Option<NotificationConfig>,
-    #[doc="<p>The name of the Amazon S3 bucket.</p>"]
-    #[serde(rename="OutputS3BucketName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Amazon S3 bucket.</p>
+    #[serde(rename = "OutputS3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_bucket_name: Option<String>,
-    #[doc="<p>The Amazon S3 bucket subfolder.</p>"]
-    #[serde(rename="OutputS3KeyPrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon S3 bucket subfolder.</p>
+    #[serde(rename = "OutputS3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_key_prefix: Option<String>,
-    #[doc="<p>The parameters for the RUN_COMMAND task execution.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters for the RUN_COMMAND task execution.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>The IAM service role to assume during task execution.</p>"]
-    #[serde(rename="ServiceRoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IAM service role to assume during task execution.</p>
+    #[serde(rename = "ServiceRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    #[doc="<p>If this time is reached and the command has not already started executing, it doesn not execute.</p>"]
-    #[serde(rename="TimeoutSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If this time is reached and the command has not already started executing, it doesn not execute.</p>
+    #[serde(rename = "TimeoutSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_seconds: Option<i64>,
 }
 
-#[doc="<p>The parameters for the STEP_FUNCTION execution.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The parameters for the STEP_FUNCTION execution.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MaintenanceWindowStepFunctionsParameters {
-    #[doc="<p>The inputs for the STEP_FUNCTION task.</p>"]
-    #[serde(rename="Input")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The inputs for the STEP_FUNCTION task.</p>
+    #[serde(rename = "Input")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
-    #[doc="<p>The name of the STEP_FUNCTION task.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the STEP_FUNCTION task.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[doc="<p>The target registered with the Maintenance Window.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The target registered with the Maintenance Window.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MaintenanceWindowTarget {
-    #[doc="<p>A description of the target.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the target.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The target name.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The target name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>"]
-    #[serde(rename="OwnerInformation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>
+    #[serde(rename = "OwnerInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_information: Option<String>,
-    #[doc="<p>The type of target.</p>"]
-    #[serde(rename="ResourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of target.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
-    #[doc="<p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    #[doc="<p>The Maintenance Window ID where the target is registered.</p>"]
-    #[serde(rename="WindowId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Maintenance Window ID where the target is registered.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
-    #[doc="<p>The ID of the target.</p>"]
-    #[serde(rename="WindowTargetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the target.</p>
+    #[serde(rename = "WindowTargetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_target_id: Option<String>,
 }
 
-#[doc="<p>Information about a task defined for a Maintenance Window.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a task defined for a Maintenance Window.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct MaintenanceWindowTask {
-    #[doc="<p>A description of the task.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the task.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>Information about an Amazon S3 bucket to write task-level logs to.</p>"]
-    #[serde(rename="LoggingInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about an Amazon S3 bucket to write task-level logs to.</p>
+    #[serde(rename = "LoggingInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
-    #[doc="<p>The maximum number of targets this task can be run for in parallel.</p>"]
-    #[serde(rename="MaxConcurrency")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of targets this task can be run for in parallel.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrency: Option<String>,
-    #[doc="<p>The maximum number of errors allowed before this task stops being scheduled.</p>"]
-    #[serde(rename="MaxErrors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of errors allowed before this task stops being scheduled.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_errors: Option<String>,
-    #[doc="<p>The task name.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The task name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The priority of the task in the Maintenance Window. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>"]
-    #[serde(rename="Priority")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The priority of the task in the Maintenance Window. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    #[doc="<p>The role that should be assumed when executing the task</p>"]
-    #[serde(rename="ServiceRoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The role that should be assumed when executing the task</p>
+    #[serde(rename = "ServiceRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    #[doc="<p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    #[doc="<p>The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, <code>TaskArn</code> is the SSM document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTION tasks, it's the state machine ARN.</p>"]
-    #[serde(rename="TaskArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, <code>TaskArn</code> is the SSM document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTION tasks, it's the state machine ARN.</p>
+    #[serde(rename = "TaskArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
-    #[doc="<p>The parameters that should be passed to the task when it is executed.</p>"]
-    #[serde(rename="TaskParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters that should be passed to the task when it is executed.</p>
+    #[serde(rename = "TaskParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
         Option<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
-    #[doc="<p>The type of task. The type can be one of the following: RUN_COMMAND, AUTOMATION, LAMBDA, or STEP_FUNCTION.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of task. The type can be one of the following: RUN_COMMAND, AUTOMATION, LAMBDA, or STEP_FUNCTION.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The Maintenance Window ID where the task is registered.</p>"]
-    #[serde(rename="WindowId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Maintenance Window ID where the task is registered.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
-    #[doc="<p>The task ID.</p>"]
-    #[serde(rename="WindowTaskId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The task ID.</p>
+    #[serde(rename = "WindowTaskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_task_id: Option<String>,
 }
 
-#[doc="<p>The parameters for task execution.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>The parameters for task execution.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MaintenanceWindowTaskInvocationParameters {
-    #[doc="<p>The parameters for a AUTOMATION task type.</p>"]
-    #[serde(rename="Automation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters for a AUTOMATION task type.</p>
+    #[serde(rename = "Automation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub automation: Option<MaintenanceWindowAutomationParameters>,
-    #[doc="<p>The parameters for a LAMBDA task type.</p>"]
-    #[serde(rename="Lambda")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters for a LAMBDA task type.</p>
+    #[serde(rename = "Lambda")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda: Option<MaintenanceWindowLambdaParameters>,
-    #[doc="<p>The parameters for a RUN_COMMAND task type.</p>"]
-    #[serde(rename="RunCommand")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters for a RUN_COMMAND task type.</p>
+    #[serde(rename = "RunCommand")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub run_command: Option<MaintenanceWindowRunCommandParameters>,
-    #[doc="<p>The parameters for a STEP_FUNCTION task type.</p>"]
-    #[serde(rename="StepFunctions")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters for a STEP_FUNCTION task type.</p>
+    #[serde(rename = "StepFunctions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub step_functions: Option<MaintenanceWindowStepFunctionsParameters>,
 }
 
-#[doc="<p>Defines the values for a task parameter.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Defines the values for a task parameter.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MaintenanceWindowTaskParameterValueExpression {
-    #[doc="<p>This field contains an array of 0 or more strings, each 1 to 255 characters in length.</p>"]
-    #[serde(rename="Values")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>This field contains an array of 0 or more strings, each 1 to 255 characters in length.</p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyDocumentPermissionRequest {
-    #[doc="<p>The AWS user accounts that should have access to the document. The account IDs can either be a group of account IDs or <i>All</i>.</p>"]
-    #[serde(rename="AccountIdsToAdd")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS user accounts that should have access to the document. The account IDs can either be a group of account IDs or <i>All</i>.</p>
+    #[serde(rename = "AccountIdsToAdd")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids_to_add: Option<Vec<String>>,
-    #[doc="<p>The AWS user accounts that should no longer have access to the document. The AWS user account can either be a group of account IDs or <i>All</i>. This action has a higher priority than <i>AccountIdsToAdd</i>. If you specify an account ID to add and the same ID to remove, the system removes access to the document.</p>"]
-    #[serde(rename="AccountIdsToRemove")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The AWS user accounts that should no longer have access to the document. The AWS user account can either be a group of account IDs or <i>All</i>. This action has a higher priority than <i>AccountIdsToAdd</i>. If you specify an account ID to add and the same ID to remove, the system removes access to the document.</p>
+    #[serde(rename = "AccountIdsToRemove")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids_to_remove: Option<Vec<String>>,
-    #[doc="<p>The name of the document that you want to share.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the document that you want to share.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>The permission type for the document. The permission type can be <i>Share</i>.</p>"]
-    #[serde(rename="PermissionType")]
+    /// <p>The permission type for the document. The permission type can be <i>Share</i>.</p>
+    #[serde(rename = "PermissionType")]
     pub permission_type: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyDocumentPermissionResponse;
 
-#[doc="<p>A summary of resources that are not compliant. The summary is organized according to resource type.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A summary of resources that are not compliant. The summary is organized according to resource type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct NonCompliantSummary {
-    #[doc="<p>The total number of compliance items that are not compliant.</p>"]
-    #[serde(rename="NonCompliantCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of compliance items that are not compliant.</p>
+    #[serde(rename = "NonCompliantCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub non_compliant_count: Option<i64>,
-    #[doc="<p>A summary of the non-compliance severity by compliance type</p>"]
-    #[serde(rename="SeveritySummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A summary of the non-compliance severity by compliance type</p>
+    #[serde(rename = "SeveritySummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub severity_summary: Option<SeveritySummary>,
 }
 
-#[doc="<p>Configurations for sending notifications.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Configurations for sending notifications.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct NotificationConfig {
-    #[doc="<p>An Amazon Resource Name (ARN) for a Simple Notification Service (SNS) topic. Run Command pushes notifications about command status changes to this topic.</p>"]
-    #[serde(rename="NotificationArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An Amazon Resource Name (ARN) for a Simple Notification Service (SNS) topic. Run Command pushes notifications about command status changes to this topic.</p>
+    #[serde(rename = "NotificationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_arn: Option<String>,
-    #[doc="<p>The different events for which you can receive notifications. These events include the following: All (events), InProgress, Success, TimedOut, Cancelled, Failed. To learn more about these events, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html\">Setting Up Events and Notifications</a> in the <i>Amazon EC2 Systems Manager User Guide</i>.</p>"]
-    #[serde(rename="NotificationEvents")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The different events for which you can receive notifications. These events include the following: All (events), InProgress, Success, TimedOut, Cancelled, Failed. To learn more about these events, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html">Setting Up Events and Notifications</a> in the <i>Amazon EC2 Systems Manager User Guide</i>.</p>
+    #[serde(rename = "NotificationEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_events: Option<Vec<String>>,
-    #[doc="<p>Command: Receive notification when the status of a command changes. Invocation: For commands sent to multiple instances, receive notification on a per-instance basis when the status of a command changes. </p>"]
-    #[serde(rename="NotificationType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Command: Receive notification when the status of a command changes. Invocation: For commands sent to multiple instances, receive notification on a per-instance basis when the status of a command changes. </p>
+    #[serde(rename = "NotificationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_type: Option<String>,
 }
 
-#[doc="<p>An Amazon EC2 Systems Manager parameter in Parameter Store.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>An Amazon EC2 Systems Manager parameter in Parameter Store.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Parameter {
-    #[doc="<p>The name of the parameter.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the parameter.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The type of parameter. Valid values include the following: String, String list, Secure string.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of parameter. Valid values include the following: String, String list, Secure string.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The parameter value.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameter value.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>Information about parameter usage.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about parameter usage.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ParameterHistory {
-    #[doc="<p>Parameter names can include the following letters and symbols.</p> <p>a-zA-Z0-9_.-</p>"]
-    #[serde(rename="AllowedPattern")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Parameter names can include the following letters and symbols.</p> <p>a-zA-Z0-9_.-</p>
+    #[serde(rename = "AllowedPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_pattern: Option<String>,
-    #[doc="<p>Information about the parameter.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the parameter.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The ID of the query key used for this parameter.</p>"]
-    #[serde(rename="KeyId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the query key used for this parameter.</p>
+    #[serde(rename = "KeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
-    #[doc="<p>Date the parameter was last changed or updated.</p>"]
-    #[serde(rename="LastModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Date the parameter was last changed or updated.</p>
+    #[serde(rename = "LastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    #[doc="<p>Amazon Resource Name (ARN) of the AWS user who last changed the parameter.</p>"]
-    #[serde(rename="LastModifiedUser")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon Resource Name (ARN) of the AWS user who last changed the parameter.</p>
+    #[serde(rename = "LastModifiedUser")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_user: Option<String>,
-    #[doc="<p>The name of the parameter.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the parameter.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The type of parameter used.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of parameter used.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    #[doc="<p>The parameter value.</p>"]
-    #[serde(rename="Value")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameter value.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-#[doc="<p>Metada includes information like the ARN of the last user and the date/time the parameter was last used.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Metada includes information like the ARN of the last user and the date/time the parameter was last used.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ParameterMetadata {
-    #[doc="<p>A parameter name can include only the following letters and symbols.</p> <p>a-zA-Z0-9_.-</p>"]
-    #[serde(rename="AllowedPattern")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A parameter name can include only the following letters and symbols.</p> <p>a-zA-Z0-9_.-</p>
+    #[serde(rename = "AllowedPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_pattern: Option<String>,
-    #[doc="<p>Description of the parameter actions.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Description of the parameter actions.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The ID of the query key used for this parameter.</p>"]
-    #[serde(rename="KeyId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the query key used for this parameter.</p>
+    #[serde(rename = "KeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
-    #[doc="<p>Date the parameter was last changed or updated.</p>"]
-    #[serde(rename="LastModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Date the parameter was last changed or updated.</p>
+    #[serde(rename = "LastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    #[doc="<p>Amazon Resource Name (ARN) of the AWS user who last changed the parameter.</p>"]
-    #[serde(rename="LastModifiedUser")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Amazon Resource Name (ARN) of the AWS user who last changed the parameter.</p>
+    #[serde(rename = "LastModifiedUser")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_user: Option<String>,
-    #[doc="<p>The parameter name.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameter name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The type of parameter. Valid parameter types include the following: String, String list, Secure string.</p>"]
-    #[serde(rename="Type")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The type of parameter. Valid parameter types include the following: String, String list, Secure string.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-#[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ParameterStringFilter {
-    #[doc="<p>The name of the filter.</p>"]
-    #[serde(rename="Key")]
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>"]
-    #[serde(rename="Option")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>
+    #[serde(rename = "Option")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub option: Option<String>,
-    #[doc="<p>The value you want to search for.</p>"]
-    #[serde(rename="Values")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value you want to search for.</p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
-#[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ParametersFilter {
-    #[doc="<p>The name of the filter.</p>"]
-    #[serde(rename="Key")]
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>The filter values.</p>"]
-    #[serde(rename="Values")]
+    /// <p>The filter values.</p>
+    #[serde(rename = "Values")]
     pub values: Vec<String>,
 }
 
-#[doc="<p>Represents metadata about a patch.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Represents metadata about a patch.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct Patch {
-    #[doc="<p>The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).</p>"]
-    #[serde(rename="Classification")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).</p>
+    #[serde(rename = "Classification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub classification: Option<String>,
-    #[doc="<p>The URL where more information can be obtained about the patch.</p>"]
-    #[serde(rename="ContentUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The URL where more information can be obtained about the patch.</p>
+    #[serde(rename = "ContentUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub content_url: Option<String>,
-    #[doc="<p>The description of the patch.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the patch.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The ID of the patch (this is different than the Microsoft Knowledge Base ID).</p>"]
-    #[serde(rename="Id")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the patch (this is different than the Microsoft Knowledge Base ID).</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[doc="<p>The Microsoft Knowledge Base ID of the patch.</p>"]
-    #[serde(rename="KbNumber")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Microsoft Knowledge Base ID of the patch.</p>
+    #[serde(rename = "KbNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub kb_number: Option<String>,
-    #[doc="<p>The language of the patch if it's language-specific.</p>"]
-    #[serde(rename="Language")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The language of the patch if it's language-specific.</p>
+    #[serde(rename = "Language")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub language: Option<String>,
-    #[doc="<p>The ID of the MSRC bulletin the patch is related to.</p>"]
-    #[serde(rename="MsrcNumber")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the MSRC bulletin the patch is related to.</p>
+    #[serde(rename = "MsrcNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub msrc_number: Option<String>,
-    #[doc="<p>The severity of the patch (for example Critical, Important, Moderate).</p>"]
-    #[serde(rename="MsrcSeverity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The severity of the patch (for example Critical, Important, Moderate).</p>
+    #[serde(rename = "MsrcSeverity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub msrc_severity: Option<String>,
-    #[doc="<p>The specific product the patch is applicable for (for example, WindowsServer2016).</p>"]
-    #[serde(rename="Product")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The specific product the patch is applicable for (for example, WindowsServer2016).</p>
+    #[serde(rename = "Product")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product: Option<String>,
-    #[doc="<p>The product family the patch is applicable for (for example, Windows).</p>"]
-    #[serde(rename="ProductFamily")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The product family the patch is applicable for (for example, Windows).</p>
+    #[serde(rename = "ProductFamily")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub product_family: Option<String>,
-    #[doc="<p>The date the patch was released.</p>"]
-    #[serde(rename="ReleaseDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the patch was released.</p>
+    #[serde(rename = "ReleaseDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub release_date: Option<f64>,
-    #[doc="<p>The title of the patch.</p>"]
-    #[serde(rename="Title")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The title of the patch.</p>
+    #[serde(rename = "Title")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
-    #[doc="<p>The name of the vendor providing the patch.</p>"]
-    #[serde(rename="Vendor")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the vendor providing the patch.</p>
+    #[serde(rename = "Vendor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vendor: Option<String>,
 }
 
-#[doc="<p>Defines the basic information about a patch baseline.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Defines the basic information about a patch baseline.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PatchBaselineIdentity {
-    #[doc="<p>The description of the patch baseline.</p>"]
-    #[serde(rename="BaselineDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the patch baseline.</p>
+    #[serde(rename = "BaselineDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub baseline_description: Option<String>,
-    #[doc="<p>The ID of the patch baseline.</p>"]
-    #[serde(rename="BaselineId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the patch baseline.</p>
+    #[serde(rename = "BaselineId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub baseline_id: Option<String>,
-    #[doc="<p>The name of the patch baseline.</p>"]
-    #[serde(rename="BaselineName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the patch baseline.</p>
+    #[serde(rename = "BaselineName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub baseline_name: Option<String>,
-    #[doc="<p>Whether this is the default baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>"]
-    #[serde(rename="DefaultBaseline")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether this is the default baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>
+    #[serde(rename = "DefaultBaseline")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_baseline: Option<bool>,
-    #[doc="<p>Defines the operating system the patch baseline applies to. Supported operating systems include WINDOWS, AMAZON_LINUX, UBUNTU and REDHAT_ENTERPRISE_LINUX. The Default value is WINDOWS. </p>"]
-    #[serde(rename="OperatingSystem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Defines the operating system the patch baseline applies to. Supported operating systems include WINDOWS, AMAZON_LINUX, UBUNTU and REDHAT_ENTERPRISE_LINUX. The Default value is WINDOWS. </p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
 }
 
-#[doc="<p>Information about the state of a patch on a particular instance as it relates to the patch baseline used to patch the instance.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about the state of a patch on a particular instance as it relates to the patch baseline used to patch the instance.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PatchComplianceData {
-    #[doc="<p>The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).</p>"]
-    #[serde(rename="Classification")]
+    /// <p>The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).</p>
+    #[serde(rename = "Classification")]
     pub classification: String,
-    #[doc="<p>The date/time the patch was installed on the instance. Note that not all operating systems provide this level of information.</p>"]
-    #[serde(rename="InstalledTime")]
+    /// <p>The date/time the patch was installed on the instance. Note that not all operating systems provide this level of information.</p>
+    #[serde(rename = "InstalledTime")]
     pub installed_time: f64,
-    #[doc="<p>The operating system-specific ID of the patch.</p>"]
-    #[serde(rename="KBId")]
+    /// <p>The operating system-specific ID of the patch.</p>
+    #[serde(rename = "KBId")]
     pub kb_id: String,
-    #[doc="<p>The severity of the patch (for example, Critical, Important, Moderate).</p>"]
-    #[serde(rename="Severity")]
+    /// <p>The severity of the patch (for example, Critical, Important, Moderate).</p>
+    #[serde(rename = "Severity")]
     pub severity: String,
-    #[doc="<p>The state of the patch on the instance (INSTALLED, INSTALLED_OTHER, MISSING, NOT_APPLICABLE or FAILED).</p>"]
-    #[serde(rename="State")]
+    /// <p>The state of the patch on the instance (INSTALLED, INSTALLED_OTHER, MISSING, NOT_APPLICABLE or FAILED).</p>
+    #[serde(rename = "State")]
     pub state: String,
-    #[doc="<p>The title of the patch.</p>"]
-    #[serde(rename="Title")]
+    /// <p>The title of the patch.</p>
+    #[serde(rename = "Title")]
     pub title: String,
 }
 
-#[doc="<p>Defines a patch filter.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Defines a patch filter.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PatchFilter {
-    #[doc="<p>The key for the filter (PRODUCT, CLASSIFICATION, MSRC_SEVERITY, PATCH_ID)</p>"]
-    #[serde(rename="Key")]
+    /// <p>The key for the filter (PRODUCT, CLASSIFICATION, MSRC_SEVERITY, PATCH_ID)</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>The value for the filter key.</p>"]
-    #[serde(rename="Values")]
+    /// <p>The value for the filter key.</p>
+    #[serde(rename = "Values")]
     pub values: Vec<String>,
 }
 
-#[doc="<p>A set of patch filters, typically used for approval rules.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A set of patch filters, typically used for approval rules.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PatchFilterGroup {
-    #[doc="<p>The set of patch filters that make up the group.</p>"]
-    #[serde(rename="PatchFilters")]
+    /// <p>The set of patch filters that make up the group.</p>
+    #[serde(rename = "PatchFilters")]
     pub patch_filters: Vec<PatchFilter>,
 }
 
-#[doc="<p>The mapping between a patch group and the patch baseline the patch group is registered with.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The mapping between a patch group and the patch baseline the patch group is registered with.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PatchGroupPatchBaselineMapping {
-    #[doc="<p>The patch baseline the patch group is registered with.</p>"]
-    #[serde(rename="BaselineIdentity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The patch baseline the patch group is registered with.</p>
+    #[serde(rename = "BaselineIdentity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub baseline_identity: Option<PatchBaselineIdentity>,
-    #[doc="<p>The name of the patch group registered with the patch baseline.</p>"]
-    #[serde(rename="PatchGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the patch group registered with the patch baseline.</p>
+    #[serde(rename = "PatchGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_group: Option<String>,
 }
 
-#[doc="<p>Defines a filter used in Patch Manager APIs.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>Defines a filter used in Patch Manager APIs.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PatchOrchestratorFilter {
-    #[doc="<p>The key for the filter.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The key for the filter.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>The value for the filter.</p>"]
-    #[serde(rename="Values")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The value for the filter.</p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
-#[doc="<p>Defines an approval rule for a patch baseline.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Defines an approval rule for a patch baseline.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PatchRule {
-    #[doc="<p>The number of days after the release date of each patch matched by the rule the patch is marked as approved in the patch baseline.</p>"]
-    #[serde(rename="ApproveAfterDays")]
+    /// <p>The number of days after the release date of each patch matched by the rule the patch is marked as approved in the patch baseline.</p>
+    #[serde(rename = "ApproveAfterDays")]
     pub approve_after_days: i64,
-    #[doc="<p>A compliance severity level for all approved patches in a patch baseline. Valid compliance severity levels include the following: Unspecified, Critical, High, Medium, Low, and Informational.</p>"]
-    #[serde(rename="ComplianceLevel")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A compliance severity level for all approved patches in a patch baseline. Valid compliance severity levels include the following: Unspecified, Critical, High, Medium, Low, and Informational.</p>
+    #[serde(rename = "ComplianceLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_level: Option<String>,
-    #[doc="<p>The patch filter group that defines the criteria for the rule.</p>"]
-    #[serde(rename="PatchFilterGroup")]
+    /// <p>The patch filter group that defines the criteria for the rule.</p>
+    #[serde(rename = "PatchFilterGroup")]
     pub patch_filter_group: PatchFilterGroup,
 }
 
-#[doc="<p>A set of rules defining the approval rules for a patch baseline.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>A set of rules defining the approval rules for a patch baseline.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PatchRuleGroup {
-    #[doc="<p>The rules that make up the rule group.</p>"]
-    #[serde(rename="PatchRules")]
+    /// <p>The rules that make up the rule group.</p>
+    #[serde(rename = "PatchRules")]
     pub patch_rules: Vec<PatchRule>,
 }
 
-#[doc="<p>Information about the approval status of a patch.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about the approval status of a patch.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PatchStatus {
-    #[doc="<p>The date the patch was approved (or will be approved if the status is PENDING_APPROVAL).</p>"]
-    #[serde(rename="ApprovalDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date the patch was approved (or will be approved if the status is PENDING_APPROVAL).</p>
+    #[serde(rename = "ApprovalDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approval_date: Option<f64>,
-    #[doc="<p>The compliance severity level for a patch.</p>"]
-    #[serde(rename="ComplianceLevel")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The compliance severity level for a patch.</p>
+    #[serde(rename = "ComplianceLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_level: Option<String>,
-    #[doc="<p>The approval status of a patch (APPROVED, PENDING_APPROVAL, EXPLICIT_APPROVED, EXPLICIT_REJECTED).</p>"]
-    #[serde(rename="DeploymentStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The approval status of a patch (APPROVED, PENDING_APPROVAL, EXPLICIT_APPROVED, EXPLICIT_REJECTED).</p>
+    #[serde(rename = "DeploymentStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutComplianceItemsRequest {
-    #[doc="<p>Specify the compliance type. For example, specify Association (for a State Manager association), Patch, or Custom:<code>string</code>.</p>"]
-    #[serde(rename="ComplianceType")]
+    /// <p>Specify the compliance type. For example, specify Association (for a State Manager association), Patch, or Custom:<code>string</code>.</p>
+    #[serde(rename = "ComplianceType")]
     pub compliance_type: String,
-    #[doc="<p>A summary of the call execution that includes an execution ID, the type of execution (for example, <code>Command</code>), and the date/time of the execution using a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>"]
-    #[serde(rename="ExecutionSummary")]
+    /// <p>A summary of the call execution that includes an execution ID, the type of execution (for example, <code>Command</code>), and the date/time of the execution using a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>
+    #[serde(rename = "ExecutionSummary")]
     pub execution_summary: ComplianceExecutionSummary,
-    #[doc="<p>MD5 or SHA-256 content hash. The content hash is used to determine if existing information should be overwritten or ignored. If the content hashes match, the request to put compliance information is ignored.</p>"]
-    #[serde(rename="ItemContentHash")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>MD5 or SHA-256 content hash. The content hash is used to determine if existing information should be overwritten or ignored. If the content hashes match, the request to put compliance information is ignored.</p>
+    #[serde(rename = "ItemContentHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_content_hash: Option<String>,
-    #[doc="<p>Information about the compliance as defined by the resource type. For example, for a patch compliance type, <code>Items</code> includes information about the PatchSeverity, Classification, etc.</p>"]
-    #[serde(rename="Items")]
+    /// <p>Information about the compliance as defined by the resource type. For example, for a patch compliance type, <code>Items</code> includes information about the PatchSeverity, Classification, etc.</p>
+    #[serde(rename = "Items")]
     pub items: Vec<ComplianceItemEntry>,
-    #[doc="<p>Specify an ID for this resource. For a managed instance, this is the instance ID.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>Specify an ID for this resource. For a managed instance, this is the instance ID.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    #[doc="<p>Specify the type of resource. <code>ManagedInstance</code> is currently the only supported resource type.</p>"]
-    #[serde(rename="ResourceType")]
+    /// <p>Specify the type of resource. <code>ManagedInstance</code> is currently the only supported resource type.</p>
+    #[serde(rename = "ResourceType")]
     pub resource_type: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutComplianceItemsResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutInventoryRequest {
-    #[doc="<p>One or more instance IDs where you want to add or update inventory items.</p>"]
-    #[serde(rename="InstanceId")]
+    /// <p>One or more instance IDs where you want to add or update inventory items.</p>
+    #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    #[doc="<p>The inventory items that you want to add or update on instances.</p>"]
-    #[serde(rename="Items")]
+    /// <p>The inventory items that you want to add or update on instances.</p>
+    #[serde(rename = "Items")]
     pub items: Vec<InventoryItem>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutInventoryResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct PutParameterRequest {
-    #[doc="<p>A regular expression used to validate the parameter value. For example, for String types with values restricted to numbers, you can specify the following: AllowedPattern=^\\d+$ </p>"]
-    #[serde(rename="AllowedPattern")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A regular expression used to validate the parameter value. For example, for String types with values restricted to numbers, you can specify the following: AllowedPattern=^\d+$ </p>
+    #[serde(rename = "AllowedPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_pattern: Option<String>,
-    #[doc="<p>Information about the parameter that you want to add to the system</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the parameter that you want to add to the system</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The KMS Key ID that you want to use to encrypt a parameter when you choose the SecureString data type. If you don't specify a key ID, the system uses the default key associated with your AWS account.</p>"]
-    #[serde(rename="KeyId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The KMS Key ID that you want to use to encrypt a parameter when you choose the SecureString data type. If you don't specify a key ID, the system uses the default key associated with your AWS account.</p>
+    #[serde(rename = "KeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
-    #[doc="<p>The name of the parameter that you want to add to the system.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the parameter that you want to add to the system.</p>
+    #[serde(rename = "Name")]
     pub name: String,
-    #[doc="<p>Overwrite an existing parameter. If not specified, will default to \"false\".</p>"]
-    #[serde(rename="Overwrite")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Overwrite an existing parameter. If not specified, will default to "false".</p>
+    #[serde(rename = "Overwrite")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub overwrite: Option<bool>,
-    #[doc="<p>The type of parameter that you want to add to the system.</p>"]
-    #[serde(rename="Type")]
+    /// <p>The type of parameter that you want to add to the system.</p>
+    #[serde(rename = "Type")]
     pub type_: String,
-    #[doc="<p>The parameter value that you want to add to the system.</p>"]
-    #[serde(rename="Value")]
+    /// <p>The parameter value that you want to add to the system.</p>
+    #[serde(rename = "Value")]
     pub value: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutParameterResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RegisterDefaultPatchBaselineRequest {
-    #[doc="<p>The ID of the patch baseline that should be the default patch baseline.</p>"]
-    #[serde(rename="BaselineId")]
+    /// <p>The ID of the patch baseline that should be the default patch baseline.</p>
+    #[serde(rename = "BaselineId")]
     pub baseline_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RegisterDefaultPatchBaselineResult {
-    #[doc="<p>The ID of the default patch baseline.</p>"]
-    #[serde(rename="BaselineId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the default patch baseline.</p>
+    #[serde(rename = "BaselineId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub baseline_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RegisterPatchBaselineForPatchGroupRequest {
-    #[doc="<p>The ID of the patch baseline to register the patch group with.</p>"]
-    #[serde(rename="BaselineId")]
+    /// <p>The ID of the patch baseline to register the patch group with.</p>
+    #[serde(rename = "BaselineId")]
     pub baseline_id: String,
-    #[doc="<p>The name of the patch group that should be registered with the patch baseline.</p>"]
-    #[serde(rename="PatchGroup")]
+    /// <p>The name of the patch group that should be registered with the patch baseline.</p>
+    #[serde(rename = "PatchGroup")]
     pub patch_group: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RegisterPatchBaselineForPatchGroupResult {
-    #[doc="<p>The ID of the patch baseline the patch group was registered with.</p>"]
-    #[serde(rename="BaselineId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the patch baseline the patch group was registered with.</p>
+    #[serde(rename = "BaselineId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub baseline_id: Option<String>,
-    #[doc="<p>The name of the patch group registered with the patch baseline.</p>"]
-    #[serde(rename="PatchGroup")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the patch group registered with the patch baseline.</p>
+    #[serde(rename = "PatchGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_group: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RegisterTargetWithMaintenanceWindowRequest {
-    #[doc="<p>User-provided idempotency token.</p>"]
-    #[serde(rename="ClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-provided idempotency token.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    #[doc="<p>An optional description for the target.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional description for the target.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>An optional name for the target.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional name for the target.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>"]
-    #[serde(rename="OwnerInformation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>
+    #[serde(rename = "OwnerInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_information: Option<String>,
-    #[doc="<p>The type of target being registered with the Maintenance Window.</p>"]
-    #[serde(rename="ResourceType")]
+    /// <p>The type of target being registered with the Maintenance Window.</p>
+    #[serde(rename = "ResourceType")]
     pub resource_type: String,
-    #[doc="<p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>"]
-    #[serde(rename="Targets")]
+    /// <p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>
+    #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
-    #[doc="<p>The ID of the Maintenance Window the target should be registered with.</p>"]
-    #[serde(rename="WindowId")]
+    /// <p>The ID of the Maintenance Window the target should be registered with.</p>
+    #[serde(rename = "WindowId")]
     pub window_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RegisterTargetWithMaintenanceWindowResult {
-    #[doc="<p>The ID of the target definition in this Maintenance Window.</p>"]
-    #[serde(rename="WindowTargetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the target definition in this Maintenance Window.</p>
+    #[serde(rename = "WindowTargetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_target_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RegisterTaskWithMaintenanceWindowRequest {
-    #[doc="<p>User-provided idempotency token.</p>"]
-    #[serde(rename="ClientToken")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-provided idempotency token.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    #[doc="<p>An optional description for the task.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional description for the task.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A structure containing information about an Amazon S3 bucket to write instance-level logs to. </p>"]
-    #[serde(rename="LoggingInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A structure containing information about an Amazon S3 bucket to write instance-level logs to. </p>
+    #[serde(rename = "LoggingInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
-    #[doc="<p>The maximum number of targets this task can be run for in parallel.</p>"]
-    #[serde(rename="MaxConcurrency")]
+    /// <p>The maximum number of targets this task can be run for in parallel.</p>
+    #[serde(rename = "MaxConcurrency")]
     pub max_concurrency: String,
-    #[doc="<p>The maximum number of errors allowed before this task stops being scheduled.</p>"]
-    #[serde(rename="MaxErrors")]
+    /// <p>The maximum number of errors allowed before this task stops being scheduled.</p>
+    #[serde(rename = "MaxErrors")]
     pub max_errors: String,
-    #[doc="<p>An optional name for the task.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional name for the task.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The priority of the task in the Maintenance Window, the lower the number the higher the priority. Tasks in a Maintenance Window are scheduled in priority order with tasks that have the same priority scheduled in parallel.</p>"]
-    #[serde(rename="Priority")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The priority of the task in the Maintenance Window, the lower the number the higher the priority. Tasks in a Maintenance Window are scheduled in priority order with tasks that have the same priority scheduled in parallel.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    #[doc="<p>The role that should be assumed when executing the task.</p>"]
-    #[serde(rename="ServiceRoleArn")]
+    /// <p>The role that should be assumed when executing the task.</p>
+    #[serde(rename = "ServiceRoleArn")]
     pub service_role_arn: String,
-    #[doc="<p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>"]
-    #[serde(rename="Targets")]
+    /// <p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>
+    #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
-    #[doc="<p>The ARN of the task to execute </p>"]
-    #[serde(rename="TaskArn")]
+    /// <p>The ARN of the task to execute </p>
+    #[serde(rename = "TaskArn")]
     pub task_arn: String,
-    #[doc="<p>The parameters that the task should use during execution. Populate only the fields that match the task type. All other fields should be empty. </p>"]
-    #[serde(rename="TaskInvocationParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters that the task should use during execution. Populate only the fields that match the task type. All other fields should be empty. </p>
+    #[serde(rename = "TaskInvocationParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
-    #[doc="<p>The parameters that should be passed to the task when it is executed.</p>"]
-    #[serde(rename="TaskParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters that should be passed to the task when it is executed.</p>
+    #[serde(rename = "TaskParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
         Option<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
-    #[doc="<p>The type of task being registered.</p>"]
-    #[serde(rename="TaskType")]
+    /// <p>The type of task being registered.</p>
+    #[serde(rename = "TaskType")]
     pub task_type: String,
-    #[doc="<p>The id of the Maintenance Window the task should be added to.</p>"]
-    #[serde(rename="WindowId")]
+    /// <p>The id of the Maintenance Window the task should be added to.</p>
+    #[serde(rename = "WindowId")]
     pub window_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RegisterTaskWithMaintenanceWindowResult {
-    #[doc="<p>The id of the task in the Maintenance Window.</p>"]
-    #[serde(rename="WindowTaskId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The id of the task in the Maintenance Window.</p>
+    #[serde(rename = "WindowTaskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_task_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct RemoveTagsFromResourceRequest {
-    #[doc="<p>The resource ID for which you want to remove tags.</p>"]
-    #[serde(rename="ResourceId")]
+    /// <p>The resource ID for which you want to remove tags.</p>
+    #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    #[doc="<p>The type of resource of which you want to remove a tag.</p>"]
-    #[serde(rename="ResourceType")]
+    /// <p>The type of resource of which you want to remove a tag.</p>
+    #[serde(rename = "ResourceType")]
     pub resource_type: String,
-    #[doc="<p>Tag keys that you want to remove from the specified resource.</p>"]
-    #[serde(rename="TagKeys")]
+    /// <p>Tag keys that you want to remove from the specified resource.</p>
+    #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct RemoveTagsFromResourceResult;
 
-#[doc="<p>Compliance summary information for a specific resource. </p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Compliance summary information for a specific resource. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourceComplianceSummaryItem {
-    #[doc="<p>The compliance type.</p>"]
-    #[serde(rename="ComplianceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The compliance type.</p>
+    #[serde(rename = "ComplianceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_type: Option<String>,
-    #[doc="<p>A list of items that are compliant for the resource.</p>"]
-    #[serde(rename="CompliantSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of items that are compliant for the resource.</p>
+    #[serde(rename = "CompliantSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compliant_summary: Option<CompliantSummary>,
-    #[doc="<p>Information about the execution.</p>"]
-    #[serde(rename="ExecutionSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the execution.</p>
+    #[serde(rename = "ExecutionSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_summary: Option<ComplianceExecutionSummary>,
-    #[doc="<p>A list of items that aren't compliant for the resource.</p>"]
-    #[serde(rename="NonCompliantSummary")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of items that aren't compliant for the resource.</p>
+    #[serde(rename = "NonCompliantSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub non_compliant_summary: Option<NonCompliantSummary>,
-    #[doc="<p>The highest severity item found for the resource. The resource is compliant for this item.</p>"]
-    #[serde(rename="OverallSeverity")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The highest severity item found for the resource. The resource is compliant for this item.</p>
+    #[serde(rename = "OverallSeverity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub overall_severity: Option<String>,
-    #[doc="<p>The resource ID.</p>"]
-    #[serde(rename="ResourceId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resource ID.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
-    #[doc="<p>The resource type.</p>"]
-    #[serde(rename="ResourceType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The resource type.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
-    #[doc="<p>The compliance status for the resource.</p>"]
-    #[serde(rename="Status")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The compliance status for the resource.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-#[doc="<p>Information about a Resource Data Sync configuration, including its current status and last successful sync.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Information about a Resource Data Sync configuration, including its current status and last successful sync.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourceDataSyncItem {
-    #[doc="<p>The status reported by the last sync.</p>"]
-    #[serde(rename="LastStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The status reported by the last sync.</p>
+    #[serde(rename = "LastStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_status: Option<String>,
-    #[doc="<p>The last time the sync operations returned a status of <code>SUCCESSFUL</code> (UTC).</p>"]
-    #[serde(rename="LastSuccessfulSyncTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last time the sync operations returned a status of <code>SUCCESSFUL</code> (UTC).</p>
+    #[serde(rename = "LastSuccessfulSyncTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_successful_sync_time: Option<f64>,
-    #[doc="<p>The last time the configuration attempted to sync (UTC).</p>"]
-    #[serde(rename="LastSyncTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The last time the configuration attempted to sync (UTC).</p>
+    #[serde(rename = "LastSyncTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_sync_time: Option<f64>,
-    #[doc="<p>Configuration information for the target Amazon S3 bucket.</p>"]
-    #[serde(rename="S3Destination")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Configuration information for the target Amazon S3 bucket.</p>
+    #[serde(rename = "S3Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_destination: Option<ResourceDataSyncS3Destination>,
-    #[doc="<p>The date and time the configuration was created (UTC).</p>"]
-    #[serde(rename="SyncCreatedTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date and time the configuration was created (UTC).</p>
+    #[serde(rename = "SyncCreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_created_time: Option<f64>,
-    #[doc="<p>The name of the Resource Data Sync.</p>"]
-    #[serde(rename="SyncName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Resource Data Sync.</p>
+    #[serde(rename = "SyncName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_name: Option<String>,
 }
 
-#[doc="<p>Information about the target Amazon S3 bucket for the Resource Data Sync.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Information about the target Amazon S3 bucket for the Resource Data Sync.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ResourceDataSyncS3Destination {
-    #[doc="<p>The name of the Amazon S3 bucket where the aggregated data is stored.</p>"]
-    #[serde(rename="BucketName")]
+    /// <p>The name of the Amazon S3 bucket where the aggregated data is stored.</p>
+    #[serde(rename = "BucketName")]
     pub bucket_name: String,
-    #[doc="<p>An Amazon S3 prefix for the bucket.</p>"]
-    #[serde(rename="Prefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An Amazon S3 prefix for the bucket.</p>
+    #[serde(rename = "Prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub prefix: Option<String>,
-    #[doc="<p>The AWS Region with the Amazon S3 bucket targeted by the Resource Data Sync.</p>"]
-    #[serde(rename="Region")]
+    /// <p>The AWS Region with the Amazon S3 bucket targeted by the Resource Data Sync.</p>
+    #[serde(rename = "Region")]
     pub region: String,
-    #[doc="<p>A supported sync format. The following format is currently supported: JsonSerDe</p>"]
-    #[serde(rename="SyncFormat")]
+    /// <p>A supported sync format. The following format is currently supported: JsonSerDe</p>
+    #[serde(rename = "SyncFormat")]
     pub sync_format: String,
 }
 
-#[doc="<p>The inventory item result attribute.</p>"]
-#[derive(Default,Debug,Clone,Serialize)]
+/// <p>The inventory item result attribute.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ResultAttribute {
-    #[doc="<p>Name of the inventory item type. Valid value: AWS:InstanceInformation. Default Value: AWS:InstanceInformation.</p>"]
-    #[serde(rename="TypeName")]
+    /// <p>Name of the inventory item type. Valid value: AWS:InstanceInformation. Default Value: AWS:InstanceInformation.</p>
+    #[serde(rename = "TypeName")]
     pub type_name: String,
 }
 
-#[doc="<p>An Amazon S3 bucket where you want to store the results of this request.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>An Amazon S3 bucket where you want to store the results of this request.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct S3OutputLocation {
-    #[doc="<p>The name of the Amazon S3 bucket.</p>"]
-    #[serde(rename="OutputS3BucketName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Amazon S3 bucket.</p>
+    #[serde(rename = "OutputS3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_bucket_name: Option<String>,
-    #[doc="<p>The Amazon S3 bucket subfolder.</p>"]
-    #[serde(rename="OutputS3KeyPrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Amazon S3 bucket subfolder.</p>
+    #[serde(rename = "OutputS3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_key_prefix: Option<String>,
-    #[doc="<p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>"]
-    #[serde(rename="OutputS3Region")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>
+    #[serde(rename = "OutputS3Region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_region: Option<String>,
 }
 
-#[doc="<p>A URL for the Amazon S3 bucket where you want to store the results of this request.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>A URL for the Amazon S3 bucket where you want to store the results of this request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct S3OutputUrl {
-    #[doc="<p>A URL for an Amazon S3 bucket where you want to store the results of this request.</p>"]
-    #[serde(rename="OutputUrl")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A URL for an Amazon S3 bucket where you want to store the results of this request.</p>
+    #[serde(rename = "OutputUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_url: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SendAutomationSignalRequest {
-    #[doc="<p>The unique identifier for an existing Automation execution that you want to send the signal to.</p>"]
-    #[serde(rename="AutomationExecutionId")]
+    /// <p>The unique identifier for an existing Automation execution that you want to send the signal to.</p>
+    #[serde(rename = "AutomationExecutionId")]
     pub automation_execution_id: String,
-    #[doc="<p>The data sent with the signal. The data schema depends on the type of signal used in the request. </p>"]
-    #[serde(rename="Payload")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The data sent with the signal. The data schema depends on the type of signal used in the request. </p>
+    #[serde(rename = "Payload")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub payload: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>The type of signal. Valid signal types include the following: Approve and Reject </p>"]
-    #[serde(rename="SignalType")]
+    /// <p>The type of signal. Valid signal types include the following: Approve and Reject </p>
+    #[serde(rename = "SignalType")]
     pub signal_type: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SendAutomationSignalResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SendCommandRequest {
-    #[doc="<p>User-specified information about the command, such as a brief description of what the command should do.</p>"]
-    #[serde(rename="Comment")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-specified information about the command, such as a brief description of what the command should do.</p>
+    #[serde(rename = "Comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
-    #[doc="<p>The Sha256 or Sha1 hash created by the system when the document was created. </p> <note> <p>Sha1 hashes have been deprecated.</p> </note>"]
-    #[serde(rename="DocumentHash")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Sha256 or Sha1 hash created by the system when the document was created. </p> <note> <p>Sha1 hashes have been deprecated.</p> </note>
+    #[serde(rename = "DocumentHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_hash: Option<String>,
-    #[doc="<p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note>"]
-    #[serde(rename="DocumentHashType")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note>
+    #[serde(rename = "DocumentHashType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_hash_type: Option<String>,
-    #[doc="<p>Required. The name of the Systems Manager document to execute. This can be a public document or a custom document.</p>"]
-    #[serde(rename="DocumentName")]
+    /// <p>Required. The name of the Systems Manager document to execute. This can be a public document or a custom document.</p>
+    #[serde(rename = "DocumentName")]
     pub document_name: String,
-    #[doc="<p>The instance IDs where the command should execute. You can specify a maximum of 50 IDs. If you prefer not to list individual instance IDs, you can instead send commands to a fleet of instances using the Targets parameter, which accepts EC2 tags. For more information about how to use Targets, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html\">Sending Commands to a Fleet</a>.</p>"]
-    #[serde(rename="InstanceIds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The instance IDs where the command should execute. You can specify a maximum of 50 IDs. If you prefer not to list individual instance IDs, you can instead send commands to a fleet of instances using the Targets parameter, which accepts EC2 tags. For more information about how to use Targets, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Sending Commands to a Fleet</a>.</p>
+    #[serde(rename = "InstanceIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
-    #[doc="<p>(Optional) The maximum number of instances that are allowed to execute the command at the same time. You can specify a number such as 10 or a percentage such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-velocity.html\">Using Concurrency Controls</a>.</p>"]
-    #[serde(rename="MaxConcurrency")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) The maximum number of instances that are allowed to execute the command at the same time. You can specify a number such as 10 or a percentage such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-velocity.html">Using Concurrency Controls</a>.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrency: Option<String>,
-    #[doc="<p>The maximum number of errors allowed without the command failing. When the command fails one more time beyond the value of MaxErrors, the systems stops sending the command to additional targets. You can specify a number like 10 or a percentage like 10%. The default value is 50. For more information about how to use MaxErrors, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-maxerrors.html\">Using Error Controls</a>.</p>"]
-    #[serde(rename="MaxErrors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The maximum number of errors allowed without the command failing. When the command fails one more time beyond the value of MaxErrors, the systems stops sending the command to additional targets. You can specify a number like 10 or a percentage like 10%. The default value is 50. For more information about how to use MaxErrors, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-maxerrors.html">Using Error Controls</a>.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_errors: Option<String>,
-    #[doc="<p>Configurations for sending notifications.</p>"]
-    #[serde(rename="NotificationConfig")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Configurations for sending notifications.</p>
+    #[serde(rename = "NotificationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_config: Option<NotificationConfig>,
-    #[doc="<p>The name of the S3 bucket where command execution responses should be stored.</p>"]
-    #[serde(rename="OutputS3BucketName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the S3 bucket where command execution responses should be stored.</p>
+    #[serde(rename = "OutputS3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_bucket_name: Option<String>,
-    #[doc="<p>The directory structure within the S3 bucket where the responses should be stored.</p>"]
-    #[serde(rename="OutputS3KeyPrefix")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The directory structure within the S3 bucket where the responses should be stored.</p>
+    #[serde(rename = "OutputS3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_key_prefix: Option<String>,
-    #[doc="<p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>"]
-    #[serde(rename="OutputS3Region")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>
+    #[serde(rename = "OutputS3Region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_region: Option<String>,
-    #[doc="<p>The required and optional parameters specified in the document being executed.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The required and optional parameters specified in the document being executed.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>The IAM role that Systems Manager uses to send notifications. </p>"]
-    #[serde(rename="ServiceRoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IAM role that Systems Manager uses to send notifications. </p>
+    #[serde(rename = "ServiceRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    #[doc="<p>(Optional) An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call. For more information about how to use Targets, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html\">Sending Commands to a Fleet</a>.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>(Optional) An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call. For more information about how to use Targets, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Sending Commands to a Fleet</a>.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    #[doc="<p>If this time is reached and the command has not already started executing, it will not execute.</p>"]
-    #[serde(rename="TimeoutSeconds")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If this time is reached and the command has not already started executing, it will not execute.</p>
+    #[serde(rename = "TimeoutSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_seconds: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SendCommandResult {
-    #[doc="<p>The request as it was received by Systems Manager. Also provides the command ID which can be used future references to this request.</p>"]
-    #[serde(rename="Command")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The request as it was received by Systems Manager. Also provides the command ID which can be used future references to this request.</p>
+    #[serde(rename = "Command")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub command: Option<Command>,
 }
 
-#[doc="<p>The number of managed instances found for each patch severity level defined in the request filter.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>The number of managed instances found for each patch severity level defined in the request filter.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct SeveritySummary {
-    #[doc="<p>The total number of resources or compliance items that have a severity level of critical. Critical severity is determined by the organization that published the compliance items.</p>"]
-    #[serde(rename="CriticalCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of resources or compliance items that have a severity level of critical. Critical severity is determined by the organization that published the compliance items.</p>
+    #[serde(rename = "CriticalCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub critical_count: Option<i64>,
-    #[doc="<p>The total number of resources or compliance items that have a severity level of high. High severity is determined by the organization that published the compliance items.</p>"]
-    #[serde(rename="HighCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of resources or compliance items that have a severity level of high. High severity is determined by the organization that published the compliance items.</p>
+    #[serde(rename = "HighCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub high_count: Option<i64>,
-    #[doc="<p>The total number of resources or compliance items that have a severity level of informational. Informational severity is determined by the organization that published the compliance items.</p>"]
-    #[serde(rename="InformationalCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of resources or compliance items that have a severity level of informational. Informational severity is determined by the organization that published the compliance items.</p>
+    #[serde(rename = "InformationalCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub informational_count: Option<i64>,
-    #[doc="<p>The total number of resources or compliance items that have a severity level of low. Low severity is determined by the organization that published the compliance items.</p>"]
-    #[serde(rename="LowCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of resources or compliance items that have a severity level of low. Low severity is determined by the organization that published the compliance items.</p>
+    #[serde(rename = "LowCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub low_count: Option<i64>,
-    #[doc="<p>The total number of resources or compliance items that have a severity level of medium. Medium severity is determined by the organization that published the compliance items.</p>"]
-    #[serde(rename="MediumCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of resources or compliance items that have a severity level of medium. Medium severity is determined by the organization that published the compliance items.</p>
+    #[serde(rename = "MediumCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub medium_count: Option<i64>,
-    #[doc="<p>The total number of resources or compliance items that have a severity level of unspecified. Unspecified severity is determined by the organization that published the compliance items.</p>"]
-    #[serde(rename="UnspecifiedCount")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The total number of resources or compliance items that have a severity level of unspecified. Unspecified severity is determined by the organization that published the compliance items.</p>
+    #[serde(rename = "UnspecifiedCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub unspecified_count: Option<i64>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartAutomationExecutionRequest {
-    #[doc="<p>The name of the Automation document to use for this execution.</p>"]
-    #[serde(rename="DocumentName")]
+    /// <p>The name of the Automation document to use for this execution.</p>
+    #[serde(rename = "DocumentName")]
     pub document_name: String,
-    #[doc="<p>The version of the Automation document to use for this execution.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the Automation document to use for this execution.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>A key-value map of execution parameters, which match the declared parameters in the Automation document.</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A key-value map of execution parameters, which match the declared parameters in the Automation document.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartAutomationExecutionResult {
-    #[doc="<p>The unique ID of a newly scheduled automation execution.</p>"]
-    #[serde(rename="AutomationExecutionId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The unique ID of a newly scheduled automation execution.</p>
+    #[serde(rename = "AutomationExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_id: Option<String>,
 }
 
-#[doc="<p>Detailed information about an the execution state of an Automation step.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+/// <p>Detailed information about an the execution state of an Automation step.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StepExecution {
-    #[doc="<p>The action this step performs. The action determines the behavior of the step.</p>"]
-    #[serde(rename="Action")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The action this step performs. The action determines the behavior of the step.</p>
+    #[serde(rename = "Action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
-    #[doc="<p>If a step has finished execution, this contains the time the execution ended. If the step has not yet concluded, this field is not populated.</p>"]
-    #[serde(rename="ExecutionEndTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a step has finished execution, this contains the time the execution ended. If the step has not yet concluded, this field is not populated.</p>
+    #[serde(rename = "ExecutionEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_end_time: Option<f64>,
-    #[doc="<p>If a step has begun execution, this contains the time the step started. If the step is in Pending status, this field is not populated.</p>"]
-    #[serde(rename="ExecutionStartTime")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a step has begun execution, this contains the time the step started. If the step is in Pending status, this field is not populated.</p>
+    #[serde(rename = "ExecutionStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_start_time: Option<f64>,
-    #[doc="<p>Information about the Automation failure.</p>"]
-    #[serde(rename="FailureDetails")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the Automation failure.</p>
+    #[serde(rename = "FailureDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_details: Option<FailureDetails>,
-    #[doc="<p>If a step failed, this message explains why the execution failed.</p>"]
-    #[serde(rename="FailureMessage")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If a step failed, this message explains why the execution failed.</p>
+    #[serde(rename = "FailureMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_message: Option<String>,
-    #[doc="<p>Fully-resolved values passed into the step before execution.</p>"]
-    #[serde(rename="Inputs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Fully-resolved values passed into the step before execution.</p>
+    #[serde(rename = "Inputs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub inputs: Option<::std::collections::HashMap<String, String>>,
-    #[doc="<p>Returned values from the execution of the step.</p>"]
-    #[serde(rename="Outputs")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Returned values from the execution of the step.</p>
+    #[serde(rename = "Outputs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub outputs: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>A message associated with the response code for an execution.</p>"]
-    #[serde(rename="Response")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A message associated with the response code for an execution.</p>
+    #[serde(rename = "Response")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub response: Option<String>,
-    #[doc="<p>The response code returned by the execution of the step.</p>"]
-    #[serde(rename="ResponseCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The response code returned by the execution of the step.</p>
+    #[serde(rename = "ResponseCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub response_code: Option<String>,
-    #[doc="<p>The name of this execution step.</p>"]
-    #[serde(rename="StepName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of this execution step.</p>
+    #[serde(rename = "StepName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub step_name: Option<String>,
-    #[doc="<p>The execution status for this step. Valid values include: Pending, InProgress, Success, Cancelled, Failed, and TimedOut.</p>"]
-    #[serde(rename="StepStatus")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The execution status for this step. Valid values include: Pending, InProgress, Success, Cancelled, Failed, and TimedOut.</p>
+    #[serde(rename = "StepStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub step_status: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopAutomationExecutionRequest {
-    #[doc="<p>The execution ID of the Automation to stop.</p>"]
-    #[serde(rename="AutomationExecutionId")]
+    /// <p>The execution ID of the Automation to stop.</p>
+    #[serde(rename = "AutomationExecutionId")]
     pub automation_execution_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopAutomationExecutionResult;
 
-#[doc="<p>Metadata that you assign to your managed instances. Tags enable you to categorize your managed instances in different ways, for example, by purpose, owner, or environment.</p>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>Metadata that you assign to your managed instances. Tags enable you to categorize your managed instances in different ways, for example, by purpose, owner, or environment.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
-    #[doc="<p>The name of the tag.</p>"]
-    #[serde(rename="Key")]
+    /// <p>The name of the tag.</p>
+    #[serde(rename = "Key")]
     pub key: String,
-    #[doc="<p>The value of the tag.</p>"]
-    #[serde(rename="Value")]
+    /// <p>The value of the tag.</p>
+    #[serde(rename = "Value")]
     pub value: String,
 }
 
-#[doc="<p>An array of search criteria that targets instances using a Key,Value combination that you specify. <code>Targets</code> is required if you don't provide one or more instance IDs in the call.</p> <p/>"]
-#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+/// <p>An array of search criteria that targets instances using a Key,Value combination that you specify. <code>Targets</code> is required if you don't provide one or more instance IDs in the call.</p> <p/>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Target {
-    #[doc="<p>User-defined criteria for sending commands that target instances that meet the criteria. Key can be tag:&lt;Amazon EC2 tag&gt; or InstanceIds. For more information about how to send commands that target instances using Key,Value parameters, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
-    #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-defined criteria for sending commands that target instances that meet the criteria. Key can be tag:&lt;Amazon EC2 tag&gt; or InstanceIds. For more information about how to send commands that target instances using Key,Value parameters, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Executing a Command Using Systems Manager Run Command</a>.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[doc="<p>User-defined criteria that maps to Key. For example, if you specified tag:ServerRole, you could specify value:WebServer to execute a command on instances that include Amazon EC2 tags of ServerRole,WebServer. For more information about how to send commands that target instances using Key,Value parameters, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
-    #[serde(rename="Values")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-defined criteria that maps to Key. For example, if you specified tag:ServerRole, you could specify value:WebServer to execute a command on instances that include Amazon EC2 tags of ServerRole,WebServer. For more information about how to send commands that target instances using Key,Value parameters, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Executing a Command Using Systems Manager Run Command</a>.</p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateAssociationRequest {
-    #[doc="<p>The ID of the association you want to update. </p>"]
-    #[serde(rename="AssociationId")]
+    /// <p>The ID of the association you want to update. </p>
+    #[serde(rename = "AssociationId")]
     pub association_id: String,
-    #[doc="<p>The name of the association that you want to update.</p>"]
-    #[serde(rename="AssociationName")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the association that you want to update.</p>
+    #[serde(rename = "AssociationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_name: Option<String>,
-    #[doc="<p>This parameter is provided for concurrency control purposes. You must specify the latest association version in the service. If you want to ensure that this request succeeds, either specify <code>$LATEST</code>, or omit this parameter.</p>"]
-    #[serde(rename="AssociationVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>This parameter is provided for concurrency control purposes. You must specify the latest association version in the service. If you want to ensure that this request succeeds, either specify <code>$LATEST</code>, or omit this parameter.</p>
+    #[serde(rename = "AssociationVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_version: Option<String>,
-    #[doc="<p>The document version you want update for the association. </p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The document version you want update for the association. </p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The name of the association document.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the association document.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>An Amazon S3 bucket where you want to store the results of this request.</p>"]
-    #[serde(rename="OutputLocation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An Amazon S3 bucket where you want to store the results of this request.</p>
+    #[serde(rename = "OutputLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub output_location: Option<InstanceAssociationOutputLocation>,
-    #[doc="<p>The parameters you want to update for the association. If you create a parameter using Parameter Store, you can reference the parameter using {{ssm:parameter-name}}</p>"]
-    #[serde(rename="Parameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters you want to update for the association. If you create a parameter using Parameter Store, you can reference the parameter using {{ssm:parameter-name}}</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[doc="<p>The cron expression used to schedule the association that you want to update.</p>"]
-    #[serde(rename="ScheduleExpression")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The cron expression used to schedule the association that you want to update.</p>
+    #[serde(rename = "ScheduleExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
-    #[doc="<p>The targets of the association.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The targets of the association.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateAssociationResult {
-    #[doc="<p>The description of the association that was updated.</p>"]
-    #[serde(rename="AssociationDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of the association that was updated.</p>
+    #[serde(rename = "AssociationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_description: Option<AssociationDescription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateAssociationStatusRequest {
-    #[doc="<p>The association status.</p>"]
-    #[serde(rename="AssociationStatus")]
+    /// <p>The association status.</p>
+    #[serde(rename = "AssociationStatus")]
     pub association_status: AssociationStatus,
-    #[doc="<p>The ID of the instance.</p>"]
-    #[serde(rename="InstanceId")]
+    /// <p>The ID of the instance.</p>
+    #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    #[doc="<p>The name of the SSM document.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the SSM document.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateAssociationStatusResult {
-    #[doc="<p>Information about the association.</p>"]
-    #[serde(rename="AssociationDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Information about the association.</p>
+    #[serde(rename = "AssociationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub association_description: Option<AssociationDescription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDocumentDefaultVersionRequest {
-    #[doc="<p>The version of a custom document that you want to set as the default version.</p>"]
-    #[serde(rename="DocumentVersion")]
+    /// <p>The version of a custom document that you want to set as the default version.</p>
+    #[serde(rename = "DocumentVersion")]
     pub document_version: String,
-    #[doc="<p>The name of a custom document that you want to set as the default version.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of a custom document that you want to set as the default version.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateDocumentDefaultVersionResult {
-    #[doc="<p>The description of a custom document that you want to set as the default version.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The description of a custom document that you want to set as the default version.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<DocumentDefaultVersionDescription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDocumentRequest {
-    #[doc="<p>The content in a document that you want to update.</p>"]
-    #[serde(rename="Content")]
+    /// <p>The content in a document that you want to update.</p>
+    #[serde(rename = "Content")]
     pub content: String,
-    #[doc="<p>The version of the document that you want to update.</p>"]
-    #[serde(rename="DocumentVersion")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The version of the document that you want to update.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    #[doc="<p>The name of the document that you want to update.</p>"]
-    #[serde(rename="Name")]
+    /// <p>The name of the document that you want to update.</p>
+    #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateDocumentResult {
-    #[doc="<p>A description of the document that was updated.</p>"]
-    #[serde(rename="DocumentDescription")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the document that was updated.</p>
+    #[serde(rename = "DocumentDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub document_description: Option<DocumentDescription>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateMaintenanceWindowRequest {
-    #[doc="<p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>"]
-    #[serde(rename="AllowUnassociatedTargets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>
+    #[serde(rename = "AllowUnassociatedTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_unassociated_targets: Option<bool>,
-    #[doc="<p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>"]
-    #[serde(rename="Cutoff")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>
+    #[serde(rename = "Cutoff")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cutoff: Option<i64>,
-    #[doc="<p>An optional description for the update request.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional description for the update request.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The duration of the Maintenance Window in hours.</p>"]
-    #[serde(rename="Duration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The duration of the Maintenance Window in hours.</p>
+    #[serde(rename = "Duration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<i64>,
-    #[doc="<p>Whether the Maintenance Window is enabled.</p>"]
-    #[serde(rename="Enabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether the Maintenance Window is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    #[doc="<p>The name of the Maintenance Window.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Maintenance Window.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>If True, then all fields that are required by the CreateMaintenanceWindow action are also required for this API request. Optional fields that are not specified are set to null. </p>"]
-    #[serde(rename="Replace")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If True, then all fields that are required by the CreateMaintenanceWindow action are also required for this API request. Optional fields that are not specified are set to null. </p>
+    #[serde(rename = "Replace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replace: Option<bool>,
-    #[doc="<p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>"]
-    #[serde(rename="Schedule")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>
+    #[serde(rename = "Schedule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    #[doc="<p>The ID of the Maintenance Window to update.</p>"]
-    #[serde(rename="WindowId")]
+    /// <p>The ID of the Maintenance Window to update.</p>
+    #[serde(rename = "WindowId")]
     pub window_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateMaintenanceWindowResult {
-    #[doc="<p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>"]
-    #[serde(rename="AllowUnassociatedTargets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>
+    #[serde(rename = "AllowUnassociatedTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_unassociated_targets: Option<bool>,
-    #[doc="<p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>"]
-    #[serde(rename="Cutoff")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>
+    #[serde(rename = "Cutoff")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cutoff: Option<i64>,
-    #[doc="<p>An optional description of the update.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional description of the update.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The duration of the Maintenance Window in hours.</p>"]
-    #[serde(rename="Duration")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The duration of the Maintenance Window in hours.</p>
+    #[serde(rename = "Duration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<i64>,
-    #[doc="<p>Whether the Maintenance Window is enabled.</p>"]
-    #[serde(rename="Enabled")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Whether the Maintenance Window is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    #[doc="<p>The name of the Maintenance Window.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the Maintenance Window.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>"]
-    #[serde(rename="Schedule")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>
+    #[serde(rename = "Schedule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    #[doc="<p>The ID of the created Maintenance Window.</p>"]
-    #[serde(rename="WindowId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the created Maintenance Window.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateMaintenanceWindowTargetRequest {
-    #[doc="<p>An optional description for the update.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>An optional description for the update.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A name for the update.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A name for the update.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>"]
-    #[serde(rename="OwnerInformation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>
+    #[serde(rename = "OwnerInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_information: Option<String>,
-    #[doc="<p>If True, then all fields that are required by the RegisterTargetWithMaintenanceWindow action are also required for this API request. Optional fields that are not specified are set to null.</p>"]
-    #[serde(rename="Replace")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If True, then all fields that are required by the RegisterTargetWithMaintenanceWindow action are also required for this API request. Optional fields that are not specified are set to null.</p>
+    #[serde(rename = "Replace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replace: Option<bool>,
-    #[doc="<p>The targets to add or replace.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The targets to add or replace.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    #[doc="<p>The Maintenance Window ID with which to modify the target.</p>"]
-    #[serde(rename="WindowId")]
+    /// <p>The Maintenance Window ID with which to modify the target.</p>
+    #[serde(rename = "WindowId")]
     pub window_id: String,
-    #[doc="<p>The target ID to modify.</p>"]
-    #[serde(rename="WindowTargetId")]
+    /// <p>The target ID to modify.</p>
+    #[serde(rename = "WindowTargetId")]
     pub window_target_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateMaintenanceWindowTargetResult {
-    #[doc="<p>The updated description.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The updated name.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The updated owner.</p>"]
-    #[serde(rename="OwnerInformation")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated owner.</p>
+    #[serde(rename = "OwnerInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_information: Option<String>,
-    #[doc="<p>The updated targets.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated targets.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    #[doc="<p>The Maintenance Window ID specified in the update request.</p>"]
-    #[serde(rename="WindowId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The Maintenance Window ID specified in the update request.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
-    #[doc="<p>The target ID specified in the update request.</p>"]
-    #[serde(rename="WindowTargetId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The target ID specified in the update request.</p>
+    #[serde(rename = "WindowTargetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_target_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateMaintenanceWindowTaskRequest {
-    #[doc="<p>The new task description to specify.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new task description to specify.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The new logging location in Amazon S3 to specify.</p>"]
-    #[serde(rename="LoggingInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new logging location in Amazon S3 to specify.</p>
+    #[serde(rename = "LoggingInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
-    #[doc="<p>The new <code>MaxConcurrency</code> value you want to specify. <code>MaxConcurrency</code> is the number of targets that are allowed to run this task in parallel.</p>"]
-    #[serde(rename="MaxConcurrency")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new <code>MaxConcurrency</code> value you want to specify. <code>MaxConcurrency</code> is the number of targets that are allowed to run this task in parallel.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrency: Option<String>,
-    #[doc="<p>The new <code>MaxErrors</code> value to specify. <code>MaxErrors</code> is the maximum number of errors that are allowed before the task stops being scheduled.</p>"]
-    #[serde(rename="MaxErrors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new <code>MaxErrors</code> value to specify. <code>MaxErrors</code> is the maximum number of errors that are allowed before the task stops being scheduled.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_errors: Option<String>,
-    #[doc="<p>The new task name to specify.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new task name to specify.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The new task priority to specify. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>"]
-    #[serde(rename="Priority")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The new task priority to specify. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    #[doc="<p>If True, then all fields that are required by the RegisterTaskWithMaintenanceWndow action are also required for this API request. Optional fields that are not specified are set to null.</p>"]
-    #[serde(rename="Replace")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>If True, then all fields that are required by the RegisterTaskWithMaintenanceWndow action are also required for this API request. Optional fields that are not specified are set to null.</p>
+    #[serde(rename = "Replace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replace: Option<bool>,
-    #[doc="<p>The IAM service role ARN to modify. The system assumes this role during task execution. </p>"]
-    #[serde(rename="ServiceRoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The IAM service role ARN to modify. The system assumes this role during task execution. </p>
+    #[serde(rename = "ServiceRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    #[doc="<p>The targets (either instances or tags) to modify. Instances are specified using Key=instanceids,Values=instanceID_1,instanceID_2. Tags are specified using Key=tag_name,Values=tag_value. </p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The targets (either instances or tags) to modify. Instances are specified using Key=instanceids,Values=instanceID_1,instanceID_2. Tags are specified using Key=tag_name,Values=tag_value. </p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    #[doc="<p>The task ARN to modify.</p>"]
-    #[serde(rename="TaskArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The task ARN to modify.</p>
+    #[serde(rename = "TaskArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
-    #[doc="<p>The parameters that the task should use during execution. Populate only the fields that match the task type. All other fields should be empty.</p>"]
-    #[serde(rename="TaskInvocationParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters that the task should use during execution. Populate only the fields that match the task type. All other fields should be empty.</p>
+    #[serde(rename = "TaskInvocationParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
-    #[doc="<p>The parameters to modify. The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>"]
-    #[serde(rename="TaskParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The parameters to modify. The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>
+    #[serde(rename = "TaskParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
         Option<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
-    #[doc="<p>The Maintenance Window ID that contains the task to modify.</p>"]
-    #[serde(rename="WindowId")]
+    /// <p>The Maintenance Window ID that contains the task to modify.</p>
+    #[serde(rename = "WindowId")]
     pub window_id: String,
-    #[doc="<p>The task ID to modify.</p>"]
-    #[serde(rename="WindowTaskId")]
+    /// <p>The task ID to modify.</p>
+    #[serde(rename = "WindowTaskId")]
     pub window_task_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateMaintenanceWindowTaskResult {
-    #[doc="<p>The updated task description.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated task description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>The updated logging information in Amazon S3.</p>"]
-    #[serde(rename="LoggingInfo")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated logging information in Amazon S3.</p>
+    #[serde(rename = "LoggingInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
-    #[doc="<p>The updated MaxConcurrency value.</p>"]
-    #[serde(rename="MaxConcurrency")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated MaxConcurrency value.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrency: Option<String>,
-    #[doc="<p>The updated MaxErrors value.</p>"]
-    #[serde(rename="MaxErrors")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated MaxErrors value.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_errors: Option<String>,
-    #[doc="<p>The updated task name.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated task name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The updated priority value.</p>"]
-    #[serde(rename="Priority")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated priority value.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    #[doc="<p>The updated service role ARN value.</p>"]
-    #[serde(rename="ServiceRoleArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated service role ARN value.</p>
+    #[serde(rename = "ServiceRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    #[doc="<p>The updated target values.</p>"]
-    #[serde(rename="Targets")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated target values.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    #[doc="<p>The updated task ARN value.</p>"]
-    #[serde(rename="TaskArn")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated task ARN value.</p>
+    #[serde(rename = "TaskArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
-    #[doc="<p>The updated parameter values.</p>"]
-    #[serde(rename="TaskInvocationParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated parameter values.</p>
+    #[serde(rename = "TaskInvocationParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
-    #[doc="<p>The updated parameter values.</p>"]
-    #[serde(rename="TaskParameters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The updated parameter values.</p>
+    #[serde(rename = "TaskParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
         Option<::std::collections::HashMap<String, MaintenanceWindowTaskParameterValueExpression>>,
-    #[doc="<p>The ID of the Maintenance Window that was updated.</p>"]
-    #[serde(rename="WindowId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the Maintenance Window that was updated.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
-    #[doc="<p>The task ID of the Maintenance Window that was updated.</p>"]
-    #[serde(rename="WindowTaskId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The task ID of the Maintenance Window that was updated.</p>
+    #[serde(rename = "WindowTaskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub window_task_id: Option<String>,
 }
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateManagedInstanceRoleRequest {
-    #[doc="<p>The IAM role you want to assign or change.</p>"]
-    #[serde(rename="IamRole")]
+    /// <p>The IAM role you want to assign or change.</p>
+    #[serde(rename = "IamRole")]
     pub iam_role: String,
-    #[doc="<p>The ID of the managed instance where you want to update the role.</p>"]
-    #[serde(rename="InstanceId")]
+    /// <p>The ID of the managed instance where you want to update the role.</p>
+    #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateManagedInstanceRoleResult;
 
-#[derive(Default,Debug,Clone,Serialize)]
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdatePatchBaselineRequest {
-    #[doc="<p>A set of rules used to include patches in the baseline.</p>"]
-    #[serde(rename="ApprovalRules")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A set of rules used to include patches in the baseline.</p>
+    #[serde(rename = "ApprovalRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approval_rules: Option<PatchRuleGroup>,
-    #[doc="<p>A list of explicitly approved patches for the baseline.</p>"]
-    #[serde(rename="ApprovedPatches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of explicitly approved patches for the baseline.</p>
+    #[serde(rename = "ApprovedPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches: Option<Vec<String>>,
-    #[doc="<p>Assigns a new compliance severity level to an existing patch baseline.</p>"]
-    #[serde(rename="ApprovedPatchesComplianceLevel")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>Assigns a new compliance severity level to an existing patch baseline.</p>
+    #[serde(rename = "ApprovedPatchesComplianceLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches_compliance_level: Option<String>,
-    #[doc="<p>The ID of the patch baseline to update.</p>"]
-    #[serde(rename="BaselineId")]
+    /// <p>The ID of the patch baseline to update.</p>
+    #[serde(rename = "BaselineId")]
     pub baseline_id: String,
-    #[doc="<p>A description of the patch baseline.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the patch baseline.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A set of global filters used to exclude patches from the baseline.</p>"]
-    #[serde(rename="GlobalFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A set of global filters used to exclude patches from the baseline.</p>
+    #[serde(rename = "GlobalFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub global_filters: Option<PatchFilterGroup>,
-    #[doc="<p>The name of the patch baseline.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the patch baseline.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>A list of explicitly rejected patches for the baseline.</p>"]
-    #[serde(rename="RejectedPatches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of explicitly rejected patches for the baseline.</p>
+    #[serde(rename = "RejectedPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rejected_patches: Option<Vec<String>>,
 }
 
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdatePatchBaselineResult {
-    #[doc="<p>A set of rules used to include patches in the baseline.</p>"]
-    #[serde(rename="ApprovalRules")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A set of rules used to include patches in the baseline.</p>
+    #[serde(rename = "ApprovalRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approval_rules: Option<PatchRuleGroup>,
-    #[doc="<p>A list of explicitly approved patches for the baseline.</p>"]
-    #[serde(rename="ApprovedPatches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of explicitly approved patches for the baseline.</p>
+    #[serde(rename = "ApprovedPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches: Option<Vec<String>>,
-    #[doc="<p>The compliance severity level assigned to the patch baseline after the update completed.</p>"]
-    #[serde(rename="ApprovedPatchesComplianceLevel")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The compliance severity level assigned to the patch baseline after the update completed.</p>
+    #[serde(rename = "ApprovedPatchesComplianceLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches_compliance_level: Option<String>,
-    #[doc="<p>The ID of the deleted patch baseline.</p>"]
-    #[serde(rename="BaselineId")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The ID of the deleted patch baseline.</p>
+    #[serde(rename = "BaselineId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub baseline_id: Option<String>,
-    #[doc="<p>The date when the patch baseline was created.</p>"]
-    #[serde(rename="CreatedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date when the patch baseline was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    #[doc="<p>A description of the Patch Baseline.</p>"]
-    #[serde(rename="Description")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A description of the Patch Baseline.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[doc="<p>A set of global filters used to exclude patches from the baseline.</p>"]
-    #[serde(rename="GlobalFilters")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A set of global filters used to exclude patches from the baseline.</p>
+    #[serde(rename = "GlobalFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub global_filters: Option<PatchFilterGroup>,
-    #[doc="<p>The date when the patch baseline was last modified.</p>"]
-    #[serde(rename="ModifiedDate")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The date when the patch baseline was last modified.</p>
+    #[serde(rename = "ModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub modified_date: Option<f64>,
-    #[doc="<p>The name of the patch baseline.</p>"]
-    #[serde(rename="Name")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The name of the patch baseline.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[doc="<p>The operating system rule used by the updated patch baseline.</p>"]
-    #[serde(rename="OperatingSystem")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>The operating system rule used by the updated patch baseline.</p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
-    #[doc="<p>A list of explicitly rejected patches for the baseline.</p>"]
-    #[serde(rename="RejectedPatches")]
-    #[serde(skip_serializing_if="Option::is_none")]
+    /// <p>A list of explicitly rejected patches for the baseline.</p>
+    #[serde(rename = "RejectedPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rejected_patches: Option<Vec<String>>,
 }
 
@@ -5307,7 +5303,6 @@ pub enum AddTagsToResourceError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl AddTagsToResourceError {
     pub fn from_body(body: &str) -> AddTagsToResourceError {
@@ -5407,7 +5402,6 @@ pub enum CancelCommandError {
     Unknown(String),
 }
 
-
 impl CancelCommandError {
     pub fn from_body(body: &str) -> CancelCommandError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5497,7 +5491,6 @@ pub enum CreateActivationError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl CreateActivationError {
     pub fn from_body(body: &str) -> CreateActivationError {
@@ -5597,7 +5590,6 @@ pub enum CreateAssociationError {
     Unknown(String),
 }
 
-
 impl CreateAssociationError {
     pub fn from_body(body: &str) -> CreateAssociationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5611,8 +5603,16 @@ impl CreateAssociationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AssociationAlreadyExists" => CreateAssociationError::AssociationAlreadyExists(String::from(error_message)),
-                    "AssociationLimitExceeded" => CreateAssociationError::AssociationLimitExceeded(String::from(error_message)),
+                    "AssociationAlreadyExists" => {
+                        CreateAssociationError::AssociationAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
+                    "AssociationLimitExceeded" => {
+                        CreateAssociationError::AssociationLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalServerError" => {
                         CreateAssociationError::InternalServerError(String::from(error_message))
                     }
@@ -5734,7 +5734,6 @@ pub enum CreateAssociationBatchError {
     Unknown(String),
 }
 
-
 impl CreateAssociationBatchError {
     pub fn from_body(body: &str) -> CreateAssociationBatchError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5748,17 +5747,31 @@ impl CreateAssociationBatchError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AssociationLimitExceeded" => CreateAssociationBatchError::AssociationLimitExceeded(String::from(error_message)),
-                    "DuplicateInstanceId" => CreateAssociationBatchError::DuplicateInstanceId(String::from(error_message)),
-                    "InternalServerError" => CreateAssociationBatchError::InternalServerError(String::from(error_message)),
+                    "AssociationLimitExceeded" => {
+                        CreateAssociationBatchError::AssociationLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DuplicateInstanceId" => CreateAssociationBatchError::DuplicateInstanceId(
+                        String::from(error_message),
+                    ),
+                    "InternalServerError" => CreateAssociationBatchError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidDocument" => {
                         CreateAssociationBatchError::InvalidDocument(String::from(error_message))
                     }
-                    "InvalidDocumentVersion" => CreateAssociationBatchError::InvalidDocumentVersion(String::from(error_message)),
+                    "InvalidDocumentVersion" => {
+                        CreateAssociationBatchError::InvalidDocumentVersion(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidInstanceId" => {
                         CreateAssociationBatchError::InvalidInstanceId(String::from(error_message))
                     }
-                    "InvalidOutputLocation" => CreateAssociationBatchError::InvalidOutputLocation(String::from(error_message)),
+                    "InvalidOutputLocation" => CreateAssociationBatchError::InvalidOutputLocation(
+                        String::from(error_message),
+                    ),
                     "InvalidParameters" => {
                         CreateAssociationBatchError::InvalidParameters(String::from(error_message))
                     }
@@ -5768,7 +5781,11 @@ impl CreateAssociationBatchError {
                     "InvalidTarget" => {
                         CreateAssociationBatchError::InvalidTarget(String::from(error_message))
                     }
-                    "UnsupportedPlatformType" => CreateAssociationBatchError::UnsupportedPlatformType(String::from(error_message)),
+                    "UnsupportedPlatformType" => {
+                        CreateAssociationBatchError::UnsupportedPlatformType(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateAssociationBatchError::Validation(error_message.to_string())
                     }
@@ -5853,7 +5870,6 @@ pub enum CreateDocumentError {
     Unknown(String),
 }
 
-
 impl CreateDocumentError {
     pub fn from_body(body: &str) -> CreateDocumentError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5879,7 +5895,11 @@ impl CreateDocumentError {
                     "InvalidDocumentContent" => {
                         CreateDocumentError::InvalidDocumentContent(String::from(error_message))
                     }
-                    "InvalidDocumentSchemaVersion" => CreateDocumentError::InvalidDocumentSchemaVersion(String::from(error_message)),
+                    "InvalidDocumentSchemaVersion" => {
+                        CreateDocumentError::InvalidDocumentSchemaVersion(String::from(
+                            error_message,
+                        ))
+                    }
                     "MaxDocumentSizeExceeded" => {
                         CreateDocumentError::MaxDocumentSizeExceeded(String::from(error_message))
                     }
@@ -5954,7 +5974,6 @@ pub enum CreateMaintenanceWindowError {
     Unknown(String),
 }
 
-
 impl CreateMaintenanceWindowError {
     pub fn from_body(body: &str) -> CreateMaintenanceWindowError {
         match from_str::<SerdeJsonValue>(body) {
@@ -5968,9 +5987,19 @@ impl CreateMaintenanceWindowError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "IdempotentParameterMismatch" => CreateMaintenanceWindowError::IdempotentParameterMismatch(String::from(error_message)),
-                    "InternalServerError" => CreateMaintenanceWindowError::InternalServerError(String::from(error_message)),
-                    "ResourceLimitExceededException" => CreateMaintenanceWindowError::ResourceLimitExceeded(String::from(error_message)),
+                    "IdempotentParameterMismatch" => {
+                        CreateMaintenanceWindowError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => CreateMaintenanceWindowError::InternalServerError(
+                        String::from(error_message),
+                    ),
+                    "ResourceLimitExceededException" => {
+                        CreateMaintenanceWindowError::ResourceLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         CreateMaintenanceWindowError::Validation(error_message.to_string())
                     }
@@ -6041,7 +6070,6 @@ pub enum CreatePatchBaselineError {
     Unknown(String),
 }
 
-
 impl CreatePatchBaselineError {
     pub fn from_body(body: &str) -> CreatePatchBaselineError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6055,7 +6083,11 @@ impl CreatePatchBaselineError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "IdempotentParameterMismatch" => CreatePatchBaselineError::IdempotentParameterMismatch(String::from(error_message)),
+                    "IdempotentParameterMismatch" => {
+                        CreatePatchBaselineError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalServerError" => {
                         CreatePatchBaselineError::InternalServerError(String::from(error_message))
                     }
@@ -6134,7 +6166,6 @@ pub enum CreateResourceDataSyncError {
     Unknown(String),
 }
 
-
 impl CreateResourceDataSyncError {
     pub fn from_body(body: &str) -> CreateResourceDataSyncError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6148,10 +6179,24 @@ impl CreateResourceDataSyncError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => CreateResourceDataSyncError::InternalServerError(String::from(error_message)),
-                    "ResourceDataSyncAlreadyExistsException" => CreateResourceDataSyncError::ResourceDataSyncAlreadyExists(String::from(error_message)),
-                    "ResourceDataSyncCountExceededException" => CreateResourceDataSyncError::ResourceDataSyncCountExceeded(String::from(error_message)),
-                    "ResourceDataSyncInvalidConfigurationException" => CreateResourceDataSyncError::ResourceDataSyncInvalidConfiguration(String::from(error_message)),
+                    "InternalServerError" => CreateResourceDataSyncError::InternalServerError(
+                        String::from(error_message),
+                    ),
+                    "ResourceDataSyncAlreadyExistsException" => {
+                        CreateResourceDataSyncError::ResourceDataSyncAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceDataSyncCountExceededException" => {
+                        CreateResourceDataSyncError::ResourceDataSyncCountExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceDataSyncInvalidConfigurationException" => {
+                        CreateResourceDataSyncError::ResourceDataSyncInvalidConfiguration(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         CreateResourceDataSyncError::Validation(error_message.to_string())
                     }
@@ -6222,7 +6267,6 @@ pub enum DeleteActivationError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteActivationError {
     pub fn from_body(body: &str) -> DeleteActivationError {
@@ -6317,7 +6361,6 @@ pub enum DeleteAssociationError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteAssociationError {
     pub fn from_body(body: &str) -> DeleteAssociationError {
@@ -6421,7 +6464,6 @@ pub enum DeleteDocumentError {
     Unknown(String),
 }
 
-
 impl DeleteDocumentError {
     pub fn from_body(body: &str) -> DeleteDocumentError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6512,7 +6554,6 @@ pub enum DeleteMaintenanceWindowError {
     Unknown(String),
 }
 
-
 impl DeleteMaintenanceWindowError {
     pub fn from_body(body: &str) -> DeleteMaintenanceWindowError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6526,7 +6567,9 @@ impl DeleteMaintenanceWindowError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DeleteMaintenanceWindowError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => DeleteMaintenanceWindowError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DeleteMaintenanceWindowError::Validation(error_message.to_string())
                     }
@@ -6592,7 +6635,6 @@ pub enum DeleteParameterError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeleteParameterError {
     pub fn from_body(body: &str) -> DeleteParameterError {
@@ -6676,7 +6718,6 @@ pub enum DeleteParametersError {
     Unknown(String),
 }
 
-
 impl DeleteParametersError {
     pub fn from_body(body: &str) -> DeleteParametersError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6756,7 +6797,6 @@ pub enum DeletePatchBaselineError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DeletePatchBaselineError {
     pub fn from_body(body: &str) -> DeletePatchBaselineError {
@@ -6844,7 +6884,6 @@ pub enum DeleteResourceDataSyncError {
     Unknown(String),
 }
 
-
 impl DeleteResourceDataSyncError {
     pub fn from_body(body: &str) -> DeleteResourceDataSyncError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6858,8 +6897,14 @@ impl DeleteResourceDataSyncError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DeleteResourceDataSyncError::InternalServerError(String::from(error_message)),
-                    "ResourceDataSyncNotFoundException" => DeleteResourceDataSyncError::ResourceDataSyncNotFound(String::from(error_message)),
+                    "InternalServerError" => DeleteResourceDataSyncError::InternalServerError(
+                        String::from(error_message),
+                    ),
+                    "ResourceDataSyncNotFoundException" => {
+                        DeleteResourceDataSyncError::ResourceDataSyncNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DeleteResourceDataSyncError::Validation(error_message.to_string())
                     }
@@ -6927,7 +6972,6 @@ pub enum DeregisterManagedInstanceError {
     Unknown(String),
 }
 
-
 impl DeregisterManagedInstanceError {
     pub fn from_body(body: &str) -> DeregisterManagedInstanceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -6941,8 +6985,12 @@ impl DeregisterManagedInstanceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DeregisterManagedInstanceError::InternalServerError(String::from(error_message)),
-                    "InvalidInstanceId" => DeregisterManagedInstanceError::InvalidInstanceId(String::from(error_message)),
+                    "InternalServerError" => DeregisterManagedInstanceError::InternalServerError(
+                        String::from(error_message),
+                    ),
+                    "InvalidInstanceId" => DeregisterManagedInstanceError::InvalidInstanceId(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DeregisterManagedInstanceError::Validation(error_message.to_string())
                     }
@@ -7010,7 +7058,6 @@ pub enum DeregisterPatchBaselineForPatchGroupError {
     Unknown(String),
 }
 
-
 impl DeregisterPatchBaselineForPatchGroupError {
     pub fn from_body(body: &str) -> DeregisterPatchBaselineForPatchGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7024,11 +7071,20 @@ impl DeregisterPatchBaselineForPatchGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DeregisterPatchBaselineForPatchGroupError::InternalServerError(String::from(error_message)),
-                    "InvalidResourceId" => DeregisterPatchBaselineForPatchGroupError::InvalidResourceId(String::from(error_message)),
+                    "InternalServerError" => {
+                        DeregisterPatchBaselineForPatchGroupError::InternalServerError(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidResourceId" => {
+                        DeregisterPatchBaselineForPatchGroupError::InvalidResourceId(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
-                        DeregisterPatchBaselineForPatchGroupError::Validation(error_message
-                                                                                  .to_string())
+                        DeregisterPatchBaselineForPatchGroupError::Validation(
+                            error_message.to_string(),
+                        )
                     }
                     _ => DeregisterPatchBaselineForPatchGroupError::Unknown(String::from(body)),
                 }
@@ -7096,7 +7152,6 @@ pub enum DeregisterTargetFromMaintenanceWindowError {
     Unknown(String),
 }
 
-
 impl DeregisterTargetFromMaintenanceWindowError {
     pub fn from_body(body: &str) -> DeregisterTargetFromMaintenanceWindowError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7110,12 +7165,25 @@ impl DeregisterTargetFromMaintenanceWindowError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DoesNotExistException" => DeregisterTargetFromMaintenanceWindowError::DoesNotExist(String::from(error_message)),
-                    "InternalServerError" => DeregisterTargetFromMaintenanceWindowError::InternalServerError(String::from(error_message)),
-                    "TargetInUseException" => DeregisterTargetFromMaintenanceWindowError::TargetInUse(String::from(error_message)),
+                    "DoesNotExistException" => {
+                        DeregisterTargetFromMaintenanceWindowError::DoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => {
+                        DeregisterTargetFromMaintenanceWindowError::InternalServerError(
+                            String::from(error_message),
+                        )
+                    }
+                    "TargetInUseException" => {
+                        DeregisterTargetFromMaintenanceWindowError::TargetInUse(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
-                        DeregisterTargetFromMaintenanceWindowError::Validation(error_message
-                                                                                   .to_string())
+                        DeregisterTargetFromMaintenanceWindowError::Validation(
+                            error_message.to_string(),
+                        )
                     }
                     _ => DeregisterTargetFromMaintenanceWindowError::Unknown(String::from(body)),
                 }
@@ -7182,7 +7250,6 @@ pub enum DeregisterTaskFromMaintenanceWindowError {
     Unknown(String),
 }
 
-
 impl DeregisterTaskFromMaintenanceWindowError {
     pub fn from_body(body: &str) -> DeregisterTaskFromMaintenanceWindowError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7196,12 +7263,19 @@ impl DeregisterTaskFromMaintenanceWindowError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DoesNotExistException" => DeregisterTaskFromMaintenanceWindowError::DoesNotExist(String::from(error_message)),
-                    "InternalServerError" => DeregisterTaskFromMaintenanceWindowError::InternalServerError(String::from(error_message)),
-                    "ValidationException" => {
-                        DeregisterTaskFromMaintenanceWindowError::Validation(error_message
-                                                                                 .to_string())
+                    "DoesNotExistException" => {
+                        DeregisterTaskFromMaintenanceWindowError::DoesNotExist(String::from(
+                            error_message,
+                        ))
                     }
+                    "InternalServerError" => {
+                        DeregisterTaskFromMaintenanceWindowError::InternalServerError(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => DeregisterTaskFromMaintenanceWindowError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DeregisterTaskFromMaintenanceWindowError::Unknown(String::from(body)),
                 }
             }
@@ -7267,7 +7341,6 @@ pub enum DescribeActivationsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeActivationsError {
     pub fn from_body(body: &str) -> DescribeActivationsError {
@@ -7365,7 +7438,6 @@ pub enum DescribeAssociationError {
     Unknown(String),
 }
 
-
 impl DescribeAssociationError {
     pub fn from_body(body: &str) -> DescribeAssociationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7379,11 +7451,19 @@ impl DescribeAssociationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AssociationDoesNotExist" => DescribeAssociationError::AssociationDoesNotExist(String::from(error_message)),
+                    "AssociationDoesNotExist" => {
+                        DescribeAssociationError::AssociationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalServerError" => {
                         DescribeAssociationError::InternalServerError(String::from(error_message))
                     }
-                    "InvalidAssociationVersion" => DescribeAssociationError::InvalidAssociationVersion(String::from(error_message)),
+                    "InvalidAssociationVersion" => {
+                        DescribeAssociationError::InvalidAssociationVersion(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidDocument" => {
                         DescribeAssociationError::InvalidDocument(String::from(error_message))
                     }
@@ -7460,7 +7540,6 @@ pub enum DescribeAutomationExecutionsError {
     Unknown(String),
 }
 
-
 impl DescribeAutomationExecutionsError {
     pub fn from_body(body: &str) -> DescribeAutomationExecutionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7474,8 +7553,14 @@ impl DescribeAutomationExecutionsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DescribeAutomationExecutionsError::InternalServerError(String::from(error_message)),
-                    "InvalidNextToken" => DescribeAutomationExecutionsError::InvalidNextToken(String::from(error_message)),
+                    "InternalServerError" => {
+                        DescribeAutomationExecutionsError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidNextToken" => DescribeAutomationExecutionsError::InvalidNextToken(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DescribeAutomationExecutionsError::Validation(error_message.to_string())
                     }
@@ -7541,7 +7626,6 @@ pub enum DescribeAvailablePatchesError {
     Unknown(String),
 }
 
-
 impl DescribeAvailablePatchesError {
     pub fn from_body(body: &str) -> DescribeAvailablePatchesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7555,7 +7639,9 @@ impl DescribeAvailablePatchesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DescribeAvailablePatchesError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => DescribeAvailablePatchesError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DescribeAvailablePatchesError::Validation(error_message.to_string())
                     }
@@ -7623,7 +7709,6 @@ pub enum DescribeDocumentError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeDocumentError {
     pub fn from_body(body: &str) -> DescribeDocumentError {
@@ -7715,7 +7800,6 @@ pub enum DescribeDocumentPermissionError {
     Unknown(String),
 }
 
-
 impl DescribeDocumentPermissionError {
     pub fn from_body(body: &str) -> DescribeDocumentPermissionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7729,9 +7813,17 @@ impl DescribeDocumentPermissionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DescribeDocumentPermissionError::InternalServerError(String::from(error_message)),
-                    "InvalidDocument" => DescribeDocumentPermissionError::InvalidDocument(String::from(error_message)),
-                    "InvalidPermissionType" => DescribeDocumentPermissionError::InvalidPermissionType(String::from(error_message)),
+                    "InternalServerError" => DescribeDocumentPermissionError::InternalServerError(
+                        String::from(error_message),
+                    ),
+                    "InvalidDocument" => DescribeDocumentPermissionError::InvalidDocument(
+                        String::from(error_message),
+                    ),
+                    "InvalidPermissionType" => {
+                        DescribeDocumentPermissionError::InvalidPermissionType(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeDocumentPermissionError::Validation(error_message.to_string())
                     }
@@ -7802,7 +7894,6 @@ pub enum DescribeEffectiveInstanceAssociationsError {
     Unknown(String),
 }
 
-
 impl DescribeEffectiveInstanceAssociationsError {
     pub fn from_body(body: &str) -> DescribeEffectiveInstanceAssociationsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7816,12 +7907,25 @@ impl DescribeEffectiveInstanceAssociationsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DescribeEffectiveInstanceAssociationsError::InternalServerError(String::from(error_message)),
-                    "InvalidInstanceId" => DescribeEffectiveInstanceAssociationsError::InvalidInstanceId(String::from(error_message)),
-                    "InvalidNextToken" => DescribeEffectiveInstanceAssociationsError::InvalidNextToken(String::from(error_message)),
+                    "InternalServerError" => {
+                        DescribeEffectiveInstanceAssociationsError::InternalServerError(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidInstanceId" => {
+                        DescribeEffectiveInstanceAssociationsError::InvalidInstanceId(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidNextToken" => {
+                        DescribeEffectiveInstanceAssociationsError::InvalidNextToken(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
-                        DescribeEffectiveInstanceAssociationsError::Validation(error_message
-                                                                                   .to_string())
+                        DescribeEffectiveInstanceAssociationsError::Validation(
+                            error_message.to_string(),
+                        )
                     }
                     _ => DescribeEffectiveInstanceAssociationsError::Unknown(String::from(body)),
                 }
@@ -7892,7 +7996,6 @@ pub enum DescribeEffectivePatchesForPatchBaselineError {
     Unknown(String),
 }
 
-
 impl DescribeEffectivePatchesForPatchBaselineError {
     pub fn from_body(body: &str) -> DescribeEffectivePatchesForPatchBaselineError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7906,11 +8009,31 @@ impl DescribeEffectivePatchesForPatchBaselineError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DoesNotExistException" => DescribeEffectivePatchesForPatchBaselineError::DoesNotExist(String::from(error_message)),
-                    "InternalServerError" => DescribeEffectivePatchesForPatchBaselineError::InternalServerError(String::from(error_message)),
-                    "InvalidResourceId" => DescribeEffectivePatchesForPatchBaselineError::InvalidResourceId(String::from(error_message)),
-                    "UnsupportedOperatingSystem" => DescribeEffectivePatchesForPatchBaselineError::UnsupportedOperatingSystem(String::from(error_message)),
-                    "ValidationException" => DescribeEffectivePatchesForPatchBaselineError::Validation(error_message.to_string()),
+                    "DoesNotExistException" => {
+                        DescribeEffectivePatchesForPatchBaselineError::DoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => {
+                        DescribeEffectivePatchesForPatchBaselineError::InternalServerError(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidResourceId" => {
+                        DescribeEffectivePatchesForPatchBaselineError::InvalidResourceId(
+                            String::from(error_message),
+                        )
+                    }
+                    "UnsupportedOperatingSystem" => {
+                        DescribeEffectivePatchesForPatchBaselineError::UnsupportedOperatingSystem(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DescribeEffectivePatchesForPatchBaselineError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
                     _ => DescribeEffectivePatchesForPatchBaselineError::Unknown(String::from(body)),
                 }
             }
@@ -7950,7 +8073,9 @@ impl Error for DescribeEffectivePatchesForPatchBaselineError {
             DescribeEffectivePatchesForPatchBaselineError::DoesNotExist(ref cause) => cause,
             DescribeEffectivePatchesForPatchBaselineError::InternalServerError(ref cause) => cause,
             DescribeEffectivePatchesForPatchBaselineError::InvalidResourceId(ref cause) => cause,
-            DescribeEffectivePatchesForPatchBaselineError::UnsupportedOperatingSystem(ref cause) => cause,
+            DescribeEffectivePatchesForPatchBaselineError::UnsupportedOperatingSystem(
+                ref cause,
+            ) => cause,
             DescribeEffectivePatchesForPatchBaselineError::Validation(ref cause) => cause,
             DescribeEffectivePatchesForPatchBaselineError::Credentials(ref err) => {
                 err.description()
@@ -7981,7 +8106,6 @@ pub enum DescribeInstanceAssociationsStatusError {
     Unknown(String),
 }
 
-
 impl DescribeInstanceAssociationsStatusError {
     pub fn from_body(body: &str) -> DescribeInstanceAssociationsStatusError {
         match from_str::<SerdeJsonValue>(body) {
@@ -7995,13 +8119,24 @@ impl DescribeInstanceAssociationsStatusError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DescribeInstanceAssociationsStatusError::InternalServerError(String::from(error_message)),
-                    "InvalidInstanceId" => DescribeInstanceAssociationsStatusError::InvalidInstanceId(String::from(error_message)),
-                    "InvalidNextToken" => DescribeInstanceAssociationsStatusError::InvalidNextToken(String::from(error_message)),
-                    "ValidationException" => {
-                        DescribeInstanceAssociationsStatusError::Validation(error_message
-                                                                                .to_string())
+                    "InternalServerError" => {
+                        DescribeInstanceAssociationsStatusError::InternalServerError(String::from(
+                            error_message,
+                        ))
                     }
+                    "InvalidInstanceId" => {
+                        DescribeInstanceAssociationsStatusError::InvalidInstanceId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidNextToken" => {
+                        DescribeInstanceAssociationsStatusError::InvalidNextToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => DescribeInstanceAssociationsStatusError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DescribeInstanceAssociationsStatusError::Unknown(String::from(body)),
                 }
             }
@@ -8073,7 +8208,6 @@ pub enum DescribeInstanceInformationError {
     Unknown(String),
 }
 
-
 impl DescribeInstanceInformationError {
     pub fn from_body(body: &str) -> DescribeInstanceInformationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8087,11 +8221,25 @@ impl DescribeInstanceInformationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DescribeInstanceInformationError::InternalServerError(String::from(error_message)),
-                    "InvalidFilterKey" => DescribeInstanceInformationError::InvalidFilterKey(String::from(error_message)),
-                    "InvalidInstanceId" => DescribeInstanceInformationError::InvalidInstanceId(String::from(error_message)),
-                    "InvalidInstanceInformationFilterValue" => DescribeInstanceInformationError::InvalidInstanceInformationFilterValue(String::from(error_message)),
-                    "InvalidNextToken" => DescribeInstanceInformationError::InvalidNextToken(String::from(error_message)),
+                    "InternalServerError" => {
+                        DescribeInstanceInformationError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidFilterKey" => DescribeInstanceInformationError::InvalidFilterKey(
+                        String::from(error_message),
+                    ),
+                    "InvalidInstanceId" => DescribeInstanceInformationError::InvalidInstanceId(
+                        String::from(error_message),
+                    ),
+                    "InvalidInstanceInformationFilterValue" => {
+                        DescribeInstanceInformationError::InvalidInstanceInformationFilterValue(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidNextToken" => DescribeInstanceInformationError::InvalidNextToken(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DescribeInstanceInformationError::Validation(error_message.to_string())
                     }
@@ -8164,7 +8312,6 @@ pub enum DescribeInstancePatchStatesError {
     Unknown(String),
 }
 
-
 impl DescribeInstancePatchStatesError {
     pub fn from_body(body: &str) -> DescribeInstancePatchStatesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8178,8 +8325,14 @@ impl DescribeInstancePatchStatesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DescribeInstancePatchStatesError::InternalServerError(String::from(error_message)),
-                    "InvalidNextToken" => DescribeInstancePatchStatesError::InvalidNextToken(String::from(error_message)),
+                    "InternalServerError" => {
+                        DescribeInstancePatchStatesError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidNextToken" => DescribeInstancePatchStatesError::InvalidNextToken(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DescribeInstancePatchStatesError::Validation(error_message.to_string())
                     }
@@ -8249,7 +8402,6 @@ pub enum DescribeInstancePatchStatesForPatchGroupError {
     Unknown(String),
 }
 
-
 impl DescribeInstancePatchStatesForPatchGroupError {
     pub fn from_body(body: &str) -> DescribeInstancePatchStatesForPatchGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8263,10 +8415,26 @@ impl DescribeInstancePatchStatesForPatchGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DescribeInstancePatchStatesForPatchGroupError::InternalServerError(String::from(error_message)),
-                    "InvalidFilter" => DescribeInstancePatchStatesForPatchGroupError::InvalidFilter(String::from(error_message)),
-                    "InvalidNextToken" => DescribeInstancePatchStatesForPatchGroupError::InvalidNextToken(String::from(error_message)),
-                    "ValidationException" => DescribeInstancePatchStatesForPatchGroupError::Validation(error_message.to_string()),
+                    "InternalServerError" => {
+                        DescribeInstancePatchStatesForPatchGroupError::InternalServerError(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidFilter" => {
+                        DescribeInstancePatchStatesForPatchGroupError::InvalidFilter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidNextToken" => {
+                        DescribeInstancePatchStatesForPatchGroupError::InvalidNextToken(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DescribeInstancePatchStatesForPatchGroupError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
                     _ => DescribeInstancePatchStatesForPatchGroupError::Unknown(String::from(body)),
                 }
             }
@@ -8338,7 +8506,6 @@ pub enum DescribeInstancePatchesError {
     Unknown(String),
 }
 
-
 impl DescribeInstancePatchesError {
     pub fn from_body(body: &str) -> DescribeInstancePatchesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8352,7 +8519,9 @@ impl DescribeInstancePatchesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DescribeInstancePatchesError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => DescribeInstancePatchesError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidFilter" => {
                         DescribeInstancePatchesError::InvalidFilter(String::from(error_message))
                     }
@@ -8431,7 +8600,6 @@ pub enum DescribeMaintenanceWindowExecutionTaskInvocationsError {
     Unknown(String),
 }
 
-
 impl DescribeMaintenanceWindowExecutionTaskInvocationsError {
     pub fn from_body(body: &str) -> DescribeMaintenanceWindowExecutionTaskInvocationsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8445,11 +8613,11 @@ impl DescribeMaintenanceWindowExecutionTaskInvocationsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DoesNotExistException" => DescribeMaintenanceWindowExecutionTaskInvocationsError::DoesNotExist(String::from(error_message)),
-                    "InternalServerError" => DescribeMaintenanceWindowExecutionTaskInvocationsError::InternalServerError(String::from(error_message)),
-                    "ValidationException" => DescribeMaintenanceWindowExecutionTaskInvocationsError::Validation(error_message.to_string()),
-                    _ => DescribeMaintenanceWindowExecutionTaskInvocationsError::Unknown(String::from(body)),
-                }
+                                    "DoesNotExistException" => DescribeMaintenanceWindowExecutionTaskInvocationsError::DoesNotExist(String::from(error_message)),
+"InternalServerError" => DescribeMaintenanceWindowExecutionTaskInvocationsError::InternalServerError(String::from(error_message)),
+"ValidationException" => DescribeMaintenanceWindowExecutionTaskInvocationsError::Validation(error_message.to_string()),
+_ => DescribeMaintenanceWindowExecutionTaskInvocationsError::Unknown(String::from(body))
+                                }
             }
             Err(_) => {
                 DescribeMaintenanceWindowExecutionTaskInvocationsError::Unknown(String::from(body))
@@ -8459,10 +8627,12 @@ impl DescribeMaintenanceWindowExecutionTaskInvocationsError {
 }
 
 impl From<serde_json::error::Error> for DescribeMaintenanceWindowExecutionTaskInvocationsError {
-    fn from(err: serde_json::error::Error)
-            -> DescribeMaintenanceWindowExecutionTaskInvocationsError {
-        DescribeMaintenanceWindowExecutionTaskInvocationsError::Unknown(err.description()
-                                                                            .to_string())
+    fn from(
+        err: serde_json::error::Error,
+    ) -> DescribeMaintenanceWindowExecutionTaskInvocationsError {
+        DescribeMaintenanceWindowExecutionTaskInvocationsError::Unknown(
+            err.description().to_string(),
+        )
     }
 }
 impl From<CredentialsError> for DescribeMaintenanceWindowExecutionTaskInvocationsError {
@@ -8477,7 +8647,9 @@ impl From<HttpDispatchError> for DescribeMaintenanceWindowExecutionTaskInvocatio
 }
 impl From<io::Error> for DescribeMaintenanceWindowExecutionTaskInvocationsError {
     fn from(err: io::Error) -> DescribeMaintenanceWindowExecutionTaskInvocationsError {
-        DescribeMaintenanceWindowExecutionTaskInvocationsError::HttpDispatch(HttpDispatchError::from(err))
+        DescribeMaintenanceWindowExecutionTaskInvocationsError::HttpDispatch(
+            HttpDispatchError::from(err),
+        )
     }
 }
 impl fmt::Display for DescribeMaintenanceWindowExecutionTaskInvocationsError {
@@ -8491,12 +8663,16 @@ impl Error for DescribeMaintenanceWindowExecutionTaskInvocationsError {
             DescribeMaintenanceWindowExecutionTaskInvocationsError::DoesNotExist(ref cause) => {
                 cause
             }
-            DescribeMaintenanceWindowExecutionTaskInvocationsError::InternalServerError(ref cause) => cause,
+            DescribeMaintenanceWindowExecutionTaskInvocationsError::InternalServerError(
+                ref cause,
+            ) => cause,
             DescribeMaintenanceWindowExecutionTaskInvocationsError::Validation(ref cause) => cause,
             DescribeMaintenanceWindowExecutionTaskInvocationsError::Credentials(ref err) => {
                 err.description()
             }
-            DescribeMaintenanceWindowExecutionTaskInvocationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeMaintenanceWindowExecutionTaskInvocationsError::HttpDispatch(
+                ref dispatch_error,
+            ) => dispatch_error.description(),
             DescribeMaintenanceWindowExecutionTaskInvocationsError::Unknown(ref cause) => cause,
         }
     }
@@ -8518,7 +8694,6 @@ pub enum DescribeMaintenanceWindowExecutionTasksError {
     Unknown(String),
 }
 
-
 impl DescribeMaintenanceWindowExecutionTasksError {
     pub fn from_body(body: &str) -> DescribeMaintenanceWindowExecutionTasksError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8532,9 +8707,21 @@ impl DescribeMaintenanceWindowExecutionTasksError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DoesNotExistException" => DescribeMaintenanceWindowExecutionTasksError::DoesNotExist(String::from(error_message)),
-                    "InternalServerError" => DescribeMaintenanceWindowExecutionTasksError::InternalServerError(String::from(error_message)),
-                    "ValidationException" => DescribeMaintenanceWindowExecutionTasksError::Validation(error_message.to_string()),
+                    "DoesNotExistException" => {
+                        DescribeMaintenanceWindowExecutionTasksError::DoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => {
+                        DescribeMaintenanceWindowExecutionTasksError::InternalServerError(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DescribeMaintenanceWindowExecutionTasksError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
                     _ => DescribeMaintenanceWindowExecutionTasksError::Unknown(String::from(body)),
                 }
             }
@@ -8597,7 +8784,6 @@ pub enum DescribeMaintenanceWindowExecutionsError {
     Unknown(String),
 }
 
-
 impl DescribeMaintenanceWindowExecutionsError {
     pub fn from_body(body: &str) -> DescribeMaintenanceWindowExecutionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8611,11 +8797,14 @@ impl DescribeMaintenanceWindowExecutionsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DescribeMaintenanceWindowExecutionsError::InternalServerError(String::from(error_message)),
-                    "ValidationException" => {
-                        DescribeMaintenanceWindowExecutionsError::Validation(error_message
-                                                                                 .to_string())
+                    "InternalServerError" => {
+                        DescribeMaintenanceWindowExecutionsError::InternalServerError(
+                            String::from(error_message),
+                        )
                     }
+                    "ValidationException" => DescribeMaintenanceWindowExecutionsError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DescribeMaintenanceWindowExecutionsError::Unknown(String::from(body)),
                 }
             }
@@ -8679,7 +8868,6 @@ pub enum DescribeMaintenanceWindowTargetsError {
     Unknown(String),
 }
 
-
 impl DescribeMaintenanceWindowTargetsError {
     pub fn from_body(body: &str) -> DescribeMaintenanceWindowTargetsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8693,8 +8881,16 @@ impl DescribeMaintenanceWindowTargetsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DoesNotExistException" => DescribeMaintenanceWindowTargetsError::DoesNotExist(String::from(error_message)),
-                    "InternalServerError" => DescribeMaintenanceWindowTargetsError::InternalServerError(String::from(error_message)),
+                    "DoesNotExistException" => {
+                        DescribeMaintenanceWindowTargetsError::DoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => {
+                        DescribeMaintenanceWindowTargetsError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeMaintenanceWindowTargetsError::Validation(error_message.to_string())
                     }
@@ -8762,7 +8958,6 @@ pub enum DescribeMaintenanceWindowTasksError {
     Unknown(String),
 }
 
-
 impl DescribeMaintenanceWindowTasksError {
     pub fn from_body(body: &str) -> DescribeMaintenanceWindowTasksError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8776,8 +8971,14 @@ impl DescribeMaintenanceWindowTasksError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DoesNotExistException" => DescribeMaintenanceWindowTasksError::DoesNotExist(String::from(error_message)),
-                    "InternalServerError" => DescribeMaintenanceWindowTasksError::InternalServerError(String::from(error_message)),
+                    "DoesNotExistException" => DescribeMaintenanceWindowTasksError::DoesNotExist(
+                        String::from(error_message),
+                    ),
+                    "InternalServerError" => {
+                        DescribeMaintenanceWindowTasksError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         DescribeMaintenanceWindowTasksError::Validation(error_message.to_string())
                     }
@@ -8843,7 +9044,6 @@ pub enum DescribeMaintenanceWindowsError {
     Unknown(String),
 }
 
-
 impl DescribeMaintenanceWindowsError {
     pub fn from_body(body: &str) -> DescribeMaintenanceWindowsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -8857,7 +9057,9 @@ impl DescribeMaintenanceWindowsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DescribeMaintenanceWindowsError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => DescribeMaintenanceWindowsError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DescribeMaintenanceWindowsError::Validation(error_message.to_string())
                     }
@@ -8929,7 +9131,6 @@ pub enum DescribeParametersError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribeParametersError {
     pub fn from_body(body: &str) -> DescribeParametersError {
@@ -9027,7 +9228,6 @@ pub enum DescribePatchBaselinesError {
     Unknown(String),
 }
 
-
 impl DescribePatchBaselinesError {
     pub fn from_body(body: &str) -> DescribePatchBaselinesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9041,7 +9241,9 @@ impl DescribePatchBaselinesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DescribePatchBaselinesError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => DescribePatchBaselinesError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DescribePatchBaselinesError::Validation(error_message.to_string())
                     }
@@ -9108,7 +9310,6 @@ pub enum DescribePatchGroupStateError {
     Unknown(String),
 }
 
-
 impl DescribePatchGroupStateError {
     pub fn from_body(body: &str) -> DescribePatchGroupStateError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9122,7 +9323,9 @@ impl DescribePatchGroupStateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => DescribePatchGroupStateError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => DescribePatchGroupStateError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidNextToken" => {
                         DescribePatchGroupStateError::InvalidNextToken(String::from(error_message))
                     }
@@ -9190,7 +9393,6 @@ pub enum DescribePatchGroupsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl DescribePatchGroupsError {
     pub fn from_body(body: &str) -> DescribePatchGroupsError {
@@ -9274,7 +9476,6 @@ pub enum GetAutomationExecutionError {
     Unknown(String),
 }
 
-
 impl GetAutomationExecutionError {
     pub fn from_body(body: &str) -> GetAutomationExecutionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9288,8 +9489,14 @@ impl GetAutomationExecutionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AutomationExecutionNotFoundException" => GetAutomationExecutionError::AutomationExecutionNotFound(String::from(error_message)),
-                    "InternalServerError" => GetAutomationExecutionError::InternalServerError(String::from(error_message)),
+                    "AutomationExecutionNotFoundException" => {
+                        GetAutomationExecutionError::AutomationExecutionNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => GetAutomationExecutionError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         GetAutomationExecutionError::Validation(error_message.to_string())
                     }
@@ -9363,7 +9570,6 @@ pub enum GetCommandInvocationError {
     Unknown(String),
 }
 
-
 impl GetCommandInvocationError {
     pub fn from_body(body: &str) -> GetCommandInvocationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9389,7 +9595,9 @@ impl GetCommandInvocationError {
                     "InvalidPluginName" => {
                         GetCommandInvocationError::InvalidPluginName(String::from(error_message))
                     }
-                    "InvocationDoesNotExist" => GetCommandInvocationError::InvocationDoesNotExist(String::from(error_message)),
+                    "InvocationDoesNotExist" => GetCommandInvocationError::InvocationDoesNotExist(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         GetCommandInvocationError::Validation(error_message.to_string())
                     }
@@ -9458,7 +9666,6 @@ pub enum GetDefaultPatchBaselineError {
     Unknown(String),
 }
 
-
 impl GetDefaultPatchBaselineError {
     pub fn from_body(body: &str) -> GetDefaultPatchBaselineError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9472,7 +9679,9 @@ impl GetDefaultPatchBaselineError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => GetDefaultPatchBaselineError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => GetDefaultPatchBaselineError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         GetDefaultPatchBaselineError::Validation(error_message.to_string())
                     }
@@ -9539,7 +9748,6 @@ pub enum GetDeployablePatchSnapshotForInstanceError {
     Unknown(String),
 }
 
-
 impl GetDeployablePatchSnapshotForInstanceError {
     pub fn from_body(body: &str) -> GetDeployablePatchSnapshotForInstanceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9553,11 +9761,20 @@ impl GetDeployablePatchSnapshotForInstanceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => GetDeployablePatchSnapshotForInstanceError::InternalServerError(String::from(error_message)),
-                    "UnsupportedOperatingSystem" => GetDeployablePatchSnapshotForInstanceError::UnsupportedOperatingSystem(String::from(error_message)),
+                    "InternalServerError" => {
+                        GetDeployablePatchSnapshotForInstanceError::InternalServerError(
+                            String::from(error_message),
+                        )
+                    }
+                    "UnsupportedOperatingSystem" => {
+                        GetDeployablePatchSnapshotForInstanceError::UnsupportedOperatingSystem(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
-                        GetDeployablePatchSnapshotForInstanceError::Validation(error_message
-                                                                                   .to_string())
+                        GetDeployablePatchSnapshotForInstanceError::Validation(
+                            error_message.to_string(),
+                        )
                     }
                     _ => GetDeployablePatchSnapshotForInstanceError::Unknown(String::from(body)),
                 }
@@ -9626,7 +9843,6 @@ pub enum GetDocumentError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetDocumentError {
     pub fn from_body(body: &str) -> GetDocumentError {
@@ -9721,7 +9937,6 @@ pub enum GetInventoryError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetInventoryError {
     pub fn from_body(body: &str) -> GetInventoryError {
@@ -9821,7 +10036,6 @@ pub enum GetInventorySchemaError {
     Unknown(String),
 }
 
-
 impl GetInventorySchemaError {
     pub fn from_body(body: &str) -> GetInventorySchemaError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9912,7 +10126,6 @@ pub enum GetMaintenanceWindowError {
     Unknown(String),
 }
 
-
 impl GetMaintenanceWindowError {
     pub fn from_body(body: &str) -> GetMaintenanceWindowError {
         match from_str::<SerdeJsonValue>(body) {
@@ -9999,7 +10212,6 @@ pub enum GetMaintenanceWindowExecutionError {
     Unknown(String),
 }
 
-
 impl GetMaintenanceWindowExecutionError {
     pub fn from_body(body: &str) -> GetMaintenanceWindowExecutionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10013,8 +10225,14 @@ impl GetMaintenanceWindowExecutionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DoesNotExistException" => GetMaintenanceWindowExecutionError::DoesNotExist(String::from(error_message)),
-                    "InternalServerError" => GetMaintenanceWindowExecutionError::InternalServerError(String::from(error_message)),
+                    "DoesNotExistException" => GetMaintenanceWindowExecutionError::DoesNotExist(
+                        String::from(error_message),
+                    ),
+                    "InternalServerError" => {
+                        GetMaintenanceWindowExecutionError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetMaintenanceWindowExecutionError::Validation(error_message.to_string())
                     }
@@ -10082,7 +10300,6 @@ pub enum GetMaintenanceWindowExecutionTaskError {
     Unknown(String),
 }
 
-
 impl GetMaintenanceWindowExecutionTaskError {
     pub fn from_body(body: &str) -> GetMaintenanceWindowExecutionTaskError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10096,12 +10313,19 @@ impl GetMaintenanceWindowExecutionTaskError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DoesNotExistException" => GetMaintenanceWindowExecutionTaskError::DoesNotExist(String::from(error_message)),
-                    "InternalServerError" => GetMaintenanceWindowExecutionTaskError::InternalServerError(String::from(error_message)),
-                    "ValidationException" => {
-                        GetMaintenanceWindowExecutionTaskError::Validation(error_message
-                                                                               .to_string())
+                    "DoesNotExistException" => {
+                        GetMaintenanceWindowExecutionTaskError::DoesNotExist(String::from(
+                            error_message,
+                        ))
                     }
+                    "InternalServerError" => {
+                        GetMaintenanceWindowExecutionTaskError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => GetMaintenanceWindowExecutionTaskError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => GetMaintenanceWindowExecutionTaskError::Unknown(String::from(body)),
                 }
             }
@@ -10166,7 +10390,6 @@ pub enum GetMaintenanceWindowExecutionTaskInvocationError {
     Unknown(String),
 }
 
-
 impl GetMaintenanceWindowExecutionTaskInvocationError {
     pub fn from_body(body: &str) -> GetMaintenanceWindowExecutionTaskInvocationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10180,10 +10403,24 @@ impl GetMaintenanceWindowExecutionTaskInvocationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DoesNotExistException" => GetMaintenanceWindowExecutionTaskInvocationError::DoesNotExist(String::from(error_message)),
-                    "InternalServerError" => GetMaintenanceWindowExecutionTaskInvocationError::InternalServerError(String::from(error_message)),
-                    "ValidationException" => GetMaintenanceWindowExecutionTaskInvocationError::Validation(error_message.to_string()),
-                    _ => GetMaintenanceWindowExecutionTaskInvocationError::Unknown(String::from(body)),
+                    "DoesNotExistException" => {
+                        GetMaintenanceWindowExecutionTaskInvocationError::DoesNotExist(
+                            String::from(error_message),
+                        )
+                    }
+                    "InternalServerError" => {
+                        GetMaintenanceWindowExecutionTaskInvocationError::InternalServerError(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        GetMaintenanceWindowExecutionTaskInvocationError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
+                    _ => GetMaintenanceWindowExecutionTaskInvocationError::Unknown(String::from(
+                        body,
+                    )),
                 }
             }
             Err(_) => GetMaintenanceWindowExecutionTaskInvocationError::Unknown(String::from(body)),
@@ -10251,7 +10488,6 @@ pub enum GetMaintenanceWindowTaskError {
     Unknown(String),
 }
 
-
 impl GetMaintenanceWindowTaskError {
     pub fn from_body(body: &str) -> GetMaintenanceWindowTaskError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10268,7 +10504,9 @@ impl GetMaintenanceWindowTaskError {
                     "DoesNotExistException" => {
                         GetMaintenanceWindowTaskError::DoesNotExist(String::from(error_message))
                     }
-                    "InternalServerError" => GetMaintenanceWindowTaskError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => GetMaintenanceWindowTaskError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         GetMaintenanceWindowTaskError::Validation(error_message.to_string())
                     }
@@ -10337,7 +10575,6 @@ pub enum GetParameterError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetParameterError {
     pub fn from_body(body: &str) -> GetParameterError {
@@ -10428,7 +10665,6 @@ pub enum GetParameterHistoryError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetParameterHistoryError {
     pub fn from_body(body: &str) -> GetParameterHistoryError {
@@ -10524,7 +10760,6 @@ pub enum GetParametersError {
     Unknown(String),
 }
 
-
 impl GetParametersError {
     pub fn from_body(body: &str) -> GetParametersError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10614,7 +10849,6 @@ pub enum GetParametersByPathError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl GetParametersByPathError {
     pub fn from_body(body: &str) -> GetParametersByPathError {
@@ -10720,7 +10954,6 @@ pub enum GetPatchBaselineError {
     Unknown(String),
 }
 
-
 impl GetPatchBaselineError {
     pub fn from_body(body: &str) -> GetPatchBaselineError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10807,7 +11040,6 @@ pub enum GetPatchBaselineForPatchGroupError {
     Unknown(String),
 }
 
-
 impl GetPatchBaselineForPatchGroupError {
     pub fn from_body(body: &str) -> GetPatchBaselineForPatchGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10821,7 +11053,11 @@ impl GetPatchBaselineForPatchGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => GetPatchBaselineForPatchGroupError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => {
+                        GetPatchBaselineForPatchGroupError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetPatchBaselineForPatchGroupError::Validation(error_message.to_string())
                     }
@@ -10890,7 +11126,6 @@ pub enum ListAssociationVersionsError {
     Unknown(String),
 }
 
-
 impl ListAssociationVersionsError {
     pub fn from_body(body: &str) -> ListAssociationVersionsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -10904,8 +11139,14 @@ impl ListAssociationVersionsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AssociationDoesNotExist" => ListAssociationVersionsError::AssociationDoesNotExist(String::from(error_message)),
-                    "InternalServerError" => ListAssociationVersionsError::InternalServerError(String::from(error_message)),
+                    "AssociationDoesNotExist" => {
+                        ListAssociationVersionsError::AssociationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => ListAssociationVersionsError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidNextToken" => {
                         ListAssociationVersionsError::InvalidNextToken(String::from(error_message))
                     }
@@ -10976,7 +11217,6 @@ pub enum ListAssociationsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListAssociationsError {
     pub fn from_body(body: &str) -> ListAssociationsError {
@@ -11068,7 +11308,6 @@ pub enum ListCommandInvocationsError {
     Unknown(String),
 }
 
-
 impl ListCommandInvocationsError {
     pub fn from_body(body: &str) -> ListCommandInvocationsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -11082,7 +11321,9 @@ impl ListCommandInvocationsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => ListCommandInvocationsError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => ListCommandInvocationsError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidCommandId" => {
                         ListCommandInvocationsError::InvalidCommandId(String::from(error_message))
                     }
@@ -11170,7 +11411,6 @@ pub enum ListCommandsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListCommandsError {
     pub fn from_body(body: &str) -> ListCommandsError {
@@ -11274,7 +11514,6 @@ pub enum ListComplianceItemsError {
     Unknown(String),
 }
 
-
 impl ListComplianceItemsError {
     pub fn from_body(body: &str) -> ListComplianceItemsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -11375,7 +11614,6 @@ pub enum ListComplianceSummariesError {
     Unknown(String),
 }
 
-
 impl ListComplianceSummariesError {
     pub fn from_body(body: &str) -> ListComplianceSummariesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -11389,7 +11627,9 @@ impl ListComplianceSummariesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => ListComplianceSummariesError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => ListComplianceSummariesError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidFilter" => {
                         ListComplianceSummariesError::InvalidFilter(String::from(error_message))
                     }
@@ -11465,7 +11705,6 @@ pub enum ListDocumentVersionsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListDocumentVersionsError {
     pub fn from_body(body: &str) -> ListDocumentVersionsError {
@@ -11558,7 +11797,6 @@ pub enum ListDocumentsError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListDocumentsError {
     pub fn from_body(body: &str) -> ListDocumentsError {
@@ -11653,7 +11891,6 @@ pub enum ListInventoryEntriesError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListInventoryEntriesError {
     pub fn from_body(body: &str) -> ListInventoryEntriesError {
@@ -11755,7 +11992,6 @@ pub enum ListResourceComplianceSummariesError {
     Unknown(String),
 }
 
-
 impl ListResourceComplianceSummariesError {
     pub fn from_body(body: &str) -> ListResourceComplianceSummariesError {
         match from_str::<SerdeJsonValue>(body) {
@@ -11769,9 +12005,17 @@ impl ListResourceComplianceSummariesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => ListResourceComplianceSummariesError::InternalServerError(String::from(error_message)),
-                    "InvalidFilter" => ListResourceComplianceSummariesError::InvalidFilter(String::from(error_message)),
-                    "InvalidNextToken" => ListResourceComplianceSummariesError::InvalidNextToken(String::from(error_message)),
+                    "InternalServerError" => {
+                        ListResourceComplianceSummariesError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidFilter" => ListResourceComplianceSummariesError::InvalidFilter(
+                        String::from(error_message),
+                    ),
+                    "InvalidNextToken" => ListResourceComplianceSummariesError::InvalidNextToken(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         ListResourceComplianceSummariesError::Validation(error_message.to_string())
                     }
@@ -11839,7 +12083,6 @@ pub enum ListResourceDataSyncError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListResourceDataSyncError {
     pub fn from_body(body: &str) -> ListResourceDataSyncError {
@@ -11928,7 +12171,6 @@ pub enum ListTagsForResourceError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl ListTagsForResourceError {
     pub fn from_body(body: &str) -> ListTagsForResourceError {
@@ -12026,7 +12268,6 @@ pub enum ModifyDocumentPermissionError {
     Unknown(String),
 }
 
-
 impl ModifyDocumentPermissionError {
     pub fn from_body(body: &str) -> ModifyDocumentPermissionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -12040,13 +12281,27 @@ impl ModifyDocumentPermissionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DocumentLimitExceeded" => ModifyDocumentPermissionError::DocumentLimitExceeded(String::from(error_message)),
-                    "DocumentPermissionLimit" => ModifyDocumentPermissionError::DocumentPermissionLimit(String::from(error_message)),
-                    "InternalServerError" => ModifyDocumentPermissionError::InternalServerError(String::from(error_message)),
+                    "DocumentLimitExceeded" => {
+                        ModifyDocumentPermissionError::DocumentLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DocumentPermissionLimit" => {
+                        ModifyDocumentPermissionError::DocumentPermissionLimit(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => ModifyDocumentPermissionError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidDocument" => {
                         ModifyDocumentPermissionError::InvalidDocument(String::from(error_message))
                     }
-                    "InvalidPermissionType" => ModifyDocumentPermissionError::InvalidPermissionType(String::from(error_message)),
+                    "InvalidPermissionType" => {
+                        ModifyDocumentPermissionError::InvalidPermissionType(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         ModifyDocumentPermissionError::Validation(error_message.to_string())
                     }
@@ -12127,7 +12382,6 @@ pub enum PutComplianceItemsError {
     Unknown(String),
 }
 
-
 impl PutComplianceItemsError {
     pub fn from_body(body: &str) -> PutComplianceItemsError {
         match from_str::<SerdeJsonValue>(body) {
@@ -12141,7 +12395,11 @@ impl PutComplianceItemsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ComplianceTypeCountLimitExceededException" => PutComplianceItemsError::ComplianceTypeCountLimitExceeded(String::from(error_message)),
+                    "ComplianceTypeCountLimitExceededException" => {
+                        PutComplianceItemsError::ComplianceTypeCountLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalServerError" => {
                         PutComplianceItemsError::InternalServerError(String::from(error_message))
                     }
@@ -12252,7 +12510,6 @@ pub enum PutInventoryError {
     Unknown(String),
 }
 
-
 impl PutInventoryError {
     pub fn from_body(body: &str) -> PutInventoryError {
         match from_str::<SerdeJsonValue>(body) {
@@ -12266,7 +12523,11 @@ impl PutInventoryError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "CustomSchemaCountLimitExceededException" => PutInventoryError::CustomSchemaCountLimitExceeded(String::from(error_message)),
+                    "CustomSchemaCountLimitExceededException" => {
+                        PutInventoryError::CustomSchemaCountLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalServerError" => {
                         PutInventoryError::InternalServerError(String::from(error_message))
                     }
@@ -12294,8 +12555,16 @@ impl PutInventoryError {
                     "TotalSizeLimitExceededException" => {
                         PutInventoryError::TotalSizeLimitExceeded(String::from(error_message))
                     }
-                    "UnsupportedInventoryItemContextException" => PutInventoryError::UnsupportedInventoryItemContext(String::from(error_message)),
-                    "UnsupportedInventorySchemaVersionException" => PutInventoryError::UnsupportedInventorySchemaVersion(String::from(error_message)),
+                    "UnsupportedInventoryItemContextException" => {
+                        PutInventoryError::UnsupportedInventoryItemContext(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnsupportedInventorySchemaVersionException" => {
+                        PutInventoryError::UnsupportedInventorySchemaVersion(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         PutInventoryError::Validation(error_message.to_string())
                     }
@@ -12386,7 +12655,6 @@ pub enum PutParameterError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl PutParameterError {
     pub fn from_body(body: &str) -> PutParameterError {
@@ -12504,7 +12772,6 @@ pub enum RegisterDefaultPatchBaselineError {
     Unknown(String),
 }
 
-
 impl RegisterDefaultPatchBaselineError {
     pub fn from_body(body: &str) -> RegisterDefaultPatchBaselineError {
         match from_str::<SerdeJsonValue>(body) {
@@ -12521,8 +12788,14 @@ impl RegisterDefaultPatchBaselineError {
                     "DoesNotExistException" => {
                         RegisterDefaultPatchBaselineError::DoesNotExist(String::from(error_message))
                     }
-                    "InternalServerError" => RegisterDefaultPatchBaselineError::InternalServerError(String::from(error_message)),
-                    "InvalidResourceId" => RegisterDefaultPatchBaselineError::InvalidResourceId(String::from(error_message)),
+                    "InternalServerError" => {
+                        RegisterDefaultPatchBaselineError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidResourceId" => RegisterDefaultPatchBaselineError::InvalidResourceId(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         RegisterDefaultPatchBaselineError::Validation(error_message.to_string())
                     }
@@ -12597,7 +12870,6 @@ pub enum RegisterPatchBaselineForPatchGroupError {
     Unknown(String),
 }
 
-
 impl RegisterPatchBaselineForPatchGroupError {
     pub fn from_body(body: &str) -> RegisterPatchBaselineForPatchGroupError {
         match from_str::<SerdeJsonValue>(body) {
@@ -12611,15 +12883,34 @@ impl RegisterPatchBaselineForPatchGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AlreadyExistsException" => RegisterPatchBaselineForPatchGroupError::AlreadyExists(String::from(error_message)),
-                    "DoesNotExistException" => RegisterPatchBaselineForPatchGroupError::DoesNotExist(String::from(error_message)),
-                    "InternalServerError" => RegisterPatchBaselineForPatchGroupError::InternalServerError(String::from(error_message)),
-                    "InvalidResourceId" => RegisterPatchBaselineForPatchGroupError::InvalidResourceId(String::from(error_message)),
-                    "ResourceLimitExceededException" => RegisterPatchBaselineForPatchGroupError::ResourceLimitExceeded(String::from(error_message)),
-                    "ValidationException" => {
-                        RegisterPatchBaselineForPatchGroupError::Validation(error_message
-                                                                                .to_string())
+                    "AlreadyExistsException" => {
+                        RegisterPatchBaselineForPatchGroupError::AlreadyExists(String::from(
+                            error_message,
+                        ))
                     }
+                    "DoesNotExistException" => {
+                        RegisterPatchBaselineForPatchGroupError::DoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => {
+                        RegisterPatchBaselineForPatchGroupError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidResourceId" => {
+                        RegisterPatchBaselineForPatchGroupError::InvalidResourceId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceLimitExceededException" => {
+                        RegisterPatchBaselineForPatchGroupError::ResourceLimitExceeded(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => RegisterPatchBaselineForPatchGroupError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => RegisterPatchBaselineForPatchGroupError::Unknown(String::from(body)),
                 }
             }
@@ -12691,7 +12982,6 @@ pub enum RegisterTargetWithMaintenanceWindowError {
     Unknown(String),
 }
 
-
 impl RegisterTargetWithMaintenanceWindowError {
     pub fn from_body(body: &str) -> RegisterTargetWithMaintenanceWindowError {
         match from_str::<SerdeJsonValue>(body) {
@@ -12705,14 +12995,29 @@ impl RegisterTargetWithMaintenanceWindowError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DoesNotExistException" => RegisterTargetWithMaintenanceWindowError::DoesNotExist(String::from(error_message)),
-                    "IdempotentParameterMismatch" => RegisterTargetWithMaintenanceWindowError::IdempotentParameterMismatch(String::from(error_message)),
-                    "InternalServerError" => RegisterTargetWithMaintenanceWindowError::InternalServerError(String::from(error_message)),
-                    "ResourceLimitExceededException" => RegisterTargetWithMaintenanceWindowError::ResourceLimitExceeded(String::from(error_message)),
-                    "ValidationException" => {
-                        RegisterTargetWithMaintenanceWindowError::Validation(error_message
-                                                                                 .to_string())
+                    "DoesNotExistException" => {
+                        RegisterTargetWithMaintenanceWindowError::DoesNotExist(String::from(
+                            error_message,
+                        ))
                     }
+                    "IdempotentParameterMismatch" => {
+                        RegisterTargetWithMaintenanceWindowError::IdempotentParameterMismatch(
+                            String::from(error_message),
+                        )
+                    }
+                    "InternalServerError" => {
+                        RegisterTargetWithMaintenanceWindowError::InternalServerError(
+                            String::from(error_message),
+                        )
+                    }
+                    "ResourceLimitExceededException" => {
+                        RegisterTargetWithMaintenanceWindowError::ResourceLimitExceeded(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => RegisterTargetWithMaintenanceWindowError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => RegisterTargetWithMaintenanceWindowError::Unknown(String::from(body)),
                 }
             }
@@ -12787,7 +13092,6 @@ pub enum RegisterTaskWithMaintenanceWindowError {
     Unknown(String),
 }
 
-
 impl RegisterTaskWithMaintenanceWindowError {
     pub fn from_body(body: &str) -> RegisterTaskWithMaintenanceWindowError {
         match from_str::<SerdeJsonValue>(body) {
@@ -12801,15 +13105,34 @@ impl RegisterTaskWithMaintenanceWindowError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DoesNotExistException" => RegisterTaskWithMaintenanceWindowError::DoesNotExist(String::from(error_message)),
-                    "FeatureNotAvailableException" => RegisterTaskWithMaintenanceWindowError::FeatureNotAvailable(String::from(error_message)),
-                    "IdempotentParameterMismatch" => RegisterTaskWithMaintenanceWindowError::IdempotentParameterMismatch(String::from(error_message)),
-                    "InternalServerError" => RegisterTaskWithMaintenanceWindowError::InternalServerError(String::from(error_message)),
-                    "ResourceLimitExceededException" => RegisterTaskWithMaintenanceWindowError::ResourceLimitExceeded(String::from(error_message)),
-                    "ValidationException" => {
-                        RegisterTaskWithMaintenanceWindowError::Validation(error_message
-                                                                               .to_string())
+                    "DoesNotExistException" => {
+                        RegisterTaskWithMaintenanceWindowError::DoesNotExist(String::from(
+                            error_message,
+                        ))
                     }
+                    "FeatureNotAvailableException" => {
+                        RegisterTaskWithMaintenanceWindowError::FeatureNotAvailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "IdempotentParameterMismatch" => {
+                        RegisterTaskWithMaintenanceWindowError::IdempotentParameterMismatch(
+                            String::from(error_message),
+                        )
+                    }
+                    "InternalServerError" => {
+                        RegisterTaskWithMaintenanceWindowError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceLimitExceededException" => {
+                        RegisterTaskWithMaintenanceWindowError::ResourceLimitExceeded(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => RegisterTaskWithMaintenanceWindowError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => RegisterTaskWithMaintenanceWindowError::Unknown(String::from(body)),
                 }
             }
@@ -12879,7 +13202,6 @@ pub enum RemoveTagsFromResourceError {
     Unknown(String),
 }
 
-
 impl RemoveTagsFromResourceError {
     pub fn from_body(body: &str) -> RemoveTagsFromResourceError {
         match from_str::<SerdeJsonValue>(body) {
@@ -12893,11 +13215,15 @@ impl RemoveTagsFromResourceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => RemoveTagsFromResourceError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => RemoveTagsFromResourceError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidResourceId" => {
                         RemoveTagsFromResourceError::InvalidResourceId(String::from(error_message))
                     }
-                    "InvalidResourceType" => RemoveTagsFromResourceError::InvalidResourceType(String::from(error_message)),
+                    "InvalidResourceType" => RemoveTagsFromResourceError::InvalidResourceType(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         RemoveTagsFromResourceError::Validation(error_message.to_string())
                     }
@@ -12968,7 +13294,6 @@ pub enum SendAutomationSignalError {
     Unknown(String),
 }
 
-
 impl SendAutomationSignalError {
     pub fn from_body(body: &str) -> SendAutomationSignalError {
         match from_str::<SerdeJsonValue>(body) {
@@ -12982,11 +13307,19 @@ impl SendAutomationSignalError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AutomationExecutionNotFoundException" => SendAutomationSignalError::AutomationExecutionNotFound(String::from(error_message)),
+                    "AutomationExecutionNotFoundException" => {
+                        SendAutomationSignalError::AutomationExecutionNotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalServerError" => {
                         SendAutomationSignalError::InternalServerError(String::from(error_message))
                     }
-                    "InvalidAutomationSignalException" => SendAutomationSignalError::InvalidAutomationSignal(String::from(error_message)),
+                    "InvalidAutomationSignalException" => {
+                        SendAutomationSignalError::InvalidAutomationSignal(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         SendAutomationSignalError::Validation(error_message.to_string())
                     }
@@ -13070,7 +13403,6 @@ pub enum SendCommandError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl SendCommandError {
     pub fn from_body(body: &str) -> SendCommandError {
@@ -13192,7 +13524,6 @@ pub enum StartAutomationExecutionError {
     Unknown(String),
 }
 
-
 impl StartAutomationExecutionError {
     pub fn from_body(body: &str) -> StartAutomationExecutionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -13206,11 +13537,29 @@ impl StartAutomationExecutionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AutomationDefinitionNotFoundException" => StartAutomationExecutionError::AutomationDefinitionNotFound(String::from(error_message)),
-                    "AutomationDefinitionVersionNotFoundException" => StartAutomationExecutionError::AutomationDefinitionVersionNotFound(String::from(error_message)),
-                    "AutomationExecutionLimitExceededException" => StartAutomationExecutionError::AutomationExecutionLimitExceeded(String::from(error_message)),
-                    "InternalServerError" => StartAutomationExecutionError::InternalServerError(String::from(error_message)),
-                    "InvalidAutomationExecutionParametersException" => StartAutomationExecutionError::InvalidAutomationExecutionParameters(String::from(error_message)),
+                    "AutomationDefinitionNotFoundException" => {
+                        StartAutomationExecutionError::AutomationDefinitionNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "AutomationDefinitionVersionNotFoundException" => {
+                        StartAutomationExecutionError::AutomationDefinitionVersionNotFound(
+                            String::from(error_message),
+                        )
+                    }
+                    "AutomationExecutionLimitExceededException" => {
+                        StartAutomationExecutionError::AutomationExecutionLimitExceeded(
+                            String::from(error_message),
+                        )
+                    }
+                    "InternalServerError" => StartAutomationExecutionError::InternalServerError(
+                        String::from(error_message),
+                    ),
+                    "InvalidAutomationExecutionParametersException" => {
+                        StartAutomationExecutionError::InvalidAutomationExecutionParameters(
+                            String::from(error_message),
+                        )
+                    }
                     "ValidationException" => {
                         StartAutomationExecutionError::Validation(error_message.to_string())
                     }
@@ -13281,7 +13630,6 @@ pub enum StopAutomationExecutionError {
     Unknown(String),
 }
 
-
 impl StopAutomationExecutionError {
     pub fn from_body(body: &str) -> StopAutomationExecutionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -13295,8 +13643,14 @@ impl StopAutomationExecutionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AutomationExecutionNotFoundException" => StopAutomationExecutionError::AutomationExecutionNotFound(String::from(error_message)),
-                    "InternalServerError" => StopAutomationExecutionError::InternalServerError(String::from(error_message)),
+                    "AutomationExecutionNotFoundException" => {
+                        StopAutomationExecutionError::AutomationExecutionNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => StopAutomationExecutionError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         StopAutomationExecutionError::Validation(error_message.to_string())
                     }
@@ -13384,7 +13738,6 @@ pub enum UpdateAssociationError {
     Unknown(String),
 }
 
-
 impl UpdateAssociationError {
     pub fn from_body(body: &str) -> UpdateAssociationError {
         match from_str::<SerdeJsonValue>(body) {
@@ -13401,11 +13754,19 @@ impl UpdateAssociationError {
                     "AssociationDoesNotExist" => {
                         UpdateAssociationError::AssociationDoesNotExist(String::from(error_message))
                     }
-                    "AssociationVersionLimitExceeded" => UpdateAssociationError::AssociationVersionLimitExceeded(String::from(error_message)),
+                    "AssociationVersionLimitExceeded" => {
+                        UpdateAssociationError::AssociationVersionLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalServerError" => {
                         UpdateAssociationError::InternalServerError(String::from(error_message))
                     }
-                    "InvalidAssociationVersion" => UpdateAssociationError::InvalidAssociationVersion(String::from(error_message)),
+                    "InvalidAssociationVersion" => {
+                        UpdateAssociationError::InvalidAssociationVersion(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidDocument" => {
                         UpdateAssociationError::InvalidDocument(String::from(error_message))
                     }
@@ -13515,7 +13876,6 @@ pub enum UpdateAssociationStatusError {
     Unknown(String),
 }
 
-
 impl UpdateAssociationStatusError {
     pub fn from_body(body: &str) -> UpdateAssociationStatusError {
         match from_str::<SerdeJsonValue>(body) {
@@ -13529,8 +13889,14 @@ impl UpdateAssociationStatusError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AssociationDoesNotExist" => UpdateAssociationStatusError::AssociationDoesNotExist(String::from(error_message)),
-                    "InternalServerError" => UpdateAssociationStatusError::InternalServerError(String::from(error_message)),
+                    "AssociationDoesNotExist" => {
+                        UpdateAssociationStatusError::AssociationDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => UpdateAssociationStatusError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidDocument" => {
                         UpdateAssociationStatusError::InvalidDocument(String::from(error_message))
                     }
@@ -13626,7 +13992,6 @@ pub enum UpdateDocumentError {
     Unknown(String),
 }
 
-
 impl UpdateDocumentError {
     pub fn from_body(body: &str) -> UpdateDocumentError {
         match from_str::<SerdeJsonValue>(body) {
@@ -13640,7 +14005,11 @@ impl UpdateDocumentError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DocumentVersionLimitExceeded" => UpdateDocumentError::DocumentVersionLimitExceeded(String::from(error_message)),
+                    "DocumentVersionLimitExceeded" => {
+                        UpdateDocumentError::DocumentVersionLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
                     "DuplicateDocumentContent" => {
                         UpdateDocumentError::DuplicateDocumentContent(String::from(error_message))
                     }
@@ -13653,7 +14022,11 @@ impl UpdateDocumentError {
                     "InvalidDocumentContent" => {
                         UpdateDocumentError::InvalidDocumentContent(String::from(error_message))
                     }
-                    "InvalidDocumentSchemaVersion" => UpdateDocumentError::InvalidDocumentSchemaVersion(String::from(error_message)),
+                    "InvalidDocumentSchemaVersion" => {
+                        UpdateDocumentError::InvalidDocumentSchemaVersion(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidDocumentVersion" => {
                         UpdateDocumentError::InvalidDocumentVersion(String::from(error_message))
                     }
@@ -13735,7 +14108,6 @@ pub enum UpdateDocumentDefaultVersionError {
     Unknown(String),
 }
 
-
 impl UpdateDocumentDefaultVersionError {
     pub fn from_body(body: &str) -> UpdateDocumentDefaultVersionError {
         match from_str::<SerdeJsonValue>(body) {
@@ -13749,10 +14121,24 @@ impl UpdateDocumentDefaultVersionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => UpdateDocumentDefaultVersionError::InternalServerError(String::from(error_message)),
-                    "InvalidDocument" => UpdateDocumentDefaultVersionError::InvalidDocument(String::from(error_message)),
-                    "InvalidDocumentSchemaVersion" => UpdateDocumentDefaultVersionError::InvalidDocumentSchemaVersion(String::from(error_message)),
-                    "InvalidDocumentVersion" => UpdateDocumentDefaultVersionError::InvalidDocumentVersion(String::from(error_message)),
+                    "InternalServerError" => {
+                        UpdateDocumentDefaultVersionError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDocument" => UpdateDocumentDefaultVersionError::InvalidDocument(
+                        String::from(error_message),
+                    ),
+                    "InvalidDocumentSchemaVersion" => {
+                        UpdateDocumentDefaultVersionError::InvalidDocumentSchemaVersion(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidDocumentVersion" => {
+                        UpdateDocumentDefaultVersionError::InvalidDocumentVersion(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         UpdateDocumentDefaultVersionError::Validation(error_message.to_string())
                     }
@@ -13822,7 +14208,6 @@ pub enum UpdateMaintenanceWindowError {
     Unknown(String),
 }
 
-
 impl UpdateMaintenanceWindowError {
     pub fn from_body(body: &str) -> UpdateMaintenanceWindowError {
         match from_str::<SerdeJsonValue>(body) {
@@ -13839,7 +14224,9 @@ impl UpdateMaintenanceWindowError {
                     "DoesNotExistException" => {
                         UpdateMaintenanceWindowError::DoesNotExist(String::from(error_message))
                     }
-                    "InternalServerError" => UpdateMaintenanceWindowError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => UpdateMaintenanceWindowError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         UpdateMaintenanceWindowError::Validation(error_message.to_string())
                     }
@@ -13907,7 +14294,6 @@ pub enum UpdateMaintenanceWindowTargetError {
     Unknown(String),
 }
 
-
 impl UpdateMaintenanceWindowTargetError {
     pub fn from_body(body: &str) -> UpdateMaintenanceWindowTargetError {
         match from_str::<SerdeJsonValue>(body) {
@@ -13921,8 +14307,14 @@ impl UpdateMaintenanceWindowTargetError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DoesNotExistException" => UpdateMaintenanceWindowTargetError::DoesNotExist(String::from(error_message)),
-                    "InternalServerError" => UpdateMaintenanceWindowTargetError::InternalServerError(String::from(error_message)),
+                    "DoesNotExistException" => UpdateMaintenanceWindowTargetError::DoesNotExist(
+                        String::from(error_message),
+                    ),
+                    "InternalServerError" => {
+                        UpdateMaintenanceWindowTargetError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         UpdateMaintenanceWindowTargetError::Validation(error_message.to_string())
                     }
@@ -13990,7 +14382,6 @@ pub enum UpdateMaintenanceWindowTaskError {
     Unknown(String),
 }
 
-
 impl UpdateMaintenanceWindowTaskError {
     pub fn from_body(body: &str) -> UpdateMaintenanceWindowTaskError {
         match from_str::<SerdeJsonValue>(body) {
@@ -14007,7 +14398,11 @@ impl UpdateMaintenanceWindowTaskError {
                     "DoesNotExistException" => {
                         UpdateMaintenanceWindowTaskError::DoesNotExist(String::from(error_message))
                     }
-                    "InternalServerError" => UpdateMaintenanceWindowTaskError::InternalServerError(String::from(error_message)),
+                    "InternalServerError" => {
+                        UpdateMaintenanceWindowTaskError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         UpdateMaintenanceWindowTaskError::Validation(error_message.to_string())
                     }
@@ -14075,7 +14470,6 @@ pub enum UpdateManagedInstanceRoleError {
     Unknown(String),
 }
 
-
 impl UpdateManagedInstanceRoleError {
     pub fn from_body(body: &str) -> UpdateManagedInstanceRoleError {
         match from_str::<SerdeJsonValue>(body) {
@@ -14089,8 +14483,12 @@ impl UpdateManagedInstanceRoleError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => UpdateManagedInstanceRoleError::InternalServerError(String::from(error_message)),
-                    "InvalidInstanceId" => UpdateManagedInstanceRoleError::InvalidInstanceId(String::from(error_message)),
+                    "InternalServerError" => UpdateManagedInstanceRoleError::InternalServerError(
+                        String::from(error_message),
+                    ),
+                    "InvalidInstanceId" => UpdateManagedInstanceRoleError::InvalidInstanceId(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         UpdateManagedInstanceRoleError::Validation(error_message.to_string())
                     }
@@ -14157,7 +14555,6 @@ pub enum UpdatePatchBaselineError {
     /// An unknown error occurred.  The raw HTTP response is provided.
     Unknown(String),
 }
-
 
 impl UpdatePatchBaselineError {
     pub fn from_body(body: &str) -> UpdatePatchBaselineError {
@@ -14231,619 +14628,610 @@ impl Error for UpdatePatchBaselineError {
 /// Trait representing the capabilities of the Amazon SSM API. Amazon SSM clients implement this trait.
 pub trait Ssm {
     #[doc="<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances, Maintenance Windows, or Parameter Store parameters. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>"]
-    fn add_tags_to_resource(&self,
-                            input: &AddTagsToResourceRequest)
-                            -> Result<AddTagsToResourceResult, AddTagsToResourceError>;
-
+    fn add_tags_to_resource(
+        &self,
+        input: &AddTagsToResourceRequest,
+    ) -> Result<AddTagsToResourceResult, AddTagsToResourceError>;
 
     #[doc="<p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>"]
-    fn cancel_command(&self,
-                      input: &CancelCommandRequest)
-                      -> Result<CancelCommandResult, CancelCommandError>;
-
+    fn cancel_command(
+        &self,
+        input: &CancelCommandRequest,
+    ) -> Result<CancelCommandResult, CancelCommandError>;
 
     #[doc="<p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html\">Setting Up Systems Manager in Hybrid Environments</a>.</p>"]
-    fn create_activation(&self,
-                         input: &CreateActivationRequest)
-                         -> Result<CreateActivationResult, CreateActivationError>;
-
-
-    #[doc="<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
-    fn create_association(&self,
-                          input: &CreateAssociationRequest)
-                          -> Result<CreateAssociationResult, CreateAssociationError>;
-
+    fn create_activation(
+        &self,
+        input: &CreateActivationRequest,
+    ) -> Result<CreateActivationResult, CreateActivationError>;
 
     #[doc="<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
-    fn create_association_batch
-        (&self,
-         input: &CreateAssociationBatchRequest)
-         -> Result<CreateAssociationBatchResult, CreateAssociationBatchError>;
+    fn create_association(
+        &self,
+        input: &CreateAssociationRequest,
+    ) -> Result<CreateAssociationResult, CreateAssociationError>;
 
+    #[doc="<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
+    fn create_association_batch(
+        &self,
+        input: &CreateAssociationBatchRequest,
+    ) -> Result<CreateAssociationBatchResult, CreateAssociationBatchError>;
 
     #[doc="<p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>"]
-    fn create_document(&self,
-                       input: &CreateDocumentRequest)
-                       -> Result<CreateDocumentResult, CreateDocumentError>;
+    fn create_document(
+        &self,
+        input: &CreateDocumentRequest,
+    ) -> Result<CreateDocumentResult, CreateDocumentError>;
 
+    #[doc = "<p>Creates a new Maintenance Window.</p>"]
+    fn create_maintenance_window(
+        &self,
+        input: &CreateMaintenanceWindowRequest,
+    ) -> Result<CreateMaintenanceWindowResult, CreateMaintenanceWindowError>;
 
-    #[doc="<p>Creates a new Maintenance Window.</p>"]
-    fn create_maintenance_window
-        (&self,
-         input: &CreateMaintenanceWindowRequest)
-         -> Result<CreateMaintenanceWindowResult, CreateMaintenanceWindowError>;
-
-
-    #[doc="<p>Creates a patch baseline.</p>"]
-    fn create_patch_baseline(&self,
-                             input: &CreatePatchBaselineRequest)
-                             -> Result<CreatePatchBaselineResult, CreatePatchBaselineError>;
-
+    #[doc = "<p>Creates a patch baseline.</p>"]
+    fn create_patch_baseline(
+        &self,
+        input: &CreatePatchBaselineRequest,
+    ) -> Result<CreatePatchBaselineResult, CreatePatchBaselineError>;
 
     #[doc="<p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a href=\"API_ListResourceDataSync.html\">ListResourceDataSync</a> operation.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync\">Configuring Resource Data Sync for Inventory</a>.</p>"]
-    fn create_resource_data_sync
-        (&self,
-         input: &CreateResourceDataSyncRequest)
-         -> Result<CreateResourceDataSyncResult, CreateResourceDataSyncError>;
-
+    fn create_resource_data_sync(
+        &self,
+        input: &CreateResourceDataSyncRequest,
+    ) -> Result<CreateResourceDataSyncResult, CreateResourceDataSyncError>;
 
     #[doc="<p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>"]
-    fn delete_activation(&self,
-                         input: &DeleteActivationRequest)
-                         -> Result<DeleteActivationResult, DeleteActivationError>;
-
+    fn delete_activation(
+        &self,
+        input: &DeleteActivationRequest,
+    ) -> Result<DeleteActivationResult, DeleteActivationError>;
 
     #[doc="<p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>"]
-    fn delete_association(&self,
-                          input: &DeleteAssociationRequest)
-                          -> Result<DeleteAssociationResult, DeleteAssociationError>;
-
+    fn delete_association(
+        &self,
+        input: &DeleteAssociationRequest,
+    ) -> Result<DeleteAssociationResult, DeleteAssociationError>;
 
     #[doc="<p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>"]
-    fn delete_document(&self,
-                       input: &DeleteDocumentRequest)
-                       -> Result<DeleteDocumentResult, DeleteDocumentError>;
+    fn delete_document(
+        &self,
+        input: &DeleteDocumentRequest,
+    ) -> Result<DeleteDocumentResult, DeleteDocumentError>;
 
+    #[doc = "<p>Deletes a Maintenance Window.</p>"]
+    fn delete_maintenance_window(
+        &self,
+        input: &DeleteMaintenanceWindowRequest,
+    ) -> Result<DeleteMaintenanceWindowResult, DeleteMaintenanceWindowError>;
 
-    #[doc="<p>Deletes a Maintenance Window.</p>"]
-    fn delete_maintenance_window
-        (&self,
-         input: &DeleteMaintenanceWindowRequest)
-         -> Result<DeleteMaintenanceWindowResult, DeleteMaintenanceWindowError>;
-
-
-    #[doc="<p>Delete a parameter from the system.</p>"]
-    fn delete_parameter(&self,
-                        input: &DeleteParameterRequest)
-                        -> Result<DeleteParameterResult, DeleteParameterError>;
-
+    #[doc = "<p>Delete a parameter from the system.</p>"]
+    fn delete_parameter(
+        &self,
+        input: &DeleteParameterRequest,
+    ) -> Result<DeleteParameterResult, DeleteParameterError>;
 
     #[doc="<p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>"]
-    fn delete_parameters(&self,
-                         input: &DeleteParametersRequest)
-                         -> Result<DeleteParametersResult, DeleteParametersError>;
+    fn delete_parameters(
+        &self,
+        input: &DeleteParametersRequest,
+    ) -> Result<DeleteParametersResult, DeleteParametersError>;
 
-
-    #[doc="<p>Deletes a patch baseline.</p>"]
-    fn delete_patch_baseline(&self,
-                             input: &DeletePatchBaselineRequest)
-                             -> Result<DeletePatchBaselineResult, DeletePatchBaselineError>;
-
+    #[doc = "<p>Deletes a patch baseline.</p>"]
+    fn delete_patch_baseline(
+        &self,
+        input: &DeletePatchBaselineRequest,
+    ) -> Result<DeletePatchBaselineResult, DeletePatchBaselineError>;
 
     #[doc="<p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to inventory data on managed instances are no longer synced with the target Amazon S3 bucket. Deleting a sync configuration does not delete data in the target Amazon S3 bucket.</p>"]
-    fn delete_resource_data_sync
-        (&self,
-         input: &DeleteResourceDataSyncRequest)
-         -> Result<DeleteResourceDataSyncResult, DeleteResourceDataSyncError>;
-
+    fn delete_resource_data_sync(
+        &self,
+        input: &DeleteResourceDataSyncRequest,
+    ) -> Result<DeleteResourceDataSyncResult, DeleteResourceDataSyncError>;
 
     #[doc="<p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling the SSM Agent first.</p>"]
-    fn deregister_managed_instance
-        (&self,
-         input: &DeregisterManagedInstanceRequest)
-         -> Result<DeregisterManagedInstanceResult, DeregisterManagedInstanceError>;
+    fn deregister_managed_instance(
+        &self,
+        input: &DeregisterManagedInstanceRequest,
+    ) -> Result<DeregisterManagedInstanceResult, DeregisterManagedInstanceError>;
 
+    #[doc = "<p>Removes a patch group from a patch baseline.</p>"]
+    fn deregister_patch_baseline_for_patch_group(
+        &self,
+        input: &DeregisterPatchBaselineForPatchGroupRequest,
+    ) -> Result<DeregisterPatchBaselineForPatchGroupResult, DeregisterPatchBaselineForPatchGroupError>;
 
-    #[doc="<p>Removes a patch group from a patch baseline.</p>"]
-    fn deregister_patch_baseline_for_patch_group
-        (&self,
-         input: &DeregisterPatchBaselineForPatchGroupRequest)
-         -> Result<DeregisterPatchBaselineForPatchGroupResult,
-                   DeregisterPatchBaselineForPatchGroupError>;
+    #[doc = "<p>Removes a target from a Maintenance Window.</p>"]
+    fn deregister_target_from_maintenance_window(
+        &self,
+        input: &DeregisterTargetFromMaintenanceWindowRequest,
+    ) -> Result<
+        DeregisterTargetFromMaintenanceWindowResult,
+        DeregisterTargetFromMaintenanceWindowError,
+    >;
 
-
-    #[doc="<p>Removes a target from a Maintenance Window.</p>"]
-    fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFromMaintenanceWindowRequest)  -> Result<DeregisterTargetFromMaintenanceWindowResult, DeregisterTargetFromMaintenanceWindowError>;
-
-
-    #[doc="<p>Removes a task from a Maintenance Window.</p>"]
-    fn deregister_task_from_maintenance_window
-        (&self,
-         input: &DeregisterTaskFromMaintenanceWindowRequest)
-         -> Result<DeregisterTaskFromMaintenanceWindowResult,
-                   DeregisterTaskFromMaintenanceWindowError>;
-
+    #[doc = "<p>Removes a task from a Maintenance Window.</p>"]
+    fn deregister_task_from_maintenance_window(
+        &self,
+        input: &DeregisterTaskFromMaintenanceWindowRequest,
+    ) -> Result<DeregisterTaskFromMaintenanceWindowResult, DeregisterTaskFromMaintenanceWindowError>;
 
     #[doc="<p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>"]
-    fn describe_activations(&self,
-                            input: &DescribeActivationsRequest)
-                            -> Result<DescribeActivationsResult, DescribeActivationsError>;
-
+    fn describe_activations(
+        &self,
+        input: &DescribeActivationsRequest,
+    ) -> Result<DescribeActivationsResult, DescribeActivationsError>;
 
     #[doc="<p>Describes the associations for the specified Systems Manager document or instance.</p>"]
-    fn describe_association(&self,
-                            input: &DescribeAssociationRequest)
-                            -> Result<DescribeAssociationResult, DescribeAssociationError>;
+    fn describe_association(
+        &self,
+        input: &DescribeAssociationRequest,
+    ) -> Result<DescribeAssociationResult, DescribeAssociationError>;
 
+    #[doc = "<p>Provides details about all active and terminated Automation executions.</p>"]
+    fn describe_automation_executions(
+        &self,
+        input: &DescribeAutomationExecutionsRequest,
+    ) -> Result<DescribeAutomationExecutionsResult, DescribeAutomationExecutionsError>;
 
-    #[doc="<p>Provides details about all active and terminated Automation executions.</p>"]
-    fn describe_automation_executions
-        (&self,
-         input: &DescribeAutomationExecutionsRequest)
-         -> Result<DescribeAutomationExecutionsResult, DescribeAutomationExecutionsError>;
+    #[doc = "<p>Lists all patches that could possibly be included in a patch baseline.</p>"]
+    fn describe_available_patches(
+        &self,
+        input: &DescribeAvailablePatchesRequest,
+    ) -> Result<DescribeAvailablePatchesResult, DescribeAvailablePatchesError>;
 
-
-    #[doc="<p>Lists all patches that could possibly be included in a patch baseline.</p>"]
-    fn describe_available_patches
-        (&self,
-         input: &DescribeAvailablePatchesRequest)
-         -> Result<DescribeAvailablePatchesResult, DescribeAvailablePatchesError>;
-
-
-    #[doc="<p>Describes the specified SSM document.</p>"]
-    fn describe_document(&self,
-                         input: &DescribeDocumentRequest)
-                         -> Result<DescribeDocumentResult, DescribeDocumentError>;
-
+    #[doc = "<p>Describes the specified SSM document.</p>"]
+    fn describe_document(
+        &self,
+        input: &DescribeDocumentRequest,
+    ) -> Result<DescribeDocumentResult, DescribeDocumentError>;
 
     #[doc="<p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>"]
-    fn describe_document_permission
-        (&self,
-         input: &DescribeDocumentPermissionRequest)
-         -> Result<DescribeDocumentPermissionResponse, DescribeDocumentPermissionError>;
+    fn describe_document_permission(
+        &self,
+        input: &DescribeDocumentPermissionRequest,
+    ) -> Result<DescribeDocumentPermissionResponse, DescribeDocumentPermissionError>;
 
-
-    #[doc="<p>All associations for the instance(s).</p>"]
-    fn describe_effective_instance_associations(&self, input: &DescribeEffectiveInstanceAssociationsRequest)  -> Result<DescribeEffectiveInstanceAssociationsResult, DescribeEffectiveInstanceAssociationsError>;
-
+    #[doc = "<p>All associations for the instance(s).</p>"]
+    fn describe_effective_instance_associations(
+        &self,
+        input: &DescribeEffectiveInstanceAssociationsRequest,
+    ) -> Result<
+        DescribeEffectiveInstanceAssociationsResult,
+        DescribeEffectiveInstanceAssociationsError,
+    >;
 
     #[doc="<p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>"]
-    fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectivePatchesForPatchBaselineRequest)  -> Result<DescribeEffectivePatchesForPatchBaselineResult, DescribeEffectivePatchesForPatchBaselineError>;
+    fn describe_effective_patches_for_patch_baseline(
+        &self,
+        input: &DescribeEffectivePatchesForPatchBaselineRequest,
+    ) -> Result<
+        DescribeEffectivePatchesForPatchBaselineResult,
+        DescribeEffectivePatchesForPatchBaselineError,
+    >;
 
-
-    #[doc="<p>The status of the associations for the instance(s).</p>"]
-    fn describe_instance_associations_status
-        (&self,
-         input: &DescribeInstanceAssociationsStatusRequest)
-         -> Result<DescribeInstanceAssociationsStatusResult,
-                   DescribeInstanceAssociationsStatusError>;
-
+    #[doc = "<p>The status of the associations for the instance(s).</p>"]
+    fn describe_instance_associations_status(
+        &self,
+        input: &DescribeInstanceAssociationsStatusRequest,
+    ) -> Result<DescribeInstanceAssociationsStatusResult, DescribeInstanceAssociationsStatusError>;
 
     #[doc="<p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>"]
-    fn describe_instance_information
-        (&self,
-         input: &DescribeInstanceInformationRequest)
-         -> Result<DescribeInstanceInformationResult, DescribeInstanceInformationError>;
+    fn describe_instance_information(
+        &self,
+        input: &DescribeInstanceInformationRequest,
+    ) -> Result<DescribeInstanceInformationResult, DescribeInstanceInformationError>;
 
-
-    #[doc="<p>Retrieves the high-level patch state of one or more instances.</p>"]
-    fn describe_instance_patch_states
-        (&self,
-         input: &DescribeInstancePatchStatesRequest)
-         -> Result<DescribeInstancePatchStatesResult, DescribeInstancePatchStatesError>;
-
+    #[doc = "<p>Retrieves the high-level patch state of one or more instances.</p>"]
+    fn describe_instance_patch_states(
+        &self,
+        input: &DescribeInstancePatchStatesRequest,
+    ) -> Result<DescribeInstancePatchStatesResult, DescribeInstancePatchStatesError>;
 
     #[doc="<p>Retrieves the high-level patch state for the instances in the specified patch group.</p>"]
-    fn describe_instance_patch_states_for_patch_group(&self, input: &DescribeInstancePatchStatesForPatchGroupRequest)  -> Result<DescribeInstancePatchStatesForPatchGroupResult, DescribeInstancePatchStatesForPatchGroupError>;
-
+    fn describe_instance_patch_states_for_patch_group(
+        &self,
+        input: &DescribeInstancePatchStatesForPatchGroupRequest,
+    ) -> Result<
+        DescribeInstancePatchStatesForPatchGroupResult,
+        DescribeInstancePatchStatesForPatchGroupError,
+    >;
 
     #[doc="<p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>"]
-    fn describe_instance_patches
-        (&self,
-         input: &DescribeInstancePatchesRequest)
-         -> Result<DescribeInstancePatchesResult, DescribeInstancePatchesError>;
-
+    fn describe_instance_patches(
+        &self,
+        input: &DescribeInstancePatchesRequest,
+    ) -> Result<DescribeInstancePatchesResult, DescribeInstancePatchesError>;
 
     #[doc="<p>Retrieves the individual task executions (one per target) for a particular task executed as part of a Maintenance Window execution.</p>"]
-    fn describe_maintenance_window_execution_task_invocations(&self, input: &DescribeMaintenanceWindowExecutionTaskInvocationsRequest)  -> Result<DescribeMaintenanceWindowExecutionTaskInvocationsResult, DescribeMaintenanceWindowExecutionTaskInvocationsError>;
+    fn describe_maintenance_window_execution_task_invocations(
+        &self,
+        input: &DescribeMaintenanceWindowExecutionTaskInvocationsRequest,
+    ) -> Result<
+        DescribeMaintenanceWindowExecutionTaskInvocationsResult,
+        DescribeMaintenanceWindowExecutionTaskInvocationsError,
+    >;
 
-
-    #[doc="<p>For a given Maintenance Window execution, lists the tasks that were executed.</p>"]
-    fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanceWindowExecutionTasksRequest)  -> Result<DescribeMaintenanceWindowExecutionTasksResult, DescribeMaintenanceWindowExecutionTasksError>;
-
+    #[doc = "<p>For a given Maintenance Window execution, lists the tasks that were executed.</p>"]
+    fn describe_maintenance_window_execution_tasks(
+        &self,
+        input: &DescribeMaintenanceWindowExecutionTasksRequest,
+    ) -> Result<
+        DescribeMaintenanceWindowExecutionTasksResult,
+        DescribeMaintenanceWindowExecutionTasksError,
+    >;
 
     #[doc="<p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>"]
-    fn describe_maintenance_window_executions
-        (&self,
-         input: &DescribeMaintenanceWindowExecutionsRequest)
-         -> Result<DescribeMaintenanceWindowExecutionsResult,
-                   DescribeMaintenanceWindowExecutionsError>;
+    fn describe_maintenance_window_executions(
+        &self,
+        input: &DescribeMaintenanceWindowExecutionsRequest,
+    ) -> Result<DescribeMaintenanceWindowExecutionsResult, DescribeMaintenanceWindowExecutionsError>;
 
+    #[doc = "<p>Lists the targets registered with the Maintenance Window.</p>"]
+    fn describe_maintenance_window_targets(
+        &self,
+        input: &DescribeMaintenanceWindowTargetsRequest,
+    ) -> Result<DescribeMaintenanceWindowTargetsResult, DescribeMaintenanceWindowTargetsError>;
 
-    #[doc="<p>Lists the targets registered with the Maintenance Window.</p>"]
-    fn describe_maintenance_window_targets
-        (&self,
-         input: &DescribeMaintenanceWindowTargetsRequest)
-         -> Result<DescribeMaintenanceWindowTargetsResult, DescribeMaintenanceWindowTargetsError>;
+    #[doc = "<p>Lists the tasks in a Maintenance Window.</p>"]
+    fn describe_maintenance_window_tasks(
+        &self,
+        input: &DescribeMaintenanceWindowTasksRequest,
+    ) -> Result<DescribeMaintenanceWindowTasksResult, DescribeMaintenanceWindowTasksError>;
 
-
-    #[doc="<p>Lists the tasks in a Maintenance Window.</p>"]
-    fn describe_maintenance_window_tasks
-        (&self,
-         input: &DescribeMaintenanceWindowTasksRequest)
-         -> Result<DescribeMaintenanceWindowTasksResult, DescribeMaintenanceWindowTasksError>;
-
-
-    #[doc="<p>Retrieves the Maintenance Windows in an AWS account.</p>"]
-    fn describe_maintenance_windows
-        (&self,
-         input: &DescribeMaintenanceWindowsRequest)
-         -> Result<DescribeMaintenanceWindowsResult, DescribeMaintenanceWindowsError>;
-
+    #[doc = "<p>Retrieves the Maintenance Windows in an AWS account.</p>"]
+    fn describe_maintenance_windows(
+        &self,
+        input: &DescribeMaintenanceWindowsRequest,
+    ) -> Result<DescribeMaintenanceWindowsResult, DescribeMaintenanceWindowsError>;
 
     #[doc="<p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>"]
-    fn describe_parameters(&self,
-                           input: &DescribeParametersRequest)
-                           -> Result<DescribeParametersResult, DescribeParametersError>;
+    fn describe_parameters(
+        &self,
+        input: &DescribeParametersRequest,
+    ) -> Result<DescribeParametersResult, DescribeParametersError>;
 
+    #[doc = "<p>Lists the patch baselines in your AWS account.</p>"]
+    fn describe_patch_baselines(
+        &self,
+        input: &DescribePatchBaselinesRequest,
+    ) -> Result<DescribePatchBaselinesResult, DescribePatchBaselinesError>;
 
-    #[doc="<p>Lists the patch baselines in your AWS account.</p>"]
-    fn describe_patch_baselines
-        (&self,
-         input: &DescribePatchBaselinesRequest)
-         -> Result<DescribePatchBaselinesResult, DescribePatchBaselinesError>;
+    #[doc = "<p>Returns high-level aggregated patch compliance state for a patch group.</p>"]
+    fn describe_patch_group_state(
+        &self,
+        input: &DescribePatchGroupStateRequest,
+    ) -> Result<DescribePatchGroupStateResult, DescribePatchGroupStateError>;
 
+    #[doc = "<p>Lists all patch groups that have been registered with patch baselines.</p>"]
+    fn describe_patch_groups(
+        &self,
+        input: &DescribePatchGroupsRequest,
+    ) -> Result<DescribePatchGroupsResult, DescribePatchGroupsError>;
 
-    #[doc="<p>Returns high-level aggregated patch compliance state for a patch group.</p>"]
-    fn describe_patch_group_state
-        (&self,
-         input: &DescribePatchGroupStateRequest)
-         -> Result<DescribePatchGroupStateResult, DescribePatchGroupStateError>;
-
-
-    #[doc="<p>Lists all patch groups that have been registered with patch baselines.</p>"]
-    fn describe_patch_groups(&self,
-                             input: &DescribePatchGroupsRequest)
-                             -> Result<DescribePatchGroupsResult, DescribePatchGroupsError>;
-
-
-    #[doc="<p>Get detailed information about a particular Automation execution.</p>"]
-    fn get_automation_execution
-        (&self,
-         input: &GetAutomationExecutionRequest)
-         -> Result<GetAutomationExecutionResult, GetAutomationExecutionError>;
-
+    #[doc = "<p>Get detailed information about a particular Automation execution.</p>"]
+    fn get_automation_execution(
+        &self,
+        input: &GetAutomationExecutionRequest,
+    ) -> Result<GetAutomationExecutionResult, GetAutomationExecutionError>;
 
     #[doc="<p>Returns detailed information about command execution for an invocation or plugin. </p>"]
-    fn get_command_invocation(&self,
-                              input: &GetCommandInvocationRequest)
-                              -> Result<GetCommandInvocationResult, GetCommandInvocationError>;
-
+    fn get_command_invocation(
+        &self,
+        input: &GetCommandInvocationRequest,
+    ) -> Result<GetCommandInvocationResult, GetCommandInvocationError>;
 
     #[doc="<p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>"]
-    fn get_default_patch_baseline
-        (&self,
-         input: &GetDefaultPatchBaselineRequest)
-         -> Result<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError>;
-
+    fn get_default_patch_baseline(
+        &self,
+        input: &GetDefaultPatchBaselineRequest,
+    ) -> Result<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError>;
 
     #[doc="<p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>"]
-    fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchSnapshotForInstanceRequest)  -> Result<GetDeployablePatchSnapshotForInstanceResult, GetDeployablePatchSnapshotForInstanceError>;
+    fn get_deployable_patch_snapshot_for_instance(
+        &self,
+        input: &GetDeployablePatchSnapshotForInstanceRequest,
+    ) -> Result<
+        GetDeployablePatchSnapshotForInstanceResult,
+        GetDeployablePatchSnapshotForInstanceError,
+    >;
 
+    #[doc = "<p>Gets the contents of the specified SSM document.</p>"]
+    fn get_document(
+        &self,
+        input: &GetDocumentRequest,
+    ) -> Result<GetDocumentResult, GetDocumentError>;
 
-    #[doc="<p>Gets the contents of the specified SSM document.</p>"]
-    fn get_document(&self,
-                    input: &GetDocumentRequest)
-                    -> Result<GetDocumentResult, GetDocumentError>;
-
-
-    #[doc="<p>Query inventory information.</p>"]
-    fn get_inventory(&self,
-                     input: &GetInventoryRequest)
-                     -> Result<GetInventoryResult, GetInventoryError>;
-
+    #[doc = "<p>Query inventory information.</p>"]
+    fn get_inventory(
+        &self,
+        input: &GetInventoryRequest,
+    ) -> Result<GetInventoryResult, GetInventoryError>;
 
     #[doc="<p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>"]
-    fn get_inventory_schema(&self,
-                            input: &GetInventorySchemaRequest)
-                            -> Result<GetInventorySchemaResult, GetInventorySchemaError>;
+    fn get_inventory_schema(
+        &self,
+        input: &GetInventorySchemaRequest,
+    ) -> Result<GetInventorySchemaResult, GetInventorySchemaError>;
 
-
-    #[doc="<p>Retrieves a Maintenance Window.</p>"]
-    fn get_maintenance_window(&self,
-                              input: &GetMaintenanceWindowRequest)
-                              -> Result<GetMaintenanceWindowResult, GetMaintenanceWindowError>;
-
+    #[doc = "<p>Retrieves a Maintenance Window.</p>"]
+    fn get_maintenance_window(
+        &self,
+        input: &GetMaintenanceWindowRequest,
+    ) -> Result<GetMaintenanceWindowResult, GetMaintenanceWindowError>;
 
     #[doc="<p>Retrieves details about a specific task executed as part of a Maintenance Window execution.</p>"]
-    fn get_maintenance_window_execution
-        (&self,
-         input: &GetMaintenanceWindowExecutionRequest)
-         -> Result<GetMaintenanceWindowExecutionResult, GetMaintenanceWindowExecutionError>;
-
+    fn get_maintenance_window_execution(
+        &self,
+        input: &GetMaintenanceWindowExecutionRequest,
+    ) -> Result<GetMaintenanceWindowExecutionResult, GetMaintenanceWindowExecutionError>;
 
     #[doc="<p>Retrieves the details about a specific task executed as part of a Maintenance Window execution.</p>"]
-    fn get_maintenance_window_execution_task
-        (&self,
-         input: &GetMaintenanceWindowExecutionTaskRequest)
-         -> Result<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError>;
-
+    fn get_maintenance_window_execution_task(
+        &self,
+        input: &GetMaintenanceWindowExecutionTaskRequest,
+    ) -> Result<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError>;
 
     #[doc="<p>Retrieves a task invocation. A task invocation is a specific task executing on a specific target. Maintenance Windows report status for all invocations. </p>"]
-    fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanceWindowExecutionTaskInvocationRequest)  -> Result<GetMaintenanceWindowExecutionTaskInvocationResult, GetMaintenanceWindowExecutionTaskInvocationError>;
+    fn get_maintenance_window_execution_task_invocation(
+        &self,
+        input: &GetMaintenanceWindowExecutionTaskInvocationRequest,
+    ) -> Result<
+        GetMaintenanceWindowExecutionTaskInvocationResult,
+        GetMaintenanceWindowExecutionTaskInvocationError,
+    >;
 
+    #[doc = "<p>Lists the tasks in a Maintenance Window.</p>"]
+    fn get_maintenance_window_task(
+        &self,
+        input: &GetMaintenanceWindowTaskRequest,
+    ) -> Result<GetMaintenanceWindowTaskResult, GetMaintenanceWindowTaskError>;
 
-    #[doc="<p>Lists the tasks in a Maintenance Window.</p>"]
-    fn get_maintenance_window_task
-        (&self,
-         input: &GetMaintenanceWindowTaskRequest)
-         -> Result<GetMaintenanceWindowTaskResult, GetMaintenanceWindowTaskError>;
+    #[doc = "<p>Get information about a parameter by using the parameter name. </p>"]
+    fn get_parameter(
+        &self,
+        input: &GetParameterRequest,
+    ) -> Result<GetParameterResult, GetParameterError>;
 
+    #[doc = "<p>Query a list of all parameters used by the AWS account.</p>"]
+    fn get_parameter_history(
+        &self,
+        input: &GetParameterHistoryRequest,
+    ) -> Result<GetParameterHistoryResult, GetParameterHistoryError>;
 
-    #[doc="<p>Get information about a parameter by using the parameter name. </p>"]
-    fn get_parameter(&self,
-                     input: &GetParameterRequest)
-                     -> Result<GetParameterResult, GetParameterError>;
-
-
-    #[doc="<p>Query a list of all parameters used by the AWS account.</p>"]
-    fn get_parameter_history(&self,
-                             input: &GetParameterHistoryRequest)
-                             -> Result<GetParameterHistoryResult, GetParameterHistoryError>;
-
-
-    #[doc="<p>Get details of a parameter.</p>"]
-    fn get_parameters(&self,
-                      input: &GetParametersRequest)
-                      -> Result<GetParametersResult, GetParametersError>;
-
+    #[doc = "<p>Get details of a parameter.</p>"]
+    fn get_parameters(
+        &self,
+        input: &GetParametersRequest,
+    ) -> Result<GetParametersResult, GetParametersError>;
 
     #[doc="<p>Retrieve parameters in a specific hierarchy. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html\">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>"]
-    fn get_parameters_by_path(&self,
-                              input: &GetParametersByPathRequest)
-                              -> Result<GetParametersByPathResult, GetParametersByPathError>;
+    fn get_parameters_by_path(
+        &self,
+        input: &GetParametersByPathRequest,
+    ) -> Result<GetParametersByPathResult, GetParametersByPathError>;
 
+    #[doc = "<p>Retrieves information about a patch baseline.</p>"]
+    fn get_patch_baseline(
+        &self,
+        input: &GetPatchBaselineRequest,
+    ) -> Result<GetPatchBaselineResult, GetPatchBaselineError>;
 
-    #[doc="<p>Retrieves information about a patch baseline.</p>"]
-    fn get_patch_baseline(&self,
-                          input: &GetPatchBaselineRequest)
-                          -> Result<GetPatchBaselineResult, GetPatchBaselineError>;
+    #[doc = "<p>Retrieves the patch baseline that should be used for the specified patch group.</p>"]
+    fn get_patch_baseline_for_patch_group(
+        &self,
+        input: &GetPatchBaselineForPatchGroupRequest,
+    ) -> Result<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError>;
 
+    #[doc = "<p>Retrieves all versions of an association for a specific association ID.</p>"]
+    fn list_association_versions(
+        &self,
+        input: &ListAssociationVersionsRequest,
+    ) -> Result<ListAssociationVersionsResult, ListAssociationVersionsError>;
 
-    #[doc="<p>Retrieves the patch baseline that should be used for the specified patch group.</p>"]
-    fn get_patch_baseline_for_patch_group
-        (&self,
-         input: &GetPatchBaselineForPatchGroupRequest)
-         -> Result<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError>;
-
-
-    #[doc="<p>Retrieves all versions of an association for a specific association ID.</p>"]
-    fn list_association_versions
-        (&self,
-         input: &ListAssociationVersionsRequest)
-         -> Result<ListAssociationVersionsResult, ListAssociationVersionsError>;
-
-
-    #[doc="<p>Lists the associations for the specified Systems Manager document or instance.</p>"]
-    fn list_associations(&self,
-                         input: &ListAssociationsRequest)
-                         -> Result<ListAssociationsResult, ListAssociationsError>;
-
+    #[doc = "<p>Lists the associations for the specified Systems Manager document or instance.</p>"]
+    fn list_associations(
+        &self,
+        input: &ListAssociationsRequest,
+    ) -> Result<ListAssociationsResult, ListAssociationsError>;
 
     #[doc="<p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>"]
-    fn list_command_invocations
-        (&self,
-         input: &ListCommandInvocationsRequest)
-         -> Result<ListCommandInvocationsResult, ListCommandInvocationsError>;
+    fn list_command_invocations(
+        &self,
+        input: &ListCommandInvocationsRequest,
+    ) -> Result<ListCommandInvocationsResult, ListCommandInvocationsError>;
 
-
-    #[doc="<p>Lists the commands requested by users of the AWS account.</p>"]
-    fn list_commands(&self,
-                     input: &ListCommandsRequest)
-                     -> Result<ListCommandsResult, ListCommandsError>;
-
+    #[doc = "<p>Lists the commands requested by users of the AWS account.</p>"]
+    fn list_commands(
+        &self,
+        input: &ListCommandsRequest,
+    ) -> Result<ListCommandsResult, ListCommandsError>;
 
     #[doc="<p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>"]
-    fn list_compliance_items(&self,
-                             input: &ListComplianceItemsRequest)
-                             -> Result<ListComplianceItemsResult, ListComplianceItemsError>;
-
+    fn list_compliance_items(
+        &self,
+        input: &ListComplianceItemsRequest,
+    ) -> Result<ListComplianceItemsResult, ListComplianceItemsError>;
 
     #[doc="<p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>"]
-    fn list_compliance_summaries
-        (&self,
-         input: &ListComplianceSummariesRequest)
-         -> Result<ListComplianceSummariesResult, ListComplianceSummariesError>;
+    fn list_compliance_summaries(
+        &self,
+        input: &ListComplianceSummariesRequest,
+    ) -> Result<ListComplianceSummariesResult, ListComplianceSummariesError>;
 
+    #[doc = "<p>List all versions for a document.</p>"]
+    fn list_document_versions(
+        &self,
+        input: &ListDocumentVersionsRequest,
+    ) -> Result<ListDocumentVersionsResult, ListDocumentVersionsError>;
 
-    #[doc="<p>List all versions for a document.</p>"]
-    fn list_document_versions(&self,
-                              input: &ListDocumentVersionsRequest)
-                              -> Result<ListDocumentVersionsResult, ListDocumentVersionsError>;
+    #[doc = "<p>Describes one or more of your SSM documents.</p>"]
+    fn list_documents(
+        &self,
+        input: &ListDocumentsRequest,
+    ) -> Result<ListDocumentsResult, ListDocumentsError>;
 
-
-    #[doc="<p>Describes one or more of your SSM documents.</p>"]
-    fn list_documents(&self,
-                      input: &ListDocumentsRequest)
-                      -> Result<ListDocumentsResult, ListDocumentsError>;
-
-
-    #[doc="<p>A list of inventory items returned by the request.</p>"]
-    fn list_inventory_entries(&self,
-                              input: &ListInventoryEntriesRequest)
-                              -> Result<ListInventoryEntriesResult, ListInventoryEntriesError>;
-
+    #[doc = "<p>A list of inventory items returned by the request.</p>"]
+    fn list_inventory_entries(
+        &self,
+        input: &ListInventoryEntriesRequest,
+    ) -> Result<ListInventoryEntriesResult, ListInventoryEntriesError>;
 
     #[doc="<p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>"]
-    fn list_resource_compliance_summaries
-        (&self,
-         input: &ListResourceComplianceSummariesRequest)
-         -> Result<ListResourceComplianceSummariesResult, ListResourceComplianceSummariesError>;
-
+    fn list_resource_compliance_summaries(
+        &self,
+        input: &ListResourceComplianceSummariesRequest,
+    ) -> Result<ListResourceComplianceSummariesResult, ListResourceComplianceSummariesError>;
 
     #[doc="<p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>"]
-    fn list_resource_data_sync(&self,
-                               input: &ListResourceDataSyncRequest)
-                               -> Result<ListResourceDataSyncResult, ListResourceDataSyncError>;
+    fn list_resource_data_sync(
+        &self,
+        input: &ListResourceDataSyncRequest,
+    ) -> Result<ListResourceDataSyncResult, ListResourceDataSyncError>;
 
-
-    #[doc="<p>Returns a list of the tags assigned to the specified resource.</p>"]
-    fn list_tags_for_resource(&self,
-                              input: &ListTagsForResourceRequest)
-                              -> Result<ListTagsForResourceResult, ListTagsForResourceError>;
-
+    #[doc = "<p>Returns a list of the tags assigned to the specified resource.</p>"]
+    fn list_tags_for_resource(
+        &self,
+        input: &ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResult, ListTagsForResourceError>;
 
     #[doc="<p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>"]
-    fn modify_document_permission
-        (&self,
-         input: &ModifyDocumentPermissionRequest)
-         -> Result<ModifyDocumentPermissionResponse, ModifyDocumentPermissionError>;
-
+    fn modify_document_permission(
+        &self,
+        input: &ModifyDocumentPermissionRequest,
+    ) -> Result<ModifyDocumentPermissionResponse, ModifyDocumentPermissionError>;
 
     #[doc="<p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p>"]
-    fn put_compliance_items(&self,
-                            input: &PutComplianceItemsRequest)
-                            -> Result<PutComplianceItemsResult, PutComplianceItemsError>;
-
+    fn put_compliance_items(
+        &self,
+        input: &PutComplianceItemsRequest,
+    ) -> Result<PutComplianceItemsResult, PutComplianceItemsError>;
 
     #[doc="<p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>"]
-    fn put_inventory(&self,
-                     input: &PutInventoryRequest)
-                     -> Result<PutInventoryResult, PutInventoryError>;
+    fn put_inventory(
+        &self,
+        input: &PutInventoryRequest,
+    ) -> Result<PutInventoryResult, PutInventoryError>;
 
+    #[doc = "<p>Add one or more parameters to the system.</p>"]
+    fn put_parameter(
+        &self,
+        input: &PutParameterRequest,
+    ) -> Result<PutParameterResult, PutParameterError>;
 
-    #[doc="<p>Add one or more parameters to the system.</p>"]
-    fn put_parameter(&self,
-                     input: &PutParameterRequest)
-                     -> Result<PutParameterResult, PutParameterError>;
+    #[doc = "<p>Defines the default patch baseline.</p>"]
+    fn register_default_patch_baseline(
+        &self,
+        input: &RegisterDefaultPatchBaselineRequest,
+    ) -> Result<RegisterDefaultPatchBaselineResult, RegisterDefaultPatchBaselineError>;
 
+    #[doc = "<p>Registers a patch baseline for a patch group.</p>"]
+    fn register_patch_baseline_for_patch_group(
+        &self,
+        input: &RegisterPatchBaselineForPatchGroupRequest,
+    ) -> Result<RegisterPatchBaselineForPatchGroupResult, RegisterPatchBaselineForPatchGroupError>;
 
-    #[doc="<p>Defines the default patch baseline.</p>"]
-    fn register_default_patch_baseline
-        (&self,
-         input: &RegisterDefaultPatchBaselineRequest)
-         -> Result<RegisterDefaultPatchBaselineResult, RegisterDefaultPatchBaselineError>;
+    #[doc = "<p>Registers a target with a Maintenance Window.</p>"]
+    fn register_target_with_maintenance_window(
+        &self,
+        input: &RegisterTargetWithMaintenanceWindowRequest,
+    ) -> Result<RegisterTargetWithMaintenanceWindowResult, RegisterTargetWithMaintenanceWindowError>;
 
+    #[doc = "<p>Adds a new task to a Maintenance Window.</p>"]
+    fn register_task_with_maintenance_window(
+        &self,
+        input: &RegisterTaskWithMaintenanceWindowRequest,
+    ) -> Result<RegisterTaskWithMaintenanceWindowResult, RegisterTaskWithMaintenanceWindowError>;
 
-    #[doc="<p>Registers a patch baseline for a patch group.</p>"]
-    fn register_patch_baseline_for_patch_group
-        (&self,
-         input: &RegisterPatchBaselineForPatchGroupRequest)
-         -> Result<RegisterPatchBaselineForPatchGroupResult,
-                   RegisterPatchBaselineForPatchGroupError>;
-
-
-    #[doc="<p>Registers a target with a Maintenance Window.</p>"]
-    fn register_target_with_maintenance_window
-        (&self,
-         input: &RegisterTargetWithMaintenanceWindowRequest)
-         -> Result<RegisterTargetWithMaintenanceWindowResult,
-                   RegisterTargetWithMaintenanceWindowError>;
-
-
-    #[doc="<p>Adds a new task to a Maintenance Window.</p>"]
-    fn register_task_with_maintenance_window
-        (&self,
-         input: &RegisterTaskWithMaintenanceWindowRequest)
-         -> Result<RegisterTaskWithMaintenanceWindowResult, RegisterTaskWithMaintenanceWindowError>;
-
-
-    #[doc="<p>Removes all tags from the specified resource.</p>"]
-    fn remove_tags_from_resource
-        (&self,
-         input: &RemoveTagsFromResourceRequest)
-         -> Result<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
-
+    #[doc = "<p>Removes all tags from the specified resource.</p>"]
+    fn remove_tags_from_resource(
+        &self,
+        input: &RemoveTagsFromResourceRequest,
+    ) -> Result<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
 
     #[doc="<p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>"]
-    fn send_automation_signal(&self,
-                              input: &SendAutomationSignalRequest)
-                              -> Result<SendAutomationSignalResult, SendAutomationSignalError>;
+    fn send_automation_signal(
+        &self,
+        input: &SendAutomationSignalRequest,
+    ) -> Result<SendAutomationSignalResult, SendAutomationSignalError>;
 
+    #[doc = "<p>Executes commands on one or more managed instances.</p>"]
+    fn send_command(
+        &self,
+        input: &SendCommandRequest,
+    ) -> Result<SendCommandResult, SendCommandError>;
 
-    #[doc="<p>Executes commands on one or more managed instances.</p>"]
-    fn send_command(&self,
-                    input: &SendCommandRequest)
-                    -> Result<SendCommandResult, SendCommandError>;
+    #[doc = "<p>Initiates execution of an Automation document.</p>"]
+    fn start_automation_execution(
+        &self,
+        input: &StartAutomationExecutionRequest,
+    ) -> Result<StartAutomationExecutionResult, StartAutomationExecutionError>;
 
-
-    #[doc="<p>Initiates execution of an Automation document.</p>"]
-    fn start_automation_execution
-        (&self,
-         input: &StartAutomationExecutionRequest)
-         -> Result<StartAutomationExecutionResult, StartAutomationExecutionError>;
-
-
-    #[doc="<p>Stop an Automation that is currently executing.</p>"]
-    fn stop_automation_execution
-        (&self,
-         input: &StopAutomationExecutionRequest)
-         -> Result<StopAutomationExecutionResult, StopAutomationExecutionError>;
-
+    #[doc = "<p>Stop an Automation that is currently executing.</p>"]
+    fn stop_automation_execution(
+        &self,
+        input: &StopAutomationExecutionRequest,
+    ) -> Result<StopAutomationExecutionResult, StopAutomationExecutionError>;
 
     #[doc="<p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p>"]
-    fn update_association(&self,
-                          input: &UpdateAssociationRequest)
-                          -> Result<UpdateAssociationResult, UpdateAssociationError>;
-
+    fn update_association(
+        &self,
+        input: &UpdateAssociationRequest,
+    ) -> Result<UpdateAssociationResult, UpdateAssociationError>;
 
     #[doc="<p>Updates the status of the Systems Manager document associated with the specified instance.</p>"]
-    fn update_association_status
-        (&self,
-         input: &UpdateAssociationStatusRequest)
-         -> Result<UpdateAssociationStatusResult, UpdateAssociationStatusError>;
+    fn update_association_status(
+        &self,
+        input: &UpdateAssociationStatusRequest,
+    ) -> Result<UpdateAssociationStatusResult, UpdateAssociationStatusError>;
 
+    #[doc = "<p>The document you want to update.</p>"]
+    fn update_document(
+        &self,
+        input: &UpdateDocumentRequest,
+    ) -> Result<UpdateDocumentResult, UpdateDocumentError>;
 
-    #[doc="<p>The document you want to update.</p>"]
-    fn update_document(&self,
-                       input: &UpdateDocumentRequest)
-                       -> Result<UpdateDocumentResult, UpdateDocumentError>;
+    #[doc = "<p>Set the default version of a document. </p>"]
+    fn update_document_default_version(
+        &self,
+        input: &UpdateDocumentDefaultVersionRequest,
+    ) -> Result<UpdateDocumentDefaultVersionResult, UpdateDocumentDefaultVersionError>;
 
-
-    #[doc="<p>Set the default version of a document. </p>"]
-    fn update_document_default_version
-        (&self,
-         input: &UpdateDocumentDefaultVersionRequest)
-         -> Result<UpdateDocumentDefaultVersionResult, UpdateDocumentDefaultVersionError>;
-
-
-    #[doc="<p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>"]
-    fn update_maintenance_window
-        (&self,
-         input: &UpdateMaintenanceWindowRequest)
-         -> Result<UpdateMaintenanceWindowResult, UpdateMaintenanceWindowError>;
-
+    #[doc = "<p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>"]
+    fn update_maintenance_window(
+        &self,
+        input: &UpdateMaintenanceWindowRequest,
+    ) -> Result<UpdateMaintenanceWindowResult, UpdateMaintenanceWindowError>;
 
     #[doc="<p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>"]
-    fn update_maintenance_window_target
-        (&self,
-         input: &UpdateMaintenanceWindowTargetRequest)
-         -> Result<UpdateMaintenanceWindowTargetResult, UpdateMaintenanceWindowTargetError>;
-
+    fn update_maintenance_window_target(
+        &self,
+        input: &UpdateMaintenanceWindowTargetRequest,
+    ) -> Result<UpdateMaintenanceWindowTargetResult, UpdateMaintenanceWindowTargetError>;
 
     #[doc="<p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <p>Task ARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> <p>Service role ARN.</p> <p>Task parameters.</p> <p>Task priority.</p> <p>Task MaxConcurrency and MaxErrors.</p> <p>Log location.</p> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.</p>"]
-    fn update_maintenance_window_task
-        (&self,
-         input: &UpdateMaintenanceWindowTaskRequest)
-         -> Result<UpdateMaintenanceWindowTaskResult, UpdateMaintenanceWindowTaskError>;
-
+    fn update_maintenance_window_task(
+        &self,
+        input: &UpdateMaintenanceWindowTaskRequest,
+    ) -> Result<UpdateMaintenanceWindowTaskResult, UpdateMaintenanceWindowTaskError>;
 
     #[doc="<p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>"]
-    fn update_managed_instance_role
-        (&self,
-         input: &UpdateManagedInstanceRoleRequest)
-         -> Result<UpdateManagedInstanceRoleResult, UpdateManagedInstanceRoleError>;
-
+    fn update_managed_instance_role(
+        &self,
+        input: &UpdateManagedInstanceRoleRequest,
+    ) -> Result<UpdateManagedInstanceRoleResult, UpdateManagedInstanceRoleError>;
 
     #[doc="<p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p>"]
-    fn update_patch_baseline(&self,
-                             input: &UpdatePatchBaselineRequest)
-                             -> Result<UpdatePatchBaselineResult, UpdatePatchBaselineError>;
+    fn update_patch_baseline(
+        &self,
+        input: &UpdatePatchBaselineRequest,
+    ) -> Result<UpdatePatchBaselineResult, UpdatePatchBaselineError>;
 }
 /// A client for the Amazon SSM API.
 pub struct SsmClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     credentials_provider: P,
     region: region::Region,
@@ -14851,8 +15239,9 @@ pub struct SsmClient<P, D>
 }
 
 impl<P, D> SsmClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         SsmClient {
@@ -14864,13 +15253,15 @@ impl<P, D> SsmClient<P, D>
 }
 
 impl<P, D> Ssm for SsmClient<P, D>
-    where P: ProvideAwsCredentials,
-          D: DispatchSignedRequest
+where
+    P: ProvideAwsCredentials,
+    D: DispatchSignedRequest,
 {
     #[doc="<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances, Maintenance Windows, or Parameter Store parameters. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>"]
-    fn add_tags_to_resource(&self,
-                            input: &AddTagsToResourceRequest)
-                            -> Result<AddTagsToResourceResult, AddTagsToResourceError> {
+    fn add_tags_to_resource(
+        &self,
+        input: &AddTagsToResourceRequest,
+    ) -> Result<AddTagsToResourceResult, AddTagsToResourceError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14886,23 +15277,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<AddTagsToResourceResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AddTagsToResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>"]
-    fn cancel_command(&self,
-                      input: &CancelCommandRequest)
-                      -> Result<CancelCommandResult, CancelCommandError> {
+    fn cancel_command(
+        &self,
+        input: &CancelCommandRequest,
+    ) -> Result<CancelCommandResult, CancelCommandError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14918,23 +15311,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CancelCommandResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CancelCommandResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CancelCommandError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CancelCommandError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html\">Setting Up Systems Manager in Hybrid Environments</a>.</p>"]
-    fn create_activation(&self,
-                         input: &CreateActivationRequest)
-                         -> Result<CreateActivationResult, CreateActivationError> {
+    fn create_activation(
+        &self,
+        input: &CreateActivationRequest,
+    ) -> Result<CreateActivationResult, CreateActivationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14950,23 +15345,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateActivationResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateActivationResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateActivationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateActivationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
-    fn create_association(&self,
-                          input: &CreateAssociationRequest)
-                          -> Result<CreateAssociationResult, CreateAssociationError> {
+    fn create_association(
+        &self,
+        input: &CreateAssociationRequest,
+    ) -> Result<CreateAssociationResult, CreateAssociationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -14982,24 +15379,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateAssociationResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateAssociationResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateAssociationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateAssociationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
-    fn create_association_batch
-        (&self,
-         input: &CreateAssociationBatchRequest)
-         -> Result<CreateAssociationBatchResult, CreateAssociationBatchError> {
+    fn create_association_batch(
+        &self,
+        input: &CreateAssociationBatchRequest,
+    ) -> Result<CreateAssociationBatchResult, CreateAssociationBatchError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15015,21 +15413,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateAssociationBatchResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateAssociationBatchResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateAssociationBatchError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateAssociationBatchError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>"]
-    fn create_document(&self,
-                       input: &CreateDocumentRequest)
-                       -> Result<CreateDocumentResult, CreateDocumentError> {
+    fn create_document(
+        &self,
+        input: &CreateDocumentRequest,
+    ) -> Result<CreateDocumentResult, CreateDocumentError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15045,24 +15447,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateDocumentResult>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<CreateDocumentResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateDocumentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a new Maintenance Window.</p>"]
-    fn create_maintenance_window
-        (&self,
-         input: &CreateMaintenanceWindowRequest)
-         -> Result<CreateMaintenanceWindowResult, CreateMaintenanceWindowError> {
+    #[doc = "<p>Creates a new Maintenance Window.</p>"]
+    fn create_maintenance_window(
+        &self,
+        input: &CreateMaintenanceWindowRequest,
+    ) -> Result<CreateMaintenanceWindowResult, CreateMaintenanceWindowError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15078,22 +15481,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateMaintenanceWindowResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateMaintenanceWindowError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(CreateMaintenanceWindowError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Creates a patch baseline.</p>"]
-    fn create_patch_baseline(&self,
-                             input: &CreatePatchBaselineRequest)
-                             -> Result<CreatePatchBaselineResult, CreatePatchBaselineError> {
+    #[doc = "<p>Creates a patch baseline.</p>"]
+    fn create_patch_baseline(
+        &self,
+        input: &CreatePatchBaselineRequest,
+    ) -> Result<CreatePatchBaselineResult, CreatePatchBaselineError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15109,22 +15515,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreatePatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreatePatchBaselineResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreatePatchBaselineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreatePatchBaselineError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a href=\"API_ListResourceDataSync.html\">ListResourceDataSync</a> operation.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync\">Configuring Resource Data Sync for Inventory</a>.</p>"]
-    fn create_resource_data_sync
-        (&self,
-         input: &CreateResourceDataSyncRequest)
-         -> Result<CreateResourceDataSyncResult, CreateResourceDataSyncError> {
+    fn create_resource_data_sync(
+        &self,
+        input: &CreateResourceDataSyncRequest,
+    ) -> Result<CreateResourceDataSyncResult, CreateResourceDataSyncError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15140,21 +15549,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateResourceDataSyncResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<CreateResourceDataSyncResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(CreateResourceDataSyncError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(CreateResourceDataSyncError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>"]
-    fn delete_activation(&self,
-                         input: &DeleteActivationRequest)
-                         -> Result<DeleteActivationResult, DeleteActivationError> {
+    fn delete_activation(
+        &self,
+        input: &DeleteActivationRequest,
+    ) -> Result<DeleteActivationResult, DeleteActivationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15170,23 +15583,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteActivationResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteActivationResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteActivationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteActivationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>"]
-    fn delete_association(&self,
-                          input: &DeleteAssociationRequest)
-                          -> Result<DeleteAssociationResult, DeleteAssociationError> {
+    fn delete_association(
+        &self,
+        input: &DeleteAssociationRequest,
+    ) -> Result<DeleteAssociationResult, DeleteAssociationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15202,23 +15617,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteAssociationResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteAssociationResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteAssociationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteAssociationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>"]
-    fn delete_document(&self,
-                       input: &DeleteDocumentRequest)
-                       -> Result<DeleteDocumentResult, DeleteDocumentError> {
+    fn delete_document(
+        &self,
+        input: &DeleteDocumentRequest,
+    ) -> Result<DeleteDocumentResult, DeleteDocumentError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15234,24 +15651,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteDocumentResult>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteDocumentResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteDocumentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a Maintenance Window.</p>"]
-    fn delete_maintenance_window
-        (&self,
-         input: &DeleteMaintenanceWindowRequest)
-         -> Result<DeleteMaintenanceWindowResult, DeleteMaintenanceWindowError> {
+    #[doc = "<p>Deletes a Maintenance Window.</p>"]
+    fn delete_maintenance_window(
+        &self,
+        input: &DeleteMaintenanceWindowRequest,
+    ) -> Result<DeleteMaintenanceWindowResult, DeleteMaintenanceWindowError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15267,22 +15685,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteMaintenanceWindowResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteMaintenanceWindowError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(DeleteMaintenanceWindowError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Delete a parameter from the system.</p>"]
-    fn delete_parameter(&self,
-                        input: &DeleteParameterRequest)
-                        -> Result<DeleteParameterResult, DeleteParameterError> {
+    #[doc = "<p>Delete a parameter from the system.</p>"]
+    fn delete_parameter(
+        &self,
+        input: &DeleteParameterRequest,
+    ) -> Result<DeleteParameterResult, DeleteParameterError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15298,23 +15719,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteParameterResult>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteParameterResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteParameterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteParameterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>"]
-    fn delete_parameters(&self,
-                         input: &DeleteParametersRequest)
-                         -> Result<DeleteParametersResult, DeleteParametersError> {
+    fn delete_parameters(
+        &self,
+        input: &DeleteParametersRequest,
+    ) -> Result<DeleteParametersResult, DeleteParametersError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15330,23 +15753,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteParametersResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DeleteParametersResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteParametersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteParametersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Deletes a patch baseline.</p>"]
-    fn delete_patch_baseline(&self,
-                             input: &DeletePatchBaselineRequest)
-                             -> Result<DeletePatchBaselineResult, DeletePatchBaselineError> {
+    #[doc = "<p>Deletes a patch baseline.</p>"]
+    fn delete_patch_baseline(
+        &self,
+        input: &DeletePatchBaselineRequest,
+    ) -> Result<DeletePatchBaselineResult, DeletePatchBaselineError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15362,22 +15787,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeletePatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeletePatchBaselineResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeletePatchBaselineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeletePatchBaselineError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to inventory data on managed instances are no longer synced with the target Amazon S3 bucket. Deleting a sync configuration does not delete data in the target Amazon S3 bucket.</p>"]
-    fn delete_resource_data_sync
-        (&self,
-         input: &DeleteResourceDataSyncRequest)
-         -> Result<DeleteResourceDataSyncResult, DeleteResourceDataSyncError> {
+    fn delete_resource_data_sync(
+        &self,
+        input: &DeleteResourceDataSyncRequest,
+    ) -> Result<DeleteResourceDataSyncResult, DeleteResourceDataSyncError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15393,22 +15821,25 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteResourceDataSyncResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeleteResourceDataSyncResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeleteResourceDataSyncError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteResourceDataSyncError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling the SSM Agent first.</p>"]
-    fn deregister_managed_instance
-        (&self,
-         input: &DeregisterManagedInstanceRequest)
-         -> Result<DeregisterManagedInstanceResult, DeregisterManagedInstanceError> {
+    fn deregister_managed_instance(
+        &self,
+        input: &DeregisterManagedInstanceRequest,
+    ) -> Result<DeregisterManagedInstanceResult, DeregisterManagedInstanceError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15424,29 +15855,33 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeregisterManagedInstanceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DeregisterManagedInstanceResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeregisterManagedInstanceError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(DeregisterManagedInstanceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes a patch group from a patch baseline.</p>"]
-    fn deregister_patch_baseline_for_patch_group
-        (&self,
-         input: &DeregisterPatchBaselineForPatchGroupRequest)
-         -> Result<DeregisterPatchBaselineForPatchGroupResult,
-                   DeregisterPatchBaselineForPatchGroupError> {
+    #[doc = "<p>Removes a patch group from a patch baseline.</p>"]
+    fn deregister_patch_baseline_for_patch_group(
+        &self,
+        input: &DeregisterPatchBaselineForPatchGroupRequest,
+    ) -> Result<DeregisterPatchBaselineForPatchGroupResult, DeregisterPatchBaselineForPatchGroupError>
+    {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.DeregisterPatchBaselineForPatchGroup");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.DeregisterPatchBaselineForPatchGroup",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15458,24 +15893,37 @@ impl<P, D> Ssm for SsmClient<P, D>
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeregisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DeregisterPatchBaselineForPatchGroupResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeregisterPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeregisterPatchBaselineForPatchGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes a target from a Maintenance Window.</p>"]
-fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFromMaintenanceWindowRequest)  -> Result<DeregisterTargetFromMaintenanceWindowResult, DeregisterTargetFromMaintenanceWindowError>{
+    #[doc = "<p>Removes a target from a Maintenance Window.</p>"]
+    fn deregister_target_from_maintenance_window(
+        &self,
+        input: &DeregisterTargetFromMaintenanceWindowRequest,
+    ) -> Result<
+        DeregisterTargetFromMaintenanceWindowResult,
+        DeregisterTargetFromMaintenanceWindowError,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.DeregisterTargetFromMaintenanceWindow");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.DeregisterTargetFromMaintenanceWindow",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15487,28 +15935,35 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeregisterTargetFromMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DeregisterTargetFromMaintenanceWindowResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeregisterTargetFromMaintenanceWindowError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeregisterTargetFromMaintenanceWindowError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes a task from a Maintenance Window.</p>"]
-    fn deregister_task_from_maintenance_window
-        (&self,
-         input: &DeregisterTaskFromMaintenanceWindowRequest)
-         -> Result<DeregisterTaskFromMaintenanceWindowResult,
-                   DeregisterTaskFromMaintenanceWindowError> {
+    #[doc = "<p>Removes a task from a Maintenance Window.</p>"]
+    fn deregister_task_from_maintenance_window(
+        &self,
+        input: &DeregisterTaskFromMaintenanceWindowRequest,
+    ) -> Result<DeregisterTaskFromMaintenanceWindowResult, DeregisterTaskFromMaintenanceWindowError>
+    {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.DeregisterTaskFromMaintenanceWindow");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.DeregisterTaskFromMaintenanceWindow",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15520,21 +15975,27 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeregisterTaskFromMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DeregisterTaskFromMaintenanceWindowResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DeregisterTaskFromMaintenanceWindowError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeregisterTaskFromMaintenanceWindowError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>"]
-    fn describe_activations(&self,
-                            input: &DescribeActivationsRequest)
-                            -> Result<DescribeActivationsResult, DescribeActivationsError> {
+    fn describe_activations(
+        &self,
+        input: &DescribeActivationsRequest,
+    ) -> Result<DescribeActivationsResult, DescribeActivationsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15550,21 +16011,25 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeActivationsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeActivationsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeActivationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeActivationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the associations for the specified Systems Manager document or instance.</p>"]
-    fn describe_association(&self,
-                            input: &DescribeAssociationRequest)
-                            -> Result<DescribeAssociationResult, DescribeAssociationError> {
+    fn describe_association(
+        &self,
+        input: &DescribeAssociationRequest,
+    ) -> Result<DescribeAssociationResult, DescribeAssociationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15580,22 +16045,25 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAssociationResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeAssociationResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAssociationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeAssociationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Provides details about all active and terminated Automation executions.</p>"]
-    fn describe_automation_executions
-        (&self,
-         input: &DescribeAutomationExecutionsRequest)
-         -> Result<DescribeAutomationExecutionsResult, DescribeAutomationExecutionsError> {
+    #[doc = "<p>Provides details about all active and terminated Automation executions.</p>"]
+    fn describe_automation_executions(
+        &self,
+        input: &DescribeAutomationExecutionsRequest,
+    ) -> Result<DescribeAutomationExecutionsResult, DescribeAutomationExecutionsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15611,23 +16079,25 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAutomationExecutionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeAutomationExecutionsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAutomationExecutionsError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(DescribeAutomationExecutionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all patches that could possibly be included in a patch baseline.</p>"]
-    fn describe_available_patches
-        (&self,
-         input: &DescribeAvailablePatchesRequest)
-         -> Result<DescribeAvailablePatchesResult, DescribeAvailablePatchesError> {
+    #[doc = "<p>Lists all patches that could possibly be included in a patch baseline.</p>"]
+    fn describe_available_patches(
+        &self,
+        input: &DescribeAvailablePatchesRequest,
+    ) -> Result<DescribeAvailablePatchesResult, DescribeAvailablePatchesError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15643,22 +16113,25 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeAvailablePatchesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeAvailablePatchesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeAvailablePatchesError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(DescribeAvailablePatchesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes the specified SSM document.</p>"]
-    fn describe_document(&self,
-                         input: &DescribeDocumentRequest)
-                         -> Result<DescribeDocumentResult, DescribeDocumentError> {
+    #[doc = "<p>Describes the specified SSM document.</p>"]
+    fn describe_document(
+        &self,
+        input: &DescribeDocumentRequest,
+    ) -> Result<DescribeDocumentResult, DescribeDocumentError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15674,24 +16147,25 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeDocumentResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeDocumentResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeDocumentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>"]
-    fn describe_document_permission
-        (&self,
-         input: &DescribeDocumentPermissionRequest)
-         -> Result<DescribeDocumentPermissionResponse, DescribeDocumentPermissionError> {
+    fn describe_document_permission(
+        &self,
+        input: &DescribeDocumentPermissionRequest,
+    ) -> Result<DescribeDocumentPermissionResponse, DescribeDocumentPermissionError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15707,25 +16181,35 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeDocumentPermissionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeDocumentPermissionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeDocumentPermissionError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(DescribeDocumentPermissionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>All associations for the instance(s).</p>"]
-fn describe_effective_instance_associations(&self, input: &DescribeEffectiveInstanceAssociationsRequest)  -> Result<DescribeEffectiveInstanceAssociationsResult, DescribeEffectiveInstanceAssociationsError>{
+    #[doc = "<p>All associations for the instance(s).</p>"]
+    fn describe_effective_instance_associations(
+        &self,
+        input: &DescribeEffectiveInstanceAssociationsRequest,
+    ) -> Result<
+        DescribeEffectiveInstanceAssociationsResult,
+        DescribeEffectiveInstanceAssociationsError,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.DescribeEffectiveInstanceAssociations");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.DescribeEffectiveInstanceAssociations",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15737,24 +16221,37 @@ fn describe_effective_instance_associations(&self, input: &DescribeEffectiveInst
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEffectiveInstanceAssociationsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeEffectiveInstanceAssociationsResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEffectiveInstanceAssociationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeEffectiveInstanceAssociationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>"]
-fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectivePatchesForPatchBaselineRequest)  -> Result<DescribeEffectivePatchesForPatchBaselineResult, DescribeEffectivePatchesForPatchBaselineError>{
+    fn describe_effective_patches_for_patch_baseline(
+        &self,
+        input: &DescribeEffectivePatchesForPatchBaselineRequest,
+    ) -> Result<
+        DescribeEffectivePatchesForPatchBaselineResult,
+        DescribeEffectivePatchesForPatchBaselineError,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.DescribeEffectivePatchesForPatchBaseline");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.DescribeEffectivePatchesForPatchBaseline",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15766,28 +16263,35 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeEffectivePatchesForPatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeEffectivePatchesForPatchBaselineResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeEffectivePatchesForPatchBaselineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeEffectivePatchesForPatchBaselineError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>The status of the associations for the instance(s).</p>"]
-    fn describe_instance_associations_status
-        (&self,
-         input: &DescribeInstanceAssociationsStatusRequest)
-         -> Result<DescribeInstanceAssociationsStatusResult,
-                   DescribeInstanceAssociationsStatusError> {
+    #[doc = "<p>The status of the associations for the instance(s).</p>"]
+    fn describe_instance_associations_status(
+        &self,
+        input: &DescribeInstanceAssociationsStatusRequest,
+    ) -> Result<DescribeInstanceAssociationsStatusResult, DescribeInstanceAssociationsStatusError>
+    {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.DescribeInstanceAssociationsStatus");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.DescribeInstanceAssociationsStatus",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15799,22 +16303,27 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeInstanceAssociationsStatusResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeInstanceAssociationsStatusResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeInstanceAssociationsStatusError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeInstanceAssociationsStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>"]
-    fn describe_instance_information
-        (&self,
-         input: &DescribeInstanceInformationRequest)
-         -> Result<DescribeInstanceInformationResult, DescribeInstanceInformationError> {
+    fn describe_instance_information(
+        &self,
+        input: &DescribeInstanceInformationRequest,
+    ) -> Result<DescribeInstanceInformationResult, DescribeInstanceInformationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15830,23 +16339,25 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeInstanceInformationResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeInstanceInformationResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeInstanceInformationError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(DescribeInstanceInformationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves the high-level patch state of one or more instances.</p>"]
-    fn describe_instance_patch_states
-        (&self,
-         input: &DescribeInstancePatchStatesRequest)
-         -> Result<DescribeInstancePatchStatesResult, DescribeInstancePatchStatesError> {
+    #[doc = "<p>Retrieves the high-level patch state of one or more instances.</p>"]
+    fn describe_instance_patch_states(
+        &self,
+        input: &DescribeInstancePatchStatesRequest,
+    ) -> Result<DescribeInstancePatchStatesResult, DescribeInstancePatchStatesError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15862,25 +16373,35 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeInstancePatchStatesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeInstancePatchStatesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeInstancePatchStatesError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(DescribeInstancePatchStatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the high-level patch state for the instances in the specified patch group.</p>"]
-fn describe_instance_patch_states_for_patch_group(&self, input: &DescribeInstancePatchStatesForPatchGroupRequest)  -> Result<DescribeInstancePatchStatesForPatchGroupResult, DescribeInstancePatchStatesForPatchGroupError>{
+    fn describe_instance_patch_states_for_patch_group(
+        &self,
+        input: &DescribeInstancePatchStatesForPatchGroupRequest,
+    ) -> Result<
+        DescribeInstancePatchStatesForPatchGroupResult,
+        DescribeInstancePatchStatesForPatchGroupError,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.DescribeInstancePatchStatesForPatchGroup");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.DescribeInstancePatchStatesForPatchGroup",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15892,22 +16413,27 @@ fn describe_instance_patch_states_for_patch_group(&self, input: &DescribeInstanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeInstancePatchStatesForPatchGroupResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeInstancePatchStatesForPatchGroupResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeInstancePatchStatesForPatchGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeInstancePatchStatesForPatchGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>"]
-    fn describe_instance_patches
-        (&self,
-         input: &DescribeInstancePatchesRequest)
-         -> Result<DescribeInstancePatchesResult, DescribeInstancePatchesError> {
+    fn describe_instance_patches(
+        &self,
+        input: &DescribeInstancePatchesRequest,
+    ) -> Result<DescribeInstancePatchesResult, DescribeInstancePatchesError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -15923,25 +16449,35 @@ fn describe_instance_patch_states_for_patch_group(&self, input: &DescribeInstanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeInstancePatchesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeInstancePatchesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeInstancePatchesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(DescribeInstancePatchesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the individual task executions (one per target) for a particular task executed as part of a Maintenance Window execution.</p>"]
-fn describe_maintenance_window_execution_task_invocations(&self, input: &DescribeMaintenanceWindowExecutionTaskInvocationsRequest)  -> Result<DescribeMaintenanceWindowExecutionTaskInvocationsResult, DescribeMaintenanceWindowExecutionTaskInvocationsError>{
+    fn describe_maintenance_window_execution_task_invocations(
+        &self,
+        input: &DescribeMaintenanceWindowExecutionTaskInvocationsRequest,
+    ) -> Result<
+        DescribeMaintenanceWindowExecutionTaskInvocationsResult,
+        DescribeMaintenanceWindowExecutionTaskInvocationsError,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.DescribeMaintenanceWindowExecutionTaskInvocations");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.DescribeMaintenanceWindowExecutionTaskInvocations",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15958,19 +16494,30 @@ fn describe_maintenance_window_execution_task_invocations(&self, input: &Describ
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeMaintenanceWindowExecutionTaskInvocationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(
+                    DescribeMaintenanceWindowExecutionTaskInvocationsError::from_body(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ),
+                )
             }
         }
     }
 
-
-    #[doc="<p>For a given Maintenance Window execution, lists the tasks that were executed.</p>"]
-fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanceWindowExecutionTasksRequest)  -> Result<DescribeMaintenanceWindowExecutionTasksResult, DescribeMaintenanceWindowExecutionTasksError>{
+    #[doc = "<p>For a given Maintenance Window execution, lists the tasks that were executed.</p>"]
+    fn describe_maintenance_window_execution_tasks(
+        &self,
+        input: &DescribeMaintenanceWindowExecutionTasksRequest,
+    ) -> Result<
+        DescribeMaintenanceWindowExecutionTasksResult,
+        DescribeMaintenanceWindowExecutionTasksError,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.DescribeMaintenanceWindowExecutionTasks");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.DescribeMaintenanceWindowExecutionTasks",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -15982,28 +16529,35 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTasksResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeMaintenanceWindowExecutionTasksResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeMaintenanceWindowExecutionTasksError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeMaintenanceWindowExecutionTasksError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>"]
-    fn describe_maintenance_window_executions
-        (&self,
-         input: &DescribeMaintenanceWindowExecutionsRequest)
-         -> Result<DescribeMaintenanceWindowExecutionsResult,
-                   DescribeMaintenanceWindowExecutionsError> {
+    fn describe_maintenance_window_executions(
+        &self,
+        input: &DescribeMaintenanceWindowExecutionsRequest,
+    ) -> Result<DescribeMaintenanceWindowExecutionsResult, DescribeMaintenanceWindowExecutionsError>
+    {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.DescribeMaintenanceWindowExecutions");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.DescribeMaintenanceWindowExecutions",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -16015,22 +16569,27 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeMaintenanceWindowExecutionsResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeMaintenanceWindowExecutionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeMaintenanceWindowExecutionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the targets registered with the Maintenance Window.</p>"]
-    fn describe_maintenance_window_targets
-        (&self,
-         input: &DescribeMaintenanceWindowTargetsRequest)
-         -> Result<DescribeMaintenanceWindowTargetsResult, DescribeMaintenanceWindowTargetsError> {
+    #[doc = "<p>Lists the targets registered with the Maintenance Window.</p>"]
+    fn describe_maintenance_window_targets(
+        &self,
+        input: &DescribeMaintenanceWindowTargetsRequest,
+    ) -> Result<DescribeMaintenanceWindowTargetsResult, DescribeMaintenanceWindowTargetsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16046,22 +16605,27 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeMaintenanceWindowTargetsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeMaintenanceWindowTargetsResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeMaintenanceWindowTargetsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeMaintenanceWindowTargetsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the tasks in a Maintenance Window.</p>"]
-    fn describe_maintenance_window_tasks
-        (&self,
-         input: &DescribeMaintenanceWindowTasksRequest)
-         -> Result<DescribeMaintenanceWindowTasksResult, DescribeMaintenanceWindowTasksError> {
+    #[doc = "<p>Lists the tasks in a Maintenance Window.</p>"]
+    fn describe_maintenance_window_tasks(
+        &self,
+        input: &DescribeMaintenanceWindowTasksRequest,
+    ) -> Result<DescribeMaintenanceWindowTasksResult, DescribeMaintenanceWindowTasksError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16077,23 +16641,27 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeMaintenanceWindowTasksResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<DescribeMaintenanceWindowTasksResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeMaintenanceWindowTasksError::from_body(String::from_utf8_lossy(&body)
-                                                                       .as_ref()))
+                Err(DescribeMaintenanceWindowTasksError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves the Maintenance Windows in an AWS account.</p>"]
-    fn describe_maintenance_windows
-        (&self,
-         input: &DescribeMaintenanceWindowsRequest)
-         -> Result<DescribeMaintenanceWindowsResult, DescribeMaintenanceWindowsError> {
+    #[doc = "<p>Retrieves the Maintenance Windows in an AWS account.</p>"]
+    fn describe_maintenance_windows(
+        &self,
+        input: &DescribeMaintenanceWindowsRequest,
+    ) -> Result<DescribeMaintenanceWindowsResult, DescribeMaintenanceWindowsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16109,22 +16677,25 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeMaintenanceWindowsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribeMaintenanceWindowsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeMaintenanceWindowsError::from_body(String::from_utf8_lossy(&body)
-                                                                   .as_ref()))
+                Err(DescribeMaintenanceWindowsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>"]
-    fn describe_parameters(&self,
-                           input: &DescribeParametersRequest)
-                           -> Result<DescribeParametersResult, DescribeParametersError> {
+    fn describe_parameters(
+        &self,
+        input: &DescribeParametersRequest,
+    ) -> Result<DescribeParametersResult, DescribeParametersError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16140,24 +16711,25 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeParametersResult>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<DescribeParametersResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribeParametersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeParametersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the patch baselines in your AWS account.</p>"]
-    fn describe_patch_baselines
-        (&self,
-         input: &DescribePatchBaselinesRequest)
-         -> Result<DescribePatchBaselinesResult, DescribePatchBaselinesError> {
+    #[doc = "<p>Lists the patch baselines in your AWS account.</p>"]
+    fn describe_patch_baselines(
+        &self,
+        input: &DescribePatchBaselinesRequest,
+    ) -> Result<DescribePatchBaselinesResult, DescribePatchBaselinesError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16173,22 +16745,25 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribePatchBaselinesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribePatchBaselinesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribePatchBaselinesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribePatchBaselinesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns high-level aggregated patch compliance state for a patch group.</p>"]
-    fn describe_patch_group_state
-        (&self,
-         input: &DescribePatchGroupStateRequest)
-         -> Result<DescribePatchGroupStateResult, DescribePatchGroupStateError> {
+    #[doc = "<p>Returns high-level aggregated patch compliance state for a patch group.</p>"]
+    fn describe_patch_group_state(
+        &self,
+        input: &DescribePatchGroupStateRequest,
+    ) -> Result<DescribePatchGroupStateResult, DescribePatchGroupStateError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16204,22 +16779,25 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribePatchGroupStateResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribePatchGroupStateResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribePatchGroupStateError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(DescribePatchGroupStateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists all patch groups that have been registered with patch baselines.</p>"]
-    fn describe_patch_groups(&self,
-                             input: &DescribePatchGroupsRequest)
-                             -> Result<DescribePatchGroupsResult, DescribePatchGroupsError> {
+    #[doc = "<p>Lists all patch groups that have been registered with patch baselines.</p>"]
+    fn describe_patch_groups(
+        &self,
+        input: &DescribePatchGroupsRequest,
+    ) -> Result<DescribePatchGroupsResult, DescribePatchGroupsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16235,22 +16813,25 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribePatchGroupsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<DescribePatchGroupsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(DescribePatchGroupsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribePatchGroupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Get detailed information about a particular Automation execution.</p>"]
-    fn get_automation_execution
-        (&self,
-         input: &GetAutomationExecutionRequest)
-         -> Result<GetAutomationExecutionResult, GetAutomationExecutionError> {
+    #[doc = "<p>Get detailed information about a particular Automation execution.</p>"]
+    fn get_automation_execution(
+        &self,
+        input: &GetAutomationExecutionRequest,
+    ) -> Result<GetAutomationExecutionResult, GetAutomationExecutionError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16266,21 +16847,25 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetAutomationExecutionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetAutomationExecutionResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetAutomationExecutionError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetAutomationExecutionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns detailed information about command execution for an invocation or plugin. </p>"]
-    fn get_command_invocation(&self,
-                              input: &GetCommandInvocationRequest)
-                              -> Result<GetCommandInvocationResult, GetCommandInvocationError> {
+    fn get_command_invocation(
+        &self,
+        input: &GetCommandInvocationRequest,
+    ) -> Result<GetCommandInvocationResult, GetCommandInvocationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16296,22 +16881,25 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetCommandInvocationResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetCommandInvocationResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetCommandInvocationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetCommandInvocationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>"]
-    fn get_default_patch_baseline
-        (&self,
-         input: &GetDefaultPatchBaselineRequest)
-         -> Result<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError> {
+    fn get_default_patch_baseline(
+        &self,
+        input: &GetDefaultPatchBaselineRequest,
+    ) -> Result<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16327,25 +16915,35 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDefaultPatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetDefaultPatchBaselineResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDefaultPatchBaselineError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(GetDefaultPatchBaselineError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>"]
-fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchSnapshotForInstanceRequest)  -> Result<GetDeployablePatchSnapshotForInstanceResult, GetDeployablePatchSnapshotForInstanceError>{
+    fn get_deployable_patch_snapshot_for_instance(
+        &self,
+        input: &GetDeployablePatchSnapshotForInstanceRequest,
+    ) -> Result<
+        GetDeployablePatchSnapshotForInstanceResult,
+        GetDeployablePatchSnapshotForInstanceError,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.GetDeployablePatchSnapshotForInstance");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.GetDeployablePatchSnapshotForInstance",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -16357,21 +16955,27 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDeployablePatchSnapshotForInstanceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<GetDeployablePatchSnapshotForInstanceResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDeployablePatchSnapshotForInstanceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDeployablePatchSnapshotForInstanceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Gets the contents of the specified SSM document.</p>"]
-    fn get_document(&self,
-                    input: &GetDocumentRequest)
-                    -> Result<GetDocumentResult, GetDocumentError> {
+    #[doc = "<p>Gets the contents of the specified SSM document.</p>"]
+    fn get_document(
+        &self,
+        input: &GetDocumentRequest,
+    ) -> Result<GetDocumentResult, GetDocumentError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16387,23 +16991,25 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDocumentResult>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetDocumentResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetDocumentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Query inventory information.</p>"]
-    fn get_inventory(&self,
-                     input: &GetInventoryRequest)
-                     -> Result<GetInventoryResult, GetInventoryError> {
+    #[doc = "<p>Query inventory information.</p>"]
+    fn get_inventory(
+        &self,
+        input: &GetInventoryRequest,
+    ) -> Result<GetInventoryResult, GetInventoryError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16419,23 +17025,25 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetInventoryResult>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetInventoryResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetInventoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetInventoryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>"]
-    fn get_inventory_schema(&self,
-                            input: &GetInventorySchemaRequest)
-                            -> Result<GetInventorySchemaResult, GetInventorySchemaError> {
+    fn get_inventory_schema(
+        &self,
+        input: &GetInventorySchemaRequest,
+    ) -> Result<GetInventorySchemaResult, GetInventorySchemaError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16451,23 +17059,25 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetInventorySchemaResult>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetInventorySchemaResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetInventorySchemaError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetInventorySchemaError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves a Maintenance Window.</p>"]
-    fn get_maintenance_window(&self,
-                              input: &GetMaintenanceWindowRequest)
-                              -> Result<GetMaintenanceWindowResult, GetMaintenanceWindowError> {
+    #[doc = "<p>Retrieves a Maintenance Window.</p>"]
+    fn get_maintenance_window(
+        &self,
+        input: &GetMaintenanceWindowRequest,
+    ) -> Result<GetMaintenanceWindowResult, GetMaintenanceWindowError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16483,22 +17093,25 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetMaintenanceWindowResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetMaintenanceWindowError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetMaintenanceWindowError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieves details about a specific task executed as part of a Maintenance Window execution.</p>"]
-    fn get_maintenance_window_execution
-        (&self,
-         input: &GetMaintenanceWindowExecutionRequest)
-         -> Result<GetMaintenanceWindowExecutionResult, GetMaintenanceWindowExecutionError> {
+    fn get_maintenance_window_execution(
+        &self,
+        input: &GetMaintenanceWindowExecutionRequest,
+    ) -> Result<GetMaintenanceWindowExecutionResult, GetMaintenanceWindowExecutionError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16514,28 +17127,33 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetMaintenanceWindowExecutionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetMaintenanceWindowExecutionResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetMaintenanceWindowExecutionError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(GetMaintenanceWindowExecutionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves the details about a specific task executed as part of a Maintenance Window execution.</p>"]
-    fn get_maintenance_window_execution_task
-        (&self,
-         input: &GetMaintenanceWindowExecutionTaskRequest)
-         -> Result<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError> {
+    fn get_maintenance_window_execution_task(
+        &self,
+        input: &GetMaintenanceWindowExecutionTaskRequest,
+    ) -> Result<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError>
+    {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.GetMaintenanceWindowExecutionTask");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.GetMaintenanceWindowExecutionTask",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -16547,24 +17165,37 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetMaintenanceWindowExecutionTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<GetMaintenanceWindowExecutionTaskResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetMaintenanceWindowExecutionTaskError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetMaintenanceWindowExecutionTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
-
 
     #[doc="<p>Retrieves a task invocation. A task invocation is a specific task executing on a specific target. Maintenance Windows report status for all invocations. </p>"]
-fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanceWindowExecutionTaskInvocationRequest)  -> Result<GetMaintenanceWindowExecutionTaskInvocationResult, GetMaintenanceWindowExecutionTaskInvocationError>{
+    fn get_maintenance_window_execution_task_invocation(
+        &self,
+        input: &GetMaintenanceWindowExecutionTaskInvocationRequest,
+    ) -> Result<
+        GetMaintenanceWindowExecutionTaskInvocationResult,
+        GetMaintenanceWindowExecutionTaskInvocationError,
+    > {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.GetMaintenanceWindowExecutionTaskInvocation");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.GetMaintenanceWindowExecutionTaskInvocation",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -16576,22 +17207,29 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetMaintenanceWindowExecutionTaskInvocationResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<GetMaintenanceWindowExecutionTaskInvocationResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetMaintenanceWindowExecutionTaskInvocationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(
+                    GetMaintenanceWindowExecutionTaskInvocationError::from_body(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ),
+                )
             }
         }
     }
 
-
-    #[doc="<p>Lists the tasks in a Maintenance Window.</p>"]
-    fn get_maintenance_window_task
-        (&self,
-         input: &GetMaintenanceWindowTaskRequest)
-         -> Result<GetMaintenanceWindowTaskResult, GetMaintenanceWindowTaskError> {
+    #[doc = "<p>Lists the tasks in a Maintenance Window.</p>"]
+    fn get_maintenance_window_task(
+        &self,
+        input: &GetMaintenanceWindowTaskRequest,
+    ) -> Result<GetMaintenanceWindowTaskResult, GetMaintenanceWindowTaskError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16607,22 +17245,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetMaintenanceWindowTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetMaintenanceWindowTaskResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetMaintenanceWindowTaskError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(GetMaintenanceWindowTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Get information about a parameter by using the parameter name. </p>"]
-    fn get_parameter(&self,
-                     input: &GetParameterRequest)
-                     -> Result<GetParameterResult, GetParameterError> {
+    #[doc = "<p>Get information about a parameter by using the parameter name. </p>"]
+    fn get_parameter(
+        &self,
+        input: &GetParameterRequest,
+    ) -> Result<GetParameterResult, GetParameterError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16638,23 +17279,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetParameterResult>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetParameterResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetParameterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetParameterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Query a list of all parameters used by the AWS account.</p>"]
-    fn get_parameter_history(&self,
-                             input: &GetParameterHistoryRequest)
-                             -> Result<GetParameterHistoryResult, GetParameterHistoryError> {
+    #[doc = "<p>Query a list of all parameters used by the AWS account.</p>"]
+    fn get_parameter_history(
+        &self,
+        input: &GetParameterHistoryRequest,
+    ) -> Result<GetParameterHistoryResult, GetParameterHistoryError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16670,21 +17313,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetParameterHistoryResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetParameterHistoryResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetParameterHistoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetParameterHistoryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Get details of a parameter.</p>"]
-    fn get_parameters(&self,
-                      input: &GetParametersRequest)
-                      -> Result<GetParametersResult, GetParametersError> {
+    #[doc = "<p>Get details of a parameter.</p>"]
+    fn get_parameters(
+        &self,
+        input: &GetParametersRequest,
+    ) -> Result<GetParametersResult, GetParametersError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16700,23 +17347,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetParametersResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetParametersResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetParametersError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetParametersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Retrieve parameters in a specific hierarchy. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html\">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>"]
-    fn get_parameters_by_path(&self,
-                              input: &GetParametersByPathRequest)
-                              -> Result<GetParametersByPathResult, GetParametersByPathError> {
+    fn get_parameters_by_path(
+        &self,
+        input: &GetParametersByPathRequest,
+    ) -> Result<GetParametersByPathResult, GetParametersByPathError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16732,21 +17381,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetParametersByPathResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetParametersByPathResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetParametersByPathError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetParametersByPathError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves information about a patch baseline.</p>"]
-    fn get_patch_baseline(&self,
-                          input: &GetPatchBaselineRequest)
-                          -> Result<GetPatchBaselineResult, GetPatchBaselineError> {
+    #[doc = "<p>Retrieves information about a patch baseline.</p>"]
+    fn get_patch_baseline(
+        &self,
+        input: &GetPatchBaselineRequest,
+    ) -> Result<GetPatchBaselineResult, GetPatchBaselineError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16762,24 +17415,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetPatchBaselineResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<GetPatchBaselineResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetPatchBaselineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(GetPatchBaselineError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves the patch baseline that should be used for the specified patch group.</p>"]
-    fn get_patch_baseline_for_patch_group
-        (&self,
-         input: &GetPatchBaselineForPatchGroupRequest)
-         -> Result<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError> {
+    #[doc = "<p>Retrieves the patch baseline that should be used for the specified patch group.</p>"]
+    fn get_patch_baseline_for_patch_group(
+        &self,
+        input: &GetPatchBaselineForPatchGroupRequest,
+    ) -> Result<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16795,23 +17449,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<GetPatchBaselineForPatchGroupResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(GetPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(GetPatchBaselineForPatchGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Retrieves all versions of an association for a specific association ID.</p>"]
-    fn list_association_versions
-        (&self,
-         input: &ListAssociationVersionsRequest)
-         -> Result<ListAssociationVersionsResult, ListAssociationVersionsError> {
+    #[doc = "<p>Retrieves all versions of an association for a specific association ID.</p>"]
+    fn list_association_versions(
+        &self,
+        input: &ListAssociationVersionsRequest,
+    ) -> Result<ListAssociationVersionsResult, ListAssociationVersionsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16827,22 +17483,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAssociationVersionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListAssociationVersionsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListAssociationVersionsError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(ListAssociationVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the associations for the specified Systems Manager document or instance.</p>"]
-    fn list_associations(&self,
-                         input: &ListAssociationsRequest)
-                         -> Result<ListAssociationsResult, ListAssociationsError> {
+    #[doc = "<p>Lists the associations for the specified Systems Manager document or instance.</p>"]
+    fn list_associations(
+        &self,
+        input: &ListAssociationsRequest,
+    ) -> Result<ListAssociationsResult, ListAssociationsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16858,24 +17517,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAssociationsResult>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListAssociationsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListAssociationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListAssociationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>"]
-    fn list_command_invocations
-        (&self,
-         input: &ListCommandInvocationsRequest)
-         -> Result<ListCommandInvocationsResult, ListCommandInvocationsError> {
+    fn list_command_invocations(
+        &self,
+        input: &ListCommandInvocationsRequest,
+    ) -> Result<ListCommandInvocationsResult, ListCommandInvocationsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16891,21 +17551,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListCommandInvocationsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListCommandInvocationsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListCommandInvocationsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListCommandInvocationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Lists the commands requested by users of the AWS account.</p>"]
-    fn list_commands(&self,
-                     input: &ListCommandsRequest)
-                     -> Result<ListCommandsResult, ListCommandsError> {
+    #[doc = "<p>Lists the commands requested by users of the AWS account.</p>"]
+    fn list_commands(
+        &self,
+        input: &ListCommandsRequest,
+    ) -> Result<ListCommandsResult, ListCommandsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16921,23 +17585,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListCommandsResult>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListCommandsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListCommandsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListCommandsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>"]
-    fn list_compliance_items(&self,
-                             input: &ListComplianceItemsRequest)
-                             -> Result<ListComplianceItemsResult, ListComplianceItemsError> {
+    fn list_compliance_items(
+        &self,
+        input: &ListComplianceItemsRequest,
+    ) -> Result<ListComplianceItemsResult, ListComplianceItemsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16953,22 +17619,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListComplianceItemsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListComplianceItemsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListComplianceItemsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListComplianceItemsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>"]
-    fn list_compliance_summaries
-        (&self,
-         input: &ListComplianceSummariesRequest)
-         -> Result<ListComplianceSummariesResult, ListComplianceSummariesError> {
+    fn list_compliance_summaries(
+        &self,
+        input: &ListComplianceSummariesRequest,
+    ) -> Result<ListComplianceSummariesResult, ListComplianceSummariesError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -16984,22 +17653,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListComplianceSummariesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListComplianceSummariesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListComplianceSummariesError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(ListComplianceSummariesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>List all versions for a document.</p>"]
-    fn list_document_versions(&self,
-                              input: &ListDocumentVersionsRequest)
-                              -> Result<ListDocumentVersionsResult, ListDocumentVersionsError> {
+    #[doc = "<p>List all versions for a document.</p>"]
+    fn list_document_versions(
+        &self,
+        input: &ListDocumentVersionsRequest,
+    ) -> Result<ListDocumentVersionsResult, ListDocumentVersionsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17015,21 +17687,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListDocumentVersionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListDocumentVersionsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDocumentVersionsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListDocumentVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Describes one or more of your SSM documents.</p>"]
-    fn list_documents(&self,
-                      input: &ListDocumentsRequest)
-                      -> Result<ListDocumentsResult, ListDocumentsError> {
+    #[doc = "<p>Describes one or more of your SSM documents.</p>"]
+    fn list_documents(
+        &self,
+        input: &ListDocumentsRequest,
+    ) -> Result<ListDocumentsResult, ListDocumentsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17045,23 +17721,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListDocumentsResult>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<ListDocumentsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListDocumentsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListDocumentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>A list of inventory items returned by the request.</p>"]
-    fn list_inventory_entries(&self,
-                              input: &ListInventoryEntriesRequest)
-                              -> Result<ListInventoryEntriesResult, ListInventoryEntriesError> {
+    #[doc = "<p>A list of inventory items returned by the request.</p>"]
+    fn list_inventory_entries(
+        &self,
+        input: &ListInventoryEntriesRequest,
+    ) -> Result<ListInventoryEntriesResult, ListInventoryEntriesError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17077,22 +17755,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListInventoryEntriesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListInventoryEntriesResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListInventoryEntriesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListInventoryEntriesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>"]
-    fn list_resource_compliance_summaries
-        (&self,
-         input: &ListResourceComplianceSummariesRequest)
-         -> Result<ListResourceComplianceSummariesResult, ListResourceComplianceSummariesError> {
+    fn list_resource_compliance_summaries(
+        &self,
+        input: &ListResourceComplianceSummariesRequest,
+    ) -> Result<ListResourceComplianceSummariesResult, ListResourceComplianceSummariesError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17108,22 +17789,27 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListResourceComplianceSummariesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<ListResourceComplianceSummariesResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListResourceComplianceSummariesError::from_body(String::from_utf8_lossy(&body)
-                                                                        .as_ref()))
+                Err(ListResourceComplianceSummariesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>"]
-    fn list_resource_data_sync(&self,
-                               input: &ListResourceDataSyncRequest)
-                               -> Result<ListResourceDataSyncResult, ListResourceDataSyncError> {
+    fn list_resource_data_sync(
+        &self,
+        input: &ListResourceDataSyncRequest,
+    ) -> Result<ListResourceDataSyncResult, ListResourceDataSyncError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17139,21 +17825,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListResourceDataSyncResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListResourceDataSyncResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListResourceDataSyncError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListResourceDataSyncError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Returns a list of the tags assigned to the specified resource.</p>"]
-    fn list_tags_for_resource(&self,
-                              input: &ListTagsForResourceRequest)
-                              -> Result<ListTagsForResourceResult, ListTagsForResourceError> {
+    #[doc = "<p>Returns a list of the tags assigned to the specified resource.</p>"]
+    fn list_tags_for_resource(
+        &self,
+        input: &ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResult, ListTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17169,22 +17859,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ListTagsForResourceResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListTagsForResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>"]
-    fn modify_document_permission
-        (&self,
-         input: &ModifyDocumentPermissionRequest)
-         -> Result<ModifyDocumentPermissionResponse, ModifyDocumentPermissionError> {
+    fn modify_document_permission(
+        &self,
+        input: &ModifyDocumentPermissionRequest,
+    ) -> Result<ModifyDocumentPermissionResponse, ModifyDocumentPermissionError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17200,22 +17893,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ModifyDocumentPermissionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<ModifyDocumentPermissionResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(ModifyDocumentPermissionError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(ModifyDocumentPermissionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p>"]
-    fn put_compliance_items(&self,
-                            input: &PutComplianceItemsRequest)
-                            -> Result<PutComplianceItemsResult, PutComplianceItemsError> {
+    fn put_compliance_items(
+        &self,
+        input: &PutComplianceItemsRequest,
+    ) -> Result<PutComplianceItemsResult, PutComplianceItemsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17231,23 +17927,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutComplianceItemsResult>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<PutComplianceItemsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutComplianceItemsError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutComplianceItemsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>"]
-    fn put_inventory(&self,
-                     input: &PutInventoryRequest)
-                     -> Result<PutInventoryResult, PutInventoryError> {
+    fn put_inventory(
+        &self,
+        input: &PutInventoryRequest,
+    ) -> Result<PutInventoryResult, PutInventoryError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17263,23 +17961,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutInventoryResult>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<PutInventoryResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutInventoryError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutInventoryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Add one or more parameters to the system.</p>"]
-    fn put_parameter(&self,
-                     input: &PutParameterRequest)
-                     -> Result<PutParameterResult, PutParameterError> {
+    #[doc = "<p>Add one or more parameters to the system.</p>"]
+    fn put_parameter(
+        &self,
+        input: &PutParameterRequest,
+    ) -> Result<PutParameterResult, PutParameterError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17295,24 +17995,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutParameterResult>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<PutParameterResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(PutParameterError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(PutParameterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Defines the default patch baseline.</p>"]
-    fn register_default_patch_baseline
-        (&self,
-         input: &RegisterDefaultPatchBaselineRequest)
-         -> Result<RegisterDefaultPatchBaselineResult, RegisterDefaultPatchBaselineError> {
+    #[doc = "<p>Defines the default patch baseline.</p>"]
+    fn register_default_patch_baseline(
+        &self,
+        input: &RegisterDefaultPatchBaselineRequest,
+    ) -> Result<RegisterDefaultPatchBaselineResult, RegisterDefaultPatchBaselineError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17328,29 +18029,33 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RegisterDefaultPatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<RegisterDefaultPatchBaselineResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RegisterDefaultPatchBaselineError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(RegisterDefaultPatchBaselineError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Registers a patch baseline for a patch group.</p>"]
-    fn register_patch_baseline_for_patch_group
-        (&self,
-         input: &RegisterPatchBaselineForPatchGroupRequest)
-         -> Result<RegisterPatchBaselineForPatchGroupResult,
-                   RegisterPatchBaselineForPatchGroupError> {
+    #[doc = "<p>Registers a patch baseline for a patch group.</p>"]
+    fn register_patch_baseline_for_patch_group(
+        &self,
+        input: &RegisterPatchBaselineForPatchGroupRequest,
+    ) -> Result<RegisterPatchBaselineForPatchGroupResult, RegisterPatchBaselineForPatchGroupError>
+    {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.RegisterPatchBaselineForPatchGroup");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.RegisterPatchBaselineForPatchGroup",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -17362,28 +18067,35 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RegisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<RegisterPatchBaselineForPatchGroupResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RegisterPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RegisterPatchBaselineForPatchGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Registers a target with a Maintenance Window.</p>"]
-    fn register_target_with_maintenance_window
-        (&self,
-         input: &RegisterTargetWithMaintenanceWindowRequest)
-         -> Result<RegisterTargetWithMaintenanceWindowResult,
-                   RegisterTargetWithMaintenanceWindowError> {
+    #[doc = "<p>Registers a target with a Maintenance Window.</p>"]
+    fn register_target_with_maintenance_window(
+        &self,
+        input: &RegisterTargetWithMaintenanceWindowRequest,
+    ) -> Result<RegisterTargetWithMaintenanceWindowResult, RegisterTargetWithMaintenanceWindowError>
+    {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.RegisterTargetWithMaintenanceWindow");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.RegisterTargetWithMaintenanceWindow",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -17395,27 +18107,35 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RegisterTargetWithMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<RegisterTargetWithMaintenanceWindowResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RegisterTargetWithMaintenanceWindowError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RegisterTargetWithMaintenanceWindowError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Adds a new task to a Maintenance Window.</p>"]
-    fn register_task_with_maintenance_window
-        (&self,
-         input: &RegisterTaskWithMaintenanceWindowRequest)
-         -> Result<RegisterTaskWithMaintenanceWindowResult, RegisterTaskWithMaintenanceWindowError> {
+    #[doc = "<p>Adds a new task to a Maintenance Window.</p>"]
+    fn register_task_with_maintenance_window(
+        &self,
+        input: &RegisterTaskWithMaintenanceWindowRequest,
+    ) -> Result<RegisterTaskWithMaintenanceWindowResult, RegisterTaskWithMaintenanceWindowError>
+    {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target",
-                           "AmazonSSM.RegisterTaskWithMaintenanceWindow");
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.RegisterTaskWithMaintenanceWindow",
+        );
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -17427,22 +18147,27 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RegisterTaskWithMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(
+                    serde_json::from_str::<RegisterTaskWithMaintenanceWindowResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RegisterTaskWithMaintenanceWindowError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RegisterTaskWithMaintenanceWindowError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Removes all tags from the specified resource.</p>"]
-    fn remove_tags_from_resource
-        (&self,
-         input: &RemoveTagsFromResourceRequest)
-         -> Result<RemoveTagsFromResourceResult, RemoveTagsFromResourceError> {
+    #[doc = "<p>Removes all tags from the specified resource.</p>"]
+    fn remove_tags_from_resource(
+        &self,
+        input: &RemoveTagsFromResourceRequest,
+    ) -> Result<RemoveTagsFromResourceResult, RemoveTagsFromResourceError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17458,21 +18183,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<RemoveTagsFromResourceResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RemoveTagsFromResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>"]
-    fn send_automation_signal(&self,
-                              input: &SendAutomationSignalRequest)
-                              -> Result<SendAutomationSignalResult, SendAutomationSignalError> {
+    fn send_automation_signal(
+        &self,
+        input: &SendAutomationSignalRequest,
+    ) -> Result<SendAutomationSignalResult, SendAutomationSignalError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17488,21 +18217,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SendAutomationSignalResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<SendAutomationSignalResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SendAutomationSignalError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SendAutomationSignalError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Executes commands on one or more managed instances.</p>"]
-    fn send_command(&self,
-                    input: &SendCommandRequest)
-                    -> Result<SendCommandResult, SendCommandError> {
+    #[doc = "<p>Executes commands on one or more managed instances.</p>"]
+    fn send_command(
+        &self,
+        input: &SendCommandRequest,
+    ) -> Result<SendCommandResult, SendCommandError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17518,24 +18251,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SendCommandResult>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<SendCommandResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(SendCommandError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(SendCommandError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Initiates execution of an Automation document.</p>"]
-    fn start_automation_execution
-        (&self,
-         input: &StartAutomationExecutionRequest)
-         -> Result<StartAutomationExecutionResult, StartAutomationExecutionError> {
+    #[doc = "<p>Initiates execution of an Automation document.</p>"]
+    fn start_automation_execution(
+        &self,
+        input: &StartAutomationExecutionRequest,
+    ) -> Result<StartAutomationExecutionResult, StartAutomationExecutionError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17551,23 +18285,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartAutomationExecutionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StartAutomationExecutionResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StartAutomationExecutionError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+                Err(StartAutomationExecutionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Stop an Automation that is currently executing.</p>"]
-    fn stop_automation_execution
-        (&self,
-         input: &StopAutomationExecutionRequest)
-         -> Result<StopAutomationExecutionResult, StopAutomationExecutionError> {
+    #[doc = "<p>Stop an Automation that is currently executing.</p>"]
+    fn stop_automation_execution(
+        &self,
+        input: &StopAutomationExecutionRequest,
+    ) -> Result<StopAutomationExecutionResult, StopAutomationExecutionError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17583,22 +18319,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopAutomationExecutionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<StopAutomationExecutionResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(StopAutomationExecutionError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(StopAutomationExecutionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p>"]
-    fn update_association(&self,
-                          input: &UpdateAssociationRequest)
-                          -> Result<UpdateAssociationResult, UpdateAssociationError> {
+    fn update_association(
+        &self,
+        input: &UpdateAssociationRequest,
+    ) -> Result<UpdateAssociationResult, UpdateAssociationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17614,24 +18353,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateAssociationResult>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateAssociationResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateAssociationError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateAssociationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Updates the status of the Systems Manager document associated with the specified instance.</p>"]
-    fn update_association_status
-        (&self,
-         input: &UpdateAssociationStatusRequest)
-         -> Result<UpdateAssociationStatusResult, UpdateAssociationStatusError> {
+    fn update_association_status(
+        &self,
+        input: &UpdateAssociationStatusRequest,
+    ) -> Result<UpdateAssociationStatusResult, UpdateAssociationStatusError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17647,22 +18387,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateAssociationStatusResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateAssociationStatusResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateAssociationStatusError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(UpdateAssociationStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>The document you want to update.</p>"]
-    fn update_document(&self,
-                       input: &UpdateDocumentRequest)
-                       -> Result<UpdateDocumentResult, UpdateDocumentError> {
+    #[doc = "<p>The document you want to update.</p>"]
+    fn update_document(
+        &self,
+        input: &UpdateDocumentRequest,
+    ) -> Result<UpdateDocumentResult, UpdateDocumentError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17678,24 +18421,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateDocumentResult>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+                Ok(serde_json::from_str::<UpdateDocumentResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateDocumentError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdateDocumentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Set the default version of a document. </p>"]
-    fn update_document_default_version
-        (&self,
-         input: &UpdateDocumentDefaultVersionRequest)
-         -> Result<UpdateDocumentDefaultVersionResult, UpdateDocumentDefaultVersionError> {
+    #[doc = "<p>Set the default version of a document. </p>"]
+    fn update_document_default_version(
+        &self,
+        input: &UpdateDocumentDefaultVersionRequest,
+    ) -> Result<UpdateDocumentDefaultVersionResult, UpdateDocumentDefaultVersionError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17711,23 +18455,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateDocumentDefaultVersionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateDocumentDefaultVersionResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateDocumentDefaultVersionError::from_body(String::from_utf8_lossy(&body)
-                                                                     .as_ref()))
+                Err(UpdateDocumentDefaultVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
-    #[doc="<p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>"]
-    fn update_maintenance_window
-        (&self,
-         input: &UpdateMaintenanceWindowRequest)
-         -> Result<UpdateMaintenanceWindowResult, UpdateMaintenanceWindowError> {
+    #[doc = "<p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>"]
+    fn update_maintenance_window(
+        &self,
+        input: &UpdateMaintenanceWindowRequest,
+    ) -> Result<UpdateMaintenanceWindowResult, UpdateMaintenanceWindowError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17743,23 +18489,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateMaintenanceWindowResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateMaintenanceWindowError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Err(UpdateMaintenanceWindowError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>"]
-    fn update_maintenance_window_target
-        (&self,
-         input: &UpdateMaintenanceWindowTargetRequest)
-         -> Result<UpdateMaintenanceWindowTargetResult, UpdateMaintenanceWindowTargetError> {
+    fn update_maintenance_window_target(
+        &self,
+        input: &UpdateMaintenanceWindowTargetRequest,
+    ) -> Result<UpdateMaintenanceWindowTargetResult, UpdateMaintenanceWindowTargetError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17775,23 +18523,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateMaintenanceWindowTargetResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateMaintenanceWindowTargetResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateMaintenanceWindowTargetError::from_body(String::from_utf8_lossy(&body)
-                                                                      .as_ref()))
+                Err(UpdateMaintenanceWindowTargetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <p>Task ARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> <p>Service role ARN.</p> <p>Task parameters.</p> <p>Task priority.</p> <p>Task MaxConcurrency and MaxErrors.</p> <p>Log location.</p> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.</p>"]
-    fn update_maintenance_window_task
-        (&self,
-         input: &UpdateMaintenanceWindowTaskRequest)
-         -> Result<UpdateMaintenanceWindowTaskResult, UpdateMaintenanceWindowTaskError> {
+    fn update_maintenance_window_task(
+        &self,
+        input: &UpdateMaintenanceWindowTaskRequest,
+    ) -> Result<UpdateMaintenanceWindowTaskResult, UpdateMaintenanceWindowTaskError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17807,23 +18557,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateMaintenanceWindowTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateMaintenanceWindowTaskResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateMaintenanceWindowTaskError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+                Err(UpdateMaintenanceWindowTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>"]
-    fn update_managed_instance_role
-        (&self,
-         input: &UpdateManagedInstanceRoleRequest)
-         -> Result<UpdateManagedInstanceRoleResult, UpdateManagedInstanceRoleError> {
+    fn update_managed_instance_role(
+        &self,
+        input: &UpdateManagedInstanceRoleRequest,
+    ) -> Result<UpdateManagedInstanceRoleResult, UpdateManagedInstanceRoleError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17839,22 +18591,25 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateManagedInstanceRoleResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdateManagedInstanceRoleResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdateManagedInstanceRoleError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Err(UpdateManagedInstanceRoleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
 
-
     #[doc="<p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p>"]
-    fn update_patch_baseline(&self,
-                             input: &UpdatePatchBaselineRequest)
-                             -> Result<UpdatePatchBaselineResult, UpdatePatchBaselineError> {
+    fn update_patch_baseline(
+        &self,
+        input: &UpdatePatchBaselineRequest,
+    ) -> Result<UpdatePatchBaselineResult, UpdatePatchBaselineError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -17870,12 +18625,16 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
             StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdatePatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
+                Ok(serde_json::from_str::<UpdatePatchBaselineResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
             }
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
-                Err(UpdatePatchBaselineError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(UpdatePatchBaselineError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
             }
         }
     }
