@@ -45,11 +45,12 @@ extern crate hyper_native_tls;
 extern crate lazy_static;
 #[macro_use]
 extern crate log;
-extern crate ring;
 extern crate hex;
+extern crate hmac;
 extern crate base64;
 pub extern crate rusoto_credential as credential;
 extern crate serde;
+extern crate sha2;
 extern crate time;
 extern crate url;
 extern crate xml;
