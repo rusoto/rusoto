@@ -293,9 +293,7 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
         if shape.shape_type == ShapeType::Structure {
             // If botocore includes documentation, clean it up a bit and use it
             if let Some(ref docs) = shape.documentation {
-                writeln!(writer,
-                         "#[doc=\"{}\"]",
-                         docs.replace("\\", "\\\\").replace("\"", "\\\""))?;
+                writeln!(writer, "/// {}", docs)?;
             }
 
             // generate a rust type for the shape
@@ -411,7 +409,7 @@ fn generate_struct_fields<P: GenerateProtocol>(service: &Service,
         let mut lines: Vec<String> = Vec::new();
 
         if let Some(ref docs) = member.documentation {
-            lines.push(format!("#[doc=\"{}\"]", docs.replace("\\","\\\\").replace("\"", "\\\"")));
+            lines.push(format!("/// {}", docs));
         }
 
         if serde_attrs {

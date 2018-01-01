@@ -3,6 +3,8 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+- Switched crategen from rustfmt to rustfmt-nightly
+
 ## [0.30.0] - 2017-12-02
 
 - Added CloudHSMv2
