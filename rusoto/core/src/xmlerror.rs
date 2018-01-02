@@ -39,7 +39,8 @@ impl XmlErrorDeserializer {
                 "" => {
                     break
                 },
-                _ => {
+                unknown => {
+                    debug!("Ignoring unknown XML element {:?} in error response.", unknown);
                     skip_tree(stack);
                 }
             }
