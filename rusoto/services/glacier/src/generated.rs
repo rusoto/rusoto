@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -52,6 +48,41 @@ pub struct AbortVaultLockInput {
     #[doc="<p>The name of the vault.</p>"]
     #[serde(rename="vaultName")]
     pub vault_name: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ActionCode {
+    ArchiveRetrieval,
+    InventoryRetrieval,
+}
+
+impl Into<String> for ActionCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ActionCode {
+    fn into(self) -> &'static str {
+        match self {
+            ActionCode::ArchiveRetrieval => "ArchiveRetrieval",
+            ActionCode::InventoryRetrieval => "InventoryRetrieval",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ArchiveRetrieval" => Ok(ActionCode::ArchiveRetrieval),
+            "InventoryRetrieval" => Ok(ActionCode::InventoryRetrieval),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The input values for <code>AddTagsToVault</code>.</p>"]
@@ -926,6 +957,44 @@ pub struct SetVaultNotificationsInput {
     #[serde(rename="vaultNotificationConfig")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub vault_notification_config: Option<VaultNotificationConfig>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StatusCode {
+    Failed,
+    InProgress,
+    Succeeded,
+}
+
+impl Into<String> for StatusCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StatusCode {
+    fn into(self) -> &'static str {
+        match self {
+            StatusCode::Failed => "Failed",
+            StatusCode::InProgress => "InProgress",
+            StatusCode::Succeeded => "Succeeded",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Failed" => Ok(StatusCode::Failed),
+            "InProgress" => Ok(StatusCode::InProgress),
+            "Succeeded" => Ok(StatusCode::Succeeded),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Provides options to add an archive to a vault.</p>"]
@@ -4463,7 +4532,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -4496,7 +4565,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -4532,7 +4601,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -4575,7 +4644,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4634,7 +4703,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -4669,7 +4738,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4717,7 +4786,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -4750,7 +4819,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -4785,7 +4854,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -4821,7 +4890,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -4858,7 +4927,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4904,7 +4973,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4950,7 +5019,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5000,7 +5069,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut result = GetJobOutputOutput::default();
 
@@ -5030,7 +5099,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
                     let value = content_type.to_owned();
                     result.content_type = Some(value)
                 };
-                result.status = Some(StatusCode::to_u16(&response.status) as i64);
+                result.status = Some(::hyper::status::StatusCode::to_u16(&response.status) as i64);
                 Ok(result)
             }
             _ => {
@@ -5062,7 +5131,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5108,7 +5177,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5155,7 +5224,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5202,7 +5271,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5264,7 +5333,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5320,7 +5389,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5380,7 +5449,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5433,7 +5502,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5485,7 +5554,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5531,7 +5600,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5579,7 +5648,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5628,7 +5697,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5674,7 +5743,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5728,7 +5797,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -5763,7 +5832,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -5799,7 +5868,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -5835,7 +5904,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -5883,7 +5952,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5953,7 +6022,7 @@ impl<P, D> Glacier for GlacierClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));

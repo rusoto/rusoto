@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use std::str::FromStr;
@@ -2027,7 +2023,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -2055,7 +2051,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -2081,7 +2077,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -2109,7 +2105,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -2135,7 +2131,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -2163,7 +2159,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -2210,7 +2206,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -2257,7 +2253,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -2302,7 +2298,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -2328,7 +2324,7 @@ impl<P, D> SimpleDb for SimpleDbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();

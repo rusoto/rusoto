@@ -11,23 +11,57 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AttributeAction {
+    Add,
+    Delete,
+    Put,
+}
+
+impl Into<String> for AttributeAction {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AttributeAction {
+    fn into(self) -> &'static str {
+        match self {
+            AttributeAction::Add => "ADD",
+            AttributeAction::Delete => "DELETE",
+            AttributeAction::Put => "PUT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AttributeAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ADD" => Ok(AttributeAction::Add),
+            "DELETE" => Ok(AttributeAction::Delete),
+            "PUT" => Ok(AttributeAction::Put),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents an attribute for describing the key schema for the table and indexes.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttributeDefinition {
@@ -174,6 +208,74 @@ pub struct Capacity {
     pub capacity_units: Option<f64>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ComparisonOperator {
+    BeginsWith,
+    Between,
+    Contains,
+    Eq,
+    Ge,
+    Gt,
+    In,
+    Le,
+    Lt,
+    Ne,
+    NotContains,
+    NotNull,
+    Null,
+}
+
+impl Into<String> for ComparisonOperator {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ComparisonOperator {
+    fn into(self) -> &'static str {
+        match self {
+            ComparisonOperator::BeginsWith => "BEGINS_WITH",
+            ComparisonOperator::Between => "BETWEEN",
+            ComparisonOperator::Contains => "CONTAINS",
+            ComparisonOperator::Eq => "EQ",
+            ComparisonOperator::Ge => "GE",
+            ComparisonOperator::Gt => "GT",
+            ComparisonOperator::In => "IN",
+            ComparisonOperator::Le => "LE",
+            ComparisonOperator::Lt => "LT",
+            ComparisonOperator::Ne => "NE",
+            ComparisonOperator::NotContains => "NOT_CONTAINS",
+            ComparisonOperator::NotNull => "NOT_NULL",
+            ComparisonOperator::Null => "NULL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BEGINS_WITH" => Ok(ComparisonOperator::BeginsWith),
+            "BETWEEN" => Ok(ComparisonOperator::Between),
+            "CONTAINS" => Ok(ComparisonOperator::Contains),
+            "EQ" => Ok(ComparisonOperator::Eq),
+            "GE" => Ok(ComparisonOperator::Ge),
+            "GT" => Ok(ComparisonOperator::Gt),
+            "IN" => Ok(ComparisonOperator::In),
+            "LE" => Ok(ComparisonOperator::Le),
+            "LT" => Ok(ComparisonOperator::Lt),
+            "NE" => Ok(ComparisonOperator::Ne),
+            "NOT_CONTAINS" => Ok(ComparisonOperator::NotContains),
+            "NOT_NULL" => Ok(ComparisonOperator::NotNull),
+            "NULL" => Ok(ComparisonOperator::Null),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the selection criteria for a <code>Query</code> or <code>Scan</code> operation:</p> <ul> <li> <p>For a <code>Query</code> operation, <code>Condition</code> is used for specifying the <code>KeyConditions</code> to use when querying a table or an index. For <code>KeyConditions</code>, only the following comparison operators are supported:</p> <p> <code>EQ | LE | LT | GE | GT | BEGINS_WITH | BETWEEN</code> </p> <p> <code>Condition</code> is also used in a <code>QueryFilter</code>, which evaluates the query results and returns only the desired values.</p> </li> <li> <p>For a <code>Scan</code> operation, <code>Condition</code> is used in a <code>ScanFilter</code>, which evaluates the scan results and returns only the desired values.</p> </li> </ul>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct Condition {
@@ -184,6 +286,41 @@ pub struct Condition {
     #[doc="<p>A comparator for evaluating attributes. For example, equals, greater than, less than, etc.</p> <p>The following comparison operators are available:</p> <p> <code>EQ | NE | LE | LT | GE | GT | NOT_NULL | NULL | CONTAINS | NOT_CONTAINS | BEGINS_WITH | IN | BETWEEN</code> </p> <p>The following are descriptions of each comparison operator.</p> <ul> <li> <p> <code>EQ</code> : Equal. <code>EQ</code> is supported for all data types, including lists and maps.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, Binary, String Set, Number Set, or Binary Set. If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{\"S\":\"6\"}</code> does not equal <code>{\"N\":\"6\"}</code>. Also, <code>{\"N\":\"6\"}</code> does not equal <code>{\"NS\":[\"6\", \"2\", \"1\"]}</code>.</p> <p/> </li> <li> <p> <code>NE</code> : Not equal. <code>NE</code> is supported for all data types, including lists and maps.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> of type String, Number, Binary, String Set, Number Set, or Binary Set. If an item contains an <code>AttributeValue</code> of a different type than the one provided in the request, the value does not match. For example, <code>{\"S\":\"6\"}</code> does not equal <code>{\"N\":\"6\"}</code>. Also, <code>{\"N\":\"6\"}</code> does not equal <code>{\"NS\":[\"6\", \"2\", \"1\"]}</code>.</p> <p/> </li> <li> <p> <code>LE</code> : Less than or equal. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{\"S\":\"6\"}</code> does not equal <code>{\"N\":\"6\"}</code>. Also, <code>{\"N\":\"6\"}</code> does not compare to <code>{\"NS\":[\"6\", \"2\", \"1\"]}</code>.</p> <p/> </li> <li> <p> <code>LT</code> : Less than. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{\"S\":\"6\"}</code> does not equal <code>{\"N\":\"6\"}</code>. Also, <code>{\"N\":\"6\"}</code> does not compare to <code>{\"NS\":[\"6\", \"2\", \"1\"]}</code>.</p> <p/> </li> <li> <p> <code>GE</code> : Greater than or equal. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{\"S\":\"6\"}</code> does not equal <code>{\"N\":\"6\"}</code>. Also, <code>{\"N\":\"6\"}</code> does not compare to <code>{\"NS\":[\"6\", \"2\", \"1\"]}</code>.</p> <p/> </li> <li> <p> <code>GT</code> : Greater than. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{\"S\":\"6\"}</code> does not equal <code>{\"N\":\"6\"}</code>. Also, <code>{\"N\":\"6\"}</code> does not compare to <code>{\"NS\":[\"6\", \"2\", \"1\"]}</code>.</p> <p/> </li> <li> <p> <code>NOT_NULL</code> : The attribute exists. <code>NOT_NULL</code> is supported for all data types, including lists and maps.</p> <note> <p>This operator tests for the existence of an attribute, not its data type. If the data type of attribute \"<code>a</code>\" is null, and you evaluate it using <code>NOT_NULL</code>, the result is a Boolean <code>true</code>. This result is because the attribute \"<code>a</code>\" exists; its data type is not relevant to the <code>NOT_NULL</code> comparison operator.</p> </note> </li> <li> <p> <code>NULL</code> : The attribute does not exist. <code>NULL</code> is supported for all data types, including lists and maps.</p> <note> <p>This operator tests for the nonexistence of an attribute, not its data type. If the data type of attribute \"<code>a</code>\" is null, and you evaluate it using <code>NULL</code>, the result is a Boolean <code>false</code>. This is because the attribute \"<code>a</code>\" exists; its data type is not relevant to the <code>NULL</code> comparison operator.</p> </note> </li> <li> <p> <code>CONTAINS</code> : Checks for a subsequence, or value in a set.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If the target attribute of the comparison is of type String, then the operator checks for a substring match. If the target attribute of the comparison is of type Binary, then the operator looks for a subsequence of the target that matches the input. If the target attribute of the comparison is a set (\"<code>SS</code>\", \"<code>NS</code>\", or \"<code>BS</code>\"), then the operator evaluates to true if it finds an exact match with any member of the set.</p> <p>CONTAINS is supported for lists: When evaluating \"<code>a CONTAINS b</code>\", \"<code>a</code>\" can be a list; however, \"<code>b</code>\" cannot be a set, a map, or a list.</p> </li> <li> <p> <code>NOT_CONTAINS</code> : Checks for absence of a subsequence, or absence of a value in a set.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If the target attribute of the comparison is a String, then the operator checks for the absence of a substring match. If the target attribute of the comparison is Binary, then the operator checks for the absence of a subsequence of the target that matches the input. If the target attribute of the comparison is a set (\"<code>SS</code>\", \"<code>NS</code>\", or \"<code>BS</code>\"), then the operator evaluates to true if it <i>does not</i> find an exact match with any member of the set.</p> <p>NOT_CONTAINS is supported for lists: When evaluating \"<code>a NOT CONTAINS b</code>\", \"<code>a</code>\" can be a list; however, \"<code>b</code>\" cannot be a set, a map, or a list.</p> </li> <li> <p> <code>BEGINS_WITH</code> : Checks for a prefix. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> of type String or Binary (not a Number or a set type). The target attribute of the comparison must be of type String or Binary (not a Number or a set type).</p> <p/> </li> <li> <p> <code>IN</code> : Checks for matching elements in a list.</p> <p> <code>AttributeValueList</code> can contain one or more <code>AttributeValue</code> elements of type String, Number, or Binary. These attributes are compared against an existing attribute of an item. If any elements of the input are equal to the item attribute, the expression evaluates to true.</p> </li> <li> <p> <code>BETWEEN</code> : Greater than or equal to the first value, and less than or equal to the second value. </p> <p> <code>AttributeValueList</code> must contain two <code>AttributeValue</code> elements of the same type, either String, Number, or Binary (not a set type). A target attribute matches if the target value is greater than, or equal to, the first element and less than, or equal to, the second element. If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{\"S\":\"6\"}</code> does not compare to <code>{\"N\":\"6\"}</code>. Also, <code>{\"N\":\"6\"}</code> does not compare to <code>{\"NS\":[\"6\", \"2\", \"1\"]}</code> </p> </li> </ul> <p>For usage examples of <code>AttributeValueList</code> and <code>ComparisonOperator</code>, see <a href=\"http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.html\">Legacy Conditional Parameters</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>"]
     #[serde(rename="ComparisonOperator")]
     pub comparison_operator: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConditionalOperator {
+    And,
+    Or,
+}
+
+impl Into<String> for ConditionalOperator {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConditionalOperator {
+    fn into(self) -> &'static str {
+        match self {
+            ConditionalOperator::And => "AND",
+            ConditionalOperator::Or => "OR",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConditionalOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AND" => Ok(ConditionalOperator::And),
+            "OR" => Ok(ConditionalOperator::Or),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The capacity units consumed by an operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the request asked for it. For more information, see <a href=\"http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html\">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>"]
@@ -555,6 +692,47 @@ pub struct GlobalSecondaryIndexUpdate {
     pub update: Option<UpdateGlobalSecondaryIndexAction>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum IndexStatus {
+    Active,
+    Creating,
+    Deleting,
+    Updating,
+}
+
+impl Into<String> for IndexStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for IndexStatus {
+    fn into(self) -> &'static str {
+        match self {
+            IndexStatus::Active => "ACTIVE",
+            IndexStatus::Creating => "CREATING",
+            IndexStatus::Deleting => "DELETING",
+            IndexStatus::Updating => "UPDATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for IndexStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(IndexStatus::Active),
+            "CREATING" => Ok(IndexStatus::Creating),
+            "DELETING" => Ok(IndexStatus::Deleting),
+            "UPDATING" => Ok(IndexStatus::Updating),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about item collections, if any, that were affected by the operation. <code>ItemCollectionMetrics</code> is only returned if the request asked for it. If the table does not have any local secondary indexes, this information is not returned in the response.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ItemCollectionMetrics {
@@ -577,6 +755,41 @@ pub struct KeySchemaElement {
     #[doc="<p>The role that this key attribute will assume:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term \"hash attribute\" derives from DynamoDB' usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term \"range attribute\" derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note>"]
     #[serde(rename="KeyType")]
     pub key_type: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum KeyType {
+    Hash,
+    Range,
+}
+
+impl Into<String> for KeyType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for KeyType {
+    fn into(self) -> &'static str {
+        match self {
+            KeyType::Hash => "HASH",
+            KeyType::Range => "RANGE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for KeyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "HASH" => Ok(KeyType::Hash),
+            "RANGE" => Ok(KeyType::Range),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents a set of primary keys and, for each key, the attributes to retrieve from the table.</p> <p>For each primary key, you must provide <i>all</i> of the key attributes. For example, with a simple primary key, you only need to provide the partition key. For a composite primary key, you must provide <i>both</i> the partition key and the sort key.</p>"]
@@ -706,6 +919,44 @@ pub struct Projection {
     #[serde(rename="ProjectionType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub projection_type: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ProjectionType {
+    All,
+    Include,
+    KeysOnly,
+}
+
+impl Into<String> for ProjectionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ProjectionType {
+    fn into(self) -> &'static str {
+        match self {
+            ProjectionType::All => "ALL",
+            ProjectionType::Include => "INCLUDE",
+            ProjectionType::KeysOnly => "KEYS_ONLY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProjectionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ALL" => Ok(ProjectionType::All),
+            "INCLUDE" => Ok(ProjectionType::Include),
+            "KEYS_ONLY" => Ok(ProjectionType::KeysOnly),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the provisioned throughput settings for a specified table or index. The settings can be modified using the <code>UpdateTable</code> operation.</p> <p>For current minimum and maximum provisioned throughput values, see <a href=\"http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html\">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>"]
@@ -909,6 +1160,161 @@ pub struct QueryOutput {
     pub scanned_count: Option<i64>,
 }
 
+#[doc="<p>Determines the level of detail about provisioned throughput consumption that is returned in the response:</p> <ul> <li> <p> <code>INDEXES</code> - The response includes the aggregate <code>ConsumedCapacity</code> for the operation, together with <code>ConsumedCapacity</code> for each table and secondary index that was accessed.</p> <p>Note that some operations, such as <code>GetItem</code> and <code>BatchGetItem</code>, do not access any indexes at all. In these cases, specifying <code>INDEXES</code> will only return <code>ConsumedCapacity</code> information for table(s).</p> </li> <li> <p> <code>TOTAL</code> - The response includes only the aggregate <code>ConsumedCapacity</code> for the operation.</p> </li> <li> <p> <code>NONE</code> - No <code>ConsumedCapacity</code> details are included in the response.</p> </li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReturnConsumedCapacity {
+    Indexes,
+    None,
+    Total,
+}
+
+impl Into<String> for ReturnConsumedCapacity {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReturnConsumedCapacity {
+    fn into(self) -> &'static str {
+        match self {
+            ReturnConsumedCapacity::Indexes => "INDEXES",
+            ReturnConsumedCapacity::None => "NONE",
+            ReturnConsumedCapacity::Total => "TOTAL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReturnConsumedCapacity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "INDEXES" => Ok(ReturnConsumedCapacity::Indexes),
+            "NONE" => Ok(ReturnConsumedCapacity::None),
+            "TOTAL" => Ok(ReturnConsumedCapacity::Total),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReturnItemCollectionMetrics {
+    None,
+    Size,
+}
+
+impl Into<String> for ReturnItemCollectionMetrics {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReturnItemCollectionMetrics {
+    fn into(self) -> &'static str {
+        match self {
+            ReturnItemCollectionMetrics::None => "NONE",
+            ReturnItemCollectionMetrics::Size => "SIZE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReturnItemCollectionMetrics {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "NONE" => Ok(ReturnItemCollectionMetrics::None),
+            "SIZE" => Ok(ReturnItemCollectionMetrics::Size),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReturnValue {
+    AllNew,
+    AllOld,
+    None,
+    UpdatedNew,
+    UpdatedOld,
+}
+
+impl Into<String> for ReturnValue {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReturnValue {
+    fn into(self) -> &'static str {
+        match self {
+            ReturnValue::AllNew => "ALL_NEW",
+            ReturnValue::AllOld => "ALL_OLD",
+            ReturnValue::None => "NONE",
+            ReturnValue::UpdatedNew => "UPDATED_NEW",
+            ReturnValue::UpdatedOld => "UPDATED_OLD",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReturnValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ALL_NEW" => Ok(ReturnValue::AllNew),
+            "ALL_OLD" => Ok(ReturnValue::AllOld),
+            "NONE" => Ok(ReturnValue::None),
+            "UPDATED_NEW" => Ok(ReturnValue::UpdatedNew),
+            "UPDATED_OLD" => Ok(ReturnValue::UpdatedOld),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ScalarAttributeType {
+    B,
+    N,
+    S,
+}
+
+impl Into<String> for ScalarAttributeType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ScalarAttributeType {
+    fn into(self) -> &'static str {
+        match self {
+            ScalarAttributeType::B => "B",
+            ScalarAttributeType::N => "N",
+            ScalarAttributeType::S => "S",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalarAttributeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "B" => Ok(ScalarAttributeType::B),
+            "N" => Ok(ScalarAttributeType::N),
+            "S" => Ok(ScalarAttributeType::S),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the input of a <code>Scan</code> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ScanInput {
@@ -1002,6 +1408,47 @@ pub struct ScanOutput {
     pub scanned_count: Option<i64>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Select {
+    AllAttributes,
+    AllProjectedAttributes,
+    Count,
+    SpecificAttributes,
+}
+
+impl Into<String> for Select {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Select {
+    fn into(self) -> &'static str {
+        match self {
+            Select::AllAttributes => "ALL_ATTRIBUTES",
+            Select::AllProjectedAttributes => "ALL_PROJECTED_ATTRIBUTES",
+            Select::Count => "COUNT",
+            Select::SpecificAttributes => "SPECIFIC_ATTRIBUTES",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Select {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ALL_ATTRIBUTES" => Ok(Select::AllAttributes),
+            "ALL_PROJECTED_ATTRIBUTES" => Ok(Select::AllProjectedAttributes),
+            "COUNT" => Ok(Select::Count),
+            "SPECIFIC_ATTRIBUTES" => Ok(Select::SpecificAttributes),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the DynamoDB Streams configuration for a table in DynamoDB.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct StreamSpecification {
@@ -1013,6 +1460,47 @@ pub struct StreamSpecification {
     #[serde(rename="StreamViewType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub stream_view_type: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StreamViewType {
+    KeysOnly,
+    NewAndOldImages,
+    NewImage,
+    OldImage,
+}
+
+impl Into<String> for StreamViewType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StreamViewType {
+    fn into(self) -> &'static str {
+        match self {
+            StreamViewType::KeysOnly => "KEYS_ONLY",
+            StreamViewType::NewAndOldImages => "NEW_AND_OLD_IMAGES",
+            StreamViewType::NewImage => "NEW_IMAGE",
+            StreamViewType::OldImage => "OLD_IMAGE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StreamViewType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "KEYS_ONLY" => Ok(StreamViewType::KeysOnly),
+            "NEW_AND_OLD_IMAGES" => Ok(StreamViewType::NewAndOldImages),
+            "NEW_IMAGE" => Ok(StreamViewType::NewImage),
+            "OLD_IMAGE" => Ok(StreamViewType::OldImage),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the properties of a table.</p>"]
@@ -1076,6 +1564,47 @@ pub struct TableDescription {
     pub table_status: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TableStatus {
+    Active,
+    Creating,
+    Deleting,
+    Updating,
+}
+
+impl Into<String> for TableStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TableStatus {
+    fn into(self) -> &'static str {
+        match self {
+            TableStatus::Active => "ACTIVE",
+            TableStatus::Creating => "CREATING",
+            TableStatus::Deleting => "DELETING",
+            TableStatus::Updating => "UPDATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TableStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(TableStatus::Active),
+            "CREATING" => Ok(TableStatus::Creating),
+            "DELETING" => Ok(TableStatus::Deleting),
+            "UPDATING" => Ok(TableStatus::Updating),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes a tag. A tag is a key-value pair. You can add up to 50 tags to a single DynamoDB table. </p> <p> AWS-assigned tag names and values are automatically assigned the aws: prefix, which the user cannot assign. AWS-assigned tag names do not count towards the tag limit of 50. User-assigned tag names have the prefix user: in the Cost Allocation Report. You cannot backdate the application of a tag. </p> <p>For an overview on tagging DynamoDB resources, see <a href=\"http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html\">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
@@ -1119,6 +1648,47 @@ pub struct TimeToLiveSpecification {
     #[doc="<p>Indicates whether Time To Live is to be enabled (true) or disabled (false) on the table.</p>"]
     #[serde(rename="Enabled")]
     pub enabled: bool,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TimeToLiveStatus {
+    Disabled,
+    Disabling,
+    Enabled,
+    Enabling,
+}
+
+impl Into<String> for TimeToLiveStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TimeToLiveStatus {
+    fn into(self) -> &'static str {
+        match self {
+            TimeToLiveStatus::Disabled => "DISABLED",
+            TimeToLiveStatus::Disabling => "DISABLING",
+            TimeToLiveStatus::Enabled => "ENABLED",
+            TimeToLiveStatus::Enabling => "ENABLING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TimeToLiveStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DISABLED" => Ok(TimeToLiveStatus::Disabled),
+            "DISABLING" => Ok(TimeToLiveStatus::Disabling),
+            "ENABLED" => Ok(TimeToLiveStatus::Enabled),
+            "ENABLING" => Ok(TimeToLiveStatus::Enabling),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -3152,7 +3722,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchGetItemOutput>(String::from_utf8_lossy(&body)
@@ -3184,7 +3754,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchWriteItemOutput>(String::from_utf8_lossy(&body)
@@ -3216,7 +3786,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateTableOutput>(String::from_utf8_lossy(&body)
@@ -3246,7 +3816,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteItemOutput>(String::from_utf8_lossy(&body)
@@ -3278,7 +3848,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteTableOutput>(String::from_utf8_lossy(&body)
@@ -3307,7 +3877,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeLimitsOutput>(String::from_utf8_lossy(&body)
@@ -3339,7 +3909,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeTableOutput>(String::from_utf8_lossy(&body)
@@ -3371,7 +3941,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeTimeToLiveOutput>(String::from_utf8_lossy(&body)
@@ -3401,7 +3971,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetItemOutput>(String::from_utf8_lossy(&body).as_ref())
@@ -3430,7 +4000,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListTablesOutput>(String::from_utf8_lossy(&body)
@@ -3462,7 +4032,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListTagsOfResourceOutput>(String::from_utf8_lossy(&body)
@@ -3492,7 +4062,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutItemOutput>(String::from_utf8_lossy(&body).as_ref())
@@ -3521,7 +4091,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<QueryOutput>(String::from_utf8_lossy(&body).as_ref())
@@ -3550,7 +4120,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ScanOutput>(String::from_utf8_lossy(&body).as_ref())
@@ -3579,7 +4149,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3603,7 +4173,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3627,7 +4197,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateItemOutput>(String::from_utf8_lossy(&body)
@@ -3659,7 +4229,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateTableOutput>(String::from_utf8_lossy(&body)
@@ -3691,7 +4261,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateTimeToLiveOutput>(String::from_utf8_lossy(&body)

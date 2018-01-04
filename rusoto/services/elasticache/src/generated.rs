@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use std::str::FromStr;
@@ -39,6 +35,41 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AZMode {
+    CrossAz,
+    SingleAz,
+}
+
+impl Into<String> for AZMode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AZMode {
+    fn into(self) -> &'static str {
+        match self {
+            AZMode::CrossAz => "cross-az",
+            AZMode::SingleAz => "single-az",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AZMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "cross-az" => Ok(AZMode::CrossAz),
+            "single-az" => Ok(AZMode::SingleAz),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the input of an AddTagsToResource operation.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct AddTagsToResourceMessage {
@@ -198,6 +229,47 @@ impl AuthorizeCacheSecurityGroupIngressResultDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AutomaticFailoverStatus {
+    Disabled,
+    Disabling,
+    Enabled,
+    Enabling,
+}
+
+impl Into<String> for AutomaticFailoverStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AutomaticFailoverStatus {
+    fn into(self) -> &'static str {
+        match self {
+            AutomaticFailoverStatus::Disabled => "disabled",
+            AutomaticFailoverStatus::Disabling => "disabling",
+            AutomaticFailoverStatus::Enabled => "enabled",
+            AutomaticFailoverStatus::Enabling => "enabling",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutomaticFailoverStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "disabled" => Ok(AutomaticFailoverStatus::Disabled),
+            "disabling" => Ok(AutomaticFailoverStatus::Disabling),
+            "enabled" => Ok(AutomaticFailoverStatus::Enabled),
+            "enabling" => Ok(AutomaticFailoverStatus::Enabling),
+            _ => Err(()),
+        }
+    }
+}
+
 struct AutomaticFailoverStatusDeserializer;
 impl AutomaticFailoverStatusDeserializer {
     #[allow(unused_variables)]
@@ -320,7 +392,7 @@ impl BooleanDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -334,7 +406,7 @@ impl BooleanOptionalDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1993,6 +2065,41 @@ impl CacheSubnetGroupsDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ChangeType {
+    Immediate,
+    RequiresReboot,
+}
+
+impl Into<String> for ChangeType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ChangeType {
+    fn into(self) -> &'static str {
+        match self {
+            ChangeType::Immediate => "immediate",
+            ChangeType::RequiresReboot => "requires-reboot",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "immediate" => Ok(ChangeType::Immediate),
+            "requires-reboot" => Ok(ChangeType::RequiresReboot),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ChangeTypeDeserializer;
 impl ChangeTypeDeserializer {
     #[allow(unused_variables)]
@@ -5590,6 +5697,41 @@ impl ParametersListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PendingAutomaticFailoverStatus {
+    Disabled,
+    Enabled,
+}
+
+impl Into<String> for PendingAutomaticFailoverStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PendingAutomaticFailoverStatus {
+    fn into(self) -> &'static str {
+        match self {
+            PendingAutomaticFailoverStatus::Disabled => "disabled",
+            PendingAutomaticFailoverStatus::Enabled => "enabled",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PendingAutomaticFailoverStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "disabled" => Ok(PendingAutomaticFailoverStatus::Disabled),
+            "enabled" => Ok(PendingAutomaticFailoverStatus::Enabled),
+            _ => Err(()),
+        }
+    }
+}
+
 struct PendingAutomaticFailoverStatusDeserializer;
 impl PendingAutomaticFailoverStatusDeserializer {
     #[allow(unused_variables)]
@@ -7147,6 +7289,50 @@ impl SnapshotListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SourceType {
+    CacheCluster,
+    CacheParameterGroup,
+    CacheSecurityGroup,
+    CacheSubnetGroup,
+    ReplicationGroup,
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SourceType {
+    fn into(self) -> &'static str {
+        match self {
+            SourceType::CacheCluster => "cache-cluster",
+            SourceType::CacheParameterGroup => "cache-parameter-group",
+            SourceType::CacheSecurityGroup => "cache-security-group",
+            SourceType::CacheSubnetGroup => "cache-subnet-group",
+            SourceType::ReplicationGroup => "replication-group",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "cache-cluster" => Ok(SourceType::CacheCluster),
+            "cache-parameter-group" => Ok(SourceType::CacheParameterGroup),
+            "cache-security-group" => Ok(SourceType::CacheSecurityGroup),
+            "cache-subnet-group" => Ok(SourceType::CacheSubnetGroup),
+            "replication-group" => Ok(SourceType::ReplicationGroup),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(unused_variables)]
@@ -11330,7 +11516,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11379,7 +11565,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11425,7 +11611,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11472,7 +11658,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11520,7 +11706,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11570,7 +11756,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11620,7 +11806,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11669,7 +11855,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11717,7 +11903,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11764,7 +11950,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11811,7 +11997,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -11840,7 +12026,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -11869,7 +12055,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -11898,7 +12084,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11946,7 +12132,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11993,7 +12179,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12041,7 +12227,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12090,7 +12276,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12139,7 +12325,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12188,7 +12374,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12237,7 +12423,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12286,7 +12472,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12333,7 +12519,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12381,7 +12567,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12430,7 +12616,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12479,7 +12665,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12525,7 +12711,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12574,7 +12760,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12620,7 +12806,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12667,7 +12853,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12715,7 +12901,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12765,7 +12951,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12814,7 +13000,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12864,7 +13050,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12910,7 +13096,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12957,7 +13143,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13005,7 +13191,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13055,7 +13241,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13102,7 +13288,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();

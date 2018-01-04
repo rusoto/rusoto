@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -72,6 +68,41 @@ pub struct EntitlementValue {
     #[serde(rename="StringValue")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub string_value: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum GetEntitlementFilterName {
+    CustomerIdentifier,
+    Dimension,
+}
+
+impl Into<String> for GetEntitlementFilterName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for GetEntitlementFilterName {
+    fn into(self) -> &'static str {
+        match self {
+            GetEntitlementFilterName::CustomerIdentifier => "CUSTOMER_IDENTIFIER",
+            GetEntitlementFilterName::Dimension => "DIMENSION",
+        }
+    }
+}
+
+impl ::std::str::FromStr for GetEntitlementFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CUSTOMER_IDENTIFIER" => Ok(GetEntitlementFilterName::CustomerIdentifier),
+            "DIMENSION" => Ok(GetEntitlementFilterName::Dimension),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The GetEntitlementsRequest contains parameters for the GetEntitlements operation.</p>"]
@@ -248,7 +279,7 @@ impl<P, D> MarketplaceEntitlement for MarketplaceEntitlementClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetEntitlementsResult>(String::from_utf8_lossy(&body)

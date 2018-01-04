@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -85,6 +81,53 @@ pub struct AcknowledgeThirdPartyJobOutput {
     pub status: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ActionCategory {
+    Approval,
+    Build,
+    Deploy,
+    Invoke,
+    Source,
+    Test,
+}
+
+impl Into<String> for ActionCategory {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ActionCategory {
+    fn into(self) -> &'static str {
+        match self {
+            ActionCategory::Approval => "Approval",
+            ActionCategory::Build => "Build",
+            ActionCategory::Deploy => "Deploy",
+            ActionCategory::Invoke => "Invoke",
+            ActionCategory::Source => "Source",
+            ActionCategory::Test => "Test",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionCategory {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Approval" => Ok(ActionCategory::Approval),
+            "Build" => Ok(ActionCategory::Build),
+            "Deploy" => Ok(ActionCategory::Deploy),
+            "Invoke" => Ok(ActionCategory::Invoke),
+            "Source" => Ok(ActionCategory::Source),
+            "Test" => Ok(ActionCategory::Test),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents information about an action configuration.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ActionConfiguration {
@@ -121,6 +164,44 @@ pub struct ActionConfigurationProperty {
     #[serde(rename="type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ActionConfigurationPropertyType {
+    Boolean,
+    Number,
+    String,
+}
+
+impl Into<String> for ActionConfigurationPropertyType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ActionConfigurationPropertyType {
+    fn into(self) -> &'static str {
+        match self {
+            ActionConfigurationPropertyType::Boolean => "Boolean",
+            ActionConfigurationPropertyType::Number => "Number",
+            ActionConfigurationPropertyType::String => "String",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionConfigurationPropertyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Boolean" => Ok(ActionConfigurationPropertyType::Boolean),
+            "Number" => Ok(ActionConfigurationPropertyType::Number),
+            "String" => Ok(ActionConfigurationPropertyType::String),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the context of an action within the stage of a pipeline to a job worker.</p>"]
@@ -202,6 +283,82 @@ pub struct ActionExecution {
     #[serde(rename="token")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub token: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ActionExecutionStatus {
+    Failed,
+    InProgress,
+    Succeeded,
+}
+
+impl Into<String> for ActionExecutionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ActionExecutionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ActionExecutionStatus::Failed => "Failed",
+            ActionExecutionStatus::InProgress => "InProgress",
+            ActionExecutionStatus::Succeeded => "Succeeded",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Failed" => Ok(ActionExecutionStatus::Failed),
+            "InProgress" => Ok(ActionExecutionStatus::InProgress),
+            "Succeeded" => Ok(ActionExecutionStatus::Succeeded),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ActionOwner {
+    Aws,
+    Custom,
+    ThirdParty,
+}
+
+impl Into<String> for ActionOwner {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ActionOwner {
+    fn into(self) -> &'static str {
+        match self {
+            ActionOwner::Aws => "AWS",
+            ActionOwner::Custom => "Custom",
+            ActionOwner::ThirdParty => "ThirdParty",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionOwner {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AWS" => Ok(ActionOwner::Aws),
+            "Custom" => Ok(ActionOwner::Custom),
+            "ThirdParty" => Ok(ActionOwner::ThirdParty),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents information about the version (or revision) of an action.</p>"]
@@ -314,6 +471,41 @@ pub struct ApprovalResult {
     pub summary: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ApprovalStatus {
+    Approved,
+    Rejected,
+}
+
+impl Into<String> for ApprovalStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ApprovalStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ApprovalStatus::Approved => "Approved",
+            ApprovalStatus::Rejected => "Rejected",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApprovalStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Approved" => Ok(ApprovalStatus::Approved),
+            "Rejected" => Ok(ApprovalStatus::Rejected),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents information about an artifact that will be worked upon by actions in the pipeline.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Artifact {
@@ -353,6 +545,38 @@ pub struct ArtifactLocation {
     #[serde(rename="type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ArtifactLocationType {
+    S3,
+}
+
+impl Into<String> for ArtifactLocationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ArtifactLocationType {
+    fn into(self) -> &'static str {
+        match self {
+            ArtifactLocationType::S3 => "S3",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArtifactLocationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "S3" => Ok(ArtifactLocationType::S3),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents revision details of an artifact. </p>"]
@@ -399,6 +623,38 @@ pub struct ArtifactStore {
     pub type_: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ArtifactStoreType {
+    S3,
+}
+
+impl Into<String> for ArtifactStoreType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ArtifactStoreType {
+    fn into(self) -> &'static str {
+        match self {
+            ArtifactStoreType::S3 => "S3",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArtifactStoreType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "S3" => Ok(ArtifactStoreType::S3),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Reserved for future use.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BlockerDeclaration {
@@ -408,6 +664,38 @@ pub struct BlockerDeclaration {
     #[doc="<p>Reserved for future use.</p>"]
     #[serde(rename="type")]
     pub type_: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BlockerType {
+    Schedule,
+}
+
+impl Into<String> for BlockerType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BlockerType {
+    fn into(self) -> &'static str {
+        match self {
+            BlockerType::Schedule => "Schedule",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BlockerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Schedule" => Ok(BlockerType::Schedule),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the input of a create custom action operation.</p>"]
@@ -546,6 +834,38 @@ pub struct EncryptionKey {
     pub type_: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EncryptionKeyType {
+    Kms,
+}
+
+impl Into<String> for EncryptionKeyType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EncryptionKeyType {
+    fn into(self) -> &'static str {
+        match self {
+            EncryptionKeyType::Kms => "KMS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionKeyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "KMS" => Ok(EncryptionKeyType::Kms),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents information about an error in AWS CodePipeline.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ErrorDetails {
@@ -589,6 +909,53 @@ pub struct FailureDetails {
     #[doc="<p>The type of the failure.</p>"]
     #[serde(rename="type")]
     pub type_: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FailureType {
+    ConfigurationError,
+    JobFailed,
+    PermissionError,
+    RevisionOutOfSync,
+    RevisionUnavailable,
+    SystemUnavailable,
+}
+
+impl Into<String> for FailureType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FailureType {
+    fn into(self) -> &'static str {
+        match self {
+            FailureType::ConfigurationError => "ConfigurationError",
+            FailureType::JobFailed => "JobFailed",
+            FailureType::PermissionError => "PermissionError",
+            FailureType::RevisionOutOfSync => "RevisionOutOfSync",
+            FailureType::RevisionUnavailable => "RevisionUnavailable",
+            FailureType::SystemUnavailable => "SystemUnavailable",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FailureType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ConfigurationError" => Ok(FailureType::ConfigurationError),
+            "JobFailed" => Ok(FailureType::JobFailed),
+            "PermissionError" => Ok(FailureType::PermissionError),
+            "RevisionOutOfSync" => Ok(FailureType::RevisionOutOfSync),
+            "RevisionUnavailable" => Ok(FailureType::RevisionUnavailable),
+            "SystemUnavailable" => Ok(FailureType::SystemUnavailable),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the input of a get job details action.</p>"]
@@ -785,6 +1152,56 @@ pub struct JobDetails {
     pub id: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum JobStatus {
+    Created,
+    Dispatched,
+    Failed,
+    InProgress,
+    Queued,
+    Succeeded,
+    TimedOut,
+}
+
+impl Into<String> for JobStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for JobStatus {
+    fn into(self) -> &'static str {
+        match self {
+            JobStatus::Created => "Created",
+            JobStatus::Dispatched => "Dispatched",
+            JobStatus::Failed => "Failed",
+            JobStatus::InProgress => "InProgress",
+            JobStatus::Queued => "Queued",
+            JobStatus::Succeeded => "Succeeded",
+            JobStatus::TimedOut => "TimedOut",
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Created" => Ok(JobStatus::Created),
+            "Dispatched" => Ok(JobStatus::Dispatched),
+            "Failed" => Ok(JobStatus::Failed),
+            "InProgress" => Ok(JobStatus::InProgress),
+            "Queued" => Ok(JobStatus::Queued),
+            "Succeeded" => Ok(JobStatus::Succeeded),
+            "TimedOut" => Ok(JobStatus::TimedOut),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the input of a list action types action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListActionTypesInput {
@@ -930,6 +1347,47 @@ pub struct PipelineExecution {
     #[serde(rename="status")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PipelineExecutionStatus {
+    Failed,
+    InProgress,
+    Succeeded,
+    Superseded,
+}
+
+impl Into<String> for PipelineExecutionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PipelineExecutionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            PipelineExecutionStatus::Failed => "Failed",
+            PipelineExecutionStatus::InProgress => "InProgress",
+            PipelineExecutionStatus::Succeeded => "Succeeded",
+            PipelineExecutionStatus::Superseded => "Superseded",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PipelineExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Failed" => Ok(PipelineExecutionStatus::Failed),
+            "InProgress" => Ok(PipelineExecutionStatus::InProgress),
+            "Succeeded" => Ok(PipelineExecutionStatus::Succeeded),
+            "Superseded" => Ok(PipelineExecutionStatus::Superseded),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Summary information about a pipeline execution.</p>"]
@@ -1219,6 +1677,76 @@ pub struct StageExecution {
     pub status: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StageExecutionStatus {
+    Failed,
+    InProgress,
+    Succeeded,
+}
+
+impl Into<String> for StageExecutionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StageExecutionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            StageExecutionStatus::Failed => "Failed",
+            StageExecutionStatus::InProgress => "InProgress",
+            StageExecutionStatus::Succeeded => "Succeeded",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StageExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Failed" => Ok(StageExecutionStatus::Failed),
+            "InProgress" => Ok(StageExecutionStatus::InProgress),
+            "Succeeded" => Ok(StageExecutionStatus::Succeeded),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StageRetryMode {
+    FailedActions,
+}
+
+impl Into<String> for StageRetryMode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StageRetryMode {
+    fn into(self) -> &'static str {
+        match self {
+            StageRetryMode::FailedActions => "FAILED_ACTIONS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StageRetryMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED_ACTIONS" => Ok(StageRetryMode::FailedActions),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents information about the state of the stage.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StageState {
@@ -1238,6 +1766,41 @@ pub struct StageState {
     #[serde(rename="stageName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub stage_name: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StageTransitionType {
+    Inbound,
+    Outbound,
+}
+
+impl Into<String> for StageTransitionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StageTransitionType {
+    fn into(self) -> &'static str {
+        match self {
+            StageTransitionType::Inbound => "Inbound",
+            StageTransitionType::Outbound => "Outbound",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StageTransitionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Inbound" => Ok(StageTransitionType::Inbound),
+            "Outbound" => Ok(StageTransitionType::Outbound),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the input of a start pipeline execution action.</p>"]
@@ -3907,7 +4470,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AcknowledgeJobOutput>(String::from_utf8_lossy(&body)
@@ -3941,7 +4504,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AcknowledgeThirdPartyJobOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3974,7 +4537,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateCustomActionTypeOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4004,7 +4567,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreatePipelineOutput>(String::from_utf8_lossy(&body)
@@ -4037,7 +4600,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4061,7 +4624,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4088,7 +4651,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4115,7 +4678,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4141,7 +4704,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetJobDetailsOutput>(String::from_utf8_lossy(&body)
@@ -4173,7 +4736,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetPipelineOutput>(String::from_utf8_lossy(&body)
@@ -4205,7 +4768,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetPipelineExecutionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4235,7 +4798,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetPipelineStateOutput>(String::from_utf8_lossy(&body)
@@ -4269,7 +4832,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetThirdPartyJobDetailsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4300,7 +4863,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListActionTypesOutput>(String::from_utf8_lossy(&body)
@@ -4334,7 +4897,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListPipelineExecutionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4364,7 +4927,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListPipelinesOutput>(String::from_utf8_lossy(&body)
@@ -4396,7 +4959,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PollForJobsOutput>(String::from_utf8_lossy(&body)
@@ -4430,7 +4993,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PollForThirdPartyJobsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4460,7 +5023,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutActionRevisionOutput>(String::from_utf8_lossy(&body)
@@ -4492,7 +5055,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutApprovalResultOutput>(String::from_utf8_lossy(&body)
@@ -4524,7 +5087,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4550,7 +5113,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4577,7 +5140,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4605,7 +5168,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4632,7 +5195,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RetryStageExecutionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4664,7 +5227,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartPipelineExecutionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4694,7 +5257,7 @@ impl<P, D> CodePipeline for CodePipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdatePipelineOutput>(String::from_utf8_lossy(&body)

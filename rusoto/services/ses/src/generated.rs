@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use std::str::FromStr;
@@ -193,6 +189,41 @@ impl AmazonResourceNameDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BehaviorOnMXFailure {
+    RejectMessage,
+    UseDefaultValue,
+}
+
+impl Into<String> for BehaviorOnMXFailure {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BehaviorOnMXFailure {
+    fn into(self) -> &'static str {
+        match self {
+            BehaviorOnMXFailure::RejectMessage => "RejectMessage",
+            BehaviorOnMXFailure::UseDefaultValue => "UseDefaultValue",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BehaviorOnMXFailure {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "RejectMessage" => Ok(BehaviorOnMXFailure::RejectMessage),
+            "UseDefaultValue" => Ok(BehaviorOnMXFailure::UseDefaultValue),
+            _ => Err(()),
+        }
+    }
+}
+
 struct BehaviorOnMXFailureDeserializer;
 impl BehaviorOnMXFailureDeserializer {
     #[allow(unused_variables)]
@@ -381,6 +412,53 @@ impl BounceStatusCodeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BounceType {
+    ContentRejected,
+    DoesNotExist,
+    ExceededQuota,
+    MessageTooLarge,
+    TemporaryFailure,
+    Undefined,
+}
+
+impl Into<String> for BounceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BounceType {
+    fn into(self) -> &'static str {
+        match self {
+            BounceType::ContentRejected => "ContentRejected",
+            BounceType::DoesNotExist => "DoesNotExist",
+            BounceType::ExceededQuota => "ExceededQuota",
+            BounceType::MessageTooLarge => "MessageTooLarge",
+            BounceType::TemporaryFailure => "TemporaryFailure",
+            BounceType::Undefined => "Undefined",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BounceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ContentRejected" => Ok(BounceType::ContentRejected),
+            "DoesNotExist" => Ok(BounceType::DoesNotExist),
+            "ExceededQuota" => Ok(BounceType::ExceededQuota),
+            "MessageTooLarge" => Ok(BounceType::MessageTooLarge),
+            "TemporaryFailure" => Ok(BounceType::TemporaryFailure),
+            "Undefined" => Ok(BounceType::Undefined),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Recipient-related information to include in the Delivery Status Notification (DSN) when an email that Amazon SES receives on your behalf bounces.</p> <p>For information about receiving email through Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html\">Amazon SES Developer Guide</a>.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct BouncedRecipientInfo {
@@ -768,6 +846,38 @@ impl ConfigurationSetSerializer {
 }
 
 
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConfigurationSetAttribute {
+    EventDestinations,
+}
+
+impl Into<String> for ConfigurationSetAttribute {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConfigurationSetAttribute {
+    fn into(self) -> &'static str {
+        match self {
+            ConfigurationSetAttribute::EventDestinations => "eventDestinations",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationSetAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "eventDestinations" => Ok(ConfigurationSetAttribute::EventDestinations),
+            _ => Err(()),
+        }
+    }
+}
+
+
 /// Serialize `ConfigurationSetAttributeList` contents to a `SignedRequest`.
 struct ConfigurationSetAttributeListSerializer;
 impl ConfigurationSetAttributeListSerializer {
@@ -1109,6 +1219,47 @@ impl CreateReceiptRuleSetResponseDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CustomMailFromStatus {
+    Failed,
+    Pending,
+    Success,
+    TemporaryFailure,
+}
+
+impl Into<String> for CustomMailFromStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CustomMailFromStatus {
+    fn into(self) -> &'static str {
+        match self {
+            CustomMailFromStatus::Failed => "Failed",
+            CustomMailFromStatus::Pending => "Pending",
+            CustomMailFromStatus::Success => "Success",
+            CustomMailFromStatus::TemporaryFailure => "TemporaryFailure",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CustomMailFromStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Failed" => Ok(CustomMailFromStatus::Failed),
+            "Pending" => Ok(CustomMailFromStatus::Pending),
+            "Success" => Ok(CustomMailFromStatus::Success),
+            "TemporaryFailure" => Ok(CustomMailFromStatus::TemporaryFailure),
+            _ => Err(()),
+        }
+    }
+}
+
 struct CustomMailFromStatusDeserializer;
 impl CustomMailFromStatusDeserializer {
     #[allow(unused_variables)]
@@ -1853,6 +2004,44 @@ impl DimensionNameDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DimensionValueSource {
+    EmailHeader,
+    LinkTag,
+    MessageTag,
+}
+
+impl Into<String> for DimensionValueSource {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DimensionValueSource {
+    fn into(self) -> &'static str {
+        match self {
+            DimensionValueSource::EmailHeader => "emailHeader",
+            DimensionValueSource::LinkTag => "linkTag",
+            DimensionValueSource::MessageTag => "messageTag",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DimensionValueSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "emailHeader" => Ok(DimensionValueSource::EmailHeader),
+            "linkTag" => Ok(DimensionValueSource::LinkTag),
+            "messageTag" => Ok(DimensionValueSource::MessageTag),
+            _ => Err(()),
+        }
+    }
+}
+
 struct DimensionValueSourceDeserializer;
 impl DimensionValueSourceDeserializer {
     #[allow(unused_variables)]
@@ -1891,6 +2080,50 @@ impl DkimAttributesDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DsnAction {
+    Delayed,
+    Delivered,
+    Expanded,
+    Failed,
+    Relayed,
+}
+
+impl Into<String> for DsnAction {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DsnAction {
+    fn into(self) -> &'static str {
+        match self {
+            DsnAction::Delayed => "delayed",
+            DsnAction::Delivered => "delivered",
+            DsnAction::Expanded => "expanded",
+            DsnAction::Failed => "failed",
+            DsnAction::Relayed => "relayed",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DsnAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "delayed" => Ok(DsnAction::Delayed),
+            "delivered" => Ok(DsnAction::Delivered),
+            "expanded" => Ok(DsnAction::Expanded),
+            "failed" => Ok(DsnAction::Failed),
+            "relayed" => Ok(DsnAction::Relayed),
+            _ => Err(()),
+        }
+    }
+}
+
 struct EnabledDeserializer;
 impl EnabledDeserializer {
     #[allow(unused_variables)]
@@ -1898,7 +2131,7 @@ impl EnabledDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -2083,6 +2316,56 @@ impl EventDestinationsDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EventType {
+    Bounce,
+    Click,
+    Complaint,
+    Delivery,
+    Open,
+    Reject,
+    Send,
+}
+
+impl Into<String> for EventType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EventType {
+    fn into(self) -> &'static str {
+        match self {
+            EventType::Bounce => "bounce",
+            EventType::Click => "click",
+            EventType::Complaint => "complaint",
+            EventType::Delivery => "delivery",
+            EventType::Open => "open",
+            EventType::Reject => "reject",
+            EventType::Send => "send",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "bounce" => Ok(EventType::Bounce),
+            "click" => Ok(EventType::Click),
+            "complaint" => Ok(EventType::Complaint),
+            "delivery" => Ok(EventType::Delivery),
+            "open" => Ok(EventType::Open),
+            "reject" => Ok(EventType::Reject),
+            "send" => Ok(EventType::Send),
+            _ => Err(()),
+        }
+    }
+}
+
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
     #[allow(unused_variables)]
@@ -2999,6 +3282,41 @@ impl IdentityNotificationAttributesDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum IdentityType {
+    Domain,
+    EmailAddress,
+}
+
+impl Into<String> for IdentityType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for IdentityType {
+    fn into(self) -> &'static str {
+        match self {
+            IdentityType::Domain => "Domain",
+            IdentityType::EmailAddress => "EmailAddress",
+        }
+    }
+}
+
+impl ::std::str::FromStr for IdentityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Domain" => Ok(IdentityType::Domain),
+            "EmailAddress" => Ok(IdentityType::EmailAddress),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the verification attributes of a single identity.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct IdentityVerificationAttributes {
@@ -3056,6 +3374,41 @@ impl IdentityVerificationAttributesDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InvocationType {
+    Event,
+    RequestResponse,
+}
+
+impl Into<String> for InvocationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InvocationType {
+    fn into(self) -> &'static str {
+        match self {
+            InvocationType::Event => "Event",
+            InvocationType::RequestResponse => "RequestResponse",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InvocationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Event" => Ok(InvocationType::Event),
+            "RequestResponse" => Ok(InvocationType::RequestResponse),
+            _ => Err(()),
+        }
+    }
+}
+
 struct InvocationTypeDeserializer;
 impl InvocationTypeDeserializer {
     #[allow(unused_variables)]
@@ -3921,6 +4274,44 @@ impl NotificationTopicDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NotificationType {
+    Bounce,
+    Complaint,
+    Delivery,
+}
+
+impl Into<String> for NotificationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NotificationType {
+    fn into(self) -> &'static str {
+        match self {
+            NotificationType::Bounce => "Bounce",
+            NotificationType::Complaint => "Complaint",
+            NotificationType::Delivery => "Delivery",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Bounce" => Ok(NotificationType::Bounce),
+            "Complaint" => Ok(NotificationType::Complaint),
+            "Delivery" => Ok(NotificationType::Delivery),
+            _ => Err(()),
+        }
+    }
+}
+
 struct PolicyDeserializer;
 impl PolicyDeserializer {
     #[allow(unused_variables)]
@@ -4423,6 +4814,41 @@ impl ReceiptFilterNameDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReceiptFilterPolicy {
+    Allow,
+    Block,
+}
+
+impl Into<String> for ReceiptFilterPolicy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReceiptFilterPolicy {
+    fn into(self) -> &'static str {
+        match self {
+            ReceiptFilterPolicy::Allow => "Allow",
+            ReceiptFilterPolicy::Block => "Block",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReceiptFilterPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Allow" => Ok(ReceiptFilterPolicy::Allow),
+            "Block" => Ok(ReceiptFilterPolicy::Block),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ReceiptFilterPolicyDeserializer;
 impl ReceiptFilterPolicyDeserializer {
     #[allow(unused_variables)]
@@ -5181,6 +5607,41 @@ impl SNSActionSerializer {
         params.put(&format!("{}{}", prefix, "TopicArn"),
                    &obj.topic_arn.replace("+", "%2B"));
 
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SNSActionEncoding {
+    Base64,
+    Utf8,
+}
+
+impl Into<String> for SNSActionEncoding {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SNSActionEncoding {
+    fn into(self) -> &'static str {
+        match self {
+            SNSActionEncoding::Base64 => "Base64",
+            SNSActionEncoding::Utf8 => "UTF-8",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SNSActionEncoding {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Base64" => Ok(SNSActionEncoding::Base64),
+            "UTF-8" => Ok(SNSActionEncoding::Utf8),
+            _ => Err(()),
+        }
     }
 }
 
@@ -6165,6 +6626,38 @@ impl StopActionSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StopScope {
+    RuleSet,
+}
+
+impl Into<String> for StopScope {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StopScope {
+    fn into(self) -> &'static str {
+        match self {
+            StopScope::RuleSet => "RuleSet",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StopScope {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "RuleSet" => Ok(StopScope::RuleSet),
+            _ => Err(()),
+        }
+    }
+}
+
 struct StopScopeDeserializer;
 impl StopScopeDeserializer {
     #[allow(unused_variables)]
@@ -6193,6 +6686,41 @@ impl TimestampDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TlsPolicy {
+    Optional,
+    Require,
+}
+
+impl Into<String> for TlsPolicy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TlsPolicy {
+    fn into(self) -> &'static str {
+        match self {
+            TlsPolicy::Optional => "Optional",
+            TlsPolicy::Require => "Require",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TlsPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Optional" => Ok(TlsPolicy::Optional),
+            "Require" => Ok(TlsPolicy::Require),
+            _ => Err(()),
+        }
+    }
+}
+
 struct TlsPolicyDeserializer;
 impl TlsPolicyDeserializer {
     #[allow(unused_variables)]
@@ -6330,6 +6858,50 @@ impl VerificationAttributesDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VerificationStatus {
+    Failed,
+    NotStarted,
+    Pending,
+    Success,
+    TemporaryFailure,
+}
+
+impl Into<String> for VerificationStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VerificationStatus {
+    fn into(self) -> &'static str {
+        match self {
+            VerificationStatus::Failed => "Failed",
+            VerificationStatus::NotStarted => "NotStarted",
+            VerificationStatus::Pending => "Pending",
+            VerificationStatus::Success => "Success",
+            VerificationStatus::TemporaryFailure => "TemporaryFailure",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VerificationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Failed" => Ok(VerificationStatus::Failed),
+            "NotStarted" => Ok(VerificationStatus::NotStarted),
+            "Pending" => Ok(VerificationStatus::Pending),
+            "Success" => Ok(VerificationStatus::Success),
+            "TemporaryFailure" => Ok(VerificationStatus::TemporaryFailure),
+            _ => Err(()),
+        }
+    }
+}
+
 struct VerificationStatusDeserializer;
 impl VerificationStatusDeserializer {
     #[allow(unused_variables)]
@@ -10666,7 +11238,7 @@ impl<P, D> Ses for SesClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -10714,7 +11286,7 @@ impl<P, D> Ses for SesClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -10760,7 +11332,7 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -10806,7 +11378,7 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -10853,7 +11425,7 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -10901,7 +11473,7 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -10950,7 +11522,7 @@ fn create_configuration_set_event_destination(&self, input: &CreateConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -10996,7 +11568,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11042,7 +11614,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11090,7 +11662,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11138,7 +11710,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11185,7 +11757,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11233,7 +11805,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11281,7 +11853,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -11311,7 +11883,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11359,7 +11931,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11408,7 +11980,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11456,7 +12028,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11505,7 +12077,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11554,7 +12126,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11602,7 +12174,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11648,7 +12220,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11697,7 +12269,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11741,7 +12313,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11786,7 +12358,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11834,7 +12406,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11882,7 +12454,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11930,7 +12502,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -11978,7 +12550,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12025,7 +12597,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12072,7 +12644,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12119,7 +12691,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12167,7 +12739,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12215,7 +12787,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12260,7 +12832,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12307,7 +12879,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12355,7 +12927,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12405,7 +12977,7 @@ fn delete_configuration_set_event_destination(&self, input: &DeleteConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12451,7 +13023,7 @@ fn set_identity_feedback_forwarding_enabled(&self, input: &SetIdentityFeedbackFo
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12497,7 +13069,7 @@ fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeade
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12544,7 +13116,7 @@ fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeade
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12592,7 +13164,7 @@ fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeade
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12640,7 +13212,7 @@ fn set_identity_headers_in_notifications_enabled(&self, input: &SetIdentityHeade
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12686,7 +13258,7 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12732,7 +13304,7 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12779,7 +13351,7 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12827,7 +13399,7 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12875,7 +13447,7 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12903,7 +13475,7 @@ fn update_configuration_set_event_destination(&self, input: &UpdateConfiguration
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();

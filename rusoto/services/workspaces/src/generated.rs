@@ -11,23 +11,57 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Compute {
+    Performance,
+    Standard,
+    Value,
+}
+
+impl Into<String> for Compute {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Compute {
+    fn into(self) -> &'static str {
+        match self {
+            Compute::Performance => "PERFORMANCE",
+            Compute::Standard => "STANDARD",
+            Compute::Value => "VALUE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Compute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "PERFORMANCE" => Ok(Compute::Performance),
+            "STANDARD" => Ok(Compute::Standard),
+            "VALUE" => Ok(Compute::Value),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains information about the compute type of a WorkSpace bundle.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ComputeType {
@@ -35,6 +69,44 @@ pub struct ComputeType {
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConnectionState {
+    Connected,
+    Disconnected,
+    Unknown,
+}
+
+impl Into<String> for ConnectionState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConnectionState {
+    fn into(self) -> &'static str {
+        match self {
+            ConnectionState::Connected => "CONNECTED",
+            ConnectionState::Disconnected => "DISCONNECTED",
+            ConnectionState::Unknown => "UNKNOWN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CONNECTED" => Ok(ConnectionState::Connected),
+            "DISCONNECTED" => Ok(ConnectionState::Disconnected),
+            "UNKNOWN" => Ok(ConnectionState::Unknown),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The request of the <a>CreateTags</a> operation.</p>"]
@@ -349,6 +421,41 @@ pub struct RebuildWorkspacesResult {
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RunningMode {
+    AlwaysOn,
+    AutoStop,
+}
+
+impl Into<String> for RunningMode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RunningMode {
+    fn into(self) -> &'static str {
+        match self {
+            RunningMode::AlwaysOn => "ALWAYS_ON",
+            RunningMode::AutoStop => "AUTO_STOP",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RunningMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ALWAYS_ON" => Ok(RunningMode::AlwaysOn),
+            "AUTO_STOP" => Ok(RunningMode::AutoStop),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the start request.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartRequest {
@@ -606,6 +713,85 @@ pub struct WorkspaceDirectory {
     pub workspace_security_group_id: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum WorkspaceDirectoryState {
+    Deregistered,
+    Deregistering,
+    Error,
+    Registered,
+    Registering,
+}
+
+impl Into<String> for WorkspaceDirectoryState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for WorkspaceDirectoryState {
+    fn into(self) -> &'static str {
+        match self {
+            WorkspaceDirectoryState::Deregistered => "DEREGISTERED",
+            WorkspaceDirectoryState::Deregistering => "DEREGISTERING",
+            WorkspaceDirectoryState::Error => "ERROR",
+            WorkspaceDirectoryState::Registered => "REGISTERED",
+            WorkspaceDirectoryState::Registering => "REGISTERING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkspaceDirectoryState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DEREGISTERED" => Ok(WorkspaceDirectoryState::Deregistered),
+            "DEREGISTERING" => Ok(WorkspaceDirectoryState::Deregistering),
+            "ERROR" => Ok(WorkspaceDirectoryState::Error),
+            "REGISTERED" => Ok(WorkspaceDirectoryState::Registered),
+            "REGISTERING" => Ok(WorkspaceDirectoryState::Registering),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum WorkspaceDirectoryType {
+    AdConnector,
+    SimpleAd,
+}
+
+impl Into<String> for WorkspaceDirectoryType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for WorkspaceDirectoryType {
+    fn into(self) -> &'static str {
+        match self {
+            WorkspaceDirectoryType::AdConnector => "AD_CONNECTOR",
+            WorkspaceDirectoryType::SimpleAd => "SIMPLE_AD",
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkspaceDirectoryType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AD_CONNECTOR" => Ok(WorkspaceDirectoryType::AdConnector),
+            "SIMPLE_AD" => Ok(WorkspaceDirectoryType::SimpleAd),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the properties of a WorkSpace.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct WorkspaceProperties {
@@ -650,6 +836,77 @@ pub struct WorkspaceRequest {
     #[serde(rename="WorkspaceProperties")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub workspace_properties: Option<WorkspaceProperties>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum WorkspaceState {
+    Available,
+    Error,
+    Impaired,
+    Maintenance,
+    Pending,
+    Rebooting,
+    Rebuilding,
+    Starting,
+    Stopped,
+    Stopping,
+    Suspended,
+    Terminated,
+    Terminating,
+    Unhealthy,
+}
+
+impl Into<String> for WorkspaceState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for WorkspaceState {
+    fn into(self) -> &'static str {
+        match self {
+            WorkspaceState::Available => "AVAILABLE",
+            WorkspaceState::Error => "ERROR",
+            WorkspaceState::Impaired => "IMPAIRED",
+            WorkspaceState::Maintenance => "MAINTENANCE",
+            WorkspaceState::Pending => "PENDING",
+            WorkspaceState::Rebooting => "REBOOTING",
+            WorkspaceState::Rebuilding => "REBUILDING",
+            WorkspaceState::Starting => "STARTING",
+            WorkspaceState::Stopped => "STOPPED",
+            WorkspaceState::Stopping => "STOPPING",
+            WorkspaceState::Suspended => "SUSPENDED",
+            WorkspaceState::Terminated => "TERMINATED",
+            WorkspaceState::Terminating => "TERMINATING",
+            WorkspaceState::Unhealthy => "UNHEALTHY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkspaceState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AVAILABLE" => Ok(WorkspaceState::Available),
+            "ERROR" => Ok(WorkspaceState::Error),
+            "IMPAIRED" => Ok(WorkspaceState::Impaired),
+            "MAINTENANCE" => Ok(WorkspaceState::Maintenance),
+            "PENDING" => Ok(WorkspaceState::Pending),
+            "REBOOTING" => Ok(WorkspaceState::Rebooting),
+            "REBUILDING" => Ok(WorkspaceState::Rebuilding),
+            "STARTING" => Ok(WorkspaceState::Starting),
+            "STOPPED" => Ok(WorkspaceState::Stopped),
+            "STOPPING" => Ok(WorkspaceState::Stopping),
+            "SUSPENDED" => Ok(WorkspaceState::Suspended),
+            "TERMINATED" => Ok(WorkspaceState::Terminated),
+            "TERMINATING" => Ok(WorkspaceState::Terminating),
+            "UNHEALTHY" => Ok(WorkspaceState::Unhealthy),
+            _ => Err(()),
+        }
+    }
 }
 
 /// Errors returned by CreateTags
@@ -1914,7 +2171,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateTagsResult>(String::from_utf8_lossy(&body)
@@ -1946,7 +2203,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateWorkspacesResult>(String::from_utf8_lossy(&body)
@@ -1976,7 +2233,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteTagsResult>(String::from_utf8_lossy(&body)
@@ -2008,7 +2265,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeTagsResult>(String::from_utf8_lossy(&body)
@@ -2041,7 +2298,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeWorkspaceBundlesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2074,7 +2331,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeWorkspaceDirectoriesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2105,7 +2362,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeWorkspacesResult>(String::from_utf8_lossy(&body)
@@ -2140,7 +2397,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeWorkspacesConnectionStatusResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2172,7 +2429,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ModifyWorkspacePropertiesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2203,7 +2460,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RebootWorkspacesResult>(String::from_utf8_lossy(&body)
@@ -2235,7 +2492,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RebuildWorkspacesResult>(String::from_utf8_lossy(&body)
@@ -2267,7 +2524,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartWorkspacesResult>(String::from_utf8_lossy(&body)
@@ -2299,7 +2556,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopWorkspacesResult>(String::from_utf8_lossy(&body)
@@ -2331,7 +2588,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<TerminateWorkspacesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())

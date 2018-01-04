@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -120,6 +116,38 @@ pub struct ApiKeys {
     pub warnings: Option<Vec<String>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ApiKeysFormat {
+    Csv,
+}
+
+impl Into<String> for ApiKeysFormat {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ApiKeysFormat {
+    fn into(self) -> &'static str {
+        match self {
+            ApiKeysFormat::Csv => "csv",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApiKeysFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "csv" => Ok(ApiKeysFormat::Csv),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>API stage name of the associated API stage in a usage plan.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ApiStage {
@@ -178,6 +206,41 @@ pub struct Authorizer {
     pub type_: Option<String>,
 }
 
+#[doc="<p>The authorizer type. the current value is <code>TOKEN</code> for a Lambda function or <code>COGNITO_USER_POOLS</code> for an Amazon Cognito Your User Pool.</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AuthorizerType {
+    CognitoUserPools,
+    Token,
+}
+
+impl Into<String> for AuthorizerType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AuthorizerType {
+    fn into(self) -> &'static str {
+        match self {
+            AuthorizerType::CognitoUserPools => "COGNITO_USER_POOLS",
+            AuthorizerType::Token => "TOKEN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthorizerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COGNITO_USER_POOLS" => Ok(AuthorizerType::CognitoUserPools),
+            "TOKEN" => Ok(AuthorizerType::Token),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents a collection of <a>Authorizer</a> resources.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html\">Enable custom authorization</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Authorizers {
@@ -219,6 +282,103 @@ pub struct BasePathMappings {
     pub position: Option<String>,
 }
 
+#[doc="<p>Returns the size of the <b>CacheCluster</b>.</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CacheClusterSize {
+    _0_5,
+    _1_6,
+    _118,
+    _13_5,
+    _237,
+    _28_4,
+    _58_2,
+    _6_1,
+}
+
+impl Into<String> for CacheClusterSize {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CacheClusterSize {
+    fn into(self) -> &'static str {
+        match self {
+            CacheClusterSize::_0_5 => "0.5",
+            CacheClusterSize::_1_6 => "1.6",
+            CacheClusterSize::_118 => "118",
+            CacheClusterSize::_13_5 => "13.5",
+            CacheClusterSize::_237 => "237",
+            CacheClusterSize::_28_4 => "28.4",
+            CacheClusterSize::_58_2 => "58.2",
+            CacheClusterSize::_6_1 => "6.1",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CacheClusterSize {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "0.5" => Ok(CacheClusterSize::_0_5),
+            "1.6" => Ok(CacheClusterSize::_1_6),
+            "118" => Ok(CacheClusterSize::_118),
+            "13.5" => Ok(CacheClusterSize::_13_5),
+            "237" => Ok(CacheClusterSize::_237),
+            "28.4" => Ok(CacheClusterSize::_28_4),
+            "58.2" => Ok(CacheClusterSize::_58_2),
+            "6.1" => Ok(CacheClusterSize::_6_1),
+            _ => Err(()),
+        }
+    }
+}
+
+#[doc="<p>Returns the status of the <b>CacheCluster</b>.</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CacheClusterStatus {
+    Available,
+    CreateInProgress,
+    DeleteInProgress,
+    FlushInProgress,
+    NotAvailable,
+}
+
+impl Into<String> for CacheClusterStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CacheClusterStatus {
+    fn into(self) -> &'static str {
+        match self {
+            CacheClusterStatus::Available => "AVAILABLE",
+            CacheClusterStatus::CreateInProgress => "CREATE_IN_PROGRESS",
+            CacheClusterStatus::DeleteInProgress => "DELETE_IN_PROGRESS",
+            CacheClusterStatus::FlushInProgress => "FLUSH_IN_PROGRESS",
+            CacheClusterStatus::NotAvailable => "NOT_AVAILABLE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CacheClusterStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AVAILABLE" => Ok(CacheClusterStatus::Available),
+            "CREATE_IN_PROGRESS" => Ok(CacheClusterStatus::CreateInProgress),
+            "DELETE_IN_PROGRESS" => Ok(CacheClusterStatus::DeleteInProgress),
+            "FLUSH_IN_PROGRESS" => Ok(CacheClusterStatus::FlushInProgress),
+            "NOT_AVAILABLE" => Ok(CacheClusterStatus::NotAvailable),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents a client certificate used to configure client-side SSL authentication while sending requests to the integration endpoint.</p> <div class=\"remarks\">Client certificates are used authenticate an API by the back-end server. To authenticate an API client (or user), use a custom <a>Authorizer</a>.</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html\">Use Client-Side Certificate</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ClientCertificate {
@@ -254,6 +414,41 @@ pub struct ClientCertificates {
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ContentHandlingStrategy {
+    ConvertToBinary,
+    ConvertToText,
+}
+
+impl Into<String> for ContentHandlingStrategy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ContentHandlingStrategy {
+    fn into(self) -> &'static str {
+        match self {
+            ContentHandlingStrategy::ConvertToBinary => "CONVERT_TO_BINARY",
+            ContentHandlingStrategy::ConvertToText => "CONVERT_TO_TEXT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentHandlingStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CONVERT_TO_BINARY" => Ok(ContentHandlingStrategy::ConvertToBinary),
+            "CONVERT_TO_TEXT" => Ok(ContentHandlingStrategy::ConvertToText),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Request to create an <a>ApiKey</a> resource.</p>"]
@@ -906,6 +1101,71 @@ pub struct DocumentationPartLocation {
     pub type_: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DocumentationPartType {
+    Api,
+    Authorizer,
+    Method,
+    Model,
+    PathParameter,
+    QueryParameter,
+    RequestBody,
+    RequestHeader,
+    Resource,
+    Response,
+    ResponseBody,
+    ResponseHeader,
+}
+
+impl Into<String> for DocumentationPartType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DocumentationPartType {
+    fn into(self) -> &'static str {
+        match self {
+            DocumentationPartType::Api => "API",
+            DocumentationPartType::Authorizer => "AUTHORIZER",
+            DocumentationPartType::Method => "METHOD",
+            DocumentationPartType::Model => "MODEL",
+            DocumentationPartType::PathParameter => "PATH_PARAMETER",
+            DocumentationPartType::QueryParameter => "QUERY_PARAMETER",
+            DocumentationPartType::RequestBody => "REQUEST_BODY",
+            DocumentationPartType::RequestHeader => "REQUEST_HEADER",
+            DocumentationPartType::Resource => "RESOURCE",
+            DocumentationPartType::Response => "RESPONSE",
+            DocumentationPartType::ResponseBody => "RESPONSE_BODY",
+            DocumentationPartType::ResponseHeader => "RESPONSE_HEADER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentationPartType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "API" => Ok(DocumentationPartType::Api),
+            "AUTHORIZER" => Ok(DocumentationPartType::Authorizer),
+            "METHOD" => Ok(DocumentationPartType::Method),
+            "MODEL" => Ok(DocumentationPartType::Model),
+            "PATH_PARAMETER" => Ok(DocumentationPartType::PathParameter),
+            "QUERY_PARAMETER" => Ok(DocumentationPartType::QueryParameter),
+            "REQUEST_BODY" => Ok(DocumentationPartType::RequestBody),
+            "REQUEST_HEADER" => Ok(DocumentationPartType::RequestHeader),
+            "RESOURCE" => Ok(DocumentationPartType::Resource),
+            "RESPONSE" => Ok(DocumentationPartType::Response),
+            "RESPONSE_BODY" => Ok(DocumentationPartType::ResponseBody),
+            "RESPONSE_HEADER" => Ok(DocumentationPartType::ResponseHeader),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The collection of documentation parts of an API.</p> <div class=\"remarks\"/> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html\">Documenting an API</a>, <a>DocumentationPart</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DocumentationParts {
@@ -1040,6 +1300,97 @@ pub struct GatewayResponse {
     #[serde(rename="statusCode")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status_code: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum GatewayResponseType {
+    AccessDenied,
+    ApiConfigurationError,
+    AuthorizerConfigurationError,
+    AuthorizerFailure,
+    BadRequestBody,
+    BadRequestParameters,
+    Default4Xx,
+    Default5Xx,
+    ExpiredToken,
+    IntegrationFailure,
+    IntegrationTimeout,
+    InvalidApiKey,
+    InvalidSignature,
+    MissingAuthenticationToken,
+    QuotaExceeded,
+    RequestTooLarge,
+    ResourceNotFound,
+    Throttled,
+    Unauthorized,
+    UnsupportedMediaType,
+}
+
+impl Into<String> for GatewayResponseType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for GatewayResponseType {
+    fn into(self) -> &'static str {
+        match self {
+            GatewayResponseType::AccessDenied => "ACCESS_DENIED",
+            GatewayResponseType::ApiConfigurationError => "API_CONFIGURATION_ERROR",
+            GatewayResponseType::AuthorizerConfigurationError => "AUTHORIZER_CONFIGURATION_ERROR",
+            GatewayResponseType::AuthorizerFailure => "AUTHORIZER_FAILURE",
+            GatewayResponseType::BadRequestBody => "BAD_REQUEST_BODY",
+            GatewayResponseType::BadRequestParameters => "BAD_REQUEST_PARAMETERS",
+            GatewayResponseType::Default4Xx => "DEFAULT_4XX",
+            GatewayResponseType::Default5Xx => "DEFAULT_5XX",
+            GatewayResponseType::ExpiredToken => "EXPIRED_TOKEN",
+            GatewayResponseType::IntegrationFailure => "INTEGRATION_FAILURE",
+            GatewayResponseType::IntegrationTimeout => "INTEGRATION_TIMEOUT",
+            GatewayResponseType::InvalidApiKey => "INVALID_API_KEY",
+            GatewayResponseType::InvalidSignature => "INVALID_SIGNATURE",
+            GatewayResponseType::MissingAuthenticationToken => "MISSING_AUTHENTICATION_TOKEN",
+            GatewayResponseType::QuotaExceeded => "QUOTA_EXCEEDED",
+            GatewayResponseType::RequestTooLarge => "REQUEST_TOO_LARGE",
+            GatewayResponseType::ResourceNotFound => "RESOURCE_NOT_FOUND",
+            GatewayResponseType::Throttled => "THROTTLED",
+            GatewayResponseType::Unauthorized => "UNAUTHORIZED",
+            GatewayResponseType::UnsupportedMediaType => "UNSUPPORTED_MEDIA_TYPE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for GatewayResponseType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCESS_DENIED" => Ok(GatewayResponseType::AccessDenied),
+            "API_CONFIGURATION_ERROR" => Ok(GatewayResponseType::ApiConfigurationError),
+            "AUTHORIZER_CONFIGURATION_ERROR" => {
+                Ok(GatewayResponseType::AuthorizerConfigurationError)
+            }
+            "AUTHORIZER_FAILURE" => Ok(GatewayResponseType::AuthorizerFailure),
+            "BAD_REQUEST_BODY" => Ok(GatewayResponseType::BadRequestBody),
+            "BAD_REQUEST_PARAMETERS" => Ok(GatewayResponseType::BadRequestParameters),
+            "DEFAULT_4XX" => Ok(GatewayResponseType::Default4Xx),
+            "DEFAULT_5XX" => Ok(GatewayResponseType::Default5Xx),
+            "EXPIRED_TOKEN" => Ok(GatewayResponseType::ExpiredToken),
+            "INTEGRATION_FAILURE" => Ok(GatewayResponseType::IntegrationFailure),
+            "INTEGRATION_TIMEOUT" => Ok(GatewayResponseType::IntegrationTimeout),
+            "INVALID_API_KEY" => Ok(GatewayResponseType::InvalidApiKey),
+            "INVALID_SIGNATURE" => Ok(GatewayResponseType::InvalidSignature),
+            "MISSING_AUTHENTICATION_TOKEN" => Ok(GatewayResponseType::MissingAuthenticationToken),
+            "QUOTA_EXCEEDED" => Ok(GatewayResponseType::QuotaExceeded),
+            "REQUEST_TOO_LARGE" => Ok(GatewayResponseType::RequestTooLarge),
+            "RESOURCE_NOT_FOUND" => Ok(GatewayResponseType::ResourceNotFound),
+            "THROTTLED" => Ok(GatewayResponseType::Throttled),
+            "UNAUTHORIZED" => Ok(GatewayResponseType::Unauthorized),
+            "UNSUPPORTED_MEDIA_TYPE" => Ok(GatewayResponseType::UnsupportedMediaType),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The collection of the <a>GatewayResponse</a> instances of a <a>RestApi</a> as a <code>responseType</code>-to-<a>GatewayResponse</a> object map of key-value pairs. As such, pagination is not supported for querying this collection.</p> <div class=\"remarks\"> For more information about valid gateway response types, see <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html\">Gateway Response Types Supported by Amazon API Gateway</a> <div class=\"example\"> <h4>Example: Get the collection of gateway responses of an API</h4> <h5>Request</h5> <p>This example request shows how to retrieve the <a>GatewayResponses</a> collection from an API.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T220604Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature=59b42fe54a76a5de8adf2c67baa6d39206f8e9ad49a1d77ccc6a5da3103a398a Cache-Control: no-cache Postman-Token: 5637af27-dc29-fc5c-9dfe-0645d52cb515 </code></pre> <p></p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ \"_links\": { \"curies\": { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html\", \"name\": \"gatewayresponse\", \"templated\": true }, \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses\" }, \"first\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses\" }, \"gatewayresponse:by-type\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"item\": [ { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_FAILURE\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/RESOURCE_NOT_FOUND\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/REQUEST_TOO_LARGE\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/THROTTLED\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED_MEDIA_TYPE\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_CONFIGURATION_ERROR\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_5XX\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_4XX\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_PARAMETERS\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_BODY\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/EXPIRED_TOKEN\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/ACCESS_DENIED\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_API_KEY\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/API_CONFIGURATION_ERROR\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/QUOTA_EXCEEDED\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_TIMEOUT\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_SIGNATURE\" }, { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_FAILURE\" } ] }, \"_embedded\": { \"item\": [ { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_FAILURE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_FAILURE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"INTEGRATION_FAILURE\", \"statusCode\": \"504\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/RESOURCE_NOT_FOUND\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/RESOURCE_NOT_FOUND\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"RESOURCE_NOT_FOUND\", \"statusCode\": \"404\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/REQUEST_TOO_LARGE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/REQUEST_TOO_LARGE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"REQUEST_TOO_LARGE\", \"statusCode\": \"413\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/THROTTLED\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/THROTTLED\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"THROTTLED\", \"statusCode\": \"429\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED_MEDIA_TYPE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED_MEDIA_TYPE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"UNSUPPORTED_MEDIA_TYPE\", \"statusCode\": \"415\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_CONFIGURATION_ERROR\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_CONFIGURATION_ERROR\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"AUTHORIZER_CONFIGURATION_ERROR\", \"statusCode\": \"500\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_5XX\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_5XX\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"DEFAULT_5XX\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_4XX\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/DEFAULT_4XX\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"DEFAULT_4XX\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_PARAMETERS\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_PARAMETERS\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"BAD_REQUEST_PARAMETERS\", \"statusCode\": \"400\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_BODY\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_BODY\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"BAD_REQUEST_BODY\", \"statusCode\": \"400\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/EXPIRED_TOKEN\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/EXPIRED_TOKEN\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"EXPIRED_TOKEN\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/ACCESS_DENIED\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/ACCESS_DENIED\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"ACCESS_DENIED\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_API_KEY\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_API_KEY\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"INVALID_API_KEY\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"UNAUTHORIZED\", \"statusCode\": \"401\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/API_CONFIGURATION_ERROR\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/API_CONFIGURATION_ERROR\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"API_CONFIGURATION_ERROR\", \"statusCode\": \"500\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/QUOTA_EXCEEDED\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/QUOTA_EXCEEDED\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"QUOTA_EXCEEDED\", \"statusCode\": \"429\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_TIMEOUT\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INTEGRATION_TIMEOUT\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"INTEGRATION_TIMEOUT\", \"statusCode\": \"504\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"MISSING_AUTHENTICATION_TOKEN\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_SIGNATURE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/INVALID_SIGNATURE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"INVALID_SIGNATURE\", \"statusCode\": \"403\" }, { \"_links\": { \"self\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_FAILURE\" }, \"gatewayresponse:put\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/{response_type}\", \"templated\": true }, \"gatewayresponse:update\": { \"href\": \"/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_FAILURE\" } }, \"defaultResponse\": true, \"responseParameters\": {}, \"responseTemplates\": { \"application/json\": \"{\\\"message\\\":$context.error.messageString}\" }, \"responseType\": \"AUTHORIZER_FAILURE\", \"statusCode\": \"500\" } ] } }</code></pre> <p></p> </div> </div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html\">Customize Gateway Responses</a> </div>"]
@@ -1816,6 +2167,50 @@ pub struct IntegrationResponse {
     pub status_code: Option<String>,
 }
 
+#[doc="<p>The integration type. The valid value is <code>HTTP</code> for integrating with an HTTP back end, <code>AWS</code> for any AWS service endpoints, <code>MOCK</code> for testing without actually invoking the back end, <code>HTTP_PROXY</code> for integrating with the HTTP proxy integration, or <code>AWS_PROXY</code> for integrating with the Lambda proxy integration type.</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum IntegrationType {
+    Aws,
+    AwsProxy,
+    Http,
+    HttpProxy,
+    Mock,
+}
+
+impl Into<String> for IntegrationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for IntegrationType {
+    fn into(self) -> &'static str {
+        match self {
+            IntegrationType::Aws => "AWS",
+            IntegrationType::AwsProxy => "AWS_PROXY",
+            IntegrationType::Http => "HTTP",
+            IntegrationType::HttpProxy => "HTTP_PROXY",
+            IntegrationType::Mock => "MOCK",
+        }
+    }
+}
+
+impl ::std::str::FromStr for IntegrationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AWS" => Ok(IntegrationType::Aws),
+            "AWS_PROXY" => Ok(IntegrationType::AwsProxy),
+            "HTTP" => Ok(IntegrationType::Http),
+            "HTTP_PROXY" => Ok(IntegrationType::HttpProxy),
+            "MOCK" => Ok(IntegrationType::Mock),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p> Represents a client-facing interface by which the client calls the API to access back-end resources. A <b>Method</b> resource is integrated with an <a>Integration</a> resource. Both consist of a request and one or more responses. The method request takes the client input that is passed to the back end through the integration request. A method response returns the output from the back end to the client through an integration response. A method request is embodied in a <b>Method</b> resource, whereas an integration request is embodied in an <a>Integration</a> resource. On the other hand, a method response is represented by a <a>MethodResponse</a> resource, whereas an integration response is represented by an <a>IntegrationResponse</a> resource. </p> <div class=\"remarks\"> <p/> <h4>Example: Retrive the GET method on a specified resource</h4> <h5>Request</h5> <p>The following example request retrieves the information about the GET method on an API resource (<code>3kzxbg5sa2</code>) of an API (<code>fugvjdxtri</code>). </p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T210259Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20160603/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ \"_links\": { \"curies\": [ { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html\", \"name\": \"integration\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html\", \"name\": \"integrationresponse\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html\", \"name\": \"method\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html\", \"name\": \"methodresponse\", \"templated\": true } ], \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\", \"name\": \"GET\", \"title\": \"GET\" }, \"integration:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"method:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\" }, \"method:integration\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"method:responses\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"method:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\" }, \"methodresponse:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status_code}\", \"templated\": true } }, \"apiKeyRequired\": true, \"authorizationType\": \"NONE\", \"httpMethod\": \"GET\", \"_embedded\": { \"method:integration\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integration:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integration:responses\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integration:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integrationresponse:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status_code}\", \"templated\": true } }, \"cacheKeyParameters\": [], \"cacheNamespace\": \"3kzxbg5sa2\", \"credentials\": \"arn:aws:iam::123456789012:role/apigAwsProxyRole\", \"httpMethod\": \"POST\", \"passthroughBehavior\": \"WHEN_NO_MATCH\", \"requestParameters\": { \"integration.request.header.Content-Type\": \"'application/x-amz-json-1.1'\" }, \"requestTemplates\": { \"application/json\": \"{\\n}\" }, \"type\": \"AWS\", \"uri\": \"arn:aws:apigateway:us-east-1:kinesis:action/ListStreams\", \"_embedded\": { \"integration:responses\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integrationresponse:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\" }, \"integrationresponse:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\" } }, \"responseParameters\": { \"method.response.header.Content-Type\": \"'application/xml'\" }, \"responseTemplates\": { \"application/json\": \"$util.urlDecode(\\\"%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E\\\")\" }, \"statusCode\": \"200\" } } }, \"method:responses\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"methodresponse:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\" }, \"methodresponse:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\" } }, \"responseModels\": { \"application/json\": \"Empty\" }, \"responseParameters\": { \"method.response.header.Content-Type\": false }, \"statusCode\": \"200\" } } }</code></pre> <p>In the example above, the response template for the <code>200 OK</code> response maps the JSON output from the <code>ListStreams</code> action in the back end to an XML output. The mapping template is URL-encoded as <code>%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E</code> and the output is decoded using the <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#util-templat-reference\">$util.urlDecode()</a> helper function.</p> </div> <div class=\"seeAlso\"> <a>MethodResponse</a>, <a>Integration</a>, <a>IntegrationResponse</a>, <a>Resource</a>, <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-method-settings.html\">Set up an API's method</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Method {
@@ -1971,6 +2366,53 @@ pub struct Models {
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Op {
+    Add,
+    Copy,
+    Move,
+    Remove,
+    Replace,
+    Test,
+}
+
+impl Into<String> for Op {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Op {
+    fn into(self) -> &'static str {
+        match self {
+            Op::Add => "add",
+            Op::Copy => "copy",
+            Op::Move => "move",
+            Op::Remove => "remove",
+            Op::Replace => "replace",
+            Op::Test => "test",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Op {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "add" => Ok(Op::Add),
+            "copy" => Ok(Op::Copy),
+            "move" => Ok(Op::Move),
+            "remove" => Ok(Op::Remove),
+            "replace" => Ok(Op::Replace),
+            "test" => Ok(Op::Test),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="A single patch operation to apply to the specified resource. Please refer to http://tools.ietf.org/html/rfc6902#section-4 for an explanation of how each operation is used."]
@@ -2169,6 +2611,41 @@ pub struct PutMethodResponseRequest {
     pub status_code: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PutMode {
+    Merge,
+    Overwrite,
+}
+
+impl Into<String> for PutMode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PutMode {
+    fn into(self) -> &'static str {
+        match self {
+            PutMode::Merge => "merge",
+            PutMode::Overwrite => "overwrite",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PutMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "merge" => Ok(PutMode::Merge),
+            "overwrite" => Ok(PutMode::Overwrite),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>A PUT request to update an existing API, with external API definitions specified as the request body.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutRestApiRequest {
@@ -2195,6 +2672,44 @@ pub struct PutRestApiRequest {
     #[doc="<p>The string identifier of the associated <a>RestApi</a>.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum QuotaPeriodType {
+    Day,
+    Month,
+    Week,
+}
+
+impl Into<String> for QuotaPeriodType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for QuotaPeriodType {
+    fn into(self) -> &'static str {
+        match self {
+            QuotaPeriodType::Day => "DAY",
+            QuotaPeriodType::Month => "MONTH",
+            QuotaPeriodType::Week => "WEEK",
+        }
+    }
+}
+
+impl ::std::str::FromStr for QuotaPeriodType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DAY" => Ok(QuotaPeriodType::Day),
+            "MONTH" => Ok(QuotaPeriodType::Month),
+            "WEEK" => Ok(QuotaPeriodType::Week),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Quotas configured for a usage plan.</p>"]
@@ -2615,6 +3130,52 @@ pub struct ThrottleSettings {
     #[serde(rename="rateLimit")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub rate_limit: Option<f64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum UnauthorizedCacheControlHeaderStrategy {
+    FailWith403,
+    SucceedWithoutResponseHeader,
+    SucceedWithResponseHeader,
+}
+
+impl Into<String> for UnauthorizedCacheControlHeaderStrategy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for UnauthorizedCacheControlHeaderStrategy {
+    fn into(self) -> &'static str {
+        match self {
+            UnauthorizedCacheControlHeaderStrategy::FailWith403 => "FAIL_WITH_403",
+            UnauthorizedCacheControlHeaderStrategy::SucceedWithoutResponseHeader => {
+                "SUCCEED_WITHOUT_RESPONSE_HEADER"
+            }
+            UnauthorizedCacheControlHeaderStrategy::SucceedWithResponseHeader => {
+                "SUCCEED_WITH_RESPONSE_HEADER"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for UnauthorizedCacheControlHeaderStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAIL_WITH_403" => Ok(UnauthorizedCacheControlHeaderStrategy::FailWith403),
+            "SUCCEED_WITHOUT_RESPONSE_HEADER" => {
+                Ok(UnauthorizedCacheControlHeaderStrategy::SucceedWithoutResponseHeader)
+            }
+            "SUCCEED_WITH_RESPONSE_HEADER" => {
+                Ok(UnauthorizedCacheControlHeaderStrategy::SucceedWithResponseHeader)
+            }
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Requests Amazon API Gateway to change information about the current <a>Account</a> resource.</p>"]
@@ -14716,7 +15277,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -14762,7 +15323,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -14808,7 +15369,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -14854,7 +15415,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -14900,7 +15461,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -14948,7 +15509,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -14994,7 +15555,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -15038,7 +15599,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -15084,7 +15645,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -15131,7 +15692,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -15174,7 +15735,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -15218,7 +15779,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -15263,7 +15824,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -15309,7 +15870,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -15351,7 +15912,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -15386,7 +15947,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -15421,7 +15982,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -15455,7 +16016,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -15491,7 +16052,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -15526,7 +16087,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -15562,7 +16123,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -15597,7 +16158,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -15632,7 +16193,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -15668,7 +16229,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -15705,7 +16266,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -15740,7 +16301,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -15777,7 +16338,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -15810,7 +16371,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -15845,7 +16406,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -15878,7 +16439,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -15909,7 +16470,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -15942,7 +16503,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -15976,7 +16537,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -16011,7 +16572,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -16046,7 +16607,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -16082,7 +16643,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
                 let result = ();
 
 
@@ -16116,7 +16677,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16159,7 +16720,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16205,7 +16766,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16263,7 +16824,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16309,7 +16870,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16361,7 +16922,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16407,7 +16968,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16459,7 +17020,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16504,7 +17065,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16555,7 +17116,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16607,7 +17168,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16659,7 +17220,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16705,7 +17266,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16766,7 +17327,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16812,7 +17373,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16866,7 +17427,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16912,7 +17473,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -16963,7 +17524,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17017,7 +17578,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut result = ExportResponse::default();
 
@@ -17066,7 +17627,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17118,7 +17679,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17165,7 +17726,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17213,7 +17774,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17258,7 +17819,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17306,7 +17867,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17354,7 +17915,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17400,7 +17961,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17450,7 +18011,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17496,7 +18057,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17548,7 +18109,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17598,7 +18159,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17653,7 +18214,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17695,7 +18256,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17744,7 +18305,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17795,7 +18356,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut result = SdkResponse::default();
 
@@ -17840,7 +18401,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17889,7 +18450,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17933,7 +18494,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -17980,7 +18541,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18035,7 +18596,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18078,7 +18639,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18124,7 +18685,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18179,7 +18740,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18233,7 +18794,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18284,7 +18845,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18338,7 +18899,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18392,7 +18953,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18439,7 +19000,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18487,7 +19048,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18536,7 +19097,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18582,7 +19143,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18631,7 +19192,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18686,7 +19247,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18734,7 +19295,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18782,7 +19343,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18825,7 +19386,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18868,7 +19429,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18915,7 +19476,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -18962,7 +19523,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19008,7 +19569,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19056,7 +19617,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19103,7 +19664,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19152,7 +19713,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19199,7 +19760,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19246,7 +19807,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19294,7 +19855,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19344,7 +19905,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19391,7 +19952,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19440,7 +20001,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19485,7 +20046,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19532,7 +20093,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19579,7 +20140,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19622,7 +20183,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19667,7 +20228,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19712,7 +20273,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -19758,7 +20319,7 @@ impl<P, D> ApiGateway for ApiGatewayClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));

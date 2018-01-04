@@ -11,23 +11,54 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ChangeType {
+    Immediate,
+    RequiresReboot,
+}
+
+impl Into<String> for ChangeType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ChangeType {
+    fn into(self) -> &'static str {
+        match self {
+            ChangeType::Immediate => "IMMEDIATE",
+            ChangeType::RequiresReboot => "REQUIRES_REBOOT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "IMMEDIATE" => Ok(ChangeType::Immediate),
+            "REQUIRES_REBOOT" => Ok(ChangeType::RequiresReboot),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains all of the attributes of a specific DAX cluster.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Cluster {
@@ -504,6 +535,44 @@ pub struct IncreaseReplicationFactorResponse {
     pub cluster: Option<Cluster>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum IsModifiable {
+    Conditional,
+    False,
+    True,
+}
+
+impl Into<String> for IsModifiable {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for IsModifiable {
+    fn into(self) -> &'static str {
+        match self {
+            IsModifiable::Conditional => "CONDITIONAL",
+            IsModifiable::False => "FALSE",
+            IsModifiable::True => "TRUE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for IsModifiable {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CONDITIONAL" => Ok(IsModifiable::Conditional),
+            "FALSE" => Ok(IsModifiable::False),
+            "TRUE" => Ok(IsModifiable::True),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListTagsRequest {
     #[doc="<p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token.</p>"]
@@ -670,6 +739,41 @@ pub struct ParameterNameValue {
     pub parameter_value: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ParameterType {
+    Default,
+    NodeTypeSpecific,
+}
+
+impl Into<String> for ParameterType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ParameterType {
+    fn into(self) -> &'static str {
+        match self {
+            ParameterType::Default => "DEFAULT",
+            ParameterType::NodeTypeSpecific => "NODE_TYPE_SPECIFIC",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParameterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DEFAULT" => Ok(ParameterType::Default),
+            "NODE_TYPE_SPECIFIC" => Ok(ParameterType::NodeTypeSpecific),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RebootNodeRequest {
     #[doc="<p>The name of the DAX cluster containing the node to be rebooted.</p>"]
@@ -699,6 +803,44 @@ pub struct SecurityGroupMembership {
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SourceType {
+    Cluster,
+    ParameterGroup,
+    SubnetGroup,
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SourceType {
+    fn into(self) -> &'static str {
+        match self {
+            SourceType::Cluster => "CLUSTER",
+            SourceType::ParameterGroup => "PARAMETER_GROUP",
+            SourceType::SubnetGroup => "SUBNET_GROUP",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CLUSTER" => Ok(SourceType::Cluster),
+            "PARAMETER_GROUP" => Ok(SourceType::ParameterGroup),
+            "SUBNET_GROUP" => Ok(SourceType::SubnetGroup),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the subnet associated with a DAX cluster. This parameter refers to subnets defined in Amazon Virtual Private Cloud (Amazon VPC) and used with DAX.</p>"]
@@ -3067,7 +3209,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateClusterResponse>(String::from_utf8_lossy(&body)
@@ -3100,7 +3242,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateParameterGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3130,7 +3272,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3161,7 +3303,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DecreaseReplicationFactorResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3192,7 +3334,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteClusterResponse>(String::from_utf8_lossy(&body)
@@ -3225,7 +3367,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteParameterGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3255,7 +3397,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3285,7 +3427,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeClustersResponse>(String::from_utf8_lossy(&body)
@@ -3318,7 +3460,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeDefaultParametersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3349,7 +3491,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeEventsResponse>(String::from_utf8_lossy(&body)
@@ -3382,7 +3524,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeParameterGroupsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3413,7 +3555,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeParametersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3444,7 +3586,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeSubnetGroupsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3475,7 +3617,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<IncreaseReplicationFactorResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3504,7 +3646,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListTagsResponse>(String::from_utf8_lossy(&body)
@@ -3536,7 +3678,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RebootNodeResponse>(String::from_utf8_lossy(&body)
@@ -3568,7 +3710,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<TagResourceResponse>(String::from_utf8_lossy(&body)
@@ -3600,7 +3742,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UntagResourceResponse>(String::from_utf8_lossy(&body)
@@ -3632,7 +3774,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateClusterResponse>(String::from_utf8_lossy(&body)
@@ -3665,7 +3807,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateParameterGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3695,7 +3837,7 @@ impl<P, D> DynamodbAccelerator for DynamodbAcceleratorClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateSubnetGroupResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())

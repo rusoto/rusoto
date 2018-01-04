@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use std::str::FromStr;
@@ -513,7 +509,7 @@ impl AssociatePublicIpAddressDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1335,7 +1331,7 @@ impl BlockDeviceEbsDeleteOnTerminationDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1349,7 +1345,7 @@ impl BlockDeviceEbsEncryptedDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -3357,7 +3353,7 @@ impl DisableScaleInDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -3488,7 +3484,7 @@ impl EbsOptimizedDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -4106,7 +4102,7 @@ impl InstanceProtectedDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -4668,6 +4664,74 @@ impl LifecycleHooksDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LifecycleState {
+    Detached,
+    Detaching,
+    EnteringStandby,
+    InService,
+    Pending,
+    PendingProceed,
+    PendingWait,
+    Quarantined,
+    Standby,
+    Terminated,
+    Terminating,
+    TerminatingProceed,
+    TerminatingWait,
+}
+
+impl Into<String> for LifecycleState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LifecycleState {
+    fn into(self) -> &'static str {
+        match self {
+            LifecycleState::Detached => "Detached",
+            LifecycleState::Detaching => "Detaching",
+            LifecycleState::EnteringStandby => "EnteringStandby",
+            LifecycleState::InService => "InService",
+            LifecycleState::Pending => "Pending",
+            LifecycleState::PendingProceed => "Pending:Proceed",
+            LifecycleState::PendingWait => "Pending:Wait",
+            LifecycleState::Quarantined => "Quarantined",
+            LifecycleState::Standby => "Standby",
+            LifecycleState::Terminated => "Terminated",
+            LifecycleState::Terminating => "Terminating",
+            LifecycleState::TerminatingProceed => "Terminating:Proceed",
+            LifecycleState::TerminatingWait => "Terminating:Wait",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LifecycleState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Detached" => Ok(LifecycleState::Detached),
+            "Detaching" => Ok(LifecycleState::Detaching),
+            "EnteringStandby" => Ok(LifecycleState::EnteringStandby),
+            "InService" => Ok(LifecycleState::InService),
+            "Pending" => Ok(LifecycleState::Pending),
+            "Pending:Proceed" => Ok(LifecycleState::PendingProceed),
+            "Pending:Wait" => Ok(LifecycleState::PendingWait),
+            "Quarantined" => Ok(LifecycleState::Quarantined),
+            "Standby" => Ok(LifecycleState::Standby),
+            "Terminated" => Ok(LifecycleState::Terminated),
+            "Terminating" => Ok(LifecycleState::Terminating),
+            "Terminating:Proceed" => Ok(LifecycleState::TerminatingProceed),
+            "Terminating:Wait" => Ok(LifecycleState::TerminatingWait),
+            _ => Err(()),
+        }
+    }
+}
+
 struct LifecycleStateDeserializer;
 impl LifecycleStateDeserializer {
     #[allow(unused_variables)]
@@ -5355,6 +5419,50 @@ impl MetricScaleDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MetricStatistic {
+    Average,
+    Maximum,
+    Minimum,
+    SampleCount,
+    Sum,
+}
+
+impl Into<String> for MetricStatistic {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MetricStatistic {
+    fn into(self) -> &'static str {
+        match self {
+            MetricStatistic::Average => "Average",
+            MetricStatistic::Maximum => "Maximum",
+            MetricStatistic::Minimum => "Minimum",
+            MetricStatistic::SampleCount => "SampleCount",
+            MetricStatistic::Sum => "Sum",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricStatistic {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Average" => Ok(MetricStatistic::Average),
+            "Maximum" => Ok(MetricStatistic::Maximum),
+            "Minimum" => Ok(MetricStatistic::Minimum),
+            "SampleCount" => Ok(MetricStatistic::SampleCount),
+            "Sum" => Ok(MetricStatistic::Sum),
+            _ => Err(()),
+        }
+    }
+}
+
 struct MetricStatisticDeserializer;
 impl MetricStatisticDeserializer {
     #[allow(unused_variables)]
@@ -5369,6 +5477,47 @@ impl MetricStatisticDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MetricType {
+    AlbrequestCountPerTarget,
+    AsgaverageCPUUtilization,
+    AsgaverageNetworkIn,
+    AsgaverageNetworkOut,
+}
+
+impl Into<String> for MetricType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MetricType {
+    fn into(self) -> &'static str {
+        match self {
+            MetricType::AlbrequestCountPerTarget => "ALBRequestCountPerTarget",
+            MetricType::AsgaverageCPUUtilization => "ASGAverageCPUUtilization",
+            MetricType::AsgaverageNetworkIn => "ASGAverageNetworkIn",
+            MetricType::AsgaverageNetworkOut => "ASGAverageNetworkOut",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ALBRequestCountPerTarget" => Ok(MetricType::AlbrequestCountPerTarget),
+            "ASGAverageCPUUtilization" => Ok(MetricType::AsgaverageCPUUtilization),
+            "ASGAverageNetworkIn" => Ok(MetricType::AsgaverageNetworkIn),
+            "ASGAverageNetworkOut" => Ok(MetricType::AsgaverageNetworkOut),
+            _ => Err(()),
+        }
+    }
+}
+
 struct MetricTypeDeserializer;
 impl MetricTypeDeserializer {
     #[allow(unused_variables)]
@@ -5444,7 +5593,7 @@ impl MonitoringEnabledDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -5458,7 +5607,7 @@ impl NoDeviceDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -5999,7 +6148,7 @@ impl PropagateAtLaunchDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -6357,6 +6506,79 @@ impl ResourceNameDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ScalingActivityStatusCode {
+    Cancelled,
+    Failed,
+    InProgress,
+    MidLifecycleAction,
+    PendingSpotBidPlacement,
+    PreInService,
+    Successful,
+    WaitingForELBConnectionDraining,
+    WaitingForInstanceId,
+    WaitingForInstanceWarmup,
+    WaitingForSpotInstanceId,
+    WaitingForSpotInstanceRequestId,
+}
+
+impl Into<String> for ScalingActivityStatusCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ScalingActivityStatusCode {
+    fn into(self) -> &'static str {
+        match self {
+            ScalingActivityStatusCode::Cancelled => "Cancelled",
+            ScalingActivityStatusCode::Failed => "Failed",
+            ScalingActivityStatusCode::InProgress => "InProgress",
+            ScalingActivityStatusCode::MidLifecycleAction => "MidLifecycleAction",
+            ScalingActivityStatusCode::PendingSpotBidPlacement => "PendingSpotBidPlacement",
+            ScalingActivityStatusCode::PreInService => "PreInService",
+            ScalingActivityStatusCode::Successful => "Successful",
+            ScalingActivityStatusCode::WaitingForELBConnectionDraining => {
+                "WaitingForELBConnectionDraining"
+            }
+            ScalingActivityStatusCode::WaitingForInstanceId => "WaitingForInstanceId",
+            ScalingActivityStatusCode::WaitingForInstanceWarmup => "WaitingForInstanceWarmup",
+            ScalingActivityStatusCode::WaitingForSpotInstanceId => "WaitingForSpotInstanceId",
+            ScalingActivityStatusCode::WaitingForSpotInstanceRequestId => {
+                "WaitingForSpotInstanceRequestId"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalingActivityStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Cancelled" => Ok(ScalingActivityStatusCode::Cancelled),
+            "Failed" => Ok(ScalingActivityStatusCode::Failed),
+            "InProgress" => Ok(ScalingActivityStatusCode::InProgress),
+            "MidLifecycleAction" => Ok(ScalingActivityStatusCode::MidLifecycleAction),
+            "PendingSpotBidPlacement" => Ok(ScalingActivityStatusCode::PendingSpotBidPlacement),
+            "PreInService" => Ok(ScalingActivityStatusCode::PreInService),
+            "Successful" => Ok(ScalingActivityStatusCode::Successful),
+            "WaitingForELBConnectionDraining" => {
+                Ok(ScalingActivityStatusCode::WaitingForELBConnectionDraining)
+            }
+            "WaitingForInstanceId" => Ok(ScalingActivityStatusCode::WaitingForInstanceId),
+            "WaitingForInstanceWarmup" => Ok(ScalingActivityStatusCode::WaitingForInstanceWarmup),
+            "WaitingForSpotInstanceId" => Ok(ScalingActivityStatusCode::WaitingForSpotInstanceId),
+            "WaitingForSpotInstanceRequestId" => {
+                Ok(ScalingActivityStatusCode::WaitingForSpotInstanceRequestId)
+            }
+            _ => Err(()),
+        }
+    }
+}
+
 struct ScalingActivityStatusCodeDeserializer;
 impl ScalingActivityStatusCodeDeserializer {
     #[allow(unused_variables)]
@@ -12243,7 +12465,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12272,7 +12494,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12319,7 +12541,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12368,7 +12590,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12417,7 +12639,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12445,7 +12667,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12474,7 +12696,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12502,7 +12724,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12530,7 +12752,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12559,7 +12781,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12606,7 +12828,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12633,7 +12855,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12661,7 +12883,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12687,7 +12909,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -12715,7 +12937,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12762,7 +12984,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12812,7 +13034,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12861,7 +13083,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12910,7 +13132,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -12957,7 +13179,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13005,7 +13227,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13055,7 +13277,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13104,7 +13326,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13151,7 +13373,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13199,7 +13421,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13248,7 +13470,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13294,7 +13516,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13341,7 +13563,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13389,7 +13611,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13438,7 +13660,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13484,7 +13706,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13531,7 +13753,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13578,7 +13800,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13626,7 +13848,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13673,7 +13895,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13721,7 +13943,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -13750,7 +13972,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -13779,7 +14001,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13824,7 +14046,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -13852,7 +14074,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13899,7 +14121,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -13946,7 +14168,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -13975,7 +14197,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -14022,7 +14244,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -14052,7 +14274,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -14097,7 +14319,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -14125,7 +14347,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -14153,7 +14375,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -14182,7 +14404,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -14227,7 +14449,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -14256,7 +14478,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -14303,7 +14525,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }

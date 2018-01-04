@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -37,6 +33,89 @@ pub struct Button {
     #[doc="<p>The value sent to Amazon Lex when a user chooses the button. For example, consider button text \"NYC.\" When the user chooses the button, the value sent can be \"New York City.\"</p>"]
     #[serde(rename="value")]
     pub value: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ContentType {
+    ApplicationVndAmazonawsCardGeneric,
+}
+
+impl Into<String> for ContentType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ContentType {
+    fn into(self) -> &'static str {
+        match self {
+            ContentType::ApplicationVndAmazonawsCardGeneric => {
+                "application/vnd.amazonaws.card.generic"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "application/vnd.amazonaws.card.generic" => {
+                Ok(ContentType::ApplicationVndAmazonawsCardGeneric)
+            }
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DialogState {
+    ConfirmIntent,
+    ElicitIntent,
+    ElicitSlot,
+    Failed,
+    Fulfilled,
+    ReadyForFulfillment,
+}
+
+impl Into<String> for DialogState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DialogState {
+    fn into(self) -> &'static str {
+        match self {
+            DialogState::ConfirmIntent => "ConfirmIntent",
+            DialogState::ElicitIntent => "ElicitIntent",
+            DialogState::ElicitSlot => "ElicitSlot",
+            DialogState::Failed => "Failed",
+            DialogState::Fulfilled => "Fulfilled",
+            DialogState::ReadyForFulfillment => "ReadyForFulfillment",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DialogState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ConfirmIntent" => Ok(DialogState::ConfirmIntent),
+            "ElicitIntent" => Ok(DialogState::ElicitIntent),
+            "ElicitSlot" => Ok(DialogState::ElicitSlot),
+            "Failed" => Ok(DialogState::Failed),
+            "Fulfilled" => Ok(DialogState::Fulfilled),
+            "ReadyForFulfillment" => Ok(DialogState::ReadyForFulfillment),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents an option rendered to the user when a prompt is shown. It could be an image, a button, a link, or text. </p>"]
@@ -502,7 +581,7 @@ impl<P, D> LexRuntime for LexRuntimeClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut result = PostContentResponse::default();
 
@@ -577,7 +656,7 @@ impl<P, D> LexRuntime for LexRuntimeClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));

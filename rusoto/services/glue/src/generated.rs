@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -346,6 +342,103 @@ pub struct ConnectionInput {
     pub physical_connection_requirements: Option<PhysicalConnectionRequirements>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConnectionPropertyKey {
+    ConfigFiles,
+    Host,
+    InstanceId,
+    JdbcConnectionUrl,
+    JdbcDriverClassName,
+    JdbcDriverJarUri,
+    JdbcEngine,
+    JdbcEngineVersion,
+    Password,
+    Port,
+    Username,
+}
+
+impl Into<String> for ConnectionPropertyKey {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConnectionPropertyKey {
+    fn into(self) -> &'static str {
+        match self {
+            ConnectionPropertyKey::ConfigFiles => "CONFIG_FILES",
+            ConnectionPropertyKey::Host => "HOST",
+            ConnectionPropertyKey::InstanceId => "INSTANCE_ID",
+            ConnectionPropertyKey::JdbcConnectionUrl => "JDBC_CONNECTION_URL",
+            ConnectionPropertyKey::JdbcDriverClassName => "JDBC_DRIVER_CLASS_NAME",
+            ConnectionPropertyKey::JdbcDriverJarUri => "JDBC_DRIVER_JAR_URI",
+            ConnectionPropertyKey::JdbcEngine => "JDBC_ENGINE",
+            ConnectionPropertyKey::JdbcEngineVersion => "JDBC_ENGINE_VERSION",
+            ConnectionPropertyKey::Password => "PASSWORD",
+            ConnectionPropertyKey::Port => "PORT",
+            ConnectionPropertyKey::Username => "USERNAME",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionPropertyKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CONFIG_FILES" => Ok(ConnectionPropertyKey::ConfigFiles),
+            "HOST" => Ok(ConnectionPropertyKey::Host),
+            "INSTANCE_ID" => Ok(ConnectionPropertyKey::InstanceId),
+            "JDBC_CONNECTION_URL" => Ok(ConnectionPropertyKey::JdbcConnectionUrl),
+            "JDBC_DRIVER_CLASS_NAME" => Ok(ConnectionPropertyKey::JdbcDriverClassName),
+            "JDBC_DRIVER_JAR_URI" => Ok(ConnectionPropertyKey::JdbcDriverJarUri),
+            "JDBC_ENGINE" => Ok(ConnectionPropertyKey::JdbcEngine),
+            "JDBC_ENGINE_VERSION" => Ok(ConnectionPropertyKey::JdbcEngineVersion),
+            "PASSWORD" => Ok(ConnectionPropertyKey::Password),
+            "PORT" => Ok(ConnectionPropertyKey::Port),
+            "USERNAME" => Ok(ConnectionPropertyKey::Username),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConnectionType {
+    Jdbc,
+    Sftp,
+}
+
+impl Into<String> for ConnectionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConnectionType {
+    fn into(self) -> &'static str {
+        match self {
+            ConnectionType::Jdbc => "JDBC",
+            ConnectionType::Sftp => "SFTP",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "JDBC" => Ok(ConnectionType::Jdbc),
+            "SFTP" => Ok(ConnectionType::Sftp),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Specifies the connections used by a job.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ConnectionsList {
@@ -455,6 +548,44 @@ pub struct CrawlerMetrics {
     #[serde(rename="TimeLeftSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub time_left_seconds: Option<f64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CrawlerState {
+    Ready,
+    Running,
+    Stopping,
+}
+
+impl Into<String> for CrawlerState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CrawlerState {
+    fn into(self) -> &'static str {
+        match self {
+            CrawlerState::Ready => "READY",
+            CrawlerState::Running => "RUNNING",
+            CrawlerState::Stopping => "STOPPING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CrawlerState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "READY" => Ok(CrawlerState::Ready),
+            "RUNNING" => Ok(CrawlerState::Running),
+            "STOPPING" => Ok(CrawlerState::Stopping),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Specifies crawler targets.</p>"]
@@ -852,6 +983,44 @@ pub struct DatabaseInput {
     #[serde(rename="Parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeleteBehavior {
+    DeleteFromDatabase,
+    DeprecateInDatabase,
+    Log,
+}
+
+impl Into<String> for DeleteBehavior {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeleteBehavior {
+    fn into(self) -> &'static str {
+        match self {
+            DeleteBehavior::DeleteFromDatabase => "DELETE_FROM_DATABASE",
+            DeleteBehavior::DeprecateInDatabase => "DEPRECATE_IN_DATABASE",
+            DeleteBehavior::Log => "LOG",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeleteBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DELETE_FROM_DATABASE" => Ok(DeleteBehavior::DeleteFromDatabase),
+            "DEPRECATE_IN_DATABASE" => Ok(DeleteBehavior::DeprecateInDatabase),
+            "LOG" => Ok(DeleteBehavior::Log),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1994,6 +2163,53 @@ pub struct JobRun {
     pub trigger_name: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum JobRunState {
+    Failed,
+    Running,
+    Starting,
+    Stopped,
+    Stopping,
+    Succeeded,
+}
+
+impl Into<String> for JobRunState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for JobRunState {
+    fn into(self) -> &'static str {
+        match self {
+            JobRunState::Failed => "FAILED",
+            JobRunState::Running => "RUNNING",
+            JobRunState::Starting => "STARTING",
+            JobRunState::Stopped => "STOPPED",
+            JobRunState::Stopping => "STOPPING",
+            JobRunState::Succeeded => "SUCCEEDED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobRunState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(JobRunState::Failed),
+            "RUNNING" => Ok(JobRunState::Running),
+            "STARTING" => Ok(JobRunState::Starting),
+            "STOPPED" => Ok(JobRunState::Stopped),
+            "STOPPING" => Ok(JobRunState::Stopping),
+            "SUCCEEDED" => Ok(JobRunState::Succeeded),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Specifies information used to update an existing job.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct JobUpdate {
@@ -2064,6 +2280,44 @@ pub struct LastCrawlInfo {
     pub status: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LastCrawlStatus {
+    Cancelled,
+    Failed,
+    Succeeded,
+}
+
+impl Into<String> for LastCrawlStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LastCrawlStatus {
+    fn into(self) -> &'static str {
+        match self {
+            LastCrawlStatus::Cancelled => "CANCELLED",
+            LastCrawlStatus::Failed => "FAILED",
+            LastCrawlStatus::Succeeded => "SUCCEEDED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LastCrawlStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CANCELLED" => Ok(LastCrawlStatus::Cancelled),
+            "FAILED" => Ok(LastCrawlStatus::Failed),
+            "SUCCEEDED" => Ok(LastCrawlStatus::Succeeded),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The location of resources.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct Location {
@@ -2075,6 +2329,70 @@ pub struct Location {
     #[serde(rename="S3")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub s3: Option<Vec<CodeGenNodeArg>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Logical {
+    And,
+}
+
+impl Into<String> for Logical {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Logical {
+    fn into(self) -> &'static str {
+        match self {
+            Logical::And => "AND",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Logical {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AND" => Ok(Logical::And),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LogicalOperator {
+    Equals,
+}
+
+impl Into<String> for LogicalOperator {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LogicalOperator {
+    fn into(self) -> &'static str {
+        match self {
+            LogicalOperator::Equals => "EQUALS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogicalOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EQUALS" => Ok(LogicalOperator::Equals),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Defines a mapping.</p>"]
@@ -2241,6 +2559,44 @@ pub struct Predicate {
     pub logical: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PrincipalType {
+    Group,
+    Role,
+    User,
+}
+
+impl Into<String> for PrincipalType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PrincipalType {
+    fn into(self) -> &'static str {
+        match self {
+            PrincipalType::Group => "GROUP",
+            PrincipalType::Role => "ROLE",
+            PrincipalType::User => "USER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PrincipalType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "GROUP" => Ok(PrincipalType::Group),
+            "ROLE" => Ok(PrincipalType::Role),
+            "USER" => Ok(PrincipalType::User),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ResetJobBookmarkRequest {
     #[doc="<p>The name of the job in question.</p>"]
@@ -2254,6 +2610,44 @@ pub struct ResetJobBookmarkResponse {
     #[serde(rename="JobBookmarkEntry")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub job_bookmark_entry: Option<JobBookmarkEntry>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ResourceType {
+    Archive,
+    File,
+    Jar,
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ResourceType {
+    fn into(self) -> &'static str {
+        match self {
+            ResourceType::Archive => "ARCHIVE",
+            ResourceType::File => "FILE",
+            ResourceType::Jar => "JAR",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ARCHIVE" => Ok(ResourceType::Archive),
+            "FILE" => Ok(ResourceType::File),
+            "JAR" => Ok(ResourceType::Jar),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>URIs for function resources.</p>"]
@@ -2293,6 +2687,44 @@ pub struct Schedule {
     #[serde(rename="State")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ScheduleState {
+    NotScheduled,
+    Scheduled,
+    Transitioning,
+}
+
+impl Into<String> for ScheduleState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ScheduleState {
+    fn into(self) -> &'static str {
+        match self {
+            ScheduleState::NotScheduled => "NOT_SCHEDULED",
+            ScheduleState::Scheduled => "SCHEDULED",
+            ScheduleState::Transitioning => "TRANSITIONING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScheduleState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "NOT_SCHEDULED" => Ok(ScheduleState::NotScheduled),
+            "SCHEDULED" => Ok(ScheduleState::Scheduled),
+            "TRANSITIONING" => Ok(ScheduleState::Transitioning),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Crawler policy for update and deletion behavior.</p>"]
@@ -2683,6 +3115,97 @@ pub struct Trigger {
     pub type_: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TriggerState {
+    Activated,
+    Activating,
+    Created,
+    Creating,
+    Deactivated,
+    Deactivating,
+    Deleting,
+    Updating,
+}
+
+impl Into<String> for TriggerState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TriggerState {
+    fn into(self) -> &'static str {
+        match self {
+            TriggerState::Activated => "ACTIVATED",
+            TriggerState::Activating => "ACTIVATING",
+            TriggerState::Created => "CREATED",
+            TriggerState::Creating => "CREATING",
+            TriggerState::Deactivated => "DEACTIVATED",
+            TriggerState::Deactivating => "DEACTIVATING",
+            TriggerState::Deleting => "DELETING",
+            TriggerState::Updating => "UPDATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TriggerState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVATED" => Ok(TriggerState::Activated),
+            "ACTIVATING" => Ok(TriggerState::Activating),
+            "CREATED" => Ok(TriggerState::Created),
+            "CREATING" => Ok(TriggerState::Creating),
+            "DEACTIVATED" => Ok(TriggerState::Deactivated),
+            "DEACTIVATING" => Ok(TriggerState::Deactivating),
+            "DELETING" => Ok(TriggerState::Deleting),
+            "UPDATING" => Ok(TriggerState::Updating),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TriggerType {
+    Conditional,
+    OnDemand,
+    Scheduled,
+}
+
+impl Into<String> for TriggerType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TriggerType {
+    fn into(self) -> &'static str {
+        match self {
+            TriggerType::Conditional => "CONDITIONAL",
+            TriggerType::OnDemand => "ON_DEMAND",
+            TriggerType::Scheduled => "SCHEDULED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TriggerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CONDITIONAL" => Ok(TriggerType::Conditional),
+            "ON_DEMAND" => Ok(TriggerType::OnDemand),
+            "SCHEDULED" => Ok(TriggerType::Scheduled),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>A structure used to provide information used to updata a trigger.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct TriggerUpdate {
@@ -2706,6 +3229,41 @@ pub struct TriggerUpdate {
     #[serde(rename="Schedule")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub schedule: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum UpdateBehavior {
+    Log,
+    UpdateInDatabase,
+}
+
+impl Into<String> for UpdateBehavior {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for UpdateBehavior {
+    fn into(self) -> &'static str {
+        match self {
+            UpdateBehavior::Log => "LOG",
+            UpdateBehavior::UpdateInDatabase => "UPDATE_IN_DATABASE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for UpdateBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "LOG" => Ok(UpdateBehavior::Log),
+            "UPDATE_IN_DATABASE" => Ok(UpdateBehavior::UpdateInDatabase),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -10549,7 +11107,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchCreatePartitionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -10580,7 +11138,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchDeleteConnectionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -10611,7 +11169,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchDeletePartitionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -10641,7 +11199,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchDeleteTableResponse>(String::from_utf8_lossy(&body)
@@ -10673,7 +11231,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchGetPartitionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -10703,7 +11261,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateClassifierResponse>(String::from_utf8_lossy(&body)
@@ -10735,7 +11293,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateConnectionResponse>(String::from_utf8_lossy(&body)
@@ -10767,7 +11325,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateCrawlerResponse>(String::from_utf8_lossy(&body)
@@ -10799,7 +11357,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateDatabaseResponse>(String::from_utf8_lossy(&body)
@@ -10831,7 +11389,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateDevEndpointResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -10859,7 +11417,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateJobResponse>(String::from_utf8_lossy(&body)
@@ -10891,7 +11449,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreatePartitionResponse>(String::from_utf8_lossy(&body)
@@ -10923,7 +11481,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateScriptResponse>(String::from_utf8_lossy(&body)
@@ -10955,7 +11513,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateTableResponse>(String::from_utf8_lossy(&body)
@@ -10987,7 +11545,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateTriggerResponse>(String::from_utf8_lossy(&body)
@@ -11020,7 +11578,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateUserDefinedFunctionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -11051,7 +11609,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteClassifierResponse>(String::from_utf8_lossy(&body)
@@ -11083,7 +11641,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteConnectionResponse>(String::from_utf8_lossy(&body)
@@ -11115,7 +11673,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteCrawlerResponse>(String::from_utf8_lossy(&body)
@@ -11147,7 +11705,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteDatabaseResponse>(String::from_utf8_lossy(&body)
@@ -11179,7 +11737,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteDevEndpointResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -11207,7 +11765,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteJobResponse>(String::from_utf8_lossy(&body)
@@ -11239,7 +11797,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeletePartitionResponse>(String::from_utf8_lossy(&body)
@@ -11271,7 +11829,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteTableResponse>(String::from_utf8_lossy(&body)
@@ -11303,7 +11861,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteTriggerResponse>(String::from_utf8_lossy(&body)
@@ -11336,7 +11894,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteUserDefinedFunctionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -11368,7 +11926,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetCatalogImportStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -11398,7 +11956,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetClassifierResponse>(String::from_utf8_lossy(&body)
@@ -11430,7 +11988,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetClassifiersResponse>(String::from_utf8_lossy(&body)
@@ -11462,7 +12020,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetConnectionResponse>(String::from_utf8_lossy(&body)
@@ -11494,7 +12052,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetConnectionsResponse>(String::from_utf8_lossy(&body)
@@ -11526,7 +12084,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetCrawlerResponse>(String::from_utf8_lossy(&body)
@@ -11558,7 +12116,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetCrawlerMetricsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -11588,7 +12146,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetCrawlersResponse>(String::from_utf8_lossy(&body)
@@ -11620,7 +12178,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDatabaseResponse>(String::from_utf8_lossy(&body)
@@ -11652,7 +12210,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDatabasesResponse>(String::from_utf8_lossy(&body)
@@ -11684,7 +12242,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDataflowGraphResponse>(String::from_utf8_lossy(&body)
@@ -11716,7 +12274,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDevEndpointResponse>(String::from_utf8_lossy(&body)
@@ -11748,7 +12306,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDevEndpointsResponse>(String::from_utf8_lossy(&body)
@@ -11778,7 +12336,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetJobResponse>(String::from_utf8_lossy(&body).as_ref())
@@ -11807,7 +12365,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetJobRunResponse>(String::from_utf8_lossy(&body)
@@ -11839,7 +12397,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetJobRunsResponse>(String::from_utf8_lossy(&body)
@@ -11869,7 +12427,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetJobsResponse>(String::from_utf8_lossy(&body).as_ref())
@@ -11900,7 +12458,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetMappingResponse>(String::from_utf8_lossy(&body)
@@ -11932,7 +12490,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetPartitionResponse>(String::from_utf8_lossy(&body)
@@ -11964,7 +12522,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetPartitionsResponse>(String::from_utf8_lossy(&body)
@@ -11994,7 +12552,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetPlanResponse>(String::from_utf8_lossy(&body).as_ref())
@@ -12023,7 +12581,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetTableResponse>(String::from_utf8_lossy(&body)
@@ -12055,7 +12613,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetTableVersionsResponse>(String::from_utf8_lossy(&body)
@@ -12085,7 +12643,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetTablesResponse>(String::from_utf8_lossy(&body)
@@ -12117,7 +12675,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetTriggerResponse>(String::from_utf8_lossy(&body)
@@ -12149,7 +12707,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetTriggersResponse>(String::from_utf8_lossy(&body)
@@ -12182,7 +12740,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetUserDefinedFunctionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -12213,7 +12771,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetUserDefinedFunctionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -12244,7 +12802,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ImportCatalogToGlueResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -12274,7 +12832,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ResetJobBookmarkResponse>(String::from_utf8_lossy(&body)
@@ -12306,7 +12864,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartCrawlerResponse>(String::from_utf8_lossy(&body)
@@ -12339,7 +12897,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartCrawlerScheduleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -12369,7 +12927,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartJobRunResponse>(String::from_utf8_lossy(&body)
@@ -12401,7 +12959,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartTriggerResponse>(String::from_utf8_lossy(&body)
@@ -12433,7 +12991,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopCrawlerResponse>(String::from_utf8_lossy(&body)
@@ -12465,7 +13023,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopCrawlerScheduleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -12495,7 +13053,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopTriggerResponse>(String::from_utf8_lossy(&body)
@@ -12527,7 +13085,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateClassifierResponse>(String::from_utf8_lossy(&body)
@@ -12559,7 +13117,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateConnectionResponse>(String::from_utf8_lossy(&body)
@@ -12591,7 +13149,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateCrawlerResponse>(String::from_utf8_lossy(&body)
@@ -12624,7 +13182,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateCrawlerScheduleResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -12654,7 +13212,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateDatabaseResponse>(String::from_utf8_lossy(&body)
@@ -12686,7 +13244,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateDevEndpointResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -12714,7 +13272,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateJobResponse>(String::from_utf8_lossy(&body)
@@ -12746,7 +13304,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdatePartitionResponse>(String::from_utf8_lossy(&body)
@@ -12778,7 +13336,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateTableResponse>(String::from_utf8_lossy(&body)
@@ -12810,7 +13368,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateTriggerResponse>(String::from_utf8_lossy(&body)
@@ -12843,7 +13401,7 @@ impl<P, D> Glue for GlueClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateUserDefinedFunctionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())

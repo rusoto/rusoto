@@ -44,7 +44,7 @@ impl GenerateProtocol for JsonGenerator {
                     let mut response = try!(self.dispatcher.dispatch(&request));
 
                     match response.status {{
-                        StatusCode::Ok => {{
+                        ::hyper::status::StatusCode::Ok => {{
                             {ok_response}
                         }}
                         _ => {{

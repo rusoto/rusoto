@@ -41,7 +41,7 @@ impl GenerateProtocol for QueryGenerator {
                     request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
                     let mut response = try!(self.dispatcher.dispatch(&request));
                     match response.status {{
-                        StatusCode::Ok => {{
+                        ::hyper::status::StatusCode::Ok => {{
                             {parse_payload}
                             Ok(result)
                         }}

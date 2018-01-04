@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -109,6 +105,44 @@ pub struct ColumnInfo {
     pub type_: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ColumnNullable {
+    NotNull,
+    Nullable,
+    Unknown,
+}
+
+impl Into<String> for ColumnNullable {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ColumnNullable {
+    fn into(self) -> &'static str {
+        match self {
+            ColumnNullable::NotNull => "NOT_NULL",
+            ColumnNullable::Nullable => "NULLABLE",
+            ColumnNullable::Unknown => "UNKNOWN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ColumnNullable {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "NOT_NULL" => Ok(ColumnNullable::NotNull),
+            "NULLABLE" => Ok(ColumnNullable::Nullable),
+            "UNKNOWN" => Ok(ColumnNullable::Unknown),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateNamedQueryInput {
     #[doc="<p>A unique case-sensitive string used to ensure the request to create the query is idempotent (executes only once). If another <code>CreateNamedQuery</code> request is received, the same response is returned and another query is not created. If a parameter has changed, for example, the <code>QueryString</code>, an error is returned.</p> <important> <p>This token is listed as not required because AWS SDKs (for example the AWS SDK for Java) auto-generate the token for users. If you are not using the AWS SDK or the AWS CLI, you must provide this token or the action will fail.</p> </important>"]
@@ -167,6 +201,44 @@ pub struct EncryptionConfiguration {
     #[serde(rename="KmsKey")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EncryptionOption {
+    CseKms,
+    SseKms,
+    SseS3,
+}
+
+impl Into<String> for EncryptionOption {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EncryptionOption {
+    fn into(self) -> &'static str {
+        match self {
+            EncryptionOption::CseKms => "CSE_KMS",
+            EncryptionOption::SseKms => "SSE_KMS",
+            EncryptionOption::SseS3 => "SSE_S3",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CSE_KMS" => Ok(EncryptionOption::CseKms),
+            "SSE_KMS" => Ok(EncryptionOption::SseKms),
+            "SSE_S3" => Ok(EncryptionOption::SseS3),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -334,6 +406,50 @@ pub struct QueryExecutionContext {
     pub database: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum QueryExecutionState {
+    Cancelled,
+    Failed,
+    Queued,
+    Running,
+    Succeeded,
+}
+
+impl Into<String> for QueryExecutionState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for QueryExecutionState {
+    fn into(self) -> &'static str {
+        match self {
+            QueryExecutionState::Cancelled => "CANCELLED",
+            QueryExecutionState::Failed => "FAILED",
+            QueryExecutionState::Queued => "QUEUED",
+            QueryExecutionState::Running => "RUNNING",
+            QueryExecutionState::Succeeded => "SUCCEEDED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for QueryExecutionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CANCELLED" => Ok(QueryExecutionState::Cancelled),
+            "FAILED" => Ok(QueryExecutionState::Failed),
+            "QUEUED" => Ok(QueryExecutionState::Queued),
+            "RUNNING" => Ok(QueryExecutionState::Running),
+            "SUCCEEDED" => Ok(QueryExecutionState::Succeeded),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The amount of data scanned during the query execution and the amount of time that it took to execute.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct QueryExecutionStatistics {
@@ -446,6 +562,38 @@ pub struct StopQueryExecutionInput {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StopQueryExecutionOutput;
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ThrottleReason {
+    ConcurrentQueryLimitExceeded,
+}
+
+impl Into<String> for ThrottleReason {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ThrottleReason {
+    fn into(self) -> &'static str {
+        match self {
+            ThrottleReason::ConcurrentQueryLimitExceeded => "CONCURRENT_QUERY_LIMIT_EXCEEDED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ThrottleReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CONCURRENT_QUERY_LIMIT_EXCEEDED" => Ok(ThrottleReason::ConcurrentQueryLimitExceeded),
+            _ => Err(()),
+        }
+    }
+}
 
 #[doc="<p>Information about a named query ID that could not be processed.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1545,7 +1693,7 @@ impl<P, D> Athena for AthenaClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchGetNamedQueryOutput>(String::from_utf8_lossy(&body)
@@ -1578,7 +1726,7 @@ impl<P, D> Athena for AthenaClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<BatchGetQueryExecutionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1608,7 +1756,7 @@ impl<P, D> Athena for AthenaClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateNamedQueryOutput>(String::from_utf8_lossy(&body)
@@ -1640,7 +1788,7 @@ impl<P, D> Athena for AthenaClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteNamedQueryOutput>(String::from_utf8_lossy(&body)
@@ -1672,7 +1820,7 @@ impl<P, D> Athena for AthenaClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetNamedQueryOutput>(String::from_utf8_lossy(&body)
@@ -1704,7 +1852,7 @@ impl<P, D> Athena for AthenaClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetQueryExecutionOutput>(String::from_utf8_lossy(&body)
@@ -1736,7 +1884,7 @@ impl<P, D> Athena for AthenaClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetQueryResultsOutput>(String::from_utf8_lossy(&body)
@@ -1768,7 +1916,7 @@ impl<P, D> Athena for AthenaClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListNamedQueriesOutput>(String::from_utf8_lossy(&body)
@@ -1800,7 +1948,7 @@ impl<P, D> Athena for AthenaClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListQueryExecutionsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1830,7 +1978,7 @@ impl<P, D> Athena for AthenaClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartQueryExecutionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -1860,7 +2008,7 @@ impl<P, D> Athena for AthenaClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopQueryExecutionOutput>(String::from_utf8_lossy(&body)

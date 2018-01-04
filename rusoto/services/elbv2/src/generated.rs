@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use std::str::FromStr;
@@ -110,6 +106,38 @@ impl ActionSerializer {
         params.put(&format!("{}{}", prefix, "Type"),
                    &obj.type_.replace("+", "%2B"));
 
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ActionTypeEnum {
+    Forward,
+}
+
+impl Into<String> for ActionTypeEnum {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ActionTypeEnum {
+    fn into(self) -> &'static str {
+        match self {
+            ActionTypeEnum::Forward => "forward",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "forward" => Ok(ActionTypeEnum::Forward),
+            _ => Err(()),
+        }
     }
 }
 
@@ -2201,6 +2229,41 @@ impl HttpCodeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum IpAddressType {
+    Dualstack,
+    Ipv4,
+}
+
+impl Into<String> for IpAddressType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for IpAddressType {
+    fn into(self) -> &'static str {
+        match self {
+            IpAddressType::Dualstack => "dualstack",
+            IpAddressType::Ipv4 => "ipv4",
+        }
+    }
+}
+
+impl ::std::str::FromStr for IpAddressType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "dualstack" => Ok(IpAddressType::Dualstack),
+            "ipv4" => Ok(IpAddressType::Ipv4),
+            _ => Err(()),
+        }
+    }
+}
+
 struct IpAddressTypeDeserializer;
 impl IpAddressTypeDeserializer {
     #[allow(unused_variables)]
@@ -2222,7 +2285,7 @@ impl IsDefaultDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -2906,6 +2969,41 @@ impl LoadBalancerNamesSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LoadBalancerSchemeEnum {
+    Internal,
+    InternetFacing,
+}
+
+impl Into<String> for LoadBalancerSchemeEnum {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LoadBalancerSchemeEnum {
+    fn into(self) -> &'static str {
+        match self {
+            LoadBalancerSchemeEnum::Internal => "internal",
+            LoadBalancerSchemeEnum::InternetFacing => "internet-facing",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerSchemeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "internal" => Ok(LoadBalancerSchemeEnum::Internal),
+            "internet-facing" => Ok(LoadBalancerSchemeEnum::InternetFacing),
+            _ => Err(()),
+        }
+    }
+}
+
 struct LoadBalancerSchemeEnumDeserializer;
 impl LoadBalancerSchemeEnumDeserializer {
     #[allow(unused_variables)]
@@ -2976,6 +3074,44 @@ impl LoadBalancerStateDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LoadBalancerStateEnum {
+    Active,
+    Failed,
+    Provisioning,
+}
+
+impl Into<String> for LoadBalancerStateEnum {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LoadBalancerStateEnum {
+    fn into(self) -> &'static str {
+        match self {
+            LoadBalancerStateEnum::Active => "active",
+            LoadBalancerStateEnum::Failed => "failed",
+            LoadBalancerStateEnum::Provisioning => "provisioning",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerStateEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "active" => Ok(LoadBalancerStateEnum::Active),
+            "failed" => Ok(LoadBalancerStateEnum::Failed),
+            "provisioning" => Ok(LoadBalancerStateEnum::Provisioning),
+            _ => Err(()),
+        }
+    }
+}
+
 struct LoadBalancerStateEnumDeserializer;
 impl LoadBalancerStateEnumDeserializer {
     #[allow(unused_variables)]
@@ -2990,6 +3126,38 @@ impl LoadBalancerStateEnumDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LoadBalancerTypeEnum {
+    Application,
+}
+
+impl Into<String> for LoadBalancerTypeEnum {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LoadBalancerTypeEnum {
+    fn into(self) -> &'static str {
+        match self {
+            LoadBalancerTypeEnum::Application => "application",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "application" => Ok(LoadBalancerTypeEnum::Application),
+            _ => Err(()),
+        }
+    }
+}
+
 struct LoadBalancerTypeEnumDeserializer;
 impl LoadBalancerTypeEnumDeserializer {
     #[allow(unused_variables)]
@@ -3635,6 +3803,41 @@ impl PortDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ProtocolEnum {
+    Http,
+    Https,
+}
+
+impl Into<String> for ProtocolEnum {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ProtocolEnum {
+    fn into(self) -> &'static str {
+        match self {
+            ProtocolEnum::Http => "HTTP",
+            ProtocolEnum::Https => "HTTPS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProtocolEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "HTTP" => Ok(ProtocolEnum::Http),
+            "HTTPS" => Ok(ProtocolEnum::Https),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ProtocolEnumDeserializer;
 impl ProtocolEnumDeserializer {
     #[allow(unused_variables)]
@@ -5591,6 +5794,69 @@ impl TargetHealthDescriptionsDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TargetHealthReasonEnum {
+    ElbInitialHealthChecking,
+    ElbInternalError,
+    ElbRegistrationInProgress,
+    TargetDeregistrationInProgress,
+    TargetFailedHealthChecks,
+    TargetInvalidState,
+    TargetNotInUse,
+    TargetNotRegistered,
+    TargetResponseCodeMismatch,
+    TargetTimeout,
+}
+
+impl Into<String> for TargetHealthReasonEnum {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TargetHealthReasonEnum {
+    fn into(self) -> &'static str {
+        match self {
+            TargetHealthReasonEnum::ElbInitialHealthChecking => "Elb.InitialHealthChecking",
+            TargetHealthReasonEnum::ElbInternalError => "Elb.InternalError",
+            TargetHealthReasonEnum::ElbRegistrationInProgress => "Elb.RegistrationInProgress",
+            TargetHealthReasonEnum::TargetDeregistrationInProgress => {
+                "Target.DeregistrationInProgress"
+            }
+            TargetHealthReasonEnum::TargetFailedHealthChecks => "Target.FailedHealthChecks",
+            TargetHealthReasonEnum::TargetInvalidState => "Target.InvalidState",
+            TargetHealthReasonEnum::TargetNotInUse => "Target.NotInUse",
+            TargetHealthReasonEnum::TargetNotRegistered => "Target.NotRegistered",
+            TargetHealthReasonEnum::TargetResponseCodeMismatch => "Target.ResponseCodeMismatch",
+            TargetHealthReasonEnum::TargetTimeout => "Target.Timeout",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetHealthReasonEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Elb.InitialHealthChecking" => Ok(TargetHealthReasonEnum::ElbInitialHealthChecking),
+            "Elb.InternalError" => Ok(TargetHealthReasonEnum::ElbInternalError),
+            "Elb.RegistrationInProgress" => Ok(TargetHealthReasonEnum::ElbRegistrationInProgress),
+            "Target.DeregistrationInProgress" => {
+                Ok(TargetHealthReasonEnum::TargetDeregistrationInProgress)
+            }
+            "Target.FailedHealthChecks" => Ok(TargetHealthReasonEnum::TargetFailedHealthChecks),
+            "Target.InvalidState" => Ok(TargetHealthReasonEnum::TargetInvalidState),
+            "Target.NotInUse" => Ok(TargetHealthReasonEnum::TargetNotInUse),
+            "Target.NotRegistered" => Ok(TargetHealthReasonEnum::TargetNotRegistered),
+            "Target.ResponseCodeMismatch" => Ok(TargetHealthReasonEnum::TargetResponseCodeMismatch),
+            "Target.Timeout" => Ok(TargetHealthReasonEnum::TargetTimeout),
+            _ => Err(()),
+        }
+    }
+}
+
 struct TargetHealthReasonEnumDeserializer;
 impl TargetHealthReasonEnumDeserializer {
     #[allow(unused_variables)]
@@ -5605,6 +5871,50 @@ impl TargetHealthReasonEnumDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TargetHealthStateEnum {
+    Draining,
+    Healthy,
+    Initial,
+    Unhealthy,
+    Unused,
+}
+
+impl Into<String> for TargetHealthStateEnum {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TargetHealthStateEnum {
+    fn into(self) -> &'static str {
+        match self {
+            TargetHealthStateEnum::Draining => "draining",
+            TargetHealthStateEnum::Healthy => "healthy",
+            TargetHealthStateEnum::Initial => "initial",
+            TargetHealthStateEnum::Unhealthy => "unhealthy",
+            TargetHealthStateEnum::Unused => "unused",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetHealthStateEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "draining" => Ok(TargetHealthStateEnum::Draining),
+            "healthy" => Ok(TargetHealthStateEnum::Healthy),
+            "initial" => Ok(TargetHealthStateEnum::Initial),
+            "unhealthy" => Ok(TargetHealthStateEnum::Unhealthy),
+            "unused" => Ok(TargetHealthStateEnum::Unused),
+            _ => Err(()),
+        }
+    }
+}
+
 struct TargetHealthStateEnumDeserializer;
 impl TargetHealthStateEnumDeserializer {
     #[allow(unused_variables)]
@@ -8527,7 +8837,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8574,7 +8884,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8621,7 +8931,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8666,7 +8976,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8713,7 +9023,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8760,7 +9070,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8807,7 +9117,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8852,7 +9162,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8899,7 +9209,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8946,7 +9256,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -8994,7 +9304,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9041,7 +9351,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9089,7 +9399,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9137,7 +9447,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9184,7 +9494,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9231,7 +9541,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9278,7 +9588,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9326,7 +9636,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9373,7 +9683,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9420,7 +9730,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9467,7 +9777,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9515,7 +9825,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9560,7 +9870,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9607,7 +9917,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9655,7 +9965,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9702,7 +10012,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9747,7 +10057,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9794,7 +10104,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9841,7 +10151,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9888,7 +10198,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();
@@ -9933,7 +10243,7 @@ impl<P, D> Elb for ElbClient<P, D>
         request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
         let mut response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
                 let mut body: Vec<u8> = Vec::new();

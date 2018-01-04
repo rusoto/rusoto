@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -159,6 +155,44 @@ pub struct BuiltinSlotTypeMetadata {
     pub supported_locales: Option<Vec<String>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ChannelType {
+    Facebook,
+    Slack,
+    TwilioSms,
+}
+
+impl Into<String> for ChannelType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ChannelType {
+    fn into(self) -> &'static str {
+        match self {
+            ChannelType::Facebook => "Facebook",
+            ChannelType::Slack => "Slack",
+            ChannelType::TwilioSms => "Twilio-Sms",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChannelType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Facebook" => Ok(ChannelType::Facebook),
+            "Slack" => Ok(ChannelType::Slack),
+            "Twilio-Sms" => Ok(ChannelType::TwilioSms),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Specifies a Lambda function that verifies requests to a bot or fulfills the user's request to a bot..</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CodeHook {
@@ -168,6 +202,41 @@ pub struct CodeHook {
     #[doc="<p>The Amazon Resource Name (ARN) of the Lambda function.</p>"]
     #[serde(rename="uri")]
     pub uri: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ContentType {
+    PlainText,
+    Ssml,
+}
+
+impl Into<String> for ContentType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ContentType {
+    fn into(self) -> &'static str {
+        match self {
+            ContentType::PlainText => "PlainText",
+            ContentType::Ssml => "SSML",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "PlainText" => Ok(ContentType::PlainText),
+            "SSML" => Ok(ContentType::Ssml),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -476,6 +545,41 @@ pub struct FulfillmentActivity {
     #[doc="<p> How the intent should be fulfilled, either by running a Lambda function or by returning the slot data to the client application. </p>"]
     #[serde(rename="type")]
     pub type_: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FulfillmentActivityType {
+    CodeHook,
+    ReturnIntent,
+}
+
+impl Into<String> for FulfillmentActivityType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FulfillmentActivityType {
+    fn into(self) -> &'static str {
+        match self {
+            FulfillmentActivityType::CodeHook => "CodeHook",
+            FulfillmentActivityType::ReturnIntent => "ReturnIntent",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FulfillmentActivityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CodeHook" => Ok(FulfillmentActivityType::CodeHook),
+            "ReturnIntent" => Ok(FulfillmentActivityType::ReturnIntent),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1133,6 +1237,38 @@ pub struct IntentMetadata {
     pub version: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Locale {
+    EnUS,
+}
+
+impl Into<String> for Locale {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Locale {
+    fn into(self) -> &'static str {
+        match self {
+            Locale::EnUS => "en-US",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Locale {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "en-US" => Ok(Locale::EnUS),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The message object that provides the message text and its type.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Message {
@@ -1142,6 +1278,41 @@ pub struct Message {
     #[doc="<p>The content type of the message string.</p>"]
     #[serde(rename="contentType")]
     pub content_type: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ProcessBehavior {
+    Build,
+    Save,
+}
+
+impl Into<String> for ProcessBehavior {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ProcessBehavior {
+    fn into(self) -> &'static str {
+        match self {
+            ProcessBehavior::Build => "BUILD",
+            ProcessBehavior::Save => "SAVE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProcessBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BUILD" => Ok(ProcessBehavior::Build),
+            "SAVE" => Ok(ProcessBehavior::Save),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Obtains information from the user. To define a prompt, provide one or more messages and specify the number of attempts to get information from the user. If you provide more than one message, Amazon Lex chooses one of the messages to use to prompt the user. For more information, see <a>how-it-works</a>.</p>"]
@@ -1487,6 +1658,47 @@ pub struct PutSlotTypeResponse {
     pub version: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReferenceType {
+    Bot,
+    BotAlias,
+    BotChannel,
+    Intent,
+}
+
+impl Into<String> for ReferenceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReferenceType {
+    fn into(self) -> &'static str {
+        match self {
+            ReferenceType::Bot => "Bot",
+            ReferenceType::BotAlias => "BotAlias",
+            ReferenceType::BotChannel => "BotChannel",
+            ReferenceType::Intent => "Intent",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReferenceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Bot" => Ok(ReferenceType::Bot),
+            "BotAlias" => Ok(ReferenceType::BotAlias),
+            "BotChannel" => Ok(ReferenceType::BotChannel),
+            "Intent" => Ok(ReferenceType::Intent),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the resource that refers to the resource that you are attempting to delete. This object is returned as part of the <code>ResourceInUseException</code> exception. </p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ResourceReference {
@@ -1535,6 +1747,41 @@ pub struct Slot {
     pub value_elicitation_prompt: Option<Prompt>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SlotConstraint {
+    Optional,
+    Required,
+}
+
+impl Into<String> for SlotConstraint {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SlotConstraint {
+    fn into(self) -> &'static str {
+        match self {
+            SlotConstraint::Optional => "Optional",
+            SlotConstraint::Required => "Required",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SlotConstraint {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Optional" => Ok(SlotConstraint::Optional),
+            "Required" => Ok(SlotConstraint::Required),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Provides information about a slot type..</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SlotTypeMetadata {
@@ -1570,6 +1817,82 @@ pub struct Statement {
     #[serde(rename="responseCard")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub response_card: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Status {
+    Building,
+    Failed,
+    NotBuilt,
+    Ready,
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Status {
+    fn into(self) -> &'static str {
+        match self {
+            Status::Building => "BUILDING",
+            Status::Failed => "FAILED",
+            Status::NotBuilt => "NOT_BUILT",
+            Status::Ready => "READY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BUILDING" => Ok(Status::Building),
+            "FAILED" => Ok(Status::Failed),
+            "NOT_BUILT" => Ok(Status::NotBuilt),
+            "READY" => Ok(Status::Ready),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StatusType {
+    Detected,
+    Missed,
+}
+
+impl Into<String> for StatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StatusType {
+    fn into(self) -> &'static str {
+        match self {
+            StatusType::Detected => "Detected",
+            StatusType::Missed => "Missed",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Detected" => Ok(StatusType::Detected),
+            "Missed" => Ok(StatusType::Missed),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Provides information about a single utterance that was made to your bot. </p>"]
@@ -5133,7 +5456,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5178,7 +5501,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5224,7 +5547,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5267,7 +5590,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -5300,7 +5623,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -5336,7 +5659,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -5372,7 +5695,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -5403,7 +5726,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -5438,7 +5761,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -5469,7 +5792,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -5504,7 +5827,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -5539,7 +5862,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -5572,7 +5895,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5618,7 +5941,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5672,7 +5995,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5720,7 +6043,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5779,7 +6102,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5832,7 +6155,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5884,7 +6207,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5928,7 +6251,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -5985,7 +6308,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6042,7 +6365,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6086,7 +6409,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6137,7 +6460,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6191,7 +6514,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6237,7 +6560,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6288,7 +6611,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6342,7 +6665,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6392,7 +6715,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6435,7 +6758,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6482,7 +6805,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6525,7 +6848,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -6570,7 +6893,7 @@ impl<P, D> LexModels for LexModelsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));

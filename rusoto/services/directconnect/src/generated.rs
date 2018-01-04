@@ -11,23 +11,54 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+#[doc="<p>Indicates the address family for the BGP peer.</p> <ul> <li> <p> <b>ipv4</b>: IPv4 address family</p> </li> <li> <p> <b>ipv6</b>: IPv6 address family</p> </li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AddressFamily {
+    Ipv4,
+    Ipv6,
+}
+
+impl Into<String> for AddressFamily {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AddressFamily {
+    fn into(self) -> &'static str {
+        match self {
+            AddressFamily::Ipv4 => "ipv4",
+            AddressFamily::Ipv6 => "ipv6",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AddressFamily {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ipv4" => Ok(AddressFamily::Ipv4),
+            "ipv6" => Ok(AddressFamily::Ipv6),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Container for the parameters to the AllocateConnectionOnInterconnect operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AllocateConnectionOnInterconnectRequest {
@@ -155,6 +186,85 @@ pub struct BGPPeer {
     pub customer_address: Option<String>,
 }
 
+#[doc="<p>The state of the BGP peer.</p> <ul> <li> <p> <b>Verifying</b>: The BGP peering addresses or ASN require validation before the BGP peer can be created. This state only applies to BGP peers on a public virtual interface. </p> </li> <li> <p> <b>Pending</b>: The BGP peer has been created, and is in this state until it is ready to be established.</p> </li> <li> <p> <b>Available</b>: The BGP peer can be established.</p> </li> <li> <p> <b>Deleting</b>: The BGP peer is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The BGP peer has been deleted and cannot be established.</p> </li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BGPPeerState {
+    Available,
+    Deleted,
+    Deleting,
+    Pending,
+    Verifying,
+}
+
+impl Into<String> for BGPPeerState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BGPPeerState {
+    fn into(self) -> &'static str {
+        match self {
+            BGPPeerState::Available => "available",
+            BGPPeerState::Deleted => "deleted",
+            BGPPeerState::Deleting => "deleting",
+            BGPPeerState::Pending => "pending",
+            BGPPeerState::Verifying => "verifying",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BGPPeerState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(BGPPeerState::Available),
+            "deleted" => Ok(BGPPeerState::Deleted),
+            "deleting" => Ok(BGPPeerState::Deleting),
+            "pending" => Ok(BGPPeerState::Pending),
+            "verifying" => Ok(BGPPeerState::Verifying),
+            _ => Err(()),
+        }
+    }
+}
+
+#[doc="<p>The Up/Down state of the BGP peer.</p> <ul> <li> <p> <b>Up</b>: The BGP peer is established.</p> </li> <li> <p> <b>Down</b>: The BGP peer is down.</p> </li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BGPStatus {
+    Down,
+    Up,
+}
+
+impl Into<String> for BGPStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BGPStatus {
+    fn into(self) -> &'static str {
+        match self {
+            BGPStatus::Down => "down",
+            BGPStatus::Up => "up",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BGPStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "down" => Ok(BGPStatus::Down),
+            "up" => Ok(BGPStatus::Up),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Container for the parameters to the ConfirmConnection operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ConfirmConnectionRequest {
@@ -247,6 +357,59 @@ pub struct Connection {
     #[serde(rename="vlan")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub vlan: Option<i64>,
+}
+
+#[doc="<p>State of the connection.</p> <ul> <li> <p> <b>Ordering</b>: The initial state of a hosted connection provisioned on an interconnect. The connection stays in the ordering state until the owner of the hosted connection confirms or declines the connection order.</p> </li> <li> <p> <b>Requested</b>: The initial state of a standard connection. The connection stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <b>Pending</b>: The connection has been approved, and is being initialized.</p> </li> <li> <p> <b>Available</b>: The network link is up, and the connection is ready for use.</p> </li> <li> <p> <b>Down</b>: The network link is down.</p> </li> <li> <p> <b>Deleting</b>: The connection is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The connection has been deleted.</p> </li> <li> <p> <b>Rejected</b>: A hosted connection in the 'Ordering' state will enter the 'Rejected' state if it is deleted by the end customer.</p> </li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConnectionState {
+    Available,
+    Deleted,
+    Deleting,
+    Down,
+    Ordering,
+    Pending,
+    Rejected,
+    Requested,
+}
+
+impl Into<String> for ConnectionState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConnectionState {
+    fn into(self) -> &'static str {
+        match self {
+            ConnectionState::Available => "available",
+            ConnectionState::Deleted => "deleted",
+            ConnectionState::Deleting => "deleting",
+            ConnectionState::Down => "down",
+            ConnectionState::Ordering => "ordering",
+            ConnectionState::Pending => "pending",
+            ConnectionState::Rejected => "rejected",
+            ConnectionState::Requested => "requested",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(ConnectionState::Available),
+            "deleted" => Ok(ConnectionState::Deleted),
+            "deleting" => Ok(ConnectionState::Deleting),
+            "down" => Ok(ConnectionState::Down),
+            "ordering" => Ok(ConnectionState::Ordering),
+            "pending" => Ok(ConnectionState::Pending),
+            "rejected" => Ok(ConnectionState::Rejected),
+            "requested" => Ok(ConnectionState::Requested),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A structure containing a list of connections.</p>"]
@@ -593,6 +756,53 @@ pub struct Interconnect {
     pub region: Option<String>,
 }
 
+#[doc="<p>State of the interconnect.</p> <ul> <li> <p> <b>Requested</b>: The initial state of an interconnect. The interconnect stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <b>Pending</b>: The interconnect has been approved, and is being initialized.</p> </li> <li> <p> <b>Available</b>: The network link is up, and the interconnect is ready for use.</p> </li> <li> <p> <b>Down</b>: The network link is down.</p> </li> <li> <p> <b>Deleting</b>: The interconnect is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The interconnect has been deleted.</p> </li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InterconnectState {
+    Available,
+    Deleted,
+    Deleting,
+    Down,
+    Pending,
+    Requested,
+}
+
+impl Into<String> for InterconnectState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InterconnectState {
+    fn into(self) -> &'static str {
+        match self {
+            InterconnectState::Available => "available",
+            InterconnectState::Deleted => "deleted",
+            InterconnectState::Deleting => "deleting",
+            InterconnectState::Down => "down",
+            InterconnectState::Pending => "pending",
+            InterconnectState::Requested => "requested",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InterconnectState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(InterconnectState::Available),
+            "deleted" => Ok(InterconnectState::Deleted),
+            "deleting" => Ok(InterconnectState::Deleting),
+            "down" => Ok(InterconnectState::Down),
+            "pending" => Ok(InterconnectState::Pending),
+            "requested" => Ok(InterconnectState::Requested),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>A structure containing a list of interconnects.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Interconnects {
@@ -651,6 +861,53 @@ pub struct Lag {
     pub region: Option<String>,
 }
 
+#[doc="<p>The state of the LAG.</p> <ul> <li> <p> <b>Requested</b>: The initial state of a LAG. The LAG stays in the requested state until the Letter of Authorization (LOA) is available.</p> </li> <li> <p> <b>Pending</b>: The LAG has been approved, and is being initialized.</p> </li> <li> <p> <b>Available</b>: The network link is established, and the LAG is ready for use.</p> </li> <li> <p> <b>Down</b>: The network link is down.</p> </li> <li> <p> <b>Deleting</b>: The LAG is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The LAG has been deleted.</p> </li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LagState {
+    Available,
+    Deleted,
+    Deleting,
+    Down,
+    Pending,
+    Requested,
+}
+
+impl Into<String> for LagState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LagState {
+    fn into(self) -> &'static str {
+        match self {
+            LagState::Available => "available",
+            LagState::Deleted => "deleted",
+            LagState::Deleting => "deleting",
+            LagState::Down => "down",
+            LagState::Pending => "pending",
+            LagState::Requested => "requested",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LagState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(LagState::Available),
+            "deleted" => Ok(LagState::Deleted),
+            "deleting" => Ok(LagState::Deleting),
+            "down" => Ok(LagState::Down),
+            "pending" => Ok(LagState::Pending),
+            "requested" => Ok(LagState::Requested),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>A structure containing a list of LAGs.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Lags {
@@ -673,6 +930,38 @@ pub struct Loa {
     #[serde(rename="loaContentType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub loa_content_type: Option<String>,
+}
+
+#[doc="<p>A standard media type indicating the content type of the LOA-CFA document. Currently, the only supported value is \"application/pdf\".</p> <p>Default: application/pdf</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LoaContentType {
+    ApplicationPdf,
+}
+
+impl Into<String> for LoaContentType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LoaContentType {
+    fn into(self) -> &'static str {
+        match self {
+            LoaContentType::ApplicationPdf => "application/pdf",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoaContentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "application/pdf" => Ok(LoaContentType::ApplicationPdf),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>An AWS Direct Connect location where connections and interconnects can be requested.</p>"]
@@ -973,6 +1262,59 @@ pub struct VirtualInterface {
     #[serde(rename="vlan")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub vlan: Option<i64>,
+}
+
+#[doc="<p>State of the virtual interface.</p> <ul> <li> <p> <b>Confirming</b>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <b>Verifying</b>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <b>Pending</b>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <b>Available</b>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <b>Down</b>: A virtual interface that is BGP down.</p> </li> <li> <p> <b>Deleting</b>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <b>Deleted</b>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <b>Rejected</b>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the 'Confirming' state is deleted by the virtual interface owner, the virtual interface will enter the 'Rejected' state.</p> </li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VirtualInterfaceState {
+    Available,
+    Confirming,
+    Deleted,
+    Deleting,
+    Down,
+    Pending,
+    Rejected,
+    Verifying,
+}
+
+impl Into<String> for VirtualInterfaceState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VirtualInterfaceState {
+    fn into(self) -> &'static str {
+        match self {
+            VirtualInterfaceState::Available => "available",
+            VirtualInterfaceState::Confirming => "confirming",
+            VirtualInterfaceState::Deleted => "deleted",
+            VirtualInterfaceState::Deleting => "deleting",
+            VirtualInterfaceState::Down => "down",
+            VirtualInterfaceState::Pending => "pending",
+            VirtualInterfaceState::Rejected => "rejected",
+            VirtualInterfaceState::Verifying => "verifying",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VirtualInterfaceState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(VirtualInterfaceState::Available),
+            "confirming" => Ok(VirtualInterfaceState::Confirming),
+            "deleted" => Ok(VirtualInterfaceState::Deleted),
+            "deleting" => Ok(VirtualInterfaceState::Deleting),
+            "down" => Ok(VirtualInterfaceState::Down),
+            "pending" => Ok(VirtualInterfaceState::Pending),
+            "rejected" => Ok(VirtualInterfaceState::Rejected),
+            "verifying" => Ok(VirtualInterfaceState::Verifying),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A structure containing a list of virtual interfaces.</p>"]
@@ -4380,7 +4722,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
@@ -4411,7 +4753,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
@@ -4445,7 +4787,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
@@ -4480,7 +4822,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
@@ -4513,7 +4855,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
@@ -4545,7 +4887,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
@@ -4577,7 +4919,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
@@ -4610,7 +4952,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ConfirmConnectionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4642,7 +4984,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ConfirmPrivateVirtualInterfaceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4675,7 +5017,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ConfirmPublicVirtualInterfaceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4706,7 +5048,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateBGPPeerResponse>(String::from_utf8_lossy(&body)
@@ -4738,7 +5080,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
@@ -4769,7 +5111,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Interconnect>(String::from_utf8_lossy(&body).as_ref())
@@ -4798,7 +5140,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4830,7 +5172,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
@@ -4865,7 +5207,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&body)
@@ -4898,7 +5240,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteBGPPeerResponse>(String::from_utf8_lossy(&body)
@@ -4930,7 +5272,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
@@ -4961,7 +5303,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteInterconnectResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4989,7 +5331,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -5020,7 +5362,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteVirtualInterfaceResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -5051,7 +5393,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeConnectionLoaResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -5081,7 +5423,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&body).as_ref())
@@ -5114,7 +5456,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&body).as_ref())
@@ -5145,7 +5487,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&body).as_ref())
@@ -5178,7 +5520,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeInterconnectLoaResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -5209,7 +5551,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Interconnects>(String::from_utf8_lossy(&body).as_ref())
@@ -5238,7 +5580,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Lags>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -5266,7 +5608,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Loa>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -5293,7 +5635,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Locations>(String::from_utf8_lossy(&body).as_ref())
@@ -5324,7 +5666,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeTagsResponse>(String::from_utf8_lossy(&body)
@@ -5353,7 +5695,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<VirtualGateways>(String::from_utf8_lossy(&body).as_ref())
@@ -5385,7 +5727,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<VirtualInterfaces>(String::from_utf8_lossy(&body)
@@ -5420,7 +5762,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&body).as_ref())
@@ -5452,7 +5794,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<TagResourceResponse>(String::from_utf8_lossy(&body)
@@ -5484,7 +5826,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UntagResourceResponse>(String::from_utf8_lossy(&body)
@@ -5514,7 +5856,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&body).as_ref()).unwrap())

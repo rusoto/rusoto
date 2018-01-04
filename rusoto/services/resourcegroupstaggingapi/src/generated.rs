@@ -11,23 +11,54 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ErrorCode {
+    InternalServiceException,
+    InvalidParameterException,
+}
+
+impl Into<String> for ErrorCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ErrorCode {
+    fn into(self) -> &'static str {
+        match self {
+            ErrorCode::InternalServiceException => "InternalServiceException",
+            ErrorCode::InvalidParameterException => "InvalidParameterException",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "InternalServiceException" => Ok(ErrorCode::InternalServiceException),
+            "InvalidParameterException" => Ok(ErrorCode::InvalidParameterException),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Details of the common errors that all actions return.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FailureInfo {
@@ -739,7 +770,7 @@ impl<P, D> ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetResourcesOutput>(String::from_utf8_lossy(&body)
@@ -770,7 +801,7 @@ impl<P, D> ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetTagKeysOutput>(String::from_utf8_lossy(&body)
@@ -803,7 +834,7 @@ impl<P, D> ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetTagValuesOutput>(String::from_utf8_lossy(&body)
@@ -836,7 +867,7 @@ impl<P, D> ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<TagResourcesOutput>(String::from_utf8_lossy(&body)
@@ -869,7 +900,7 @@ impl<P, D> ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UntagResourcesOutput>(String::from_utf8_lossy(&body)

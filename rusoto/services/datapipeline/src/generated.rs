@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -281,6 +277,50 @@ pub struct Operator {
     #[serde(rename="values")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OperatorType {
+    Between,
+    Eq,
+    Ge,
+    Le,
+    RefEq,
+}
+
+impl Into<String> for OperatorType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OperatorType {
+    fn into(self) -> &'static str {
+        match self {
+            OperatorType::Between => "BETWEEN",
+            OperatorType::Eq => "EQ",
+            OperatorType::Ge => "GE",
+            OperatorType::Le => "LE",
+            OperatorType::RefEq => "REF_EQ",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperatorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BETWEEN" => Ok(OperatorType::Between),
+            "EQ" => Ok(OperatorType::Eq),
+            "GE" => Ok(OperatorType::Ge),
+            "LE" => Ok(OperatorType::Le),
+            "REF_EQ" => Ok(OperatorType::RefEq),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The attributes allowed or specified with a parameter object.</p>"]
@@ -616,6 +656,44 @@ pub struct TaskObject {
     #[serde(rename="taskId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub task_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TaskStatus {
+    Failed,
+    False,
+    Finished,
+}
+
+impl Into<String> for TaskStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TaskStatus {
+    fn into(self) -> &'static str {
+        match self {
+            TaskStatus::Failed => "FAILED",
+            TaskStatus::False => "FALSE",
+            TaskStatus::Finished => "FINISHED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaskStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(TaskStatus::Failed),
+            "FALSE" => Ok(TaskStatus::False),
+            "FINISHED" => Ok(TaskStatus::Finished),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Contains the parameters for ValidatePipelineDefinition.</p>"]
@@ -2644,7 +2722,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ActivatePipelineOutput>(String::from_utf8_lossy(&body)
@@ -2674,7 +2752,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&body).as_ref())
@@ -2705,7 +2783,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreatePipelineOutput>(String::from_utf8_lossy(&body)
@@ -2737,7 +2815,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeactivatePipelineOutput>(String::from_utf8_lossy(&body)
@@ -2767,7 +2845,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -2793,7 +2871,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeObjectsOutput>(String::from_utf8_lossy(&body)
@@ -2825,7 +2903,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribePipelinesOutput>(String::from_utf8_lossy(&body)
@@ -2857,7 +2935,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<EvaluateExpressionOutput>(String::from_utf8_lossy(&body)
@@ -2890,7 +2968,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetPipelineDefinitionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -2920,7 +2998,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListPipelinesOutput>(String::from_utf8_lossy(&body)
@@ -2952,7 +3030,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PollForTaskOutput>(String::from_utf8_lossy(&body)
@@ -2985,7 +3063,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutPipelineDefinitionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3015,7 +3093,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<QueryObjectsOutput>(String::from_utf8_lossy(&body)
@@ -3045,7 +3123,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RemoveTagsOutput>(String::from_utf8_lossy(&body)
@@ -3077,7 +3155,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ReportTaskProgressOutput>(String::from_utf8_lossy(&body)
@@ -3110,7 +3188,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ReportTaskRunnerHeartbeatOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -3139,7 +3217,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3165,7 +3243,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<SetTaskStatusOutput>(String::from_utf8_lossy(&body)
@@ -3198,7 +3276,7 @@ impl<P, D> DataPipeline for DataPipelineClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ValidatePipelineDefinitionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())

@@ -11,23 +11,54 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AccessDirection {
+    Inbound,
+    Outbound,
+}
+
+impl Into<String> for AccessDirection {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AccessDirection {
+    fn into(self) -> &'static str {
+        match self {
+            AccessDirection::Inbound => "inbound",
+            AccessDirection::Outbound => "outbound",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccessDirection {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "inbound" => Ok(AccessDirection::Inbound),
+            "outbound" => Ok(AccessDirection::Outbound),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AllocateStaticIpRequest {
     #[doc="<p>The name of the static IP address.</p>"]
@@ -121,6 +152,41 @@ pub struct Blueprint {
     #[serde(rename="versionCode")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub version_code: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BlueprintType {
+    App,
+    Os,
+}
+
+impl Into<String> for BlueprintType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BlueprintType {
+    fn into(self) -> &'static str {
+        match self {
+            BlueprintType::App => "app",
+            BlueprintType::Os => "os",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BlueprintType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "app" => Ok(BlueprintType::App),
+            "os" => Ok(BlueprintType::Os),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes a bundle, which is a set of specs describing your virtual private server (or <i>instance</i>).</p>"]
@@ -1090,6 +1156,41 @@ pub struct InstanceAccessDetails {
     pub username: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceAccessProtocol {
+    Rdp,
+    Ssh,
+}
+
+impl Into<String> for InstanceAccessProtocol {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceAccessProtocol {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceAccessProtocol::Rdp => "rdp",
+            InstanceAccessProtocol::Ssh => "ssh",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceAccessProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "rdp" => Ok(InstanceAccessProtocol::Rdp),
+            "ssh" => Ok(InstanceAccessProtocol::Ssh),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the hardware for the instance.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct InstanceHardware {
@@ -1105,6 +1206,53 @@ pub struct InstanceHardware {
     #[serde(rename="ramSizeInGb")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub ram_size_in_gb: Option<f32>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceMetricName {
+    Cpuutilization,
+    NetworkIn,
+    NetworkOut,
+    StatusCheckFailed,
+    StatusCheckFailedInstance,
+    StatusCheckFailedSystem,
+}
+
+impl Into<String> for InstanceMetricName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceMetricName {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceMetricName::Cpuutilization => "CPUUtilization",
+            InstanceMetricName::NetworkIn => "NetworkIn",
+            InstanceMetricName::NetworkOut => "NetworkOut",
+            InstanceMetricName::StatusCheckFailed => "StatusCheckFailed",
+            InstanceMetricName::StatusCheckFailedInstance => "StatusCheckFailed_Instance",
+            InstanceMetricName::StatusCheckFailedSystem => "StatusCheckFailed_System",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceMetricName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CPUUtilization" => Ok(InstanceMetricName::Cpuutilization),
+            "NetworkIn" => Ok(InstanceMetricName::NetworkIn),
+            "NetworkOut" => Ok(InstanceMetricName::NetworkOut),
+            "StatusCheckFailed" => Ok(InstanceMetricName::StatusCheckFailed),
+            "StatusCheckFailed_Instance" => Ok(InstanceMetricName::StatusCheckFailedInstance),
+            "StatusCheckFailed_System" => Ok(InstanceMetricName::StatusCheckFailedSystem),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes monthly data transfer rates and port information for an instance.</p>"]
@@ -1231,6 +1379,44 @@ pub struct InstanceSnapshot {
     pub support_code: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceSnapshotState {
+    Available,
+    Error,
+    Pending,
+}
+
+impl Into<String> for InstanceSnapshotState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceSnapshotState {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceSnapshotState::Available => "available",
+            InstanceSnapshotState::Error => "error",
+            InstanceSnapshotState::Pending => "pending",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceSnapshotState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(InstanceSnapshotState::Available),
+            "error" => Ok(InstanceSnapshotState::Error),
+            "pending" => Ok(InstanceSnapshotState::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the virtual private server (or <i>instance</i>) status.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct InstanceState {
@@ -1321,6 +1507,160 @@ pub struct MetricDatapoint {
     pub unit: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MetricStatistic {
+    Average,
+    Maximum,
+    Minimum,
+    SampleCount,
+    Sum,
+}
+
+impl Into<String> for MetricStatistic {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MetricStatistic {
+    fn into(self) -> &'static str {
+        match self {
+            MetricStatistic::Average => "Average",
+            MetricStatistic::Maximum => "Maximum",
+            MetricStatistic::Minimum => "Minimum",
+            MetricStatistic::SampleCount => "SampleCount",
+            MetricStatistic::Sum => "Sum",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricStatistic {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Average" => Ok(MetricStatistic::Average),
+            "Maximum" => Ok(MetricStatistic::Maximum),
+            "Minimum" => Ok(MetricStatistic::Minimum),
+            "SampleCount" => Ok(MetricStatistic::SampleCount),
+            "Sum" => Ok(MetricStatistic::Sum),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MetricUnit {
+    Bits,
+    BitsSecond,
+    Bytes,
+    BytesSecond,
+    Count,
+    CountSecond,
+    Gigabits,
+    GigabitsSecond,
+    Gigabytes,
+    GigabytesSecond,
+    Kilobits,
+    KilobitsSecond,
+    Kilobytes,
+    KilobytesSecond,
+    Megabits,
+    MegabitsSecond,
+    Megabytes,
+    MegabytesSecond,
+    Microseconds,
+    Milliseconds,
+    None,
+    Percent,
+    Seconds,
+    Terabits,
+    TerabitsSecond,
+    Terabytes,
+    TerabytesSecond,
+}
+
+impl Into<String> for MetricUnit {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MetricUnit {
+    fn into(self) -> &'static str {
+        match self {
+            MetricUnit::Bits => "Bits",
+            MetricUnit::BitsSecond => "Bits/Second",
+            MetricUnit::Bytes => "Bytes",
+            MetricUnit::BytesSecond => "Bytes/Second",
+            MetricUnit::Count => "Count",
+            MetricUnit::CountSecond => "Count/Second",
+            MetricUnit::Gigabits => "Gigabits",
+            MetricUnit::GigabitsSecond => "Gigabits/Second",
+            MetricUnit::Gigabytes => "Gigabytes",
+            MetricUnit::GigabytesSecond => "Gigabytes/Second",
+            MetricUnit::Kilobits => "Kilobits",
+            MetricUnit::KilobitsSecond => "Kilobits/Second",
+            MetricUnit::Kilobytes => "Kilobytes",
+            MetricUnit::KilobytesSecond => "Kilobytes/Second",
+            MetricUnit::Megabits => "Megabits",
+            MetricUnit::MegabitsSecond => "Megabits/Second",
+            MetricUnit::Megabytes => "Megabytes",
+            MetricUnit::MegabytesSecond => "Megabytes/Second",
+            MetricUnit::Microseconds => "Microseconds",
+            MetricUnit::Milliseconds => "Milliseconds",
+            MetricUnit::None => "None",
+            MetricUnit::Percent => "Percent",
+            MetricUnit::Seconds => "Seconds",
+            MetricUnit::Terabits => "Terabits",
+            MetricUnit::TerabitsSecond => "Terabits/Second",
+            MetricUnit::Terabytes => "Terabytes",
+            MetricUnit::TerabytesSecond => "Terabytes/Second",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricUnit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Bits" => Ok(MetricUnit::Bits),
+            "Bits/Second" => Ok(MetricUnit::BitsSecond),
+            "Bytes" => Ok(MetricUnit::Bytes),
+            "Bytes/Second" => Ok(MetricUnit::BytesSecond),
+            "Count" => Ok(MetricUnit::Count),
+            "Count/Second" => Ok(MetricUnit::CountSecond),
+            "Gigabits" => Ok(MetricUnit::Gigabits),
+            "Gigabits/Second" => Ok(MetricUnit::GigabitsSecond),
+            "Gigabytes" => Ok(MetricUnit::Gigabytes),
+            "Gigabytes/Second" => Ok(MetricUnit::GigabytesSecond),
+            "Kilobits" => Ok(MetricUnit::Kilobits),
+            "Kilobits/Second" => Ok(MetricUnit::KilobitsSecond),
+            "Kilobytes" => Ok(MetricUnit::Kilobytes),
+            "Kilobytes/Second" => Ok(MetricUnit::KilobytesSecond),
+            "Megabits" => Ok(MetricUnit::Megabits),
+            "Megabits/Second" => Ok(MetricUnit::MegabitsSecond),
+            "Megabytes" => Ok(MetricUnit::Megabytes),
+            "Megabytes/Second" => Ok(MetricUnit::MegabytesSecond),
+            "Microseconds" => Ok(MetricUnit::Microseconds),
+            "Milliseconds" => Ok(MetricUnit::Milliseconds),
+            "None" => Ok(MetricUnit::None),
+            "Percent" => Ok(MetricUnit::Percent),
+            "Seconds" => Ok(MetricUnit::Seconds),
+            "Terabits" => Ok(MetricUnit::Terabits),
+            "Terabits/Second" => Ok(MetricUnit::TerabitsSecond),
+            "Terabytes" => Ok(MetricUnit::Terabytes),
+            "Terabytes/Second" => Ok(MetricUnit::TerabytesSecond),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the monthly data transfer in and out of your virtual private server (or <i>instance</i>).</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct MonthlyTransfer {
@@ -1328,6 +1668,44 @@ pub struct MonthlyTransfer {
     #[serde(rename="gbPerMonthAllocated")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub gb_per_month_allocated: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NetworkProtocol {
+    All,
+    Tcp,
+    Udp,
+}
+
+impl Into<String> for NetworkProtocol {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NetworkProtocol {
+    fn into(self) -> &'static str {
+        match self {
+            NetworkProtocol::All => "all",
+            NetworkProtocol::Tcp => "tcp",
+            NetworkProtocol::Udp => "udp",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NetworkProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "all" => Ok(NetworkProtocol::All),
+            "tcp" => Ok(NetworkProtocol::Tcp),
+            "udp" => Ok(NetworkProtocol::Udp),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1401,6 +1779,133 @@ pub struct Operation {
     pub status_changed_at: Option<f64>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OperationStatus {
+    Completed,
+    Failed,
+    NotStarted,
+    Started,
+}
+
+impl Into<String> for OperationStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OperationStatus {
+    fn into(self) -> &'static str {
+        match self {
+            OperationStatus::Completed => "Completed",
+            OperationStatus::Failed => "Failed",
+            OperationStatus::NotStarted => "NotStarted",
+            OperationStatus::Started => "Started",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Completed" => Ok(OperationStatus::Completed),
+            "Failed" => Ok(OperationStatus::Failed),
+            "NotStarted" => Ok(OperationStatus::NotStarted),
+            "Started" => Ok(OperationStatus::Started),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OperationType {
+    AllocateStaticIp,
+    AttachStaticIp,
+    CloseInstancePublicPorts,
+    CreateDomain,
+    CreateInstance,
+    CreateInstanceSnapshot,
+    CreateInstancesFromSnapshot,
+    DeleteDomain,
+    DeleteDomainEntry,
+    DeleteInstance,
+    DeleteInstanceSnapshot,
+    DetachStaticIp,
+    OpenInstancePublicPorts,
+    PutInstancePublicPorts,
+    RebootInstance,
+    ReleaseStaticIp,
+    StartInstance,
+    StopInstance,
+    UpdateDomainEntry,
+}
+
+impl Into<String> for OperationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OperationType {
+    fn into(self) -> &'static str {
+        match self {
+            OperationType::AllocateStaticIp => "AllocateStaticIp",
+            OperationType::AttachStaticIp => "AttachStaticIp",
+            OperationType::CloseInstancePublicPorts => "CloseInstancePublicPorts",
+            OperationType::CreateDomain => "CreateDomain",
+            OperationType::CreateInstance => "CreateInstance",
+            OperationType::CreateInstanceSnapshot => "CreateInstanceSnapshot",
+            OperationType::CreateInstancesFromSnapshot => "CreateInstancesFromSnapshot",
+            OperationType::DeleteDomain => "DeleteDomain",
+            OperationType::DeleteDomainEntry => "DeleteDomainEntry",
+            OperationType::DeleteInstance => "DeleteInstance",
+            OperationType::DeleteInstanceSnapshot => "DeleteInstanceSnapshot",
+            OperationType::DetachStaticIp => "DetachStaticIp",
+            OperationType::OpenInstancePublicPorts => "OpenInstancePublicPorts",
+            OperationType::PutInstancePublicPorts => "PutInstancePublicPorts",
+            OperationType::RebootInstance => "RebootInstance",
+            OperationType::ReleaseStaticIp => "ReleaseStaticIp",
+            OperationType::StartInstance => "StartInstance",
+            OperationType::StopInstance => "StopInstance",
+            OperationType::UpdateDomainEntry => "UpdateDomainEntry",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AllocateStaticIp" => Ok(OperationType::AllocateStaticIp),
+            "AttachStaticIp" => Ok(OperationType::AttachStaticIp),
+            "CloseInstancePublicPorts" => Ok(OperationType::CloseInstancePublicPorts),
+            "CreateDomain" => Ok(OperationType::CreateDomain),
+            "CreateInstance" => Ok(OperationType::CreateInstance),
+            "CreateInstanceSnapshot" => Ok(OperationType::CreateInstanceSnapshot),
+            "CreateInstancesFromSnapshot" => Ok(OperationType::CreateInstancesFromSnapshot),
+            "DeleteDomain" => Ok(OperationType::DeleteDomain),
+            "DeleteDomainEntry" => Ok(OperationType::DeleteDomainEntry),
+            "DeleteInstance" => Ok(OperationType::DeleteInstance),
+            "DeleteInstanceSnapshot" => Ok(OperationType::DeleteInstanceSnapshot),
+            "DetachStaticIp" => Ok(OperationType::DetachStaticIp),
+            "OpenInstancePublicPorts" => Ok(OperationType::OpenInstancePublicPorts),
+            "PutInstancePublicPorts" => Ok(OperationType::PutInstancePublicPorts),
+            "RebootInstance" => Ok(OperationType::RebootInstance),
+            "ReleaseStaticIp" => Ok(OperationType::ReleaseStaticIp),
+            "StartInstance" => Ok(OperationType::StartInstance),
+            "StopInstance" => Ok(OperationType::StopInstance),
+            "UpdateDomainEntry" => Ok(OperationType::UpdateDomainEntry),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PeerVpcRequest;
 
@@ -1410,6 +1915,41 @@ pub struct PeerVpcResult {
     #[serde(rename="operation")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub operation: Option<Operation>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PortAccessType {
+    Private,
+    Public,
+}
+
+impl Into<String> for PortAccessType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PortAccessType {
+    fn into(self) -> &'static str {
+        match self {
+            PortAccessType::Private => "Private",
+            PortAccessType::Public => "Public",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PortAccessType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Private" => Ok(PortAccessType::Private),
+            "Public" => Ok(PortAccessType::Public),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes information about the ports on your virtual private server (or <i>instance</i>).</p>"]
@@ -1427,6 +1967,41 @@ pub struct PortInfo {
     #[serde(rename="toPort")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub to_port: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PortState {
+    Closed,
+    Open,
+}
+
+impl Into<String> for PortState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PortState {
+    fn into(self) -> &'static str {
+        match self {
+            PortState::Closed => "closed",
+            PortState::Open => "open",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PortState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "closed" => Ok(PortState::Closed),
+            "open" => Ok(PortState::Open),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1487,6 +2062,68 @@ pub struct Region {
     pub name: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RegionName {
+    ApNortheast1,
+    ApNortheast2,
+    ApSouth1,
+    ApSoutheast1,
+    ApSoutheast2,
+    EuCentral1,
+    EuWest1,
+    UsEast1,
+    UsEast2,
+    UsWest1,
+    UsWest2,
+}
+
+impl Into<String> for RegionName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RegionName {
+    fn into(self) -> &'static str {
+        match self {
+            RegionName::ApNortheast1 => "ap-northeast-1",
+            RegionName::ApNortheast2 => "ap-northeast-2",
+            RegionName::ApSouth1 => "ap-south-1",
+            RegionName::ApSoutheast1 => "ap-southeast-1",
+            RegionName::ApSoutheast2 => "ap-southeast-2",
+            RegionName::EuCentral1 => "eu-central-1",
+            RegionName::EuWest1 => "eu-west-1",
+            RegionName::UsEast1 => "us-east-1",
+            RegionName::UsEast2 => "us-east-2",
+            RegionName::UsWest1 => "us-west-1",
+            RegionName::UsWest2 => "us-west-2",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RegionName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ap-northeast-1" => Ok(RegionName::ApNortheast1),
+            "ap-northeast-2" => Ok(RegionName::ApNortheast2),
+            "ap-south-1" => Ok(RegionName::ApSouth1),
+            "ap-southeast-1" => Ok(RegionName::ApSoutheast1),
+            "ap-southeast-2" => Ok(RegionName::ApSoutheast2),
+            "eu-central-1" => Ok(RegionName::EuCentral1),
+            "eu-west-1" => Ok(RegionName::EuWest1),
+            "us-east-1" => Ok(RegionName::UsEast1),
+            "us-east-2" => Ok(RegionName::UsEast2),
+            "us-west-1" => Ok(RegionName::UsWest1),
+            "us-west-2" => Ok(RegionName::UsWest2),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ReleaseStaticIpRequest {
     #[doc="<p>The name of the static IP to delete.</p>"]
@@ -1513,6 +2150,53 @@ pub struct ResourceLocation {
     #[serde(rename="regionName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub region_name: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ResourceType {
+    Domain,
+    Instance,
+    InstanceSnapshot,
+    KeyPair,
+    PeeredVpc,
+    StaticIp,
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ResourceType {
+    fn into(self) -> &'static str {
+        match self {
+            ResourceType::Domain => "Domain",
+            ResourceType::Instance => "Instance",
+            ResourceType::InstanceSnapshot => "InstanceSnapshot",
+            ResourceType::KeyPair => "KeyPair",
+            ResourceType::PeeredVpc => "PeeredVpc",
+            ResourceType::StaticIp => "StaticIp",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Domain" => Ok(ResourceType::Domain),
+            "Instance" => Ok(ResourceType::Instance),
+            "InstanceSnapshot" => Ok(ResourceType::InstanceSnapshot),
+            "KeyPair" => Ok(ResourceType::KeyPair),
+            "PeeredVpc" => Ok(ResourceType::PeeredVpc),
+            "StaticIp" => Ok(ResourceType::StaticIp),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -7359,7 +8043,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AllocateStaticIpResult>(String::from_utf8_lossy(&body)
@@ -7391,7 +8075,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AttachStaticIpResult>(String::from_utf8_lossy(&body)
@@ -7425,7 +8109,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CloseInstancePublicPortsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7456,7 +8140,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateDomainResult>(String::from_utf8_lossy(&body)
@@ -7488,7 +8172,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateDomainEntryResult>(String::from_utf8_lossy(&body)
@@ -7521,7 +8205,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateInstanceSnapshotResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7551,7 +8235,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateInstancesResult>(String::from_utf8_lossy(&body)
@@ -7585,7 +8269,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateInstancesFromSnapshotResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7616,7 +8300,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateKeyPairResult>(String::from_utf8_lossy(&body)
@@ -7648,7 +8332,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteDomainResult>(String::from_utf8_lossy(&body)
@@ -7680,7 +8364,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteDomainEntryResult>(String::from_utf8_lossy(&body)
@@ -7712,7 +8396,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteInstanceResult>(String::from_utf8_lossy(&body)
@@ -7745,7 +8429,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteInstanceSnapshotResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7775,7 +8459,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteKeyPairResult>(String::from_utf8_lossy(&body)
@@ -7807,7 +8491,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DetachStaticIpResult>(String::from_utf8_lossy(&body)
@@ -7838,7 +8522,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DownloadDefaultKeyPairResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7868,7 +8552,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetActiveNamesResult>(String::from_utf8_lossy(&body)
@@ -7900,7 +8584,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetBlueprintsResult>(String::from_utf8_lossy(&body)
@@ -7930,7 +8614,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetBundlesResult>(String::from_utf8_lossy(&body)
@@ -7960,7 +8644,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDomainResult>(String::from_utf8_lossy(&body).as_ref())
@@ -7989,7 +8673,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDomainsResult>(String::from_utf8_lossy(&body)
@@ -8021,7 +8705,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetInstanceResult>(String::from_utf8_lossy(&body)
@@ -8055,7 +8739,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetInstanceAccessDetailsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8087,7 +8771,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetInstanceMetricDataResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8118,7 +8802,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetInstancePortStatesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8148,7 +8832,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetInstanceSnapshotResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8178,7 +8862,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetInstanceSnapshotsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8208,7 +8892,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetInstanceStateResult>(String::from_utf8_lossy(&body)
@@ -8240,7 +8924,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetInstancesResult>(String::from_utf8_lossy(&body)
@@ -8270,7 +8954,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetKeyPairResult>(String::from_utf8_lossy(&body)
@@ -8302,7 +8986,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetKeyPairsResult>(String::from_utf8_lossy(&body)
@@ -8334,7 +9018,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetOperationResult>(String::from_utf8_lossy(&body)
@@ -8366,7 +9050,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetOperationsResult>(String::from_utf8_lossy(&body)
@@ -8400,7 +9084,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetOperationsForResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8429,7 +9113,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetRegionsResult>(String::from_utf8_lossy(&body)
@@ -8461,7 +9145,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetStaticIpResult>(String::from_utf8_lossy(&body)
@@ -8493,7 +9177,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetStaticIpsResult>(String::from_utf8_lossy(&body)
@@ -8525,7 +9209,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ImportKeyPairResult>(String::from_utf8_lossy(&body)
@@ -8554,7 +9238,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<IsVpcPeeredResult>(String::from_utf8_lossy(&body)
@@ -8587,7 +9271,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<OpenInstancePublicPortsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8615,7 +9299,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PeerVpcResult>(String::from_utf8_lossy(&body).as_ref())
@@ -8647,7 +9331,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutInstancePublicPortsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8677,7 +9361,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RebootInstanceResult>(String::from_utf8_lossy(&body)
@@ -8709,7 +9393,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ReleaseStaticIpResult>(String::from_utf8_lossy(&body)
@@ -8741,7 +9425,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartInstanceResult>(String::from_utf8_lossy(&body)
@@ -8773,7 +9457,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopInstanceResult>(String::from_utf8_lossy(&body)
@@ -8802,7 +9486,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UnpeerVpcResult>(String::from_utf8_lossy(&body).as_ref())
@@ -8833,7 +9517,7 @@ impl<P, D> Lightsail for LightsailClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateDomainEntryResult>(String::from_utf8_lossy(&body)

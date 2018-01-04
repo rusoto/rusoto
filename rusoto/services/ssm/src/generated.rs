@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -210,6 +206,56 @@ pub struct AssociationFilter {
     pub value: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AssociationFilterKey {
+    AssociationId,
+    AssociationName,
+    AssociationStatusName,
+    InstanceId,
+    LastExecutedAfter,
+    LastExecutedBefore,
+    Name,
+}
+
+impl Into<String> for AssociationFilterKey {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AssociationFilterKey {
+    fn into(self) -> &'static str {
+        match self {
+            AssociationFilterKey::AssociationId => "AssociationId",
+            AssociationFilterKey::AssociationName => "AssociationName",
+            AssociationFilterKey::AssociationStatusName => "AssociationStatusName",
+            AssociationFilterKey::InstanceId => "InstanceId",
+            AssociationFilterKey::LastExecutedAfter => "LastExecutedAfter",
+            AssociationFilterKey::LastExecutedBefore => "LastExecutedBefore",
+            AssociationFilterKey::Name => "Name",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssociationFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AssociationId" => Ok(AssociationFilterKey::AssociationId),
+            "AssociationName" => Ok(AssociationFilterKey::AssociationName),
+            "AssociationStatusName" => Ok(AssociationFilterKey::AssociationStatusName),
+            "InstanceId" => Ok(AssociationFilterKey::InstanceId),
+            "LastExecutedAfter" => Ok(AssociationFilterKey::LastExecutedAfter),
+            "LastExecutedBefore" => Ok(AssociationFilterKey::LastExecutedBefore),
+            "Name" => Ok(AssociationFilterKey::Name),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about the association.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AssociationOverview {
@@ -243,6 +289,44 @@ pub struct AssociationStatus {
     #[doc="<p>The status.</p>"]
     #[serde(rename="Name")]
     pub name: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AssociationStatusName {
+    Failed,
+    Pending,
+    Success,
+}
+
+impl Into<String> for AssociationStatusName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AssociationStatusName {
+    fn into(self) -> &'static str {
+        match self {
+            AssociationStatusName::Failed => "Failed",
+            AssociationStatusName::Pending => "Pending",
+            AssociationStatusName::Success => "Success",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssociationStatusName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Failed" => Ok(AssociationStatusName::Failed),
+            "Pending" => Ok(AssociationStatusName::Pending),
+            "Success" => Ok(AssociationStatusName::Success),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Information about the association version.</p>"]
@@ -346,6 +430,41 @@ pub struct AutomationExecutionFilter {
     pub values: Vec<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AutomationExecutionFilterKey {
+    DocumentNamePrefix,
+    ExecutionStatus,
+}
+
+impl Into<String> for AutomationExecutionFilterKey {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AutomationExecutionFilterKey {
+    fn into(self) -> &'static str {
+        match self {
+            AutomationExecutionFilterKey::DocumentNamePrefix => "DocumentNamePrefix",
+            AutomationExecutionFilterKey::ExecutionStatus => "ExecutionStatus",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutomationExecutionFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DocumentNamePrefix" => Ok(AutomationExecutionFilterKey::DocumentNamePrefix),
+            "ExecutionStatus" => Ok(AutomationExecutionFilterKey::ExecutionStatus),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Details about a specific Automation execution.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AutomationExecutionMetadata {
@@ -385,6 +504,56 @@ pub struct AutomationExecutionMetadata {
     #[serde(rename="Outputs")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub outputs: Option<::std::collections::HashMap<String, Vec<String>>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AutomationExecutionStatus {
+    Cancelled,
+    Failed,
+    InProgress,
+    Pending,
+    Success,
+    TimedOut,
+    Waiting,
+}
+
+impl Into<String> for AutomationExecutionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AutomationExecutionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            AutomationExecutionStatus::Cancelled => "Cancelled",
+            AutomationExecutionStatus::Failed => "Failed",
+            AutomationExecutionStatus::InProgress => "InProgress",
+            AutomationExecutionStatus::Pending => "Pending",
+            AutomationExecutionStatus::Success => "Success",
+            AutomationExecutionStatus::TimedOut => "TimedOut",
+            AutomationExecutionStatus::Waiting => "Waiting",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutomationExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Cancelled" => Ok(AutomationExecutionStatus::Cancelled),
+            "Failed" => Ok(AutomationExecutionStatus::Failed),
+            "InProgress" => Ok(AutomationExecutionStatus::InProgress),
+            "Pending" => Ok(AutomationExecutionStatus::Pending),
+            "Success" => Ok(AutomationExecutionStatus::Success),
+            "TimedOut" => Ok(AutomationExecutionStatus::TimedOut),
+            "Waiting" => Ok(AutomationExecutionStatus::Waiting),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p/>"]
@@ -499,6 +668,44 @@ pub struct CommandFilter {
     pub value: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CommandFilterKey {
+    InvokedAfter,
+    InvokedBefore,
+    Status,
+}
+
+impl Into<String> for CommandFilterKey {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CommandFilterKey {
+    fn into(self) -> &'static str {
+        match self {
+            CommandFilterKey::InvokedAfter => "InvokedAfter",
+            CommandFilterKey::InvokedBefore => "InvokedBefore",
+            CommandFilterKey::Status => "Status",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CommandFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "InvokedAfter" => Ok(CommandFilterKey::InvokedAfter),
+            "InvokedBefore" => Ok(CommandFilterKey::InvokedBefore),
+            "Status" => Ok(CommandFilterKey::Status),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. A command invocation returns status and detail information about a command you executed. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CommandInvocation {
@@ -559,6 +766,59 @@ pub struct CommandInvocation {
     pub trace_output: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CommandInvocationStatus {
+    Cancelled,
+    Cancelling,
+    Delayed,
+    Failed,
+    InProgress,
+    Pending,
+    Success,
+    TimedOut,
+}
+
+impl Into<String> for CommandInvocationStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CommandInvocationStatus {
+    fn into(self) -> &'static str {
+        match self {
+            CommandInvocationStatus::Cancelled => "Cancelled",
+            CommandInvocationStatus::Cancelling => "Cancelling",
+            CommandInvocationStatus::Delayed => "Delayed",
+            CommandInvocationStatus::Failed => "Failed",
+            CommandInvocationStatus::InProgress => "InProgress",
+            CommandInvocationStatus::Pending => "Pending",
+            CommandInvocationStatus::Success => "Success",
+            CommandInvocationStatus::TimedOut => "TimedOut",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CommandInvocationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Cancelled" => Ok(CommandInvocationStatus::Cancelled),
+            "Cancelling" => Ok(CommandInvocationStatus::Cancelling),
+            "Delayed" => Ok(CommandInvocationStatus::Delayed),
+            "Failed" => Ok(CommandInvocationStatus::Failed),
+            "InProgress" => Ok(CommandInvocationStatus::InProgress),
+            "Pending" => Ok(CommandInvocationStatus::Pending),
+            "Success" => Ok(CommandInvocationStatus::Success),
+            "TimedOut" => Ok(CommandInvocationStatus::TimedOut),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes plugin details.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CommandPlugin {
@@ -610,6 +870,103 @@ pub struct CommandPlugin {
     #[serde(rename="StatusDetails")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status_details: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CommandPluginStatus {
+    Cancelled,
+    Failed,
+    InProgress,
+    Pending,
+    Success,
+    TimedOut,
+}
+
+impl Into<String> for CommandPluginStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CommandPluginStatus {
+    fn into(self) -> &'static str {
+        match self {
+            CommandPluginStatus::Cancelled => "Cancelled",
+            CommandPluginStatus::Failed => "Failed",
+            CommandPluginStatus::InProgress => "InProgress",
+            CommandPluginStatus::Pending => "Pending",
+            CommandPluginStatus::Success => "Success",
+            CommandPluginStatus::TimedOut => "TimedOut",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CommandPluginStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Cancelled" => Ok(CommandPluginStatus::Cancelled),
+            "Failed" => Ok(CommandPluginStatus::Failed),
+            "InProgress" => Ok(CommandPluginStatus::InProgress),
+            "Pending" => Ok(CommandPluginStatus::Pending),
+            "Success" => Ok(CommandPluginStatus::Success),
+            "TimedOut" => Ok(CommandPluginStatus::TimedOut),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CommandStatus {
+    Cancelled,
+    Cancelling,
+    Failed,
+    InProgress,
+    Pending,
+    Success,
+    TimedOut,
+}
+
+impl Into<String> for CommandStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CommandStatus {
+    fn into(self) -> &'static str {
+        match self {
+            CommandStatus::Cancelled => "Cancelled",
+            CommandStatus::Cancelling => "Cancelling",
+            CommandStatus::Failed => "Failed",
+            CommandStatus::InProgress => "InProgress",
+            CommandStatus::Pending => "Pending",
+            CommandStatus::Success => "Success",
+            CommandStatus::TimedOut => "TimedOut",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CommandStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Cancelled" => Ok(CommandStatus::Cancelled),
+            "Cancelling" => Ok(CommandStatus::Cancelling),
+            "Failed" => Ok(CommandStatus::Failed),
+            "InProgress" => Ok(CommandStatus::InProgress),
+            "Pending" => Ok(CommandStatus::Pending),
+            "Success" => Ok(CommandStatus::Success),
+            "TimedOut" => Ok(CommandStatus::TimedOut),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A summary of the call execution that includes an execution ID, the type of execution (for example, <code>Command</code>), and the date/time of the execution using a datetime object that is saved in the following format: yyyy-MM-dd'T'HH:mm:ss'Z'.</p>"]
@@ -690,6 +1047,132 @@ pub struct ComplianceItemEntry {
     #[serde(rename="Title")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub title: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ComplianceQueryOperatorType {
+    BeginWith,
+    Equal,
+    GreaterThan,
+    LessThan,
+    NotEqual,
+}
+
+impl Into<String> for ComplianceQueryOperatorType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ComplianceQueryOperatorType {
+    fn into(self) -> &'static str {
+        match self {
+            ComplianceQueryOperatorType::BeginWith => "BEGIN_WITH",
+            ComplianceQueryOperatorType::Equal => "EQUAL",
+            ComplianceQueryOperatorType::GreaterThan => "GREATER_THAN",
+            ComplianceQueryOperatorType::LessThan => "LESS_THAN",
+            ComplianceQueryOperatorType::NotEqual => "NOT_EQUAL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComplianceQueryOperatorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BEGIN_WITH" => Ok(ComplianceQueryOperatorType::BeginWith),
+            "EQUAL" => Ok(ComplianceQueryOperatorType::Equal),
+            "GREATER_THAN" => Ok(ComplianceQueryOperatorType::GreaterThan),
+            "LESS_THAN" => Ok(ComplianceQueryOperatorType::LessThan),
+            "NOT_EQUAL" => Ok(ComplianceQueryOperatorType::NotEqual),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ComplianceSeverity {
+    Critical,
+    High,
+    Informational,
+    Low,
+    Medium,
+    Unspecified,
+}
+
+impl Into<String> for ComplianceSeverity {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ComplianceSeverity {
+    fn into(self) -> &'static str {
+        match self {
+            ComplianceSeverity::Critical => "CRITICAL",
+            ComplianceSeverity::High => "HIGH",
+            ComplianceSeverity::Informational => "INFORMATIONAL",
+            ComplianceSeverity::Low => "LOW",
+            ComplianceSeverity::Medium => "MEDIUM",
+            ComplianceSeverity::Unspecified => "UNSPECIFIED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComplianceSeverity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CRITICAL" => Ok(ComplianceSeverity::Critical),
+            "HIGH" => Ok(ComplianceSeverity::High),
+            "INFORMATIONAL" => Ok(ComplianceSeverity::Informational),
+            "LOW" => Ok(ComplianceSeverity::Low),
+            "MEDIUM" => Ok(ComplianceSeverity::Medium),
+            "UNSPECIFIED" => Ok(ComplianceSeverity::Unspecified),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ComplianceStatus {
+    Compliant,
+    NonCompliant,
+}
+
+impl Into<String> for ComplianceStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ComplianceStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ComplianceStatus::Compliant => "COMPLIANT",
+            ComplianceStatus::NonCompliant => "NON_COMPLIANT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComplianceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COMPLIANT" => Ok(ComplianceStatus::Compliant),
+            "NON_COMPLIANT" => Ok(ComplianceStatus::NonCompliant),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
@@ -1188,6 +1671,44 @@ pub struct DescribeActivationsFilter {
     #[serde(rename="FilterValues")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub filter_values: Option<Vec<String>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DescribeActivationsFilterKeys {
+    ActivationIds,
+    DefaultInstanceName,
+    IamRole,
+}
+
+impl Into<String> for DescribeActivationsFilterKeys {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DescribeActivationsFilterKeys {
+    fn into(self) -> &'static str {
+        match self {
+            DescribeActivationsFilterKeys::ActivationIds => "ActivationIds",
+            DescribeActivationsFilterKeys::DefaultInstanceName => "DefaultInstanceName",
+            DescribeActivationsFilterKeys::IamRole => "IamRole",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DescribeActivationsFilterKeys {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ActivationIds" => Ok(DescribeActivationsFilterKeys::ActivationIds),
+            "DefaultInstanceName" => Ok(DescribeActivationsFilterKeys::DefaultInstanceName),
+            "IamRole" => Ok(DescribeActivationsFilterKeys::IamRole),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1940,6 +2461,82 @@ pub struct DocumentFilter {
     pub value: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DocumentFilterKey {
+    DocumentType,
+    Name,
+    Owner,
+    PlatformTypes,
+}
+
+impl Into<String> for DocumentFilterKey {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DocumentFilterKey {
+    fn into(self) -> &'static str {
+        match self {
+            DocumentFilterKey::DocumentType => "DocumentType",
+            DocumentFilterKey::Name => "Name",
+            DocumentFilterKey::Owner => "Owner",
+            DocumentFilterKey::PlatformTypes => "PlatformTypes",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DocumentType" => Ok(DocumentFilterKey::DocumentType),
+            "Name" => Ok(DocumentFilterKey::Name),
+            "Owner" => Ok(DocumentFilterKey::Owner),
+            "PlatformTypes" => Ok(DocumentFilterKey::PlatformTypes),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DocumentHashType {
+    Sha1,
+    Sha256,
+}
+
+impl Into<String> for DocumentHashType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DocumentHashType {
+    fn into(self) -> &'static str {
+        match self {
+            DocumentHashType::Sha1 => "Sha1",
+            DocumentHashType::Sha256 => "Sha256",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentHashType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Sha1" => Ok(DocumentHashType::Sha1),
+            "Sha256" => Ok(DocumentHashType::Sha256),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the name of an SSM document.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DocumentIdentifier {
@@ -1988,6 +2585,152 @@ pub struct DocumentParameter {
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DocumentParameterType {
+    String,
+    StringList,
+}
+
+impl Into<String> for DocumentParameterType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DocumentParameterType {
+    fn into(self) -> &'static str {
+        match self {
+            DocumentParameterType::String => "String",
+            DocumentParameterType::StringList => "StringList",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentParameterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "String" => Ok(DocumentParameterType::String),
+            "StringList" => Ok(DocumentParameterType::StringList),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DocumentPermissionType {
+    Share,
+}
+
+impl Into<String> for DocumentPermissionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DocumentPermissionType {
+    fn into(self) -> &'static str {
+        match self {
+            DocumentPermissionType::Share => "Share",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentPermissionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Share" => Ok(DocumentPermissionType::Share),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DocumentStatus {
+    Active,
+    Creating,
+    Deleting,
+    Updating,
+}
+
+impl Into<String> for DocumentStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DocumentStatus {
+    fn into(self) -> &'static str {
+        match self {
+            DocumentStatus::Active => "Active",
+            DocumentStatus::Creating => "Creating",
+            DocumentStatus::Deleting => "Deleting",
+            DocumentStatus::Updating => "Updating",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Active" => Ok(DocumentStatus::Active),
+            "Creating" => Ok(DocumentStatus::Creating),
+            "Deleting" => Ok(DocumentStatus::Deleting),
+            "Updating" => Ok(DocumentStatus::Updating),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DocumentType {
+    Automation,
+    Command,
+    Policy,
+}
+
+impl Into<String> for DocumentType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DocumentType {
+    fn into(self) -> &'static str {
+        match self {
+            DocumentType::Automation => "Automation",
+            DocumentType::Command => "Command",
+            DocumentType::Policy => "Policy",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Automation" => Ok(DocumentType::Automation),
+            "Command" => Ok(DocumentType::Command),
+            "Policy" => Ok(DocumentType::Policy),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Version information about the document.</p>"]
@@ -2056,6 +2799,44 @@ pub struct FailureDetails {
     #[serde(rename="FailureType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub failure_type: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Fault {
+    Client,
+    Server,
+    Unknown,
+}
+
+impl Into<String> for Fault {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Fault {
+    fn into(self) -> &'static str {
+        match self {
+            Fault::Client => "Client",
+            Fault::Server => "Server",
+            Fault::Unknown => "Unknown",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Fault {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Client" => Ok(Fault::Client),
+            "Server" => Ok(Fault::Server),
+            "Unknown" => Ok(Fault::Unknown),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -2982,6 +3763,59 @@ pub struct InstanceInformationFilter {
     pub value_set: Vec<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceInformationFilterKey {
+    ActivationIds,
+    AgentVersion,
+    AssociationStatus,
+    IamRole,
+    InstanceIds,
+    PingStatus,
+    PlatformTypes,
+    ResourceType,
+}
+
+impl Into<String> for InstanceInformationFilterKey {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceInformationFilterKey {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceInformationFilterKey::ActivationIds => "ActivationIds",
+            InstanceInformationFilterKey::AgentVersion => "AgentVersion",
+            InstanceInformationFilterKey::AssociationStatus => "AssociationStatus",
+            InstanceInformationFilterKey::IamRole => "IamRole",
+            InstanceInformationFilterKey::InstanceIds => "InstanceIds",
+            InstanceInformationFilterKey::PingStatus => "PingStatus",
+            InstanceInformationFilterKey::PlatformTypes => "PlatformTypes",
+            InstanceInformationFilterKey::ResourceType => "ResourceType",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceInformationFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ActivationIds" => Ok(InstanceInformationFilterKey::ActivationIds),
+            "AgentVersion" => Ok(InstanceInformationFilterKey::AgentVersion),
+            "AssociationStatus" => Ok(InstanceInformationFilterKey::AssociationStatus),
+            "IamRole" => Ok(InstanceInformationFilterKey::IamRole),
+            "InstanceIds" => Ok(InstanceInformationFilterKey::InstanceIds),
+            "PingStatus" => Ok(InstanceInformationFilterKey::PingStatus),
+            "PlatformTypes" => Ok(InstanceInformationFilterKey::PlatformTypes),
+            "ResourceType" => Ok(InstanceInformationFilterKey::ResourceType),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The filters to describe or get information about your managed instances.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct InstanceInformationStringFilter {
@@ -3058,6 +3892,82 @@ pub struct InstancePatchStateFilter {
     pub values: Vec<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstancePatchStateOperatorType {
+    Equal,
+    GreaterThan,
+    LessThan,
+    NotEqual,
+}
+
+impl Into<String> for InstancePatchStateOperatorType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstancePatchStateOperatorType {
+    fn into(self) -> &'static str {
+        match self {
+            InstancePatchStateOperatorType::Equal => "Equal",
+            InstancePatchStateOperatorType::GreaterThan => "GreaterThan",
+            InstancePatchStateOperatorType::LessThan => "LessThan",
+            InstancePatchStateOperatorType::NotEqual => "NotEqual",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstancePatchStateOperatorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Equal" => Ok(InstancePatchStateOperatorType::Equal),
+            "GreaterThan" => Ok(InstancePatchStateOperatorType::GreaterThan),
+            "LessThan" => Ok(InstancePatchStateOperatorType::LessThan),
+            "NotEqual" => Ok(InstancePatchStateOperatorType::NotEqual),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InventoryAttributeDataType {
+    Number,
+    String,
+}
+
+impl Into<String> for InventoryAttributeDataType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InventoryAttributeDataType {
+    fn into(self) -> &'static str {
+        match self {
+            InventoryAttributeDataType::Number => "number",
+            InventoryAttributeDataType::String => "string",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventoryAttributeDataType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "number" => Ok(InventoryAttributeDataType::Number),
+            "string" => Ok(InventoryAttributeDataType::String),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct InventoryFilter {
@@ -3125,6 +4035,50 @@ pub struct InventoryItemSchema {
     pub version: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InventoryQueryOperatorType {
+    BeginWith,
+    Equal,
+    GreaterThan,
+    LessThan,
+    NotEqual,
+}
+
+impl Into<String> for InventoryQueryOperatorType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InventoryQueryOperatorType {
+    fn into(self) -> &'static str {
+        match self {
+            InventoryQueryOperatorType::BeginWith => "BeginWith",
+            InventoryQueryOperatorType::Equal => "Equal",
+            InventoryQueryOperatorType::GreaterThan => "GreaterThan",
+            InventoryQueryOperatorType::LessThan => "LessThan",
+            InventoryQueryOperatorType::NotEqual => "NotEqual",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventoryQueryOperatorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BeginWith" => Ok(InventoryQueryOperatorType::BeginWith),
+            "Equal" => Ok(InventoryQueryOperatorType::Equal),
+            "GreaterThan" => Ok(InventoryQueryOperatorType::GreaterThan),
+            "LessThan" => Ok(InventoryQueryOperatorType::LessThan),
+            "NotEqual" => Ok(InventoryQueryOperatorType::NotEqual),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Inventory query results.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct InventoryResultEntity {
@@ -3158,6 +4112,44 @@ pub struct InventoryResultItem {
     #[doc="<p>The name of the inventory result item type.</p>"]
     #[serde(rename="TypeName")]
     pub type_name: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LastResourceDataSyncStatus {
+    Failed,
+    InProgress,
+    Successful,
+}
+
+impl Into<String> for LastResourceDataSyncStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LastResourceDataSyncStatus {
+    fn into(self) -> &'static str {
+        match self {
+            LastResourceDataSyncStatus::Failed => "Failed",
+            LastResourceDataSyncStatus::InProgress => "InProgress",
+            LastResourceDataSyncStatus::Successful => "Successful",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LastResourceDataSyncStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Failed" => Ok(LastResourceDataSyncStatus::Failed),
+            "InProgress" => Ok(LastResourceDataSyncStatus::InProgress),
+            "Successful" => Ok(LastResourceDataSyncStatus::Successful),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -3587,6 +4579,59 @@ pub struct MaintenanceWindowExecution {
     pub window_id: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MaintenanceWindowExecutionStatus {
+    Cancelled,
+    Cancelling,
+    Failed,
+    InProgress,
+    Pending,
+    SkippedOverlapping,
+    Success,
+    TimedOut,
+}
+
+impl Into<String> for MaintenanceWindowExecutionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MaintenanceWindowExecutionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            MaintenanceWindowExecutionStatus::Cancelled => "CANCELLED",
+            MaintenanceWindowExecutionStatus::Cancelling => "CANCELLING",
+            MaintenanceWindowExecutionStatus::Failed => "FAILED",
+            MaintenanceWindowExecutionStatus::InProgress => "IN_PROGRESS",
+            MaintenanceWindowExecutionStatus::Pending => "PENDING",
+            MaintenanceWindowExecutionStatus::SkippedOverlapping => "SKIPPED_OVERLAPPING",
+            MaintenanceWindowExecutionStatus::Success => "SUCCESS",
+            MaintenanceWindowExecutionStatus::TimedOut => "TIMED_OUT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MaintenanceWindowExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CANCELLED" => Ok(MaintenanceWindowExecutionStatus::Cancelled),
+            "CANCELLING" => Ok(MaintenanceWindowExecutionStatus::Cancelling),
+            "FAILED" => Ok(MaintenanceWindowExecutionStatus::Failed),
+            "IN_PROGRESS" => Ok(MaintenanceWindowExecutionStatus::InProgress),
+            "PENDING" => Ok(MaintenanceWindowExecutionStatus::Pending),
+            "SKIPPED_OVERLAPPING" => Ok(MaintenanceWindowExecutionStatus::SkippedOverlapping),
+            "SUCCESS" => Ok(MaintenanceWindowExecutionStatus::Success),
+            "TIMED_OUT" => Ok(MaintenanceWindowExecutionStatus::TimedOut),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Information about a task execution performed as part of a Maintenance Window execution.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct MaintenanceWindowExecutionTaskIdentity {
@@ -3738,6 +4783,38 @@ pub struct MaintenanceWindowLambdaParameters {
     #[serde(rename="Qualifier")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub qualifier: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MaintenanceWindowResourceType {
+    Instance,
+}
+
+impl Into<String> for MaintenanceWindowResourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MaintenanceWindowResourceType {
+    fn into(self) -> &'static str {
+        match self {
+            MaintenanceWindowResourceType::Instance => "INSTANCE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MaintenanceWindowResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "INSTANCE" => Ok(MaintenanceWindowResourceType::Instance),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The parameters for a RUN_COMMAND task type.</p>"]
@@ -3915,6 +4992,47 @@ pub struct MaintenanceWindowTaskParameterValueExpression {
     pub values: Option<Vec<String>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MaintenanceWindowTaskType {
+    Automation,
+    Lambda,
+    RunCommand,
+    StepFunctions,
+}
+
+impl Into<String> for MaintenanceWindowTaskType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MaintenanceWindowTaskType {
+    fn into(self) -> &'static str {
+        match self {
+            MaintenanceWindowTaskType::Automation => "AUTOMATION",
+            MaintenanceWindowTaskType::Lambda => "LAMBDA",
+            MaintenanceWindowTaskType::RunCommand => "RUN_COMMAND",
+            MaintenanceWindowTaskType::StepFunctions => "STEP_FUNCTIONS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MaintenanceWindowTaskType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AUTOMATION" => Ok(MaintenanceWindowTaskType::Automation),
+            "LAMBDA" => Ok(MaintenanceWindowTaskType::Lambda),
+            "RUN_COMMAND" => Ok(MaintenanceWindowTaskType::RunCommand),
+            "STEP_FUNCTIONS" => Ok(MaintenanceWindowTaskType::StepFunctions),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ModifyDocumentPermissionRequest {
     #[doc="<p>The AWS user accounts that should have access to the document. The account IDs can either be a group of account IDs or <i>All</i>.</p>"]
@@ -3964,6 +5082,129 @@ pub struct NotificationConfig {
     #[serde(rename="NotificationType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub notification_type: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NotificationEvent {
+    All,
+    Cancelled,
+    Failed,
+    InProgress,
+    Success,
+    TimedOut,
+}
+
+impl Into<String> for NotificationEvent {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NotificationEvent {
+    fn into(self) -> &'static str {
+        match self {
+            NotificationEvent::All => "All",
+            NotificationEvent::Cancelled => "Cancelled",
+            NotificationEvent::Failed => "Failed",
+            NotificationEvent::InProgress => "InProgress",
+            NotificationEvent::Success => "Success",
+            NotificationEvent::TimedOut => "TimedOut",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationEvent {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "All" => Ok(NotificationEvent::All),
+            "Cancelled" => Ok(NotificationEvent::Cancelled),
+            "Failed" => Ok(NotificationEvent::Failed),
+            "InProgress" => Ok(NotificationEvent::InProgress),
+            "Success" => Ok(NotificationEvent::Success),
+            "TimedOut" => Ok(NotificationEvent::TimedOut),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NotificationType {
+    Command,
+    Invocation,
+}
+
+impl Into<String> for NotificationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NotificationType {
+    fn into(self) -> &'static str {
+        match self {
+            NotificationType::Command => "Command",
+            NotificationType::Invocation => "Invocation",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Command" => Ok(NotificationType::Command),
+            "Invocation" => Ok(NotificationType::Invocation),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OperatingSystem {
+    AmazonLinux,
+    RedhatEnterpriseLinux,
+    Ubuntu,
+    Windows,
+}
+
+impl Into<String> for OperatingSystem {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OperatingSystem {
+    fn into(self) -> &'static str {
+        match self {
+            OperatingSystem::AmazonLinux => "AMAZON_LINUX",
+            OperatingSystem::RedhatEnterpriseLinux => "REDHAT_ENTERPRISE_LINUX",
+            OperatingSystem::Ubuntu => "UBUNTU",
+            OperatingSystem::Windows => "WINDOWS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperatingSystem {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AMAZON_LINUX" => Ok(OperatingSystem::AmazonLinux),
+            "REDHAT_ENTERPRISE_LINUX" => Ok(OperatingSystem::RedhatEnterpriseLinux),
+            "UBUNTU" => Ok(OperatingSystem::Ubuntu),
+            "WINDOWS" => Ok(OperatingSystem::Windows),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>An Amazon EC2 Systems Manager parameter in Parameter Store.</p>"]
@@ -4069,6 +5310,44 @@ pub struct ParameterStringFilter {
     pub values: Option<Vec<String>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ParameterType {
+    SecureString,
+    String,
+    StringList,
+}
+
+impl Into<String> for ParameterType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ParameterType {
+    fn into(self) -> &'static str {
+        match self {
+            ParameterType::SecureString => "SecureString",
+            ParameterType::String => "String",
+            ParameterType::StringList => "StringList",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParameterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "SecureString" => Ok(ParameterType::SecureString),
+            "String" => Ok(ParameterType::String),
+            "StringList" => Ok(ParameterType::StringList),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ParametersFilter {
@@ -4078,6 +5357,44 @@ pub struct ParametersFilter {
     #[doc="<p>The filter values.</p>"]
     #[serde(rename="Values")]
     pub values: Vec<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ParametersFilterKey {
+    KeyId,
+    Name,
+    Type,
+}
+
+impl Into<String> for ParametersFilterKey {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ParametersFilterKey {
+    fn into(self) -> &'static str {
+        match self {
+            ParametersFilterKey::KeyId => "KeyId",
+            ParametersFilterKey::Name => "Name",
+            ParametersFilterKey::Type => "Type",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParametersFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "KeyId" => Ok(ParametersFilterKey::KeyId),
+            "Name" => Ok(ParametersFilterKey::Name),
+            "Type" => Ok(ParametersFilterKey::Type),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents metadata about a patch.</p>"]
@@ -4185,6 +5502,138 @@ pub struct PatchComplianceData {
     pub title: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PatchComplianceDataState {
+    Failed,
+    Installed,
+    InstalledOther,
+    Missing,
+    NotApplicable,
+}
+
+impl Into<String> for PatchComplianceDataState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PatchComplianceDataState {
+    fn into(self) -> &'static str {
+        match self {
+            PatchComplianceDataState::Failed => "FAILED",
+            PatchComplianceDataState::Installed => "INSTALLED",
+            PatchComplianceDataState::InstalledOther => "INSTALLED_OTHER",
+            PatchComplianceDataState::Missing => "MISSING",
+            PatchComplianceDataState::NotApplicable => "NOT_APPLICABLE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PatchComplianceDataState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(PatchComplianceDataState::Failed),
+            "INSTALLED" => Ok(PatchComplianceDataState::Installed),
+            "INSTALLED_OTHER" => Ok(PatchComplianceDataState::InstalledOther),
+            "MISSING" => Ok(PatchComplianceDataState::Missing),
+            "NOT_APPLICABLE" => Ok(PatchComplianceDataState::NotApplicable),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PatchComplianceLevel {
+    Critical,
+    High,
+    Informational,
+    Low,
+    Medium,
+    Unspecified,
+}
+
+impl Into<String> for PatchComplianceLevel {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PatchComplianceLevel {
+    fn into(self) -> &'static str {
+        match self {
+            PatchComplianceLevel::Critical => "CRITICAL",
+            PatchComplianceLevel::High => "HIGH",
+            PatchComplianceLevel::Informational => "INFORMATIONAL",
+            PatchComplianceLevel::Low => "LOW",
+            PatchComplianceLevel::Medium => "MEDIUM",
+            PatchComplianceLevel::Unspecified => "UNSPECIFIED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PatchComplianceLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CRITICAL" => Ok(PatchComplianceLevel::Critical),
+            "HIGH" => Ok(PatchComplianceLevel::High),
+            "INFORMATIONAL" => Ok(PatchComplianceLevel::Informational),
+            "LOW" => Ok(PatchComplianceLevel::Low),
+            "MEDIUM" => Ok(PatchComplianceLevel::Medium),
+            "UNSPECIFIED" => Ok(PatchComplianceLevel::Unspecified),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PatchDeploymentStatus {
+    Approved,
+    ExplicitApproved,
+    ExplicitRejected,
+    PendingApproval,
+}
+
+impl Into<String> for PatchDeploymentStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PatchDeploymentStatus {
+    fn into(self) -> &'static str {
+        match self {
+            PatchDeploymentStatus::Approved => "APPROVED",
+            PatchDeploymentStatus::ExplicitApproved => "EXPLICIT_APPROVED",
+            PatchDeploymentStatus::ExplicitRejected => "EXPLICIT_REJECTED",
+            PatchDeploymentStatus::PendingApproval => "PENDING_APPROVAL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PatchDeploymentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "APPROVED" => Ok(PatchDeploymentStatus::Approved),
+            "EXPLICIT_APPROVED" => Ok(PatchDeploymentStatus::ExplicitApproved),
+            "EXPLICIT_REJECTED" => Ok(PatchDeploymentStatus::ExplicitRejected),
+            "PENDING_APPROVAL" => Ok(PatchDeploymentStatus::PendingApproval),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Defines a patch filter.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PatchFilter {
@@ -4204,6 +5653,56 @@ pub struct PatchFilterGroup {
     pub patch_filters: Vec<PatchFilter>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PatchFilterKey {
+    Classification,
+    MsrcSeverity,
+    PatchId,
+    Priority,
+    Product,
+    Section,
+    Severity,
+}
+
+impl Into<String> for PatchFilterKey {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PatchFilterKey {
+    fn into(self) -> &'static str {
+        match self {
+            PatchFilterKey::Classification => "CLASSIFICATION",
+            PatchFilterKey::MsrcSeverity => "MSRC_SEVERITY",
+            PatchFilterKey::PatchId => "PATCH_ID",
+            PatchFilterKey::Priority => "PRIORITY",
+            PatchFilterKey::Product => "PRODUCT",
+            PatchFilterKey::Section => "SECTION",
+            PatchFilterKey::Severity => "SEVERITY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PatchFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CLASSIFICATION" => Ok(PatchFilterKey::Classification),
+            "MSRC_SEVERITY" => Ok(PatchFilterKey::MsrcSeverity),
+            "PATCH_ID" => Ok(PatchFilterKey::PatchId),
+            "PRIORITY" => Ok(PatchFilterKey::Priority),
+            "PRODUCT" => Ok(PatchFilterKey::Product),
+            "SECTION" => Ok(PatchFilterKey::Section),
+            "SEVERITY" => Ok(PatchFilterKey::Severity),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The mapping between a patch group and the patch baseline the patch group is registered with.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PatchGroupPatchBaselineMapping {
@@ -4215,6 +5714,41 @@ pub struct PatchGroupPatchBaselineMapping {
     #[serde(rename="PatchGroup")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub patch_group: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PatchOperationType {
+    Install,
+    Scan,
+}
+
+impl Into<String> for PatchOperationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PatchOperationType {
+    fn into(self) -> &'static str {
+        match self {
+            PatchOperationType::Install => "Install",
+            PatchOperationType::Scan => "Scan",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PatchOperationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Install" => Ok(PatchOperationType::Install),
+            "Scan" => Ok(PatchOperationType::Scan),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Defines a filter used in Patch Manager APIs.</p>"]
@@ -4268,6 +5802,79 @@ pub struct PatchStatus {
     #[serde(rename="DeploymentStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_status: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PingStatus {
+    ConnectionLost,
+    Inactive,
+    Online,
+}
+
+impl Into<String> for PingStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PingStatus {
+    fn into(self) -> &'static str {
+        match self {
+            PingStatus::ConnectionLost => "ConnectionLost",
+            PingStatus::Inactive => "Inactive",
+            PingStatus::Online => "Online",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PingStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ConnectionLost" => Ok(PingStatus::ConnectionLost),
+            "Inactive" => Ok(PingStatus::Inactive),
+            "Online" => Ok(PingStatus::Online),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PlatformType {
+    Linux,
+    Windows,
+}
+
+impl Into<String> for PlatformType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PlatformType {
+    fn into(self) -> &'static str {
+        match self {
+            PlatformType::Linux => "Linux",
+            PlatformType::Windows => "Windows",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlatformType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Linux" => Ok(PlatformType::Linux),
+            "Windows" => Ok(PlatformType::Windows),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -4577,6 +6184,114 @@ pub struct ResourceDataSyncS3Destination {
     pub sync_format: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ResourceDataSyncS3Format {
+    JsonSerDe,
+}
+
+impl Into<String> for ResourceDataSyncS3Format {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ResourceDataSyncS3Format {
+    fn into(self) -> &'static str {
+        match self {
+            ResourceDataSyncS3Format::JsonSerDe => "JsonSerDe",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceDataSyncS3Format {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "JsonSerDe" => Ok(ResourceDataSyncS3Format::JsonSerDe),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ResourceType {
+    Document,
+    Ec2Instance,
+    ManagedInstance,
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ResourceType {
+    fn into(self) -> &'static str {
+        match self {
+            ResourceType::Document => "Document",
+            ResourceType::Ec2Instance => "EC2Instance",
+            ResourceType::ManagedInstance => "ManagedInstance",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Document" => Ok(ResourceType::Document),
+            "EC2Instance" => Ok(ResourceType::Ec2Instance),
+            "ManagedInstance" => Ok(ResourceType::ManagedInstance),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ResourceTypeForTagging {
+    MaintenanceWindow,
+    ManagedInstance,
+    Parameter,
+}
+
+impl Into<String> for ResourceTypeForTagging {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ResourceTypeForTagging {
+    fn into(self) -> &'static str {
+        match self {
+            ResourceTypeForTagging::MaintenanceWindow => "MaintenanceWindow",
+            ResourceTypeForTagging::ManagedInstance => "ManagedInstance",
+            ResourceTypeForTagging::Parameter => "Parameter",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceTypeForTagging {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "MaintenanceWindow" => Ok(ResourceTypeForTagging::MaintenanceWindow),
+            "ManagedInstance" => Ok(ResourceTypeForTagging::ManagedInstance),
+            "Parameter" => Ok(ResourceTypeForTagging::Parameter),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The inventory item result attribute.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ResultAttribute {
@@ -4726,6 +6441,41 @@ pub struct SeveritySummary {
     #[serde(rename="UnspecifiedCount")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub unspecified_count: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SignalType {
+    Approve,
+    Reject,
+}
+
+impl Into<String> for SignalType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SignalType {
+    fn into(self) -> &'static str {
+        match self {
+            SignalType::Approve => "Approve",
+            SignalType::Reject => "Reject",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SignalType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Approve" => Ok(SignalType::Approve),
+            "Reject" => Ok(SignalType::Reject),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -14883,7 +16633,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(&body)
@@ -14915,7 +16665,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CancelCommandResult>(String::from_utf8_lossy(&body)
@@ -14947,7 +16697,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateActivationResult>(String::from_utf8_lossy(&body)
@@ -14979,7 +16729,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateAssociationResult>(String::from_utf8_lossy(&body)
@@ -15012,7 +16762,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateAssociationBatchResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15042,7 +16792,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateDocumentResult>(String::from_utf8_lossy(&body)
@@ -15075,7 +16825,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15106,7 +16856,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreatePatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15137,7 +16887,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateResourceDataSyncResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15167,7 +16917,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteActivationResult>(String::from_utf8_lossy(&body)
@@ -15199,7 +16949,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteAssociationResult>(String::from_utf8_lossy(&body)
@@ -15231,7 +16981,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteDocumentResult>(String::from_utf8_lossy(&body)
@@ -15264,7 +17014,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15295,7 +17045,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteParameterResult>(String::from_utf8_lossy(&body)
@@ -15327,7 +17077,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteParametersResult>(String::from_utf8_lossy(&body)
@@ -15359,7 +17109,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeletePatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15390,7 +17140,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteResourceDataSyncResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15421,7 +17171,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeregisterManagedInstanceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15455,7 +17205,7 @@ impl<P, D> Ssm for SsmClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeregisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15484,7 +17234,7 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeregisterTargetFromMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15517,7 +17267,7 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeregisterTaskFromMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15547,7 +17297,7 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeActivationsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15577,7 +17327,7 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeAssociationResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15608,7 +17358,7 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeAutomationExecutionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15640,7 +17390,7 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeAvailablePatchesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15671,7 +17421,7 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeDocumentResult>(String::from_utf8_lossy(&body)
@@ -15704,7 +17454,7 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeDocumentPermissionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15734,7 +17484,7 @@ fn describe_effective_instance_associations(&self, input: &DescribeEffectiveInst
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeEffectiveInstanceAssociationsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15763,7 +17513,7 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeEffectivePatchesForPatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15796,7 +17546,7 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeInstanceAssociationsStatusResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15827,7 +17577,7 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeInstanceInformationResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15859,7 +17609,7 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeInstancePatchStatesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15889,7 +17639,7 @@ fn describe_instance_patch_states_for_patch_group(&self, input: &DescribeInstanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeInstancePatchStatesForPatchGroupResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15920,7 +17670,7 @@ fn describe_instance_patch_states_for_patch_group(&self, input: &DescribeInstanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeInstancePatchesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15950,7 +17700,7 @@ fn describe_maintenance_window_execution_task_invocations(&self, input: &Describ
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTaskInvocationsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -15979,7 +17729,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTasksResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16012,7 +17762,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16043,7 +17793,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeMaintenanceWindowTargetsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16074,7 +17824,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeMaintenanceWindowTasksResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16106,7 +17856,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeMaintenanceWindowsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16137,7 +17887,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeParametersResult>(String::from_utf8_lossy(&body)
@@ -16170,7 +17920,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribePatchBaselinesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16201,7 +17951,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribePatchGroupStateResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16232,7 +17982,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribePatchGroupsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16263,7 +18013,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetAutomationExecutionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16293,7 +18043,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetCommandInvocationResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16324,7 +18074,7 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDefaultPatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16354,7 +18104,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDeployablePatchSnapshotForInstanceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16384,7 +18134,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetDocumentResult>(String::from_utf8_lossy(&body)
@@ -16416,7 +18166,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetInventoryResult>(String::from_utf8_lossy(&body)
@@ -16448,7 +18198,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetInventorySchemaResult>(String::from_utf8_lossy(&body)
@@ -16480,7 +18230,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16511,7 +18261,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetMaintenanceWindowExecutionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16544,7 +18294,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetMaintenanceWindowExecutionTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16573,7 +18323,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetMaintenanceWindowExecutionTaskInvocationResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16604,7 +18354,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetMaintenanceWindowTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16635,7 +18385,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetParameterResult>(String::from_utf8_lossy(&body)
@@ -16667,7 +18417,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetParameterHistoryResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16697,7 +18447,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetParametersResult>(String::from_utf8_lossy(&body)
@@ -16729,7 +18479,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetParametersByPathResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16759,7 +18509,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetPatchBaselineResult>(String::from_utf8_lossy(&body)
@@ -16792,7 +18542,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16824,7 +18574,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListAssociationVersionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16855,7 +18605,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListAssociationsResult>(String::from_utf8_lossy(&body)
@@ -16888,7 +18638,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListCommandInvocationsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16918,7 +18668,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListCommandsResult>(String::from_utf8_lossy(&body)
@@ -16950,7 +18700,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListComplianceItemsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -16981,7 +18731,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListComplianceSummariesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17012,7 +18762,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListDocumentVersionsResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17042,7 +18792,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListDocumentsResult>(String::from_utf8_lossy(&body)
@@ -17074,7 +18824,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListInventoryEntriesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17105,7 +18855,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListResourceComplianceSummariesResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17136,7 +18886,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListResourceDataSyncResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17166,7 +18916,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17197,7 +18947,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ModifyDocumentPermissionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17228,7 +18978,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutComplianceItemsResult>(String::from_utf8_lossy(&body)
@@ -17260,7 +19010,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutInventoryResult>(String::from_utf8_lossy(&body)
@@ -17292,7 +19042,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutParameterResult>(String::from_utf8_lossy(&body)
@@ -17325,7 +19075,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RegisterDefaultPatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17359,7 +19109,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RegisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17392,7 +19142,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RegisterTargetWithMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17424,7 +19174,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RegisterTaskWithMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17455,7 +19205,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17485,7 +19235,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<SendAutomationSignalResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17515,7 +19265,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<SendCommandResult>(String::from_utf8_lossy(&body)
@@ -17548,7 +19298,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StartAutomationExecutionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17580,7 +19330,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<StopAutomationExecutionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17611,7 +19361,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateAssociationResult>(String::from_utf8_lossy(&body)
@@ -17644,7 +19394,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateAssociationStatusResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17675,7 +19425,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateDocumentResult>(String::from_utf8_lossy(&body)
@@ -17708,7 +19458,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateDocumentDefaultVersionResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17740,7 +19490,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateMaintenanceWindowResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17772,7 +19522,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateMaintenanceWindowTargetResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17804,7 +19554,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateMaintenanceWindowTaskResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17836,7 +19586,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateManagedInstanceRoleResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -17867,7 +19617,7 @@ fn get_maintenance_window_execution_task_invocation(&self, input: &GetMaintenanc
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdatePatchBaselineResult>(String::from_utf8_lossy(&body).as_ref()).unwrap())

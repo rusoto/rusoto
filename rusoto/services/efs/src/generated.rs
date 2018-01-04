@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -280,6 +276,47 @@ pub struct FileSystemSize {
     pub value: i64,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LifeCycleState {
+    Available,
+    Creating,
+    Deleted,
+    Deleting,
+}
+
+impl Into<String> for LifeCycleState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LifeCycleState {
+    fn into(self) -> &'static str {
+        match self {
+            LifeCycleState::Available => "available",
+            LifeCycleState::Creating => "creating",
+            LifeCycleState::Deleted => "deleted",
+            LifeCycleState::Deleting => "deleting",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LifeCycleState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(LifeCycleState::Available),
+            "creating" => Ok(LifeCycleState::Creating),
+            "deleted" => Ok(LifeCycleState::Deleted),
+            "deleting" => Ok(LifeCycleState::Deleting),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ModifyMountTargetSecurityGroupsRequest {
@@ -319,6 +356,41 @@ pub struct MountTargetDescription {
     #[doc="<p>ID of the mount target's subnet.</p>"]
     #[serde(rename="SubnetId")]
     pub subnet_id: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PerformanceMode {
+    GeneralPurpose,
+    MaxIO,
+}
+
+impl Into<String> for PerformanceMode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PerformanceMode {
+    fn into(self) -> &'static str {
+        match self {
+            PerformanceMode::GeneralPurpose => "generalPurpose",
+            PerformanceMode::MaxIO => "maxIO",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PerformanceMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "generalPurpose" => Ok(PerformanceMode::GeneralPurpose),
+            "maxIO" => Ok(PerformanceMode::MaxIO),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A tag is a key-value pair. Allowed characters: letters, whitespace, and numbers, representable in UTF-8, and the following characters:<code> + - = . _ : /</code> </p>"]
@@ -1515,7 +1587,7 @@ impl<P, D> Efs for EfsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1561,7 +1633,7 @@ impl<P, D> Efs for EfsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1606,7 +1678,7 @@ impl<P, D> Efs for EfsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -1641,7 +1713,7 @@ impl<P, D> Efs for EfsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -1676,7 +1748,7 @@ impl<P, D> Efs for EfsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -1710,7 +1782,7 @@ impl<P, D> Efs for EfsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 
@@ -1757,7 +1829,7 @@ impl<P, D> Efs for EfsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1805,7 +1877,7 @@ impl<P, D> Efs for EfsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1866,7 +1938,7 @@ impl<P, D> Efs for EfsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1919,7 +1991,7 @@ impl<P, D> Efs for EfsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -1966,7 +2038,7 @@ impl<P, D> Efs for EfsClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::NoContent => {
+            ::hyper::status::StatusCode::NoContent => {
                 let result = ();
 
 

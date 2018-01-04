@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -364,6 +360,41 @@ pub struct Destination {
     pub target_arn: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Distribution {
+    ByLogStream,
+    Random,
+}
+
+impl Into<String> for Distribution {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Distribution {
+    fn into(self) -> &'static str {
+        match self {
+            Distribution::ByLogStream => "ByLogStream",
+            Distribution::Random => "Random",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Distribution {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ByLogStream" => Ok(Distribution::ByLogStream),
+            "Random" => Ok(Distribution::Random),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents an export task.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ExportTask {
@@ -429,6 +460,53 @@ pub struct ExportTaskStatus {
     #[serde(rename="message")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ExportTaskStatusCode {
+    Cancelled,
+    Completed,
+    Failed,
+    Pending,
+    PendingCancel,
+    Running,
+}
+
+impl Into<String> for ExportTaskStatusCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ExportTaskStatusCode {
+    fn into(self) -> &'static str {
+        match self {
+            ExportTaskStatusCode::Cancelled => "CANCELLED",
+            ExportTaskStatusCode::Completed => "COMPLETED",
+            ExportTaskStatusCode::Failed => "FAILED",
+            ExportTaskStatusCode::Pending => "PENDING",
+            ExportTaskStatusCode::PendingCancel => "PENDING_CANCEL",
+            ExportTaskStatusCode::Running => "RUNNING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExportTaskStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CANCELLED" => Ok(ExportTaskStatusCode::Cancelled),
+            "COMPLETED" => Ok(ExportTaskStatusCode::Completed),
+            "FAILED" => Ok(ExportTaskStatusCode::Failed),
+            "PENDING" => Ok(ExportTaskStatusCode::Pending),
+            "PENDING_CANCEL" => Ok(ExportTaskStatusCode::PendingCancel),
+            "RUNNING" => Ok(ExportTaskStatusCode::Running),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -701,6 +779,41 @@ pub struct MetricTransformation {
     #[doc="<p>The value to publish to the CloudWatch metric when a filter pattern matches a log event.</p>"]
     #[serde(rename="metricValue")]
     pub metric_value: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OrderBy {
+    LastEventTime,
+    LogStreamName,
+}
+
+impl Into<String> for OrderBy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OrderBy {
+    fn into(self) -> &'static str {
+        match self {
+            OrderBy::LastEventTime => "LastEventTime",
+            OrderBy::LogStreamName => "LogStreamName",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrderBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "LastEventTime" => Ok(OrderBy::LastEventTime),
+            "LogStreamName" => Ok(OrderBy::LogStreamName),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents a log event.</p>"]
@@ -3772,7 +3885,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3798,7 +3911,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateExportTaskResponse>(String::from_utf8_lossy(&body)
@@ -3828,7 +3941,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3854,7 +3967,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3880,7 +3993,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3904,7 +4017,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3930,7 +4043,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3956,7 +4069,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -3982,7 +4095,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4008,7 +4121,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4035,7 +4148,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeDestinationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4065,7 +4178,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeExportTasksResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4095,7 +4208,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeLogGroupsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4125,7 +4238,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeLogStreamsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4156,7 +4269,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeMetricFiltersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4187,7 +4300,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeSubscriptionFiltersResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -4218,7 +4331,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<FilterLogEventsResponse>(String::from_utf8_lossy(&body)
@@ -4250,7 +4363,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<GetLogEventsResponse>(String::from_utf8_lossy(&body)
@@ -4282,7 +4395,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListTagsLogGroupResponse>(String::from_utf8_lossy(&body)
@@ -4314,7 +4427,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutDestinationResponse>(String::from_utf8_lossy(&body)
@@ -4346,7 +4459,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4372,7 +4485,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<PutLogEventsResponse>(String::from_utf8_lossy(&body)
@@ -4404,7 +4517,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4430,7 +4543,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4456,7 +4569,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4480,7 +4593,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -4506,7 +4619,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<TestMetricFilterResponse>(String::from_utf8_lossy(&body)
@@ -4536,7 +4649,7 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));

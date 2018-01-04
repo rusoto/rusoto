@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -49,6 +45,41 @@ pub struct BucketInfo {
     #[serde(rename="buckets")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub buckets: Option<Vec<Bucket>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ContentType {
+    ApplicationJson,
+    ApplicationXml,
+}
+
+impl Into<String> for ContentType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ContentType {
+    fn into(self) -> &'static str {
+        match self {
+            ContentType::ApplicationJson => "application/json",
+            ContentType::ApplicationXml => "application/xml",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "application/json" => Ok(ContentType::ApplicationJson),
+            "application/xml" => Ok(ContentType::ApplicationXml),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A warning returned by the document service when an issue is discovered while processing an upload request.</p>"]
@@ -137,6 +168,47 @@ pub struct Hits {
     #[serde(rename="start")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub start: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum QueryParser {
+    Dismax,
+    Lucene,
+    Simple,
+    Structured,
+}
+
+impl Into<String> for QueryParser {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for QueryParser {
+    fn into(self) -> &'static str {
+        match self {
+            QueryParser::Dismax => "dismax",
+            QueryParser::Lucene => "lucene",
+            QueryParser::Simple => "simple",
+            QueryParser::Structured => "structured",
+        }
+    }
+}
+
+impl ::std::str::FromStr for QueryParser {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "dismax" => Ok(QueryParser::Dismax),
+            "lucene" => Ok(QueryParser::Lucene),
+            "simple" => Ok(QueryParser::Simple),
+            "structured" => Ok(QueryParser::Structured),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Container for the parameters to the <code>Search</code> request.</p>"]
@@ -674,7 +746,7 @@ impl<P, D> CloudSearchDomain for CloudSearchDomainClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -723,7 +795,7 @@ impl<P, D> CloudSearchDomain for CloudSearchDomainClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
@@ -770,7 +842,7 @@ impl<P, D> CloudSearchDomain for CloudSearchDomainClient<P, D>
         let mut response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));

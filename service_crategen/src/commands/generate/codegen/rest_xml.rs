@@ -46,7 +46,7 @@ impl GenerateProtocol for RestXmlGenerator {
                         let mut response = try!(self.dispatcher.dispatch(&request));
 
                         match response.status {{
-                            StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {{
+                            ::hyper::status::StatusCode::Ok|::hyper::status::StatusCode::NoContent|::hyper::status::StatusCode::PartialContent => {{
                                 {parse_response_body}
                                 {parse_non_payload}
                                 Ok(result)
@@ -88,7 +88,7 @@ impl GenerateProtocol for RestXmlGenerator {
 
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
         let mut imports = "
-            use std::str::{FromStr};
+            use std::str::FromStr;
             use std::io::Write;
             use xml::reader::ParserConfig;
             use rusoto_core::param::{Params, ServiceParams};

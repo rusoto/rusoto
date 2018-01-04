@@ -11,17 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
 use std::io;
 use std::io::Read;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -53,6 +49,44 @@ pub struct AccessLevelFilter {
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AccessLevelFilterKey {
+    Account,
+    Role,
+    User,
+}
+
+impl Into<String> for AccessLevelFilterKey {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AccessLevelFilterKey {
+    fn into(self) -> &'static str {
+        match self {
+            AccessLevelFilterKey::Account => "Account",
+            AccessLevelFilterKey::Role => "Role",
+            AccessLevelFilterKey::User => "User",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccessLevelFilterKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Account" => Ok(AccessLevelFilterKey::Account),
+            "Role" => Ok(AccessLevelFilterKey::Role),
+            "User" => Ok(AccessLevelFilterKey::User),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1176,6 +1210,105 @@ pub struct Principal {
     pub principal_type: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PrincipalType {
+    Iam,
+}
+
+impl Into<String> for PrincipalType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PrincipalType {
+    fn into(self) -> &'static str {
+        match self {
+            PrincipalType::Iam => "IAM",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PrincipalType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "IAM" => Ok(PrincipalType::Iam),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ProductSource {
+    Account,
+}
+
+impl Into<String> for ProductSource {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ProductSource {
+    fn into(self) -> &'static str {
+        match self {
+            ProductSource::Account => "ACCOUNT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProductSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCOUNT" => Ok(ProductSource::Account),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ProductType {
+    CloudFormationTemplate,
+    Marketplace,
+}
+
+impl Into<String> for ProductType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ProductType {
+    fn into(self) -> &'static str {
+        match self {
+            ProductType::CloudFormationTemplate => "CLOUD_FORMATION_TEMPLATE",
+            ProductType::Marketplace => "MARKETPLACE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProductType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CLOUD_FORMATION_TEMPLATE" => Ok(ProductType::CloudFormationTemplate),
+            "MARKETPLACE" => Ok(ProductType::Marketplace),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>A single product view aggregation value/count pair, containing metadata about each product to which the calling user has access.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ProductViewAggregationValue {
@@ -1208,6 +1341,85 @@ pub struct ProductViewDetail {
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ProductViewFilterBy {
+    FullTextSearch,
+    Owner,
+    ProductType,
+    SourceProductId,
+}
+
+impl Into<String> for ProductViewFilterBy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ProductViewFilterBy {
+    fn into(self) -> &'static str {
+        match self {
+            ProductViewFilterBy::FullTextSearch => "FullTextSearch",
+            ProductViewFilterBy::Owner => "Owner",
+            ProductViewFilterBy::ProductType => "ProductType",
+            ProductViewFilterBy::SourceProductId => "SourceProductId",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProductViewFilterBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FullTextSearch" => Ok(ProductViewFilterBy::FullTextSearch),
+            "Owner" => Ok(ProductViewFilterBy::Owner),
+            "ProductType" => Ok(ProductViewFilterBy::ProductType),
+            "SourceProductId" => Ok(ProductViewFilterBy::SourceProductId),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ProductViewSortBy {
+    CreationDate,
+    Title,
+    VersionCount,
+}
+
+impl Into<String> for ProductViewSortBy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ProductViewSortBy {
+    fn into(self) -> &'static str {
+        match self {
+            ProductViewSortBy::CreationDate => "CreationDate",
+            ProductViewSortBy::Title => "Title",
+            ProductViewSortBy::VersionCount => "VersionCount",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProductViewSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CreationDate" => Ok(ProductViewSortBy::CreationDate),
+            "Title" => Ok(ProductViewSortBy::Title),
+            "VersionCount" => Ok(ProductViewSortBy::VersionCount),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The summary metadata about the specified product.</p>"]
@@ -1344,6 +1556,47 @@ pub struct ProvisionedProductDetail {
     pub type_: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ProvisionedProductStatus {
+    Available,
+    Error,
+    Tainted,
+    UnderChange,
+}
+
+impl Into<String> for ProvisionedProductStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ProvisionedProductStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ProvisionedProductStatus::Available => "AVAILABLE",
+            ProvisionedProductStatus::Error => "ERROR",
+            ProvisionedProductStatus::Tainted => "TAINTED",
+            ProvisionedProductStatus::UnderChange => "UNDER_CHANGE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProvisionedProductStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AVAILABLE" => Ok(ProvisionedProductStatus::Available),
+            "ERROR" => Ok(ProvisionedProductStatus::Error),
+            "TAINTED" => Ok(ProvisionedProductStatus::Tainted),
+            "UNDER_CHANGE" => Ok(ProvisionedProductStatus::UnderChange),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains information indicating the ways in which a product can be provisioned.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ProvisioningArtifact {
@@ -1464,6 +1717,44 @@ pub struct ProvisioningArtifactSummary {
     pub provisioning_artifact_metadata: Option<::std::collections::HashMap<String, String>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ProvisioningArtifactType {
+    CloudFormationTemplate,
+    MarketplaceAmi,
+    MarketplaceCar,
+}
+
+impl Into<String> for ProvisioningArtifactType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ProvisioningArtifactType {
+    fn into(self) -> &'static str {
+        match self {
+            ProvisioningArtifactType::CloudFormationTemplate => "CLOUD_FORMATION_TEMPLATE",
+            ProvisioningArtifactType::MarketplaceAmi => "MARKETPLACE_AMI",
+            ProvisioningArtifactType::MarketplaceCar => "MARKETPLACE_CAR",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProvisioningArtifactType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CLOUD_FORMATION_TEMPLATE" => Ok(ProvisioningArtifactType::CloudFormationTemplate),
+            "MARKETPLACE_AMI" => Ok(ProvisioningArtifactType::MarketplaceAmi),
+            "MARKETPLACE_CAR" => Ok(ProvisioningArtifactType::MarketplaceCar),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The parameter key-value pairs used to provision a product.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ProvisioningParameter {
@@ -1562,6 +1853,50 @@ pub struct RecordOutput {
     #[serde(rename="OutputValue")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub output_value: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RecordStatus {
+    Created,
+    Failed,
+    InProgress,
+    InProgressInError,
+    Succeeded,
+}
+
+impl Into<String> for RecordStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RecordStatus {
+    fn into(self) -> &'static str {
+        match self {
+            RecordStatus::Created => "CREATED",
+            RecordStatus::Failed => "FAILED",
+            RecordStatus::InProgress => "IN_PROGRESS",
+            RecordStatus::InProgressInError => "IN_PROGRESS_IN_ERROR",
+            RecordStatus::Succeeded => "SUCCEEDED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecordStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CREATED" => Ok(RecordStatus::Created),
+            "FAILED" => Ok(RecordStatus::Failed),
+            "IN_PROGRESS" => Ok(RecordStatus::InProgress),
+            "IN_PROGRESS_IN_ERROR" => Ok(RecordStatus::InProgressInError),
+            "SUCCEEDED" => Ok(RecordStatus::Succeeded),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>A tag associated with the record, stored as a key-value pair.</p>"]
@@ -1739,6 +2074,79 @@ pub struct SearchProductsOutput {
     #[serde(rename="ProductViewSummaries")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub product_view_summaries: Option<Vec<ProductViewSummary>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SortOrder {
+    Ascending,
+    Descending,
+}
+
+impl Into<String> for SortOrder {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SortOrder {
+    fn into(self) -> &'static str {
+        match self {
+            SortOrder::Ascending => "ASCENDING",
+            SortOrder::Descending => "DESCENDING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ASCENDING" => Ok(SortOrder::Ascending),
+            "DESCENDING" => Ok(SortOrder::Descending),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Status {
+    Available,
+    Creating,
+    Failed,
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Status {
+    fn into(self) -> &'static str {
+        match self {
+            Status::Available => "AVAILABLE",
+            Status::Creating => "CREATING",
+            Status::Failed => "FAILED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AVAILABLE" => Ok(Status::Available),
+            "CREATING" => Ok(Status::Creating),
+            "FAILED" => Ok(Status::Failed),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.</p>"]
@@ -6850,7 +7258,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AcceptPortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6882,7 +7290,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AssociatePrincipalWithPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6915,7 +7323,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AssociateProductWithPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6948,7 +7356,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<AssociateTagOptionWithResourceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -6980,7 +7388,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateConstraintOutput>(String::from_utf8_lossy(&body)
@@ -7013,7 +7421,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreatePortfolioOutput>(String::from_utf8_lossy(&body)
@@ -7046,7 +7454,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreatePortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7076,7 +7484,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateProductOutput>(String::from_utf8_lossy(&body)
@@ -7110,7 +7518,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7142,7 +7550,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<CreateTagOptionOutput>(String::from_utf8_lossy(&body)
@@ -7175,7 +7583,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteConstraintOutput>(String::from_utf8_lossy(&body)
@@ -7208,7 +7616,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeletePortfolioOutput>(String::from_utf8_lossy(&body)
@@ -7241,7 +7649,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeletePortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7271,7 +7679,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteProductOutput>(String::from_utf8_lossy(&body)
@@ -7305,7 +7713,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DeleteProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7337,7 +7745,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeConstraintOutput>(String::from_utf8_lossy(&body)
@@ -7370,7 +7778,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribePortfolioOutput>(String::from_utf8_lossy(&body)
@@ -7403,7 +7811,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeProductOutput>(String::from_utf8_lossy(&body)
@@ -7437,7 +7845,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeProductAsAdminOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7468,7 +7876,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeProductViewOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7500,7 +7908,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeProvisionedProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7533,7 +7941,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7566,7 +7974,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeProvisioningParametersOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7597,7 +8005,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeRecordOutput>(String::from_utf8_lossy(&body)
@@ -7630,7 +8038,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DescribeTagOptionOutput>(String::from_utf8_lossy(&body)
@@ -7665,7 +8073,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DisassociatePrincipalFromPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7697,7 +8105,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DisassociateProductFromPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7729,7 +8137,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<DisassociateTagOptionFromResourceOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7761,7 +8169,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListAcceptedPortfolioSharesOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7794,7 +8202,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListConstraintsForPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7826,7 +8234,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListLaunchPathsOutput>(String::from_utf8_lossy(&body)
@@ -7859,7 +8267,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListPortfolioAccessOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7889,7 +8297,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListPortfoliosOutput>(String::from_utf8_lossy(&body)
@@ -7923,7 +8331,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListPortfoliosForProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7956,7 +8364,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListPrincipalsForPortfolioOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -7989,7 +8397,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListProvisioningArtifactsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8021,7 +8429,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListRecordHistoryOutput>(String::from_utf8_lossy(&body)
@@ -8055,7 +8463,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListResourcesForTagOptionOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8086,7 +8494,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ListTagOptionsOutput>(String::from_utf8_lossy(&body)
@@ -8119,7 +8527,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ProvisionProductOutput>(String::from_utf8_lossy(&body)
@@ -8152,7 +8560,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<RejectPortfolioShareOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8184,7 +8592,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<ScanProvisionedProductsOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8215,7 +8623,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<SearchProductsOutput>(String::from_utf8_lossy(&body)
@@ -8249,7 +8657,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<SearchProductsAsAdminOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8281,7 +8689,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<TerminateProvisionedProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8313,7 +8721,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateConstraintOutput>(String::from_utf8_lossy(&body)
@@ -8346,7 +8754,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdatePortfolioOutput>(String::from_utf8_lossy(&body)
@@ -8378,7 +8786,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateProductOutput>(String::from_utf8_lossy(&body)
@@ -8412,7 +8820,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateProvisionedProductOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8445,7 +8853,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateProvisioningArtifactOutput>(String::from_utf8_lossy(&body).as_ref()).unwrap())
@@ -8477,7 +8885,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
         let mut response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Ok(serde_json::from_str::<UpdateTagOptionOutput>(String::from_utf8_lossy(&body)
