@@ -5,8 +5,8 @@
  
 - Allow setting both, Region name and endpoint, via `Region::Custom`
 - Added China-northwest, US-Gov-West & Paris regions
-
 - Switched crategen from rustfmt to rustfmt-nightly
+- Removed unused AsciiExt imports 
 
 ## [0.30.0] - 2017-12-02
 

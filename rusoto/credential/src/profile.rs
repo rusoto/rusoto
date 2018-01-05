@@ -1,7 +1,6 @@
 //! The Credentials Provider for Credentials stored in a profile inside of a Credentials file.
 
 use regex::Regex;
-use std::ascii::AsciiExt;
 use std::collections::HashMap;
 use std::env::{home_dir, var as env_var};
 use std::fs;
