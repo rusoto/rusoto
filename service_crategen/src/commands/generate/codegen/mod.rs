@@ -113,16 +113,19 @@ fn generate<P, E>(writer: &mut FileWriter,
         //
         // =================================================================
 
+        use std::error::Error;
+        use std::fmt;
+        use std::io;
+
         #[allow(warnings)]
-        use hyper::Client;
-        use hyper::status::StatusCode;
+        use futures::future;
+        use futures::Future;
+        use hyper::StatusCode;
+        use rusoto_core::reactor::{{CredentialsProvider, RequestDispatcher}};
         use rusoto_core::request::DispatchSignedRequest;
         use rusoto_core::region;
+        use rusoto_core::{{ClientInner, RusotoFuture}};
 
-        use std::fmt;
-        use std::error::Error;
-        use std::io;
-        use std::io::Read;
         use rusoto_core::request::HttpDispatchError;
         use rusoto_core::credential::{{CredentialsError, ProvideAwsCredentials}};
     ")?;
@@ -160,23 +163,32 @@ fn generate_client<P>(writer: &mut FileWriter,
 
     writeln!(writer,
         "/// A client for the {service_name} API.
-        pub struct {type_name}<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {{
-            credentials_provider: P,
+        pub struct {type_name}<P = CredentialsProvider, D = RequestDispatcher> where P: ProvideAwsCredentials, D: DispatchSignedRequest {{
+            inner: ClientInner<P, D>,
             region: region::Region,
-            dispatcher: D,
+        }}
+
+        impl {type_name} {{
+            /// Creates a simple client backed by an implicit event loop.
+            ///
+            /// The client will use the default credentials provider and tls client.
+            ///
+            /// See the `rusoto_core::reactor` module for more details.
+            pub fn simple(region: region::Region) -> {type_name} {{
+                {type_name}::new(RequestDispatcher::default(), CredentialsProvider::default(), region)
+            }}
         }}
 
         impl<P, D> {type_name}<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {{
             pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {{
                   {type_name} {{
-                    credentials_provider: credentials_provider,
-                    region: region,
-                    dispatcher: request_dispatcher
+                    inner: ClientInner::new(credentials_provider, request_dispatcher),
+                    region: region
                 }}
             }}
         }}
 
-        impl<P, D> {trait_name} for {type_name}<P, D> where P: ProvideAwsCredentials, D: DispatchSignedRequest {{
+        impl<P, D> {trait_name} for {type_name}<P, D> where P: ProvideAwsCredentials + 'static, D: DispatchSignedRequest + 'static {{
         ",
         service_name = service.name(),
         type_name = service.client_type_name(),
@@ -222,7 +234,7 @@ pub fn get_rust_type(service: &Service,
     } else {
         mutate_type_name_for_streaming(shape_name)
     }
-                     }
+}
 
 fn has_streaming_member(name: &str, shape: &Shape) -> bool {
     shape.shape_type == ShapeType::Structure &&
@@ -314,11 +326,17 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
         if is_streaming_shape(service, name) {
             // Add a second type for streaming blobs, which are the only streaming type we can have
             writeln!(writer,
-                     "pub struct {streaming_name}(Box<Read>);
+                     "pub struct {streaming_name} {{
+                         inner: Box<::futures::Stream<Item=Vec<u8>, Error=HttpDispatchError> + Send>
+                     }}
 
                      impl {streaming_name} {{
-                         pub fn new<R: Read + 'static>(read: R) -> {streaming_name} {{
-                             {streaming_name}(Box::new(read))
+                         pub fn new<S>(stream: S) -> {streaming_name}
+                             where S: ::futures::Stream<Item=Vec<u8>, Error=HttpDispatchError> + Send + 'static
+                         {{
+                             {streaming_name} {{
+                                 inner: Box::new(stream)
+                             }}
                          }}
                      }}
 
@@ -328,23 +346,12 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
                          }}
                      }}
 
-                     impl ::std::ops::Deref for {streaming_name} {{
-                         type Target = Box<Read>;
+                     impl ::futures::Stream for {streaming_name} {{
+                         type Item = Vec<u8>;
+                         type Error = HttpDispatchError;
 
-                         fn deref(&self) -> &Box<Read> {{
-                             &self.0
-                         }}
-                     }}
-
-                     impl ::std::ops::DerefMut for {streaming_name} {{
-                         fn deref_mut(&mut self) -> &mut Box<Read> {{
-                             &mut self.0
-                         }}
-                     }}
-
-                     impl ::std::io::Read for {streaming_name} {{
-                         fn read(&mut self, buf: &mut [u8]) -> ::std::io::Result<usize> {{
-                             self.0.read(buf)
+                         fn poll(&mut self) -> ::futures::Poll<Option<Self::Item>, Self::Error> {{
+                             self.inner.poll()
                          }}
                      }}",
                      name = type_name,

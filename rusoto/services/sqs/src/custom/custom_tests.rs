@@ -58,7 +58,7 @@ fn should_serialize_map_parameters_in_query_string() {
     };
 
     let client = SqsClient::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let _result = client.send_message(&request).unwrap();
+    let _result = client.send_message(&request).sync().unwrap();
 }
 
 #[test]
@@ -115,5 +115,5 @@ fn should_fix_issue_323() {
     };
 
     let client = SqsClient::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let _result = client.receive_message(&request).unwrap();
+    let _result = client.receive_message(&request).sync().unwrap();
 }

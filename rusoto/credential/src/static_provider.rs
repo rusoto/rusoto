@@ -1,8 +1,10 @@
 //! Provides a way to create static/programmatically generated AWS Credentials.
 //! For those who can't get them from an environment, or a file.
 
-use {AwsCredentials, CredentialsError, ProvideAwsCredentials};
 use chrono::{Duration, Utc};
+use futures::future::{FutureResult, ok};
+
+use {AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
 /// Provides AWS credentials from statically/programmatically provided strings.
 #[derive(Clone, Debug)]
@@ -72,8 +74,10 @@ impl StaticProvider {
 }
 
 impl ProvideAwsCredentials for StaticProvider {
-    fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        Ok(AwsCredentials::new(
+    type Future = FutureResult<AwsCredentials, CredentialsError>;
+
+    fn credentials(&self) -> Self::Future {
+        ok(AwsCredentials::new(
             self.aws_access_key_id.clone(),
             self.aws_secret_access_key.clone(),
             self.token.clone(),
@@ -84,6 +88,8 @@ impl ProvideAwsCredentials for StaticProvider {
 
 #[cfg(test)]
 mod tests {
+    use futures::Future;
+
     use ProvideAwsCredentials;
     use super::*;
 
@@ -94,7 +100,7 @@ mod tests {
             "fake-secret".to_owned(),
             Some("token".to_owned()),
             Some(300),
-        ).credentials();
+        ).credentials().wait();
         assert!(result.is_ok());
     }
 
@@ -102,7 +108,7 @@ mod tests {
     fn test_static_provider_minimal_creation() {
         let result =
             StaticProvider::new_minimal("fake-key-2".to_owned(), "fake-secret-2".to_owned())
-                .credentials();
+                .credentials().wait();
         assert!(result.is_ok());
     }
 
@@ -114,7 +120,7 @@ mod tests {
             "fake-secret".to_owned(),
             None,
             Some(10000),
-        ).credentials();
+        ).credentials().wait();
         assert!(result.is_ok());
         let finalized = result.unwrap();
         let expires_at = finalized.expires_at().clone();

@@ -539,6 +539,7 @@ fn build_hostname(service: &str, region: &Region) -> String {
 
 #[cfg(test)]
 mod tests {
+    use futures::Future;
     use time::empty_tm;
 
     use credential::{ProvideAwsCredentials, ProfileProvider};
@@ -561,7 +562,7 @@ mod tests {
                                              "s3",
                                              &Region::UsEast1,
                                              "/path with spaces: the sequel");
-        request.sign(provider.credentials().as_ref().unwrap());
+        request.sign(provider.credentials().wait().as_ref().unwrap());
         assert_eq!("/path%20with%20spaces%3A%20the%20sequel",
                    request.canonical_uri());
     }

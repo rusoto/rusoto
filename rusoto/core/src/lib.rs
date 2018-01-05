@@ -9,8 +9,9 @@
 //! Rusoto is an [AWS](https://aws.amazon.com/) SDK for Rust.
 //! A high level overview is available in `README.md` at <https://github.com/rusoto/rusoto>.
 
+extern crate futures;
 extern crate hyper;
-extern crate hyper_native_tls;
+extern crate hyper_tls;
 #[macro_use]
 extern crate lazy_static;
 #[macro_use]
@@ -22,14 +23,21 @@ pub extern crate rusoto_credential as credential;
 extern crate serde;
 extern crate sha2;
 extern crate time;
+extern crate tokio_core;
 extern crate url;
 extern crate xml;
+
+mod future;
+mod client_inner;
 
 pub mod param;
 pub mod region;
 pub mod request;
 pub mod signature;
+pub mod reactor;
 
+#[doc(hidden)]
+pub use client_inner::ClientInner;
 #[doc(hidden)]
 pub mod serialization;
 #[doc(hidden)]
@@ -47,3 +55,4 @@ pub use credential::{AwsCredentials, ChainProvider, ContainerProvider, Credentia
 pub use region::{ParseRegionError, Region, default_region};
 pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError, default_tls_client};
 pub use signature::SignedRequest;
+pub use future::RusotoFuture;
