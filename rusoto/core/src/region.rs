@@ -7,12 +7,26 @@
 use std;
 use std::error::Error;
 use std::str::FromStr;
-use std::fmt::{Display, Error as FmtError, Formatter};
+use std::fmt::{self, Display, Error as FmtError, Formatter};
 use serde::{de, Serialize, Serializer, Deserialize, Deserializer};
+use serde::ser::SerializeTuple;
 
 /// An AWS region.
-/// `Custom` can be used to use a local or otherwise non-AWS endpoint.  This may be used for API-compatible services, such as DynamoDB Local or Ceph.
-/// Example: `Region::Custom("http://localhost:8000".to_owned())` instead of `Region::UsEast1`.
+///
+/// # AWS-compatible services
+///
+/// `Region::Custom` can be used to connect to AWS-compatible services such as DynamoDB Local or Ceph.
+///
+/// ```
+///     # use rusoto_core::Region;
+///     Region::Custom {
+///         name: "eu-east-3".to_owned(),
+///         endpoint: "http://localhost:8000".to_owned(),
+///     };
+/// ```
+///
+/// # Caveats
+///
 /// `CnNorth1` is currently untested due to Rusoto maintainers not having access to AWS China.
 #[derive(Clone, Debug, PartialEq)]
 pub enum Region {
@@ -71,38 +85,29 @@ pub enum Region {
     CnNorthwest1,
 
     /// Specifies a custom region, such as a local Ceph target
-    Custom(String)
+    Custom {
+        /// Name of the endpoint (e.g. `"eu-east-2"`).
+        name: String,
+
+        /// Endpoint to be used. For instance, `"https://s3.my-provider.net"` or just
+        /// `"s3.my-provider.net"` (default scheme is https).
+        endpoint: String,
+    },
 }
 
-/// An error produced when attempting to convert a `str` into a `Region` fails.
-#[derive(Debug,PartialEq)]
-pub struct ParseRegionError {
-    message: String,
-}
-
-// Manually derived for lack of way to flatten Custom variant
-// Related: https://github.com/serde-rs/serde/issues/119
-impl Serialize for Region {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where S: Serializer
-    {
-        serializer.collect_str(&self.to_string())
-    }
-}
-
-// Manually derived to deserialize both the standard 'us-east-1' kebab-case style
-// as well as 'UsEast1' PascalCase style to faciliate migrating from older versions
-impl<'de> Deserialize<'de> for Region {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-        where D: Deserializer<'de>
-    {
-        String::deserialize(deserializer)?.parse().map_err(de::Error::custom)
-    }
-}
-
-impl Display for Region {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), FmtError> {
-        let region_str = match *self {
+impl Region {
+    /// Name of the region
+    ///
+    /// ```
+    ///     # use rusoto_core::Region;
+    ///     assert_eq!(Region::CaCentral1.name(), "ca-central-1");
+    ///     assert_eq!(
+    ///         Region::Custom { name: "eu-east-3".to_owned(), endpoint: "s3.net".to_owned() }.name(),
+    ///         "eu-east-3"
+    ///     );
+    /// ```
+    pub fn name(&self) -> &str {
+        match *self {
             Region::ApNortheast1 => "ap-northeast-1",
             Region::ApNortheast2 => "ap-northeast-2",
             Region::ApSouth1 => "ap-south-1",
@@ -121,10 +126,78 @@ impl Display for Region {
             Region::UsGovWest1 => "us-gov-west-1",
             Region::CnNorth1 => "cn-north-1",
             Region::CnNorthwest1 => "cn-northwest-1",
-            Region::Custom(ref hostname) => &hostname,
-        };
+            Region::Custom { ref name, .. } => name,
+        }
+    }
+}
 
-        write!(f, "{}", region_str)
+/// An error produced when attempting to convert a `str` into a `Region` fails.
+#[derive(Debug,PartialEq)]
+pub struct ParseRegionError {
+    message: String,
+}
+
+// Manually created for lack of a way to flatten the `Region::Custom` variant
+// Related: https://github.com/serde-rs/serde/issues/119
+impl Serialize for Region {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where S: Serializer
+    {
+        let mut seq = serializer.serialize_tuple(2)?;
+        if let Region::Custom { ref endpoint, ref name } = *self {
+            seq.serialize_element(&name)?;
+            seq.serialize_element(&Some(&endpoint))?;
+        } else {
+            seq.serialize_element(self.name())?;
+            seq.serialize_element(&None as &Option<&str>)?;
+        }
+        seq.end()
+    }
+}
+
+struct RegionVisitor;
+
+impl<'de> de::Visitor<'de> for RegionVisitor {
+    type Value = Region;
+
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        formatter.write_str("sequence of (name, Some(endpoint))")
+    }
+
+    fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
+        where
+            A: de::SeqAccess<'de>,
+    {
+        let name: String = seq.next_element()?
+            .ok_or_else(|| de::Error::custom("region is missing name"))?;
+        let endpoint: Option<String> = seq.next_element()?
+            .ok_or_else(|| de::Error::custom("region is missing endpoint"))?;
+        match (name, endpoint) {
+            (name, Some(endpoint)) => Ok(Region::Custom { name, endpoint }),
+            (name, None) => name.parse().map_err(de::Error::custom),
+        }
+    }
+}
+
+// Manually created for lack of a way to flatten the `Region::Custom` variant
+// Related: https://github.com/serde-rs/serde/issues/119
+impl<'de> Deserialize<'de> for Region {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+        where D: Deserializer<'de>
+    {
+        deserializer.deserialize_tuple(2, RegionVisitor)
+    }
+}
+
+impl Display for Region {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), FmtError> {
+        match *self {
+            Region::Custom {
+                ref endpoint,
+                ref name,
+            } => write!(f, "{} with endpoint {}", &name, &endpoint),
+            ref r @ _ => write!(f, "{}", r.name()),
+        }
     }
 }
 
@@ -194,7 +267,7 @@ pub fn default_region() -> Region {
 #[cfg(test)]
 mod tests {
     extern crate serde_test;
-    use self::serde_test::{Token, assert_tokens, assert_ser_tokens, assert_de_tokens};
+    use self::serde_test::{Token, assert_tokens};
     use super::*;
 
     #[test]
@@ -249,56 +322,61 @@ mod tests {
         assert_eq!(Region::UsGovWest1.to_string(), "us-gov-west-1".to_owned());
         assert_eq!(Region::CnNorth1.to_string(), "cn-north-1".to_owned());
         assert_eq!(Region::CnNorthwest1.to_string(), "cn-northwest-1".to_owned());
+        assert_eq!(
+            Region::Custom {
+                endpoint: "https://s3.provider.net".to_owned(),
+                name: "aa-south-1".to_owned(),
+            }.to_string(),
+            "aa-south-1 with endpoint https://s3.provider.net"
+        )
     }
 
     #[test]
     fn region_serialize_deserialize() {
-        assert_tokens(&Region::ApNortheast1, &[Token::String("ap-northeast-1")]);
-        assert_tokens(&Region::ApNortheast2, &[Token::String("ap-northeast-2")]);
-        assert_tokens(&Region::ApSouth1, &[Token::String("ap-south-1")]);
-        assert_tokens(&Region::ApSoutheast1, &[Token::String("ap-southeast-1")]);
-        assert_tokens(&Region::ApSoutheast2, &[Token::String("ap-southeast-2")]);
-        assert_tokens(&Region::CaCentral1, &[Token::String("ca-central-1")]);
-        assert_tokens(&Region::EuCentral1, &[Token::String("eu-central-1")]);
-        assert_tokens(&Region::EuWest1, &[Token::String("eu-west-1")]);
-        assert_tokens(&Region::EuWest2, &[Token::String("eu-west-2")]);
-        assert_tokens(&Region::EuWest3, &[Token::String("eu-west-3")]);
-        assert_tokens(&Region::SaEast1, &[Token::String("sa-east-1")]);
-        assert_tokens(&Region::UsEast1, &[Token::String("us-east-1")]);
-        assert_tokens(&Region::UsEast2, &[Token::String("us-east-2")]);
-        assert_tokens(&Region::UsWest1, &[Token::String("us-west-1")]);
-        assert_tokens(&Region::UsWest2, &[Token::String("us-west-2")]);
-        assert_tokens(&Region::CnNorth1, &[Token::String("cn-north-1")]);
-        assert_tokens(&Region::UsGovWest1, &[Token::String("us-gov-west-1")]);
-        assert_tokens(&Region::CnNorthwest1, &[Token::String("cn-northwest-1")]);
+        assert_tokens(&Region::ApNortheast1, &tokens_for_region("ap-northeast-1"));
+        assert_tokens(&Region::ApNortheast2, &tokens_for_region("ap-northeast-2"));
+        assert_tokens(&Region::ApSouth1, &tokens_for_region("ap-south-1"));
+        assert_tokens(&Region::ApSoutheast1, &tokens_for_region("ap-southeast-1"));
+        assert_tokens(&Region::ApSoutheast2, &tokens_for_region("ap-southeast-2"));
+        assert_tokens(&Region::CaCentral1, &tokens_for_region("ca-central-1"));
+        assert_tokens(&Region::EuCentral1, &tokens_for_region("eu-central-1"));
+        assert_tokens(&Region::EuWest1, &tokens_for_region("eu-west-1"));
+        assert_tokens(&Region::EuWest2, &tokens_for_region("eu-west-2"));
+        assert_tokens(&Region::EuWest3, &tokens_for_region("eu-west-3"));
+        assert_tokens(&Region::SaEast1, &tokens_for_region("sa-east-1"));
+        assert_tokens(&Region::UsEast1, &tokens_for_region("us-east-1"));
+        assert_tokens(&Region::UsEast2, &tokens_for_region("us-east-2"));
+        assert_tokens(&Region::UsWest1, &tokens_for_region("us-west-1"));
+        assert_tokens(&Region::UsWest2, &tokens_for_region("us-west-2"));
+        assert_tokens(&Region::UsGovWest1, &tokens_for_region("us-gov-west-1"));
+        assert_tokens(&Region::CnNorth1, &tokens_for_region("cn-north-1"));
+        assert_tokens(&Region::CnNorthwest1, &tokens_for_region("cn-northwest-1"))
+    }
+
+    fn tokens_for_region(name: &'static str) -> [Token; 4] {
+        [
+            Token::Tuple { len: 2 },
+            Token::String(name),
+            Token::None,
+            Token::TupleEnd,
+        ]
     }
 
     #[test]
-    fn region_serialize_custom() {
-        let custom_region = Region::Custom("http://localhost:8000".to_owned());
-        assert_ser_tokens(&custom_region, &[Token::String("http://localhost:8000")]);
-    }
-
-    // Test we can still deserialize from the old style to ease migration
-    #[test]
-    fn region_deserialize_migration() {
-        assert_de_tokens(&Region::ApNortheast1, &[Token::String("ApNortheast1")]);
-        assert_de_tokens(&Region::ApNortheast2, &[Token::String("ApNortheast2")]);
-        assert_de_tokens(&Region::ApSouth1, &[Token::String("ApSouth1")]);
-        assert_de_tokens(&Region::ApSoutheast1, &[Token::String("ApSoutheast1")]);
-        assert_de_tokens(&Region::ApSoutheast2, &[Token::String("ApSoutheast2")]);
-        assert_de_tokens(&Region::CaCentral1, &[Token::String("CaCentral1")]);
-        assert_de_tokens(&Region::EuCentral1, &[Token::String("EuCentral1")]);
-        assert_de_tokens(&Region::EuWest1, &[Token::String("EuWest1")]);
-        assert_de_tokens(&Region::EuWest2, &[Token::String("EuWest2")]);
-        assert_de_tokens(&Region::EuWest3, &[Token::String("EuWest3")]);
-        assert_de_tokens(&Region::SaEast1, &[Token::String("SaEast1")]);
-        assert_de_tokens(&Region::UsEast1, &[Token::String("UsEast1")]);
-        assert_de_tokens(&Region::UsEast2, &[Token::String("UsEast2")]);
-        assert_de_tokens(&Region::UsWest1, &[Token::String("UsWest1")]);
-        assert_de_tokens(&Region::UsWest2, &[Token::String("UsWest2")]);
-        assert_de_tokens(&Region::UsGovWest1, &[Token::String("UsGovWest1")]);
-        assert_de_tokens(&Region::CnNorth1, &[Token::String("CnNorth1")]);
-        assert_de_tokens(&Region::CnNorthwest1, &[Token::String("CnNorthwest1")]);
+    fn region_serialize_deserialize_custom() {
+        let custom_region = Region::Custom {
+            endpoint: "http://localhost:8000".to_owned(),
+            name: "eu-east-1".to_owned(),
+        };
+        assert_tokens(
+            &custom_region,
+            &[
+                Token::Tuple { len: 2 },
+                Token::String("eu-east-1"),
+                Token::Some,
+                Token::String("http://localhost:8000"),
+                Token::TupleEnd,
+            ],
+        );
     }
 }

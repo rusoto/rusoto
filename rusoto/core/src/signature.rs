@@ -128,8 +128,8 @@ impl SignedRequest {
             Some(ref p) => p.to_string(),
             None => {
                 match self.region {
-                    Region::Custom(ref hostname) => {
-                        if hostname.starts_with("http://") {
+                    Region::Custom { ref endpoint, .. } => {
+                        if endpoint.starts_with("http://") {
                             "http".to_owned()
                         } else {
                             "https".to_owned()
@@ -268,7 +268,7 @@ impl SignedRequest {
         let signature = sign_string(&string_to_sign,
                                     creds.aws_secret_access_key(),
                                     date,
-                                    &self.region.to_string(),
+                                    &self.region.name(),
                                     &self.service);
 
         // build the actual auth header
@@ -500,30 +500,38 @@ fn build_hostname(service: &str, region: &Region) -> String {
     match service {
         "iam" => {
             match *region {
-                Region::Custom(ref hostname) => remove_scheme_from_custom_hostname(hostname).to_owned(),
-                Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
+                Region::Custom { ref endpoint, .. } => {
+                    remove_scheme_from_custom_hostname(endpoint).to_owned()
+                }
+                Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region.name()),
                 _ => format!("{}.amazonaws.com", service),
             }
         }
         "s3" => {
             match *region {
-                Region::Custom(ref hostname) => remove_scheme_from_custom_hostname(hostname).to_owned(),
+                Region::Custom { ref endpoint, .. } => {
+                    remove_scheme_from_custom_hostname(endpoint).to_owned()
+                }
                 Region::UsEast1 => "s3.amazonaws.com".to_string(),
-                Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", region),
-                _ => format!("s3-{}.amazonaws.com", region),
+                Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", region.name()),
+                _ => format!("s3-{}.amazonaws.com", region.name()),
             }
         }
         "route53" => {
             match *region {
-                Region::Custom(ref hostname) => remove_scheme_from_custom_hostname(hostname).to_owned(),
+                Region::Custom { ref endpoint, .. } => {
+                    remove_scheme_from_custom_hostname(endpoint).to_owned()
+                }
                 _ => "route53.amazonaws.com".to_owned(),
             }
         }
         _ => {
             match *region {
-                Region::Custom(ref hostname) => remove_scheme_from_custom_hostname(hostname).to_owned(),
-                Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
-                _ => format!("{}.{}.amazonaws.com", service, region),
+                Region::Custom { ref endpoint, .. } => {
+                    remove_scheme_from_custom_hostname(endpoint).to_owned()
+                }
+                Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region.name()),
+                _ => format!("{}.{}.amazonaws.com", service, region.name()),
             }
         }
     }
