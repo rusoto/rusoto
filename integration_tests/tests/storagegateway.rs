@@ -4,15 +4,12 @@ extern crate rusoto_core;
 extern crate rusoto_storagegateway;
 
 use rusoto_storagegateway::{StorageGateway, StorageGatewayClient, ListGatewaysInput};
-use rusoto_core::{DefaultCredentialsProvider, Region};
-use rusoto_core::default_tls_client;
+use rusoto_core::Region;
 
 #[test]
 fn should_list_gateways() {
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client =
-        StorageGatewayClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client = StorageGatewayClient::simple(Region::UsEast1);
     let request = ListGatewaysInput::default();
 
-    client.list_gateways(&request).unwrap();
+    client.list_gateways(&request).sync().unwrap();
 }

@@ -4,14 +4,12 @@ extern crate rusoto_core;
 extern crate rusoto_cloudtrail;
 
 use rusoto_cloudtrail::{CloudTrail, CloudTrailClient, DescribeTrailsRequest};
-use rusoto_core::{DefaultCredentialsProvider, Region};
-use rusoto_core::default_tls_client;
+use rusoto_core::Region;
 
 #[test]
 fn should_describe_trails() {
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = CloudTrailClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client = CloudTrailClient::simple(Region::UsEast1);
     let request = DescribeTrailsRequest::default();
 
-    client.describe_trails(&request).unwrap();
+    client.describe_trails(&request).sync().unwrap();
 }

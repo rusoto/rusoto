@@ -4,22 +4,19 @@ extern crate rusoto_core;
 extern crate rusoto_opsworks;
 
 use rusoto_opsworks::{OpsWorks, OpsWorksClient, DescribeStacksRequest};
-use rusoto_core::{DefaultCredentialsProvider, Region};
-use rusoto_core::default_tls_client;
+use rusoto_core::Region;
 
 #[test]
 fn should_describe_stacks() {
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = OpsWorksClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client = OpsWorksClient::simple(Region::UsEast1);
     let request = DescribeStacksRequest::default();
 
-    client.describe_stacks(&request).unwrap();
+    client.describe_stacks(&request).sync().unwrap();
 }
 
 #[test]
 fn should_describe_my_user_profile() {
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = OpsWorksClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client = OpsWorksClient::simple(Region::UsEast1);
 
-    client.describe_my_user_profile().unwrap();
+    client.describe_my_user_profile().sync().unwrap();
 }

@@ -5,16 +5,15 @@ extern crate rusoto_greengrass;
 extern crate env_logger;
 
 use rusoto_greengrass::{GreenGrass, GreenGrassClient, ListGroupsRequest};
-use rusoto_core::{DefaultCredentialsProvider, Region, default_tls_client};
+use rusoto_core::Region;
 
 #[test]
 fn should_list_groups() {
     let _ = env_logger::try_init();
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = GreenGrassClient::new(default_tls_client().unwrap(), credentials, Region::UsWest2);
+    let client = GreenGrassClient::simple(Region::UsWest2);
     
     let request = ListGroupsRequest::default();
 
-    let result = client.list_groups(&request).unwrap();
+    let result = client.list_groups(&request).sync().unwrap();
     println!("{:#?}", result);
 }

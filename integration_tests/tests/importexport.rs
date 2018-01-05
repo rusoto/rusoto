@@ -4,17 +4,14 @@ extern crate rusoto_core;
 extern crate rusoto_importexport;
 
 use rusoto_importexport::{ImportExport, ImportExportClient, ListJobsInput};
-use rusoto_core::{DefaultCredentialsProvider, Region};
-use rusoto_core::default_tls_client;
+use rusoto_core::Region;
 
 #[test]
 fn should_list_jobs() {
     let _ = env_logger::try_init();
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client =
-        ImportExportClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client = ImportExportClient::simple(Region::UsEast1);
     let request = ListJobsInput::default();
 
-    let result = client.list_jobs(&request);
+    let result = client.list_jobs(&request).sync();
     println!("{:#?}", result);
 }

@@ -4,14 +4,13 @@ extern crate rusoto_core;
 extern crate rusoto_devicefarm;
 
 use rusoto_devicefarm::{DeviceFarm, DeviceFarmClient, ListDevicesRequest};
-use rusoto_core::{DefaultCredentialsProvider, Region};
-use rusoto_core::default_tls_client;
+use rusoto_core::Region;
 
 #[test]
 pub fn should_list_devices() {
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = DeviceFarmClient::new(default_tls_client().unwrap(), credentials, Region::UsWest2);
+    
+    let client = DeviceFarmClient::simple(Region::UsWest2);
     let request = ListDevicesRequest::default();
 
-    client.list_devices(&request).unwrap();
+    client.list_devices(&request).sync().unwrap();
 }

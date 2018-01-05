@@ -8,25 +8,22 @@ extern crate env_logger;
 use rusoto_sqs::{Sqs, SqsClient};
 use rusoto_sqs::{ListQueuesRequest, CreateQueueRequest, GetQueueUrlRequest, SendMessageRequest};
 use rusoto_sqs::{ReceiveMessageRequest, DeleteMessageRequest, DeleteQueueRequest, GetQueueAttributesRequest};
-use rusoto_core::{DefaultCredentialsProvider, Region};
-use rusoto_core::default_tls_client;
+use rusoto_core::Region;
 
 #[test]
 fn list_queues() {
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let sqs = SqsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let sqs = SqsClient::simple(Region::UsEast1);
 
     let request = ListQueuesRequest { ..Default::default() };
 
-    let result = sqs.list_queues(&request).expect("List queues failed");
+    let result = sqs.list_queues(&request).sync().expect("List queues failed");
     println!("{:#?}", result);
 }
 
 #[test]
 fn sqs_roundtrip_tests() {
 	let _ = env_logger::try_init();
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let sqs = SqsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+	let sqs = SqsClient::simple(Region::UsEast1);
 
 	// create a new queue
 	let q_name = &format!("test_q_{}", time::get_time().sec);
@@ -35,7 +32,7 @@ fn sqs_roundtrip_tests() {
 		..Default::default()
 	};
 
-	let response = sqs.create_queue(&q_creation_req).expect("Create queue failed");
+	let response = sqs.create_queue(&q_creation_req).sync().expect("Create queue failed");
 	println!("Created queue {} with url {}", q_name, response
 		.queue_url
 		.clone()
@@ -48,7 +45,7 @@ fn sqs_roundtrip_tests() {
 		queue_name: q_name.clone(),
 		..Default::default()
 	};
-	let response = sqs.get_queue_url(&get_q_by_name_request).expect("Get queue by URL request failed");
+	let response = sqs.get_queue_url(&get_q_by_name_request).sync().expect("Get queue by URL request failed");
 	let queue_url = &response.queue_url.expect("Queue url should be available from list queues");
 	println!("Verified queue url {} for queue name {}", queue_url.clone(), q_name);
 
@@ -57,7 +54,7 @@ fn sqs_roundtrip_tests() {
 		queue_url: queue_url.clone(),
 		attribute_names: Some(vec!["All".to_string()]),
 	};
-	match sqs.get_queue_attributes(&queue_attributes_req) {
+	match sqs.get_queue_attributes(&queue_attributes_req).sync() {
 		Ok(result) => println!("Queue attributes: {:?}", result),
 		Err(e) => panic!("Error getting queue attributes: {:?}", e),
 	}
@@ -69,7 +66,7 @@ fn sqs_roundtrip_tests() {
 		queue_url: queue_url.clone(),
 		..Default::default()
 	};
-	let response = sqs.send_message(&send_msg_request);
+	let response = sqs.send_message(&send_msg_request).sync();
 	println!("Sent message with body '{}' and created message_id {}", msg_str, response.unwrap().message_id.unwrap());
 
 	// message_attribute_names is for testing https://github.com/rusoto/rusoto/issues/586
@@ -79,7 +76,7 @@ fn sqs_roundtrip_tests() {
 		..Default::default()
 	};
 
-	let response = sqs.receive_message(&receive_request);
+	let response = sqs.receive_message(&receive_request).sync();
 	for msg in response
 		.expect("Expected to have a receive message response")
 		.messages
@@ -93,7 +90,7 @@ fn sqs_roundtrip_tests() {
 			queue_url: queue_url.clone(),
 			receipt_handle: msg.receipt_handle.clone().unwrap()
 		};
-		match sqs.delete_message(&delete_message_request) {
+		match sqs.delete_message(&delete_message_request).sync() {
 			Ok(_) => println!("Deleted message via receipt handle {:?}", delete_message_request.receipt_handle),
 			Err(e) => panic!("Couldn't delete message: {:?}", e),
 		}
@@ -102,7 +99,7 @@ fn sqs_roundtrip_tests() {
 	let queue_deletion_req = DeleteQueueRequest {
 		queue_url: queue_url.clone()
 	};
-	match sqs.delete_queue(&queue_deletion_req) {
+	match sqs.delete_queue(&queue_deletion_req).sync() {
 		Ok(_) => (),
 		Err(e) => panic!("Couldn't delete queue: {:?}", e),
 	}
