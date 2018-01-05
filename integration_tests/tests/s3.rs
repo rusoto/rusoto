@@ -8,6 +8,7 @@ extern crate log;
 
 use hyper::Client;
 use std::collections::HashMap;
+use std::env;
 use std::fs::File;
 use std::io::{Read, BufReader};
 use time::get_time;
@@ -29,11 +30,18 @@ type TestClient = S3Client<DefaultCredentialsProvider, Client>;
 fn test_all_the_things() {
     let _ = env_logger::init();
 
+    let region = if let Ok(endpoint) = env::var("S3_ENDPOINT") {
+        let region = Region::Custom { name: "us-east-1".to_owned(), endpoint: endpoint.to_owned() };
+        println!("picked up non-standard endpoint {:?} from S3_ENDPOINT env. variable", region);
+        region
+    } else {
+        Region::UsEast1
+    };
     let client = S3Client::new(default_tls_client().unwrap(),
                                DefaultCredentialsProvider::new().unwrap(),
-                               Region::UsEast1);
+                               region);
 
-    let test_bucket = format!("rusoto_test_bucket_{}", get_time().sec);
+    let test_bucket = format!("rusoto-test-bucket-{}", get_time().sec);
     let filename = format!("test_file_{}", get_time().sec);
     let utf8_filename = format!("test[über]file@{}", get_time().sec);
     let binary_filename = format!("test_file_b{}", get_time().sec);
@@ -50,10 +58,16 @@ fn test_all_the_things() {
     list_items_in_bucket(&client, &test_bucket);
 
     // do a multipart upload
-    test_multipart_upload(&client, &test_bucket, &multipart_filename);
+    if cfg!(not(feature = "disable_minio_unsupported")) {
+        // FIXME: Minio support: test is broken, probably because the ETag isn't parsed properly
+        test_multipart_upload(&client, &test_bucket, &multipart_filename);
+    }
 
     // modify the bucket's CORS properties
-    test_put_bucket_cors(&client, &test_bucket);
+    if cfg!(not(feature = "disable_minio_unsupported")) {
+        // Minio support: CORS is not implemented by Minio
+        test_put_bucket_cors(&client, &test_bucket);
+    }
 
     // PUT an object (no_credentials is an arbitrary choice)
     test_put_object_with_filename(&client,
@@ -101,18 +115,27 @@ fn test_all_the_things() {
     let mut metadata = HashMap::<String, String>::new();
     metadata.insert("rusoto-metadata-some".to_string(), "some-test-value".to_string());
     metadata.insert("rusoto-metadata-none".to_string(), "".to_string());
-    
+
     test_put_object_with_metadata(&client,
                                   &test_bucket,
                                   &metadata_filename,
                                   &"tests/sample-data/no_credentials",
                                   &metadata);
-    
-    test_head_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
-    test_get_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
+
+    if cfg!(not(feature = "disable_minio_unsupported")) {
+        // FIXME: Minio support: metadata retrieval is currently broken
+        test_head_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
+    }
+    if cfg!(not(feature = "disable_minio_unsupported")) {
+        // FIXME: Minio support: metadata retrieval currently broken
+        test_get_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
+    }
 
     // list items with paging
-    list_items_in_bucket_paged(&client, &test_bucket);
+    if cfg!(not(feature = "disable_ceph_unsupported")) {
+        // Ceph support: this test depends on the list object v2 API which is not implemented by Ceph
+        list_items_in_bucket_paged(&client, &test_bucket);
+    }
 
     test_delete_object(&client, &test_bucket, &metadata_filename);
     test_delete_object(&client, &test_bucket, &binary_filename);
